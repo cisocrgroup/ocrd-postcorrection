@@ -1,0 +1,16 @@
+#%RAML 1.0
+title: API with Types
+types:
+  Test:
+    type: object
+    properties:
+      name: string
+      inputstring:  string
+      age:       number
+/halloworld:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Test

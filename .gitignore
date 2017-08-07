@@ -1,0 +1,11 @@
+/target/classes/
+/target/test-classes/
+
+.project
+.classpath
+.settings/
+doc
+
+src/webapp/assets/
+src/webapp/index.html
+/target/
