@@ -29,8 +29,9 @@ Eclipse/Maven project for OCRD Application Server REST API & UIF
     * `/api/` points to all api endpoints
 
 
-#### use-cases:
-- for integration with other subsystems (within test/integration env.)
+#### API documentation:
+- install raml2html module (https://github.com/raml2html/raml2html)
+- to generate use: raml2html api.raml > api.html
 
 
 
@@ -44,3 +45,8 @@ all source files which are needed to build the webapp (e.g. backbone js code & H
 
 ### build
 use build scripts to create a build. The build-script shall sync the build to `src/webapp`
+
+
+
+
+
