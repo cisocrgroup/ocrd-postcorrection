@@ -2,113 +2,33 @@
 // entities/util.js
 // ================
 
-define(["app"], function(IPS_App){
+define(["app"], function(App){
 
   var Entities={};
 
+  var Test = Backbone.Model.extend({});
+ 
+
 Entities.API = {
 
-  getHelpText: function(route,role){
-    var defer = jQuery.Deferred();
-        $.ajax({
-        url: "api/v1/help/"+route+"/"+role,
-        type: "GET",
-        success: function(data) {
-           defer.resolve(data);
 
-            },
-            error: function(data){
-              defer.resolve(undefined);
-            }
-    });
-
-
-    return defer.promise();
-    
-},
-  getCardHubData: function(data){
-    var defer = jQuery.Deferred();
-        $.ajax({
-        headers: { 
-        'Accept': 'application/json',
-        'Content-Type': 'application/json' 
-         },
-        url: "api/v1/help/cardHubData/",
-        type: "POST",
-        dataType:"json",
-        data:JSON.stringify(data),
-        success: function(data) {
-           defer.resolve(data['cardHubParent']);
-
-            },
-            error: function(data){
-              defer.resolve(undefined);
-            }
-    });
-
-
-    return defer.promise();
-    
-},
-
-  getInterfaceData: function(data){
-    var defer = jQuery.Deferred();
-        $.ajax({
-        headers: { 
-        'Accept': 'application/json',
-        'Content-Type': 'application/json' 
-         },
-        url: "api/v1/help/interface/",
-        type: "POST",
-        dataType:"json",
-        data:JSON.stringify(data),
-        success: function(data) {
-           defer.resolve(data);
-
-            },
-            error: function(data){
-              defer.resolve(undefined);
-            }
-    });
-
-
-    return defer.promise();
-    
-},
-
-  getInstitutions: function(userKey,userRole){
+  postHalloWorld: function(data){
+    console.log(data);
     var defer = jQuery.Deferred();
     $.ajax({
-        url: "/api/v1/proposals/"+userKey+"/"+userRole+"/institutions",
-        type: "GET",
+         headers: { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json' 
+        },
+        url: "/api/halloworld",
+        type: "POST",
+        data:JSON.stringify(data),
         success: function(data) {
-// #ifdef DEVELOPMENT_VERSION
-           // console.log(data);
-// #endif DEVELOPMENT_VERSION
 
-             defer.resolve(data);
+            var result = new Test();
+            result.set(data);
 
-            },
-            error: function(data){
-              defer.resolve(undefined);
-            }
-    });
-
-    return defer.promise();
-    
-},
-
-  getTopics: function(userKey,userRole){
-    var defer = jQuery.Deferred();
-    $.ajax({
-        url: "/api/v1/proposals/"+userKey+"/"+userRole+"/topics",
-        type: "GET",
-        success: function(data) {
-// #ifdef DEVELOPMENT_VERSION
-           // console.log(data);
-// #endif DEVELOPMENT_VERSION
-
-             defer.resolve(data);
+             defer.resolve(result);
 
             },
             error: function(data){

@@ -16,49 +16,60 @@ define(["app","common/util","common/views","apps/ocrd/show/show_view"], function
               App.mainLayout.showChildView('backdropRegion',loadingCircleView);
 
         	
-			$.when().done(function(){
 			loadingCircleView.destroy();
 
 		 	//currentProposal.set({"url_id":id}); // pass url_id to view..
-			var ocrdhowLayout = new Show.Layout();
-			var ocrdhowHeader;
-			var ocrdhowInfo;
+			var ocrdShowLayout = new Show.Layout();
+			var ocrdShowHeader;
+			var ocrdShowInfo;
 
 			// console.log(reviews);
 	
-			ocrdhowLayout.on("attach",function(){
+			ocrdShowLayout.on("attach",function(){
 			  
 
-			  ocrdhowHeader = new Show.Header();
-			  ocrdhowInfo = new Show.Info();
+			  ocrdShowHeader = new Show.Header();
+			  ocrdShowInfo = new Show.Info();
+
+			  ocrdShowInfo.on("show:formSubmitted",function(data){
+
+			  	var postingHalloWorld = UtilEntitites.API.postHalloWorld(data); 
+
+  				$.when(postingHalloWorld).done(function(test){
+
+
+  					var ocrdShowExampleResponse = new Show.Resp({model:test})
+	         		ocrdShowLayout.showChildView('respRegion',ocrdShowExampleResponse);
+
+	    		}).fail(function(response){ 
+
+	 			  //     loadingCircleView.destroy();
+					  // var errortext = Util.getErrorText(response);    
+	      //             var errorView = new Show.Error({errortext:errortext})
+
+	      //             App.mainLayout.showChildView('mainRegion',errorView);
+
+	          }); //  $.when
+
+
+
+
+			  });
+
 
   			// ocrdPanel = new Show.FooterPanel();
 
 
-
-	          ocrdhowLayout.showChildView('headerRegion',ocrdhowHeader);
-	          ocrdhowLayout.showChildView('infoRegion',ocrdhowInfo);
+	          ocrdShowLayout.showChildView('headerRegion',ocrdShowHeader);
+	          ocrdShowLayout.showChildView('infoRegion',ocrdShowInfo);
 
 
 
     		}); // on.attach()
 
-          App.mainLayout.showChildView('mainRegion',ocrdhowLayout);
+          App.mainLayout.showChildView('mainRegion',ocrdShowLayout);
 
 
-    		}).fail(function(response){ 
-
- 			  //     loadingCircleView.destroy();
-				  // var errortext = Util.getErrorText(response);    
-      //             var errorView = new Show.Error({errortext:errortext})
-
-      //             errorView.on("currentproposal:loggedIn",function(){
-					 //    IPS_App.ocrdApp.Show.Controller.showProposal(id);
-      //             });
-
-      //             IPS_App.mainLayout.showChildView('mainRegion',errorView);
-
-          }); //  $.when
 
     	}) // require
     	

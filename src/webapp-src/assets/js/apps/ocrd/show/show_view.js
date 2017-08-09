@@ -2,11 +2,13 @@
 // apps/ocrd/show/show_view.js
 // ================================
 
-define(["marionette","app","common/views",
+define(["marionette","app","backbone.syphon","common/views",
         "tpl!apps/ocrd/show/templates/layout.tpl",
-        "tpl!apps/ocrd/show/templates/info.tpl"
+        "tpl!apps/ocrd/show/templates/info.tpl",
+        "tpl!apps/ocrd/show/templates/resp.tpl"
 
-  ], function(Marionette,App,Views,layoutTpl,infoTpl){
+
+  ], function(Marionette,App,BackboneSyphon,Views,layoutTpl,infoTpl,respTpl){
 
 
     var Show = {};
@@ -16,9 +18,8 @@ define(["marionette","app","common/views",
     regions:{
        headerRegion: "#hl-region"
       ,infoRegion: "#info-region"
-      ,buttonPanelRegion: "#button-panel-region"
-      ,reviewsRegion: "#reviews-region"
-      ,panelRegion: "#panel-region"
+      ,respRegion: "#resp-region"
+      ,footerlRegion: "#footer-region"
     }
 
   });
@@ -34,10 +35,39 @@ define(["marionette","app","common/views",
 
   Show.Info = Marionette.View.extend({
       template: infoTpl,
-     
+      events: {
+       "click .js-submit": "formSubmitted"
+      },
+
+      formSubmitted:function(e){
+        e.preventDefault();
+        var data = Backbone.Syphon.serialize(this);
+
+        this.trigger("show:formSubmitted",data);
+
+      },
      onAttach: function(){
       
-      }          
+      },          
+
+  });
+
+  Show.Resp = Marionette.View.extend({
+      template: respTpl,
+      events: {
+       "click .js-submit": "formSubmitted"
+      },
+
+      formSubmitted:function(e){
+        e.preventDefault();
+        var data = Backbone.Syphon.serialize(this);
+
+        this.trigger("show:formSubmitted",data);
+
+      },
+     onAttach: function(){
+      
+      },          
 
   });
 
