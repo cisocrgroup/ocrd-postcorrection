@@ -30,16 +30,28 @@ define(["app","common/util","common/views","apps/ocrd/show/show_view"], function
 
 			  ocrdShowHeader = new Show.Header();
 			  ocrdShowInfo = new Show.Info();
-
-			  ocrdShowInfo.on("show:formSubmitted",function(data){
-
-			  	var postingHalloWorld = UtilEntitites.API.postHalloWorld(data); 
-
-  				$.when(postingHalloWorld).done(function(test){
+			  ocrdShowExampleResponse = new Show.Resp({results:{}})
 
 
-  					var ocrdShowExampleResponse = new Show.Resp({model:test})
-	         		ocrdShowLayout.showChildView('respRegion',ocrdShowExampleResponse);
+			  ocrdShowInfo.on("show:training_clicked",function(methods){
+
+
+			  	var postingTrainingData = UtilEntitites.API.startTraining({methods:methods}); 
+
+  				$.when(postingTrainingData).done(function(response){
+  					
+  					var resultarray = JSON.parse(response.result);
+
+  					for (key in resultarray) {
+						console.log(resultarray[key].evalstring) 
+
+  						resultarray[key].evalstring = resultarray[key].evalstring[0].replace(/(?:\r\n|\r|\n)/g, '<br />');
+
+  					}
+
+
+  					ocrdShowExampleResponse.options.results = resultarray;
+  					ocrdShowExampleResponse.render();
 
 	    		}).fail(function(response){ 
 
@@ -62,6 +74,7 @@ define(["app","common/util","common/views","apps/ocrd/show/show_view"], function
 
 	          ocrdShowLayout.showChildView('headerRegion',ocrdShowHeader);
 	          ocrdShowLayout.showChildView('infoRegion',ocrdShowInfo);
+	          ocrdShowLayout.showChildView('respRegion',ocrdShowExampleResponse);
 
 
 

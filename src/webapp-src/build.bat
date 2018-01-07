@@ -2,6 +2,10 @@ rem ========================
 rem build script for windows
 rem ========================
 
+@echo off
+
+set arg1=%1
+
 copy index.html ..\webapp\index.html 
 copy assets\js\vendor\tether.min.js ..\webapp\assets\js\tether.min.js
 
@@ -16,4 +20,15 @@ robocopy assets\css ..\webapp\assets\css /s /e
 cd assets\js
 node r.js -o build.js
 
-cd ..\..
+if "%arg1%" == "-doc" (
+	cd ..\..\..\
+	cd resources\raml
+	ryaml2json api.raml > api.json
+	copy api.json ..\..\webapp\assets\js\api.json
+	cd ..\..\
+	cd webapp-src
+) else (
+  cd ..\..\
+)
+
+@echo on

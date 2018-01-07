@@ -13,3 +13,17 @@ cp -r assets/css ../webapp/assets
 
 cd assets/js
 node r.js -o build.js
+
+if [$1 == "-doc"]
+then 
+	cd ../../../
+		cd resources/raml
+		ryaml2json api.raml > api.json
+    	cp api.json ../../webapp/assets/js/api.json
+
+		cd ../../
+		cd webapp-src
+else 
+  cd ../../
+fi 
+

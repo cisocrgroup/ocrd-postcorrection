@@ -1,10 +1,9 @@
-package unit_tests;
 
+package ocrd.rest.raml.impl;
 
 import java.net.URI;
 import java.util.Scanner;
 
-import javax.ws.rs.client.WebTarget;
 
 
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -12,27 +11,16 @@ import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.servlet.ServletContainer;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import ocrd.rest.raml.handler.OcrdHandler;
 
-import ocrd.rest.raml.impl.OcrdResourceImpl;
 
-import junit.framework.Assert;
-
-public class OcrdHandlerTests {
-	
-	
-	public static HttpServer server;
-	private WebTarget target;
-
-	@Before
-	public void setUp() throws Exception {
-	
-		
+public class RunLocalGrizzly
+{
+    @SuppressWarnings("resource")
+	public static void main(final String[] args) throws Exception
+    //Runs the API & webapp within a local grizzly2 server under port 8181
+    {
 		OcrdHandler ocrd_handler = new OcrdHandler();
 
 		//Add REST api classes
@@ -54,22 +42,12 @@ public class OcrdHandlerTests {
         //Disable file locking of static webcontent
         server.getListener("grizzly").getFileCache().setEnabled(false);
 
-       
+        System.out.println("Strike ENTER to stop...");
+        new Scanner(System.in).nextLine();
 
-	}
+        server.stop();
 
-
-	// test methods here..
-	
-	@Test
-//	public void testGetXY){
-//		
-//	}
-	
-	
-	@After
-	public void tearDown() throws Exception {
-		server.stop();
-	}
-
+        System.out.println("Bye!");
+        System.exit(0);
+    }
 }

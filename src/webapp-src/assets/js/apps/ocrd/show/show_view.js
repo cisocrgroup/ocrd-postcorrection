@@ -35,15 +35,29 @@ define(["marionette","app","backbone.syphon","common/views",
 
   Show.Info = Marionette.View.extend({
       template: infoTpl,
-      events: {
-       "click .js-submit": "formSubmitted"
+      events:{
+      'click .js-train' : 'training_clicked'
       },
+     
 
-      formSubmitted:function(e){
+      training_clicked:function(e){
         e.preventDefault();
-        var data = Backbone.Syphon.serialize(this);
+        methods = [];
 
-        this.trigger("show:formSubmitted",data);
+          $('.method_select').children().each(function(){
+
+              if($(this).is(':checked')){
+                methods.push("{type:"+$(this).val()+"}")
+
+              }
+        
+        })
+
+      var that = this;
+         $('.loading_background').fadeIn(function(){
+          that.trigger("show:training_clicked",methods);
+          })
+        
 
       },
      onAttach: function(){
@@ -54,9 +68,7 @@ define(["marionette","app","backbone.syphon","common/views",
 
   Show.Resp = Marionette.View.extend({
       template: respTpl,
-      events: {
-       "click .js-submit": "formSubmitted"
-      },
+
 
       formSubmitted:function(e){
         e.preventDefault();
@@ -65,9 +77,26 @@ define(["marionette","app","backbone.syphon","common/views",
         this.trigger("show:formSubmitted",data);
 
       },
-     onAttach: function(){
+     onDomRefresh: function(){
       
-      },          
+      results = Marionette.getOption(this,"results")
+      console.log(results)
+         if(results.length==0){
+          $('.loading_background').fadeOut(function(){
+              });
+          }
+          else {
+            $("#tabs").tab();
+            $('.loading_background').hide();
+          }
+
+      },  
+      serializeData: function(){
+       return {
+       results: Marionette.getOption(this,"results")
+       }
+      }
+        
 
   });
 

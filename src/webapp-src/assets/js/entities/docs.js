@@ -1,29 +1,27 @@
 // ================
-// entities/util.js
+// entities/docs.js
 // ================
 
-define(["app"], function(App){
+define(["app"], function(IPS_App){
 
   var Entities={};
-
- 
 
 Entities.API = {
 
 
-  startTraining: function(data){
+  getJson: function(data){
     var defer = jQuery.Deferred();
-    $.ajax({
-         headers: { 
+        $.ajax({
+        headers: { 
         'Accept': 'application/json',
         'Content-Type': 'application/json' 
-        },
-        url: "/api/trainclassifier",
-        type: "POST",
-        data:JSON.stringify(data),
+         },
+        url: "assets/js/api.json",
+        type: "GET",
+        dataType:"json",
         success: function(data) {
-
-             defer.resolve(data);
+          console.log(data)
+          defer.resolve(data);
 
             },
             error: function(data){
@@ -31,9 +29,14 @@ Entities.API = {
             }
     });
 
+
     return defer.promise();
     
-}
+},
+
+  
+
+
 
 
 };
