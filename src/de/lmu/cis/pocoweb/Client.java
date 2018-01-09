@@ -18,7 +18,7 @@ import javax.json.JsonReader;
 import org.apache.commons.io.IOUtils;
 
 class Client {
-  private String host;
+  private final String host;
   private String sid;
 
   public static Client login(String host, String user, String pass)
@@ -30,6 +30,17 @@ class Client {
   public SuggestionsData getSuggestions(int pid) throws Exception {
     return get("/books/" + pid + "/suggestions", SuggestionsData.class);
   }
+
+  public BooksData getBooks() throws Exception {
+    return get("/books", BooksData.class);
+  }
+
+  public BookData getBook(int pid) throws Exception {
+    return get("/books/" + pid, BookData.class);
+  }
+
+  public String getHost() { return this.host; }
+  public String getSid() { return this.sid; }
 
   private Client(String host) {
     this.host = host;
