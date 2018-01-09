@@ -90,16 +90,4 @@ class Client {
     }
     return con;
   }
-
-  public static void main(String[] args) {
-    try {
-      Client client = Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb",
-                                   "pocoweb123");
-      System.out.println("sid: " + client.sid);
-      SuggestionsData s = client.getSuggestions(305);
-      System.out.println(new Gson().toJson(s));
-    } catch (Exception e) {
-      System.out.println("error: " + e);
-    }
-  }
 }
