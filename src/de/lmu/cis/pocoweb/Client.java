@@ -23,12 +23,12 @@ class Client {
 
   public static Client login(String host, String user, String pass)
       throws Exception {
-    Client client = new Client(host);
-    return client.login(user, pass);
+    Client Client = new Client(host);
+    return Client.login(user, pass);
   }
 
-  public Suggestions getSuggestions(int pid) throws Exception {
-    return get("/books/" + pid + "/suggestions", Suggestions.class);
+  public SuggestionsData getSuggestions(int pid) throws Exception {
+    return get("/books/" + pid + "/suggestions", SuggestionsData.class);
   }
 
   private Client(String host) {
@@ -37,7 +37,7 @@ class Client {
   }
 
   private Client login(String user, String pass) throws Exception {
-    SID sid = post("/login", new Login(user, pass), SID.class);
+    SidData sid = post("/login", new LoginData(user, pass), SidData.class);
     this.sid = sid.sid;
     return this;
   }
@@ -85,7 +85,7 @@ class Client {
       Client client = Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb",
                                    "pocoweb123");
       System.out.println("sid: " + client.sid);
-      Suggestions s = client.getSuggestions(305);
+      SuggestionsData s = client.getSuggestions(305);
       System.out.println(new Gson().toJson(s));
     } catch (Exception e) {
       System.out.println("error: " + e);

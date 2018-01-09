@@ -1,5 +1,5 @@
 package de.lmu.cis.pocoweb;
 
-class SID {
+class SidData {
   public String sid;
 }
