@@ -8,21 +8,21 @@ class Main {
       Client client = Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb",
                                    "pocoweb123");
       System.out.println("sid: " + client.getSid());
-      BookData nb = client.uploadBook(
+      ProjectData nb = client.uploadProject(
           new FileInputStream(new File("testdata/hobbes-ocropus.zip")));
       nb.author = "flo";
       nb.title = "title";
-      client.updateBookData(nb);
-      BookData[] bs = client.listBooks();
-      for (BookData b : bs) {
+      client.updateProjectData(nb);
+      ProjectData[] bs = client.listProjects();
+      for (ProjectData b : bs) {
         System.out.println(b.author + " " + b.title + " " + b.projectId);
       }
-      BookData b = client.getBook(305);
+      ProjectData b = client.getProject(305);
       for (int p : b.pageIds) {
         System.out.println("book " + 305 + " page " + p);
       }
       System.out.println("PID: " + nb.projectId);
-      client.deleteBook(nb.projectId);
+      client.deleteProject(nb.projectId);
     } catch (Exception e) {
       System.out.println("error: " + e);
     }

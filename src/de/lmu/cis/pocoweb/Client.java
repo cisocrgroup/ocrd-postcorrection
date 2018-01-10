@@ -31,12 +31,12 @@ class Client {
     return get("/books/" + pid + "/suggestions", SuggestionsData.class);
   }
 
-  public BookData[] listBooks() throws Exception {
-    return get("/books", BooksData.class).books;
+  public ProjectData[] listProjects() throws Exception {
+    return get("/books", ProjectsData.class).books;
   }
 
-  public BookData getBook(int pid) throws Exception {
-    return get("/books/" + pid, BookData.class);
+  public ProjectData getProject(int pid) throws Exception {
+    return get("/books/" + pid, ProjectData.class);
   }
 
   public TokensData getTokens(int bid, int pid) throws Exception {
@@ -50,15 +50,15 @@ class Client {
                TokenData.class);
   }
 
-  public BookData uploadBook(InputStream in) throws Exception {
-    return post("/books", in, BookData.class, "application/zip");
+  public ProjectData uploadProject(InputStream in) throws Exception {
+    return post("/books", in, ProjectData.class, "application/zip");
   }
 
-  public BookData updateBookData(BookData b) throws Exception {
-    return post(String.format("/books/%d", b.projectId), b, BookData.class);
+  public ProjectData updateProjectData(ProjectData b) throws Exception {
+    return post(String.format("/books/%d", b.projectId), b, ProjectData.class);
   }
 
-  public void deleteBook(int bid) throws Exception {
+  public void deleteProject(int bid) throws Exception {
     delete(String.format("/books/%d", bid));
   }
 
