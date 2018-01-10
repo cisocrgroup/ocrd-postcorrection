@@ -39,6 +39,17 @@ class Client {
     return get("/books/" + pid, BookData.class);
   }
 
+  public TokensData getTokens(int bid, int pid) throws Exception {
+    return get(String.format("/books/%d/pages/%d", bid, pid), TokensData.class);
+  }
+
+  public TokenData getToken(int bid, int pid, int lid, int tid)
+      throws Exception {
+    return get(String.format("/books/%d/pages/%d/lines/%d/tokens/%d", bid, pid,
+                             lid, tid),
+               TokenData.class);
+  }
+
   public String getHost() { return this.host; }
   public String getSid() { return this.sid; }
 
@@ -54,16 +65,22 @@ class Client {
   }
 
   private <T> T post(String path, Object data, Class<T> clss) throws Exception {
+    return post(path, IOUtils.toInputStream(new Gson().toJson(data), "UTF-8"),
+                clss, "application/json; charset=UTF-8");
+  }
+
+  private <T> T post(String path, InputStream in, Class<T> clss, String ct)
+      throws Exception {
     HttpURLConnection con = getConnection(path);
     con.setRequestMethod("POST");
-    con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+    con.setRequestProperty("Content-Type", ct);
     con.setDoOutput(true);
     try (DataOutputStream out = new DataOutputStream(con.getOutputStream());) {
-      out.writeBytes(new Gson().toJson(data));
+      IOUtils.copy(in, out);
       out.flush();
     }
-    try (InputStream in = con.getInputStream();) {
-      return deserialize(in, clss);
+    try (InputStream cin = con.getInputStream();) {
+      return deserialize(cin, clss);
     }
   }
 

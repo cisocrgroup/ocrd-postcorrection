@@ -10,6 +10,12 @@ class Main {
       for (BookData b : bs.books) {
         System.out.println(b.author + " " + b.title + " " + b.bookId);
       }
+      BookData b = client.getBook(305);
+      for (int p : b.pageIds) {
+        System.out.println("book " + 305 + " page " + p);
+        // TokensData ts = client.getTokens(305, p);
+        // for (
+      }
     } catch (Exception e) {
       System.out.println("error: " + e);
     }
