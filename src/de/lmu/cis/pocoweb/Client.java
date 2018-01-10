@@ -28,38 +28,40 @@ class Client {
   }
 
   public SuggestionsData getSuggestions(int pid) throws Exception {
-    return get("/books/" + pid + "/suggestions", SuggestionsData.class);
+    return get("/books/" + pid + "/suggestions", SuggestionsData.class, 200);
   }
 
   public ProjectData[] listProjects() throws Exception {
-    return get("/books", ProjectsData.class).books;
+    return get("/books", ProjectsData.class, 200).books;
   }
 
   public ProjectData getProject(int pid) throws Exception {
-    return get("/books/" + pid, ProjectData.class);
+    return get("/books/" + pid, ProjectData.class, 200);
   }
 
   public TokensData getTokens(int bid, int pid) throws Exception {
-    return get(String.format("/books/%d/pages/%d", bid, pid), TokensData.class);
+    return get(String.format("/books/%d/pages/%d", bid, pid), TokensData.class,
+               200);
   }
 
   public TokenData getToken(int bid, int pid, int lid, int tid)
       throws Exception {
     return get(String.format("/books/%d/pages/%d/lines/%d/tokens/%d", bid, pid,
                              lid, tid),
-               TokenData.class);
+               TokenData.class, 200);
   }
 
   public ProjectData uploadProject(InputStream in) throws Exception {
-    return post("/books", in, ProjectData.class, "application/zip");
+    return post("/books", in, ProjectData.class, "application/zip", 200, 201);
   }
 
   public ProjectData updateProjectData(ProjectData b) throws Exception {
-    return post(String.format("/books/%d", b.projectId), b, ProjectData.class);
+    return post(String.format("/books/%d", b.projectId), b, ProjectData.class,
+                200);
   }
 
   public void deleteProject(int bid) throws Exception {
-    delete(String.format("/books/%d", bid));
+    delete(String.format("/books/%d", bid), 200);
   }
 
   public String getHost() { return this.host; }
@@ -71,18 +73,19 @@ class Client {
   }
 
   private Client login(String user, String pass) throws Exception {
-    SidData sid = post("/login", new LoginData(user, pass), SidData.class);
+    SidData sid = post("/login", new LoginData(user, pass), SidData.class, 200);
     this.sid = sid.sid;
     return this;
   }
 
-  private <T> T post(String path, Object data, Class<T> clss) throws Exception {
+  private <T> T post(String path, Object data, Class<T> clss, int... codes)
+      throws Exception {
     return post(path, IOUtils.toInputStream(new Gson().toJson(data), "UTF-8"),
-                clss, "application/json; charset=UTF-8");
+                clss, "application/json; charset=UTF-8", codes);
   }
 
-  private <T> T post(String path, InputStream in, Class<T> clss, String ct)
-      throws Exception {
+  private <T> T post(String path, InputStream in, Class<T> clss, String ct,
+                     int... codes) throws Exception {
     HttpURLConnection con = getConnection(path);
     con.setRequestMethod("POST");
     con.setRequestProperty("Content-Type", ct);
@@ -91,22 +94,25 @@ class Client {
       IOUtils.copy(in, out);
       out.flush();
     }
+    validateResponseCode(con.getResponseCode(), codes);
     try (InputStream cin = con.getInputStream();) {
       return deserialize(cin, clss);
     }
   }
 
-  private <T> T get(String path, Class<T> clss) throws Exception {
+  private <T> T get(String path, Class<T> clss, int... codes) throws Exception {
     HttpURLConnection con = getConnection(path);
     con.setRequestMethod("GET");
+    validateResponseCode(con.getResponseCode(), codes);
     try (InputStream in = con.getInputStream();) {
       return deserialize(in, clss);
     }
   }
 
-  private int delete(String path)throws Exception {
+  private int delete(String path, int... codes)throws Exception {
     HttpURLConnection con = getConnection(path);
     con.setRequestMethod("DELETE");
+    validateResponseCode(con.getResponseCode(), codes);
     return con.getResponseCode();
   }
 
@@ -115,6 +121,16 @@ class Client {
     StringWriter out = new StringWriter();
     IOUtils.copy(in, out, Charset.forName("UTF-8"));
     return new Gson().fromJson(out.toString(), clss);
+  }
+
+  private static void validateResponseCode(int got, int... codes)
+      throws Exception {
+    for (int want : codes) {
+      if (want == got) {
+        return;
+      }
+    }
+    throw new Exception("Invalid return code: " + got);
   }
 
   private HttpURLConnection getConnection(String path) throws Exception {
