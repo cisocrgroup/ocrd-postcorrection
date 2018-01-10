@@ -50,6 +50,14 @@ class Client {
                TokenData.class);
   }
 
+  public BookData uploadBook(InputStream in) throws Exception {
+    return post("/books", in, BookData.class, "application/zip");
+  }
+
+  public BookData updateBookData(BookData b) throws Exception {
+    return post(String.format("/books/%d", b.bookId), b, BookData.class);
+  }
+
   public String getHost() { return this.host; }
   public String getSid() { return this.sid; }
 
