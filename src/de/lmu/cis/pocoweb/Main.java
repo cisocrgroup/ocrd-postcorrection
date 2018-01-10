@@ -10,9 +10,12 @@ class Main {
       System.out.println("sid: " + client.getSid());
       BookData nb = client.uploadBook(
           new FileInputStream(new File("testdata/hobbes-ocropus.zip")));
+      nb.author = "flo";
+      nb.title = "title";
+      client.updateBookData(nb);
       BookData[] bs = client.listBooks();
       for (BookData b : bs) {
-        System.out.println(b.author + " " + b.title + " " + b.bookId);
+        System.out.println(b.author + " " + b.title + " " + b.projectId);
       }
       BookData b = client.getBook(305);
       for (int p : b.pageIds) {

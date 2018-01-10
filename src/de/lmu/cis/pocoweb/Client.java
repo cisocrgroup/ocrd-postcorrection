@@ -55,7 +55,7 @@ class Client {
   }
 
   public BookData updateBookData(BookData b) throws Exception {
-    return post(String.format("/books/%d", b.bookId), b, BookData.class);
+    return post(String.format("/books/%d", b.projectId), b, BookData.class);
   }
 
   public void deleteBook(int bid) throws Exception {
