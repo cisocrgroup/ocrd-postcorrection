@@ -5,6 +5,7 @@ class BookData {
   public String title;
   public String language;
   public String profilerUrl;
+  public String description;
   public int year;
   public int bookId;
   public int projectId;
