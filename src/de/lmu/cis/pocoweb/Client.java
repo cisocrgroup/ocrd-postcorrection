@@ -31,8 +31,8 @@ class Client {
     return get("/books/" + pid + "/suggestions", SuggestionsData.class);
   }
 
-  public BooksData getBooks() throws Exception {
-    return get("/books", BooksData.class);
+  public BookData[] listBooks() throws Exception {
+    return get("/books", BooksData.class).books;
   }
 
   public BookData getBook(int pid) throws Exception {
@@ -56,6 +56,10 @@ class Client {
 
   public BookData updateBookData(BookData b) throws Exception {
     return post(String.format("/books/%d", b.bookId), b, BookData.class);
+  }
+
+  public void deleteBook(int bid) throws Exception {
+    delete(String.format("/books/%d", bid));
   }
 
   public String getHost() { return this.host; }
@@ -98,6 +102,12 @@ class Client {
     try (InputStream in = con.getInputStream();) {
       return deserialize(in, clss);
     }
+  }
+
+  private int delete(String path)throws Exception {
+    HttpURLConnection con = getConnection(path);
+    con.setRequestMethod("DELETE");
+    return con.getResponseCode();
   }
 
   private static <T> T deserialize(InputStream in, Class<T> clss)
