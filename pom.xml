@@ -153,6 +153,7 @@
 				<archive>
 				  <manifest>
 					<mainClass>de.lmu.cis.pocoweb.Main</mainClass>
+					<!-- <mainClass>ocrd.rest.raml.impl.RunLocalGrizzly</mainClass> -->
 				  </manifest>
 				</archive>
 				<descriptorRefs>
