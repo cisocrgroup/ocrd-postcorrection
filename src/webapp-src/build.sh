@@ -1,7 +1,7 @@
 #!/bin/bash
 # build script for linux/Unix systems
 
-cp index.html ../webapp/index.html 
+cp index.html ../webapp/index.html
 cp assets/js/vendor/tether.min.js ../webapp/assets/js
 
 cp assets/js/vendor/jquery.js ../webapp/assets/js/jquery.js
@@ -14,8 +14,7 @@ cp -r assets/css ../webapp/assets
 cd assets/js
 node r.js -o build.js
 
-if [$1 == "-doc"]
-then 
+if [ "$1" == "-doc" ]; then
 	cd ../../../
 		cd resources/raml
 		ryaml2json api.raml > api.json
@@ -23,7 +22,7 @@ then
 
 		cd ../../
 		cd webapp-src
-else 
+else
   cd ../../
-fi 
+fi
 
