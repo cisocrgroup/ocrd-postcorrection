@@ -10,19 +10,19 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import ocrd.rest.raml.handler.OcrdHandler;
+import ocrd.rest.raml.handler.ProjectsHandler;
 
 public class RunLocalGrizzly {
   @SuppressWarnings("resource")
   public static void main(final String[] args) throws Exception
-  // Runs the API & webapp within a local grizzly2 server under port 8181
+  // Runs the API & webapp within a local grizzly2 server under port 8888
   {
-    OcrdHandler ocrd_handler = new OcrdHandler();
 
     // Add REST api classes
     final ResourceConfig config = new ResourceConfig();
 
     config.register(OcrdResourceImpl.class);
+    config.register(ProjectsResourceImpl.class);
 
     config.register(MultiPartFeature.class);
 

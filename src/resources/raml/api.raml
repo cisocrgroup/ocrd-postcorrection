@@ -5,10 +5,31 @@ types:
     type: object
     properties:
       methods: object
+
   EvaluationResult:
     type: object
     properties:
       result: string
+
+  Project:
+    type: object
+    properties:
+      author: string
+      title: string
+      projectId: number
+      language: string
+      profilerUrl: string
+      description: string
+      year: number
+      pages: number
+      isBook: boolean
+      pageIds: number[]
+
+  Projects:
+    type: object
+    properties:
+      projects: Project[]
+
 /trainclassifier:
   post:
     body:
@@ -19,3 +40,11 @@ types:
         body:
           application/json:
             type: EvaluationResult
+/projects:
+  /list:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Projects

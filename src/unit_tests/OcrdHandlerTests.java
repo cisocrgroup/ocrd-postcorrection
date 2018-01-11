@@ -17,7 +17,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ocrd.rest.raml.handler.OcrdHandler;
+import ocrd.rest.raml.handler.ProjectsHandler;
 
 import ocrd.rest.raml.impl.OcrdResourceImpl;
 
@@ -33,7 +33,7 @@ public class OcrdHandlerTests {
 	public void setUp() throws Exception {
 	
 		
-		OcrdHandler ocrd_handler = new OcrdHandler();
+		ProjectsHandler ocrd_handler = new ProjectsHandler();
 
 		//Add REST api classes
         final ResourceConfig config = new ResourceConfig();

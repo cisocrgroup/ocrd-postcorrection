@@ -50,10 +50,11 @@ App.on("start", function(){
                "apps/header/header_app"
                ,"apps/home/home_app"
                ,"apps/footer/footer_app"
+               ,"apps/projects/projects_app"
                ,"apps/ocrd/ocrd_app"
                ,"apps/docs/docs_app"
 
-        ], function (HeaderApp,HomeApp,FooterApp,OcrdApp,DocsApp) {
+        ], function (HeaderApp,HomeApp,FooterApp,ProjectsApp,OcrdApp,DocsApp) {
 
 
     var app_region = App.getRegion();

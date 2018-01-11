@@ -20,10 +20,10 @@ define(["app","common/util","apps/home/show/show_view","apps/header/show/show_vi
                 "color": "green",
                 "icon": "fa-align-left",
                 "id": "test_btn",
-                "name": "OCRD Prototype Tests",
+                "name": "OCR Projects",
                 "seq": 1,
-                "text": "Test pages for UIF prototype.",
-                "url": "ocrd:show",
+                "text": "Test pages for OCR projects.",
+                "url": "projects:list",
             }, {
                 "color": "blue",
                 "icon": "fa-book",

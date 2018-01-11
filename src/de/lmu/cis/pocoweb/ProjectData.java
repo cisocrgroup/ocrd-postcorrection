@@ -1,6 +1,6 @@
 package de.lmu.cis.pocoweb;
 
-class ProjectData {
+public class ProjectData {
   public String author;
   public String title;
   public String language;

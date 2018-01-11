@@ -17,7 +17,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import org.apache.commons.io.IOUtils;
 
-class Client {
+public class Client {
   private final String host;
   private String sid;
 

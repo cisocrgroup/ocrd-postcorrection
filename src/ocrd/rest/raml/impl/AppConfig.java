@@ -7,6 +7,8 @@ public class AppConfig extends ResourceConfig {
 	
 	public AppConfig() {
 		register(OcrdResourceImpl.class);
+		register(ProjectsResourceImpl.class);
+
 	
 	}
    

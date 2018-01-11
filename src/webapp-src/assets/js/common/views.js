@@ -259,7 +259,7 @@ onAttach: function(){
 				columns: Marionette.getOption(this,"columns"),
         		header_bg: Marionette.getOption(this,"header_bg"),	
         		border_color: Marionette.getOption(this,"border_color"),	
-				items: this.collection.toJSON(),
+				items: Marionette.getOption(this,"collection"),
      		    header:"",
      		    backBtn:"",
      		    datatable_options: Marionette.getOption(this,"datatable_options")
@@ -278,11 +278,12 @@ onAttach: function(){
 
 	  onDomRefresh: function(){
 
+
 	  	var old_table_height = 0;
 
 	  	this.datatable_options['initComplete'] = function(){
 
-	           	   setTimeout(function() {placeFooter();old_table_height = $('#table tr').length;}, 1000);
+	           	   setTimeout(function() {old_table_height = $('#table tr').length;}, 1000);
 	          
 	           }
 	       
@@ -305,13 +306,11 @@ onAttach: function(){
 	  	    if(old_table_height!=$('#table tr').length){	
 
 	  	  			$(window).scrollTop(0);
-	  	  			placeFooter();
 	  	  			page_changed = false;
 
 	  	  		 }
 
 	  	     if(length_changed){
-	  	     	placeFooter();
 	  	     	length_changed = false;
 	  	     } 
 

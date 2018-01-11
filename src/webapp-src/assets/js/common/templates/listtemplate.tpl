@@ -18,7 +18,8 @@
 
 
      <%
-     var count = 0;
+     var count = 0; 
+     console.log(items);
      _.each(items, function(item) {
      
       %>
@@ -35,34 +36,9 @@
 
         <% for(var i=0;i<columns.length;i++){ %>  
 
-          <% column=columns[i]; if(column.name=="topicacronym") { %>
-
-          <td class="prop_icon-td">
-          <div class="prop_icon">
-            
-        <% if (item['topicacronym'] == "WOOD") { %> <img src="assets/images/icons/woodicon.svg" > <% } %>
-        <% if (item['topicacronym'] == "AGRI") { %> <img src="assets/images/icons/agriicon.svg" > <% } %>
-        <% if (item['topicacronym'] == "ECO") { %> <img src="assets/images/icons/ecoicon.svg" > <% } %>
-        <% if (item['topicacronym'] == "GEO") { %> <img src="assets/images/icons/landicon.svg" > <% } %>
-        <% if (item['topicacronym'] == "H2O") { %> <img src="assets/images/icons/watericon.svg" > <% } %>
-        <% if (item['topicacronym'] == "GLACIER") { %> <img src="assets/images/icons/glaciericon.svg" > <% } %>
-        <% if (item['topicacronym'] == "SOIL") { %> <img  src="assets/images/icons/soilicon.svg" > <% } %>
-        <% if (item['topicacronym'] == "HYDRO") { %> <img  src="assets/images/icons/hydroicon.svg" > <% } %>
-        <% if (item['topicacronym'] == "PHYSIC") { %> <img src="assets/images/icons/physic_icon.svg" > <% } %>
-
-        <div> <span class="prop_icon_title"> <%- item[column.name]%> </span> </div>
-
-          </div> 
-          </td>
-
-          <% } else {%>
-
-          <td> <%- item[column.name] %> </td>
-
-          <% } %>
-
-
-      
+          <% column=columns[i]; %>
+    
+          <td> <%- item[column.name] %> </td>      
 
         <% } %>  
        
