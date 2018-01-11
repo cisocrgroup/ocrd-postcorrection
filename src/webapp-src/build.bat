@@ -7,7 +7,7 @@ rem ========================
 set arg1=%1
 
 copy index.html ..\webapp\index.html 
-copy assets\js\vendor\tether.min.js ..\webapp\assets\js\tether.min.js
+copy assets\js\popper.js ..\webapp\assets\js\popper.js
 
 copy assets\js\vendor\jquery.js ..\webapp\assets\js\jquery.js
 

@@ -13,8 +13,8 @@ define(["marionette","app","common/views","apps/projects/common/views"], functio
     List.Header = CommonViews.Header.extend({
     initialize: function(){
         this.title = "OCR Projects"
-        this.icon ="fa fa-th-list"
-        this.color ="red"
+        this.icon ="fa fa-align-left"
+        this.color ="green"
       }
   });
 

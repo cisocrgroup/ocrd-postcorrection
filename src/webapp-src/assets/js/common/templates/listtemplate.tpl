@@ -3,14 +3,14 @@
  <div class="col col-lg-12" >
 
 
- <table class="table table-bordered  dt-responsive no-footer dtr-inline collapsed custom-table red-border myhover" 
+ <table class="table table-bordered" 
  id="table" cellspacing="0" width="100%"  style="margin-top: 20px !important; margin-bottom: 30px !important;" >
 
 
      <thead>
       <tr>
       <% _.each(headers, function(header) { %>  
-        <th class="table_head <%-border_color%>-border-bottom <%-header_bg%>-light-bg"><%-header.name%></th>
+        <th><%-header.name%></th>
        <% }); %>         
       </tr>
      </thead>

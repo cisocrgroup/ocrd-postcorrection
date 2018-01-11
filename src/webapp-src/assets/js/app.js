@@ -41,7 +41,6 @@ Backbone.history.navigate(route, options);
 App.getCurrentRoute = function(){
  return Backbone.history.fragment
 };
-
 App.on("start", function(){
 
 

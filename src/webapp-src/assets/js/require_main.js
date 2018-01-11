@@ -25,6 +25,7 @@ requirejs.config({
     tpl: "vendor/underscore-tpl",
     underscore: "vendor/underscore",
 
+
     bootstrap:"vendor/bootstrap.min",
     "datepicker":"vendor/datepicker",
 
@@ -42,6 +43,11 @@ requirejs.config({
     underscore: {
       exports: "_"
     },
+
+      "bootstrap":{
+      deps: ["jquery"],
+    },
+
     backbone: {
       deps: ["jquery", "underscore"],
       exports: "Backbone"
