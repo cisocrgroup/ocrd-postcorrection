@@ -12,10 +12,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.List;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import org.apache.commons.io.IOUtils;
+import org.raml.jaxrs.example.model.Project;
+import org.raml.jaxrs.example.model.Projects;
 
 public class Client {
   private final String host;
@@ -31,12 +34,13 @@ public class Client {
     return get("/books/" + pid + "/suggestions", SuggestionsData.class, 200);
   }
 
-  public ProjectData[] listProjects() throws Exception {
-    return get("/books", ProjectsData.class, 200).books;
+  public List<Project> listProjects() throws Exception {
+    return get("/books", Projects.class, 200).getProjects();
   }
 
-  public ProjectData getProject(int pid) throws Exception {
-    return get("/books/" + pid, ProjectData.class, 200);
+  // public ProjectData getProject(int pid) throws Exception {
+  public Project getProject(int pid) throws Exception {
+    return get("/books/" + pid, Project.class, 200);
   }
 
   public TokensData getTokens(int bid, int pid) throws Exception {
@@ -51,12 +55,12 @@ public class Client {
                TokenData.class, 200);
   }
 
-  public ProjectData uploadProject(InputStream in) throws Exception {
-    return post("/books", in, ProjectData.class, "application/zip", 200, 201);
+  public Project uploadProject(InputStream in) throws Exception {
+    return post("/books", in, Project.class, "application/zip", 200, 201);
   }
 
-  public ProjectData updateProjectData(ProjectData b) throws Exception {
-    return post(String.format("/books/%d", b.projectId), b, ProjectData.class,
+  public Project updateProjectData(Project p) throws Exception {
+    return post(String.format("/books/%d", p.getProjectId()), p, Project.class,
                 200);
   }
 

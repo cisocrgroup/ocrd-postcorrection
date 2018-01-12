@@ -1,6 +1,8 @@
 package de.lmu.cis.pocoweb;
 import java.io.FileInputStream;
 import java.io.File;
+import java.util.List;
+import org.raml.jaxrs.example.model.Project;
 
 class Main {
   public static void main(String[] args) {
@@ -8,21 +10,22 @@ class Main {
       Client client = Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb",
                                    "pocoweb123");
       System.out.println("sid: " + client.getSid());
-      ProjectData np = client.uploadProject(
+      Project np = client.uploadProject(
           new FileInputStream(new File("testdata/hobbes-ocropus.zip")));
-      np.author = "flo";
-      np.title = "title";
+      np.setAuthor("flo");
+      np.setTitle("foo");
       client.updateProjectData(np);
-      ProjectData[] ps = client.listProjects();
-      for (ProjectData p : ps) {
-        System.out.println(p.author + " " + p.title + " " + p.projectId);
+      List<Project> ps = client.listProjects();
+      for (Project p : ps) {
+        System.out.println(p.getAuthor() + " " + p.getTitle() + " " +
+                           p.getProjectId());
       }
-      ProjectData p = client.getProject(305);
-      for (int pid : p.pageIds) {
+      Project p = client.getProject(305);
+      for (Integer pid : p.getPageIds()) {
         System.out.println("book " + 305 + " page id " + pid);
       }
-      System.out.println("PID: " + np.projectId);
-      client.deleteProject(np.projectId);
+      System.out.println("PID: " + np.getProjectId());
+      client.deleteProject(np.getProjectId());
     } catch (Exception e) {
       System.out.println("error: " + e);
     }
