@@ -30,6 +30,42 @@ types:
     properties:
       projects: Project[]
 
+  Box:
+    type: object
+    properties:
+      left: integer
+      right: integer
+      top: integer
+      bottom: integer
+      width: integer
+      height: integer
+
+  Line:
+    type: object
+    properties:
+      imgFile: string
+      ocr: string
+      cor: string
+      cuts: integer[]
+      confidences: number[]
+      lineId: integer
+      pageId: integer
+      projectId: integer
+      averageConfidence: number
+      isFullyCorrected: boolean
+      isPartiallyCorrected: boolean
+      box: Box
+
+  Page:
+    type: object
+    properties:
+      ocrFile: string
+      imgFile: string
+      pageId: integer
+      projectId: integer
+      box: Box
+      lines: Line[]
+
 /trainclassifier:
   post:
     body:
