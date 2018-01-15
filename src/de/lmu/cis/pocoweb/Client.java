@@ -19,6 +19,7 @@ import javax.json.JsonReader;
 import org.apache.commons.io.IOUtils;
 import org.raml.jaxrs.example.model.Project;
 import org.raml.jaxrs.example.model.Projects;
+import org.raml.jaxrs.example.model.Page;
 
 public class Client {
   private final String host;
@@ -66,6 +67,10 @@ public class Client {
 
   public void deleteProject(int bid) throws Exception {
     delete(String.format("/books/%d", bid), 200);
+  }
+
+  public Page getPage(int bid, int pid) throws Exception {
+    return get(String.format("/books/%d/pages/%d", bid, pid), Page.class, 200);
   }
 
   public String getHost() { return this.host; }
