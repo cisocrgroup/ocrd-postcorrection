@@ -84,3 +84,17 @@ types:
           body:
             application/json:
               type: Projects
+  /{projectID}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Project
+  /{projectID}/pages/{pageID}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Page

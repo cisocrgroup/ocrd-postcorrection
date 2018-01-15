@@ -7,13 +7,24 @@ import ocrd.rest.raml.handler.ProjectsHandler;
 
 public class ProjectsResourceImpl implements ProjectsResource {
 
+  @Override
+  public GetProjectsListResponse getProjectsList() throws Exception {
+    ProjectsHandler projects_handler = new ProjectsHandler();
+    Projects p = projects_handler.listProjects();
 
-	@Override
-	public GetProjectsListResponse getProjectsList() throws Exception {
-		ProjectsHandler projects_handler = new ProjectsHandler();
-		Projects p = projects_handler.listProjects();
-		
-		return GetProjectsListResponse.withJsonOK(p);
-	}
+    return GetProjectsListResponse.withJsonOK(p);
+  }
 
+  @Override
+  public GetProjectsByProjectIDPagesByPageIDResponse
+  getProjectsByProjectIDPagesByPageID(String projectID, String pageID)
+      throws Exception {
+    return null;
+  }
+
+  @Override
+  public GetProjectsByProjectIDResponse getProjectsByProjectID(String projectID)
+      throws Exception {
+    return null;
+  }
 }
