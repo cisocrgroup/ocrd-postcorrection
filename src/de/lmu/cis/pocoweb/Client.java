@@ -23,6 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.raml.jaxrs.example.model.Book;
 import org.raml.jaxrs.example.model.Page;
 import org.raml.jaxrs.example.model.Project;
+import org.raml.jaxrs.example.model.ProjectEntry;
 import org.raml.jaxrs.example.model.Projects;
 
 public class Client {
@@ -87,6 +88,12 @@ public class Client {
 
   public void deleteBook(int bid) throws Exception {
     delete(String.format("/books/%d", bid), 200);
+  }
+
+  public void deleteProject(Project p) throws Exception {
+    for (ProjectEntry e : p.getBooks()) {
+      deleteBook(e.getBook().getProjectId());
+    }
   }
 
   public Page getPage(int bid, int pid) throws Exception {
