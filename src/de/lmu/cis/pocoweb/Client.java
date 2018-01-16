@@ -1,7 +1,6 @@
 package de.lmu.cis.pocoweb;
 
 import com.google.gson.Gson;
-import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,14 +12,18 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import org.apache.commons.io.IOUtils;
-
 import org.raml.jaxrs.example.model.Book;
 import org.raml.jaxrs.example.model.Page;
+import org.raml.jaxrs.example.model.Project;
+import org.raml.jaxrs.example.model.Projects;
 
 public class Client {
   private final String host;
@@ -42,21 +45,34 @@ public class Client {
     return list;
   }
 
+  public Projects listProjects() throws Exception {
+    List<ProjectBook> projectBooks = listBooks();
+    Map<Integer, Project> map = new HashMap();
+    for (ProjectBook book : projectBooks) {
+      Integer ocrId = book.getOcrId();
+      if (!map.containsKey(ocrId)) {
+        map.put(ocrId, book.newProjectFromThis());
+      } else {
+        book.addThisToProject(map.get(ocrId), book.getOcrEngine());
+      }
+    }
+    List<Project> projects = new ArrayList(map.size());
+    projects.addAll(map.values());
+    return new Projects().withProjects(projects);
+  }
+
+  public Project getProject(int pid) throws Exception {
+    for (Project p : listProjects().getProjects()) {
+      if (p.getProjectId() == pid) {
+        return p;
+      }
+    }
+    throw new Exception("no such project: " + pid);
+  }
+
   // public ProjectData getProject(int pid) throws Exception {
   public ProjectBook getBook(int pid) throws Exception {
     return new ProjectBook(get("/books/" + pid, Book.class, 200));
-  }
-
-  public TokensData getTokens(int bid, int pid) throws Exception {
-    return get(String.format("/books/%d/pages/%d", bid, pid), TokensData.class,
-               200);
-  }
-
-  public TokenData getToken(int bid, int pid, int lid, int tid)
-      throws Exception {
-    return get(String.format("/books/%d/pages/%d/lines/%d/tokens/%d", bid, pid,
-                             lid, tid),
-               TokenData.class, 200);
   }
 
   public ProjectBook uploadBook(InputStream in) throws Exception {
@@ -77,12 +93,24 @@ public class Client {
     return get(String.format("/books/%d/pages/%d", bid, pid), Page.class, 200);
   }
 
-  public String getHost() { return this.host; }
-  public String getSid() { return this.sid; }
+  public TokensData getTokens(int bid, int pid) throws Exception {
+    return get(String.format("/books/%d/pages/%d", bid, pid), TokensData.class,
+               200);
+  }
+
+  public TokenData getToken(int bid, int pid, int lid, int tid)
+      throws Exception {
+    return get(String.format("/books/%d/pages/%d/lines/%d/tokens/%d", bid, pid,
+                             lid, tid),
+               TokenData.class, 200);
+  }
 
   public SuggestionsData getSuggestions(int pid) throws Exception {
     return get("/books/" + pid + "/suggestions", SuggestionsData.class, 200);
   }
+
+  public String getHost() { return this.host; }
+  public String getSid() { return this.sid; }
 
   private Client(String host) {
     this.host = host;

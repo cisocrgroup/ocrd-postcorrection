@@ -48,15 +48,29 @@ class ProjectBook extends Book {
   }
   public String getOcrUser() { return loadOcrData().ocrUser; }
 
-  public void addToProject(Project project, String ocrEngine) {
+  public Project newProjectFromThis() {
+    Project project = new Project()
+                          .withAuthor(author)
+                          .withTitle(title)
+                          .withLanguage(language)
+                          .withProfilerUrl(profilerUrl)
+                          .withYear(year)
+                          .withUser(getOcrUser())
+                          .withProjectId(getOcrId());
+    project.getBooks().add(
+        new ProjectEntry().withOcrEngine(getOcrEngine()).withBook(this));
+    return project;
+  }
+
+  public void addThisToProject(Project project, String ocrEngine) {
     // ocrId
     List<ProjectEntry> list = project.getBooks();
     if (list.isEmpty()) {
       project.setProjectId(this.projectId);
     }
     // update book data
-    this.title = project.getTitle();
     this.author = project.getAuthor();
+    this.title = project.getTitle();
     this.language = project.getLanguage();
     this.profilerUrl = project.getProfilerUrl();
     this.year = project.getYear();
