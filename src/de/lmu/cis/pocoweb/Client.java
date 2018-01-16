@@ -71,7 +71,6 @@ public class Client {
     throw new Exception("no such project: " + pid);
   }
 
-  // public ProjectData getProject(int pid) throws Exception {
   public ProjectBook getBook(int pid) throws Exception {
     return new ProjectBook(get("/books/" + pid, Book.class, 200));
   }
