@@ -49,6 +49,12 @@ class ProjectBook extends Book {
   public String getOcrUser() { return loadOcrData().ocrUser; }
 
   public Project newProjectFromThis() {
+    int ocrId = getOcrId();
+    // if the book does not have a valid ocrId,
+    // use the book's projectId instead.
+    if (ocrId == 0) {
+      ocrId = projectId;
+    }
     Project project = new Project()
                           .withAuthor(author)
                           .withTitle(title)
@@ -56,7 +62,7 @@ class ProjectBook extends Book {
                           .withProfilerUrl(profilerUrl)
                           .withYear(year)
                           .withUser(getOcrUser())
-                          .withProjectId(getOcrId());
+                          .withProjectId(ocrId);
     project.getBooks().add(
         new ProjectEntry().withOcrEngine(getOcrEngine()).withBook(this));
     return project;
