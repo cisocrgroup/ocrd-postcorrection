@@ -137,7 +137,7 @@ public class Client {
       throws Exception {
     StringWriter out = new StringWriter();
     IOUtils.copy(in, out, Charset.forName("UTF-8"));
-    System.out.println("json: " + out.toString());
+    // System.out.println("json: " + out.toString());
     return new Gson().fromJson(out.toString(), clss);
   }
 
