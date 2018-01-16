@@ -31,7 +31,6 @@ class ProjectBook extends Book {
     data.ocrEngine = engine;
     setOcrData(data);
   }
-
   public String getOcrEngine() { return loadOcrData().ocrEngine; }
 
   public void setOcrUser(String user) {
@@ -39,13 +38,13 @@ class ProjectBook extends Book {
     data.ocrUser = user;
     setOcrData(data);
   }
-
   public String getOcrUser() { return loadOcrData().ocrUser; }
 
   private class OcrData {
     public String ocrUser, ocrEngine;
     public int ocrId;
   }
+
   private OcrData loadOcrData() {
     return new Gson().fromJson(description, OcrData.class);
   }
