@@ -14,6 +14,7 @@ import java.util.List;
 import de.lmu.cis.pocoweb.Client;
 
 import org.raml.jaxrs.example.model.Project;
+import org.raml.jaxrs.example.model.Book;
 import org.raml.jaxrs.example.model.Projects;
 
 public class ProjectsHandler {
@@ -51,13 +52,17 @@ public class ProjectsHandler {
   } // ProjectsHandler()
 
   public Projects listProjects() {
-    try {
-      Projects ps = new Projects();
-      ps.setProjects(client.listProjects());
-      return ps;
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
     return null;
+    //   try {
+    //     Book ps = new Book();
+    //     List<Book> pps = client.listBooks();
+    //     System.out.println("len projects: " + pps.size());
+    //     ps.setBooks(pps);
+    //     // ps.setProjects(client.listProjects());
+    //     return ps;
+    //   } catch (Exception e) {
+    //     e.printStackTrace();
+    //   }
+    //   return null;
   }
 }

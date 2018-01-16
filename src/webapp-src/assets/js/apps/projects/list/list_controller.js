@@ -14,7 +14,7 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
           var loadingCircleView = new  Views.LoadingBackdrop();
           IPS_App.mainLayout.showChildView('backdropRegion',loadingCircleView);
 
-   		
+
      var fetchingprojects = ProjectEntitites.API.getProjects();
 
 		 var projectsListLayout = new List.Layout();
@@ -25,9 +25,9 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
 
     		projectsListLayout.on("attach",function(){
 
- 			
+
       var projectsListHeader = new List.Header();
-			var projectsListView = new List.projectsList({collection: projects.projects});
+			var projectsListView = new List.projectsList({collection: projects.books});
       var porposalsListFooterPanel = new List.FooterPanel();
 
           projectsListLayout.showChildView('headerRegion',projectsListHeader);
@@ -42,11 +42,11 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
 
        IPS_App.mainLayout.showChildView('mainRegion',projectsListLayout);
 
-		}).fail(function(response){ 
+		}).fail(function(response){
 
 
  			     // loadingCircleView.destroy();
-				  var errortext = Util.getErrorText(response);    
+				  var errortext = Util.getErrorText(response);
                   var errorView = new List.Error({model: currentUser,errortext:errortext})
 
                   errorView.on("currentProject:loggedIn",function(){
@@ -54,10 +54,10 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
                   });
 
                   IPS_App.mainLayout.showChildView('mainRegion',errorView);
- 
-                          
-                         
-                                        
+
+
+
+
           }); //  $.when(fetchingAuth).done // $when fetchingprojects
 
 		}); // require

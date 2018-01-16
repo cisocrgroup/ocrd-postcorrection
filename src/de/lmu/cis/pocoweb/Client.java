@@ -1,6 +1,7 @@
 package de.lmu.cis.pocoweb;
 
 import com.google.gson.Gson;
+import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,8 +18,8 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import org.apache.commons.io.IOUtils;
-import org.raml.jaxrs.example.model.Project;
-import org.raml.jaxrs.example.model.Projects;
+
+import org.raml.jaxrs.example.model.Book;
 import org.raml.jaxrs.example.model.Page;
 
 public class Client {
@@ -31,17 +32,19 @@ public class Client {
     return Client.login(user, pass);
   }
 
-  public SuggestionsData getSuggestions(int pid) throws Exception {
-    return get("/books/" + pid + "/suggestions", SuggestionsData.class, 200);
-  }
-
-  public List<Project> listProjects() throws Exception {
-    return get("/books", Projects.class, 200).getProjects();
+  private class Books { public Book[] books; }
+  public List<ProjectBook> listBooks() throws Exception {
+    Book[] books = get("/books", Books.class, 200).books;
+    List<ProjectBook> list = new ArrayList(books.length);
+    for (Book b : books) {
+      list.add(new ProjectBook(b));
+    }
+    return list;
   }
 
   // public ProjectData getProject(int pid) throws Exception {
-  public Project getProject(int pid) throws Exception {
-    return get("/books/" + pid, Project.class, 200);
+  public ProjectBook getBook(int pid) throws Exception {
+    return new ProjectBook(get("/books/" + pid, Book.class, 200));
   }
 
   public TokensData getTokens(int bid, int pid) throws Exception {
@@ -56,16 +59,17 @@ public class Client {
                TokenData.class, 200);
   }
 
-  public Project uploadProject(InputStream in) throws Exception {
-    return post("/books", in, Project.class, "application/zip", 200, 201);
+  public ProjectBook uploadBook(InputStream in) throws Exception {
+    return new ProjectBook(
+        post("/books", in, Book.class, "application/zip", 200, 201));
   }
 
-  public Project updateProjectData(Project p) throws Exception {
-    return post(String.format("/books/%d", p.getProjectId()), p, Project.class,
-                200);
+  public ProjectBook updateBookData(ProjectBook p) throws Exception {
+    return new ProjectBook(
+        post(String.format("/books/%d", p.getProjectId()), p, Book.class, 200));
   }
 
-  public void deleteProject(int bid) throws Exception {
+  public void deleteBook(int bid) throws Exception {
     delete(String.format("/books/%d", bid), 200);
   }
 
@@ -75,6 +79,10 @@ public class Client {
 
   public String getHost() { return this.host; }
   public String getSid() { return this.sid; }
+
+  public SuggestionsData getSuggestions(int pid) throws Exception {
+    return get("/books/" + pid + "/suggestions", SuggestionsData.class, 200);
+  }
 
   private Client(String host) {
     this.host = host;
@@ -129,6 +137,7 @@ public class Client {
       throws Exception {
     StringWriter out = new StringWriter();
     IOUtils.copy(in, out, Charset.forName("UTF-8"));
+    System.out.println("json: " + out.toString());
     return new Gson().fromJson(out.toString(), clss);
   }
 

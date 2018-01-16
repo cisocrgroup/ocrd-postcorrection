@@ -11,7 +11,30 @@ types:
     properties:
       result: string
 
+  ProjectEntry:
+    type: object
+    properties:
+      ocrEngine: string
+      book: Book
+
   Project:
+    type: object
+    properties:
+      projectId: integer
+      books: ProjectEntry[]
+      title: string
+      author: string
+      user: string
+      language: string
+      pofilerUrl: string
+      year: integer
+
+  Projects:
+    type: object
+    properties:
+      projects: Project[]
+
+  Book:
     type: object
     properties:
       author: string
@@ -24,11 +47,6 @@ types:
       pages: integer
       isBook: boolean
       pageIds: integer[]
-
-  Projects:
-    type: object
-    properties:
-      projects: Project[]
 
   Box:
     type: object
