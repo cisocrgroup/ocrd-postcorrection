@@ -262,7 +262,8 @@ onAttach: function(){
 				items: Marionette.getOption(this,"collection"),
      		    header:"",
      		    backBtn:"",
-     		    datatable_options: Marionette.getOption(this,"datatable_options")
+     		    datatable_options: Marionette.getOption(this,"datatable_options"),
+     		    hover: Marionette.getOption(this,"hover")
 
 			}
 		},

@@ -9,7 +9,7 @@ define(["marionette","app"], function(Marionette,App){
 	projectsdApp.Router = Marionette.AppRouter.extend({
 		appRoutes: {
 		   "projects/list"    :"listProjects",
-  		   "projects/show"    :"showProjects"
+  		   "projects/:id"    :"showProject"
 
 		}
 	});
@@ -17,9 +17,9 @@ define(["marionette","app"], function(Marionette,App){
 	var API = {
 	
 	
-		showProjects: function(id){
+		showProject: function(id){
 			require(["apps/projects/show/show_controller"], function(ShowController){
-       				ShowController.showprojectsd(id);
+       				ShowController.showProject(id);
 				});
 		},
 
@@ -34,7 +34,7 @@ define(["marionette","app"], function(Marionette,App){
 
 	App.on("projects:show",function(id){
 		App.navigate("projects");
-		API.showProjects(id);
+		API.showProject(id);
 	});
 
 

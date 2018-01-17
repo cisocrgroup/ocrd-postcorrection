@@ -2,13 +2,23 @@
 // apps/projects/list/list_view.js
 // ================================
 
-define(["marionette","app","common/views","apps/projects/common/views"], function(Marionette,IPS_App,CommonViews,Views){
+define(["marionette","app","common/views","apps/projects/common/views",
+  "tpl!apps/projects/list/templates/layout.tpl",
+  "tpl!apps/projects/list/templates/listpanel.tpl",
+], function(Marionette,IPS_App,CommonViews,Views,layoutTpl,panelTpl){
 
   var List ={};
 
-  List.Layout = CommonViews.Layout.extend({    
-  });
+  List.Layout = Marionette.View.extend({
+    template:layoutTpl,
+    regions:{
+       headerRegion: "#hl-region"
+      ,panelRegion: "#panel-region"
+      ,infoRegion: "#info-region"
+      ,footerRegion: "#footer-region"
+    }
 
+  });
   
     List.Header = CommonViews.Header.extend({
     initialize: function(){
@@ -19,9 +29,17 @@ define(["marionette","app","common/views","apps/projects/common/views"], functio
   });
 
 
-  List.projectsList = Views.projectsList.extend({
-   
+  List.ProjectsList = Views.projectsList.extend({
   });
+
+    
+
+  List.Panel = Marionette.View.extend({
+    template: panelTpl,
+      events:{
+      'click .js-create' : 'create_clicked'
+      }
+    });
 
   List.FooterPanel = CommonViews.FooterPanel.extend({
     });

@@ -24,9 +24,10 @@ public class ProjectsResourceImpl implements ProjectsResource {
   }
 
   @Override
-  public GetProjectsByProjectIDResponse getProjectsByProjectID(String projectID)
-      throws Exception {
-    throw new Exception("Not implemented");
+  public GetProjectsByProjectIDResponse getProjectsByProjectID(String projectID) throws Exception {
+  try (Client client = newClient();) {
+      return GetProjectsByProjectIDResponse.withJsonOK(client.getProject(Integer.parseInt(projectID)));
+  	}
   }
   @Override
   public PostProjectsByProjectIDAddBookResponse

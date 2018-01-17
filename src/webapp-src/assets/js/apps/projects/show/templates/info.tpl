@@ -4,36 +4,87 @@
 <div class="container">
 <div class="row">
 
-   <div class="col-5-md">
-
-    <h4> <b>Classifier Test:</b>  </h4> 
+   <div class="col-md-5">
+   	<% console.log(project)%>
+    <h4> <b>Project Information:</b>  </h4> 
 
   </div>
-   <div class="col-7-md">
+   <div class="col-md-7">
    </div>
 
 </div>
 
 <div class="row">
+<div class="col-lg-12">
 
-   <div class="col-12-md">
+<div style="margin-bottom:15px">
 
-<div class="method_select" style="margin-bottom: 15px">
+	<div>
+	<b>Title : </b> <%-project.title%>
+	</div>
 
-<input type="checkbox" name="vehicle" value="naivebayes">Naive Bayes
-<input type="checkbox" name="vehicle" value="svm">Support Vector Machine
-<input type="checkbox" name="vehicle" value="decisiontree">Decision Tree
+	<div>
+	<b>Author : </b> <%-project.author%>
+	</div>
+
+	<div>
+	<b>Year : </b> <%-project.year%>
+	</div>
+
+	<div>
+	<b>Language : </b> <%-project.language%>
+	</div>
+
+
+	<div>
+	<b>User : </b> <%-project.user%>
+	</div>
+
+<hr>
 
 </div>
 
-<button type="submit" class="btn back_btn js-train red-border hover"> <i class="fa fa-play-circle" aria-hidden="true"></i> Start Training</button>
-
-
+</div>
 </div>
 
+<div class="row">
+<div class="col-lg-12">
+
+<h4> <b>Books:</b>  </h4> 
+
+
+<button type="submit" class="btn back_btn js-add-book" style="margin-bottom:15px"> <i class="fa fa-plus" aria-hidden="true"></i> Add Book</button>
 
 </div>
+</div>
 
+<table class="table table-bordered table-hover" 
+ id="book_table" cellspacing="0" width="100%"  style="margin-top: 20px !important; margin-bottom: 30px !important;" >
+
+ <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Language</th>
+        <th>Ocr Engine</th>
+
+      </tr>
+ </thead>
+ <tbody>
+
+ 	<% _.each(project.books, function(book) { %>
+ 	<tr>  
+        <th><%-book.book.title%></th>
+        <th><%-book.book.author%></th>
+        <th><%-book.book.language%></th>
+        <th><%-book.book.ocrEngine%></th>
+
+    </tr>
+    <% }); %>   
+
+ </tbody>
+
+</table>
 
 </div>
 

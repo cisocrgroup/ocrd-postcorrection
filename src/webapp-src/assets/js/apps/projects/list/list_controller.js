@@ -27,12 +27,14 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
 
 
       var projectsListHeader = new List.Header();
-			var projectsListView = new List.projectsList({collection: projects.projects});
-      var porposalsListFooterPanel = new List.FooterPanel();
+			var projectsListView = new List.ProjectsList({collection: projects.projects,hover:true});
+      var projectsListPanel = new List.Panel();
+      var projectsListFooterPanel = new List.FooterPanel();
 
           projectsListLayout.showChildView('headerRegion',projectsListHeader);
-          projectsListLayout.showChildView('contentRegion',projectsListView);
-          projectsListLayout.showChildView('panelRegion',porposalsListFooterPanel);
+          projectsListLayout.showChildView('panelRegion',projectsListPanel);
+          projectsListLayout.showChildView('infoRegion',projectsListView);
+          projectsListLayout.showChildView('footerRegion',projectsListFooterPanel);
 
           $(window).scrollTop(0);
 

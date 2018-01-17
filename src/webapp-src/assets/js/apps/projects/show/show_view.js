@@ -1,11 +1,11 @@
 // ================================
-// apps/ocrd/show/show_view.js
+// apps/projects/show/show_view.js
 // ================================
 
 define(["marionette","app","backbone.syphon","common/views",
-        "tpl!apps/ocrd/show/templates/layout.tpl",
-        "tpl!apps/ocrd/show/templates/info.tpl",
-        "tpl!apps/ocrd/show/templates/resp.tpl"
+        "tpl!apps/projects/show/templates/layout.tpl",
+        "tpl!apps/projects/show/templates/info.tpl",
+        "tpl!apps/projects/show/templates/resp.tpl"
 
 
   ], function(Marionette,App,BackboneSyphon,Views,layoutTpl,infoTpl,respTpl){
@@ -19,7 +19,7 @@ define(["marionette","app","backbone.syphon","common/views",
        headerRegion: "#hl-region"
       ,infoRegion: "#info-region"
       ,respRegion: "#resp-region"
-      ,footerlRegion: "#footer-region"
+      ,footerRegion: "#footer-region"
     }
 
   });
@@ -27,7 +27,7 @@ define(["marionette","app","backbone.syphon","common/views",
 
   Show.Header = Views.Header.extend({
     initialize: function(){
-        this.title = "OCRD Prototype Tests"
+        this.title = "projects Prototype Tests"
       }
   });
 
@@ -61,8 +61,14 @@ define(["marionette","app","backbone.syphon","common/views",
 
       },
      onAttach: function(){
-      
-      },          
+       var table = $('#book_table').DataTable();
+
+      },
+     serializeData: function(){
+       return {
+       project: Marionette.getOption(this,"project")
+       }
+      }          
 
   });
 
@@ -101,8 +107,11 @@ define(["marionette","app","backbone.syphon","common/views",
   });
 
 
+Show.FooterPanel = Views.FooterPanel.extend({
+    });
+
  
-	Show.Missingocrd = Views.Error.extend({errortext:"Error 404: ocrd not found"});
+	Show.Missingprojects = Views.Error.extend({errortext:"Error 404: projects not found"});
 
 
 return Show;

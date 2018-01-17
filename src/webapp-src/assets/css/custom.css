@@ -12,6 +12,13 @@ body{
   overflow-x:hidden;
 }
 
+h4{
+  margin-bottom: 15px !important;
+}
+
+.container-fluid {
+   padding: 0px;
+}
 
 #main-region{
   min-height: 75vh;
