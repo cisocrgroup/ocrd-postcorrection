@@ -2,7 +2,7 @@
 
 #set -x
 
-watch="src/webapp target/ocrd-0.1-jar-with-dependencies.jar"
+watch="target/ocrd-0.1-jar-with-dependencies.jar"
 wait_secs=20
 
 function block_for_change {
