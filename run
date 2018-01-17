@@ -1,14 +1,13 @@
 #!/bin/bash
 
 #set -x
-# TODO: unsuck this
 
 watch="src/webapp target/ocrd-0.1-jar-with-dependencies.jar"
-add=20
+wait_secs=20
 
 function block_for_change {
 		inotifywait -r -e modify,move,create,delete $watch
-		sleep $add; # sleep and wait for the build process to finish
+		sleep $wait_secs; # sleep and wait for the build process to finish
 }
 
 java -jar target/ocrd-0.1-jar-with-dependencies.jar &
