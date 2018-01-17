@@ -29,6 +29,12 @@ types:
       profilerUrl: string
       year: integer
 
+  UploadProjectData:
+    type: object
+    properties:
+      project: Project
+      content: string
+
   Projects:
     type: object
     properties:
@@ -124,6 +130,17 @@ types:
           body:
             application/json:
               type: Projects
+  /create:
+    post:
+      body:
+        application/json:
+          type: UploadProjectData
+      responses:
+        201:
+          body:
+            application/json:
+              type: Project
+
   /{projectID}:
     get:
       responses:
@@ -131,10 +148,22 @@ types:
           body:
             application/json:
               type: Project
-  /{projectID}/pages/{pageID}:
-    get:
-      responses:
-        200:
-          body:
-            application/json:
-              type: Page
+
+    /add-book:
+      post:
+        body:
+          application/json:
+            type: UploadProjectData
+        responses:
+          200:
+           body:
+             application/json:
+               type: Project
+
+    /pages/{pageID}:
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: Page
