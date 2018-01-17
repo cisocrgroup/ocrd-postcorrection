@@ -11,6 +11,7 @@ import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,14 +22,16 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import org.apache.commons.io.IOUtils;
 import org.raml.jaxrs.example.model.Book;
+import org.raml.jaxrs.example.model.Languages;
 import org.raml.jaxrs.example.model.Page;
 import org.raml.jaxrs.example.model.Project;
 import org.raml.jaxrs.example.model.ProjectEntry;
 import org.raml.jaxrs.example.model.Projects;
 
-public class Client {
+public class Client implements AutoCloseable {
   private final String host;
   private String sid;
+  public final static String LocalProfiler = "local";
 
   public static Client login(String host, String user, String pass)
       throws Exception {
@@ -36,10 +39,21 @@ public class Client {
     return Client.login(user, pass);
   }
 
+  public void close() throws Exception { logout(); }
+
+  public Languages getProfilerLanguages(String profilerUrl) throws Exception {
+    return get(String.format("/profiler-languages&url=%s",
+                             URLEncoder.encode(profilerUrl, "UTF-8")),
+               Languages.class);
+  }
+  public Languages getLocalProfilerLanguages() throws Exception {
+    return getProfilerLanguages(LocalProfiler);
+  }
+
   private class Books { public Book[] books; }
   public List<ProjectBook> listBooks() throws Exception {
     Book[] books = get("/books", Books.class, 200).books;
-    List<ProjectBook> list = new ArrayList(books.length);
+    List<ProjectBook> list = new ArrayList<ProjectBook>(books.length);
     for (Book b : books) {
       list.add(new ProjectBook(b));
     }
@@ -48,7 +62,8 @@ public class Client {
 
   public Projects listProjects() throws Exception {
     List<ProjectBook> projectBooks = listBooks();
-    Map<Integer, Project> map = new HashMap();
+    Map<Integer, Project> map = new HashMap<Integer, Project>();
+    System.out.println("got " + projectBooks.size() + " books");
     for (ProjectBook book : projectBooks) {
       Integer ocrId = book.getOcrId();
       if (!map.containsKey(ocrId)) {
@@ -57,7 +72,8 @@ public class Client {
         book.addThisToProject(map.get(ocrId), book.getOcrEngine());
       }
     }
-    List<Project> projects = new ArrayList(map.size());
+    List<Project> projects = new ArrayList<Project>(map.size());
+    System.out.println("got " + map.size() + " projects");
     projects.addAll(map.values());
     return new Projects().withProjects(projects);
   }
@@ -123,6 +139,11 @@ public class Client {
     this.sid = null;
   }
 
+  private void logout() throws Exception {
+    HttpURLConnection con = getConnection("/logout", "GET");
+    validateResponseCode(con.getResponseCode(), 200);
+  }
+
   private Client login(String user, String pass) throws Exception {
     SidData sid = post("/login", new LoginData(user, pass), SidData.class, 200);
     this.sid = sid.sid;
@@ -137,8 +158,7 @@ public class Client {
 
   private <T> T post(String path, InputStream in, Class<T> clss, String ct,
                      int... codes) throws Exception {
-    HttpURLConnection con = getConnection(path);
-    con.setRequestMethod("POST");
+    HttpURLConnection con = getConnection(path, "POST");
     con.setRequestProperty("Content-Type", ct);
     con.setDoOutput(true);
     try (DataOutputStream out = new DataOutputStream(con.getOutputStream());) {
@@ -152,7 +172,7 @@ public class Client {
   }
 
   private <T> T get(String path, Class<T> clss, int... codes) throws Exception {
-    HttpURLConnection con = getConnection(path);
+    HttpURLConnection con = getConnection(path, "GET");
     con.setRequestMethod("GET");
     validateResponseCode(con.getResponseCode(), codes);
     try (InputStream in = con.getInputStream();) {
@@ -161,8 +181,7 @@ public class Client {
   }
 
   private int delete(String path, int... codes)throws Exception {
-    HttpURLConnection con = getConnection(path);
-    con.setRequestMethod("DELETE");
+    HttpURLConnection con = getConnection(path, "DELETE");
     validateResponseCode(con.getResponseCode(), codes);
     return con.getResponseCode();
   }
@@ -171,12 +190,13 @@ public class Client {
       throws Exception {
     StringWriter out = new StringWriter();
     IOUtils.copy(in, out, Charset.forName("UTF-8"));
-    // System.out.println("json: " + out.toString());
+    System.out.println("[Client] deserializing JSON: " + out.toString());
     return new Gson().fromJson(out.toString(), clss);
   }
 
   private static void validateResponseCode(int got, int... codes)
       throws Exception {
+    System.out.println("[Client] got return code: " + got);
     for (int want : codes) {
       if (want == got) {
         return;
@@ -185,12 +205,16 @@ public class Client {
     throw new Exception("Invalid return code: " + got);
   }
 
-  private HttpURLConnection getConnection(String path) throws Exception {
+  private HttpURLConnection getConnection(String path, String method)
+      throws Exception {
     HttpURLConnection con =
         (HttpURLConnection) new URL(this.host + path).openConnection();
     if (this.sid != null) {
       con.setRequestProperty("Authorization", "Pocoweb " + sid);
     }
+    con.setRequestMethod(method);
+    System.out.println(
+        String.format("[Client] sending request to [%s] %s", method, path));
     return con;
   }
 }

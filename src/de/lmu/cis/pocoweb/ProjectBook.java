@@ -32,7 +32,10 @@ class ProjectBook extends Book {
     data.ocrId = id;
     setOcrData(data);
   }
-  public int getOcrId() { return loadOcrData().ocrId; }
+  public int getOcrId() {
+    int ocrId = loadOcrData().ocrId;
+    return ocrId == 0 ? projectId : ocrId;
+  }
 
   public void setOcrEngine(String engine) {
     OcrData data = loadOcrData();

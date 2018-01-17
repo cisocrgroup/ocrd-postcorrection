@@ -1,5 +1,6 @@
 package ocrd.rest.raml.impl;
 
+import de.lmu.cis.pocoweb.Client;
 import org.raml.jaxrs.example.model.Projects;
 import org.raml.jaxrs.example.resource.ProjectsResource;
 
@@ -9,10 +10,9 @@ public class ProjectsResourceImpl implements ProjectsResource {
 
   @Override
   public GetProjectsListResponse getProjectsList() throws Exception {
-    ProjectsHandler projects_handler = new ProjectsHandler();
-    Projects p = projects_handler.listProjects();
-
-    return GetProjectsListResponse.withJsonOK(p);
+    try (Client client = newClient();) {
+      return GetProjectsListResponse.withJsonOK(client.listProjects());
+    }
   }
 
   @Override
@@ -26,5 +26,10 @@ public class ProjectsResourceImpl implements ProjectsResource {
   public GetProjectsByProjectIDResponse getProjectsByProjectID(String projectID)
       throws Exception {
     return null;
+  }
+
+  private static Client newClient() throws Exception {
+    return Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb",
+                        "pocoweb123");
   }
 }

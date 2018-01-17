@@ -18,10 +18,16 @@ class Main {
       // client.updateProjectData(np);
       List<ProjectBook> bs = client.listBooks();
       System.out.println("len bs: " + bs.size());
+      int i = 0;
       for (ProjectBook b : bs) {
         System.out.println(b.getAuthor() + " " + b.getTitle() + " " +
                            b.getProjectId());
+        b.setOcrId(++i);
+        b.setOcrEngine("ocropus");
+        b.setOcrUser("user");
+        System.out.println(b.getDescription());
       }
+
       // Project p = client.getProject(305);
       // for (Integer pid : p.getPageIds()) {
       //   System.out.println("book " + 305 + " page id " + pid);

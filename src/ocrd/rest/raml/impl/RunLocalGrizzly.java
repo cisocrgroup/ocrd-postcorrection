@@ -23,7 +23,7 @@ public class RunLocalGrizzly {
 
     config.register(OcrdResourceImpl.class);
     config.register(ProjectsResourceImpl.class);
-
+    config.register(LanguagesResourceImpl.class);
     config.register(MultiPartFeature.class);
 
     // Define static webcontent
@@ -39,12 +39,14 @@ public class RunLocalGrizzly {
     // Disable file locking of static webcontent
     server.getListener("grizzly").getFileCache().setEnabled(false);
 
-    System.out.println("Strike ENTER to stop...");
-    new Scanner(System.in).nextLine();
+    // System.out.println("Strike ENTER to stop...");
+    while (true) {
+    }
+    // new Scanner(System.in).nextLine();
 
-    server.stop();
+    // server.stop();
 
-    System.out.println("Bye!");
-    System.exit(0);
+    // System.out.println("Bye!");
+    // System.exit(0);
   }
 }

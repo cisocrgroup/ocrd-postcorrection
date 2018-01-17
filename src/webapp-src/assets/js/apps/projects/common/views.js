@@ -25,7 +25,7 @@ var Views = {};
           {name: "Language"},
           {name: "Year"},
           {name: "Pages"},
-         
+
 
         ]
 
@@ -35,13 +35,13 @@ var Views = {};
         {name:"language",id:"projectId"},
         {name:"year",id:"projectId"},
         {name:"pages",id:"projectId"},
-      
+
 
         ]
 
-    
+
         }
-   
+
   });
 
 Views.projectsForm = Marionette.View.extend({
@@ -55,7 +55,7 @@ Views.projectsForm = Marionette.View.extend({
 
    },
    initialize: function(){
-    
+
   },
   onAttach : function(){
 
@@ -100,7 +100,7 @@ Views.projectsForm = Marionette.View.extend({
 
   closeClicked: function(e){
       e.preventDefault();
-         
+
    },
 
     serializeData: function(){
@@ -113,7 +113,7 @@ Views.projectsForm = Marionette.View.extend({
 
 
         return data;
-    
+
     },
 
    });

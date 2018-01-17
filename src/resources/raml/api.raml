@@ -34,6 +34,12 @@ types:
     properties:
       projects: Project[]
 
+  Languages:
+    type: object
+    properties:
+      languages: string[]
+      url: string
+
   Book:
     type: object
     properties:
@@ -94,6 +100,22 @@ types:
         body:
           application/json:
             type: EvaluationResult
+
+/languages:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: Languages
+  /{profilerUrl}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              type: Languages
+
 /projects:
   /list:
     get:

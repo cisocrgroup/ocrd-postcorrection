@@ -27,7 +27,7 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
 
 
       var projectsListHeader = new List.Header();
-			var projectsListView = new List.projectsList({collection: projects.books});
+			var projectsListView = new List.projectsList({collection: projects.projects});
       var porposalsListFooterPanel = new List.FooterPanel();
 
           projectsListLayout.showChildView('headerRegion',projectsListHeader);
