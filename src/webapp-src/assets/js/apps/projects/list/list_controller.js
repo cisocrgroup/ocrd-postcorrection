@@ -39,6 +39,10 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
           $(window).scrollTop(0);
 
 
+          projectsListPanel.on("list:create_clicked",function(){
+
+          })
+
  		}); // onAttach()
 
 

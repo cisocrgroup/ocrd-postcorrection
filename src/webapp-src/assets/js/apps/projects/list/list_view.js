@@ -38,6 +38,9 @@ define(["marionette","app","common/views","apps/projects/common/views",
     template: panelTpl,
       events:{
       'click .js-create' : 'create_clicked'
+      },
+      create_clicked: function(){
+        this.trigger("list:create_clicked");
       }
     });
 
