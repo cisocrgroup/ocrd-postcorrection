@@ -6,7 +6,7 @@ import org.raml.jaxrs.example.model.Book;
 import org.raml.jaxrs.example.model.Project;
 import org.raml.jaxrs.example.model.ProjectEntry;
 
-class ProjectBook extends Book {
+public class ProjectBook extends Book {
   public ProjectBook() {
     super();
     this.description = "{}";
@@ -25,6 +25,21 @@ class ProjectBook extends Book {
     if (description == null || description.isEmpty()) {
       this.description = "{}";
     }
+  }
+
+  public ProjectBook withOcrEngine(String engine) {
+    setOcrEngine(engine);
+    return this;
+  }
+
+  public ProjectBook withOcrUser(String user) {
+    setOcrUser(user);
+    return this;
+  }
+
+  public ProjectBook withOcrId(int id) {
+    setOcrId(id);
+    return this;
   }
 
   public void setOcrId(int id) {
