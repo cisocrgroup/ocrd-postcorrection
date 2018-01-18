@@ -111,6 +111,20 @@ public class Client implements AutoCloseable {
     }
   }
 
+  public void orderProfile(int bid) throws Exception {
+    HttpURLConnection con =
+        getConnection(String.format("/books/%d/profile", bid), "POST");
+    validateResponseCode(con.getResponseCode(), 202);
+  }
+
+  public int getProfilingStatus(int bid) throws Exception {
+    HttpURLConnection con =
+        getConnection(String.format("/books/%d/profile", bid), "GET");
+    int rc = con.getResponseCode();
+    validateResponseCode(rc, 200, 201, 202);
+    return rc;
+  }
+
   public Page getPage(int bid, int pid) throws Exception {
     return get(String.format("/books/%d/pages/%d", bid, pid), Page.class, 200);
   }
