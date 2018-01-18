@@ -69,7 +69,7 @@ public class Client implements AutoCloseable {
       if (!map.containsKey(ocrId)) {
         map.put(ocrId, book.newProjectFromThis());
       } else {
-        book.addThisToProject(map.get(ocrId), book.getOcrEngine());
+        book.addThisToProject(map.get(ocrId));
       }
     }
     List<Project> projects = new ArrayList<Project>(map.size());
@@ -91,9 +91,12 @@ public class Client implements AutoCloseable {
     return new ProjectBook(get("/books/" + pid, Book.class, 200));
   }
 
-  public ProjectBook uploadBook(InputStream in) throws Exception {
-    return new ProjectBook(
-        post("/books", in, Book.class, "application/zip", 200, 201));
+  public ProjectBook uploadBook(ProjectBook p, InputStream in)
+      throws Exception {
+    p.setProjectId(post("/books", in, Book.class, "application/zip", 200, 201)
+                       .getProjectId());
+    this.updateBookData(p);
+    return p;
   }
 
   public ProjectBook updateBookData(ProjectBook p) throws Exception {

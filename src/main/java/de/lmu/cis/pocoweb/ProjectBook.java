@@ -11,6 +11,7 @@ public class ProjectBook extends Book {
     super();
     this.description = "{}";
   }
+
   public ProjectBook(Book s) {
     this.author = s.getAuthor();
     this.title = s.getTitle();
@@ -27,16 +28,6 @@ public class ProjectBook extends Book {
     }
   }
 
-  public ProjectBook withOcrEngine(String engine) {
-    setOcrEngine(engine);
-    return this;
-  }
-
-  public ProjectBook withOcrUser(String user) {
-    setOcrUser(user);
-    return this;
-  }
-
   public ProjectBook withOcrId(int id) {
     setOcrId(id);
     return this;
@@ -47,9 +38,15 @@ public class ProjectBook extends Book {
     data.ocrId = id;
     setOcrData(data);
   }
+
   public int getOcrId() {
     int ocrId = loadOcrData().ocrId;
     return ocrId == 0 ? projectId : ocrId;
+  }
+
+  public ProjectBook withOcrEngine(String engine) {
+    setOcrEngine(engine);
+    return this;
   }
 
   public void setOcrEngine(String engine) {
@@ -58,6 +55,11 @@ public class ProjectBook extends Book {
     setOcrData(data);
   }
   public String getOcrEngine() { return loadOcrData().ocrEngine; }
+
+  public ProjectBook withOcrUser(String user) {
+    setOcrUser(user);
+    return this;
+  }
 
   public void setOcrUser(String user) {
     OcrData data = loadOcrData();
@@ -86,7 +88,7 @@ public class ProjectBook extends Book {
     return project;
   }
 
-  public void addThisToProject(Project project, String ocrEngine) {
+  public void addThisToProject(Project project) {
     // ocrId
     List<ProjectEntry> list = project.getBooks();
     if (list.isEmpty()) {
@@ -98,11 +100,11 @@ public class ProjectBook extends Book {
     this.language = project.getLanguage();
     this.profilerUrl = project.getProfilerUrl();
     this.year = project.getYear();
-    this.setOcrEngine(ocrEngine);
     this.setOcrUser(project.getUser());
     this.setOcrId(project.getProjectId());
     // insert this book into project's list of books
-    list.add(new ProjectEntry().withOcrEngine(ocrEngine).withBook(this));
+    list.add(
+        new ProjectEntry().withOcrEngine(this.getOcrEngine()).withBook(this));
     project.setBooks(list);
   }
 
