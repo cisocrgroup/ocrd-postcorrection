@@ -6,6 +6,22 @@ define(["app"], function(IPS_App){
 
   var Entities={};
 
+Entities.Project = Backbone.Model.extend({
+     urlRoot: "api/v1/proposals",
+
+     defaults:{
+  author:null,
+  books:null,
+  language:null,
+  profilerUrl:null,
+  projectId:null,
+  title:"",
+  user:"",
+  year:""
+     }
+  });
+
+
 Entities.API = {
 
 

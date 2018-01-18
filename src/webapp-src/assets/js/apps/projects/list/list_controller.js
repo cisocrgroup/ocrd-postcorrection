@@ -31,15 +31,23 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
       var projectsListPanel = new List.Panel();
       var projectsListFooterPanel = new List.FooterPanel();
 
+      var projectsListAddProject = new List.ProjectForm({model: new ProjectEntitites.Project, asModal:true,text:"Create a new OCR Project"});
+
+
           projectsListLayout.showChildView('headerRegion',projectsListHeader);
           projectsListLayout.showChildView('panelRegion',projectsListPanel);
           projectsListLayout.showChildView('infoRegion',projectsListView);
           projectsListLayout.showChildView('footerRegion',projectsListFooterPanel);
 
+          IPS_App.mainLayout.showChildView('addProjectRegion',projectsListAddProject);
+
+
           $(window).scrollTop(0);
 
 
           projectsListPanel.on("list:create_clicked",function(){
+
+            $('#projects-modal').modal();
 
           })
 

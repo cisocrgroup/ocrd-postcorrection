@@ -7,4 +7,5 @@
 <div id="footer-region"> </div>
 <div id="dialog-region"> </div>
 
-
+<div id="add-project-region"></div>
+<div id="add-book-region"></div>

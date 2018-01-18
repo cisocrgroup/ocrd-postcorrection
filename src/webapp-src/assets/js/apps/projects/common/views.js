@@ -4,9 +4,9 @@
 
 define(["app","marionette","backbone.syphon",
         "common/util","common/views"
-        ,"tpl!apps/projects/common/templates/proposalform.tpl"
+        ,"tpl!apps/projects/common/templates/projectform.tpl"
 
-        	], function(IPS_App,Marionette,Syphon,Util,CommonViews,proposalTpl){
+        	], function(IPS_App,Marionette,Syphon,Util,CommonViews,projectTpl){
 
 
 var Views = {};
@@ -14,7 +14,7 @@ var Views = {};
 
 
 
- Views.projectsList = CommonViews.Icon_DataTable.extend({
+ Views.ProjectsList = CommonViews.Icon_DataTable.extend({
    initialize: function(){
         this.urlroot="projects",
         this.border_color="red",
@@ -44,14 +44,13 @@ var Views = {};
 
   });
 
-Views.projectsForm = Marionette.View.extend({
-   template: proposalTpl,
+Views.ProjectForm = Marionette.View.extend({
+   template: projectTpl,
    className:"",
    events: {
-   "click .js-submit-proposal": "submitClicked",
-   "click .js-delete": "deleteClicked",
-   "click .js-back":   "backClicked",
-   "click .js-close":  "closeClicked"
+   "click .js-submit-project": "submitClicked",
+   "click .js-upload": "chooseFile",
+  
 
    },
    initialize: function(){
@@ -61,11 +60,10 @@ Views.projectsForm = Marionette.View.extend({
 
      if(this.options.asModal){
 
-          this.$el.attr("ID","proposal-modal");
-          this.$el.addClass("modal fade proposal-modal");
+          this.$el.attr("ID","projects-modal");
+          this.$el.addClass("modal fade projects-modal");
           this.$el.on('shown.bs.modal', function (e) {
            })
-       this.$el.modal();
 
     }
 
@@ -88,20 +86,14 @@ Views.projectsForm = Marionette.View.extend({
     this.trigger("proposal:submit_clicked", data);
    },
 
-   deleteClicked: function(e){
-      e.preventDefault();
-      var data = Backbone.Syphon.serialize(this);
-   },
-
-   backClicked: function(e){
-      e.preventDefault();
-      this.trigger("form:back");
-   },
-
-  closeClicked: function(e){
+   chooseFile: function(e){
       e.preventDefault();
 
+      Util.openFile(e)
+
    },
+
+ 
 
     serializeData: function(){
 
@@ -119,23 +111,7 @@ Views.projectsForm = Marionette.View.extend({
    });
 
 
- Views.Reviewers = CommonViews.Icon_DataTable.extend({
-   initialize: function(){
-        this.urlroot="proposalportal/reviewer",
-        this.border_color="red",
-        this.headers = [
-          {name: "userKey"},
-          {name: "Status"},
 
-        ]
-
-        this.columns = [
-        {name:"userKey",id:"id"},
-        {name:"status",id:"id"},
-        ]
-
-        }
-  });
 
 
 

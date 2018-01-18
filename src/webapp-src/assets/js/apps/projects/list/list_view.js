@@ -29,7 +29,7 @@ define(["marionette","app","common/views","apps/projects/common/views",
   });
 
 
-  List.ProjectsList = Views.projectsList.extend({
+  List.ProjectsList = Views.ProjectsList.extend({
   });
 
     
@@ -47,6 +47,9 @@ define(["marionette","app","common/views","apps/projects/common/views",
   List.FooterPanel = CommonViews.FooterPanel.extend({
     });
 
+
+ List.ProjectForm = Views.ProjectForm.extend({
+  });
 
 
 return List;
