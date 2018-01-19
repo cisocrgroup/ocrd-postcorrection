@@ -2,7 +2,7 @@
 // apps/projects/list/list_controller.js
 // ======================================
 
-define(["app","common/util","common/views","apps/projects/list/list_view"], function(IPS_App,Util,Views,List){
+define(["app","common/util","common/views","apps/projects/list/list_view"], function(App,Util,Views,List){
 
 
   var Controller = {
@@ -12,7 +12,7 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
      		require(["entities/project"], function(ProjectEntitites){
 
           var loadingCircleView = new  Views.LoadingBackdrop();
-          IPS_App.mainLayout.showChildView('backdropRegion',loadingCircleView);
+          App.mainLayout.showChildView('backdropRegion',loadingCircleView);
 
 
      var fetchingprojects = ProjectEntitites.API.getProjects();
@@ -52,6 +52,7 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
            projectsListAddProject.on("project:submit_clicked",function(data){
            var postingProject = ProjectEntitites.API.createProject(data);
 
+
                  $.when(postingProject).done(function(result){
                   $('.loading_background').fadeOut();
 
@@ -67,7 +68,7 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
 
           });
 
-          IPS_App.mainLayout.showChildView('addProjectRegion',projectsListAddProject);
+          App.mainLayout.showChildView('addProjectRegion',projectsListAddProject);
 
 
           })
@@ -79,7 +80,7 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
  		}); // onAttach()
 
 
-       IPS_App.mainLayout.showChildView('mainRegion',projectsListLayout);
+       App.mainLayout.showChildView('mainRegion',projectsListLayout);
 
 		}).fail(function(response){
 
@@ -89,10 +90,10 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
                   var errorView = new List.Error({model: currentUser,errortext:errortext})
 
                   errorView.on("currentProject:loggedIn",function(){
-					        IPS_App.projectsApp.List.Controller.listprojects();
+					        App.projectsApp.List.Controller.listprojects();
                   });
 
-                  IPS_App.mainLayout.showChildView('mainRegion',errorView);
+                  App.mainLayout.showChildView('mainRegion',errorView);
 
 
 

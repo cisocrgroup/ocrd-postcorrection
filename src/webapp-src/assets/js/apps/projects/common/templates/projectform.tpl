@@ -31,6 +31,8 @@ if(asModal) {
 
 <form>
 
+<% if(!add_book) { %>
+
 <div class="form-group row">
   <div class="col-6">
     <label for="title">Title</label>
@@ -55,6 +57,27 @@ if(asModal) {
  
   </div>
 
+<% } %>
+
+<div class="form-group row">
+
+
+  <div class="col-3">
+  <label for="ocrEngine">OCR Engine</label>
+
+    <select style="width: 100%" class="form-control" id="ocrEngine" value="<%-ocrEngine%>">
+      <option value="ocropus">Ocropus</option>
+      <option value="tesseract">Tesseract</option>
+      <option value="abbyy_finereader">Abbyy Finereader</option>
+
+    </select>
+  </div>
+
+</div>
+
+
+<% if(!edit_project) { %>
+
 
 <div class="form-group row">
 <div class="col-6">
@@ -70,6 +93,8 @@ if(asModal) {
 
 </div>
 </div>
+
+<% } %>
 
 </form>
 

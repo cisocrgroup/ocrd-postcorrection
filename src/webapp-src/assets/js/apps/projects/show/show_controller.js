@@ -36,43 +36,100 @@ define(["app","common/util","common/views","apps/projects/show/show_view"], func
 			  projectShowInfo = new Show.Info({project:project});
               projectShowFooterPanel = new Show.FooterPanel();
 
-			  projectShowExampleResponse = new Show.Resp({results:{}})
+
+			  projectShowInfo.on("show:edit_clicked",function(methods){
 
 
-			  projectShowInfo.on("show:training_clicked",function(methods){
+			   var projectsShowEditProject = new Show.ProjectForm({model: new ProjectEntitites.Project(project), asModal:true,text:"Edit OCR Project",edit_project:true});
 
 
-			  	var postingTrainingData = UtilEntitites.API.startTraining({methods:methods}); 
-
-  				$.when(postingTrainingData).done(function(response){
-  					
-  					var resultarray = JSON.parse(response.result);
-
-  					for (key in resultarray) {
-						console.log(resultarray[key].evalstring) 
-
-  						resultarray[key].evalstring = resultarray[key].evalstring[0].replace(/(?:\r\n|\r|\n)/g, '<br />');
-
-  					}
+           projectsShowEditProject.on("project:submit_clicked",function(data){
+           // var postingProject = ProjectEntitites.API.createProject(data);
 
 
-  					projectShowExampleResponse.options.results = resultarray;
-  					projectShowExampleResponse.render();
+           //       $.when(postingProject).done(function(result){
+           //        $('.loading_background').fadeOut();
 
-	    		}).fail(function(response){ 
-
-	 			  //     loadingCircleView.destroy();
-					  // var errortext = Util.getErrorText(response);    
-	      //             var errorView = new Show.Error({errortext:errortext})
-
-	      //             App.mainLayout.showChildView('mainRegion',errorView);
-
-	          }); //  $.when
+           //         $('#projects-modal').modal('toggle');
 
 
+           //         projectsShowEditProject.model.clear().set(projectsListEditProject.model.defaults);
+           //         $('#selected_file').text("");
+           //         // projectsListAddProject.render()
+
+           //      })
 
 
-			  });
+          });
+
+
+          App.mainLayout.showChildView('dialogRegion',projectsShowEditProject);
+
+          });
+
+
+            projectShowInfo.on("show:delete_clicked",function(methods){
+
+			   var projectsShowDeleteProject = new Show.DeleteProjectForm({asModal:true,text:"Remove this Project?",title:"Delete OCR Project"});
+
+
+           projectsShowDeleteProject.on("project:delete_clicked",function(data){
+           // var postingProject = ProjectEntitites.API.createProject(data);
+
+
+           //       $.when(postingProject).done(function(result){
+           //        $('.loading_background').fadeOut();
+
+           //         $('#projects-modal').modal('toggle');
+
+
+           //         projectsShowDeleteProject.model.clear().set(projectsListDeleteProject.model.defaults);
+           //         $('#selected_file').text("");
+           //         // projectsListAddProject.render()
+
+           //      })
+
+
+          });
+
+        
+
+          App.mainLayout.showChildView('dialogRegion',projectsShowDeleteProject);
+
+
+
+		  });
+
+
+         projectShowInfo.on("show:add_book_clicked",function(methods){
+
+
+		   var projectsShowEditProject = new Show.ProjectForm({model: new ProjectEntitites.Project(), asModal:true,text:"Add a book to the OCR Project",add_book:true});
+
+
+       projectsShowEditProject.on("project:submit_clicked",function(data){
+       // var postingProject = ProjectEntitites.API.createProject(data);
+
+
+       //       $.when(postingProject).done(function(result){
+       //        $('.loading_background').fadeOut();
+
+       //         $('#projects-modal').modal('toggle');
+
+
+       //         projectsShowEditProject.model.clear().set(projectsListEditProject.model.defaults);
+       //         $('#selected_file').text("");
+       //         // projectsListAddProject.render()
+
+       //      })
+
+
+      });
+
+
+          App.mainLayout.showChildView('dialogRegion',projectsShowEditProject);
+
+          });
 
 
   			// projectPanel = new Show.FooterPanel();
@@ -80,7 +137,6 @@ define(["app","common/util","common/views","apps/projects/show/show_view"], func
 
 	          projectShowLayout.showChildView('headerRegion',projectShowHeader);
 	          projectShowLayout.showChildView('infoRegion',projectShowInfo);
-	          projectShowLayout.showChildView('respRegion',projectShowExampleResponse);
 	          projectShowLayout.showChildView('footerRegion',projectShowFooterPanel);
 
 

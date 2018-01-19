@@ -5,8 +5,19 @@
 <div class="row">
 
    <div class="col-md-5">
-   	<% console.log(project)%>
+
+
+    <div style="margin-bottom:15px">
+
+    <button type="button" class="btn js-edit-project"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
+    <button type="button" class="btn js-delete-project btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
+    <button type="button" class="btn js-add-book"> <i class="fa fa-plus" aria-hidden="true"></i> Add Book</button>
+
+    </div>
+
+
     <h4> <b>Project Information:</b>  </h4> 
+
 
   </div>
    <div class="col-md-7">
@@ -52,8 +63,6 @@
 
 <h4> <b>Books:</b>  </h4> 
 
-
-<button type="submit" class="btn back_btn js-add-book" style="margin-bottom:15px"> <i class="fa fa-plus" aria-hidden="true"></i> Add Book</button>
 
 </div>
 </div>

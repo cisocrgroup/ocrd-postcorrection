@@ -17,7 +17,10 @@ Entities.Project = Backbone.Model.extend({
   projectId:null,
   title:"",
   user:"",
-  year:""
+  ocrEngine:"",
+  year:"",
+  add_book:false,
+  edit_project:false
      }
   });
 
