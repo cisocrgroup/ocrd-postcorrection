@@ -15,11 +15,11 @@ import static org.hamcrest.CoreMatchers.*;
 public class ClientTest {
   private Client client;
   private static final String resourceAbbyyZip =
-      "src/test/resources/1841-DieGrenzboten-abbyy.zip";
+      "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
   private static final String resourceTesseractZip =
-      "src/test/resources/1841-DieGrenzboten-tesseract.zip";
+      "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
   private static final String resourceOcropusZip =
-      "src/test/resources/1841-DieGrenzboten-ocropus.zip";
+      "src/test/resources/1841-DieGrenzboten-ocropus-small.zip";
 
   @Before
   public void login() throws Exception {
