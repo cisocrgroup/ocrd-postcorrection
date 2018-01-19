@@ -1,11 +1,14 @@
 package ocrd.rest.raml.impl;
 
 import de.lmu.cis.pocoweb.Client;
+import de.lmu.cis.pocoweb.ProjectBook;
+import java.util.Base64;
+import ocrd.rest.raml.handler.ProjectsHandler;
+import org.apache.commons.io.IOUtils;
+import org.raml.jaxrs.example.model.Project;
 import org.raml.jaxrs.example.model.Projects;
 import org.raml.jaxrs.example.model.UploadProjectData;
 import org.raml.jaxrs.example.resource.ProjectsResource;
-
-import ocrd.rest.raml.handler.ProjectsHandler;
 
 public class ProjectsResourceImpl implements ProjectsResource {
 
@@ -24,10 +27,12 @@ public class ProjectsResourceImpl implements ProjectsResource {
   }
 
   @Override
-  public GetProjectsByProjectIDResponse getProjectsByProjectID(String projectID) throws Exception {
-  try (Client client = newClient();) {
-      return GetProjectsByProjectIDResponse.withJsonOK(client.getProject(Integer.parseInt(projectID)));
-  	}
+  public GetProjectsByProjectIDResponse getProjectsByProjectID(String projectID)
+      throws Exception {
+    try (Client client = newClient();) {
+      return GetProjectsByProjectIDResponse.withJsonOK(
+          client.getProject(Integer.parseInt(projectID)));
+    }
   }
   @Override
   public PostProjectsByProjectIDAddBookResponse
@@ -36,11 +41,21 @@ public class ProjectsResourceImpl implements ProjectsResource {
     throw new Exception("Not implemented");
   }
   @Override
-  public PostProjectsCreateResponse postProjectsCreate(UploadProjectData data) throws Exception {
+  public PostProjectsCreateResponse postProjectsCreate(UploadProjectData data)
+      throws Exception {
     try (Client client = newClient();) {
-    	System.out.println(data.getContent());
+      ProjectBook book = new ProjectBook()
+                             .withOcrUser(data.getProject().getUser())
+                             .withOcrEngine(data.getOcrEngine());
+      book.withAuthor(data.getProject().getAuthor())
+          .withTitle(data.getProject().getTitle())
+          .withYear(data.getProject().getYear())
+          .withLanguage(data.getProject().getLanguage());
+      client.uploadBook(book, Base64.getDecoder().wrap(IOUtils.toInputStream(
+                                  data.getContent(), "UTF-8")));
+      Project project = book.newProjectFromThis();
+      return PostProjectsCreateResponse.withJsonCreated(project);
     }
-	return null;
   }
 
   private static Client newClient() throws Exception {
