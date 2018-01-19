@@ -18,6 +18,8 @@ public class ClientTest {
       "src/test/resources/1841-DieGrenzboten-abbyy.zip";
   private static final String resourceTesseractZip =
       "src/test/resources/1841-DieGrenzboten-tesseract.zip";
+  private static final String resourceOcropusZip =
+      "src/test/resources/1841-DieGrenzboten-ocropus.zip";
 
   @Before
   public void login() throws Exception {
@@ -59,6 +61,16 @@ public class ClientTest {
     assertThat(project.getTitle(), is(book.getTitle()));
     assertThat(project.getYear(), is(book.getYear()));
     assertThat(project.getBooks().size(), is(2));
+    book =
+        new ProjectBook().withOcrEngine("ocropus").withOcrUser("test-ocr-user");
+    book.addThisToProject(project);
+    uploadBook(book, resourceOcropusZip);
+    assertThat(project.getProjectId(), is(not(book.getProjectId())));
+    assertThat(project.getUser(), is(book.getOcrUser()));
+    assertThat(project.getAuthor(), is(book.getAuthor()));
+    assertThat(project.getTitle(), is(book.getTitle()));
+    assertThat(project.getYear(), is(book.getYear()));
+    assertThat(project.getBooks().size(), is(3));
     Project otherProject = client.getProject(project.getProjectId());
     assertThat(project.getProjectId(), is(otherProject.getProjectId()));
     assertThat(project.getUser(), is(otherProject.getUser()));
