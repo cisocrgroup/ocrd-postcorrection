@@ -47,6 +47,7 @@ var Views = {};
 Views.ProjectForm = Marionette.View.extend({
    template: projectTpl,
    className:"",
+   selected_file:"",
    events: {
    "click .js-submit-project": "submitClicked",
    "click .js-upload": "chooseFile",
@@ -65,34 +66,47 @@ Views.ProjectForm = Marionette.View.extend({
           this.$el.on('shown.bs.modal', function (e) {
            })
 
+         $('#projects-modal').modal();
+
     }
+    var that = this
+    $('#file-upload').on('change',function(){
+
+      console.log(this.files)
+
+      $('#selected_file').text('Selected file: '+this.files[0].name)
+      that.selected_file = this.files[0]
+
+    })
 
   },
 
    submitClicked: function(e){
+
      e.preventDefault();
       var data = Backbone.Syphon.serialize(this);
-       var topic = $('#topic_id').find(":selected").text();
-        data['topic'] = topic;
-     // var checkBox =$('#notify').is(':checked');
-     // var checkBoxValue=0;
-     // if(checkBox) checkBoxValue=1;
-     // data['notify'] = checkBoxValue;
 
-     //   checkBox =$('#verified_checkbox').is(':checked');
-     //   checkBoxValue=0;
-     // if(checkBox) checkBoxValue=1;
-     // data['verified_checkbox'] = checkBoxValue;
-    this.trigger("proposal:submit_clicked", data);
+        $('.loading_background').fadeIn();
+
+        var that = this
+    
+        Util.getBase64(this.selected_file,function(base64){
+
+
+                  var result = {}
+        
+                result['project'] = data;
+                result['content'] = base64;
+
+                that.trigger("project:submit_clicked", result);
+
+
+        });
+ 
+
    },
 
-   chooseFile: function(e){
-      e.preventDefault();
-
-      Util.openFile(e)
-
-   },
-
+  
  
 
     serializeData: function(){

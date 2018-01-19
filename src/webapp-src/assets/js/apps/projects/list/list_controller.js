@@ -31,15 +31,13 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
       var projectsListPanel = new List.Panel();
       var projectsListFooterPanel = new List.FooterPanel();
 
-      var projectsListAddProject = new List.ProjectForm({model: new ProjectEntitites.Project, asModal:true,text:"Create a new OCR Project"});
-
+     
 
           projectsListLayout.showChildView('headerRegion',projectsListHeader);
           projectsListLayout.showChildView('panelRegion',projectsListPanel);
           projectsListLayout.showChildView('infoRegion',projectsListView);
           projectsListLayout.showChildView('footerRegion',projectsListFooterPanel);
 
-          IPS_App.mainLayout.showChildView('addProjectRegion',projectsListAddProject);
 
 
           $(window).scrollTop(0);
@@ -47,9 +45,36 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
 
           projectsListPanel.on("list:create_clicked",function(){
 
-            $('#projects-modal').modal();
+
+             var projectsListAddProject = new List.ProjectForm({model: new ProjectEntitites.Project, asModal:true,text:"Create a new OCR Project"});
+
+
+           projectsListAddProject.on("project:submit_clicked",function(data){
+           var postingProject = ProjectEntitites.API.createProject(data);
+
+                 $.when(postingProject).done(function(result){
+                  $('.loading_background').fadeOut();
+
+                   $('#projects-modal').modal('toggle');
+
+
+                   projectsListAddProject.model.clear().set(projectsListAddProject.model.defaults);
+                   $('#selected_file').text("");
+                   // projectsListAddProject.render()
+
+                })
+
+
+          });
+
+          IPS_App.mainLayout.showChildView('addProjectRegion',projectsListAddProject);
+
 
           })
+
+         
+
+
 
  		}); // onAttach()
 

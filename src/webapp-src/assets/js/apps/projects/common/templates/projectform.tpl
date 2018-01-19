@@ -1,10 +1,14 @@
 
+
+
 <%
 if(asModal) {
 %>
 
   <div class="modal-dialog modal-lg" role="document">
   <div class="modal-content">
+
+
 
 <div class="modal-header red-border-bottom">
         <h3 class="modal-title"><%-text%> </h3>
@@ -15,6 +19,13 @@ if(asModal) {
 
       </div>
 <div class="modal-body">
+
+<div class="loading_background" style="display: none;">
+         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+         <div class="loading_text_parent">
+           <div class="loading_text"> Upload in progress </div>
+         </div>
+</div>
 
 <% } %>
 
@@ -50,10 +61,12 @@ if(asModal) {
 
 
 
-<label for="file-upload" class="btn" style="margin-top:15px">
- <i class="fa fa-file-archive-o" aria-hidden="true"></i> Upload Data (.zip)
+<label for="file-upload" class="btn" style="margin-top:15px; background: #dddddd;">
+ <i class="fa fa-file-archive-o" aria-hidden="true"></i> Upload data (.zip)
 </label>
 <input id="file-upload" type="file" style="display:none">
+
+<div id="selected_file"></div>
 
 </div>
 </div>

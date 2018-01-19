@@ -49,13 +49,27 @@ background: white;
 
 .loading_background i{
 
-font-size: 40px;
+font-size: 30px;
 height: 30px;
 margin: auto;
 position: absolute;
 top: 0; left: 0; bottom: 0; right: 0;
 opacity: 0.6;
 }
+
+
+.loading_text_parent {
+  text-align: center;
+}
+
+.loading_text {
+    position: relative;
+    top: 188px;
+    font-size: 20px;
+
+
+}
+
 
 
  #container{

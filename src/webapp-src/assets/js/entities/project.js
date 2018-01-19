@@ -68,6 +68,32 @@ getProject: function(id){
   
 },
 
+createProject: function(data){
+    var defer = jQuery.Deferred();
+       $.ajax({
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+         },
+        url: "api/projects/create",
+        type: "POST",
+        // type: "GET",
+        data:JSON.stringify(data),
+        dataType: "json",
+        success: function(data) {
+// #ifdef DEVELOPMENT_VERSION
+          console.log(data);
+// #endif DEVELOPMENT_VERSION
+              defer.resolve(data);
+            },
+            error: function(data){
+              defer.resolve(undefined);
+            }
+    });
+
+    return defer.promise();
+  },
+
 
 
 

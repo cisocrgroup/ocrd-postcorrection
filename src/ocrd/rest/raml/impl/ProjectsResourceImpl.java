@@ -36,9 +36,11 @@ public class ProjectsResourceImpl implements ProjectsResource {
     throw new Exception("Not implemented");
   }
   @Override
-  public PostProjectsCreateResponse postProjectsCreate(UploadProjectData data)
-      throws Exception {
-    throw new Exception("Not implemented");
+  public PostProjectsCreateResponse postProjectsCreate(UploadProjectData data) throws Exception {
+    try (Client client = newClient();) {
+    	System.out.println(data.getContent());
+    }
+	return null;
   }
 
   private static Client newClient() throws Exception {

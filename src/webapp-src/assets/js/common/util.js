@@ -5,19 +5,19 @@
 define({
 
 
- openFile: function(event){
+ getBase64: function(file,callback) {
+   var reader = new FileReader();
+   reader.readAsDataURL(file);
+   reader.onload = function () {
 
-        var input = event.target;
-
-        var reader = new FileReader();
-        reader.onload = function(){
-          var text = reader.result;
-          var node = document.getElementById('output');
-          node.innerText = text;
-          console.log(reader.result.substring(0, 200));
-        };
-        reader.readAsText(input.files[0]);
-      }
+     data = reader.result.split(",")
+     callback(data[1]);
+   };
+   reader.onerror = function (error) {
+      callback(error);
+  ;
+   };
+}
 
 
 });
