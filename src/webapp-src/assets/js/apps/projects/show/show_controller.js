@@ -32,47 +32,108 @@ define(["app","common/util","common/views","apps/projects/show/show_view"], func
 			projectShowLayout.on("attach",function(){
 			  
 
-			  projectShowHeader = new Show.Header({title:"OCR Project: "+project.title});
-			  projectShowInfo = new Show.Info({project:project});
-              projectShowFooterPanel = new Show.FooterPanel();
-
-			  projectShowExampleResponse = new Show.Resp({results:{}})
+			  projectShowHeader = new Show.Header({title:"OCR Project: "+project.get('title')});
+			  projectShowInfo = new Show.Info({model:project});
+        projectShowFooterPanel = new Show.FooterPanel();
 
 
-			  projectShowInfo.on("show:training_clicked",function(methods){
+			  projectShowInfo.on("show:edit_clicked",function(methods){
 
 
-			  	var postingTrainingData = UtilEntitites.API.startTraining({methods:methods}); 
-
-  				$.when(postingTrainingData).done(function(response){
-  					
-  					var resultarray = JSON.parse(response.result);
-
-  					for (key in resultarray) {
-						console.log(resultarray[key].evalstring) 
-
-  						resultarray[key].evalstring = resultarray[key].evalstring[0].replace(/(?:\r\n|\r|\n)/g, '<br />');
-
-  					}
+			   var projectsShowEditProject = new Show.ProjectForm({model:project
+          , asModal:true,text:"Edit OCR Project",edit_project:true,loading_text:"Update in progress"});
 
 
-  					projectShowExampleResponse.options.results = resultarray;
-  					projectShowExampleResponse.render();
+           projectsShowEditProject.on("project:update_clicked",function(data){
+            project.set(data)
+            console.log(project)
 
-	    		}).fail(function(response){ 
-
-	 			  //     loadingCircleView.destroy();
-					  // var errortext = Util.getErrorText(response);    
-	      //             var errorView = new Show.Error({errortext:errortext})
-
-	      //             App.mainLayout.showChildView('mainRegion',errorView);
-
-	          }); //  $.when
+            var puttingProject = ProjectEntitites.API.updateProject(id,project);
 
 
+                //  $.when(postingProject).done(function(result){
+                //   $('.loading_background').fadeOut();
+
+                //    $('#projects-modal').modal('toggle');
 
 
-			  });
+                //    projectsShowEditProject.model.clear().set(projectsListEditProject.model.defaults);
+                //    $('#selected_file').text("");
+                //    // projectsListAddProject.render()
+
+                // })
+
+
+          });
+
+
+          App.mainLayout.showChildView('dialogRegion',projectsShowEditProject);
+
+          });
+
+
+            projectShowInfo.on("show:delete_clicked",function(methods){
+
+			   var projectsShowDeleteProject = new Show.DeleteProjectForm({asModal:true,text:"Remove this Project?",title:"Delete OCR Project"});
+
+
+           projectsShowDeleteProject.on("project:delete_clicked",function(data){
+           // var postingProject = ProjectEntitites.API.createProject(data);
+
+
+           //       $.when(postingProject).done(function(result){
+           //        $('.loading_background').fadeOut();
+
+           //         $('#projects-modal').modal('toggle');
+
+
+           //         projectsShowDeleteProject.model.clear().set(projectsListDeleteProject.model.defaults);
+           //         $('#selected_file').text("");
+           //         // projectsListAddProject.render()
+
+           //      })
+
+
+          });
+
+        
+
+          App.mainLayout.showChildView('dialogRegion',projectsShowDeleteProject);
+
+
+
+		  });
+
+
+         projectShowInfo.on("show:add_book_clicked",function(methods){
+
+
+		   var projectsShowEditProject = new Show.ProjectForm({model: new ProjectEntitites.Project(), asModal:true,text:"Add a book to the OCR Project",add_book:true});
+
+
+       projectsShowEditProject.on("project:submit_clicked",function(data){
+       // var postingProject = ProjectEntitites.API.createProject(data);
+
+
+       //       $.when(postingProject).done(function(result){
+       //        $('.loading_background').fadeOut();
+
+       //         $('#projects-modal').modal('toggle');
+
+
+       //         projectsShowEditProject.model.clear().set(projectsListEditProject.model.defaults);
+       //         $('#selected_file').text("");
+       //         // projectsListAddProject.render()
+
+       //      })
+
+
+      });
+
+
+          App.mainLayout.showChildView('dialogRegion',projectsShowEditProject);
+
+          });
 
 
   			// projectPanel = new Show.FooterPanel();
@@ -80,7 +141,6 @@ define(["app","common/util","common/views","apps/projects/show/show_view"], func
 
 	          projectShowLayout.showChildView('headerRegion',projectShowHeader);
 	          projectShowLayout.showChildView('infoRegion',projectShowInfo);
-	          projectShowLayout.showChildView('respRegion',projectShowExampleResponse);
 	          projectShowLayout.showChildView('footerRegion',projectShowFooterPanel);
 
 

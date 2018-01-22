@@ -57,9 +57,19 @@ public class ProjectsResourceImpl implements ProjectsResource {
       return PostProjectsCreateResponse.withJsonCreated(project);
     }
   }
+  
+  @Override
+  public PutProjectsByProjectIDUpdateResponse putProjectsByProjectIDUpdate(String projectID, Project entity)
+  		throws Exception {
+  	System.out.println(projectID);
+  	System.out.println(entity.getAuthor());
+  	return null;
+  }
 
   private static Client newClient() throws Exception {
     return Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb",
                         "pocoweb123");
   }
+
+
 }

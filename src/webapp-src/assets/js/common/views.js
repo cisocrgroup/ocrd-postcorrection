@@ -19,9 +19,9 @@ define(["marionette","app","spin","spin.jquery","common/util","datatables",
 "tpl!common/templates/buttongroup.tpl",
 "tpl!common/templates/bginfo.tpl",
 "tpl!common/templates/footerpaneltemplate.tpl",
+"tpl!common/templates/confirm.tpl",
 
-
-	], function(Marionette,IPS_App,Spinner,SpinnerJQuery,Util,dtb,listTpl,loadingTpl,loadingOpcTpl,headerTpl,cardHeadTpl,cardhubTpl,layoutTpl,errorTpl,emptyTpl,areYouTpl,okTpl,infoPanelTpl,bgInfoTpl,footerPanelTpl){
+	], function(Marionette,IPS_App,Spinner,SpinnerJQuery,Util,dtb,listTpl,loadingTpl,loadingOpcTpl,headerTpl,cardHeadTpl,cardhubTpl,layoutTpl,errorTpl,emptyTpl,areYouTpl,okTpl,infoPanelTpl,bgInfoTpl,footerPanelTpl,confirmTpl){
 
     var Views={};
 
@@ -569,6 +569,59 @@ Views.Layout = Marionette.View.extend({
 
 
  });
+
+
+
+  Views.Confirm = Marionette.View.extend({
+   template: confirmTpl,
+   events: {
+   "click .js-confirm"        : "confirmClicked"
+  ,"click .js-cancel" : "cancelClicked"
+   },
+
+    serializeData: function(){
+      return {
+    asModal: Marionette.getOption(this,"asModal"),
+    model: Marionette.getOption(this,"model"),
+    text:  Marionette.getOption(this,"text"), 
+    title:  Marionette.getOption(this,"title"), 
+    color:  Marionette.getOption(this,"color"), 
+
+    }
+  },
+
+   onAttach: function(){
+
+     if(this.options.asModal){
+
+          this.$el.attr("ID","confirm-modal");
+          this.$el.addClass("modal fade confirm-modal");
+	  this.$el.on('shown.bs.modal', function (e) {
+// #ifdef DEVELOPMENT_VERSION
+	    perform_test("common/views.js","shown.bs.modal");
+// #endif DEVELOPMENT_VERSION
+          })
+
+          var that = this;
+         
+           this.$el.modal();
+    }
+     else {
+       var $title = $('#formhl');
+     $title.text(this.title);
+    }
+     
+   }, // onAttach()
+   confirmClicked: function(e){
+     e.preventDefault();
+     // $('#role-modal').modal('hide');
+   },
+   cancelClicked: function(e){
+     e.preventDefault();
+     this.$el.modal('hide');
+   },
+  
+});
 
 Views.FooterPanel = Marionette.View.extend({
      events:{
