@@ -79,6 +79,10 @@ Show.ProjectForm = CommonViews.ProjectForm.extend({
   });
 
 Show.DeleteProjectForm = Views.Confirm.extend({
+   confirmClicked: function(e){
+     e.preventDefault();
+     this.trigger("project:delete_clicked");
+   },
 
   });
 

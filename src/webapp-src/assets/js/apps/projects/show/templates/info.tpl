@@ -10,7 +10,7 @@
     <div style="margin-bottom:15px">
 
     <button type="button" class="btn js-edit-project"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
-    <button type="button" class="btn js-delete-project btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
+    <button type="button" class="btn js-delete-project btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
     <button type="button" class="btn js-add-book"> <i class="fa fa-plus" aria-hidden="true"></i> Add Book</button>
 
     </div>
@@ -67,7 +67,7 @@
 </div>
 </div>
 
-<table class="table table-bordered table-hover" 
+<table class="table table-bordered" 
  id="book_table" cellspacing="0" width="100%"  style="margin-top: 20px !important; margin-bottom: 30px !important;" >
 
  <thead>
@@ -76,17 +76,18 @@
         <th>Author</th>
         <th>Language</th>
         <th>Ocr Engine</th>
-
+        <th></th>
       </tr>
  </thead>
  <tbody>
 
  	<% _.each(books, function(book) { %>
  	<tr>  
-        <th><%-book.book.title%></th>
-        <th><%-book.book.author%></th>
-        <th><%-book.book.language%></th>
-        <th><%-book.book.ocrEngine%></th>
+        <td><%-book.title%></td>
+        <td><%-book.autdor%></td>
+        <td><%-book.language%></td>
+        <td><%-book.ocrEngine%></td>
+        <td><button class="btn no_bg_btn float-right js-delete-book table_row_button btn-warning"><i class="fa fa-minus" aria-hidden="true"></i> Remove</button></td>
 
     </tr>
     <% }); %>   

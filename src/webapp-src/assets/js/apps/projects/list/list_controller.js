@@ -69,7 +69,7 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
 
           });
 
-          App.mainLayout.showChildView('addProjectRegion',projectsListAddProject);
+          App.mainLayout.showChildView('dialogRegion',projectsListAddProject);
 
 
           })

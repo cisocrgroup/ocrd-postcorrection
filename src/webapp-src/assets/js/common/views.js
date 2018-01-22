@@ -596,10 +596,8 @@ Views.Layout = Marionette.View.extend({
 
           this.$el.attr("ID","confirm-modal");
           this.$el.addClass("modal fade confirm-modal");
-	  this.$el.on('shown.bs.modal', function (e) {
-// #ifdef DEVELOPMENT_VERSION
-	    perform_test("common/views.js","shown.bs.modal");
-// #endif DEVELOPMENT_VERSION
+	 	  this.$el.on('shown.bs.modal', function (e) {
+
           })
 
           var that = this;

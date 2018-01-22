@@ -38,9 +38,9 @@ define(["marionette","app"], function(Marionette,App){
 	});
 
 
-	App.on("projects:list",function(id){
+	App.on("projects:list",function(){
 		App.navigate("projects/list");
-		API.listProjects(id);
+		API.listProjects();
 	});
 
 
