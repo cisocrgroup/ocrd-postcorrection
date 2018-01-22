@@ -85,11 +85,12 @@ Views.ProjectForm = Marionette.View.extend({
 
      e.preventDefault();
       var data = Backbone.Syphon.serialize(this);
-
-
-
+      var ocrEngine =  $('#ocrEngine').find(":selected").val();
 
         $('.loading_background').fadeIn();
+
+        if(!Marionette.getOption(this,"edit_project")) {
+
 
         var that = this
     
@@ -101,7 +102,7 @@ Views.ProjectForm = Marionette.View.extend({
                 result['project'] = data;
                 result['project']['books'] = [{book:"",ocrEngine:""}] 
                 result['project']['books'][0]['book'] =  Backbone.Syphon.serialize(that);
-                result['project']['books'][0]['ocrEngine'] = $('#ocrEngine').find(":selected").val();
+                result['project']['books'][0]['ocrEngine'] = ocrEngine
 
 
                 result['content'] = base64;
@@ -110,7 +111,15 @@ Views.ProjectForm = Marionette.View.extend({
 
 
         });
- 
+      }
+
+      else {
+
+       
+         this.trigger("project:update_clicked", data);
+
+
+      }
 
    },
 
@@ -125,7 +134,7 @@ Views.ProjectForm = Marionette.View.extend({
           data.text = Marionette.getOption(this,"text");
           data.add_book = Marionette.getOption(this,"add_book");
           data.edit_project = Marionette.getOption(this,"edit_project");
-
+          data.loading_text = Marionette.getOption(this,"loading_text");
 
         return data;
 

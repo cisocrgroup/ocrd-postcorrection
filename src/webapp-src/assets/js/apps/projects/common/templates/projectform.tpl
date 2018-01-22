@@ -23,7 +23,7 @@ if(asModal) {
 <div class="loading_background" style="display: none;">
          <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
          <div class="loading_text_parent">
-           <div class="loading_text"> Upload in progress </div>
+           <div class="loading_text"> <%-loading_text%> </div>
          </div>
 </div>
 
@@ -65,7 +65,7 @@ if(asModal) {
   <div class="col-3">
   <label for="ocrEngine">OCR Engine</label>
 
-    <select style="width: 100%" class="form-control" id="ocrEngine" value="<%-ocrEngine%>">
+    <select style="width: 100%" class="form-control" id="ocrEngine">
       <option value="ocropus">Ocropus</option>
       <option value="tesseract">Tesseract</option>
       <option value="abbyy_finereader">Abbyy Finereader</option>

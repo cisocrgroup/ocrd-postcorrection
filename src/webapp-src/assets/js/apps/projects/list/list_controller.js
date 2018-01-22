@@ -46,7 +46,7 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
           projectsListPanel.on("list:create_clicked",function(){
 
 
-             var projectsListAddProject = new List.ProjectForm({model: new ProjectEntitites.Project, asModal:true,text:"Create a new OCR Project"});
+             var projectsListAddProject = new List.ProjectForm({model: new ProjectEntitites.Project, asModal:true,text:"Create a new OCR Project",loading_text:"Upload in progress"});
 
 
            projectsListAddProject.on("project:submit_clicked",function(data){
@@ -57,7 +57,8 @@ define(["app","common/util","common/views","apps/projects/list/list_view"], func
                   $('.loading_background').fadeOut();
 
                    $('#projects-modal').modal('toggle');
-
+                   console.log(result)
+                   App.trigger("projects:show",result.projectId)
 
                    projectsListAddProject.model.clear().set(projectsListAddProject.model.defaults);
                    $('#selected_file').text("");

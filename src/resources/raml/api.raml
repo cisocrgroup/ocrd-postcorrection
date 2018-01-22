@@ -60,6 +60,8 @@ types:
       pages: integer
       isBook: boolean
       pageIds: integer[]
+      ocrUser : string
+      ocrEngine: string
 
   Box:
     type: object
@@ -149,6 +151,16 @@ types:
           body:
             application/json:
               type: Project
+    /update:
+      put:
+        body:
+          application/json:
+            type: Project
+        responses:
+          200:
+           body:
+             application/json:
+               type: Project
 
     /add-book:
       post:

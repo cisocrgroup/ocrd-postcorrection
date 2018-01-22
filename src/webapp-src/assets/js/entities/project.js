@@ -17,10 +17,8 @@ Entities.Project = Backbone.Model.extend({
   projectId:null,
   title:"",
   user:"",
-  ocrEngine:"",
-  year:"",
-  add_book:false,
-  edit_project:false
+  year:""
+  
      }
   });
 
@@ -57,8 +55,8 @@ getProject: function(id){
       type: "GET",
       dataType:"json",
       success: function(data) {
-        console.log(data)
-        defer.resolve(data);
+        var result = new Entities.Project(data)
+        defer.resolve(result);
 
           },
           error: function(data){
@@ -80,13 +78,10 @@ createProject: function(data){
          },
         url: "api/projects/create",
         type: "POST",
-        // type: "GET",
         data:JSON.stringify(data),
         dataType: "json",
         success: function(data) {
-// #ifdef DEVELOPMENT_VERSION
-          console.log(data);
-// #endif DEVELOPMENT_VERSION
+
               defer.resolve(data);
             },
             error: function(data){
@@ -97,6 +92,28 @@ createProject: function(data){
     return defer.promise();
   },
 
+updateProject: function(id,data){
+    var defer = jQuery.Deferred();
+       $.ajax({
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+         },
+        url: "api/projects/"+id+"/update",
+        type: "PUT",
+        data:JSON.stringify(data),
+        dataType: "json",
+        success: function(data) {
+
+              defer.resolve(data);
+            },
+            error: function(data){
+              defer.resolve(undefined);
+            }
+    });
+
+    return defer.promise();
+  },
 
 
 

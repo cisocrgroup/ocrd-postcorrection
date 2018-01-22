@@ -63,13 +63,8 @@ define(["marionette","app","backbone.syphon","common/views","apps/projects/commo
      onAttach: function(){
        var table = $('#book_table').DataTable();
 
-      },
-     serializeData: function(){
-       return {
-       project: Marionette.getOption(this,"project")
-       }
-      }          
-
+      }
+    
   });
 
 

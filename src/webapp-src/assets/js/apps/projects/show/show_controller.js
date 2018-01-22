@@ -32,32 +32,36 @@ define(["app","common/util","common/views","apps/projects/show/show_view"], func
 			projectShowLayout.on("attach",function(){
 			  
 
-			  projectShowHeader = new Show.Header({title:"OCR Project: "+project.title});
-			  projectShowInfo = new Show.Info({project:project});
-              projectShowFooterPanel = new Show.FooterPanel();
+			  projectShowHeader = new Show.Header({title:"OCR Project: "+project.get('title')});
+			  projectShowInfo = new Show.Info({model:project});
+        projectShowFooterPanel = new Show.FooterPanel();
 
 
 			  projectShowInfo.on("show:edit_clicked",function(methods){
 
 
-			   var projectsShowEditProject = new Show.ProjectForm({model: new ProjectEntitites.Project(project), asModal:true,text:"Edit OCR Project",edit_project:true});
+			   var projectsShowEditProject = new Show.ProjectForm({model:project
+          , asModal:true,text:"Edit OCR Project",edit_project:true,loading_text:"Update in progress"});
 
 
-           projectsShowEditProject.on("project:submit_clicked",function(data){
-           // var postingProject = ProjectEntitites.API.createProject(data);
+           projectsShowEditProject.on("project:update_clicked",function(data){
+            project.set(data)
+            console.log(project)
+
+            var puttingProject = ProjectEntitites.API.updateProject(id,project);
 
 
-           //       $.when(postingProject).done(function(result){
-           //        $('.loading_background').fadeOut();
+                //  $.when(postingProject).done(function(result){
+                //   $('.loading_background').fadeOut();
 
-           //         $('#projects-modal').modal('toggle');
+                //    $('#projects-modal').modal('toggle');
 
 
-           //         projectsShowEditProject.model.clear().set(projectsListEditProject.model.defaults);
-           //         $('#selected_file').text("");
-           //         // projectsListAddProject.render()
+                //    projectsShowEditProject.model.clear().set(projectsListEditProject.model.defaults);
+                //    $('#selected_file').text("");
+                //    // projectsListAddProject.render()
 
-           //      })
+                // })
 
 
           });

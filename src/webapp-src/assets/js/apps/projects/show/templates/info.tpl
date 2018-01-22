@@ -31,24 +31,24 @@
 <div style="margin-bottom:15px">
 
 	<div>
-	<b>Title : </b> <%-project.title%>
+	<b>Title : </b> <%-title%>
 	</div>
 
 	<div>
-	<b>Author : </b> <%-project.author%>
+	<b>Author : </b> <%-author%>
 	</div>
 
 	<div>
-	<b>Year : </b> <%-project.year%>
+	<b>Year : </b> <%-year%>
 	</div>
 
 	<div>
-	<b>Language : </b> <%-project.language%>
+	<b>Language : </b> <%-language%>
 	</div>
 
 
 	<div>
-	<b>User : </b> <%-project.user%>
+	<b>User : </b> <%-user%>
 	</div>
 
 <hr>
@@ -81,7 +81,7 @@
  </thead>
  <tbody>
 
- 	<% _.each(project.books, function(book) { %>
+ 	<% _.each(books, function(book) { %>
  	<tr>  
         <th><%-book.book.title%></th>
         <th><%-book.book.author%></th>
