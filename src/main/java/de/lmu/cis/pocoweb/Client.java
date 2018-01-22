@@ -25,7 +25,6 @@ import org.raml.jaxrs.example.model.Book;
 import org.raml.jaxrs.example.model.Languages;
 import org.raml.jaxrs.example.model.Page;
 import org.raml.jaxrs.example.model.Project;
-import org.raml.jaxrs.example.model.ProjectEntry;
 import org.raml.jaxrs.example.model.Projects;
 
 public class Client implements AutoCloseable {
@@ -69,7 +68,7 @@ public class Client implements AutoCloseable {
       if (!map.containsKey(ocrId)) {
         map.put(ocrId, book.newProjectFromThis());
       } else {
-        book.addThisToProject(map.get(ocrId));
+        map.get(ocrId).getBooks().add(book.newBookFromThis());
       }
     }
     List<Project> projects = new ArrayList<Project>(map.size());
@@ -91,11 +90,11 @@ public class Client implements AutoCloseable {
     return new ProjectBook(get("/books/" + pid, Book.class, 200));
   }
 
-  public ProjectBook uploadBook(ProjectBook p, InputStream in)
-      throws Exception {
-    p.setProjectId(post("/books", in, Book.class, "application/zip", 200, 201)
-                       .getProjectId());
-    this.updateBookData(p);
+  public Project uploadProject(Project p, InputStream in) throws Exception {
+    // Book book = post("/books", in, Book.class, "application/zip", 200, 201);
+    // p.setProjectId(book.getProjectId());
+    // p.setPageIds(book.getPageIds());
+    // this.updateBookData(p);
     return p;
   }
 
@@ -109,8 +108,8 @@ public class Client implements AutoCloseable {
   }
 
   public void deleteProject(Project p) throws Exception {
-    for (ProjectEntry e : p.getBooks()) {
-      deleteBook(e.getBook().getProjectId());
+    for (Book book : p.getBooks()) {
+      deleteBook(book.getProjectId());
     }
   }
 
@@ -207,7 +206,7 @@ public class Client implements AutoCloseable {
       throws Exception {
     StringWriter out = new StringWriter();
     IOUtils.copy(in, out, Charset.forName("UTF-8"));
-    System.out.println("[Client] deserializing JSON: " + out.toString());
+    // System.out.println("[Client] deserializing JSON: " + out.toString());
     return new Gson().fromJson(out.toString(), clss);
   }
 

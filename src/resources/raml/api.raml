@@ -11,17 +11,11 @@ types:
     properties:
       result: string
 
-  ProjectEntry:
-    type: object
-    properties:
-      ocrEngine: string
-      book: Book
-
   Project:
     type: object
     properties:
       projectId: integer
-      books: ProjectEntry[]
+      books: Book[]
       title: string
       author: string
       user: string
@@ -34,7 +28,6 @@ types:
     properties:
       project: Project
       content: string
-      ocrEngine: string
 
   Projects:
     type: object

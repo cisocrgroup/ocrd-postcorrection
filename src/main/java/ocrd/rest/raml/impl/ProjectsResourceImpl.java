@@ -44,32 +44,35 @@ public class ProjectsResourceImpl implements ProjectsResource {
   public PostProjectsCreateResponse postProjectsCreate(UploadProjectData data)
       throws Exception {
     try (Client client = newClient();) {
-      ProjectBook book = new ProjectBook()
-                             .withOcrUser(data.getProject().getUser())
-                             .withOcrEngine(data.getOcrEngine());
-      book.withAuthor(data.getProject().getAuthor())
-          .withTitle(data.getProject().getTitle())
-          .withYear(data.getProject().getYear())
-          .withLanguage(data.getProject().getLanguage());
-      client.uploadBook(book, Base64.getDecoder().wrap(IOUtils.toInputStream(
-                                  data.getContent(), "UTF-8")));
-      Project project = book.newProjectFromThis();
+      if (data.getProject().getBooks().isEmpty()) {
+        throw new Exception("cannot upload project with no book data");
+      }
+      // ProjectBook book = new ProjectBook()
+      //                        .withOcrUser(data.getProject().getUser())
+      //                    //.withOcrEngine(data.getOcrEngine());
+      //                    book.withAuthor(data.getProject().getAuthor())
+      //                        .withTitle(data.getProject().getTitle())
+      //                        .withYear(data.getProject().getYear())
+      //                        .withLanguage(data.getProject().getLanguage());
+      Project project = client.uploadProject(
+          data.getProject(), Base64.getDecoder().wrap(IOUtils.toInputStream(
+                                 data.getContent(), "UTF-8")));
+      // Project project = book.newProjectFromThis();
       return PostProjectsCreateResponse.withJsonCreated(project);
     }
   }
-  
+
   @Override
-  public PutProjectsByProjectIDUpdateResponse putProjectsByProjectIDUpdate(String projectID, Project entity)
-  		throws Exception {
-  	System.out.println(projectID);
-  	System.out.println(entity.getAuthor());
-  	return null;
+  public PutProjectsByProjectIDUpdateResponse
+  putProjectsByProjectIDUpdate(String projectID, Project entity)
+      throws Exception {
+    System.out.println(projectID);
+    System.out.println(entity.getAuthor());
+    return null;
   }
 
   private static Client newClient() throws Exception {
     return Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb",
                         "pocoweb123");
   }
-
-
 }

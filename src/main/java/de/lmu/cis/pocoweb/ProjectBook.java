@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import java.util.List;
 import org.raml.jaxrs.example.model.Book;
 import org.raml.jaxrs.example.model.Project;
-import org.raml.jaxrs.example.model.ProjectEntry;
 
 public class ProjectBook extends Book {
   public ProjectBook() {
@@ -83,30 +82,36 @@ public class ProjectBook extends Book {
                           .withYear(year)
                           .withUser(getOcrUser())
                           .withProjectId(ocrId);
-    project.getBooks().add(
-        new ProjectEntry().withOcrEngine(getOcrEngine()).withBook(this));
+    project.getBooks().add(new Book()
+                               .withOcrEngine(getOcrEngine())
+                               .withAuthor(author)
+                               .withTitle(title)
+                               .withLanguage(language)
+                               .withProfilerUrl(profilerUrl)
+                               .withYear(year));
     return project;
   }
-
-  public void addThisToProject(Project project) {
-    // ocrId
-    List<ProjectEntry> list = project.getBooks();
-    if (list.isEmpty()) {
-      project.setProjectId(this.projectId);
-    }
-    // update book data
-    this.author = project.getAuthor();
-    this.title = project.getTitle();
-    this.language = project.getLanguage();
-    this.profilerUrl = project.getProfilerUrl();
-    this.year = project.getYear();
-    this.setOcrUser(project.getUser());
-    this.setOcrId(project.getProjectId());
-    // insert this book into project's list of books
-    list.add(
-        new ProjectEntry().withOcrEngine(this.getOcrEngine()).withBook(this));
-    project.setBooks(list);
-  }
+  public Book newBookFromThis() { return new Book(); }
+  // public void addThisToProject(Project project) {
+  //   // ocrId
+  //   List<ProjectEntry> list = project.getBooks();
+  //   if (list.isEmpty()) {
+  //     project.setProjectId(this.projectId);
+  //   }
+  //   // update book data
+  //   this.author = project.getAuthor();
+  //   this.title = project.getTitle();
+  //   this.language = project.getLanguage();
+  //   this.profilerUrl = project.getProfilerUrl();
+  //   this.year = project.getYear();
+  //   this.setOcrUser(project.getUser());
+  //   this.setOcrId(project.getProjectId());
+  //   // insert this book into project's list of books
+  //   list.add(
+  //       new
+  //       ProjectEntry().withOcrEngine(this.getOcrEngine()).withBook(this));
+  //   project.setBooks(list);
+  // }
 
   private class OcrData {
     public String ocrUser, ocrEngine;
