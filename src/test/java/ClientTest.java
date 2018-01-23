@@ -15,6 +15,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class ClientTest {
   private Client client;
+  private Project project;
   private static final String resourceAbbyyZip =
       "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
   private static final String resourceTesseractZip =
@@ -29,6 +30,9 @@ public class ClientTest {
   }
   @After
   public void logout() throws Exception {
+    if (project != null) {
+      client.deleteProject(project);
+    }
     this.client.close();
   }
 
@@ -46,12 +50,16 @@ public class ClientTest {
                     .withAuthor("Grenzboten")
                     .withTitle("Die Grenzboten")
                     .withYear(1841);
-    Project project;
     try (InputStream is = new FileInputStream(resourceAbbyyZip);) {
-      project = client.newProject(book, is);
+      this.project = client.newProject(book, is);
     }
+    assertThat(project.getUser(), is("test-ocr-user"));
+    assertThat(project.getYear(), is(1841));
+    assertThat(project.getAuthor(), is("Grenzboten"));
+    assertThat(project.getTitle(), is("Die Grenzboten"));
     assertThat(project.getProjectId(), is(not(0)));
     assertThat(project.getBooks().size(), is(1));
+    assertThat(project.getBooks().get(0).getOcrEngine(), is("abbyy"));
     assertThat(project.getProjectId(),
                is(project.getBooks().get(0).getProjectId()));
     System.out.println(project.getUser() + "::" +
@@ -71,6 +79,7 @@ public class ClientTest {
       project = client.addBook(project, book, is);
     }
     assertThat(project.getBooks().size(), is(2));
+    assertThat(project.getBooks().get(1).getOcrEngine(), is("tesseract"));
     assertThat(project.getBooks().get(1).getProjectId(), is(not(0)));
     assertThat(book.getProjectId(),
                is(not(project.getBooks().get(1).getProjectId())));
@@ -91,6 +100,7 @@ public class ClientTest {
       project = client.addBook(project, book, is);
     }
     assertThat(project.getBooks().size(), is(3));
+    assertThat(project.getBooks().get(2).getOcrEngine(), is("ocropus"));
     assertThat(project.getBooks().get(2).getProjectId(), is(not(0)));
     assertThat(book.getProjectId(),
                is(not(project.getBooks().get(2).getProjectId())));
@@ -100,6 +110,5 @@ public class ClientTest {
     assertThat(project.getAuthor(), is(project.getBooks().get(2).getAuthor()));
     assertThat(project.getTitle(), is(project.getBooks().get(2).getTitle()));
     assertThat(project.getYear(), is(project.getBooks().get(2).getYear()));
-    client.deleteProject(project);
   }
 }

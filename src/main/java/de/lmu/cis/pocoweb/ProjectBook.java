@@ -21,8 +21,10 @@ public class ProjectBook {
     this.pages = s.getPages();
     this.isBook = s.getIsBook();
     this.pageIds = s.getPageIds();
-    this.description = "{}";
+    this.setOcrData(new OcrData());
     this.setOcrEngine(s.getOcrEngine());
+    this.setOcrUser(s.getOcrUser());
+    // System.out.println("NEW PROJCET BOOK DESCRIPTION: " + description);
   }
 
   public ProjectBook withOcrId(int id) {
@@ -81,12 +83,6 @@ public class ProjectBook {
   }
 
   public Project newProject() {
-    int ocrId = getOcrId();
-    // if the book does not have a valid ocrId,
-    // use the book's projectId instead.
-    if (ocrId == 0) {
-      ocrId = projectId;
-    }
     Project project = new Project()
                           .withAuthor(author)
                           .withTitle(title)
@@ -94,7 +90,7 @@ public class ProjectBook {
                           .withProfilerUrl(profilerUrl)
                           .withYear(year)
                           .withUser(getOcrUser())
-                          .withProjectId(ocrId);
+                          .withProjectId(getOcrId());
     project.getBooks().add(this.newBook());
     return project;
   }
@@ -110,12 +106,15 @@ public class ProjectBook {
     if (data == null) {
       return new OcrData();
     }
+    // System.out.println("LOAD OCR DATA: " + description);
     return data;
   }
   private void setOcrData(OcrData data) {
+    // System.out.println("SET OCR DATA BEFORE: " + description);
     if (data == null) {
       data = new OcrData();
     }
     description = new Gson().toJson(data);
+    // System.out.println("SET OCR DATA AFTER: " + description);
   }
 }

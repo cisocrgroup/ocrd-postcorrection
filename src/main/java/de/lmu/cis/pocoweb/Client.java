@@ -92,16 +92,23 @@ public class Client implements AutoCloseable {
 
   public Project newProject(Book book, InputStream in) throws Exception {
     ProjectBook pbook = new ProjectBook(book);
-    pbook = post("/books", in, ProjectBook.class, "application/zip", 200, 201);
-    pbook = updateBookData(pbook);
+    ProjectBook tmp =
+        post("/books", in, ProjectBook.class, "application/zip", 200, 201);
+    pbook.pageIds = tmp.pageIds;
+    pbook.projectId = tmp.projectId;
+    pbook.setOcrId(pbook.projectId); // ocrid is the first book's project id
+    updateBookData(pbook);
     return pbook.newProject();
   }
 
   public Project addBook(Project project, Book book, InputStream in)
       throws Exception {
     ProjectBook pbook = new ProjectBook(book);
-    pbook = post("/books", in, ProjectBook.class, "application/zip", 200, 201);
-    pbook = updateBookData(pbook);
+    ProjectBook tmp =
+        post("/books", in, ProjectBook.class, "application/zip", 200, 201);
+    pbook.pageIds = tmp.pageIds;
+    pbook.projectId = tmp.projectId;
+    updateBookData(pbook);
     project.getBooks().add(pbook.newBook());
     return project;
   }
