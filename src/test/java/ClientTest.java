@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.raml.jaxrs.example.model.Project;
 import org.raml.jaxrs.example.model.Projects;
+import org.raml.jaxrs.example.model.Book;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
@@ -39,52 +40,66 @@ public class ClientTest {
 
   @Test
   public void TestCreateNewProject() throws Exception {
-    ProjectBook book =
-        new ProjectBook().withOcrEngine("abbyy").withOcrUser("test-ocr-user");
-    book.withAuthor("Grenzboten").withTitle("Die Grenzboten").withYear(1841);
-    uploadBook(book, resourceAbbyyZip);
-    Project project = book.newProjectFromThis();
-    assertThat(project.getProjectId(), is(book.getProjectId()));
-    assertThat(project.getUser(), is(book.getOcrUser()));
-    assertThat(project.getAuthor(), is(book.getAuthor()));
-    assertThat(project.getTitle(), is(book.getTitle()));
-    assertThat(project.getYear(), is(book.getYear()));
-    assertThat(project.getBooks().size(), is(1));
-    book = new ProjectBook()
-               .withOcrEngine("tesseract")
-               .withOcrUser("test-ocr-user");
-    book.addThisToProject(project);
-    uploadBook(book, resourceTesseractZip);
-    assertThat(project.getProjectId(), is(not(book.getProjectId())));
-    assertThat(project.getUser(), is(book.getOcrUser()));
-    assertThat(project.getAuthor(), is(book.getAuthor()));
-    assertThat(project.getTitle(), is(book.getTitle()));
-    assertThat(project.getYear(), is(book.getYear()));
-    assertThat(project.getBooks().size(), is(2));
-    book =
-        new ProjectBook().withOcrEngine("ocropus").withOcrUser("test-ocr-user");
-    book.addThisToProject(project);
-    uploadBook(book, resourceOcropusZip);
-    assertThat(project.getProjectId(), is(not(book.getProjectId())));
-    assertThat(project.getUser(), is(book.getOcrUser()));
-    assertThat(project.getAuthor(), is(book.getAuthor()));
-    assertThat(project.getTitle(), is(book.getTitle()));
-    assertThat(project.getYear(), is(book.getYear()));
-    assertThat(project.getBooks().size(), is(3));
-    Project otherProject = client.getProject(project.getProjectId());
-    assertThat(project.getProjectId(), is(otherProject.getProjectId()));
-    assertThat(project.getUser(), is(otherProject.getUser()));
-    assertThat(project.getAuthor(), is(otherProject.getAuthor()));
-    assertThat(project.getTitle(), is(otherProject.getTitle()));
-    assertThat(project.getYear(), is(otherProject.getYear()));
-    assertThat(project.getBooks().size(), is(otherProject.getBooks().size()));
-    client.deleteProject(project);
-  }
-
-  private void uploadBook(ProjectBook book, String resource) throws Exception {
-    try (InputStream is = new FileInputStream(resource);) {
-      client.uploadBook(book, is);
-      assertThat(book.getProjectId(), is(not(0)));
+    Book book = new Book()
+                    .withOcrEngine("abbyy")
+                    .withOcrUser("test-ocr-user")
+                    .withAuthor("Grenzboten")
+                    .withTitle("Die Grenzboten")
+                    .withYear(1841);
+    Project project;
+    try (InputStream is = new FileInputStream(resourceAbbyyZip);) {
+      project = client.newProject(book, is);
     }
+    assertThat(project.getProjectId(), is(not(0)));
+    assertThat(project.getBooks().size(), is(1));
+    assertThat(project.getProjectId(),
+               is(project.getBooks().get(0).getProjectId()));
+    System.out.println(project.getUser() + "::" +
+                       project.getBooks().get(0).getOcrUser());
+    assertThat(project.getUser(), is(project.getBooks().get(0).getOcrUser()));
+    assertThat(project.getAuthor(), is(project.getBooks().get(0).getAuthor()));
+    assertThat(project.getTitle(), is(project.getBooks().get(0).getTitle()));
+    assertThat(project.getYear(), is(project.getBooks().get(0).getYear()));
+    // tesseract
+    book = new Book()
+               .withOcrEngine("tesseract")
+               .withOcrUser("test-ocr-user")
+               .withAuthor("Grenzboten")
+               .withTitle("Die Grenzboten")
+               .withYear(1841);
+    try (InputStream is = new FileInputStream(resourceTesseractZip);) {
+      project = client.addBook(project, book, is);
+    }
+    assertThat(project.getBooks().size(), is(2));
+    assertThat(project.getBooks().get(1).getProjectId(), is(not(0)));
+    assertThat(book.getProjectId(),
+               is(not(project.getBooks().get(1).getProjectId())));
+    assertThat(project.getProjectId(),
+               is(not(project.getBooks().get(1).getProjectId())));
+    assertThat(project.getUser(), is(project.getBooks().get(1).getOcrUser()));
+    assertThat(project.getAuthor(), is(project.getBooks().get(1).getAuthor()));
+    assertThat(project.getTitle(), is(project.getBooks().get(1).getTitle()));
+    assertThat(project.getYear(), is(project.getBooks().get(1).getYear()));
+    // ocropus
+    book = new Book()
+               .withOcrEngine("ocropus")
+               .withOcrUser("test-ocr-user")
+               .withAuthor("Grenzboten")
+               .withTitle("Die Grenzboten")
+               .withYear(1841);
+    try (InputStream is = new FileInputStream(resourceOcropusZip);) {
+      project = client.addBook(project, book, is);
+    }
+    assertThat(project.getBooks().size(), is(3));
+    assertThat(project.getBooks().get(2).getProjectId(), is(not(0)));
+    assertThat(book.getProjectId(),
+               is(not(project.getBooks().get(2).getProjectId())));
+    assertThat(project.getProjectId(),
+               is(not(project.getBooks().get(2).getProjectId())));
+    assertThat(project.getUser(), is(project.getBooks().get(2).getOcrUser()));
+    assertThat(project.getAuthor(), is(project.getBooks().get(2).getAuthor()));
+    assertThat(project.getTitle(), is(project.getBooks().get(2).getTitle()));
+    assertThat(project.getYear(), is(project.getBooks().get(2).getYear()));
+    client.deleteProject(project);
   }
 }

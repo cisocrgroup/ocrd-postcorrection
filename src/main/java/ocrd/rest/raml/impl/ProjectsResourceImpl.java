@@ -6,6 +6,7 @@ import java.util.Base64;
 import ocrd.rest.raml.handler.ProjectsHandler;
 import org.apache.commons.io.IOUtils;
 import org.raml.jaxrs.example.model.Project;
+import org.raml.jaxrs.example.model.Book;
 import org.raml.jaxrs.example.model.Projects;
 import org.raml.jaxrs.example.model.UploadProjectData;
 import org.raml.jaxrs.example.resource.ProjectsResource;
@@ -44,21 +45,14 @@ public class ProjectsResourceImpl implements ProjectsResource {
   public PostProjectsCreateResponse postProjectsCreate(UploadProjectData data)
       throws Exception {
     try (Client client = newClient();) {
-      if (data.getProject().getBooks().isEmpty()) {
+      if (data.getProject().getBooks().size() != 1) {
         throw new Exception("cannot upload project with no book data");
       }
-      // ProjectBook book = new ProjectBook()
-      //                        .withOcrUser(data.getProject().getUser())
-      //                    //.withOcrEngine(data.getOcrEngine());
-      //                    book.withAuthor(data.getProject().getAuthor())
-      //                        .withTitle(data.getProject().getTitle())
-      //                        .withYear(data.getProject().getYear())
-      //                        .withLanguage(data.getProject().getLanguage());
-      Project project = client.uploadProject(
-          data.getProject(), Base64.getDecoder().wrap(IOUtils.toInputStream(
-                                 data.getContent(), "UTF-8")));
-      // Project project = book.newProjectFromThis();
-      return PostProjectsCreateResponse.withJsonCreated(project);
+      Project project =
+          client.newProject(data.getProject().getBooks().get(0),
+                            Base64.getDecoder().wrap(IOUtils.toInputStream(
+                                data.getContent(), "UTF-8")));
+      return PostProjectsCreateResponse.withJsonCreated(data.getProject());
     }
   }
 

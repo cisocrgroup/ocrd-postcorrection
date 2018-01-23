@@ -49,12 +49,12 @@ public class Client implements AutoCloseable {
     return getProfilerLanguages(LocalProfiler);
   }
 
-  private class Books { public Book[] books; }
-  public List<ProjectBook> listBooks() throws Exception {
-    Book[] books = get("/books", Books.class, 200).books;
+  private class Books { public ProjectBook[] books; }
+  private List<ProjectBook> listBooks() throws Exception {
+    ProjectBook[] books = get("/books", Books.class, 200).books;
     List<ProjectBook> list = new ArrayList<ProjectBook>(books.length);
-    for (Book b : books) {
-      list.add(new ProjectBook(b));
+    for (ProjectBook b : books) {
+      list.add(b);
     }
     return list;
   }
@@ -66,9 +66,9 @@ public class Client implements AutoCloseable {
     for (ProjectBook book : projectBooks) {
       Integer ocrId = book.getOcrId();
       if (!map.containsKey(ocrId)) {
-        map.put(ocrId, book.newProjectFromThis());
+        map.put(ocrId, book.newProject());
       } else {
-        map.get(ocrId).getBooks().add(book.newBookFromThis());
+        map.get(ocrId).getBooks().add(book.newBook());
       }
     }
     List<Project> projects = new ArrayList<Project>(map.size());
@@ -86,24 +86,32 @@ public class Client implements AutoCloseable {
     throw new Exception("no such project: " + pid);
   }
 
-  public ProjectBook getBook(int pid) throws Exception {
+  private ProjectBook getBook(int pid) throws Exception {
     return new ProjectBook(get("/books/" + pid, Book.class, 200));
   }
 
-  public Project uploadProject(Project p, InputStream in) throws Exception {
-    // Book book = post("/books", in, Book.class, "application/zip", 200, 201);
-    // p.setProjectId(book.getProjectId());
-    // p.setPageIds(book.getPageIds());
-    // this.updateBookData(p);
-    return p;
+  public Project newProject(Book book, InputStream in) throws Exception {
+    ProjectBook pbook = new ProjectBook(book);
+    pbook = post("/books", in, ProjectBook.class, "application/zip", 200, 201);
+    pbook = updateBookData(pbook);
+    return pbook.newProject();
   }
 
-  public ProjectBook updateBookData(ProjectBook p) throws Exception {
-    return new ProjectBook(
-        post(String.format("/books/%d", p.getProjectId()), p, Book.class, 200));
+  public Project addBook(Project project, Book book, InputStream in)
+      throws Exception {
+    ProjectBook pbook = new ProjectBook(book);
+    pbook = post("/books", in, ProjectBook.class, "application/zip", 200, 201);
+    pbook = updateBookData(pbook);
+    project.getBooks().add(pbook.newBook());
+    return project;
   }
 
-  public void deleteBook(int bid) throws Exception {
+  private ProjectBook updateBookData(ProjectBook p) throws Exception {
+    return post(String.format("/books/%d", p.projectId), p, ProjectBook.class,
+                200);
+  }
+
+  private void deleteBook(int bid) throws Exception {
     delete(String.format("/books/%d", bid), 200);
   }
 

@@ -3,6 +3,7 @@ package test;
 import de.lmu.cis.pocoweb.ProjectBook;
 import org.junit.Test;
 import org.raml.jaxrs.example.model.Projects;
+import org.raml.jaxrs.example.model.Book;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
@@ -14,22 +15,22 @@ public class ProjectBookTest {
 
   @Test
   public void testWithOcrUser() throws Exception {
-    ProjectBook book = new ProjectBook().withOcrUser(testOcrUser);
+    ProjectBook book = new ProjectBook(new Book()).withOcrUser(testOcrUser);
     assertThat(book.getOcrUser(), is(testOcrUser));
   }
   @Test
   public void testWithOcrId() throws Exception {
-    ProjectBook book = new ProjectBook().withOcrId(testOcrId);
+    ProjectBook book = new ProjectBook(new Book()).withOcrId(testOcrId);
     assertThat(book.getOcrId(), is(testOcrId));
   }
   @Test
   public void testWithOcrEngine() throws Exception {
-    ProjectBook book = new ProjectBook().withOcrEngine(testOcrEngine);
+    ProjectBook book = new ProjectBook(new Book()).withOcrEngine(testOcrEngine);
     assertThat(book.getOcrEngine(), is(testOcrEngine));
   }
   @Test
   public void testWithAll() throws Exception {
-    ProjectBook book = new ProjectBook()
+    ProjectBook book = new ProjectBook(new Book())
                            .withOcrUser(testOcrUser)
                            .withOcrId(testOcrId)
                            .withOcrEngine(testOcrEngine);
