@@ -62,8 +62,6 @@ public class ClientTest {
     assertThat(project.getBooks().get(0).getOcrEngine(), is("abbyy"));
     assertThat(project.getProjectId(),
                is(project.getBooks().get(0).getProjectId()));
-    System.out.println(project.getUser() + "::" +
-                       project.getBooks().get(0).getOcrUser());
     assertThat(project.getUser(), is(project.getBooks().get(0).getOcrUser()));
     assertThat(project.getAuthor(), is(project.getBooks().get(0).getAuthor()));
     assertThat(project.getTitle(), is(project.getBooks().get(0).getTitle()));

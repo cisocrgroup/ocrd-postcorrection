@@ -62,7 +62,7 @@ public class Client implements AutoCloseable {
   public Projects listProjects() throws Exception {
     List<ProjectBook> projectBooks = listBooks();
     Map<Integer, Project> map = new HashMap<Integer, Project>();
-    System.out.println("got " + projectBooks.size() + " books");
+    // System.out.println("got " + projectBooks.size() + " books");
     for (ProjectBook book : projectBooks) {
       Integer ocrId = book.getOcrId();
       if (!map.containsKey(ocrId)) {
@@ -72,7 +72,7 @@ public class Client implements AutoCloseable {
       }
     }
     List<Project> projects = new ArrayList<Project>(map.size());
-    System.out.println("got " + map.size() + " projects");
+    // System.out.println("got " + map.size() + " projects");
     projects.addAll(map.values());
     return new Projects().withProjects(projects);
   }
@@ -146,16 +146,17 @@ public class Client implements AutoCloseable {
     return get(String.format("/books/%d/pages/%d", bid, pid), Page.class, 200);
   }
 
-  public TokensData getTokens(int bid, int pid) throws Exception {
-    return get(String.format("/books/%d/pages/%d", bid, pid), TokensData.class,
-               200);
-  }
-
-  public TokenData getToken(int bid, int pid, int lid, int tid)
-      throws Exception {
-    return get(String.format("/books/%d/pages/%d/lines/%d/tokens/%d", bid, pid,
-                             lid, tid),
-               TokenData.class, 200);
+  private class Tokens { public Token[] tokens; }
+  public List<Token> getTokens(int bid, int pid, int lid) throws Exception {
+    Token[] tokens =
+        get(String.format("/books/%d/pages/%d/lines/%d/tokens", bid, pid, lid),
+            Tokens.class, 200)
+            .tokens;
+    List<Token> list = new ArrayList<Token>(tokens.length);
+    for (Token t : tokens) {
+      list.add(t);
+    }
+    return list;
   }
 
   public SuggestionsData getSuggestions(int pid) throws Exception {
