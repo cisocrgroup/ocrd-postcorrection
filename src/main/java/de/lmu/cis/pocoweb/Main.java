@@ -1,12 +1,12 @@
 package de.lmu.cis.pocoweb;
 
 import de.lmu.cis.ocrd.Document;
+// import de.lmu.cis.ocrd.Line;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.raml.jaxrs.example.model.Line;
 import org.raml.jaxrs.example.model.Page;
 import org.raml.jaxrs.example.model.Project;
 import org.raml.jaxrs.example.model.Book;
@@ -47,8 +47,9 @@ class Main {
                  .withAuthor("Grenzboten")
                  .withTitle("Die Grenzboten")
                  .withYear(1841);
-      try (InputStream is = new FileInputStream(
-               "src/test/resources/1841-DieGrenzboten-tesseract-small.zip");) {
+      try (
+          InputStream is = new FileInputStream(
+              "src/test/resources/1841-DieGrenzboten-tesseract-small-with-error.zip");) {
         project = client.addBook(project, book, is);
       }
       book = new Book()
@@ -63,10 +64,14 @@ class Main {
       }
       Document doc = new Document(project, client);
       doc.eachLine(new Document.Visitor() {
-        public void visit(Document.LineTriple t) {
+        public void visit(Document.LineTriple t) throws Exception {
           System.out.println(String.format("[%9s,%1d,%2d] %s", t.ocrEngine,
                                            t.pageSeq, t.line.getLineId(),
-                                           t.line.getCor()));
+                                           t.line.getNormalized()));
+          // for (Token token : t.line.getTokens()) {
+          //   System.out.println(String.format(
+          //       "[token %2d] %s", token.getTokenId(), token.getCor()));
+          // }
         }
       });
       client.deleteProject(project);

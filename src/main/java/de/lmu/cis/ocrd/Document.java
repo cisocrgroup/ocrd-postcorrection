@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.raml.jaxrs.example.model.Book;
-import org.raml.jaxrs.example.model.Line;
 import org.raml.jaxrs.example.model.Page;
 import org.raml.jaxrs.example.model.Project;
 
@@ -23,11 +22,12 @@ public class Document {
       System.out.println("engine: " + book.getOcrEngine() + ", size: " +
                          book.getPageIds().size() + ",user: " +
                          book.getOcrUser());
-      int pseq = 0;
+      int pseq = 1;
       for (int pageId : book.getPageIds()) {
         Page page = client.getPage(book.getProjectId(), pageId);
-        for (Line line : page.getLines()) {
-          lines.add(new LineTriple(book.getOcrEngine(), line, pseq));
+        for (org.raml.jaxrs.example.model.Line line : page.getLines()) {
+          lines.add(new LineTriple(book.getOcrEngine(), new Line(client, line),
+                                   pseq));
         }
         pseq++;
       }
@@ -62,5 +62,5 @@ public class Document {
     public Line line;
     public int pageSeq;
   }
-  public interface Visitor { void visit(LineTriple t); }
+  public interface Visitor { void visit(LineTriple t) throws Exception; }
 }
