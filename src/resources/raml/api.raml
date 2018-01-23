@@ -92,6 +92,11 @@ types:
       box: Box
       lines: Line[]
 
+  IdResponse:
+    type: object
+    properties: 
+      id: integer
+
 /trainclassifier:
   post:
     body:
@@ -154,6 +159,13 @@ types:
            body:
              application/json:
                type: Project
+    /delete:
+      delete:
+        responses:
+          200:
+           body:
+             application/json:
+               type: IdResponse
 
     /add-book:
       post:
@@ -164,7 +176,7 @@ types:
           200:
            body:
              application/json:
-               type: Project
+               type: IdResponse
 
     /pages/{pageID}:
       get:

@@ -59,6 +59,9 @@ if(asModal) {
 
 <% } %>
 
+<% if(!edit_project) { %>
+
+
 <div class="form-group row">
 
 
@@ -76,7 +79,6 @@ if(asModal) {
 </div>
 
 
-<% if(!edit_project) { %>
 
 
 <div class="form-group row">

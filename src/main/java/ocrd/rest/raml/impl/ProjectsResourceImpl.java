@@ -65,8 +65,19 @@ public class ProjectsResourceImpl implements ProjectsResource {
     return null;
   }
 
+  
+  @Override
+  public DeleteProjectsByProjectIDDeleteResponse deleteProjectsByProjectIDDelete(String projectID) throws Exception {
+  	System.out.println(projectID);
+  	return null;
+  }
+  
   private static Client newClient() throws Exception {
     return Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb",
                         "pocoweb123");
   }
+
+
+
+
 }

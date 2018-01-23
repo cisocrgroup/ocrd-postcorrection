@@ -115,6 +115,51 @@ updateProject: function(id,data){
     return defer.promise();
   },
 
+deleteProject: function(id){
+    var defer = jQuery.Deferred();
+       $.ajax({
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+         },
+        url: "api/projects/"+id+"/delete",
+        type: "DELETE",
+        dataType: "json",
+        success: function(data) {
+
+              defer.resolve(data);
+            },
+            error: function(data){
+              defer.resolve(undefined);
+            }
+    });
+
+    return defer.promise();
+  },
+
+addBook: function(id,data){
+    var defer = jQuery.Deferred();
+       $.ajax({
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+         },
+        url: "api/projects/"+id+"/add-book",
+        type: "POST",
+        data:JSON.stringify(data),
+        dataType: "json",
+        success: function(data) {
+
+              defer.resolve(data);
+            },
+            error: function(data){
+              defer.resolve(undefined);
+            }
+    });
+
+    return defer.promise();
+  },
+
 
 
 };
