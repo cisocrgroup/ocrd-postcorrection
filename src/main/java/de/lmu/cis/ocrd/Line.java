@@ -64,7 +64,7 @@ public class Line extends org.raml.jaxrs.example.model.Line {
     normalized = builder.toString();
   }
 
-  private List<Token> getTokens() throws Exception {
+  public List<Token> getTokens() throws Exception {
     List<Token> tokens = client.getTokens(projectId, pageId, lineId);
     if (tokens == null) {
       return new ArrayList<Token>();
