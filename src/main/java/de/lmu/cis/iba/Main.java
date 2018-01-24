@@ -8,10 +8,13 @@ import de.lmu.cis.pocoweb.Token;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.raml.jaxrs.example.model.Page;
 import org.raml.jaxrs.example.model.Project;
+
+
 import org.raml.jaxrs.example.model.Book;
 
 class Main {
@@ -66,6 +69,9 @@ class Main {
         project = client.addBook(project, book, is);
       }
       Document doc = new Document(project, client);
+      
+      ArrayList<String> stringset = new ArrayList<String>();
+      
       doc.eachLine(new Document.Visitor() {
         public void visit(Document.LineTriple t) throws Exception {
           System.out.println(String.format("[%9s,%1d,%2d] %s", t.ocrEngine,
@@ -75,10 +81,30 @@ class Main {
              System.out.println(String.format(
                  "[token %2d] %s", token.getTokenId(), token.getCor()));
            }
+           stringset.add("#"+t.line.getNormalized()+"$");
         }
       });
+      
+      
+      System.out.println(stringset.size());
+      System.out.println(stringset.get(0));
+      System.out.println(stringset.get(1));
+      System.out.println(stringset.get(2));
+      
+      ArrayList test = new ArrayList();
+      
+      test.add("#Dmlschland md Belgien$");
+      test.add("#Deuiſchland und Belgien$");
+      test.add("#Deutschland und Belgien$");
+
+    	
+		 Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset,true);
+		   scdawg.determineAlphabet(true);
+		   scdawg.build_cdawg();
+
       client.deleteProject(project);
     } catch (Exception e) {
+    	e.printStackTrace();
       System.out.println("error: " + e);
     }
   }

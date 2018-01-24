@@ -1,4 +1,3 @@
-package test;
 
 import de.lmu.cis.pocoweb.ProjectBook;
 import org.junit.Test;

@@ -34,7 +34,7 @@ public class Line extends org.raml.jaxrs.example.model.Line {
   public String getNormalized() { return normalized; }
 
   public Token getTokenAt(int i) { return tokenAlignements.get(i); }
-  public List<Token> getTokens() { return tokenAlignements; }
+  public List<Token> getTokens() { return tokens; }
 
   private class Pair {
     public Pair(String normalized, List<Token> tokenAlignements) {
