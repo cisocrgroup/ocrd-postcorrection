@@ -9,8 +9,8 @@ import de.lmu.cis.pocoweb.Token;
 public class Line extends org.raml.jaxrs.example.model.Line {
   private final Client client;
   private final List<Token> tokens;
-  private String normalized;
-  private List<Token> tokenAlignements;
+  private final String normalized;
+  private final List<Token> tokenAlignements;
   public Line(Client client, org.raml.jaxrs.example.model.Line line)
       throws Exception {
     this.withProjectId(line.getProjectId())
@@ -25,46 +25,45 @@ public class Line extends org.raml.jaxrs.example.model.Line {
         .withIsPartiallyCorrected(line.getIsPartiallyCorrected())
         .withBox(line.getBox());
     this.client = client;
-    this.tokens = getTokens();
-    normalized = null;
-    tokenAlignements = null;
-    // List<Token> tmp = client.getTokens(projectId, pageId, lineId);
-    // if (tmp != null) {
-    //   this.tokens = tmp;
-    // } else {
-    //   this.tokens = new ArrayList<Token>();
-    // }
+    this.tokens = loadTokens();
+    Pair pair = getNormalizedData();
+    this.normalized = pair.normalized;
+    this.tokenAlignements = pair.tokenAlignements;
   }
 
-  public String getNormalized() {
-    if (normalized == null || tokenAlignements == null) {
-      calculateNormalizedData();
-    }
-    return normalized;
-  }
+  public String getNormalized() { return normalized; }
 
   public Token getTokenAt(int i) { return tokenAlignements.get(i); }
+  public List<Token> getTokens() { return tokenAlignements; }
 
-  private void calculateNormalizedData() {
+  private class Pair {
+    public Pair(String normalized, List<Token> tokenAlignements) {
+      this.normalized = normalized;
+      this.tokenAlignements = tokenAlignements;
+    }
+    public String normalized;
+    public List<Token> tokenAlignements;
+  }
+  private Pair getNormalizedData() {
     StringBuilder builder = new StringBuilder();
     boolean first = true;
-    tokenAlignements = new ArrayList<Token>();
+    List<Token> alignements = new ArrayList<Token>();
     for (Token t : tokens) {
       if (first) {
         first = false;
       } else {
         builder.append(' ');
-        tokenAlignements.add(null); // there is surely a better way
+        alignements.add(null); // there is surely a better way
       }
       builder.append(t.getCor());
       for (int i = 0; i < t.getCor().length(); i++) {
-        tokenAlignements.add(t);
+        alignements.add(t);
       }
     }
-    normalized = builder.toString();
+    return new Pair(builder.toString(), alignements);
   }
 
-  private List<Token> getTokens() throws Exception {
+  private List<Token> loadTokens() throws Exception {
     List<Token> tokens = client.getTokens(projectId, pageId, lineId);
     if (tokens == null) {
       return new ArrayList<Token>();
