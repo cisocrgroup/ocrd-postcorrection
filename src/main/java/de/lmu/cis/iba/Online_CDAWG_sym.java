@@ -162,16 +162,9 @@ boolean canonize_blumer(Node node,int pos) {
      System.out.println(next_pos);
      ap.active_edge = this.get_letter(next_pos,stringcount);
      
-	 ap.active_length -= edgelength;
-
-     
+	 ap.active_length -= edgelength;     
 	 ap.active_node = node;
-	 // TEST!!! kein übergang!!
 
-//	 if(!(has_outgoing_left_edge(ap.active_node,this.get_letter(pos-edgelength-1,stringcount)))&&ap.active_length==0){ // if no left edge with label of active edge from active point
-//		 System.out.println("DA�PDSL��A�L�SDL��");
-//	     create_edge_left(ap.active_node, sink,this.get_letter(pos-edgelength-1,stringcount)); // create new edge from active_node to sink				 
-//  	}
 	 return true;
 	}
 	return false;
@@ -540,8 +533,9 @@ if(print) System.out.println("ANFANG ACTIVE LENGTH "+ap.active_length);
 			
 	
 		next = ap.active_node.children.get(ap.active_edge);
+		System.out.println(this.get_node_label(next));
 		if(this.get_edge_length(ap.active_edge, ap.active_node, next) +this.get_node_length(ap.active_node) == this.get_node_length(next)) {
-		canonize_blumer(next,pos+1);
+		canonize_blumer(next,pos);
 		}
 		next = ap.active_node.children.get(ap.active_edge);
 		
