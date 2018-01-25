@@ -2,8 +2,8 @@ package de.lmu.cis.ocrd;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
+import java.io.InputStream;
 
 public class Config {
   private Properties properties;
