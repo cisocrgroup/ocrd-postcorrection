@@ -37,12 +37,14 @@ public class Document {
       v.visit(line);
     }
   }
+
   public class LineTriple implements Comparable<LineTriple> {
     public LineTriple(String ocrEngine, Line line, int pageSeq) {
       this.ocrEngine = ocrEngine;
       this.line = line;
       this.pageSeq = pageSeq;
     }
+
     public int compareTo(LineTriple other) {
       if (this.pageSeq < other.pageSeq) {
         return -1;
@@ -62,5 +64,6 @@ public class Document {
     public Line line;
     public int pageSeq;
   }
+
   public interface Visitor { void visit(LineTriple t) throws Exception; }
 }
