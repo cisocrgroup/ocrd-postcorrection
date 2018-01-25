@@ -1,6 +1,7 @@
 #!/bin/bash
 # build script for linux/Unix systems
 
+set -e
 cp index.html ../webapp/index.html
 cp assets/js/popper.js ../webapp/assets/js
 
@@ -25,4 +26,3 @@ if [ "$1" == "-doc" ]; then
 else
   cd ../../
 fi
-

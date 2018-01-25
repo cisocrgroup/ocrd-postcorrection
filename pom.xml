@@ -123,6 +123,8 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
+					<!-- <webappDirectory>/usr/local/tomcat/webapps</webappDirectory> -->
+					<webappDirectory>${basedir}/target/ocrd</webappDirectory>
 					<warSourceDirectory>src/webapp</warSourceDirectory>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
