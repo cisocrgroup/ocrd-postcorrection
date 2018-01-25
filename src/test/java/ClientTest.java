@@ -7,9 +7,9 @@ import java.io.InputStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.raml.jaxrs.example.model.Book;
-import org.raml.jaxrs.example.model.Project;
-import org.raml.jaxrs.example.model.Projects;
+import de.lmu.cis.api.model.Book;
+import de.lmu.cis.api.model.Project;
+import de.lmu.cis.api.model.Projects;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 

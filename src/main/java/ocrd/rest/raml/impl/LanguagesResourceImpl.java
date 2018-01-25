@@ -5,8 +5,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import org.raml.jaxrs.example.model.Languages;
-import org.raml.jaxrs.example.resource.LanguagesResource;
+import de.lmu.cis.api.model.Languages;
+import de.lmu.cis.api.resource.LanguagesResource;
 import de.lmu.cis.pocoweb.Client;
 
 public class LanguagesResourceImpl implements LanguagesResource {
@@ -19,8 +19,8 @@ public class LanguagesResourceImpl implements LanguagesResource {
   }
 
   @Override
-  public GetLanguagesByProfilerUrlResponse
-  getLanguagesByProfilerUrl(String profilerUrl) throws Exception {
+  public GetLanguagesByProfilerUrlResponse getLanguagesByProfilerUrl(
+      String profilerUrl) throws Exception {
     try (Client client = newClient();) {
       return GetLanguagesByProfilerUrlResponse.withJsonOK(
           client.getProfilerLanguages(profilerUrl));

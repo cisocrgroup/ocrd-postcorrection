@@ -1,6 +1,6 @@
 package de.lmu.cis.pocoweb;
 
-import org.raml.jaxrs.example.model.Box;
+import de.lmu.cis.api.model.Box;
 
 public class Token {
   protected int projectId;
@@ -16,37 +16,59 @@ public class Token {
   protected Box box;
   protected boolean isNormal;
 
-  public int getProjectId() { return this.projectId; }
-  public void setProjectId(int value) { this.projectId = value; }
+  public int getProjectId() {
+    return this.projectId;
+  }
+  public void setProjectId(int value) {
+    this.projectId = value;
+  }
   public Token withProjectId(int value) {
     this.projectId = value;
     return this;
   }
-  public int getPageId() { return this.pageId; }
-  public void setPageId(int value) { this.pageId = value; }
+  public int getPageId() {
+    return this.pageId;
+  }
+  public void setPageId(int value) {
+    this.pageId = value;
+  }
   public Token withPageId(int value) {
     this.pageId = value;
     return this;
   }
-  public int getLineId() { return this.lineId; }
-  public void setLineId(int value) { this.lineId = value; }
+  public int getLineId() {
+    return this.lineId;
+  }
+  public void setLineId(int value) {
+    this.lineId = value;
+  }
   public Token withLineId(int value) {
     this.lineId = value;
     return this;
   }
-  public int getTokenId() { return this.tokenId; }
-  public void setTokenId(int value) { this.tokenId = value; }
+  public int getTokenId() {
+    return this.tokenId;
+  }
+  public void setTokenId(int value) {
+    this.tokenId = value;
+  }
   public Token withTokenId(int value) {
     this.tokenId = value;
     return this;
   }
-  public int getOffset() { return this.offset; }
-  public void setOffset(int value) { this.offset = value; }
+  public int getOffset() {
+    return this.offset;
+  }
+  public void setOffset(int value) {
+    this.offset = value;
+  }
   public Token withOffset(int value) {
     this.offset = value;
     return this;
   }
-  public boolean getIsFullyCorrected() { return this.isFullyCorrected; }
+  public boolean getIsFullyCorrected() {
+    return this.isFullyCorrected;
+  }
   public void setIsFullyCorrected(boolean value) {
     this.isFullyCorrected = value;
   }
@@ -54,7 +76,9 @@ public class Token {
     this.isFullyCorrected = value;
     return this;
   }
-  public boolean getIsPartiallyCorrected() { return this.isPartiallyCorrected; }
+  public boolean getIsPartiallyCorrected() {
+    return this.isPartiallyCorrected;
+  }
   public void setIsPartiallyCorrected(boolean value) {
     this.isPartiallyCorrected = value;
   }
@@ -62,19 +86,29 @@ public class Token {
     this.isPartiallyCorrected = value;
     return this;
   }
-  public String getOcr() { return this.ocr; }
-  public void setOcr(String value) { this.ocr = value; }
+  public String getOcr() {
+    return this.ocr;
+  }
+  public void setOcr(String value) {
+    this.ocr = value;
+  }
   public Token withOcr(String value) {
     this.ocr = value;
     return this;
   }
-  public String getCor() { return this.cor; }
-  public void setCor(String value) { this.cor = value; }
+  public String getCor() {
+    return this.cor;
+  }
+  public void setCor(String value) {
+    this.cor = value;
+  }
   public Token withCor(String value) {
     this.cor = value;
     return this;
   }
-  public float getAverageConfidence() { return this.averageConfidence; }
+  public float getAverageConfidence() {
+    return this.averageConfidence;
+  }
   public void setAverageConfidence(float value) {
     this.averageConfidence = value;
   }
@@ -82,14 +116,22 @@ public class Token {
     this.averageConfidence = value;
     return this;
   }
-  public Box getBox() { return this.box; }
-  public void setBox(Box value) { this.box = value; }
+  public Box getBox() {
+    return this.box;
+  }
+  public void setBox(Box value) {
+    this.box = value;
+  }
   public Token withBox(Box value) {
     this.box = value;
     return this;
   }
-  public boolean getIsNormal() { return this.isNormal; }
-  public void setIsNormal(boolean value) { this.isNormal = value; }
+  public boolean getIsNormal() {
+    return this.isNormal;
+  }
+  public void setIsNormal(boolean value) {
+    this.isNormal = value;
+  }
   public Token withIsNormal(boolean value) {
     this.isNormal = value;
     return this;

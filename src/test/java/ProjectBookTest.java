@@ -1,8 +1,8 @@
 
 import de.lmu.cis.pocoweb.ProjectBook;
 import org.junit.Test;
-import org.raml.jaxrs.example.model.Projects;
-import org.raml.jaxrs.example.model.Book;
+import de.lmu.cis.api.model.Projects;
+import de.lmu.cis.api.model.Book;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 

@@ -15,10 +15,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import org.raml.jaxrs.example.model.Page;
-import org.raml.jaxrs.example.model.Project;
+import de.lmu.cis.api.model.Page;
+import de.lmu.cis.api.model.Project;
 
-import org.raml.jaxrs.example.model.Book;
+import de.lmu.cis.api.model.Book;
 
 class Main {
   private static String patternsToString(String[] patterns) {
@@ -108,9 +108,7 @@ class Main {
       ArrayList test_result = new ArrayList();
 
       for (int j = 0; j < scdawg.sinks.size(); j++) {
-
         for (int i = 0; i < scdawg.all_nodes.size(); i++) {
-
           Node node = scdawg.all_nodes.get(i);
 
           // all nodes except first and last alignment part
@@ -123,7 +121,7 @@ class Main {
 
             int letter = (int)pair.getKey();
 
-            if (scdawg.sinks.get(j) == child) { // wenn rechtsübergang auf sink
+            if (scdawg.sinks.get(j) == child) {  // wenn rechtsübergang auf sink
               test_result.add(scdawg.sinks.get(j).stringnr + " " +
                               scdawg.get_node_label(node));
             }
@@ -132,7 +130,6 @@ class Main {
           Iterator it2 = node.children_left.entrySet().iterator();
 
           while (it2.hasNext()) {
-
             Map.Entry pair_left = (Map.Entry)it2.next();
             Node child_left = (Node)pair_left.getValue();
             System.out.println(child_left.stringnr);

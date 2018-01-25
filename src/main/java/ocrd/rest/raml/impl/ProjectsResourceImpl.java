@@ -6,14 +6,13 @@ import de.lmu.cis.ocrd.Config;
 import java.util.Base64;
 import ocrd.rest.raml.handler.ProjectsHandler;
 import org.apache.commons.io.IOUtils;
-import org.raml.jaxrs.example.model.Project;
-import org.raml.jaxrs.example.model.Book;
-import org.raml.jaxrs.example.model.Projects;
-import org.raml.jaxrs.example.model.UploadProjectData;
-import org.raml.jaxrs.example.resource.ProjectsResource;
+import de.lmu.cis.api.model.Project;
+import de.lmu.cis.api.model.Book;
+import de.lmu.cis.api.model.Projects;
+import de.lmu.cis.api.model.UploadProjectData;
+import de.lmu.cis.api.resource.ProjectsResource;
 
 public class ProjectsResourceImpl implements ProjectsResource {
-
   @Override
   public GetProjectsListResponse getProjectsList() throws Exception {
     try (Client client = newClient();) {
@@ -37,9 +36,8 @@ public class ProjectsResourceImpl implements ProjectsResource {
     }
   }
   @Override
-  public PostProjectsByProjectIDAddBookResponse
-  postProjectsByProjectIDAddBook(String projectID, UploadProjectData data)
-      throws Exception {
+  public PostProjectsByProjectIDAddBookResponse postProjectsByProjectIDAddBook(
+      String projectID, UploadProjectData data) throws Exception {
     throw new Exception("Not implemented");
   }
   @Override
@@ -58,9 +56,8 @@ public class ProjectsResourceImpl implements ProjectsResource {
   }
 
   @Override
-  public PutProjectsByProjectIDUpdateResponse
-  putProjectsByProjectIDUpdate(String projectID, Project entity)
-      throws Exception {
+  public PutProjectsByProjectIDUpdateResponse putProjectsByProjectIDUpdate(
+      String projectID, Project entity) throws Exception {
     System.out.println(projectID);
     System.out.println(entity.getAuthor());
     return null;

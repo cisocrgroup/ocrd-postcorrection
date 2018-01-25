@@ -4,9 +4,9 @@ import de.lmu.cis.pocoweb.Client;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.raml.jaxrs.example.model.Book;
-import org.raml.jaxrs.example.model.Page;
-import org.raml.jaxrs.example.model.Project;
+import de.lmu.cis.api.model.Book;
+import de.lmu.cis.api.model.Page;
+import de.lmu.cis.api.model.Project;
 
 public class Document {
   private final Project project;
@@ -15,6 +15,7 @@ public class Document {
     this.client = client;
     this.project = project;
   }
+
   public void eachLine(Visitor v) throws Exception {
     List<LineTriple> lines = new ArrayList<LineTriple>();
     System.out.println("size: " + project.getBooks().size());
@@ -25,7 +26,7 @@ public class Document {
       int pseq = 1;
       for (int pageId : book.getPageIds()) {
         Page page = client.getPage(book.getProjectId(), pageId);
-        for (org.raml.jaxrs.example.model.Line line : page.getLines()) {
+        for (de.lmu.cis.api.model.Line line : page.getLines()) {
           lines.add(new LineTriple(book.getOcrEngine(), new Line(client, line),
                                    pseq));
         }
