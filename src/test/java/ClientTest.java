@@ -1,16 +1,17 @@
 
-import java.io.InputStream;
-import java.io.FileInputStream;
 import de.lmu.cis.pocoweb.Client;
 import de.lmu.cis.pocoweb.ProjectBook;
+import de.lmu.cis.ocrd.Config;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.raml.jaxrs.example.model.Book;
 import org.raml.jaxrs.example.model.Project;
 import org.raml.jaxrs.example.model.Projects;
-import org.raml.jaxrs.example.model.Book;
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 public class ClientTest {
   private Client client;
@@ -24,8 +25,9 @@ public class ClientTest {
 
   @Before
   public void login() throws Exception {
-    this.client =
-        Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb", "pocoweb123");
+    this.client = Client.login(Config.getInstance().getPocowebURL(),
+                               Config.getInstance().getPocowebUser(),
+                               Config.getInstance().getPocowebPass());
   }
   @After
   public void logout() throws Exception {
