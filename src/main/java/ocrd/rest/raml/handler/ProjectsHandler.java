@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.lmu.cis.pocoweb.Client;
+import de.lmu.cis.ocrd.Config;
 
 import org.raml.jaxrs.example.model.Project;
 import org.raml.jaxrs.example.model.Book;
@@ -24,25 +25,32 @@ public class ProjectsHandler {
   public ProjectsHandler() {
 
     try {
+      client = Client.login(Config.getInstance().getPocowebURL(),
+                            Config.getInstance().getPocowebUser(),
+                            Config.getInstance().getPocowebPass());
 
-      client = Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb",
-                            "pocoweb123");
-
-      //			      System.out.println("sid: " +
+      //			      System.out.println("sid: "
+      //+
       // client.getSid());
-      //			      ProjectData np = client.uploadProject(
-      //			          new FileInputStream(new
+      //			      ProjectData np =
+      // client.uploadProject(
+      //			          new
+      // FileInputStream(new
       // File("testdata/hobbes-ocropus.zip")));
       //			      np.author = "flo";
       //			      np.title = "title";
       //			      client.updateProjectData(np);
       //
-      //			      ProjectData p = client.getProject(305);
-      //			      for (int pid : p.pageIds) {
-      //			        System.out.println("book " + 305 + "
+      //			      ProjectData p =
+      // client.getProject(305);
+      //			      for (int pid : p.pageIds)
+      //{
+      //			        System.out.println("book " + 305 +
+      //"
       // page id " + pid);
       //			      }
-      //			      System.out.println("PID: " +
+      //			      System.out.println("PID: "
+      //+
       // np.projectId);
       //			      client.deleteProject(np.projectId);
     } catch (Exception e) {
