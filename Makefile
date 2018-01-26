@@ -1,4 +1,6 @@
-.PHONY: copile test deploy package
+SUDO ?= "sudo"
+TAG ?= "ocrd"
+P ?= "8888:8080"
 
 default: compile
 
@@ -11,11 +13,18 @@ compile:
 test:
 	mvn test
 
-deploy: target/ocrd-0.1.war webapp
-	cp target/ocrd-0.1.war ${CATALINA_HOME}/webapps/ocrd-0.1.war
+deploy: Dockerfile target/ocrd-0.1.war webapp
+	${SUDO} docker build --tag ${TAG} .
+#	${SUDO} docker run -it -p ${P} --entrypoint /bin/bash ${TAG}
+	${SUDO} docker run -it -p ${P} ${TAG}
 
 target/ocrd-0.1.war:
 	mvn compile war:war
 
 webapp: src/webapp/api.html
 	cd src/webapp-src && ./build.sh
+
+clean:
+	$(RM) -f target
+
+.PHONY: copile test deploy package clean
