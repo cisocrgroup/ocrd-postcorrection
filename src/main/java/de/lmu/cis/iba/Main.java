@@ -93,7 +93,6 @@ class Main {
         System.out.println(stringset.get(i));
       }
 
-<<<<<<< HEAD
       Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset, true);
       scdawg.determineAlphabet(true);
       scdawg.build_cdawg();
@@ -190,60 +189,7 @@ class Main {
         }
         System.out.println("-------------------");
       }
-=======
-      ArrayList test = new ArrayList();
-
-      test.add(
-          "#Brüssel Wenige Städte in Europa bieten gleiche Vortheile der$");
-      test.add("#Bruſſel Wenige Stͤdte in Europa bieten gleiche Vortheiſe der$");
-      test.add(
-          "#Brüssel Wenige Städte in Europa bieten gleiche Vortheile der$");
-
-      Online_CDAWG_sym scdawg = new Online_CDAWG_sym(test, true);
-      scdawg.determineAlphabet(true);
-      scdawg.build_cdawg();
-
-      ArrayList test_result = new ArrayList();
-
-      for (int j = 0; j < scdawg.sinks.size(); j++) {
-        for (int i = 0; i < scdawg.all_nodes.size(); i++) {
-          Node node = scdawg.all_nodes.get(i);
-
-          // all nodes except first and last alignment part
-
-          Iterator it = node.children.entrySet().iterator();
-
-          while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            Node child = (Node)pair.getValue();
-
-            int letter = (int)pair.getKey();
-
-            if (scdawg.sinks.get(j) == child) {  // wenn rechtsübergang auf sink
-              test_result.add(scdawg.sinks.get(j).stringnr + " " +
-                              scdawg.get_node_label(node));
-            }
-          }
-
-          Iterator it2 = node.children_left.entrySet().iterator();
-
-          while (it2.hasNext()) {
-            Map.Entry pair_left = (Map.Entry)it2.next();
-            Node child_left = (Node)pair_left.getValue();
-            System.out.println(child_left.stringnr);
-
-            if (scdawg.sinks.get(j) == child_left) {
-              test_result.add(scdawg.sinks.get(j).stringnr + " " +
-                              scdawg.get_node_label(node));
-            }
-          }
-        }
-      }
-
-      for (int i = 0; i < test_result.size(); i++) {
-        //			   System.out.println(test_result.get(i));
-      }
->>>>>>> new-order
+    
 
       client.deleteProject(project);
     } catch (Exception e) {
