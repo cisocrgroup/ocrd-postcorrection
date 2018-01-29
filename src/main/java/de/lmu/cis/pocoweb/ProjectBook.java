@@ -2,8 +2,8 @@ package de.lmu.cis.pocoweb;
 
 import com.google.gson.Gson;
 import java.util.List;
-import org.raml.jaxrs.example.model.Book;
-import org.raml.jaxrs.example.model.Project;
+import de.lmu.cis.api.model.Book;
+import de.lmu.cis.api.model.Project;
 
 public class ProjectBook {
   public String author, title, language, description, profilerUrl;
@@ -53,7 +53,9 @@ public class ProjectBook {
     data.ocrEngine = engine;
     setOcrData(data);
   }
-  public String getOcrEngine() { return loadOcrData().ocrEngine; }
+  public String getOcrEngine() {
+    return loadOcrData().ocrEngine;
+  }
 
   public ProjectBook withOcrUser(String user) {
     setOcrUser(user);
@@ -65,7 +67,9 @@ public class ProjectBook {
     data.ocrUser = user;
     setOcrData(data);
   }
-  public String getOcrUser() { return loadOcrData().ocrUser; }
+  public String getOcrUser() {
+    return loadOcrData().ocrUser;
+  }
 
   public Book newBook() {
     return new Book()

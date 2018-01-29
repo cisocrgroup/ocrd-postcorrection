@@ -6,13 +6,12 @@ import java.lang.StringBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Line extends org.raml.jaxrs.example.model.Line {
+public class Line extends de.lmu.cis.api.model.Line {
   private final Client client;
   private final List<Token> tokens;
   private final String normalized;
   private final List<Token> tokenAlignements;
-  public Line(Client client, org.raml.jaxrs.example.model.Line line)
-      throws Exception {
+  public Line(Client client, de.lmu.cis.api.model.Line line) throws Exception {
     this.withProjectId(line.getProjectId())
         .withPageId(line.getPageId())
         .withLineId(line.getLineId())
@@ -54,6 +53,7 @@ public class Line extends org.raml.jaxrs.example.model.Line {
 
   private Pair getNormalizedData() {
     StringBuilder builder = new StringBuilder();
+
     boolean first = true;
     List<Token> alignements = new ArrayList<Token>();
     for (Token t : tokens) {

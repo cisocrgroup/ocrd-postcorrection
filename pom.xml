@@ -123,6 +123,8 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
+					<!-- <webappDirectory>/usr/local/tomcat/webapps</webappDirectory> -->
+					<webappDirectory>${basedir}/target/ocrd</webappDirectory>
 					<warSourceDirectory>src/webapp</warSourceDirectory>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
@@ -132,8 +134,9 @@
 				<artifactId>raml-jaxrs-maven-plugin</artifactId>
 				<version>1.3.8</version>
 				<configuration>
-					<sourceDirectory>${basedir}/src/resources/raml</sourceDirectory>
-					<basePackageName>org.raml.jaxrs.example</basePackageName>
+					<sourceDirectory>${basedir}/src/main/resources/raml</sourceDirectory>
+					<basePackageName>de.lmu.cis.api</basePackageName>
+					<!-- <basePackageName>org.raml.jaxrs.example</basePackageName> -->
 					<jaxrsVersion>2.0</jaxrsVersion>
 					<useJsr303Annotations>false</useJsr303Annotations>
 					<jsonMapper>jackson2</jsonMapper>

@@ -14,16 +14,14 @@ import java.util.List;
 import de.lmu.cis.pocoweb.Client;
 import de.lmu.cis.ocrd.Config;
 
-import org.raml.jaxrs.example.model.Project;
-import org.raml.jaxrs.example.model.Book;
-import org.raml.jaxrs.example.model.Projects;
+import de.lmu.cis.api.model.Project;
+import de.lmu.cis.api.model.Book;
+import de.lmu.cis.api.model.Projects;
 
 public class ProjectsHandler {
-
   private static Client client;
 
   public ProjectsHandler() {
-
     try {
       client = Client.login(Config.getInstance().getPocowebURL(),
                             Config.getInstance().getPocowebUser(),
@@ -57,7 +55,7 @@ public class ProjectsHandler {
       System.out.println("error: " + e);
     }
 
-  } // ProjectsHandler()
+  }  // ProjectsHandler()
 
   public Projects listProjects() {
     return null;

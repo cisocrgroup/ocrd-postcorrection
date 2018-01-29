@@ -21,11 +21,11 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import org.apache.commons.io.IOUtils;
-import org.raml.jaxrs.example.model.Book;
-import org.raml.jaxrs.example.model.Languages;
-import org.raml.jaxrs.example.model.Page;
-import org.raml.jaxrs.example.model.Project;
-import org.raml.jaxrs.example.model.Projects;
+import de.lmu.cis.api.model.Book;
+import de.lmu.cis.api.model.Languages;
+import de.lmu.cis.api.model.Page;
+import de.lmu.cis.api.model.Project;
+import de.lmu.cis.api.model.Projects;
 
 public class Client implements AutoCloseable {
   private final String host;
@@ -38,7 +38,9 @@ public class Client implements AutoCloseable {
     return Client.login(user, pass);
   }
 
-  public void close() throws Exception { logout(); }
+  public void close() throws Exception {
+    logout();
+  }
 
   public Languages getProfilerLanguages(String profilerUrl) throws Exception {
     return get(String.format("/profiler-languages&url=%s",
@@ -96,7 +98,7 @@ public class Client implements AutoCloseable {
         post("/books", in, ProjectBook.class, "application/zip", 200, 201);
     pbook.pageIds = tmp.pageIds;
     pbook.projectId = tmp.projectId;
-    pbook.setOcrId(pbook.projectId); // ocrid is the first book's project id
+    pbook.setOcrId(pbook.projectId);  // ocrid is the first book's project id
     updateBookData(pbook);
     return pbook.newProject();
   }
@@ -163,8 +165,12 @@ public class Client implements AutoCloseable {
     return get("/books/" + pid + "/suggestions", SuggestionsData.class, 200);
   }
 
-  public String getHost() { return this.host; }
-  public String getSid() { return this.sid; }
+  public String getHost() {
+    return this.host;
+  }
+  public String getSid() {
+    return this.sid;
+  }
 
   private Client(String host) {
     this.host = host;

@@ -7,9 +7,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import org.raml.jaxrs.example.model.Page;
-import org.raml.jaxrs.example.model.Project;
-import org.raml.jaxrs.example.model.Book;
+import de.lmu.cis.api.model.Page;
+import de.lmu.cis.api.model.Project;
+import de.lmu.cis.api.model.Book;
 
 class Main {
   private static String patternsToString(String[] patterns) {
