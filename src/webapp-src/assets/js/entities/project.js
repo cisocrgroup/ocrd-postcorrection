@@ -18,7 +18,7 @@ Entities.Project = Backbone.Model.extend({
   title:"",
   user:"",
   year:""
-  
+
      }
   });
 
@@ -29,8 +29,8 @@ Entities.API = {
   getProjects: function(){
     var defer = jQuery.Deferred();
         $.ajax({
-        
-        url: "/api/projects/list",
+
+        url: "api/projects/list",
         type: "GET",
         dataType:"json",
         success: function(data) {
@@ -44,14 +44,14 @@ Entities.API = {
 
 
     return defer.promise();
-    
+
 },
 
 getProject: function(id){
   var defer = jQuery.Deferred();
       $.ajax({
-      
-      url: "/api/projects/"+id,
+
+      url: "api/projects/"+id,
       type: "GET",
       dataType:"json",
       success: function(data) {
@@ -66,7 +66,7 @@ getProject: function(id){
 
 
   return defer.promise();
-  
+
 },
 
 createProject: function(data){
