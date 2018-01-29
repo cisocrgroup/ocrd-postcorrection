@@ -32,7 +32,6 @@ public Node root,sink,suffixstate,old_suffixstate,split;
  
  ArrayList <HashMap> quasi_candidates = new ArrayList();
 
- 
 
  
  int id_cnt;

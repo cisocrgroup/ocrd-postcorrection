@@ -1,10 +1,10 @@
 package de.lmu.cis.ocrd;
 
-import java.lang.StringBuilder;
-import java.util.List;
-import java.util.ArrayList;
 import de.lmu.cis.pocoweb.Client;
 import de.lmu.cis.pocoweb.Token;
+import java.lang.StringBuilder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Line extends org.raml.jaxrs.example.model.Line {
   private final Client client;
@@ -31,10 +31,17 @@ public class Line extends org.raml.jaxrs.example.model.Line {
     this.tokenAlignements = pair.tokenAlignements;
   }
 
-  public String getNormalized() { return normalized; }
+  public String getNormalized() {
+    return normalized;
+  }
 
-  public Token getTokenAt(int i) { return tokenAlignements.get(i); }
-  public List<Token> getTokens() { return tokens; }
+  public Token getTokenAt(int i) {
+    return tokenAlignements.get(i);
+  }
+
+  public List<Token> getTokens() {
+    return tokens;
+  }
 
   private class Pair {
     public Pair(String normalized, List<Token> tokenAlignements) {
@@ -44,6 +51,7 @@ public class Line extends org.raml.jaxrs.example.model.Line {
     public String normalized;
     public List<Token> tokenAlignements;
   }
+
   private Pair getNormalizedData() {
     StringBuilder builder = new StringBuilder();
     boolean first = true;
@@ -53,7 +61,7 @@ public class Line extends org.raml.jaxrs.example.model.Line {
         first = false;
       } else {
         builder.append(' ');
-        alignements.add(null); // there is surely a better way
+        alignements.add(null);  // there is surely a better way
       }
       builder.append(t.getCor());
       for (int i = 0; i < t.getCor().length(); i++) {

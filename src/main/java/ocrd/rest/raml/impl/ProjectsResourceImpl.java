@@ -2,6 +2,7 @@ package ocrd.rest.raml.impl;
 
 import de.lmu.cis.pocoweb.Client;
 import de.lmu.cis.pocoweb.ProjectBook;
+import de.lmu.cis.ocrd.Config;
 import java.util.Base64;
 import ocrd.rest.raml.handler.ProjectsHandler;
 import org.apache.commons.io.IOUtils;
@@ -65,19 +66,16 @@ public class ProjectsResourceImpl implements ProjectsResource {
     return null;
   }
 
-  
   @Override
-  public DeleteProjectsByProjectIDDeleteResponse deleteProjectsByProjectIDDelete(String projectID) throws Exception {
-  	System.out.println(projectID);
-  	return null;
+  public DeleteProjectsByProjectIDDeleteResponse
+  deleteProjectsByProjectIDDelete(String projectID) throws Exception {
+    System.out.println(projectID);
+    return null;
   }
-  
+
   private static Client newClient() throws Exception {
-    return Client.login("http://pocoweb.cis.lmu.de/rest", "pocoweb",
-                        "pocoweb123");
+    return Client.login(Config.getInstance().getPocowebURL(),
+                        Config.getInstance().getPocowebUser(),
+                        Config.getInstance().getPocowebPass());
   }
-
-
-
-
 }

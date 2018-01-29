@@ -1,7 +1,7 @@
 package de.lmu.cis.pocoweb;
 
 import de.lmu.cis.ocrd.Document;
-// import de.lmu.cis.ocrd.Line;
+import de.lmu.cis.ocrd.Config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -28,8 +28,9 @@ class Main {
   }
 
   public static void main(String[] args) {
-    try (Client client = Client.login("http://pocoweb.cis.lmu.de/rest",
-                                      "pocoweb", "pocoweb123");) {
+    try (Client client = Client.login(Config.getInstance().getPocowebURL(),
+                                      Config.getInstance().getPocowebUser(),
+                                      Config.getInstance().getPocowebPass());) {
       Book book = new Book()
                       .withOcrEngine("abbyy")
                       .withOcrUser("test-ocr-user")
