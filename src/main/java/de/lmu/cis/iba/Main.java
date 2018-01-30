@@ -22,14 +22,14 @@ import de.lmu.cis.api.model.Book;
 
 class Main {
 	
-  private static void check_sinks(Node node,Online_CDAWG_sym scdawg) {
+  private static void check_sinks(Node node,Online_CDAWG_sym scdawg,HashMap result) {
 	  
 	  int sinkcount = 0; 
 	  
 	  	/// DIE KINDER DIE SINKS SIND SCHON MAL auslassen.. in der nächsten Runde.
 	    ArrayList nodes_to_all_sinks = new ArrayList();
 	    
-	    ArrayList sinks_hit = new ArrayList();
+	    ArrayList <Node> sinks_hit = new ArrayList();
 	    
 	    Iterator it = node.children.entrySet().iterator();
 
@@ -51,11 +51,32 @@ class Main {
 	      
 	   
 	      for (int i=0;i<sinks_hit.size();i++) {
-	    	  System.out.println(sinks_hit.get(i));
+	    	  System.out.println(sinks_hit.get(i).id);
 	      }
 	      
-      	System.out.println(sinkcount);
+	      
+	      if (sinks_hit.size() == 3) {
 
+	      
+		      String key="";
+		      String d="";
+		      for (int i=0;i<3;i++) {
+		    	  key += d + sinks_hit.get(i).id;
+		    	  d = "_";
+		      }
+		      
+	    	  result.put(key,node);
+	      }
+	      
+	      // REC AUFRUF der Funktion mit den Kindern
+	      Iterator it2 = node.children.entrySet().iterator();
+
+	      while (it2.hasNext()) {
+	    	  
+	        Map.Entry pair = (Map.Entry)it2.next();
+	        Node child = (Node)pair.getValue();
+	        check_sinks(child,scdawg,result);
+	      }
 	  
   }
 	
@@ -136,16 +157,27 @@ class Main {
       scdawg.build_cdawg();
       // scdawg.print_automaton("svgs/scdawg");
       
+      HashMap nodes_for_line_alignment = new HashMap();
+      
      Iterator it = scdawg.root.children.entrySet().iterator();
      while (it.hasNext()) {
     	
     	 Map.Entry pair = (Map.Entry)it.next();
          Node child = (Node)pair.getValue();
-    	 check_sinks(child,scdawg);
+    	 check_sinks(child,scdawg,nodes_for_line_alignment);
     	 System.out.println(":::::::::::::::::::::::::::::::::");
     	
      }
       
+     //
+   Iterator it2 = nodes_for_line_alignment.entrySet().iterator();
+
+   while (it2.hasNext()) {
+     Map.Entry pair = (Map.Entry)it2.next();
+     System.out.println(pair.getKey()+" "+scdawg.get_node_label((Node)pair.getValue()));
+    }
+     
+     
 //	 check_sinks(scdawg.root,scdawg);
 
       ArrayList test_result = new ArrayList();
