@@ -159,16 +159,19 @@ class Main {
       
       HashMap nodes_for_line_alignment = new HashMap();
       
-     Iterator it = scdawg.root.children.entrySet().iterator();
-     while (it.hasNext()) {
-    	
-    	 Map.Entry pair = (Map.Entry)it.next();
-         Node child = (Node)pair.getValue();
-    	 check_sinks(child,scdawg,nodes_for_line_alignment);
-    	 System.out.println(":::::::::::::::::::::::::::::::::");
-    	
-     }
+//     Iterator it = scdawg.root.children.entrySet().iterator();
+//     while (it.hasNext()) {
+//    	
+//    	 Map.Entry pair = (Map.Entry)it.next();
+//         Node child = (Node)pair.getValue();
+//    	 check_sinks(child,scdawg,nodes_for_line_alignment);
+//    	 System.out.println(":::::::::::::::::::::::::::::::::");
+//    	
+//     }
       
+	 check_sinks(scdawg.root,scdawg,nodes_for_line_alignment);
+
+     
      //
    Iterator it2 = nodes_for_line_alignment.entrySet().iterator();
 
