@@ -10,11 +10,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 import de.lmu.cis.api.model.Page;
 import de.lmu.cis.api.model.Project;
 
@@ -22,78 +27,138 @@ import de.lmu.cis.api.model.Book;
 
 class Main {
 	
-  private static void check_sinks(Node node,Online_CDAWG_sym scdawg,HashMap result) {
-	  
-	  int sinkcount = 0; 
-	  
-	  	/// DIE KINDER DIE SINKS SIND SCHON MAL auslassen.. in der nächsten Runde.
-	    ArrayList nodes_to_all_sinks = new ArrayList();
-	    
-	    ArrayList <Node> sinks_hit = new ArrayList();
-	    
-	    Iterator it = node.children.entrySet().iterator();
+	
+	  private static String patternsToString(String[] patterns) {
+		    String prefix = "[";
+		    String res = "";
+		    if (patterns == null || patterns.length == 0) {
+		      res += "[]";
+		    } else {
+		      for (String p : patterns) {
+		        res += prefix + p;
+		        prefix = ",";
+		      }
+		      res += "]";
+		    }
+		    return res;
+		  }
 
-	      while (it.hasNext()) {
-	    	  
-	        Map.Entry pair = (Map.Entry)it.next();
-	        Node child = (Node)pair.getValue();
-	        
-	      
-	        	for (int j = 0; j < scdawg.sinks.size(); j++) {
-	        		if(scdawg.sinks.get(j)==child) {
-	        			sinkcount ++ ;
-	        			sinks_hit.add(scdawg.sinks.get(j));
-	        		}
-	        	}
-	         
-	    	  
-	      }
-	      
-	   
-	      for (int i=0;i<sinks_hit.size();i++) {
-	    	  System.out.println(sinks_hit.get(i).id);
-	      }
-	      
-	      
-	      if (sinks_hit.size() == 3) {
+	
+	private static HashMap sort_by_values_desc(HashMap map) { 
+	       List list = new LinkedList(map.entrySet());
+	       // Defined Custom Comparator here
+	       Collections.sort(list, new Comparator() {
+	            public int compare(Object o1, Object o2) {
+	               return ((Comparable) ((Map.Entry) (o2)).getValue())
+	                  .compareTo(((Map.Entry) (o1)).getValue());
+	            }
+	       });
 
-	      
-		      String key="";
-		      String d="";
-		      for (int i=0;i<3;i++) {
-		    	  key += d + sinks_hit.get(i).id;
-		    	  d = "_";
+
+	       HashMap sortedHashMap = new LinkedHashMap();
+	       for (Iterator it = list.iterator(); it.hasNext();) {
+	              Map.Entry entry = (Map.Entry) it.next();
+	              sortedHashMap.put(entry.getKey(), entry.getValue());
+	       } 
+	       return sortedHashMap;
+	  }
+	
+	private static void find_nodes_with_n_transitions_to_sinks(int n,Node node,Online_CDAWG_sym scdawg,HashMap result) {
+		  
+		  int sinkcount = 0; 
+		  
+		    ArrayList nodes_to_all_sinks = new ArrayList();
+		    
+		    ArrayList <Node> sinks_hit = new ArrayList();
+		    
+		    Iterator it = node.children_left.entrySet().iterator();
+
+		      while (it.hasNext()) {
+		    	  
+		        Map.Entry pair = (Map.Entry)it.next();
+		        Node child = (Node)pair.getValue();
+		        
+		      
+		        	for (int j = 0; j < scdawg.sinks.size(); j++) {
+		        		if(scdawg.sinks.get(j)==child) {
+		        			sinkcount ++ ;
+		        			if(!sinks_hit.contains(scdawg.sinks.get(j))) sinks_hit.add(scdawg.sinks.get(j));
+		        		}
+		        	}
+		         
+		    	  
 		      }
 		      
-	    	  result.put(key,node);
-	      }
-	      
-	      // REC AUFRUF der Funktion mit den Kindern
-	      Iterator it2 = node.children.entrySet().iterator();
+		  		  		      
+		      
+		      if (sinks_hit.size() == n &! (node==scdawg.root)) {
+		    			   			      
+		    	  result.put(node,sinks_hit);
+		      }
+		      
+		      // REC AUFRUF der Funktion mit den Kindern
+		      Iterator it2 = node.children.entrySet().iterator();
 
-	      while (it2.hasNext()) {
-	    	  
-	        Map.Entry pair = (Map.Entry)it2.next();
-	        Node child = (Node)pair.getValue();
-	        check_sinks(child,scdawg,result);
-	      }
-	  
-  }
+		      while (it2.hasNext()) {
+		    	  
+		        Map.Entry pair = (Map.Entry)it2.next();
+		        Node child = (Node)pair.getValue();
+		        find_nodes_with_n_transitions_to_sinks(n,child,scdawg,result);
+		      }
+		  
+	  }
 	
-  private static String patternsToString(String[] patterns) {
-    String prefix = "[";
-    String res = "";
-    if (patterns == null || patterns.length == 0) {
-      res += "[]";
-    } else {
-      for (String p : patterns) {
-        res += prefix + p;
-        prefix = ",";
-      }
-      res += "]";
-    }
-    return res;
-  }
+	private static void count_nodes(int n,Node node,Online_CDAWG_sym scdawg,HashMap<Node,Integer> result) {
+		  
+		  // Count all right transitions
+		  	  
+		    		    
+		    Iterator it = node.children.entrySet().iterator();
+
+		      while (it.hasNext()) {
+		    	  
+		        Map.Entry pair = (Map.Entry)it.next();
+		        Node child = (Node)pair.getValue();
+		        
+		    	  if(scdawg.sinks.contains(child)) continue;
+
+		        	if(result.containsKey(child)) result.put(child,(int)result.get(child)+1);
+		        	else {result.put(child,1);}        
+		      }
+		    		  		      
+		                                                       
+		      
+		      // Count all left transitions
+		  	  		    
+			    
+			    Iterator it2 = node.children_left.entrySet().iterator();
+
+			      while (it2.hasNext()) {
+			    	  			    	  
+			        Map.Entry pair = (Map.Entry)it2.next();
+			        Node child = (Node)pair.getValue();
+			        
+			    	  if(scdawg.sinks.contains(child)) continue;
+
+			        	if(result.containsKey(child)) result.put(child,(int)result.get(child)+1);
+			        	else {result.put(child,1);}        
+			      }
+			    		  	
+			      
+		      
+		      // REC AUFRUF der Funktion mit den Kindern
+		      Iterator it3 = node.children.entrySet().iterator();
+
+		      while (it3.hasNext()) {
+		    	  
+		        Map.Entry pair = (Map.Entry)it3.next();
+		        Node child = (Node)pair.getValue();
+		        count_nodes(n,child,scdawg,result);
+		      }
+		  
+	  }
+
+	
 
   public static void main(String[] args) {
     try (Client client = Client.login(Config.getInstance().getPocowebURL(),
@@ -152,33 +217,52 @@ class Main {
         System.out.println(stringset.get(i));
       }
 
-      Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset, true);
+      Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset, false);
       scdawg.determineAlphabet(true);
       scdawg.build_cdawg();
       // scdawg.print_automaton("svgs/scdawg");
       
       HashMap nodes_for_line_alignment = new HashMap();
+
+      find_nodes_with_n_transitions_to_sinks(3,scdawg.root,scdawg,nodes_for_line_alignment);
+    
+    Iterator it2 = nodes_for_line_alignment.entrySet().iterator();
+
+    while (it2.hasNext()) {
+      Map.Entry pair = (Map.Entry)it2.next();
       
-//     Iterator it = scdawg.root.children.entrySet().iterator();
-//     while (it.hasNext()) {
-//    	
-//    	 Map.Entry pair = (Map.Entry)it.next();
-//         Node child = (Node)pair.getValue();
-//    	 check_sinks(child,scdawg,nodes_for_line_alignment);
-//    	 System.out.println(":::::::::::::::::::::::::::::::::");
-//    	
-//     }
+      Node n = (Node) pair.getKey();
       
-	 check_sinks(scdawg.root,scdawg,nodes_for_line_alignment);
+//      System.out.println(scdawg.get_node_label((Node)pair.getKey())+ " "+n.id);
+      ArrayList nodes = (ArrayList) pair.getValue();
+      for (int i = 0 ; i<nodes.size();i++) {
+    	 // System.out.println(scdawg.get_node_label((Node) nodes.get(i)));
+      }
+     }
 
      
-     //
-   Iterator it2 = nodes_for_line_alignment.entrySet().iterator();
+    HashMap nodes_count = new HashMap<Node,Integer>();
 
-   while (it2.hasNext()) {
-     Map.Entry pair = (Map.Entry)it2.next();
-     System.out.println(pair.getKey()+" "+scdawg.get_node_label((Node)pair.getValue()));
-    }
+    count_nodes(3,scdawg.root,scdawg,nodes_count);
+
+    HashMap count_nodes_sorted = sort_by_values_desc(nodes_count);
+    
+
+    
+    Iterator it3 = count_nodes_sorted.entrySet().iterator();
+
+      while (it3.hasNext()) {
+        Map.Entry pair = (Map.Entry)it3.next();
+        
+        Node n = (Node) pair.getKey();
+        if((int)pair.getValue()>15) {
+        System.out.println(scdawg.get_node_label((Node)pair.getKey())+ " "+pair.getValue());
+        }
+       }
+	    
+    
+     //
+  
      
      
 //	 check_sinks(scdawg.root,scdawg);
