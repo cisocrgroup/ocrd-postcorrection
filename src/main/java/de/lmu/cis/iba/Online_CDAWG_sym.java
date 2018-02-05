@@ -20,6 +20,7 @@ import com.google.common.collect.Multimap;
 
 
 
+
 public class Online_CDAWG_sym extends IndexStructure {
 
 ActivePoint ap;
@@ -428,6 +429,8 @@ int left_char_occ = copy_node.start-1;
 create_edge_left(copy_node, next, this.get_letter(left_char_occ, next.stringnr)); // create left_edge from split to next 
 create_edge_left(copy_node, sink, this.get_letter(pos-this.get_node_length(copy_node), sink.stringnr)); // create left_edge from split to sink 
 
+create_edge_left(copy_node.suffixLink, copy_node, this.get_letter(copy_node.start, copy_node.stringnr)); // create left_edge from copy_node_suffixlink to copy_node 
+
 
 Node old_next = next;
 
@@ -465,10 +468,30 @@ if(print) System.out.println("ANFANG ACTIVE LENGTH "+ap.active_length);
 	
 		next = ap.active_node.children.get(ap.active_edge);
 		
-		if(this.get_edge_length(ap.active_edge, ap.active_node, next) +this.get_node_length(ap.active_node) == this.get_node_length(next)) {
+		while(this.get_edge_length(ap.active_edge, ap.active_node, next) +this.get_node_length(ap.active_node) >= this.get_node_length(next)) {
 		canonize(next,pos+1);
+		
+		 if(this.get_edge_length(ap.active_edge, ap.active_node, copy_node)+this.get_node_length(ap.active_node)<this.get_node_length(copy_node)) {
+			 // länge start knoten + läng der kante < länge des zielknotens
+			 int left_letter_pos = copy_node.start + this.get_node_length(copy_node) - this.get_edge_length(ap.active_edge, ap.active_node, copy_node) - this.get_node_length(ap.active_node)-1;
+			 int active_edge_left = this.get_letter(left_letter_pos, copy_node.stringnr); // stimmt das????
+			 Node next_left = ap.active_node.children_left.get(active_edge_left);
+			 
+
+			 if(this.get_edge_label_left(active_edge_left,ap.active_node, next_left).length()+this.get_node_length(ap.active_node)<=this.get_node_length(next_left)) {
+			 redirect_edge_left(ap.active_node,copy_node,active_edge_left);
+			 }	
+		
+	
+		    		
+		  }
+		
+		if (ap.active_length==0){				
+			break;
 		}
 		next = ap.active_node.children.get(ap.active_edge);
+				
+		}
 		
 		
 //		if(this.get_node_length(copy_node)>(this.get_edge_length(ap.active_edge, ap.active_node,old_next)+this.get_node_length(ap.active_node))){
@@ -476,7 +499,7 @@ if(print) System.out.println("ANFANG ACTIVE LENGTH "+ap.active_length);
 			if(print) System.out.println("SEPARATE REDIRECT");
     		redirect_edge(ap.active_node,copy_node,ap.active_edge);
     		    	
-    		
+    			
     		  if(this.get_edge_length(ap.active_edge, ap.active_node, copy_node)+this.get_node_length(ap.active_node)<this.get_node_length(copy_node)) {
 				 
 				 // länge start knoten + läng der kante < länge des zielknotens
@@ -510,6 +533,7 @@ if(print) System.out.println("ANFANG ACTIVE LENGTH "+ap.active_length);
 	}
 	
 	}
+
 
 
 

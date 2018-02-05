@@ -244,9 +244,7 @@ class Main {
       count_nodes(3,scdawg.root,scdawg,nodes_count);
 
       HashMap count_nodes_sorted = sort_by_values_desc(nodes_count);
-      
-
-      HashMap nodes_sink_set = new HashMap();
+      ArrayList <ArrayList> nodes_sink_set = new ArrayList();
       
       Iterator it3 = count_nodes_sorted.entrySet().iterator();
 
@@ -260,38 +258,46 @@ class Main {
            sinks = new ArrayList();
           
            find_n_transitions_to_sinks(n,scdawg);
-          
+	       System.out.println(scdawg.get_node_label((Node)pair.getKey())+" "+sinks.size());
+
            if (sinks.size()!=3) continue;
            
-           HashSet sink_set = new HashSet();
+           ArrayList <Node> sink_set = new ArrayList();
            
 		  for (int i = 0 ; i<sinks.size();i++) {
-			  sink_set.add(sinks.get(i).id);
+			  sink_set.add(sinks.get(i));
 		  }
 		  
-		  if(nodes_sink_set.isEmpty()) nodes_sink_set.put(n, sink_set);
+		  
+		  if(nodes_sink_set.size()==0) nodes_sink_set.add(new ArrayList(){{add(n);add(sink_set);}});
 		  else {
-		      Iterator it4 = nodes_sink_set.entrySet().iterator();
-		        while (it4.hasNext()) {
-		        	   Map.Entry pair2 = (Map.Entry)it4.next();
-				       Node n2 = (Node) pair2.getKey();
-				       
-				       if(pair2.getValue().equals(sink_set)&&scdawg.get_node_label(n).length()>scdawg.get_node_label((Node) pair2.getKey()).length()) {
-				    	   nodes_sink_set.remove(pair2.getKey());
-				    	   nodes_sink_set.put(n,sink_set);
+			  boolean node_found = false;
+		       for(int i=0;i<nodes_sink_set.size();i++) {
+		        		
+		    	   	 	ArrayList pair2 = nodes_sink_set.get(i);
+
+				       for(int j=0;j<sink_set.size();j++) {
+				    	   ArrayList <Node> known_sinks = (ArrayList) nodes_sink_set.get(i).get(1);
+				    	   for(int k=0;k<known_sinks.size();k++)
+				    	   
+					       if(known_sinks.get(k).equals(sink_set.get(j))) {
+					    	   node_found = true;
+					       }
 				       }
+				       
 		        }
+		       if(!node_found) nodes_sink_set.add(new ArrayList(){{add(n);add(sink_set);}});
 
 
 		  }
           
          }
 	    
-	     Iterator it5 = nodes_sink_set.entrySet().iterator();
-	     while (it5.hasNext()) {
-        	   Map.Entry pair2 = (Map.Entry)it5.next();
-        	   System.out.println(scdawg.get_node_label((Node) pair2.getKey()));
+	     for(int i=0;i<nodes_sink_set.size();i++) {
+        	   ArrayList pair = nodes_sink_set.get(i);
+        	   System.out.println(scdawg.get_node_label((Node) pair.get(0))+" "+pair.get(1));
 	     }
+        
     
 
       client.deleteProject(project);
