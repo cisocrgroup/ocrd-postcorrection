@@ -216,9 +216,9 @@ class Main {
             System.out.println(String.format(
                 "[token %2d] %s", token.getTokenId(), token.getCor()));
           }
-          // stringset.add("#" + t.line.getNormalized() + "$");
-          ids.add(String.format("[%s,%d,%d]", t.ocrEngine, t.pageSeq,
-                                t.line.getLineId()));
+          stringset.add("#" + t.line.getNormalized() + "$");
+          ids.add(String.format("[%d,%d,%s]", t.pageSeq, t.line.getLineId(),
+                                t.ocrEngine));
         }
       });
 
@@ -296,14 +296,25 @@ class Main {
         }
       }
 
+      // ArrayList<String> xyz = new ArrayList<String>(stringset.size());
+      String[] xyz = new String[stringset.size()];
       for (int i = 0; i < nodes_sink_set.size(); i++) {
         ArrayList pair = nodes_sink_set.get(i);
         System.out.println(scdawg.get_node_label((Node)pair.get(0)));
         for (int j = 0; j < ((ArrayList)pair.get(1)).size(); j++) {
           int idx = ((Node)((ArrayList)pair.get(1)).get(j)).stringnr;
           System.out.println(" - " + stringset.get(idx) + ": " + ids.get(idx));
+          xyz[idx] = stringset.get(idx);
         }
         System.out.println();
+      }
+      for (int i = 0; i < xyz.length; i++) {
+        if (xyz[i] != null) {
+          System.out.print(xyz[i]);
+        } else {
+          System.out.print("NULL");
+        }
+        System.out.println(" " + stringset.get(i));
       }
 
       client.deleteProject(project);
