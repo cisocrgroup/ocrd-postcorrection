@@ -1,4 +1,5 @@
 package de.lmu.cis.iba;
+
 import java.awt.List;
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,8 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-
-
+//import indexstructure.Neo4J_Handler;
 
 public class Online_CDAWG_sym extends IndexStructure {
 
@@ -33,6 +33,7 @@ public Node root,sink,suffixstate,old_suffixstate,split;
  
  ArrayList <HashMap> quasi_candidates = new ArrayList();
 
+ 
 
  
  int id_cnt;
@@ -46,7 +47,6 @@ public Node root,sink,suffixstate,old_suffixstate,split;
  int pos=0;
  
  boolean print = false;
- 
  public Online_CDAWG_sym(ArrayList<String> _stringset,boolean print)
  {
 	 
@@ -62,480 +62,498 @@ public Node root,sink,suffixstate,old_suffixstate,split;
    all_nodes = new ArrayList();
    
 
+
+
  } // Online_CDAWG()
 
 
 
-public void build_cdawg() {
+ public void build_cdawg() {
 
-	long startTime = System.currentTimeMillis();
-    System.out.println(" ..building CDAWG ");
-	
-// 1. Create a state root 
-
-  root = create_node(-1,0,0,0);
-
-
-  stringcount=0;
-	
-
-  while (stringcount<stringset.size()){
-  
-  	 quasi_candidates.add(new HashMap<Integer,Node>());
-
-	   input_text=stringset.get(stringcount);
-	   
-	// 1. Create a state sink 
-
-	   sink = create_node(0,0,0,stringcount);
-	   sinks.add(sink);
-	   
-	   ap = new ActivePoint(root,-1,0);
-
-	    pos=-1;
-	   
-	      // 2. For each letter a of w do:
-	     
-	      letters_available=true;
-	      while (letters_available)
-	      {
-	        update();
-	        if(pos>=input_text.length()-1) letters_available=false;
-	      }  // letters_available
-	      
-	       sink.suffixLink = ap.active_node;
-
-	    stringcount++;
-	  }
-  
-
-  	  
-	
-  long duration = System.currentTimeMillis() - startTime;	
-  System.out.println(" ... took " + duration + " millieseconds");  	  
-	  
-  }
-
-
-boolean canonize(Node node,int pos) {
-	int edgelength = this.get_edge_length(ap.active_edge, ap.active_node, ap.active_node.children.get(ap.active_edge));
-	if (ap.active_length >= edgelength) {
-
-	if(print) System.out.println("CANONIZE");
-	 ap.active_length -= edgelength;
-
-     int next_pos = pos-ap.active_length;
-     
-     if(ap.active_length >0) {
-         
-         ap.active_edge = this.get_letter(next_pos,stringcount);
-         
-         }
-     
-	 ap.active_node = node;
-	
-	 return true;
-	}
-	return false;
-}
-
-
-
-private void add_suffixlink(Node node){
-	if(print) System.out.println("SUFFIX START <" + this.get_node_label(node)+">");
-	  if (suffixstate != null) {
-		  if(print) System.out.println("ADDDDD SUFFIXLINK!!!!!!");
-		  suffixstate.suffixLink = node; old_suffixstate=suffixstate;
-		  
-
-		  create_edge_left(node, suffixstate, this.get_letter(suffixstate.end-this.get_node_length(node), suffixstate.stringnr)); // create left_edge from split to next 
-		  }
-	  suffixstate = node;
-	}
-
-
-
-
-//*******************************************************************************
-//update()
-//*******************************************************************************
-private void update() {
-	
-
-     pos++;
-	 int a = get_letter(pos,stringcount);
-	 suffixstate = null;
-	 old_suffixstate = null;
-	 split = null;
-	 Node active_child= null;
-	 
-	 sink.end=pos;
-	 sink.pathlength=pos+1;
-	 
-	  while(true) {
-		  	
-
-		 if(ap.active_length==0) ap.active_edge = a ;
-		  
-		 if(print) System.out.println(" pos: "+ pos+ " "+input_text.charAt(pos) + " (active_node: " + ap.active_node.id +" <"+this.get_node_label(ap.active_node)+  "> active_edge: " + ap.active_edge  +" ["+ this.get_letter_by_idx(ap.active_edge)  + "] active length: " +  ap.active_length + ")");
-
+		long startTime = System.currentTimeMillis();
+	    System.out.println(" ..building CDAWG ");
 		
-		 if(!(has_outgoing_edge(ap.active_node,ap.active_edge))){ // if no edge with label of active edge from active point
-			 
-		    create_edge(ap.active_node, sink,ap.active_edge); // create new edge from active_node to sink
+	// 1. Create a state root 
 
-		    
-		    int active_edge_left=0;
-		    if(ap.active_node==root){ 
-				 active_edge_left = ap.active_edge;
-				 
-				 create_edge_left(ap.active_node, sink,active_edge_left); // create new edge from active_node to sink
+	  root = create_node(-1,0,0,0);
 
-				 
-			}
-		    else {
-   			 int left_char_occ = pos-this.get_node_length(ap.active_node)-1; 
-   			 		
-   			 if(!this.get_node_label(ap.active_node).startsWith("#")) {
-   			 	
-	   			     if(!(has_outgoing_left_edge(ap.active_node, this.get_letter(left_char_occ,sink.stringnr)))) {
-	   			    	 
-				     create_edge_left(ap.active_node,sink,this.get_letter(left_char_occ,sink.stringnr));
-				     
-	   			     }
-   			 }
-			     
-			 }
+
+	  stringcount=0;
+		
+
+	  while (stringcount<stringset.size()){
+	  
+		  boolean continue_while = false;
 		  
-			add_suffixlink(ap.active_node); // rule 2
+	  	 quasi_candidates.add(new HashMap<Integer,Node>());
+
+		   input_text=stringset.get(stringcount);
+		   
+		// 1. Create a state sink 
+		   
+		   
+		   for (int i=0;i<sinks.size();i++) {
+			   if (this.get_node_label(sinks.get(i)).equals(input_text)){
+				   sink.stringnumbers.add(stringcount);
+				   continue_while = true;
+				   break;
+			   }
 			 
-		 }
+		   }
+		   
+		   if (continue_while) {
+			   stringcount ++;
+			   continue;
+		   }
+		   
+		   sink = create_node(0,0,0,stringcount);
+		   sink.stringnumbers.add(stringcount);
+
+		   sinks.add(sink);
+		   
+		   ap = new ActivePoint(root,-1,0);
+
+		    pos=-1;
+		   
+		      // 2. For each letter a of w do:
+		     
+		      letters_available=true;
+		      while (letters_available)
+		      {
+		        update();
+		        if(pos>=input_text.length()-1) letters_available=false;
+		      }  // letters_available
+		      
+		       sink.suffixLink = ap.active_node;
+
+		    stringcount++;
+		  }
+	  
+
+	  	  
+		
+	  long duration = System.currentTimeMillis() - startTime;	
+	  System.out.println(" ... took " + duration + " millieseconds");  	  
+		  
+	  }
+
+
+	boolean canonize(Node node,int pos) {
+		int edgelength = this.get_edge_length(ap.active_edge, ap.active_node, ap.active_node.children.get(ap.active_edge));
+		if (ap.active_length >= edgelength) {
+
+		if(print) System.out.println("CANONIZE");
+		 ap.active_length -= edgelength;
+
+	     int next_pos = pos-ap.active_length;
+	     
+	     if(ap.active_length >0) {
+	         
+	         ap.active_edge = this.get_letter(next_pos,stringcount);
+	         
+	         }
+	     
+		 ap.active_node = node;
+		
+		 return true;
+		}
+		return false;
+	}
+
+
+
+	private void add_suffixlink(Node node){
+		if(print) System.out.println("SUFFIX START <" + this.get_node_label(node)+">");
+		  if (suffixstate != null) {
+			  if(print) System.out.println("ADDDDD SUFFIXLINK!!!!!!");
+			  suffixstate.suffixLink = node; old_suffixstate=suffixstate;
+			  
+
+			  create_edge_left(node, suffixstate, this.get_letter(suffixstate.end-this.get_node_length(node), suffixstate.stringnr)); // create left_edge from split to next 
+			  }
+		  suffixstate = node;
+		}
+
+
+
+
+	//*******************************************************************************
+	//update()
+	//*******************************************************************************
+	private void update() {
+		
+
+	     pos++;
+		 int a = get_letter(pos,stringcount);
+		 suffixstate = null;
+		 old_suffixstate = null;
+		 split = null;
+		 Node active_child= null;
 		 
+		 sink.end=pos;
+		 sink.pathlength=pos+1;
+		 
+		  while(true) {
+			  	
 
-		 else {
-			 if(print) System.out.println("ELSE");
-			 
-			 Node next = ap.active_node.children.get(ap.active_edge);
-			 if(canonize(next,pos)) continue; //observation 2
-			 String current_letter = get_letter_by_idx(a);
-			 
-			 String active_label = this.get_edge_label(ap.active_edge, ap.active_node, next);
-			 if(print) System.out.println("active label: "+active_label );
-			 Character last_char = active_label.charAt(ap.active_length);
-			 String last_suffix =  last_char.toString();
+			 if(ap.active_length==0) ap.active_edge = a ;
+			  
+			 if(print) System.out.println(" pos: "+ pos+ " "+input_text.charAt(pos) + " (active_node: " + ap.active_node.id +" <"+this.get_node_label(ap.active_node)+  "> active_edge: " + ap.active_edge  +" ["+ this.get_letter_by_idx(ap.active_edge)  + "] active length: " +  ap.active_length + ")");
 
+			
+			 if(!(has_outgoing_edge(ap.active_node,ap.active_edge))){ // if no edge with label of active edge from active point
+				 
+			    create_edge(ap.active_node, sink,ap.active_edge); // create new edge from active_node to sink
 
-			 if(last_suffix.equals(current_letter)){//observation 1 current auf active edge vorhanden => kein neuer rechtskontext.
-				 if(print) System.out.println("ACTIVE LENGTH ++");
-				 ap.active_length++;
-				 add_suffixlink(ap.active_node); //observation 3
-				 break;
+			    
+			    int active_edge_left=0;
+			    if(ap.active_node==root){ 
+					 active_edge_left = ap.active_edge;
+					 
+					 create_edge_left(ap.active_node, sink,active_edge_left); // create new edge from active_node to sink
+
+					 
+				}
+			    else {
+	   			 int left_char_occ = pos-this.get_node_length(ap.active_node)-1; 
+	   			 		
+	   			 if(!this.get_node_label(ap.active_node).startsWith("#")) {
+	   			 	
+		   			     if(!(has_outgoing_left_edge(ap.active_node, this.get_letter(left_char_occ,sink.stringnr)))) {
+		   			    	 
+					     create_edge_left(ap.active_node,sink,this.get_letter(left_char_occ,sink.stringnr));
+					     
+		   			     }
+	   			 }
+				     
+				 }
+			  
+				add_suffixlink(ap.active_node); // rule 2
+				 
 			 }
 			 
-			 //Redirect
-			 if (active_child==ap.active_node.children.get(ap.active_edge)){
-				 redirect_edge(ap.active_node,split,ap.active_edge);
+
+			 else {
+				 if(print) System.out.println("ELSE");
 				 
-				 int active_edge_left=0;
-				 if(ap.active_node==root){ 
-					 active_edge_left = ap.active_edge;
-			    	redirect_edge_left(ap.active_node,split,active_edge_left);
+				 Node next = ap.active_node.children.get(ap.active_edge);
+				 if(canonize(next,pos)) continue; //observation 2
+				 String current_letter = get_letter_by_idx(a);
+				 
+				 String active_label = this.get_edge_label(ap.active_edge, ap.active_node, next);
+				 if(print) System.out.println("active label: "+active_label );
+				 Character last_char = active_label.charAt(ap.active_length);
+				 String last_suffix =  last_char.toString();
+
+
+				 if(last_suffix.equals(current_letter)){//observation 1 current auf active edge vorhanden => kein neuer rechtskontext.
+					 if(print) System.out.println("ACTIVE LENGTH ++");
+					 ap.active_length++;
+					 add_suffixlink(ap.active_node); //observation 3
+					 break;
 				 }
-				 else if(this.get_edge_length(ap.active_edge, ap.active_node, split)+this.get_node_length(ap.active_node)<this.get_node_length(split)) {
-					 	
-					 // länge start knoten + läng der kante < länge des zielknotens
-					 int left_letter_pos = split.start + this.get_node_length(split) - this.get_edge_length(ap.active_edge, ap.active_node, split) - this.get_node_length(ap.active_node)-1;
-					 active_edge_left = this.get_letter(left_letter_pos, split.stringnr);
-					 Node next_left = ap.active_node.children_left.get(active_edge_left);				 					 	
+				 
+				 //Redirect
+				 if (active_child==ap.active_node.children.get(ap.active_edge)){
+					 redirect_edge(ap.active_node,split,ap.active_edge);
 					 
-					 
-					 if(print) System.out.println(this.get_node_label(ap.active_node)+ " pos= "+left_letter_pos+" "+ this.get_letter_by_idx(active_edge_left)+" "+split.stringnr);			 
-					 if(print) System.out.println(active_edge_left);
-					 if(print) System.out.println(this.get_node_label(next_left));
-					 
-					 if(this.get_edge_label_left(active_edge_left,ap.active_node, next_left).length()+this.get_node_length(ap.active_node)<this.get_node_length(next_left)) {
-				     redirect_edge_left(ap.active_node,split,active_edge_left);
+					 int active_edge_left=0;
+					 if(ap.active_node==root){ 
+						 active_edge_left = ap.active_edge;
+				    	redirect_edge_left(ap.active_node,split,active_edge_left);
+					 }
+					 else if(this.get_edge_length(ap.active_edge, ap.active_node, split)+this.get_node_length(ap.active_node)<this.get_node_length(split)) {
+						 	
+						 // länge start knoten + läng der kante < länge des zielknotens
+						 int left_letter_pos = split.start + this.get_node_length(split) - this.get_edge_length(ap.active_edge, ap.active_node, split) - this.get_node_length(ap.active_node)-1;
+						 active_edge_left = this.get_letter(left_letter_pos, split.stringnr);
+						 Node next_left = ap.active_node.children_left.get(active_edge_left);				 					 	
+						 
+						 
+						 if(print) System.out.println(this.get_node_label(ap.active_node)+ " pos= "+left_letter_pos+" "+ this.get_letter_by_idx(active_edge_left)+" "+split.stringnr);			 
+						 if(print) System.out.println(active_edge_left);
+						 if(print) System.out.println(this.get_node_label(next_left));
+						 
+						 if(this.get_edge_label_left(active_edge_left,ap.active_node, next_left).length()+this.get_node_length(ap.active_node)<this.get_node_length(next_left)) {
+					     redirect_edge_left(ap.active_node,split,active_edge_left);
+
+						 }
 
 					 }
 
+
 				 }
-
-
-			 }
-			 
-			 //Split
-			 else {
-			 if(print) System.out.println("SPLIT");
-
-			 active_child = ap.active_node.children.get(ap.active_edge); 
-			 			 
-			 String rep_parent = this.get_node_label(ap.active_node);
-			 
-			 String x = this.get_letter_by_idx(ap.active_edge);	
-			 
-			 
-			 int stringnr = next.stringnr;
-			 			 			 
-			 int start = stringset.get(stringnr).indexOf(rep_parent+x);
-			 split = create_node(start,start+ap.active_node.pathlength+ap.active_length-1,ap.active_node.pathlength+ap.active_length,stringnr);
-
-			 
-        	 create_edge(ap.active_node, split,ap.active_edge); // create edge from active_node to split  
-        	 
-        	 create_edge(split, sink ,a); // create edge from split to sink
-        	 
-        	 int last_char_occ = stringset.get(next.stringnr).indexOf(last_char);
-
-        	 create_edge(split,next,this.get_letter(last_char_occ,next.stringnr)); // create edge from split to next 
-			 add_suffixlink(split); // rule 2 
-			 
-			 // new sym edges
-//			 if(stringset.get(stringnr).startsWith(active_label.substring(0, ap.active_length))){
-			 if(this.get_node_length(ap.active_node) + active_label.length() == this.get_node_length(next)){
-
-				 if(print) System.out.println("SYM PR�FIX");
-				 if(print) System.out.println("next id "+ next.id);
-				 if(print) System.out.println("split id "+ split.id);
-
-					Iterator it = next.children_left.entrySet().iterator();
-					  while (it.hasNext()) {
-					      Map.Entry pair = (Map.Entry)it.next();
-					      int key = (int) pair.getKey();
-					      Node child = (Node) pair.getValue();
-							split.children_left.put(key, child);
-					  }	
-					 
-			 }
-			 else {
-				 if(print) System.out.println(this.get_node_label(split));
-				 if(print) System.out.println(this.get_node_label(next));
-				 if(print) System.out.println(this.get_letter(split.start-1,next.stringnr));
-	        	 create_edge_left(split,next,this.get_letter(split.start-1,next.stringnr)); // create edge from split to next
-			 }
-			 
-			 int left_char_occ = stringset.get(stringnr).indexOf(active_label.substring(0, ap.active_length))-1;
-			
-			 if(old_suffixstate==null||old_suffixstate.suffixLink!=split){
-			 if(print) System.out.println(pos+" POS");
-			 if(print) System.out.println(this.get_node_label(split));
-
-			 left_char_occ = pos-this.get_node_length(split)-1;
-
-			 if(print) System.out.println("STELLE left cahr occ "+left_char_occ +"  "+((ap.active_length+this.get_node_length(ap.active_node))-1));
-			 
-			 if(split.start!=0) create_edge_left(split,sink,this.get_letter(left_char_occ, sink.stringnr));  // create left_edge from split to sink
-			 }
-			 
-        	 if(ap.active_node==root) create_edge_left(ap.active_node, split,ap.active_edge); // create edge from active_node to split
-			 
-			 }
-			 
-		 }
-		 			
-		 if(ap.active_node == root && ap.active_length > 0){  // rule 1
-			if(print) System.out.println("RULE 1");
-			ap.active_edge = get_letter(pos - ap.active_length +1,stringcount); // find the next shortest suffix (e.g. after root -> ab ; root -> b) 
-		 	 ap.active_length--;                   
-
-		 } else {
-			 if(ap.active_node.suffixLink != null){  // rule 3
-				if(print) System.out.println("RULE 3");
-				 ap.active_node = ap.active_node.suffixLink;
-			 }
-			 else {
-		 		 ap.active_node = root;
-		 		if(print) System.out.println("AP -> ROOT");
-
-		 		 break;
-		 	 }   
-		 } 		  
-		  
-	  } // while
-	  
-	  separate_node();
-	  
-	  Node target_ap = ap.active_node.children.get(ap.active_edge);
-	  
-	  if(target_ap!=null) {
-		  if(print) System.out.println(this.get_node_label(target_ap)+ " "+ap.active_length);
-		  
-		  if(this.get_edge_length(ap.active_edge,ap.active_node , target_ap)==ap.active_length&!this.get_node_label(target_ap).startsWith("#")) {
-			  
-			  int left_char_occ = pos-this.get_node_length(target_ap);
-			  
-			   if(print) System.out.println("LEFT CHAR OCC " + left_char_occ + " " + sink.stringnr);
-				  int left_letter = this.get_letter(left_char_occ, sink.stringnr);
-				  
-				  if (!(this.has_outgoing_left_edge(target_ap, left_letter))) {
-					  this.create_edge_left(target_ap, sink, left_letter);
-				  }
-			  
-			  
-			  
-		  }
-	
-	  }
-	  
- if(print) System.out.println("-----------------------------------------------------------------------------------------");
-
-}
-
-
-
-//*******************************************************************************
-//separate_node()
-//*******************************************************************************
-
-void separate_node()
-{
-
-	Node next = ap.active_node.children.get(ap.active_edge);
-	int ap_rep_length=0;
-	ap_rep_length = this.get_node_length(ap.active_node);
-	
-	int next_rep_length = this.get_node_length(next);
-	
-//	if(print) System.out.println(this.get_edge_label(ap.active_edge, ap.active_node, next));
-	int edgelength = this.get_edge_length(ap.active_edge, ap.active_node, next);
-	if(print) System.out.println("edgelength "+edgelength);
-	
-	if(ap.active_length==edgelength&&next_rep_length>ap.active_length+ap_rep_length){
-	if(print) System.out.println("SEPARATE NODE"+next.pathlength);
-		
-	Node copy_node = this.create_node(next.end-(edgelength+this.get_node_length(ap.active_node))+1,next.end,this.get_node_length(ap.active_node)+edgelength, next.stringnr);
-	
-	Iterator it = next.children.entrySet().iterator();
-	
-	while (it.hasNext()) {
-      Map.Entry pair = (Map.Entry)it.next();
-      int key = (int) pair.getKey();
-      Node child = (Node) pair.getValue();
-		copy_node.children.put(key, child);
-  }
-		
-
-	copy_node.suffixLink = next.suffixLink;
-	next.suffixLink = copy_node;
-	if(print) System.out.println("SEPARATE NODE ID "+copy_node.id+ " REP " + this.get_node_label(copy_node));
-
-
-
-redirect_edge(ap.active_node,copy_node,ap.active_edge);
-
-
-int left_char_occ = copy_node.start-1;
-
-
-create_edge_left(copy_node, next, this.get_letter(left_char_occ, next.stringnr)); // create left_edge from split to next 
-create_edge_left(copy_node, sink, this.get_letter(pos-this.get_node_length(copy_node), sink.stringnr)); // create left_edge from split to sink 
-
-create_edge_left(copy_node.suffixLink, copy_node, this.get_letter(copy_node.start, copy_node.stringnr)); // create left_edge from copy_node_suffixlink to copy_node 
-
-
-Node old_next = next;
-
-int left_letter=0;
-
-if(print) System.out.println("ANFANG ACTIVE LENGTH "+ap.active_length);
-
-	while (true){
-
-		 if(ap.active_node.suffixLink != null){  // rule 3
-		 	if (print) System.out.println("RULE 3");
-		 	left_char_occ = ap.active_node.end - this.get_node_length(ap.active_node.suffixLink);
-		 	left_letter = this.get_letter(left_char_occ, ap.active_node.stringnr);
-			 ap.active_node = ap.active_node.suffixLink;
-			 
-		 }
-		
-		 else{
-			
-			 	if (print) System.out.println("RULE 1");
-			 	ap.active_length--; 
-			 	left_char_occ --;
-
-				if(ap.active_length==0) {
-			 		 break;
-				} 
-				
-				ap.active_edge = get_letter(pos-ap.active_length+1,stringcount); // find the next shortest suffix (e.g. after root -> ab ; root -> b) 
-			 	left_letter = this.get_letter(pos-ap.active_length+1,stringcount);
-
-			 	if(print) System.out.println("RULE1 suffix" +ap.active_edge);
-				 	 
-		}
-			
-	
-		next = ap.active_node.children.get(ap.active_edge);
-		
-		while(this.get_edge_length(ap.active_edge, ap.active_node, next) +this.get_node_length(ap.active_node) >= this.get_node_length(next)) {
-		canonize(next,pos+1);
-		
-		 if(this.get_edge_length(ap.active_edge, ap.active_node, copy_node)+this.get_node_length(ap.active_node)<this.get_node_length(copy_node)) {
-			 // länge start knoten + läng der kante < länge des zielknotens
-			 int left_letter_pos = copy_node.start + this.get_node_length(copy_node) - this.get_edge_length(ap.active_edge, ap.active_node, copy_node) - this.get_node_length(ap.active_node)-1;
-			 int active_edge_left = this.get_letter(left_letter_pos, copy_node.stringnr); // stimmt das????
-			 Node next_left = ap.active_node.children_left.get(active_edge_left);
-			 
-
-			 if(this.get_edge_label_left(active_edge_left,ap.active_node, next_left).length()+this.get_node_length(ap.active_node)<=this.get_node_length(next_left)) {
-			 redirect_edge_left(ap.active_node,copy_node,active_edge_left);
-			 }	
-		
-	
-		    		
-		  }
-		
-		if (ap.active_length==0){				
-			break;
-		}
-		next = ap.active_node.children.get(ap.active_edge);
-				
-		}
-		
-		
-//		if(this.get_node_length(copy_node)>(this.get_edge_length(ap.active_edge, ap.active_node,old_next)+this.get_node_length(ap.active_node))){
-		if(old_next==next){
-			if(print) System.out.println("SEPARATE REDIRECT");
-    		redirect_edge(ap.active_node,copy_node,ap.active_edge);
-    		    	
-    			
-    		  if(this.get_edge_length(ap.active_edge, ap.active_node, copy_node)+this.get_node_length(ap.active_node)<this.get_node_length(copy_node)) {
 				 
+				 //Split
+				 else {
+				 if(print) System.out.println("SPLIT");
+
+				 active_child = ap.active_node.children.get(ap.active_edge); 
+				 			 
+				 String rep_parent = this.get_node_label(ap.active_node);
+				 
+				 String x = this.get_letter_by_idx(ap.active_edge);	
+				 
+				 
+				 int stringnr = next.stringnr;
+				 			 			 
+				 int start = stringset.get(stringnr).indexOf(rep_parent+x);
+				 split = create_node(start,start+ap.active_node.pathlength+ap.active_length-1,ap.active_node.pathlength+ap.active_length,stringnr);
+
+				 
+	        	 create_edge(ap.active_node, split,ap.active_edge); // create edge from active_node to split  
+	        	 
+	        	 create_edge(split, sink ,a); // create edge from split to sink
+	        	 
+	        	 int last_char_occ = stringset.get(next.stringnr).indexOf(last_char);
+
+	        	 create_edge(split,next,this.get_letter(last_char_occ,next.stringnr)); // create edge from split to next 
+				 add_suffixlink(split); // rule 2 
+				 
+				 // new sym edges
+//				 if(stringset.get(stringnr).startsWith(active_label.substring(0, ap.active_length))){
+				 if(this.get_node_length(ap.active_node) + active_label.length() == this.get_node_length(next)){
+
+					 if(print) System.out.println("SYM PR�FIX");
+					 if(print) System.out.println("next id "+ next.id);
+					 if(print) System.out.println("split id "+ split.id);
+
+						Iterator it = next.children_left.entrySet().iterator();
+						  while (it.hasNext()) {
+						      Map.Entry pair = (Map.Entry)it.next();
+						      int key = (int) pair.getKey();
+						      Node child = (Node) pair.getValue();
+								split.children_left.put(key, child);
+						  }	
+						 
+				 }
+				 else {
+					 if(print) System.out.println(this.get_node_label(split));
+					 if(print) System.out.println(this.get_node_label(next));
+					 if(print) System.out.println(this.get_letter(split.start-1,next.stringnr));
+		        	 create_edge_left(split,next,this.get_letter(split.start-1,next.stringnr)); // create edge from split to next
+				 }
+				 
+				 int left_char_occ = stringset.get(stringnr).indexOf(active_label.substring(0, ap.active_length))-1;
+				
+				 if(old_suffixstate==null||old_suffixstate.suffixLink!=split){
+				 if(print) System.out.println(pos+" POS");
+				 if(print) System.out.println(this.get_node_label(split));
+
+				 left_char_occ = pos-this.get_node_length(split)-1;
+
+				 if(print) System.out.println("STELLE left cahr occ "+left_char_occ +"  "+((ap.active_length+this.get_node_length(ap.active_node))-1));
+				 
+				 if(split.start!=0) create_edge_left(split,sink,this.get_letter(left_char_occ, sink.stringnr));  // create left_edge from split to sink
+				 }
+				 
+	        	 if(ap.active_node==root) create_edge_left(ap.active_node, split,ap.active_edge); // create edge from active_node to split
+				 
+				 }
+				 
+			 }
+			 			
+			 if(ap.active_node == root && ap.active_length > 0){  // rule 1
+				if(print) System.out.println("RULE 1");
+				ap.active_edge = get_letter(pos - ap.active_length +1,stringcount); // find the next shortest suffix (e.g. after root -> ab ; root -> b) 
+			 	 ap.active_length--;                   
+
+			 } else {
+				 if(ap.active_node.suffixLink != null){  // rule 3
+					if(print) System.out.println("RULE 3");
+					 ap.active_node = ap.active_node.suffixLink;
+				 }
+				 else {
+			 		 ap.active_node = root;
+			 		if(print) System.out.println("AP -> ROOT");
+
+			 		 break;
+			 	 }   
+			 } 		  
+			  
+		  } // while
+		  
+		  separate_node();
+		  
+		  Node target_ap = ap.active_node.children.get(ap.active_edge);
+		  
+		  if(target_ap!=null) {
+			  if(print) System.out.println(this.get_node_label(target_ap)+ " "+ap.active_length);
+			  
+			  if(this.get_edge_length(ap.active_edge,ap.active_node , target_ap)==ap.active_length&!this.get_node_label(target_ap).startsWith("#")) {
+				  
+				  int left_char_occ = pos-this.get_node_length(target_ap);
+				  
+				   if(print) System.out.println("LEFT CHAR OCC " + left_char_occ + " " + sink.stringnr);
+					  int left_letter = this.get_letter(left_char_occ, sink.stringnr);
+					  
+					  if (!(this.has_outgoing_left_edge(target_ap, left_letter))) {
+						  this.create_edge_left(target_ap, sink, left_letter);
+					  }
+				  
+				  
+				  
+			  }
+		
+		  }
+		  
+	 if(print) System.out.println("-----------------------------------------------------------------------------------------");
+
+	}
+
+
+
+	//*******************************************************************************
+	//separate_node()
+	//*******************************************************************************
+
+	void separate_node()
+	{
+
+		Node next = ap.active_node.children.get(ap.active_edge);
+		int ap_rep_length=0;
+		ap_rep_length = this.get_node_length(ap.active_node);
+		
+		int next_rep_length = this.get_node_length(next);
+		
+//		if(print) System.out.println(this.get_edge_label(ap.active_edge, ap.active_node, next));
+		int edgelength = this.get_edge_length(ap.active_edge, ap.active_node, next);
+		if(print) System.out.println("edgelength "+edgelength);
+		
+		if(ap.active_length==edgelength&&next_rep_length>ap.active_length+ap_rep_length){
+		if(print) System.out.println("SEPARATE NODE"+next.pathlength);
+			
+		Node copy_node = this.create_node(next.end-(edgelength+this.get_node_length(ap.active_node))+1,next.end,this.get_node_length(ap.active_node)+edgelength, next.stringnr);
+		
+		Iterator it = next.children.entrySet().iterator();
+		
+		while (it.hasNext()) {
+	      Map.Entry pair = (Map.Entry)it.next();
+	      int key = (int) pair.getKey();
+	      Node child = (Node) pair.getValue();
+			copy_node.children.put(key, child);
+	  }
+			
+
+		copy_node.suffixLink = next.suffixLink;
+		next.suffixLink = copy_node;
+		if(print) System.out.println("SEPARATE NODE ID "+copy_node.id+ " REP " + this.get_node_label(copy_node));
+
+
+
+	redirect_edge(ap.active_node,copy_node,ap.active_edge);
+
+
+	int left_char_occ = copy_node.start-1;
+
+
+	create_edge_left(copy_node, next, this.get_letter(left_char_occ, next.stringnr)); // create left_edge from split to next 
+	create_edge_left(copy_node, sink, this.get_letter(pos-this.get_node_length(copy_node), sink.stringnr)); // create left_edge from split to sink 
+	
+	create_edge_left(copy_node.suffixLink, copy_node, this.get_letter(copy_node.start, copy_node.stringnr)); // create left_edge from copy_node_suffixlink to copy_node 
+
+
+	Node old_next = next;
+
+	int left_letter=0;
+
+	if(print) System.out.println("ANFANG ACTIVE LENGTH "+ap.active_length);
+
+		while (true){
+
+			 if(ap.active_node.suffixLink != null){  // rule 3
+			 	if (print) System.out.println("RULE 3");
+			 	left_char_occ = ap.active_node.end - this.get_node_length(ap.active_node.suffixLink);
+			 	left_letter = this.get_letter(left_char_occ, ap.active_node.stringnr);
+				 ap.active_node = ap.active_node.suffixLink;
+				 
+			 }
+			
+			 else{
+				
+				 	if (print) System.out.println("RULE 1");
+				 	ap.active_length--; 
+				 	left_char_occ --;
+
+					if(ap.active_length==0) {
+				 		 break;
+					} 
+					
+					ap.active_edge = get_letter(pos-ap.active_length+1,stringcount); // find the next shortest suffix (e.g. after root -> ab ; root -> b) 
+				 	left_letter = this.get_letter(pos-ap.active_length+1,stringcount);
+
+				 	if(print) System.out.println("RULE1 suffix" +ap.active_edge);
+					 	 
+			}
+				
+		
+			next = ap.active_node.children.get(ap.active_edge);
+			
+			while(this.get_edge_length(ap.active_edge, ap.active_node, next) +this.get_node_length(ap.active_node) >= this.get_node_length(next)) {
+			canonize(next,pos+1);
+			
+			 if(this.get_edge_length(ap.active_edge, ap.active_node, copy_node)+this.get_node_length(ap.active_node)<this.get_node_length(copy_node)) {
 				 // länge start knoten + läng der kante < länge des zielknotens
 				 int left_letter_pos = copy_node.start + this.get_node_length(copy_node) - this.get_edge_length(ap.active_edge, ap.active_node, copy_node) - this.get_node_length(ap.active_node)-1;
 				 int active_edge_left = this.get_letter(left_letter_pos, copy_node.stringnr); // stimmt das????
 				 Node next_left = ap.active_node.children_left.get(active_edge_left);
 				 
 	
-				 if(this.get_edge_label_left(active_edge_left,ap.active_node, next_left).length()+this.get_node_length(ap.active_node)<this.get_node_length(next_left)) {
+				 if(this.get_edge_label_left(active_edge_left,ap.active_node, next_left).length()+this.get_node_length(ap.active_node)<=this.get_node_length(next_left)) {
 				 redirect_edge_left(ap.active_node,copy_node,active_edge_left);
 				 }	
     		
     	
 			    		
     		  }
+			
+			if (ap.active_length==0){				
+				break;
+			}
+			next = ap.active_node.children.get(ap.active_edge);
+					 
+			}
+			
+			
+//			if(this.get_node_length(copy_node)>(this.get_edge_length(ap.active_edge, ap.active_node,old_next)+this.get_node_length(ap.active_node))){
+			if(old_next==next){
+				if(print) System.out.println("SEPARATE REDIRECT");
+	    		redirect_edge(ap.active_node,copy_node,ap.active_edge);
+	    		    	
+	    			
+	    		  if(this.get_edge_length(ap.active_edge, ap.active_node, copy_node)+this.get_node_length(ap.active_node)<this.get_node_length(copy_node)) {
+					 
+					 // länge start knoten + läng der kante < länge des zielknotens
+					 int left_letter_pos = copy_node.start + this.get_node_length(copy_node) - this.get_edge_length(ap.active_edge, ap.active_node, copy_node) - this.get_node_length(ap.active_node)-1;
+					 int active_edge_left = this.get_letter(left_letter_pos, copy_node.stringnr); // stimmt das????
+					 Node next_left = ap.active_node.children_left.get(active_edge_left);
+					 
+		
+					 if(this.get_edge_label_left(active_edge_left,ap.active_node, next_left).length()+this.get_node_length(ap.active_node)<this.get_node_length(next_left)) {
+					 redirect_edge_left(ap.active_node,copy_node,active_edge_left);
+					 }	
+	    		
+	    	
+				    		
+	    		  }
 
-    	}
-		if(print) System.out.println("APPPPP "+ap.active_node.id+" "+ap.active_edge +" al "+ap.active_length);
-		 if(print) System.out.println(" pos: "+ pos+ " "+input_text.charAt(pos) + " (active_node: " + ap.active_node.id +" <"+this.get_node_label(ap.active_node)+  "> active_edge: " + ap.active_edge  +" ["+ this.get_letter_by_idx(ap.active_edge)  + "] active length: " +  ap.active_length + ")");
+	    	}
+			if(print) System.out.println("APPPPP "+ap.active_node.id+" "+ap.active_edge +" al "+ap.active_length);
+			 if(print) System.out.println(" pos: "+ pos+ " "+input_text.charAt(pos) + " (active_node: " + ap.active_node.id +" <"+this.get_node_label(ap.active_node)+  "> active_edge: " + ap.active_edge  +" ["+ this.get_letter_by_idx(ap.active_edge)  + "] active length: " +  ap.active_length + ")");
 
 
-		if(ap.active_length==0) {
-	 		 break;
+			if(ap.active_length==0) {
+		 		 break;
 
-		} 
-		  
-	
-	}
-	
-	ap.active_node=copy_node;
-	}
-	
-	}
-
-
-
+			} 
+			  
+		
+		}
+		
+		ap.active_node=copy_node;
+		}
+		
+		}
 
 //*******************************************************************************
 //redirect_edge()

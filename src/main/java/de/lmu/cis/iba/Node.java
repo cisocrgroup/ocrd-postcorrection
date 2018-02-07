@@ -20,6 +20,7 @@ public class Node {
 	  public HashMap<Integer,Node> children_pos;
 	  public HashMap<Integer,Node> children_left_pos;
 	  
+	  public ArrayList <Integer> stringnumbers = new ArrayList<Integer>();
 	  
 	  public boolean is_endNode=false;
 

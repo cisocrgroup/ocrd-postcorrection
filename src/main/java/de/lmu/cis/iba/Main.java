@@ -63,59 +63,72 @@ class Main {
     return sortedHashMap;
   }
 
-  private static void find_n_transitions_to_sinks(Node node,
-                                                  Online_CDAWG_sym scdawg) {
+  private static void find_n_transitions_to_sinks(Node node,Online_CDAWG_sym scdawg) {
+	    
+	    Iterator it = node.children.entrySet().iterator();
 
-    Iterator it = node.children.entrySet().iterator();
+	      while (it.hasNext()) {
+	    	  
+	        Map.Entry pair = (Map.Entry)it.next();
+	        Node child = (Node)pair.getValue();
+	       		      
+	        	for (int j = 0; j < scdawg.sinks.size(); j++) {
+	        		if(scdawg.sinks.get(j)==child) {
+	        			if(!sinks.contains(scdawg.sinks.get(j))) {
+	        				for (int k = 0 ; k < scdawg.sinks.get(j).stringnumbers.size();k++) {
+	        				sinks.add(scdawg.sinks.get(j));
+	        				}
+	        			}
+	        		}
+	        	}
+	         
+	    	  
+	      }
+	      
+	  		     
+	      Iterator it2 = node.children_left.entrySet().iterator();
 
-    while (it.hasNext()) {
+	      while (it2.hasNext()) {
+	    	  
+	        Map.Entry pair = (Map.Entry)it2.next();
+	        Node child = (Node)pair.getValue();
+	      
+	        	for (int j = 0; j < scdawg.sinks.size(); j++) {
+	        		if(scdawg.sinks.get(j)==child) {
+	        			if(!sinks.contains(scdawg.sinks.get(j))) {
+	        				for (int k = 0 ; k < scdawg.sinks.get(j).stringnumbers.size();k++) {
+	        				sinks.add(scdawg.sinks.get(j));
+	        				}
+	        			}
+	        		}
+	        	}
+	         
+	    	  
+	      }
+	    			   			      
+	      
+	      
+	      // REC AUFRUF der Funktion mit den Kindern
+	      Iterator it3 = node.children.entrySet().iterator();
 
-      Map.Entry pair = (Map.Entry)it.next();
-      Node child = (Node)pair.getValue();
+	      while (it3.hasNext()) {
 
-      for (int j = 0; j < scdawg.sinks.size(); j++) {
-        if (scdawg.sinks.get(j) == child) {
-          if (!sinks.contains(scdawg.sinks.get(j)))
-            sinks.add(scdawg.sinks.get(j));
-        }
-      }
-    }
+	        Map.Entry pair = (Map.Entry)it3.next();
+	        Node child = (Node)pair.getValue();
+	        find_n_transitions_to_sinks(child,scdawg);
+	      }
+	      
+	      Iterator it4 = node.children_left.entrySet().iterator();
 
-    Iterator it2 = node.children_left.entrySet().iterator();
+	      while (it4.hasNext()) {
+	        Map.Entry pair = (Map.Entry)it4.next();
+	        Node child = (Node)pair.getValue();
+	        find_n_transitions_to_sinks(child,scdawg);
+	      }
+	  
+}
 
-    while (it2.hasNext()) {
-
-      Map.Entry pair = (Map.Entry)it2.next();
-      Node child = (Node)pair.getValue();
-
-      for (int j = 0; j < scdawg.sinks.size(); j++) {
-        if (scdawg.sinks.get(j) == child) {
-          if (!sinks.contains(scdawg.sinks.get(j)))
-            sinks.add(scdawg.sinks.get(j));
-        }
-      }
-    }
-
-    // REC AUFRUF der Funktion mit den Kindern
-    Iterator it3 = node.children.entrySet().iterator();
-
-    while (it3.hasNext()) {
-
-      Map.Entry pair = (Map.Entry)it3.next();
-      Node child = (Node)pair.getValue();
-      find_n_transitions_to_sinks(child, scdawg);
-    }
-
-    Iterator it4 = node.children_left.entrySet().iterator();
-
-    while (it4.hasNext()) {
-      Map.Entry pair = (Map.Entry)it4.next();
-      Node child = (Node)pair.getValue();
-      find_n_transitions_to_sinks(child, scdawg);
-    }
-  }
-
-  private static void count_nodes(int n, Node node, Online_CDAWG_sym scdawg,
+  private static void count_nodes(Node node, Online_CDAWG_sym scdawg,
                                   HashMap<Node, Integer> result) {
 
     // Count all right transitions
@@ -163,7 +176,7 @@ class Main {
 
       Map.Entry pair = (Map.Entry)it3.next();
       Node child = (Node)pair.getValue();
-      count_nodes(n, child, scdawg, result);
+      count_nodes(child, scdawg, result);
     }
   }
 
@@ -233,7 +246,7 @@ class Main {
 
       HashMap nodes_count = new HashMap<Node, Integer>();
 
-      count_nodes(3, scdawg.root, scdawg, nodes_count);
+      count_nodes(scdawg.root, scdawg, nodes_count);
 
       HashMap count_nodes_sorted = sort_by_values_desc(nodes_count);
       ArrayList<ArrayList> nodes_sink_set = new ArrayList();
@@ -245,17 +258,16 @@ class Main {
 
         Node n = (Node)pair.getKey();
 
-        // System.out.println(scdawg.get_node_label((Node)pair.getKey())+ "
-        // "+pair.getValue());
 
         sinks = new ArrayList();
 
         find_n_transitions_to_sinks(n, scdawg);
-        // System.out.println(scdawg.get_node_label((Node)pair.getKey())+"
-        // "+sinks.size());
 
         if (sinks.size() != 3)
           continue;
+        
+//      System.out.println(scdawg.get_node_label((Node)pair.getKey())+" "+pair.getValue());
+//      System.out.println(scdawg.get_node_label((Node)pair.getKey())+" "+sinks.size());
 
         ArrayList<Node> sink_set = new ArrayList();
 
@@ -263,6 +275,8 @@ class Main {
           sink_set.add(sinks.get(i));
         }
 
+        
+        
         if (nodes_sink_set.size() == 0)
           nodes_sink_set.add(new ArrayList() {
             {
@@ -277,11 +291,11 @@ class Main {
             ArrayList pair2 = nodes_sink_set.get(i);
 
             for (int j = 0; j < sink_set.size(); j++) {
-              ArrayList<Node> known_sinks =
-                  (ArrayList)nodes_sink_set.get(i).get(1);
+              ArrayList<Node> known_sinks = (ArrayList)nodes_sink_set.get(i).get(1);
               for (int k = 0; k < known_sinks.size(); k++)
 
                 if (known_sinks.get(k).equals(sink_set.get(j))) {
+                	//System.out.println(scdawg.get_node_label(n)+" :: " + scdawg.get_node_label(sink_set.get(j))+" FOUND!!!");
                   node_found = true;
                 }
             }
@@ -291,12 +305,13 @@ class Main {
               {
                 add(n);
                 add(sink_set);
+                
               }
             });
         }
       }
 
-      // ArrayList<String> xyz = new ArrayList<String>(stringset.size());
+//       ArrayList<String> xyz = new ArrayList<String>(stringset.size());
       String[] xyz = new String[stringset.size()];
       for (int i = 0; i < nodes_sink_set.size(); i++) {
         ArrayList pair = nodes_sink_set.get(i);
