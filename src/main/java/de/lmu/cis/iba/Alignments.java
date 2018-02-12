@@ -162,6 +162,9 @@ public class Alignments {
 
   public static LineAlignment alignLines(Document doc, int nlines)
       throws Exception {
+    if (nlines <= 0) {
+      throw new Exception("cannot allign " + nlines + " lines");
+    }
 
     ArrayList<String> stringset = new ArrayList<String>();
     ArrayList<String> strids = new ArrayList<String>();
