@@ -66,7 +66,11 @@ public class ProjectsResourceImpl implements ProjectsResource {
   @Override
   public DeleteProjectsByProjectIDDeleteResponse
   deleteProjectsByProjectIDDelete(String projectID) throws Exception {
-    System.out.println(projectID);
+    try (Client client = newClient();) {
+    	Project project = client.getProject(Integer.parseInt(projectID));
+    	client.deleteProject(project);
+      }
+    
     return null;
   }
 
