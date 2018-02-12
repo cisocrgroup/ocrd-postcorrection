@@ -65,7 +65,7 @@ class Main {
       }
       Document doc = new Document(project, client);
       doc.eachLine(new Document.Visitor() {
-        public void visit(Document.LineTriple t) throws Exception {
+        public void visit(Document.OCRLine t) throws Exception {
           System.out.println(String.format("[%9s,%1d,%2d] %s", t.ocrEngine,
                                            t.pageSeq, t.line.getLineId(),
                                            t.line.getNormalized()));
