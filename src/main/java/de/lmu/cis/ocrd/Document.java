@@ -19,19 +19,21 @@ public class Document {
   public void eachLine(Visitor v) throws Exception {
     List<LineTriple> lines = new ArrayList<LineTriple>();
     System.out.println("size: " + project.getBooks().size());
+    boolean isMasterOCR = true;
     for (Book book : project.getBooks()) {
-      System.out.println("engine: " + book.getOcrEngine() + ", size: " +
-                         book.getPageIds().size() + ",user: " +
-                         book.getOcrUser());
+      System.out.println("engine: " + book.getOcrEngine() +
+                         ", size: " + book.getPageIds().size() +
+                         ",user: " + book.getOcrUser());
       int pseq = 1;
       for (int pageId : book.getPageIds()) {
         Page page = client.getPage(book.getProjectId(), pageId);
         for (de.lmu.cis.api.model.Line line : page.getLines()) {
           lines.add(new LineTriple(book.getOcrEngine(), new Line(client, line),
-                                   pseq));
+                                   pseq, isMasterOCR));
         }
         pseq++;
       }
+      isMasterOCR = false;
     }
     Collections.sort(lines);
     for (LineTriple line : lines) {
@@ -40,10 +42,12 @@ public class Document {
   }
 
   public class LineTriple implements Comparable<LineTriple> {
-    public LineTriple(String ocrEngine, Line line, int pageSeq) {
+    public LineTriple(String ocrEngine, Line line, int pageSeq,
+                      boolean isMasterOCR) {
       this.ocrEngine = ocrEngine;
       this.line = line;
       this.pageSeq = pageSeq;
+      this.isMasterOCR = isMasterOCR;
     }
 
     public int compareTo(LineTriple other) {
@@ -61,9 +65,10 @@ public class Document {
       }
       return this.ocrEngine.compareTo(other.ocrEngine);
     }
-    public String ocrEngine;
-    public Line line;
-    public int pageSeq;
+    public final String ocrEngine;
+    public final Line line;
+    public final int pageSeq;
+    public final boolean isMasterOCR;
   }
 
   public interface Visitor { void visit(LineTriple t) throws Exception; }
