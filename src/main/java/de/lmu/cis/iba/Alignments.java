@@ -1,14 +1,5 @@
 package de.lmu.cis.iba;
 
-import de.lmu.cis.ocrd.Document;
-import de.lmu.cis.ocrd.Config;
-import de.lmu.cis.pocoweb.Client;
-import de.lmu.cis.pocoweb.Token;
-
-// import de.lmu.cis.ocrd.Line;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,35 +10,33 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import de.lmu.cis.api.model.Page;
-import de.lmu.cis.api.model.Project;
+import de.lmu.cis.ocrd.Document;
+import de.lmu.cis.ocrd.Document.OCRLine;
+import de.lmu.cis.pocoweb.Token;
 
-import de.lmu.cis.api.model.Book;
-import de.lmu.cis.iba.Alignments.*;
+public class Alignments {
 
-class Main {
 	private static final int N = 3;
 
-	static ArrayList<Node> sinks = new ArrayList();
+	static ArrayList<Node> sinks = new ArrayList<Node>();
 
-	private static String patternsToString(String[] patterns) {
-		String prefix = "[";
-		String res = "";
-		if (patterns == null || patterns.length == 0) {
-			res += "[]";
-		} else {
-			for (String p : patterns) {
-				res += prefix + p;
-				prefix = ",";
-			}
-			res += "]";
-		}
-		return res;
+	private static class pair {
+		public Node node;
+		public HashSet<Integer> ids;
 	}
 
-	private static HashMap sort_by_values_desc(HashMap map) {
+	public static class LineAlignment extends ArrayList {
+		public LineAlignment() {
+			super();
+		}
+	}
+
+	public Alignments() {
+
+	}
+
+	private static HashMap sort_by_values_desc(HashMap<Node, Integer> map) {
 		List list = new LinkedList(map.entrySet());
 		// Defined Custom Comparator here
 		Collections.sort(list, new Comparator() {
@@ -174,34 +163,109 @@ class Main {
 		}
 	}
 
-	public static void main(String[] args) {
-		try (Client client = Client.login(Config.getInstance().getPocowebURL(), Config.getInstance().getPocowebUser(),
-				Config.getInstance().getPocowebPass());) {
-			Book book = new Book().withOcrEngine("abbyy").withOcrUser("test-ocr-user").withAuthor("Grenzboten")
-					.withTitle("Die Grenzboten").withYear(1841);
-			Project project;
-			try (InputStream is = new FileInputStream("src/test/resources/1841-DieGrenzboten-abbyy-small.zip");) {
-				project = client.newProject(book, is);
-			}
-			book = new Book().withOcrEngine("tesseract").withOcrUser("test-ocr-user").withAuthor("Grenzboten")
-					.withTitle("Die Grenzboten").withYear(1841);
-			try (InputStream is = new FileInputStream(
-					"src/test/resources/1841-DieGrenzboten-tesseract-small-with-error.zip");) {
-				project = client.addBook(project, book, is);
-			}
-			book = new Book().withOcrEngine("ocropus").withOcrUser("test-ocr-user").withAuthor("Grenzboten")
-					.withTitle("Die Grenzboten").withYear(1841);
-			try (InputStream is = new FileInputStream("src/test/resources/1841-DieGrenzboten-ocropus-small.zip");) {
-				project = client.addBook(project, book, is);
-			}
-			Document doc = new Document(project, client);
+	public static LineAlignment alignLines(Document doc) throws Exception {
 
-			LineAlignment l_alignment = Alignments.alignLines(doc);
+		ArrayList<String> stringset = new ArrayList<String>();
+		ArrayList<String> strids = new ArrayList<String>();
+		ArrayList<OCRLine> ocrlines = new ArrayList<OCRLine>();
 
-			client.deleteProject(project);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("error: " + e);
+		LineAlignment result = new LineAlignment();
+
+		doc.eachLine(new Document.Visitor() {
+			public void visit(Document.OCRLine l) throws Exception {
+				System.out.println(String.format("[%9s,%1d,%2d] %s", l.ocrEngine, l.pageSeq, l.line.getLineId(),
+						l.line.getNormalized()));
+				for (Token token : l.line.getTokens()) {
+					System.out.println(String.format("[token %2d] %s", token.getTokenId(), token.getCor()));
+				}
+				stringset.add("#" + l.line.getNormalized() + "$");
+				strids.add(String.format("[%d,%d,%s]", l.pageSeq, l.line.getLineId(), l.ocrEngine));
+				ocrlines.add(l);
+			}
+		});
+
+		Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset, false);
+		scdawg.determineAlphabet(false);
+		scdawg.build_cdawg();
+		// scdawg.print_automaton("svgs/scdawg");
+
+		HashMap<Node, Integer> nodes_count = new HashMap<Node, Integer>();
+
+		count_nodes(scdawg.root, scdawg, nodes_count);
+
+		HashMap count_nodes_sorted = sort_by_values_desc(nodes_count);
+		ArrayList<pair> nodes_sink_set = new ArrayList<pair>();
+
+		count_nodes_sorted.put(scdawg.root, null);
+		Iterator it3 = count_nodes_sorted.entrySet().iterator();
+
+		HashSet<Integer> usedIDs = new HashSet<Integer>();
+		main_loop: while (it3.hasNext()) {
+			Map.Entry pair = (Map.Entry) it3.next();
+
+			Node n = (Node) pair.getKey();
+
+			HashSet<Integer> ids = find_n_transitions_to_sinks(n, scdawg, new HashSet<Integer>());
+
+			if (ids.size() != N) {
+				continue;
+			}
+			for (Integer id : ids) {
+				if (usedIDs.contains(id)) {
+					continue main_loop;
+				}
+			}
+			for (Integer id : ids) {
+				usedIDs.add(id);
+			}
+			pair p = new pair();
+			p.ids = ids;
+			p.node = n;
+			nodes_sink_set.add(p);
 		}
+		// handle final nodes (special case if all ocrs are identical)
+		for (Node sink : scdawg.sinks) {
+			if (sink.stringnumbers.size() == N) {
+				// it is impossilbe (?) that this node was used before
+				// System.out.println("got sink with " + N + " sinks");
+				// System.out.println(sink.stringnumbers);
+				pair p = new pair();
+				p.ids = new HashSet<Integer>();
+				for (Integer id : sink.stringnumbers) {
+					p.ids.add(id);
+				}
+				p.node = scdawg.root;
+				nodes_sink_set.add(p);
+			}
+		}
+
+		// ArrayList<String> xyz = new ArrayList<String>(stringset.size());
+		String[] xyz = new String[stringset.size()];
+		for (pair p : nodes_sink_set) {
+			System.out.println(scdawg.get_node_label(p.node));
+			System.out.println(p.ids);
+			ArrayList<Document.OCRLine> linetupel = new ArrayList<Document.OCRLine>();
+			for (Integer id : p.ids) {
+				int idx = id;
+
+				linetupel.add(ocrlines.get(idx));
+
+				System.out.println("- " + stringset.get(idx) + ": " + strids.get(idx));
+				xyz[idx] = stringset.get(idx);
+			}
+			result.add(linetupel);
+			System.out.println();
+		}
+		// for (int i = 0; i < xyz.length; i++) {
+		// if (xyz[i] != null) {
+		// System.out.print(xyz[i]);
+		// } else {
+		// System.out.print("NULL");
+		// }
+		// System.out.println(" " + stringset.get(i));
+		// }
+
+		return result;
 	}
+
 }

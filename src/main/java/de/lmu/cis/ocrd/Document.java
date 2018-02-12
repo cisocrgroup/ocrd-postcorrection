@@ -17,7 +17,7 @@ public class Document {
   }
 
   public void eachLine(Visitor v) throws Exception {
-    List<LineTriple> lines = new ArrayList<LineTriple>();
+    List<OCRLine> lines = new ArrayList<OCRLine>();
     System.out.println("size: " + project.getBooks().size());
     boolean isMasterOCR = true;
     for (Book book : project.getBooks()) {
@@ -28,7 +28,7 @@ public class Document {
       for (int pageId : book.getPageIds()) {
         Page page = client.getPage(book.getProjectId(), pageId);
         for (de.lmu.cis.api.model.Line line : page.getLines()) {
-          lines.add(new LineTriple(book.getOcrEngine(), new Line(client, line),
+          lines.add(new OCRLine(book.getOcrEngine(), new Line(client, line),
                                    pseq, isMasterOCR));
         }
         pseq++;
@@ -36,13 +36,13 @@ public class Document {
       isMasterOCR = false;
     }
     Collections.sort(lines);
-    for (LineTriple line : lines) {
+    for (OCRLine line : lines) {
       v.visit(line);
     }
   }
 
-  public class LineTriple implements Comparable<LineTriple> {
-    public LineTriple(String ocrEngine, Line line, int pageSeq,
+  public class OCRLine implements Comparable<OCRLine> {
+    public OCRLine(String ocrEngine, Line line, int pageSeq,
                       boolean isMasterOCR) {
       this.ocrEngine = ocrEngine;
       this.line = line;
@@ -50,7 +50,7 @@ public class Document {
       this.isMasterOCR = isMasterOCR;
     }
 
-    public int compareTo(LineTriple other) {
+    public int compareTo(OCRLine other) {
       if (this.pageSeq < other.pageSeq) {
         return -1;
       }
@@ -71,5 +71,5 @@ public class Document {
     public final boolean isMasterOCR;
   }
 
-  public interface Visitor { void visit(LineTriple t) throws Exception; }
+  public interface Visitor { void visit(OCRLine t) throws Exception; }
 }

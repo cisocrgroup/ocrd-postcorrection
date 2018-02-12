@@ -679,7 +679,7 @@ public class Online_CDAWG_sym extends IndexStructure {
     try {
 
       if (node == root)
-        return "λ";
+        return "";
 
       else {
         return stringset.get(node.stringnr).substring(node.start, node.end + 1);
