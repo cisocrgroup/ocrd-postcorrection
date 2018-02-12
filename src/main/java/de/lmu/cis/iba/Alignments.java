@@ -17,8 +17,6 @@ import de.lmu.cis.pocoweb.Token;
 
 public class Alignments {
 
-  private static final int N = 3;
-
   static ArrayList<Node> sinks = new ArrayList<Node>();
 
   private static class pair {
@@ -162,7 +160,8 @@ public class Alignments {
     }
   }
 
-  public static LineAlignment alignLines(Document doc) throws Exception {
+  public static LineAlignment alignLines(Document doc, int nlines)
+      throws Exception {
 
     ArrayList<String> stringset = new ArrayList<String>();
     ArrayList<String> strids = new ArrayList<String>();
@@ -211,7 +210,7 @@ public class Alignments {
       HashSet<Integer> ids =
           find_n_transitions_to_sinks(n, scdawg, new HashSet<Integer>());
 
-      if (ids.size() != N) {
+      if (ids.size() != nlines) {
         continue;
       }
       for (Integer id : ids) {
@@ -229,7 +228,7 @@ public class Alignments {
     }
     // handle final nodes (special case if all ocrs are identical)
     for (Node sink : scdawg.sinks) {
-      if (sink.stringnumbers.size() == N) {
+      if (sink.stringnumbers.size() == nlines) {
         // it is impossilbe (?) that this node was used before
         // System.out.println("got sink with " + N + " sinks");
         // System.out.println(sink.stringnumbers);
