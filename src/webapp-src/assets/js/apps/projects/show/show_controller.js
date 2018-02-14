@@ -133,6 +133,53 @@ define(["app","common/util","common/views","apps/projects/show/show_view"], func
 
           });
 
+         projectShowInfo.on("show:run_clicked",function(methods){
+
+
+       var projectsRunTraining = new Show.RunConfirm({model: new ProjectEntitites.Project(), asModal:true,text:"Begin training on this project?",title:"Start Training"});
+
+
+loading_text:"Step1: Aligning Lines"
+
+       projectsRunTraining.on("project:run_clicked",function(data){
+          var projectsLoadingInfo = new Show.LoadingInfo({model:project,loading_text:"Step1: Aligning Lines..."})
+
+         $('#confirm-modal').modal('toggle');
+
+         $('#confirm-modal').on('hidden.bs.modal', function (e) {
+          App.mainLayout.showChildView('dialogRegion',projectsLoadingInfo);
+
+            var aligning_lines = ProjectEntitites.API.alignLines(id,{id:id});
+
+
+       //       $.when(addingBook).done(function(result){
+       //        $('.loading_background').fadeOut();
+
+       //         $('#projects-modal').modal('toggle');
+
+
+       //         projectsShowAddBook.model.clear().set(projectsListEditProject.model.defaults);
+       //         $('#selected_file').text("");
+       //         // projectsListAddProject.render()
+
+       //      })
+
+
+
+          })
+
+
+
+      
+
+
+      });
+
+
+          App.mainLayout.showChildView('dialogRegion',projectsRunTraining);
+
+          });
+
 
   			// projectPanel = new Show.FooterPanel();
 

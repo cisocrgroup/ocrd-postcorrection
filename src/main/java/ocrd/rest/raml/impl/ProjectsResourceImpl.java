@@ -3,14 +3,19 @@ package ocrd.rest.raml.impl;
 import de.lmu.cis.pocoweb.Client;
 import de.lmu.cis.pocoweb.ProjectBook;
 import de.lmu.cis.ocrd.Config;
+import de.lmu.cis.ocrd.Document;
+
 import java.util.Base64;
 import ocrd.rest.raml.handler.ProjectsHandler;
 import org.apache.commons.io.IOUtils;
 import de.lmu.cis.api.model.Project;
 import de.lmu.cis.api.model.Book;
+import de.lmu.cis.api.model.IdResponse;
 import de.lmu.cis.api.model.Projects;
 import de.lmu.cis.api.model.UploadProjectData;
 import de.lmu.cis.api.resource.ProjectsResource;
+import de.lmu.cis.iba.Alignments;
+import de.lmu.cis.iba.Alignments.LineAlignment;
 
 public class ProjectsResourceImpl implements ProjectsResource {
   @Override
@@ -79,4 +84,19 @@ public class ProjectsResourceImpl implements ProjectsResource {
                         Config.getInstance().getPocowebUser(),
                         Config.getInstance().getPocowebPass());
   }
+
+@Override
+	public PostProjectsByProjectIDAlignLinesResponse postProjectsByProjectIDAlignLines(String projectID,
+			IdResponse entity) throws Exception {
+		try (Client client = newClient();) {
+
+			Project project = client.getProject(Integer.parseInt(projectID));
+			
+			  Document doc = new Document(project, client);
+
+		      LineAlignment l_alignment = Alignments.alignLines(doc, 3);
+			
+		}
+		return null;
+	}
 }

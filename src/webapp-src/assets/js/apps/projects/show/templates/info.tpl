@@ -21,6 +21,7 @@
 
   </div>
    <div class="col-md-7">
+    <button type="button" class="btn js-run float-right"> <i class="fa fa-play" aria-hidden="true"></i> Run Training</button>
    </div>
 
 </div>

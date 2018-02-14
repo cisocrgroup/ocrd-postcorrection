@@ -38,7 +38,8 @@ define(["marionette","app","backbone.syphon","common/views","apps/projects/commo
       events:{
       'click .js-edit-project' : 'edit_clicked',
       'click .js-delete-project' : 'delete_clicked',
-      'click .js-add-book' : 'add_book_clicked'
+      'click .js-add-book' : 'add_book_clicked',
+      'click .js-run' : 'run_clicked',
 
       },
      
@@ -57,8 +58,10 @@ define(["marionette","app","backbone.syphon","common/views","apps/projects/commo
        add_book_clicked:function(e){
         e.preventDefault();
         this.trigger("show:add_book_clicked");
-
-
+      },
+       run_clicked:function(e){
+        e.preventDefault();
+        this.trigger("show:run_clicked");
       },
      onAttach: function(){
        var table = $('#book_table').DataTable();
@@ -83,6 +86,19 @@ Show.DeleteProjectForm = Views.Confirm.extend({
      e.preventDefault();
      this.trigger("project:delete_clicked");
    },
+
+  });
+
+Show.RunConfirm = Views.Confirm.extend({
+   confirmClicked: function(e){
+     e.preventDefault();
+     this.trigger("project:run_clicked");
+   },
+
+  });
+
+Show.LoadingInfo = Views.LoadingInfo.extend({
+   
 
   });
 

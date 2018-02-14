@@ -20,8 +20,9 @@ define(["marionette","app","spin","spin.jquery","common/util","datatables",
 "tpl!common/templates/bginfo.tpl",
 "tpl!common/templates/footerpaneltemplate.tpl",
 "tpl!common/templates/confirm.tpl",
+"tpl!common/templates/loadinginfo.tpl",
 
-	], function(Marionette,IPS_App,Spinner,SpinnerJQuery,Util,dtb,listTpl,loadingTpl,loadingOpcTpl,headerTpl,cardHeadTpl,cardhubTpl,layoutTpl,errorTpl,emptyTpl,areYouTpl,okTpl,infoPanelTpl,bgInfoTpl,footerPanelTpl,confirmTpl){
+	], function(Marionette,IPS_App,Spinner,SpinnerJQuery,Util,dtb,listTpl,loadingTpl,loadingOpcTpl,headerTpl,cardHeadTpl,cardhubTpl,layoutTpl,errorTpl,emptyTpl,areYouTpl,okTpl,infoPanelTpl,bgInfoTpl,footerPanelTpl,confirmTpl,loadingInfoTpl){
 
     var Views={};
 
@@ -633,6 +634,35 @@ Views.FooterPanel = Marionette.View.extend({
       template: footerPanelTpl,
   });
 
+ Views.LoadingInfo = Marionette.View.extend({
+   template: loadingInfoTpl,
+  
+    serializeData: function(){
+      return {
+    model: Marionette.getOption(this,"model"),
+    loading_text:  Marionette.getOption(this,"loading_text"), 
+    
+    }
+  },
+
+   onAttach: function(){
+
+
+          this.$el.attr("ID","loadinginfo-modal");
+          this.$el.addClass("modal fade loadinginfo-modal");
+	 	  this.$el.on('shown.bs.modal', function (e) {
+
+          })
+
+          var that = this;
+         
+           this.$el.modal();
+  
+     
+   } // onAttach()
+   
+  
+});
 
 return Views;
 
