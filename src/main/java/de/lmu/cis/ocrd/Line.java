@@ -30,6 +30,11 @@ public class Line extends de.lmu.cis.api.model.Line {
     this.tokenAlignements = pair.tokenAlignements;
   }
 
+  @Override
+  public String toString() {
+    return this.getNormalized();
+  }
+
   public String getNormalized() {
     return normalized;
   }

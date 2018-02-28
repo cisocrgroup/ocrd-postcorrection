@@ -18,18 +18,18 @@ public class Document {
 
   public void eachLine(Visitor v) throws Exception {
     List<OCRLine> lines = new ArrayList<OCRLine>();
-    System.out.println("size: " + project.getBooks().size());
+    // System.out.println("size: " + project.getBooks().size());
     boolean isMasterOCR = true;
     for (Book book : project.getBooks()) {
-      System.out.println("engine: " + book.getOcrEngine() +
-                         ", size: " + book.getPageIds().size() +
-                         ",user: " + book.getOcrUser());
+      // System.out.println("engine: " + book.getOcrEngine() +
+      //                    ", size: " + book.getPageIds().size() +
+      //                    ",user: " + book.getOcrUser());
       int pseq = 1;
       for (int pageId : book.getPageIds()) {
         Page page = client.getPage(book.getProjectId(), pageId);
         for (de.lmu.cis.api.model.Line line : page.getLines()) {
           lines.add(new OCRLine(book.getOcrEngine(), new Line(client, line),
-                                   pseq, isMasterOCR));
+                                pseq, isMasterOCR));
         }
         pseq++;
       }
@@ -43,11 +43,16 @@ public class Document {
 
   public class OCRLine implements Comparable<OCRLine> {
     public OCRLine(String ocrEngine, Line line, int pageSeq,
-                      boolean isMasterOCR) {
+                   boolean isMasterOCR) {
       this.ocrEngine = ocrEngine;
       this.line = line;
       this.pageSeq = pageSeq;
       this.isMasterOCR = isMasterOCR;
+    }
+
+    @Override
+    public String toString() {
+      return this.line.toString();
     }
 
     public int compareTo(OCRLine other) {

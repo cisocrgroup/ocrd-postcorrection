@@ -16,19 +16,22 @@ public class Pairwise_LCS_Alignment {
   Online_CDAWG_sym scdawg;
   ArrayList<ArrayList<LCS_Triple>> longest_common_subsequences =
       new ArrayList<ArrayList<LCS_Triple>>();
+  ArrayList<String> stringset;
 
   public Pairwise_LCS_Alignment(ArrayList<String> stringset) {
     Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset, false);
     scdawg.determineAlphabet(false);
     scdawg.build_cdawg();
-
+    this.stringset = stringset;
     this.scdawg = scdawg;
   }
 
   public void align() {
     System.out.println("Searching quasi max nodes for s1 and s2 pairs...");
     ArrayList<Endpos_Pair> quasi_max_nodes = find_quasi_max_nodes_pairwise();
-
+    if (quasi_max_nodes == null) {
+      return;
+    }
     System.out.println("Calculating LCS for s1 and s2 pairs...");
 
     for (Endpos_Pair pair : quasi_max_nodes) {
@@ -124,6 +127,9 @@ public class Pairwise_LCS_Alignment {
     int i_count = 0;
     for (int i = 0; i < greedy_cover.length; i++) {
       if (greedy_cover[i].size() > 0) i_count++;
+    }
+    if (i_count <= 0) {
+      return null;
     }
 
     ArrayList<LCS_Triple> lis = new ArrayList<LCS_Triple>();
@@ -309,17 +315,18 @@ public class Pairwise_LCS_Alignment {
   // *******************************************************************************
   // LCS_to_JSONString()
   // *******************************************************************************
-
   public String LCS_to_JSONString() {
     String result = "{";
 
     for (int u = 0; u < this.longest_common_subsequences.size(); u++) {
       ArrayList<LCS_Triple> lis = this.longest_common_subsequences.get(u);
+      if (lis == null) {
+        return "{}";
+      }
 
       String alignment = "[";
 
       String d = "";
-
       for (int i = 0; i < lis.size(); i++) {
         // System.out.println(lis.get(i).endpos_s1+" "+lis.get(i).endpos_s2+"
         // "+scdawg.get_node_label(lis.get(i).node));
@@ -327,7 +334,9 @@ public class Pairwise_LCS_Alignment {
             scdawg.get_node_label(lis.get(i).node).replace("\"", "\\\"");
         alignment += d + "{\"endpos_s1\":\"" + lis.get(i).endpos_s1 +
                      "\",\"endpos_s2\":\"" + lis.get(i).endpos_s2 +
-                     "\",\"nodelabel\":\"" + nodelabel + "\"}";
+                     "\",\"nodelabel\":\"" + nodelabel + "\",\"s1\":\"" +
+                     this.stringset.get(0) + "\",\"s2\":\"" +
+                     this.stringset.get(1) + "\"}";
         d = ",";
       }
 
@@ -340,6 +349,79 @@ public class Pairwise_LCS_Alignment {
 
     return result + "}";
   }
+
+  public static class AlignmentPair {
+    public final int epos1;
+    public final int epos2;
+    public final int spos1;
+    public final int spos2;
+    public final String label;
+    public AlignmentPair(String label, int epos1, int epos2) {
+      this.epos1 = epos1;
+      this.epos2 = epos2;
+      this.label = label;
+      this.spos1 = calcSpos(epos1, this.label.length());
+      this.spos2 = calcSpos(epos2, this.label.length());
+    }
+    private static int calcSpos(int epos, int n) {
+      int res = epos - n;
+      if (res < 0) {
+        return 0;
+      }
+      return res;
+    }
+  };
+
+  public ArrayList<AlignmentPair> getAligmentPairs() {
+    ArrayList<AlignmentPair> res = new ArrayList<AlignmentPair>();
+    for (int u = 0; u < this.longest_common_subsequences.size(); u++) {
+      ArrayList<LCS_Triple> lis = this.longest_common_subsequences.get(u);
+      if (lis == null) {
+        res.add(new AlignmentPair("", 0, 0));
+        continue;
+      }
+      for (int i = 0; i < lis.size(); i++) {
+        int e1 = lis.get(i).endpos_s1;
+        int e2 = lis.get(i).endpos_s2;
+        String nodelabel = scdawg.get_node_label(lis.get(i).node);
+        res.add(new AlignmentPair(nodelabel, e1, e2));
+      }
+    }
+    return res;
+  }
+  // public String LCS_to_JSONString() {
+  //   String result = "{";
+
+  //   for (int u = 0; u < this.longest_common_subsequences.size(); u++) {
+  //     ArrayList<LCS_Triple> lis = this.longest_common_subsequences.get(u);
+  //     if (lis == null) {
+  //       return "{}";
+  //     }
+
+  //     String alignment = "[";
+
+  //     String d = "";
+  //     for (int i = 0; i < lis.size(); i++) {
+  //       // System.out.println(lis.get(i).endpos_s1+"
+  //       "+lis.get(i).endpos_s2+"
+  //       // "+scdawg.get_node_label(lis.get(i).node));
+  //       String nodelabel =
+  //           scdawg.get_node_label(lis.get(i).node).replace("\"", "\\\"");
+  //       alignment += d + "{\"endpos_s1\":\"" + lis.get(i).endpos_s1 +
+  //                    "\",\"endpos_s2\":\"" + lis.get(i).endpos_s2 +
+  //                    "\",\"nodelabel\":\"" + nodelabel + "\"}";
+  //       d = ",";
+  //     }
+
+  //     alignment += "]";
+
+  //     result += "\"alignment" + u + "\":" + alignment;
+  //     if (u < scdawg.stringset.size() - 2) result += ",";
+
+  //   }  // for u
+
+  //   return result + "}";
+  // }
 
   // *******************************************************************************
   // *******************************************************************************

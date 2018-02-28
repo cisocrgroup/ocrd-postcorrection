@@ -5,6 +5,7 @@ import de.lmu.cis.ocrd.Document.OCRLine;
 import de.lmu.cis.ocrd.Config;
 import de.lmu.cis.pocoweb.Client;
 import de.lmu.cis.pocoweb.Token;
+import com.google.gson.Gson;
 
 // import de.lmu.cis.ocrd.Line;
 import java.io.File;
@@ -47,8 +48,6 @@ class Main {
     return res;
   }
 
-
-
   public static void main(String[] args) {
     try (Client client = Client.login(Config.getInstance().getPocowebURL(),
                                       Config.getInstance().getPocowebUser(),
@@ -88,19 +87,40 @@ class Main {
       Document doc = new Document(project, client);
 
       LineAlignment l_alignment = new LineAlignment(doc, 3);
-      
-//      for (ArrayList<OCRLine> aligned_lines: l_alignment) {
-//    	  for(OCRLine line : aligned_lines) {
-//    		  System.out.println(line.);
-//    	  }
-//      }
-      
-//  	Pairwise_LCS_Alignment alignment = new Pairwise_LCS_Alignment(stringset);
-//	alignment.align();
-//	String json = alignment.LCS_to_JSONString();
-//	System.out.println(json);
-	
-      
+      for (ArrayList<OCRLine> aligned_lines : l_alignment) {
+        for (OCRLine line : aligned_lines) {
+          System.out.println(line);
+        }
+      }
+      for (ArrayList<OCRLine> aligned_lines : l_alignment) {
+        OCRLine mocr = null;
+        ArrayList<OCRLine> other = new ArrayList<OCRLine>();
+        for (OCRLine line : aligned_lines) {
+          if (line.isMasterOCR) {
+            mocr = line;
+          } else {
+            other.add(line);
+          }
+        }
+        if (mocr == null) {
+          throw new Exception("no master ocr");
+        }
+        for (OCRLine line : other) {
+          ArrayList<String> stringset = new ArrayList<String>();
+          stringset.add("#" + mocr.toString() + "$");
+          stringset.add("#" + line.toString() + "$");
+          Pairwise_LCS_Alignment alignment =
+              new Pairwise_LCS_Alignment(stringset);
+          alignment.align();
+          System.out.println(new Gson().toJson(alignment.getAligmentPairs()));
+          // System.out.println(mocr);
+          // System.out.println(line);
+          // System.out.println(alignment.LCS_to_JSONString());
+        }
+      }
+      //	alignment.align();
+      //	String json = alignment.LCS_to_JSONString();
+      //	System.out.println(json);
 
       client.deleteProject(project);
     } catch (Exception e) {

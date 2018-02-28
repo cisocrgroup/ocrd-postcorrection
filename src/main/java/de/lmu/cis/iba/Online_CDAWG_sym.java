@@ -58,7 +58,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 
   public void build_cdawg() {
     long startTime = System.currentTimeMillis();
-    System.out.println(" ..building CDAWG ");
+    if (print) System.out.println(" ..building CDAWG ");
 
     // 1. Create a state root
 
@@ -106,7 +106,7 @@ public class Online_CDAWG_sym extends IndexStructure {
     }
 
     long duration = System.currentTimeMillis() - startTime;
-    System.out.println(" ... took " + duration + " millieseconds");
+    if (print) System.out.println(" ... took " + duration + " millieseconds");
   }
 
   boolean canonize(Node node, int pos) {
