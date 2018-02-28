@@ -22,7 +22,6 @@ import com.google.common.collect.Multimap;
 // import indexstructure.Neo4J_Handler;
 
 public class Online_CDAWG_sym extends IndexStructure {
-
   ActivePoint ap;
 
   public Node root, sink, suffixstate, old_suffixstate, split;
@@ -44,7 +43,6 @@ public class Online_CDAWG_sym extends IndexStructure {
 
   boolean print = false;
   public Online_CDAWG_sym(ArrayList<String> _stringset, boolean print) {
-
     super();
 
     id_cnt = 0;
@@ -56,10 +54,9 @@ public class Online_CDAWG_sym extends IndexStructure {
 
     all_nodes = new ArrayList();
 
-  } // Online_CDAWG()
+  }  // Online_CDAWG()
 
   public void build_cdawg() {
-
     long startTime = System.currentTimeMillis();
     System.out.println(" ..building CDAWG ");
 
@@ -71,7 +68,6 @@ public class Online_CDAWG_sym extends IndexStructure {
 
   main_loop:
     while (stringcount < stringset.size()) {
-
       quasi_candidates.add(new HashMap<Integer, Node>());
 
       input_text = stringset.get(stringcount);
@@ -101,9 +97,8 @@ public class Online_CDAWG_sym extends IndexStructure {
       letters_available = true;
       while (letters_available) {
         update();
-        if (pos >= input_text.length() - 1)
-          letters_available = false;
-      } // letters_available
+        if (pos >= input_text.length() - 1) letters_available = false;
+      }  // letters_available
 
       sink.suffixLink = ap.active_node;
 
@@ -119,15 +114,12 @@ public class Online_CDAWG_sym extends IndexStructure {
         this.get_edge_length(ap.active_edge, ap.active_node,
                              ap.active_node.children.get(ap.active_edge));
     if (ap.active_length >= edgelength) {
-
-      if (print)
-        System.out.println("CANONIZE");
+      if (print) System.out.println("CANONIZE");
       ap.active_length -= edgelength;
 
       int next_pos = pos - ap.active_length;
 
       if (ap.active_length > 0) {
-
         ap.active_edge = this.get_letter(next_pos, stringcount);
       }
 
@@ -142,8 +134,7 @@ public class Online_CDAWG_sym extends IndexStructure {
     if (print)
       System.out.println("SUFFIX START <" + this.get_node_label(node) + ">");
     if (suffixstate != null) {
-      if (print)
-        System.out.println("ADDDDD SUFFIXLINK!!!!!!");
+      if (print) System.out.println("ADDDDD SUFFIXLINK!!!!!!");
       suffixstate.suffixLink = node;
       old_suffixstate = suffixstate;
 
@@ -151,7 +142,7 @@ public class Online_CDAWG_sym extends IndexStructure {
           node, suffixstate,
           this.get_letter(
               suffixstate.end - this.get_node_length(node),
-              suffixstate.stringnr)); // create left_edge from split to next
+              suffixstate.stringnr));  // create left_edge from split to next
     }
     suffixstate = node;
   }
@@ -160,7 +151,6 @@ public class Online_CDAWG_sym extends IndexStructure {
   // update()
   //*******************************************************************************
   private void update() {
-
     pos++;
     int a = get_letter(pos, stringcount);
     suffixstate = null;
@@ -172,9 +162,7 @@ public class Online_CDAWG_sym extends IndexStructure {
     sink.pathlength = pos + 1;
 
     while (true) {
-
-      if (ap.active_length == 0)
-        ap.active_edge = a;
+      if (ap.active_length == 0) ap.active_edge = a;
 
       if (print)
         System.out.println(" pos: " + pos + " " + input_text.charAt(pos) +
@@ -185,12 +173,13 @@ public class Online_CDAWG_sym extends IndexStructure {
                            "] active length: " + ap.active_length + ")");
 
       if (!(has_outgoing_edge(ap.active_node,
-                              ap.active_edge))) { // if no edge with label of
-                                                  // active edge from active
-                                                  // point
+                              ap.active_edge))) {  // if no edge with label of
+                                                   // active edge from active
+                                                   // point
 
-        create_edge(ap.active_node, sink,
-                    ap.active_edge); // create new edge from active_node to sink
+        create_edge(
+            ap.active_node, sink,
+            ap.active_edge);  // create new edge from active_node to sink
 
         int active_edge_left = 0;
         if (ap.active_node == root) {
@@ -198,50 +187,44 @@ public class Online_CDAWG_sym extends IndexStructure {
 
           create_edge_left(
               ap.active_node, sink,
-              active_edge_left); // create new edge from active_node to sink
+              active_edge_left);  // create new edge from active_node to sink
 
         } else {
           int left_char_occ = pos - this.get_node_length(ap.active_node) - 1;
 
           if (!this.get_node_label(ap.active_node).startsWith("#")) {
-
             if (!(has_outgoing_left_edge(
                     ap.active_node,
                     this.get_letter(left_char_occ, sink.stringnr)))) {
-
               create_edge_left(ap.active_node, sink,
                                this.get_letter(left_char_occ, sink.stringnr));
             }
           }
         }
 
-        add_suffixlink(ap.active_node); // rule 2
+        add_suffixlink(ap.active_node);  // rule 2
 
       }
 
       else {
-        if (print)
-          System.out.println("ELSE");
+        if (print) System.out.println("ELSE");
 
         Node next = ap.active_node.children.get(ap.active_edge);
-        if (canonize(next, pos))
-          continue; // observation 2
+        if (canonize(next, pos)) continue;  // observation 2
         String current_letter = get_letter_by_idx(a);
 
         String active_label =
             this.get_edge_label(ap.active_edge, ap.active_node, next);
-        if (print)
-          System.out.println("active label: " + active_label);
+        if (print) System.out.println("active label: " + active_label);
         Character last_char = active_label.charAt(ap.active_length);
         String last_suffix = last_char.toString();
 
-        if (last_suffix.equals(current_letter)) { // observation 1 current auf
-                                                  // active edge vorhanden =>
-                                                  // kein neuer rechtskontext.
-          if (print)
-            System.out.println("ACTIVE LENGTH ++");
+        if (last_suffix.equals(current_letter)) {  // observation 1 current auf
+                                                   // active edge vorhanden =>
+                                                   // kein neuer rechtskontext.
+          if (print) System.out.println("ACTIVE LENGTH ++");
           ap.active_length++;
-          add_suffixlink(ap.active_node); // observation 3
+          add_suffixlink(ap.active_node);  // observation 3
           break;
         }
 
@@ -257,7 +240,6 @@ public class Online_CDAWG_sym extends IndexStructure {
                                           split) +
                          this.get_node_length(ap.active_node) <
                      this.get_node_length(split)) {
-
             // länge start knoten + läng der kante < länge des zielknotens
             int left_letter_pos =
                 split.start + this.get_node_length(split) -
@@ -271,10 +253,8 @@ public class Online_CDAWG_sym extends IndexStructure {
                                  " pos= " + left_letter_pos + " " +
                                  this.get_letter_by_idx(active_edge_left) +
                                  " " + split.stringnr);
-            if (print)
-              System.out.println(active_edge_left);
-            if (print)
-              System.out.println(this.get_node_label(next_left));
+            if (print) System.out.println(active_edge_left);
+            if (print) System.out.println(this.get_node_label(next_left));
 
             if (this.get_edge_label_left(active_edge_left, ap.active_node,
                                          next_left)
@@ -289,8 +269,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 
         // Split
         else {
-          if (print)
-            System.out.println("SPLIT");
+          if (print) System.out.println("SPLIT");
 
           active_child = ap.active_node.children.get(ap.active_edge);
 
@@ -306,30 +285,26 @@ public class Online_CDAWG_sym extends IndexStructure {
               ap.active_node.pathlength + ap.active_length, stringnr);
 
           create_edge(ap.active_node, split,
-                      ap.active_edge); // create edge from active_node to split
+                      ap.active_edge);  // create edge from active_node to split
 
-          create_edge(split, sink, a); // create edge from split to sink
+          create_edge(split, sink, a);  // create edge from split to sink
 
           int last_char_occ = stringset.get(next.stringnr).indexOf(last_char);
 
-          create_edge(
-              split, next,
-              this.get_letter(last_char_occ,
-                              next.stringnr)); // create edge from split to next
-          add_suffixlink(split);               // rule 2
+          create_edge(split, next,
+                      this.get_letter(
+                          last_char_occ,
+                          next.stringnr));  // create edge from split to next
+          add_suffixlink(split);            // rule 2
 
           // new sym edges
           //				 if(stringset.get(stringnr).startsWith(active_label.substring(0,
           // ap.active_length))){
           if (this.get_node_length(ap.active_node) + active_label.length() ==
               this.get_node_length(next)) {
-
-            if (print)
-              System.out.println("SYM PR�FIX");
-            if (print)
-              System.out.println("next id " + next.id);
-            if (print)
-              System.out.println("split id " + split.id);
+            if (print) System.out.println("SYM PR�FIX");
+            if (print) System.out.println("next id " + next.id);
+            if (print) System.out.println("split id " + split.id);
 
             Iterator it = next.children_left.entrySet().iterator();
             while (it.hasNext()) {
@@ -340,10 +315,8 @@ public class Online_CDAWG_sym extends IndexStructure {
             }
 
           } else {
-            if (print)
-              System.out.println(this.get_node_label(split));
-            if (print)
-              System.out.println(this.get_node_label(next));
+            if (print) System.out.println(this.get_node_label(split));
+            if (print) System.out.println(this.get_node_label(next));
             if (print)
               System.out.println(
                   this.get_letter(split.start - 1, next.stringnr));
@@ -351,7 +324,7 @@ public class Online_CDAWG_sym extends IndexStructure {
                 split, next,
                 this.get_letter(
                     split.start - 1,
-                    next.stringnr)); // create edge from split to next
+                    next.stringnr));  // create edge from split to next
           }
 
           int left_char_occ = stringset.get(stringnr).indexOf(
@@ -359,10 +332,8 @@ public class Online_CDAWG_sym extends IndexStructure {
                               1;
 
           if (old_suffixstate == null || old_suffixstate.suffixLink != split) {
-            if (print)
-              System.out.println(pos + " POS");
-            if (print)
-              System.out.println(this.get_node_label(split));
+            if (print) System.out.println(pos + " POS");
+            if (print) System.out.println(this.get_node_label(split));
 
             left_char_occ = pos - this.get_node_length(split) - 1;
 
@@ -377,40 +348,37 @@ public class Online_CDAWG_sym extends IndexStructure {
                   split, sink,
                   this.get_letter(
                       left_char_occ,
-                      sink.stringnr)); // create left_edge from split to sink
+                      sink.stringnr));  // create left_edge from split to sink
           }
 
           if (ap.active_node == root)
             create_edge_left(
                 ap.active_node, split,
-                ap.active_edge); // create edge from active_node to split
+                ap.active_edge);  // create edge from active_node to split
         }
       }
 
-      if (ap.active_node == root && ap.active_length > 0) { // rule 1
-        if (print)
-          System.out.println("RULE 1");
+      if (ap.active_node == root && ap.active_length > 0) {  // rule 1
+        if (print) System.out.println("RULE 1");
         ap.active_edge = get_letter(pos - ap.active_length + 1,
-                                    stringcount); // find the next shortest
-                                                  // suffix (e.g. after root ->
-                                                  // ab ; root -> b)
+                                    stringcount);  // find the next shortest
+                                                   // suffix (e.g. after root ->
+                                                   // ab ; root -> b)
         ap.active_length--;
 
       } else {
-        if (ap.active_node.suffixLink != null) { // rule 3
-          if (print)
-            System.out.println("RULE 3");
+        if (ap.active_node.suffixLink != null) {  // rule 3
+          if (print) System.out.println("RULE 3");
           ap.active_node = ap.active_node.suffixLink;
         } else {
           ap.active_node = root;
-          if (print)
-            System.out.println("AP -> ROOT");
+          if (print) System.out.println("AP -> ROOT");
 
           break;
         }
       }
 
-    } // while
+    }  // while
 
     separate_node();
 
@@ -424,7 +392,6 @@ public class Online_CDAWG_sym extends IndexStructure {
       if (this.get_edge_length(ap.active_edge, ap.active_node, target_ap) ==
               ap.active_length &
           !this.get_node_label(target_ap).startsWith("#")) {
-
         int left_char_occ = pos - this.get_node_length(target_ap);
 
         if (print)
@@ -448,7 +415,6 @@ public class Online_CDAWG_sym extends IndexStructure {
   //*******************************************************************************
 
   void separate_node() {
-
     Node next = ap.active_node.children.get(ap.active_edge);
     int ap_rep_length = 0;
     ap_rep_length = this.get_node_length(ap.active_node);
@@ -458,13 +424,11 @@ public class Online_CDAWG_sym extends IndexStructure {
     //		if(print) System.out.println(this.get_edge_label(ap.active_edge,
     // ap.active_node, next));
     int edgelength = this.get_edge_length(ap.active_edge, ap.active_node, next);
-    if (print)
-      System.out.println("edgelength " + edgelength);
+    if (print) System.out.println("edgelength " + edgelength);
 
     if (ap.active_length == edgelength &&
         next_rep_length > ap.active_length + ap_rep_length) {
-      if (print)
-        System.out.println("SEPARATE NODE" + next.pathlength);
+      if (print) System.out.println("SEPARATE NODE" + next.pathlength);
 
       Node copy_node = this.create_node(
           next.end - (edgelength + this.get_node_length(ap.active_node)) + 1,
@@ -494,32 +458,29 @@ public class Online_CDAWG_sym extends IndexStructure {
           copy_node, next,
           this.get_letter(
               left_char_occ,
-              next.stringnr)); // create left_edge from split to next
+              next.stringnr));  // create left_edge from split to next
       create_edge_left(
           copy_node, sink,
           this.get_letter(
               pos - this.get_node_length(copy_node),
-              sink.stringnr)); // create left_edge from split to sink
+              sink.stringnr));  // create left_edge from split to sink
 
       create_edge_left(
           copy_node.suffixLink, copy_node,
           this.get_letter(copy_node.start,
-                          copy_node.stringnr)); // create left_edge from
-                                                // copy_node_suffixlink to
-                                                // copy_node
+                          copy_node.stringnr));  // create left_edge from
+                                                 // copy_node_suffixlink to
+                                                 // copy_node
 
       Node old_next = next;
 
       int left_letter = 0;
 
-      if (print)
-        System.out.println("ANFANG ACTIVE LENGTH " + ap.active_length);
+      if (print) System.out.println("ANFANG ACTIVE LENGTH " + ap.active_length);
 
       while (true) {
-
-        if (ap.active_node.suffixLink != null) { // rule 3
-          if (print)
-            System.out.println("RULE 3");
+        if (ap.active_node.suffixLink != null) {  // rule 3
+          if (print) System.out.println("RULE 3");
           left_char_occ = ap.active_node.end -
                           this.get_node_length(ap.active_node.suffixLink);
           left_letter = this.get_letter(left_char_occ, ap.active_node.stringnr);
@@ -528,9 +489,7 @@ public class Online_CDAWG_sym extends IndexStructure {
         }
 
         else {
-
-          if (print)
-            System.out.println("RULE 1");
+          if (print) System.out.println("RULE 1");
           ap.active_length--;
           left_char_occ--;
 
@@ -539,14 +498,13 @@ public class Online_CDAWG_sym extends IndexStructure {
           }
 
           ap.active_edge = get_letter(pos - ap.active_length + 1,
-                                      stringcount); // find the next shortest
-                                                    // suffix (e.g. after root
-                                                    // -> ab ; root -> b)
+                                      stringcount);  // find the next shortest
+                                                     // suffix (e.g. after root
+                                                     // -> ab ; root -> b)
           left_letter =
               this.get_letter(pos - ap.active_length + 1, stringcount);
 
-          if (print)
-            System.out.println("RULE1 suffix" + ap.active_edge);
+          if (print) System.out.println("RULE1 suffix" + ap.active_edge);
         }
 
         next = ap.active_node.children.get(ap.active_edge);
@@ -566,7 +524,7 @@ public class Online_CDAWG_sym extends IndexStructure {
                                      copy_node) -
                 this.get_node_length(ap.active_node) - 1;
             int active_edge_left = this.get_letter(
-                left_letter_pos, copy_node.stringnr); // stimmt das????
+                left_letter_pos, copy_node.stringnr);  // stimmt das????
             Node next_left = ap.active_node.children_left.get(active_edge_left);
 
             if (this.get_edge_label_left(active_edge_left, ap.active_node,
@@ -587,14 +545,12 @@ public class Online_CDAWG_sym extends IndexStructure {
         //			if(this.get_node_length(copy_node)>(this.get_edge_length(ap.active_edge,
         // ap.active_node,old_next)+this.get_node_length(ap.active_node))){
         if (old_next == next) {
-          if (print)
-            System.out.println("SEPARATE REDIRECT");
+          if (print) System.out.println("SEPARATE REDIRECT");
           redirect_edge(ap.active_node, copy_node, ap.active_edge);
 
           if (this.get_edge_length(ap.active_edge, ap.active_node, copy_node) +
                   this.get_node_length(ap.active_node) <
               this.get_node_length(copy_node)) {
-
             // länge start knoten + läng der kante < länge des zielknotens
             int left_letter_pos =
                 copy_node.start + this.get_node_length(copy_node) -
@@ -602,7 +558,7 @@ public class Online_CDAWG_sym extends IndexStructure {
                                      copy_node) -
                 this.get_node_length(ap.active_node) - 1;
             int active_edge_left = this.get_letter(
-                left_letter_pos, copy_node.stringnr); // stimmt das????
+                left_letter_pos, copy_node.stringnr);  // stimmt das????
             Node next_left = ap.active_node.children_left.get(active_edge_left);
 
             if (this.get_edge_label_left(active_edge_left, ap.active_node,
@@ -639,7 +595,6 @@ public class Online_CDAWG_sym extends IndexStructure {
   //*******************************************************************************
 
   void redirect_edge(Node start, Node target, int edge) {
-
     start.children.put(edge, target);
 
     /// **  # # # ** ## ** #'**** ##** NEU NEU
@@ -652,7 +607,6 @@ public class Online_CDAWG_sym extends IndexStructure {
   //*******************************************************************************
 
   void redirect_edge_left(Node start, Node target, int edge) {
-
     start.children_left.put(edge, target);
   }
 
@@ -661,7 +615,6 @@ public class Online_CDAWG_sym extends IndexStructure {
   //*******************************************************************************
 
   int get_letter(int pos, int stringnr) {
-
     Character letter = stringset.get(stringnr).charAt(pos);
     return utf8_sequence_map.get(letter.toString());
   }
@@ -671,13 +624,11 @@ public class Online_CDAWG_sym extends IndexStructure {
   //*******************************************************************************
 
   public String get_node_label(Node node) {
-
     String result;
     //	System.out.println(stringset.get(0).substring(node.end-node.pathlength,node.end)+"
     // pathlength: "+node.pathlength);
 
     try {
-
       if (node == root)
         return "";
 
@@ -686,39 +637,34 @@ public class Online_CDAWG_sym extends IndexStructure {
       }
 
     } catch (Exception e) {
-
       return "X";
     }
 
-  } // get_node_label()
+  }  // get_node_label()
 
   //*******************************************************************************
   // get_node_length()
   //*******************************************************************************
 
   public int get_node_length(Node node) {
-
     return node.pathlength;
 
-  } // get_node_label()
+  }  // get_node_label()
 
   //*******************************************************************************
   // get_edge_label()
   //*******************************************************************************
 
   public String get_edge_label(int letter_idx, Node parent, Node node) {
-
     String rep_parent = get_node_label(parent);
     String rep_child = get_node_label(node);
-    if (rep_parent.equals("λ"))
-      rep_parent = "";
+    if (rep_parent.equals("λ")) rep_parent = "";
 
     String letter = this.get_letter_by_idx(letter_idx);
     // System.out.println("rep_parent: "+rep_parent+" rep_child: "+rep_child+"
     // letter "+letter+" node_id "+node.id+ " node start "+node.start);
 
     try {
-
       int start = rep_child.indexOf(rep_parent + letter);
 
       return rep_child.substring(start + rep_parent.length(),
@@ -728,18 +674,16 @@ public class Online_CDAWG_sym extends IndexStructure {
       return "X";
     }
 
-  } // get_edge_label()
+  }  // get_edge_label()
 
   //*******************************************************************************
   // get_edge_label_left()
   //*******************************************************************************
 
   public String get_edge_label_left(int letter_idx, Node parent, Node node) {
-
     String rep_parent = new StringBuilder(get_node_label(parent)).toString();
     String rep_child = new StringBuilder(get_node_label(node)).toString();
-    if (rep_parent.equals("λ"))
-      rep_parent = "";
+    if (rep_parent.equals("λ")) rep_parent = "";
 
     String letter = this.get_letter_by_idx(letter_idx);
     // System.out.println("rep_parent: "+rep_parent+" rep_child: "+rep_child+"
@@ -759,25 +703,22 @@ public class Online_CDAWG_sym extends IndexStructure {
       return "X";
     }
 
-  } // get_edge_label_left()
+  }  // get_edge_label_left()
 
   //*******************************************************************************
   // get_edge_length()
   //*******************************************************************************
 
   public int get_edge_length(int letter_idx, Node parent, Node node) {
-
     String rep_parent = get_node_label(parent);
     String rep_child = get_node_label(node);
-    if (rep_parent.equals("λ"))
-      rep_parent = "";
+    if (rep_parent.equals("λ")) rep_parent = "";
 
     String letter = this.get_letter_by_idx(letter_idx);
     // System.out.println("rep_parent: "+rep_parent+" rep_child: "+rep_child+"
     // letter "+letter+" node_id "+node.id+ " node start "+node.start);
 
     try {
-
       int start = rep_child.indexOf(rep_parent + letter);
 
       return rep_child.length() - (start + rep_parent.length());
@@ -786,26 +727,25 @@ public class Online_CDAWG_sym extends IndexStructure {
       return -2;
     }
 
-  } // get_edge_label()
+  }  // get_edge_label()
 
   private boolean has_outgoing_edge(Node node, int label) {
     Node n = node.children.get(label);
-    if (n == null)
-      return false;
+    if (n == null) return false;
     return true;
   }
 
   private boolean has_outgoing_left_edge(Node node, int label) {
     Node n = node.children_left.get(label);
-    if (n == null)
-      return false;
+    if (n == null) return false;
     return true;
   }
 
-  public Node get_parent(Node node) { return node.suffixLink; } // get_parent()
+  public Node get_parent(Node node) {
+    return node.suffixLink;
+  }  // get_parent()
 
   public void save_graph_to_db() {
-
     long startTime = System.currentTimeMillis();
     System.out.println("\n ..saving graph to database ");
 
@@ -826,7 +766,6 @@ public class Online_CDAWG_sym extends IndexStructure {
   //*******************************************************************************
 
   private Node create_node(int start, int end, int pathlength, int stringnr) {
-
     // if(pos==-2) node  = new Node();
     id_cnt = id_cnt + 1;
     int new_idcnt = id_cnt;
@@ -850,21 +789,19 @@ public class Online_CDAWG_sym extends IndexStructure {
   //*******************************************************************************
 
   public void create_edge(Node parent, Node child, int label) {
-
     // for(int i=0;i<sinks.size();i++) {
     //	Node sink= sinks.get(i);
     //	if(child==sink) parent.right_end=true;
     //}
     parent.children.put(label, child);
 
-  } // create_edge()
+  }  // create_edge()
 
   //*******************************************************************************
   // create_edge_left()
   //*******************************************************************************
 
   public void create_edge_left(Node parent, Node child, int label) {
-
     // for(int i=0;i<sinks.size();i++) {
     //		Node sink= sinks.get(i);
     //	if(child==sink&&parent.right_end) {
@@ -873,28 +810,26 @@ public class Online_CDAWG_sym extends IndexStructure {
     //}
     parent.children_left.put(label, child);
 
-  } // create_edge()
+  }  // create_edge()
 
   //*******************************************************************************
   // create_edge()
   //*******************************************************************************
 
   public void create_edge_new(Node parent, Node child, int pos) {
-
     // for(int i=0;i<sinks.size();i++) {
     //	Node sink= sinks.get(i);
     //	if(child==sink) parent.right_end=true;
     //}
     parent.children_pos.put(pos, child);
 
-  } // create_edge()
+  }  // create_edge()
 
   //*******************************************************************************
   // create_edge_left_new()
   //*******************************************************************************
 
   public void create_edge_left_new(Node parent, Node child, int pos) {
-
     // for(int i=0;i<sinks.size();i++) {
     //		Node sink= sinks.get(i);
     //	if(child==sink&&parent.right_end) {
@@ -903,10 +838,9 @@ public class Online_CDAWG_sym extends IndexStructure {
     //}
     parent.children_left_pos.put(pos, child);
 
-  } // create_edge()
+  }  // create_edge()
 
   public void print_automaton(String outputfile) {
-
     long startTime = System.currentTimeMillis();
     System.out.println(" ..printing CDAWG ");
 
@@ -963,7 +897,6 @@ public class Online_CDAWG_sym extends IndexStructure {
                     "dot -Tsvg cdawg.dot -o " + outputfile + "_CDAWG.svg"};
 
     try {
-
       Process p = Runtime.getRuntime().exec(cmd);
 
       BufferedReader input =
@@ -971,8 +904,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 
       String temp = "";
 
-      while ((temp = input.readLine()) != null)
-        System.out.println(temp);
+      while ((temp = input.readLine()) != null) System.out.println(temp);
 
       input.close();
 
@@ -982,10 +914,9 @@ public class Online_CDAWG_sym extends IndexStructure {
     long duration = System.currentTimeMillis() - startTime;
     System.out.println(" ... took " + duration + " milliseconds");
 
-  } // print_automaton()
+  }  // print_automaton()
 
   public String get_dot() {
-
     long startTime = System.currentTimeMillis();
 
     StringBuilder sb = new StringBuilder();
@@ -1005,10 +936,9 @@ public class Online_CDAWG_sym extends IndexStructure {
 
     return result;
 
-  } // get_dot()
+  }  // get_dot()
 
   String print_nodes() {
-
     String result = "";
 
     String node_str;
@@ -1018,7 +948,6 @@ public class Online_CDAWG_sym extends IndexStructure {
     // for (int i=0;i<levels.length;i++) levels[i] = "{rank=same;";
 
     for (int r = 0; r < all_nodes.size(); r++) {
-
       Node node = all_nodes.get(r);
 
       int node_number;
@@ -1040,8 +969,7 @@ public class Online_CDAWG_sym extends IndexStructure {
       //
       //
       String rep = this.get_node_label(node);
-      if (rep.length() == 0)
-        rep = "λ";
+      if (rep.length() == 0) rep = "λ";
 
       // cout << " rep: " << rep << endl;
       // cout << " pathlength " << node->pathlength << endl;
@@ -1073,13 +1001,12 @@ public class Online_CDAWG_sym extends IndexStructure {
 
     return result;
 
-  } // print_nodes()
+  }  // print_nodes()
 
   //*******************************************************************************
   // print_nodes_rec()
   //*******************************************************************************
   String print_nodes_rec(Node node) {
-
     String result = "";
 
     StringBuilder node_sstr = new StringBuilder();
@@ -1110,7 +1037,6 @@ public class Online_CDAWG_sym extends IndexStructure {
 
     Iterator it = node.children.entrySet().iterator();
     while (it.hasNext()) {
-
       Map.Entry pair = (Map.Entry)it.next();
 
       Node child = (Node)pair.getValue();
@@ -1137,25 +1063,22 @@ public class Online_CDAWG_sym extends IndexStructure {
 
     return result;
 
-  } // print_nodes_rec()
+  }  // print_nodes_rec()
 
   //*******************************************************************************
   // print_edges()
   //*******************************************************************************
   public String print_edges() {
-
     String result = "";
     StringBuilder edge_sstr = new StringBuilder();
 
     for (int r = 0; r < all_nodes.size(); r++) {
-
       Node node = all_nodes.get(r);
       //    if (node->ident_pointers.size()>0||node==root) {
       int label_count = 0;
 
       Iterator it = node.children.entrySet().iterator();
       while (it.hasNext()) {
-
         Map.Entry pair = (Map.Entry)it.next();
 
         int i = (int)pair.getKey();
@@ -1185,11 +1108,10 @@ public class Online_CDAWG_sym extends IndexStructure {
                          + "  label=\"" + label + "\"];"
                          + "\n");
 
-      } // for it node children
+      }  // for it node children
 
       it = node.children_left.entrySet().iterator();
       while (it.hasNext()) {
-
         Map.Entry pair = (Map.Entry)it.next();
 
         int i = (int)pair.getKey();
@@ -1219,12 +1141,11 @@ public class Online_CDAWG_sym extends IndexStructure {
                          + "  label=\"" + label + "\"];"
                          + "\n");
 
-      } // for it node children_left
+      }  // for it node children_left
 
       Node suffixLink = node.suffixLink;
 
       if (suffixLink != null) {
-
         int node_number;
         if (node.end == -1)
           node_number = node.end + 1;
@@ -1278,11 +1199,11 @@ public class Online_CDAWG_sym extends IndexStructure {
       // }
 
       //}
-    } // for all nodes
+    }  // for all nodes
 
     result = edge_sstr.toString();
 
     return result;
 
-  } // print_edges()
+  }  // print_edges()
 }

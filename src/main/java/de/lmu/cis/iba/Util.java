@@ -27,260 +27,250 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Util {
+  public static String parseFilename(String filename) {
+    String[] array = filename.split("\\\\");
+    String[] array2 = array[array.length - 1].split("\\.");
 
-	public static String parseFilename(String filename) {
+    return array2[0];
+  }
+  public static <K extends Comparable, V> Map<K, V> sortByKeys(Map<K, V> map) {
+    return new TreeMap<>(map);
+  }
 
-		String[] array = filename.split("\\\\");
-		String[] array2 = array[array.length - 1].split("\\.");
+  public static HashMap sortByValues(HashMap map, String mode) {
+    List list = new LinkedList(map.entrySet());
+    // Defined Custom Comparator here
 
-		return array2[0];
+    if (mode.equals("ASC")) {
+      Collections.sort(list, new Comparator() {
+        public int compare(Object o1, Object o2) {
+          return ((Comparable)((Map.Entry)(o1)).getValue())
+              .compareTo(((Map.Entry)(o2)).getValue());
+        }
+      });
 
-	}
+    }
 
-	public static HashMap sortByValues(HashMap map, String mode) {
-		List list = new LinkedList(map.entrySet());
-		// Defined Custom Comparator here
+    else {
+      Collections.sort(list, new Comparator() {
+        public int compare(Object o2, Object o1) {
+          return ((Comparable)((Map.Entry)(o1)).getValue())
+              .compareTo(((Map.Entry)(o2)).getValue());
+        }
+      });
+    }
 
-		if (mode.equals("ASC")) {
+    HashMap sortedHashMap = new LinkedHashMap();
+    for (Iterator it = list.iterator(); it.hasNext();) {
+      Map.Entry entry = (Map.Entry)it.next();
+      sortedHashMap.put(entry.getKey(), entry.getValue());
+    }
+    return sortedHashMap;
+  }
 
-			Collections.sort(list, new Comparator() {
-				public int compare(Object o1, Object o2) {
-					return ((Comparable) ((Map.Entry) (o1)).getValue()).compareTo(((Map.Entry) (o2)).getValue());
-				}
-			});
+  public static ArrayList readInputFile(String filename) throws IOException {
+    ArrayList result = new ArrayList();
 
-		}
+    BufferedReader br = new BufferedReader(new InputStreamReader(
+        new FileInputStream(filename), StandardCharsets.UTF_8));
+    try {
+      File f = new File(filename);
+      byte[] fileBytes = readBytes(f);
 
-		else {
+      String str = new String(fileBytes, StandardCharsets.UTF_8);
 
-			Collections.sort(list, new Comparator() {
-				public int compare(Object o2, Object o1) {
-					return ((Comparable) ((Map.Entry) (o1)).getValue()).compareTo(((Map.Entry) (o2)).getValue());
-				}
-			});
+      String strarray[] = str.split("\\r?\\n");
 
-		}
+      for (int i = strarray.length - 1; i >= 0; i--) {
+        result.add(strarray[i].trim());
+      }
 
-		HashMap sortedHashMap = new LinkedHashMap();
-		for (Iterator it = list.iterator(); it.hasNext();) {
-			Map.Entry entry = (Map.Entry) it.next();
-			sortedHashMap.put(entry.getKey(), entry.getValue());
-		}
-		return sortedHashMap;
-	}
+    } finally {
+      br.close();
+    }
 
-	public static ArrayList readInputFile(String filename) throws IOException {
+    // for(int i=0;i<result.size();i++) System.out.println(" x"+result.get(i));
 
-		ArrayList result = new ArrayList();
+    return result;
+  }
 
-		BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8));
-		try {
-			File f = new File(filename);
-			byte[] fileBytes = readBytes(f);
+  public static byte[] readBytes(File file) {
+    FileInputStream fis = null;
+    byte[] b = null;
+    try {
+      fis = new FileInputStream(file);
+      b = readBytesFromStream(fis);
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      // close(fis);
+    }
+    return b;
+  }
 
-			String str = new String(fileBytes, StandardCharsets.UTF_8);
+  public static byte[] readBytesFromStream(InputStream readStream)
+      throws IOException {
+    ByteArrayOutputStream writeStream = null;
+    byte[] byteArr = null;
+    writeStream = new ByteArrayOutputStream();
+    try {
+      copy(readStream, writeStream);
+      writeStream.flush();
+      byteArr = writeStream.toByteArray();
+    } finally {
+      close(writeStream);
+    }
+    return byteArr;
+  }
 
-			String strarray[] = str.split("\\r?\\n");
+  public static void close(Writer writer) {
+    if (writer != null) {
+      try {
+        writer.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      writer = null;
+    }
+  }
 
-			for (int i = strarray.length - 1; i >= 0; i--) {
-				result.add(strarray[i].trim());
-			}
+  public static void close(InputStream inStream) {
+    try {
+      inStream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    inStream = null;
+  }
 
-		} finally {
-			br.close();
-		}
+  public static void close(OutputStream outStream) {
+    try {
+      outStream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    outStream = null;
+  }
 
-		// for(int i=0;i<result.size();i++) System.out.println(" x"+result.get(i));
+  public static long copy(InputStream readStream, OutputStream writeStream)
+      throws IOException {
+    int bytesread = -1;
+    byte[] b = new byte[4096];  // 4096 is default cluster size in Windows for <
+                                // 2TB NTFS partitions
+    long count = 0;
+    bytesread = readStream.read(b);
+    while (bytesread != -1) {
+      writeStream.write(b, 0, bytesread);
+      count += bytesread;
+      bytesread = readStream.read(b);
+    }
+    return count;
+  }
 
-		return result;
+  public static void writeFile(String filename, String content) {
+    BufferedWriter writer = null;
+    try {
+      writer = new BufferedWriter(new FileWriter(filename));
+      writer.write(content);
 
-	}
+    } catch (IOException e) {
+    } finally {
+      try {
+        if (writer != null) writer.close();
+      } catch (IOException e) {
+      }
+    }
+  }
 
-	public static byte[] readBytes(File file) {
-		FileInputStream fis = null;
-		byte[] b = null;
-		try {
-			fis = new FileInputStream(file);
-			b = readBytesFromStream(fis);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			// close(fis);
-		}
-		return b;
-	}
+  public static void printHelp() {
+    printFrame(new ArrayList() {
+      {
+        add("Usage:");
+        add("indexstructure: -s <'suffixtrie,suffixtree,dawg,cdawg'>");
+        add("modes: -i <console input> -d  -f <read file>  <read directory>");
+      }
+    });
+  }
 
-	public static byte[] readBytesFromStream(InputStream readStream) throws IOException {
-		ByteArrayOutputStream writeStream = null;
-		byte[] byteArr = null;
-		writeStream = new ByteArrayOutputStream();
-		try {
-			copy(readStream, writeStream);
-			writeStream.flush();
-			byteArr = writeStream.toByteArray();
-		} finally {
-			close(writeStream);
-		}
-		return byteArr;
-	}
+  // ++++++++++++++++++++++++++++++++++++++++++++++++ //
+  // +++++++++++++ Print-Methoden +++++++++++++++++++ //
+  // ++++++++++++++++++++++++++++++++++++++++++++++++ //
 
-	public static void close(Writer writer) {
-		if (writer != null) {
-			try {
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			writer = null;
-		}
-	}
+  // =======================================
+  // printFrame
+  // =======================================
+  public static void printFrame(String text) {
+    System.out.println("");
+    System.out.print(" +-");
+    for (int i = 0; i < text.length(); i++) System.out.print("-");
+    System.out.println("-+");
 
-	public static void close(InputStream inStream) {
-		try {
-			inStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		inStream = null;
-	}
+    System.out.println(" | " + text + " |");
+    System.out.print(" +-");
+    for (int i = 0; i < text.length(); i++) System.out.print("-");
+    System.out.println("-+");
+    System.out.println("");
 
-	public static void close(OutputStream outStream) {
-		try {
-			outStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		outStream = null;
-	}
+  }  // printFrame
 
-	public static long copy(InputStream readStream, OutputStream writeStream) throws IOException {
-		int bytesread = -1;
-		byte[] b = new byte[4096]; // 4096 is default cluster size in Windows for < 2TB NTFS partitions
-		long count = 0;
-		bytesread = readStream.read(b);
-		while (bytesread != -1) {
-			writeStream.write(b, 0, bytesread);
-			count += bytesread;
-			bytesread = readStream.read(b);
-		}
-		return count;
-	}
+  // =======================================
+  // printFrame
+  // =======================================
 
-	public static void writeFile(String filename, String content) {
+  public static void printFrame(ArrayList textList) {
+    String s;
+    int maxLength = 0;
 
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter(filename));
-			writer.write(content);
+    for (int i = 0; i < textList.size(); i++) {
+      s = (String)textList.get(i);
+      if (maxLength < s.length()) maxLength = s.length();
+    }
 
-		} catch (IOException e) {
-		} finally {
-			try {
-				if (writer != null)
-					writer.close();
-			} catch (IOException e) {
-			}
-		}
+    System.out.println("");
+    System.out.print(" +-");
+    for (int i = 0; i < maxLength; i++) System.out.print("-");
+    System.out.println("-+");
 
-	}
+    for (int i = 0; i < textList.size(); i++) {
+      s = " | " + textList.get(i);
 
-	public static void printHelp() {
-		printFrame(new ArrayList() {
-			{
-				add("Usage:");
-				add("indexstructure: -s <'suffixtrie,suffixtree,dawg,cdawg'>");
-				add("modes: -i <console input> -d  -f <read file>  <read directory>");
-			}
-		});
-	}
+      for (int j = s.length(); j <= maxLength + 3; j++) s += " ";
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++ //
-	// +++++++++++++ Print-Methoden +++++++++++++++++++ //
-	// ++++++++++++++++++++++++++++++++++++++++++++++++ //
+      s += "|";
 
-	// =======================================
-	// printFrame
-	// =======================================
-	public static void printFrame(String text) {
-		System.out.println("");
-		System.out.print(" +-");
-		for (int i = 0; i < text.length(); i++)
-			System.out.print("-");
-		System.out.println("-+");
+      System.out.println(s);
+    }
+    System.out.print(" +-");
+    for (int i = 0; i < maxLength; i++) System.out.print("-");
+    System.out.println("-+");
+    System.out.println("");
 
-		System.out.println(" | " + text + " |");
-		System.out.print(" +-");
-		for (int i = 0; i < text.length(); i++)
-			System.out.print("-");
-		System.out.println("-+");
-		System.out.println("");
+  }  // printFrame
 
-	}// printFrame
+  // =======================================
+  // printArray
+  // =======================================
+  public static void printArray(ArrayList list) {
+    // System.out.print("\n");
+    for (int i = 0; i < list.size(); i++) {
+      System.out.println("   - " + list.get(i));
+    }
+    // System.out.print("\n");
+  }  // printArray
 
-	// =======================================
-	// printFrame
-	// =======================================
+  // =======================================
+  // printTreeMap
+  // =======================================
 
-	public static void printFrame(ArrayList textList) {
-		String s;
-		int maxLength = 0;
+  public static String printTreeMap(TreeMap trmp) {
+    String s1 = "\n";
+    Iterator it = trmp.entrySet().iterator();
+    while (it.hasNext()) {
+      Map.Entry me = (Map.Entry)it.next();
+      System.out.println(me);
+    }
+    // System.out.println(s1);
 
-		for (int i = 0; i < textList.size(); i++) {
-			s = (String) textList.get(i);
-			if (maxLength < s.length())
-				maxLength = s.length();
-		}
-
-		System.out.println("");
-		System.out.print(" +-");
-		for (int i = 0; i < maxLength; i++)
-			System.out.print("-");
-		System.out.println("-+");
-
-		for (int i = 0; i < textList.size(); i++) {
-			s = " | " + textList.get(i);
-
-			for (int j = s.length(); j <= maxLength + 3; j++)
-				s += " ";
-
-			s += "|";
-
-			System.out.println(s);
-		}
-		System.out.print(" +-");
-		for (int i = 0; i < maxLength; i++)
-			System.out.print("-");
-		System.out.println("-+");
-		System.out.println("");
-
-	}// printFrame
-
-	// =======================================
-	// printArray
-	// =======================================
-	public static void printArray(ArrayList list) {
-		// System.out.print("\n");
-		for (int i = 0; i < list.size(); i++) {
-			System.out.println("   - " + list.get(i));
-		}
-		// System.out.print("\n");
-	}// printArray
-
-	// =======================================
-	// printTreeMap
-	// =======================================
-
-	public static String printTreeMap(TreeMap trmp) {
-		String s1 = "\n";
-		Iterator it = trmp.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry me = (Map.Entry) it.next();
-			System.out.println(me);
-		}
-		// System.out.println(s1);
-
-		return s1;
-	}
-
+    return s1;
+  }
 }
