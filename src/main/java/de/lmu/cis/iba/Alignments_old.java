@@ -15,7 +15,7 @@ import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.Document.OCRLine;
 import de.lmu.cis.pocoweb.Token;
 
-public class Alignments {
+public class Alignments_old {
 
   static ArrayList<Node> sinks = new ArrayList<Node>();
 
@@ -28,7 +28,7 @@ public class Alignments {
     public LineAlignment() { super(); }
   }
 
-  public Alignments() {}
+  public Alignments_old() {}
 
   private static HashMap sort_by_values_desc(HashMap<Node, Integer> map) {
     List list = new LinkedList(map.entrySet());

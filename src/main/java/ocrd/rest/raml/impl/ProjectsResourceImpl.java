@@ -14,8 +14,7 @@ import de.lmu.cis.api.model.IdResponse;
 import de.lmu.cis.api.model.Projects;
 import de.lmu.cis.api.model.UploadProjectData;
 import de.lmu.cis.api.resource.ProjectsResource;
-import de.lmu.cis.iba.Alignments;
-import de.lmu.cis.iba.Alignments.LineAlignment;
+import de.lmu.cis.iba.LineAlignment;
 
 public class ProjectsResourceImpl implements ProjectsResource {
   @Override
@@ -94,7 +93,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
 			
 			  Document doc = new Document(project, client);
 
-		      LineAlignment l_alignment = Alignments.alignLines(doc, 3);
+		      LineAlignment l_alignment = new LineAlignment(doc, 3);
 			
 		}
 		return null;
