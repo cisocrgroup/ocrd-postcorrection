@@ -114,8 +114,9 @@ class Main {
               alignment.getAligmentPairs();
           System.out.println(new Gson().toJson(as));
           if (as.size() > 2) {
-            AlignmentGraph g =
-                new AlignmentGraph(alignment.getAligmentPairs(), mocr, line);
+            AlignmentGraph g = new AlignmentGraph(alignment.getAligmentPairs(),
+                                                  mocr.line.getNormalized(),
+                                                  line.line.getNormalized());
             System.out.println(g.getStartNode().toDot());
             return;
           }

@@ -7,14 +7,14 @@ import com.google.gson.Gson;
 import java.util.HashSet;
 
 public class AlignmentGraph {
-  private final ArrayList<OCRLine> lines;
+  private final ArrayList<String> lines;
   private int n;
   private final Node start;
   private final Node _final;
   private final ArrayList<Node> main;
 
-  public AlignmentGraph(ArrayList<AlignmentPair> as, OCRLine s1, OCRLine s2) {
-    lines = new ArrayList<OCRLine>();
+  public AlignmentGraph(ArrayList<AlignmentPair> as, String s1, String s2) {
+    lines = new ArrayList<String>();
     lines.add(s1);
     this.n = 0;
     this.main = new ArrayList<Node>();
@@ -22,13 +22,13 @@ public class AlignmentGraph {
     this._final = newNode();
     setup(s1);
     addAlignment(as, s2);
-    System.out.println(s1.line.getNormalized());
-    System.out.println(s2.line.getNormalized());
+    System.out.println(s1);
+    System.out.println(s2);
   }
 
-  private void setup(OCRLine s1) {
+  private void setup(String s1) {
     Node current = this.start;
-    final String normalized = '#' + s1.line.getNormalized();
+    final String normalized = '#' + s1;
     for (int i = 0; i < normalized.length(); i++) {
       Node n = newNode();
       main.add(n);
@@ -48,8 +48,8 @@ public class AlignmentGraph {
     return new Node(this.n++, this);
   }
 
-  public void addAlignment(ArrayList<AlignmentPair> as, OCRLine s2) {
-    final String normalized = '#' + s2.line.getNormalized() + '$';
+  public void addAlignment(ArrayList<AlignmentPair> as, String s2) {
+    final String normalized = '#' + s2 + '$';
     Node current = this.start;
     int pos = 0;
     for (AlignmentPair p : as) {
