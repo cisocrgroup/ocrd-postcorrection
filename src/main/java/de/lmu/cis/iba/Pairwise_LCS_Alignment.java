@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 import de.lmu.cis.ocrd.Document.OCRLine;
+import com.google.gson.Gson;
 
 // import cdawg_sym.Online_CDAWG_sym;
 // import indexstructure.Node;
@@ -318,38 +319,7 @@ public class Pairwise_LCS_Alignment {
   // LCS_to_JSONString()
   // *******************************************************************************
   public String LCS_to_JSONString() {
-    String result = "{";
-
-    for (int u = 0; u < this.longest_common_subsequences.size(); u++) {
-      ArrayList<LCS_Triple> lis = this.longest_common_subsequences.get(u);
-      if (lis == null) {
-        return "{}";
-      }
-
-      String alignment = "[";
-
-      String d = "";
-      for (int i = 0; i < lis.size(); i++) {
-        // System.out.println(lis.get(i).endpos_s1+" "+lis.get(i).endpos_s2+"
-        // "+scdawg.get_node_label(lis.get(i).node));
-        String nodelabel =
-            scdawg.get_node_label(lis.get(i).node).replace("\"", "\\\"");
-        alignment += d + "{\"endpos_s1\":\"" + lis.get(i).endpos_s1 +
-                     "\",\"endpos_s2\":\"" + lis.get(i).endpos_s2 +
-                     "\",\"nodelabel\":\"" + nodelabel + "\",\"s1\":\"" +
-                     scdawg.stringset.get(0) + "\",\"s2\":\"" +
-                     scdawg.stringset.get(1) + "\"}";
-        d = ",";
-      }
-
-      alignment += "]";
-
-      result += "\"alignment" + u + "\":" + alignment;
-      if (u < scdawg.stringset.size() - 2) result += ",";
-
-    }  // for u
-
-    return result + "}";
+    return new Gson().toJson(this.getAligmentPairs());
   }
 
   public static class AlignmentPair {
@@ -361,13 +331,6 @@ public class Pairwise_LCS_Alignment {
       this.label = label;
       this.spos1 = epos1 - this.label.length();
       this.spos2 = epos2 - this.label.length();
-    }
-    private static int calcSpos(int epos, int n) {
-      int res = epos - n;
-      if (res < 0) {
-        return 0;
-      }
-      return res;
     }
   };
 
