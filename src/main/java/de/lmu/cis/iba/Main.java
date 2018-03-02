@@ -107,11 +107,8 @@ class Main {
           throw new Exception("no master ocr");
         }
         for (OCRLine line : other) {
-          ArrayList<String> stringset = new ArrayList<String>();
-          stringset.add("#" + mocr.toString() + "$");
-          stringset.add("#" + line.toString() + "$");
-          Pairwise_LCS_Alignment alignment =
-              new Pairwise_LCS_Alignment(mocr, line);
+          Pairwise_LCS_Alignment alignment = new Pairwise_LCS_Alignment(
+              mocr.line.getNormalized(), line.line.getNormalized());
           alignment.align();
           ArrayList<Pairwise_LCS_Alignment.AlignmentPair> as =
               alignment.getAligmentPairs();

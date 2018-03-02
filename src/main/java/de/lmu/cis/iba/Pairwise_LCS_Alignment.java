@@ -18,10 +18,10 @@ public class Pairwise_LCS_Alignment {
   ArrayList<ArrayList<LCS_Triple>> longest_common_subsequences =
       new ArrayList<ArrayList<LCS_Triple>>();
 
-  public Pairwise_LCS_Alignment(OCRLine s1, OCRLine s2) {
+  public Pairwise_LCS_Alignment(String n1, String n2) {
     ArrayList<String> stringset = new ArrayList<String>();
-    stringset.add("#" + s1.line.getNormalized() + "$");
-    stringset.add("#" + s2.line.getNormalized() + "$");
+    stringset.add("#" + n1 + "$");
+    stringset.add("#" + n2 + "$");
     Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset, false);
     scdawg.determineAlphabet(false);
     scdawg.build_cdawg();
