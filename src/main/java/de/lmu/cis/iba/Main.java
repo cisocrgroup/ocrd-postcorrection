@@ -5,6 +5,7 @@ import de.lmu.cis.ocrd.Document.OCRLine;
 import de.lmu.cis.ocrd.Config;
 import de.lmu.cis.pocoweb.Client;
 import de.lmu.cis.pocoweb.Token;
+import de.lmu.cis.ocrd.graph.AlignmentGraph;
 import com.google.gson.Gson;
 
 // import de.lmu.cis.ocrd.Line;
@@ -110,9 +111,17 @@ class Main {
           stringset.add("#" + mocr.toString() + "$");
           stringset.add("#" + line.toString() + "$");
           Pairwise_LCS_Alignment alignment =
-              new Pairwise_LCS_Alignment(stringset);
+              new Pairwise_LCS_Alignment(mocr, line);
           alignment.align();
-          System.out.println(new Gson().toJson(alignment.getAligmentPairs()));
+          ArrayList<Pairwise_LCS_Alignment.AlignmentPair> as =
+              alignment.getAligmentPairs();
+          System.out.println(new Gson().toJson(as));
+          if (as.size() > 2) {
+            AlignmentGraph g =
+                new AlignmentGraph(alignment.getAligmentPairs(), mocr, line);
+            System.out.println(g.getStartNode().toDot());
+            return;
+          }
           // System.out.println(mocr);
           // System.out.println(line);
           // System.out.println(alignment.LCS_to_JSONString());

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import de.lmu.cis.ocrd.Document.OCRLine;
 
 // import cdawg_sym.Online_CDAWG_sym;
 // import indexstructure.Node;
@@ -16,13 +17,14 @@ public class Pairwise_LCS_Alignment {
   Online_CDAWG_sym scdawg;
   ArrayList<ArrayList<LCS_Triple>> longest_common_subsequences =
       new ArrayList<ArrayList<LCS_Triple>>();
-  ArrayList<String> stringset;
 
-  public Pairwise_LCS_Alignment(ArrayList<String> stringset) {
+  public Pairwise_LCS_Alignment(OCRLine s1, OCRLine s2) {
+    ArrayList<String> stringset = new ArrayList<String>();
+    stringset.add("#" + s1.line.getNormalized() + "$");
+    stringset.add("#" + s2.line.getNormalized() + "$");
     Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset, false);
     scdawg.determineAlphabet(false);
     scdawg.build_cdawg();
-    this.stringset = stringset;
     this.scdawg = scdawg;
   }
 
@@ -335,8 +337,8 @@ public class Pairwise_LCS_Alignment {
         alignment += d + "{\"endpos_s1\":\"" + lis.get(i).endpos_s1 +
                      "\",\"endpos_s2\":\"" + lis.get(i).endpos_s2 +
                      "\",\"nodelabel\":\"" + nodelabel + "\",\"s1\":\"" +
-                     this.stringset.get(0) + "\",\"s2\":\"" +
-                     this.stringset.get(1) + "\"}";
+                     scdawg.stringset.get(0) + "\",\"s2\":\"" +
+                     scdawg.stringset.get(1) + "\"}";
         d = ",";
       }
 
@@ -351,17 +353,14 @@ public class Pairwise_LCS_Alignment {
   }
 
   public static class AlignmentPair {
-    public final int epos1;
-    public final int epos2;
-    public final int spos1;
-    public final int spos2;
+    public final int epos1, epos2, spos1, spos2;
     public final String label;
     public AlignmentPair(String label, int epos1, int epos2) {
       this.epos1 = epos1;
       this.epos2 = epos2;
       this.label = label;
-      this.spos1 = calcSpos(epos1, this.label.length());
-      this.spos2 = calcSpos(epos2, this.label.length());
+      this.spos1 = epos1 - this.label.length();
+      this.spos2 = epos2 - this.label.length();
     }
     private static int calcSpos(int epos, int n) {
       int res = epos - n;
