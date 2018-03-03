@@ -21,18 +21,18 @@ public class AlignmentGraph {
     if (ps.isEmpty()) {
       return;
     }
-    System.out.println(new Gson().toJson(ps.get(0)));
+    // System.out.println(new Gson().toJson(ps.get(0)));
     start = new Node(ps.get(0).label, this);
     Node prevn = start;
     AlignmentPair prevp = ps.get(0);
     for (int i = 1; i < ps.size(); i++) {
-      final AlignmentPair curp = ps.get(i);
+      final AlignmentPair curp = handleOverlap(prevp, ps.get(i));
       final Node curn = new Node(curp.label, this);
-      System.out.println(new Gson().toJson(curp));
+      // System.out.println(new Gson().toJson(curp));
       final String s1gap = getGapLabel(prevp.epos1, curp.spos1, s1);
-      System.out.println("s1gap: " + s1gap);
+      // System.out.println("s1gap: " + s1gap);
       final String s2gap = getGapLabel(prevp.epos2, curp.spos2, s2);
-      System.out.println("s2gap: " + s2gap);
+      // System.out.println("s2gap: " + s2gap);
       Gap g1 = new Gap(0, s1gap, curn);
       Gap g2 = new Gap(1, s2gap, curn);
       prevn.gaps.add(g1);
@@ -44,7 +44,7 @@ public class AlignmentGraph {
   }
 
   private String getGapLabel(int s, int e, String str) {
-    System.out.println("getGapLabel(" + s + ", " + e + ", " + str + ")");
+    // System.out.println("getGapLabel(" + s + ", " + e + ", " + str + ")");
     s += 1;
     e += 1;
     if (s > e) {  // overlaps
@@ -53,7 +53,16 @@ public class AlignmentGraph {
     return str.substring(s, e);
   }
 
-  private void handleOverlap(AlignmentPair p, AlignmentPair c) {
+  private AlignmentPair handleOverlap(AlignmentPair p, AlignmentPair c) {
+    if (p.epos1 > c.spos1) {
+      String label = c.label.substring(p.epos1 - c.spos1);
+      return new AlignmentPair(label, c.epos1, c.epos2);
+    }
+    if (p.epos2 > c.spos2) {
+      String label = c.label.substring(p.epos2 - c.spos2);
+      return new AlignmentPair(label, c.epos1, c.epos2);
+    }
+    return c;
   }
 
   public Node getStartNode() {
