@@ -91,52 +91,27 @@ public class AlignmentGraph {
       }
     }
     public String toDot() {
-      return "";
+      StringBuilder builder = new StringBuilder();
+      builder.append("digraph g { // dotcode\n");
+      builder.append("rankdir=LR; // dotcode\n");
+      this.appendDot(builder);
+      builder.append("} // dotcode\n");
+      return builder.toString();
     }
-    // public String toDot() {
-    //   HashSet<Node> v = new HashSet<Node>();
-    //   StringBuilder builder = new StringBuilder();
-    //   builder.append("digraph g { // dotcode\n");
-    //   builder.append("rankdir=LR; // dotcode\n");
-    //   this.appendDot(builder, v);
-    //   builder.append("} // dotcode\n");
-    //   return builder.toString();
-    // }
 
-    // private void appendDot(StringBuilder builder, HashSet<Node> v) {
-    //   if (v.contains(this)) {
-    //     return;
-    //   }
-    //   v.add(this);
-    //   builder.append(this.id);
-    //   builder.append(" [label=\"" + this.id + "\"]; // dotcode\n");
-    //   for (Transition t : transitions) {
-    //     builder.append(this.id);
-    //     builder.append(" -> ");
-    //     builder.append(t.target.id);
-    //     builder.append("[label=\"");
-    //     builder.append(t.toString());
-    //     builder.append("\"]; // dotcode\n");
-    //     t.target.appendDot(builder, v);
-    //   }
-    // }
-    // private Node delta(int id, StringBuilder builder) {
-    //   for (Transition t : transitions) {
-    //     if (t.id == id) {
-    //       builder.append(t.o);
-    //       return t.target;
-    //     }
-    //   }
-    //   return null;
-    // }
-
-    // public String traverse(int id) {
-    //   StringBuilder builder = new StringBuilder();
-    //   for (Node i = this; i != null; i = i.delta(id, builder)) {
-    //     ;  // do nothing
-    //   }
-    //   return builder.toString();
-    // }
+    private void appendDot(StringBuilder builder) {
+      builder.append("\"" + label + "\"");
+      builder.append(" [label=\"" + label + "\"] // dotcode\n");
+      for (Gap g : gaps) {
+        builder.append("\"" + label + "\"");
+        builder.append(" -> ");
+        builder.append("\"" + g.target.label + "\"");
+        builder.append(" [label=\"" + g.toString() + "\"] // dotcode\n");
+      }
+      if (!gaps.isEmpty()) {
+        gaps.get(0).target.appendDot(builder);
+      }
+    }
   }
 
   private static class Gap {

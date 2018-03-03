@@ -20,6 +20,7 @@ public class AlignmentGraphTest {
     String b = "di Preſſe";
     ArrayList<Pairwise_LCS_Alignment.AlignmentPair> as = align(a, b);
     AlignmentGraph g = new AlignmentGraph(as, a, b);
+    // System.out.println(g.getStartNode().toDot());
     assertThat(g.getStartNode().traverse(0), is('#' + a + '$'));
     assertThat(g.getStartNode().traverse(1), is('#' + b + '$'));
   }
@@ -29,6 +30,7 @@ public class AlignmentGraphTest {
     String b = "die Preſſe";
     ArrayList<Pairwise_LCS_Alignment.AlignmentPair> as = align(a, b);
     AlignmentGraph g = new AlignmentGraph(as, a, b);
+    // System.out.println(g.getStartNode().toDot());
     assertThat(g.getStartNode().traverse(0), is('#' + a + '$'));
     assertThat(g.getStartNode().traverse(1), is('#' + b + '$'));
   }
