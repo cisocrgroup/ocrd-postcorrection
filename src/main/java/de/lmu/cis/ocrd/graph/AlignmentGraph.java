@@ -7,141 +7,148 @@ import com.google.gson.Gson;
 import java.util.HashSet;
 
 public class AlignmentGraph {
-  private final ArrayList<String> lines;
-  private int n;
-  private final Node start;
-  private final Node _final;
-  private final ArrayList<Node> main;
+  private final String s1, s2;
+  private Node start;
+  private Node _final;
 
-  public AlignmentGraph(ArrayList<AlignmentPair> as, String s1, String s2) {
-    lines = new ArrayList<String>();
-    lines.add(s1);
-    this.n = 0;
-    this.main = new ArrayList<Node>();
-    this.start = newNode();
-    this._final = newNode();
-    setup(s1);
-    addAlignment(as, s2);
-    System.out.println(s1);
-    System.out.println(s2);
+  public AlignmentGraph(ArrayList<AlignmentPair> ps, String s1, String s2) {
+    this.s1 = '#' + s1 + '$';
+    this.s2 = '#' + s2 + '$';
+    build(ps);
   }
 
-  private void setup(String s1) {
-    Node current = this.start;
-    final String normalized = '#' + s1;
-    for (int i = 0; i < normalized.length(); i++) {
-      Node n = newNode();
-      main.add(n);
-      Transition t = new Transition(0, normalized.charAt(i), n);
-      current.transitions.add(t);
-      current = n;
+  private void build(ArrayList<AlignmentPair> ps) {
+    if (ps.isEmpty()) {
+      return;
     }
-    current.transitions.add(new Transition(0, '$', _final));
-    main.add(_final);
+    System.out.println(new Gson().toJson(ps.get(0)));
+    start = new Node(ps.get(0).label, this);
+    Node prevn = start;
+    AlignmentPair prevp = ps.get(0);
+    for (int i = 1; i < ps.size(); i++) {
+      final AlignmentPair curp = ps.get(i);
+      final Node curn = new Node(curp.label, this);
+      System.out.println(new Gson().toJson(curp));
+      final String s1gap = getGapLabel(prevp.epos1, curp.spos1, s1);
+      System.out.println("s1gap: " + s1gap);
+      final String s2gap = getGapLabel(prevp.epos2, curp.spos2, s2);
+      System.out.println("s2gap: " + s2gap);
+      Gap g1 = new Gap(0, s1gap, curn);
+      Gap g2 = new Gap(1, s2gap, curn);
+      prevn.gaps.add(g1);
+      prevn.gaps.add(g2);
+      prevp = curp;
+      prevn = curn;
+    }
+    _final = prevn;
+  }
+
+  private String getGapLabel(int s, int e, String str) {
+    System.out.println("getGapLabel(" + s + ", " + e + ", " + str + ")");
+    s += 1;
+    e += 1;
+    if (s > e) {  // overlaps
+      return "";
+    }
+    return str.substring(s, e);
+  }
+
+  private void handleOverlap(AlignmentPair p, AlignmentPair c) {
   }
 
   public Node getStartNode() {
     return this.start;
   }
 
-  private Node newNode() {
-    return new Node(this.n++, this);
-  }
-
-  public void addAlignment(ArrayList<AlignmentPair> as, String s2) {
-    final String normalized = '#' + s2 + '$';
-    Node current = this.start;
-    int pos = 0;
-    for (AlignmentPair p : as) {
-      System.out.println(new Gson().toJson(p));
-      Node target = main.get(p.spos1 + 1);
-      addNewPath(current, target, pos, p.spos2, normalized);
-      current = followPath(current, p.epos1 - p.spos1);
-      pos = p.epos2;
-    }
-    current.transitions.add(new Transition(1, '$', _final));
-  }
-
-  private void addNewPath(Node current, Node target, int spos, int epos,
-                          String normalized) {
-    System.out.println("add new spos: " + spos + " (" + normalized.length() +
-                       ")");
-    System.out.println("add new epos: " + epos + " (" + normalized.length() +
-                       ")");
-    System.out.println("add new epos: " + (spos + 1) + " -> " + epos);
-    System.out.println(normalized);
-    boolean newNode = false;
-    for (int i = spos + 1; i <= epos; i++) {
-      newNode = true;
-      Node n = newNode();
-      Transition t = new Transition(1, normalized.charAt(i), n);
-      current.transitions.add(t);
-      current = n;
-    }
-    if (newNode) {
-      current.transitions.add(new Transition(1, 'X', target));
-    }
-  }
-
-  private Node followPath(Node current, int n) {
-    System.out.println("follow path: " + n);
-    for (int i = 0; i < n; i++) {
-      Node node = current.transitions.get(0).target;
-      char c = current.transitions.get(0).c;
-      current.transitions.add(new Transition(1, c, node));
-      current = node;
-    }
-    return current;
-  }
-
   public static class Node {
-    private final int id;
+    private final String label;
     private final AlignmentGraph graph;
-    private final ArrayList<Transition> transitions;
-    private Node(int id, AlignmentGraph graph) {
-      this.id = id;
+    private final ArrayList<Gap> gaps;
+    private Node(String label, AlignmentGraph graph) {
+      this.label = label;
       this.graph = graph;
-      this.transitions = new ArrayList<Transition>();
+      this.gaps = new ArrayList<Gap>();
     }
-
-    public String toDot() {
-      HashSet<Node> v = new HashSet<Node>();
+    public String traverse(int id) {
       StringBuilder builder = new StringBuilder();
-      builder.append("digraph g { // dotcode\n");
-      builder.append("rankdir=LR; // dotcode\n");
-      this.appendDot(builder, v);
-      builder.append("} // dotcode\n");
+      this.traverse(id, builder);
       return builder.toString();
     }
-
-    private void appendDot(StringBuilder builder, HashSet<Node> v) {
-      if (v.contains(this)) {
-        return;
-      }
-      v.add(this);
-      builder.append(this.id);
-      builder.append(" [label=\"" + this.id + "\"]; // dotcode\n");
-      for (Transition t : transitions) {
-        builder.append(this.id);
-        builder.append(" -> ");
-        builder.append(t.target.id);
-        builder.append("[label=\"");
-        builder.append(t.id);
-        builder.append(':');
-        builder.append(t.c);
-        builder.append("\"]; // dotcode\n");
-        t.target.appendDot(builder, v);
+    private void traverse(int id, StringBuilder builder) {
+      builder.append(label);
+      if (!gaps.isEmpty()) {
+        builder.append(gaps.get(id).o);
+        gaps.get(id).target.traverse(id, builder);
       }
     }
+    public String toDot() {
+      return "";
+    }
+    // public String toDot() {
+    //   HashSet<Node> v = new HashSet<Node>();
+    //   StringBuilder builder = new StringBuilder();
+    //   builder.append("digraph g { // dotcode\n");
+    //   builder.append("rankdir=LR; // dotcode\n");
+    //   this.appendDot(builder, v);
+    //   builder.append("} // dotcode\n");
+    //   return builder.toString();
+    // }
+
+    // private void appendDot(StringBuilder builder, HashSet<Node> v) {
+    //   if (v.contains(this)) {
+    //     return;
+    //   }
+    //   v.add(this);
+    //   builder.append(this.id);
+    //   builder.append(" [label=\"" + this.id + "\"]; // dotcode\n");
+    //   for (Transition t : transitions) {
+    //     builder.append(this.id);
+    //     builder.append(" -> ");
+    //     builder.append(t.target.id);
+    //     builder.append("[label=\"");
+    //     builder.append(t.toString());
+    //     builder.append("\"]; // dotcode\n");
+    //     t.target.appendDot(builder, v);
+    //   }
+    // }
+    // private Node delta(int id, StringBuilder builder) {
+    //   for (Transition t : transitions) {
+    //     if (t.id == id) {
+    //       builder.append(t.o);
+    //       return t.target;
+    //     }
+    //   }
+    //   return null;
+    // }
+
+    // public String traverse(int id) {
+    //   StringBuilder builder = new StringBuilder();
+    //   for (Node i = this; i != null; i = i.delta(id, builder)) {
+    //     ;  // do nothing
+    //   }
+    //   return builder.toString();
+    // }
   }
-  private static class Transition {
+
+  private static class Gap {
     final int id;
-    final char c;
+    final String o;
     final Node target;
-    Transition(int id, char c, Node t) {
+    Gap(int id, String o, Node t) {
       this.id = id;
-      this.c = c;
+      this.o = o;
       this.target = t;
+    }
+
+    public String toString() {
+      String output = this.o;
+      if (output.length() == 0) {
+        output = "ε";
+      }
+      if (" ".equals(output)) {
+        output = "<SP>";
+      }
+      return id + ":" + output;
     }
   }
 }
