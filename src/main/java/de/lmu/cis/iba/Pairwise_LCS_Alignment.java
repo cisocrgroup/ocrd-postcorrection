@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
-import de.lmu.cis.ocrd.Document.OCRLine;
+
 import com.google.gson.Gson;
 
 // import cdawg_sym.Online_CDAWG_sym;
@@ -410,7 +410,7 @@ public class Pairwise_LCS_Alignment {
         int endpos_n1 =
             scdawg.get_node_length(currentNode) + entry.getKey() - 1;
         System.out.println(
-            scdawg.get_node_label((Node)entry.getValue()) + " " +
+            scdawg.get_node_label(entry.getValue()) + " " +
             entry.getKey() + " " +
             (scdawg.get_node_length(currentNode) + entry.getKey() - 1));
       }

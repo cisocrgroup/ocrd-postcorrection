@@ -1,31 +1,16 @@
 package de.lmu.cis.pocoweb;
 
-import de.lmu.cis.ocrd.Document;
-import de.lmu.cis.ocrd.Config;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import de.lmu.cis.api.model.Page;
-import de.lmu.cis.api.model.Project;
+
 import de.lmu.cis.api.model.Book;
+import de.lmu.cis.api.model.Project;
+import de.lmu.cis.ocrd.Config;
+import de.lmu.cis.ocrd.Document.Visitor;
+import de.lmu.cis.ocrd.OCRLine;
+import de.lmu.cis.ocrd.PocowebDocument;
 
 class Main {
-  private static String patternsToString(String[] patterns) {
-    String prefix = "[";
-    String res = "";
-    if (patterns == null || patterns.length == 0) {
-      res += "[]";
-    } else {
-      for (String p : patterns) {
-        res += prefix + p;
-        prefix = ",";
-      }
-      res += "]";
-    }
-    return res;
-  }
 
   public static void main(String[] args) {
     try (Client client = Client.login(Config.getInstance().getPocowebURL(),
@@ -63,9 +48,10 @@ class Main {
                "src/test/resources/1841-DieGrenzboten-ocropus-small.zip");) {
         project = client.addBook(project, book, is);
       }
-      Document doc = new Document(project, client);
-      doc.eachLine(new Document.Visitor() {
-        public void visit(Document.OCRLine t) throws Exception {
+      PocowebDocument doc = new PocowebDocument(project, client);
+      doc.eachLine(new Visitor() {
+        @Override
+		public void visit(OCRLine t) throws Exception {
           // System.out.println(String.format("[%9s,%1d,%2d] %s", t.ocrEngine,
           //                                  t.pageSeq, t.line.getLineId(),
           //                                  t.line.getNormalized()));

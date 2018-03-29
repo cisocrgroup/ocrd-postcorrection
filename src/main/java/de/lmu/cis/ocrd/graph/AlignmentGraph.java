@@ -1,10 +1,8 @@
 package de.lmu.cis.ocrd.graph;
 
-import de.lmu.cis.ocrd.Document.OCRLine;
 import java.util.ArrayList;
+
 import de.lmu.cis.iba.Pairwise_LCS_Alignment.AlignmentPair;
-import com.google.gson.Gson;
-import java.util.HashSet;
 
 public class AlignmentGraph {
   private final String s1, s2;
@@ -124,7 +122,8 @@ public class AlignmentGraph {
       this.target = t;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
       String output = this.o;
       if (output.length() == 0) {
         output = "ε";

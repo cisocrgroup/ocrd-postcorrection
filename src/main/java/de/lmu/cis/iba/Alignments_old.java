@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import de.lmu.cis.ocrd.Document;
-import de.lmu.cis.ocrd.Document.OCRLine;
+import de.lmu.cis.ocrd.OCRLine;
+import de.lmu.cis.ocrd.PocowebDocument;
 import de.lmu.cis.pocoweb.Token;
 
 public class Alignments_old {
@@ -34,7 +35,8 @@ public class Alignments_old {
     List list = new LinkedList(map.entrySet());
     // Defined Custom Comparator here
     Collections.sort(list, new Comparator() {
-      public int compare(Object o1, Object o2) {
+      @Override
+	public int compare(Object o1, Object o2) {
         return ((Comparable)((Map.Entry)(o2)).getValue())
             .compareTo(((Map.Entry)(o1)).getValue());
       }
@@ -124,7 +126,7 @@ public class Alignments_old {
         continue;
 
       if (result.containsKey(child))
-        result.put(child, (int)result.get(child) + 1);
+        result.put(child, result.get(child) + 1);
       else {
         result.put(child, 1);
       }
@@ -143,7 +145,7 @@ public class Alignments_old {
         continue;
 
       if (result.containsKey(child))
-        result.put(child, (int)result.get(child) + 1);
+        result.put(child, result.get(child) + 1);
       else {
         result.put(child, 1);
       }
@@ -160,7 +162,7 @@ public class Alignments_old {
     }
   }
 
-  public static LineAlignment alignLines(Document doc, int nlines)
+  public static LineAlignment alignLines(PocowebDocument doc, int nlines)
       throws Exception {
     if (nlines <= 0) {
       throw new Exception("cannot allign " + nlines + " lines");
@@ -173,7 +175,8 @@ public class Alignments_old {
     LineAlignment result = new LineAlignment();
 
     doc.eachLine(new Document.Visitor() {
-      public void visit(Document.OCRLine l) throws Exception {
+      @Override
+	public void visit(OCRLine l) throws Exception {
         System.out.println(String.format("[%9s,%1d,%2d] %s", l.ocrEngine,
                                          l.pageSeq, l.line.getLineId(),
                                          l.line.getNormalized()));
@@ -250,7 +253,7 @@ public class Alignments_old {
     for (pair p : nodes_sink_set) {
       System.out.println(scdawg.get_node_label(p.node));
       System.out.println(p.ids);
-      ArrayList<Document.OCRLine> linetupel = new ArrayList<Document.OCRLine>();
+      ArrayList<OCRLine> linetupel = new ArrayList<OCRLine>();
       for (Integer id : p.ids) {
         int idx = id;
 

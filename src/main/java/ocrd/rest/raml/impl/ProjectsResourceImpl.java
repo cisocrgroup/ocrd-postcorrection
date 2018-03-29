@@ -3,7 +3,7 @@ package ocrd.rest.raml.impl;
 import de.lmu.cis.pocoweb.Client;
 import de.lmu.cis.pocoweb.ProjectBook;
 import de.lmu.cis.ocrd.Config;
-import de.lmu.cis.ocrd.Document;
+import de.lmu.cis.ocrd.PocowebDocument;
 
 import java.util.Base64;
 import ocrd.rest.raml.handler.ProjectsHandler;
@@ -91,7 +91,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
 
 			Project project = client.getProject(Integer.parseInt(projectID));
 			
-			  Document doc = new Document(project, client);
+			  PocowebDocument doc = new PocowebDocument(project, client);
 
 		      LineAlignment l_alignment = new LineAlignment(doc, 3);
 			

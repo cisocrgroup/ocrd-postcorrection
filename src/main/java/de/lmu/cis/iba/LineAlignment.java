@@ -7,8 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import de.lmu.cis.ocrd.Document;
-import de.lmu.cis.ocrd.Document.OCRLine;
-import de.lmu.cis.pocoweb.Token;
+import de.lmu.cis.ocrd.OCRLine;
 
 public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
   static ArrayList<Node> sinks = new ArrayList<Node>();
@@ -27,11 +26,11 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
     }
 
     ArrayList<String> stringset = new ArrayList<String>();
-    ArrayList<String> strids = new ArrayList<String>();
     ArrayList<OCRLine> ocrlines = new ArrayList<OCRLine>();
 
     doc.eachLine(new Document.Visitor() {
-      public void visit(Document.OCRLine l) throws Exception {
+      @Override
+	public void visit(OCRLine l) throws Exception {
         stringset.add("#" + l.line.getNormalized() + "$");
         ocrlines.add(l);
       }
@@ -99,7 +98,7 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
     for (pair p : nodes_sink_set) {
       // System.out.println(scdawg.get_node_label(p.node));
       // System.out.println(p.ids);
-      ArrayList<Document.OCRLine> linetupel = new ArrayList<Document.OCRLine>();
+      ArrayList<OCRLine> linetupel = new ArrayList<OCRLine>();
       for (Integer id : p.ids) {
         int idx = id;
 
@@ -183,7 +182,7 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
       if (scdawg.sinks.contains(child)) continue;
 
       if (result.containsKey(child))
-        result.put(child, (int)result.get(child) + 1);
+        result.put(child, result.get(child) + 1);
       else {
         result.put(child, 1);
       }
@@ -200,7 +199,7 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
       if (scdawg.sinks.contains(child)) continue;
 
       if (result.containsKey(child))
-        result.put(child, (int)result.get(child) + 1);
+        result.put(child, result.get(child) + 1);
       else {
         result.put(child, 1);
       }

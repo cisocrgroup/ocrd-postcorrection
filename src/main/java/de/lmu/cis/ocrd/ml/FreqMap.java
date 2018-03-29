@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.util;
+package de.lmu.cis.ocrd.ml;
 
 import java.util.HashMap;
 

@@ -1,33 +1,18 @@
 package de.lmu.cis.iba;
 
-import de.lmu.cis.ocrd.Document;
-import de.lmu.cis.ocrd.Document.OCRLine;
-import de.lmu.cis.ocrd.Config;
-import de.lmu.cis.pocoweb.Client;
-import de.lmu.cis.pocoweb.Token;
-import de.lmu.cis.ocrd.graph.AlignmentGraph;
-import com.google.gson.Gson;
-
-// import de.lmu.cis.ocrd.Line;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import de.lmu.cis.api.model.Page;
-import de.lmu.cis.api.model.Project;
+import com.google.gson.Gson;
 
 import de.lmu.cis.api.model.Book;
+import de.lmu.cis.api.model.Project;
+import de.lmu.cis.ocrd.Config;
+import de.lmu.cis.ocrd.OCRLine;
+import de.lmu.cis.ocrd.PocowebDocument;
+import de.lmu.cis.ocrd.graph.AlignmentGraph;
+import de.lmu.cis.pocoweb.Client;
 
 class Main {
   private static final int N = 3;
@@ -85,7 +70,7 @@ class Main {
                "src/test/resources/1841-DieGrenzboten-ocropus-small.zip");) {
         project = client.addBook(project, book, is);
       }
-      Document doc = new Document(project, client);
+      PocowebDocument doc = new PocowebDocument(project, client);
 
       LineAlignment l_alignment = new LineAlignment(doc, 3);
       for (ArrayList<OCRLine> aligned_lines : l_alignment) {

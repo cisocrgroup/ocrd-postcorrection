@@ -1,9 +1,11 @@
-import de.lmu.cis.ocrd.util.FreqMap;
-import org.junit.After;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+
+import de.lmu.cis.ocrd.ml.FreqMap;
+
 
 public class FreqMapTest {
   private FreqMap<String> freqs;
