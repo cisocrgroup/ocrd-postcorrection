@@ -41,11 +41,11 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 		scdawg.build_cdawg();
 		// scdawg.print_automaton("svgs/scdawg");
 
-		HashMap<Node, Integer> nodes_count = new HashMap<Node, Integer>();
+		Common_SCDAWG_Functions scdawg_functions = new Common_SCDAWG_Functions(scdawg);
 
-		count_nodes(scdawg.root, scdawg, nodes_count);
+		HashMap<Node, Integer> nodes_count = scdawg_functions.count_nodes();
 
-		HashMap count_nodes_sorted = Util.sortByValues(nodes_count, "Desc");
+		HashMap count_nodes_sorted = Util.sortByValues(nodes_count, "DESC");
 		ArrayList<pair> nodes_sink_set = new ArrayList<pair>();
 
 		count_nodes_sorted.put(scdawg.root, null);
@@ -96,7 +96,7 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 						continue sinkloop;
 					}
 				}
-				
+
 				// end special case
 
 				pair p = new pair();
