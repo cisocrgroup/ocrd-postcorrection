@@ -6,7 +6,12 @@ import de.lmu.cis.pocoweb.Token;
 
 public interface Line {
 	public int getLineId();
+
+	public int getPageId();
+
 	public String getNormalized();
+
 	public Token getTokenAt(int i);
+
 	public List<Token> getTokens();
 }

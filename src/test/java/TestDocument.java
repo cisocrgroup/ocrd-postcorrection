@@ -10,19 +10,19 @@ public class TestDocument implements Document {
 	public TestDocument() {
 		lines = new ArrayList<OCRLine>();
 	}
-	
-	public TestDocument withLine(String line, int id, String ocr, boolean masterOCR) {
-		lines.add(new OCRLine(ocr, new TestLine(id, line), 0, masterOCR));
+
+	public TestDocument withLine(String line, int pageid, int id, String ocr, boolean masterOCR) {
+		lines.add(new OCRLine(ocr, new TestLine(pageid, id, line), 0, masterOCR));
 		return this;
 	}
-	
+
 	public int getLength() {
 		return this.lines.size();
 	}
-	
+
 	@Override
 	public void eachLine(Visitor v) throws Exception {
-		for (OCRLine line: lines) {
+		for (OCRLine line : lines) {
 			v.visit(line);
 		}
 	}
