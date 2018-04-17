@@ -15,13 +15,13 @@ import java.util.zip.ZipFile;
 import org.apache.commons.io.IOUtils;
 
 public class Archive {
-	public static SimpleLine createOcropusDocumentFromZipArchive(String ar) throws IOException {
+	public static SimpleDocument createOcropusDocumentFromZipArchive(String ar) throws IOException {
 		try (ZipFile zip = new ZipFile(ar)) {
 			return createOcropusDocumentFromZipArchive(zip);
 		}
 	}
 
-	public static SimpleLine createOcropusDocumentFromZipArchive(ZipFile zip) throws IOException {
+	public static SimpleDocument createOcropusDocumentFromZipArchive(ZipFile zip) throws IOException {
 		// gather valid `.txt` files
 		ArrayList<Path> lines = new ArrayList<Path>();
 		for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
@@ -47,7 +47,7 @@ public class Archive {
 			}
 		});
 		// append lines to document
-		SimpleLine doc = new SimpleLine().withPath(zip.getName()).withOcrEngine("ocropus");
+		SimpleDocument doc = new SimpleDocument().withPath(zip.getName()).withOcrEngine("ocropus");
 		for (Path line : lines) {
 			int pageno = Integer.parseInt(line.getParent().getFileName().toString());
 			doc.add(pageno, slurpZipFile(zip, line.toString()));
