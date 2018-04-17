@@ -7,22 +7,17 @@ import de.lmu.cis.pocoweb.Token;
 
 public class SimpleLine implements Line {
 
+	private static String normalize(String line) {
+		return line.replaceAll("[^\\p{L}\\p{Nd}]+", " ").trim();
+	}
+
 	private int lineID, pageID;
 	private String line;
 
-	public SimpleLine withLineId(int id) {
-		this.lineID = id;
-		return this;
-	}
+	private ArrayList<Double> cs;
 
-	public SimpleLine withPageId(int id) {
-		this.pageID = id;
-		return this;
-	}
-
-	public SimpleLine withOcr(String line) {
-		this.line = normalize(line);
-		return this;
+	public double getConfidenceAt(int i) {
+		return cs.get(i);
 	}
 
 	@Override
@@ -31,13 +26,13 @@ public class SimpleLine implements Line {
 	}
 
 	@Override
-	public int getPageId() {
-		return this.pageID;
+	public String getNormalized() {
+		return this.line;
 	}
 
 	@Override
-	public String getNormalized() {
-		return this.line;
+	public int getPageId() {
+		return this.pageID;
 	}
 
 	@Override
@@ -56,7 +51,23 @@ public class SimpleLine implements Line {
 		return tokens;
 	}
 
-	private static String normalize(String line) {
-		return line.replaceAll("[^\\p{L}\\p{Nd}]+", " ").trim();
+	public SimpleLine withConfidences(ArrayList<Double> cs) {
+		this.cs = cs;
+		return this;
+	}
+
+	public SimpleLine withLineId(int id) {
+		this.lineID = id;
+		return this;
+	}
+
+	public SimpleLine withOcr(String line) {
+		this.line = normalize(line);
+		return this;
+	}
+
+	public SimpleLine withPageId(int id) {
+		this.pageID = id;
+		return this;
 	}
 }

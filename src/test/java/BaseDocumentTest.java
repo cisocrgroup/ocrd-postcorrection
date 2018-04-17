@@ -1,8 +1,6 @@
-import java.io.IOException;
-
 import org.junit.Before;
 
-import de.lmu.cis.ocrd.Archive;
+import de.lmu.cis.ocrd.ArchiveFactory;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.Line;
 import de.lmu.cis.ocrd.OCRLine;
@@ -10,10 +8,10 @@ import de.lmu.cis.ocrd.OCRLine;
 public class BaseDocumentTest {
 	private Document doc;
 	private Line line;
-	private final String ar;
+	private final ArchiveFactory factory;
 
-	public BaseDocumentTest(String ar) {
-		this.ar = ar;
+	public BaseDocumentTest(ArchiveFactory factory) {
+		this.factory = factory;
 	}
 
 	protected Line findLine(int pageno, int lineno) throws Exception {
@@ -26,13 +24,13 @@ public class BaseDocumentTest {
 			}
 		});
 		if (this.line == null) {
-			throw new Exception("cannot find line");
+			throw new Exception("cannot find line: " + pageno + ", line: " + lineno);
 		}
 		return this.line;
 	}
 
 	@Before
-	public void readArchive() throws IOException {
-		this.doc = Archive.createOcropusDocumentFromZipArchive(this.ar);
+	public void readArchive() throws Exception {
+		this.doc = this.factory.create();
 	}
 }

@@ -8,11 +8,11 @@ public class SimpleDocument implements Document {
 
 	private String path, ocrEngine;
 	private boolean isMasterOCR;
-	private final TreeMap<Integer, ArrayList<String>> lines = new TreeMap<Integer, ArrayList<String>>();
+	private final TreeMap<Integer, ArrayList<Line>> lines = new TreeMap<Integer, ArrayList<Line>>();
 
-	public void add(int pageno, String line) {
+	public void add(int pageno, Line line) {
 		if (!this.lines.containsKey(pageno)) {
-			this.lines.put(pageno, new ArrayList<String>());
+			this.lines.put(pageno, new ArrayList<Line>());
 		}
 		lines.get(pageno).add(line);
 	}
@@ -20,14 +20,11 @@ public class SimpleDocument implements Document {
 	@Override
 	public void eachLine(Visitor v) throws Exception {
 		int pageseq = 0;
-		for (Map.Entry<Integer, ArrayList<String>> e : this.lines.entrySet()) {
+		for (Map.Entry<Integer, ArrayList<Line>> e : this.lines.entrySet()) {
 			assert (e.getValue() != null);
-			int lineid = 0;
-			for (String line : e.getValue()) {
-				SimpleLine tmp = new SimpleLine().withOcr(line).withLineId(lineid).withPageId(e.getKey());
-				OCRLine ocrLine = new OCRLine(ocrEngine, tmp, pageseq, isMasterOCR);
+			for (Line line : e.getValue()) {
+				OCRLine ocrLine = new OCRLine(ocrEngine, line, pageseq, isMasterOCR);
 				v.visit(ocrLine);
-				++lineid;
 			}
 			++pageseq;
 		}
