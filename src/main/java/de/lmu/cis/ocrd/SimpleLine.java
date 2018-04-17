@@ -5,22 +5,22 @@ import java.util.List;
 
 import de.lmu.cis.pocoweb.Token;
 
-public class LineImpl implements Line {
+public class SimpleLine implements Line {
 
 	private int lineID, pageID;
 	private String line;
 
-	public LineImpl withLineId(int id) {
+	public SimpleLine withLineId(int id) {
 		this.lineID = id;
 		return this;
 	}
 
-	public LineImpl withPageId(int id) {
+	public SimpleLine withPageId(int id) {
 		this.pageID = id;
 		return this;
 	}
 
-	public LineImpl withOcr(String line) {
+	public SimpleLine withOcr(String line) {
 		this.line = normalize(line);
 		return this;
 	}
