@@ -13,10 +13,6 @@ import java.util.zip.ZipFile;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 public class ABBYYDocumentBuilder extends ArchiveFactory {
 	private final static Pattern num = Pattern.compile(".*?(\\p{Digit}+).*?");
 
@@ -26,32 +22,6 @@ public class ABBYYDocumentBuilder extends ArchiveFactory {
 			throw new Exception("cannot extract pageid from file name: " + path.getFileName().toString());
 		}
 		return Integer.parseInt(m.group(1));
-	}
-
-	private static String parseChar(Node charParam) throws Exception {
-		Node data = charParam.getFirstChild();
-		if (data == null) {
-			return " ";
-		}
-		if (data.getNodeType() != Node.TEXT_NODE) {
-			throw new Exception("invalid charParams node");
-		}
-		String r = data.getNodeValue();
-		if (r == null || "".equals(r)) {
-			return " ";
-		}
-		return r;
-	}
-
-	private static double parseConfidence(Node charParam) {
-		if (charParam.getAttributes() == null) {
-			return 0;
-		}
-		Node c = charParam.getAttributes().getNamedItem("charConfidence");
-		if (c == null) {
-			return 0;
-		}
-		return (double) 1 / (double) Integer.parseInt(c.getNodeValue());
 	}
 
 	private SimpleDocument doc;
@@ -76,40 +46,14 @@ public class ABBYYDocumentBuilder extends ArchiveFactory {
 		for (Path path : pages) {
 			parsePage(zip, path);
 		}
-		return doc;
-	}
-
-	private void parseLine(int pid, int lid, Node line) throws Exception {
-		if (line.getNodeType() != Node.ELEMENT_NODE) {
-			return;
-		}
-		NodeList charParams = ((Element) line).getElementsByTagName("charParams");
-		final int n = charParams.getLength();
-		StringBuilder str = new StringBuilder();
-		ArrayList<Double> cs = new ArrayList<Double>();
-		for (int i = 0; i < n; i++) {
-			String r = parseChar(charParams.item(i));
-			double c = parseConfidence(charParams.item(i));
-			str.append(r);
-			cs.add(c);
-		}
-		SimpleLine tmp = new SimpleLine().withOcr(str.toString()).withConfidences(cs).withLineId(lid).withPageId(pid);
-		this.doc.add(pid, tmp);
+		return this.doc;
 	}
 
 	private void parsePage(int pid, InputStream is) throws Exception {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 		org.w3c.dom.Document xml = docBuilder.parse(is);
-		parsePage(pid, xml);
-	}
-
-	private void parsePage(int pid, org.w3c.dom.Document xml) throws Exception {
-		NodeList lines = xml.getElementsByTagName("line");
-		final int n = lines.getLength();
-		for (int i = 0; i < n; i++) {
-			parseLine(pid, i + 1, lines.item(i));
-		}
+		this.doc.add(new ABBYYPageParser(xml, pid).parse());
 	}
 
 	private void parsePage(ZipFile zip, Path path) throws Exception {

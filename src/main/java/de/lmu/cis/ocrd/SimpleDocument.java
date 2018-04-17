@@ -17,6 +17,12 @@ public class SimpleDocument implements Document {
 		lines.get(pageno).add(line);
 	}
 
+	public void add(SimpleDocument o) {
+		for (Map.Entry<Integer, ArrayList<Line>> e : o.lines.entrySet()) {
+			this.lines.put(e.getKey(), e.getValue());
+		}
+	}
+
 	@Override
 	public void eachLine(Visitor v) throws Exception {
 		int pageseq = 0;

@@ -18,6 +18,8 @@ public class BaseDocumentTest {
 		this.doc.eachLine(new Document.Visitor() {
 			@Override
 			public void visit(OCRLine t) throws Exception {
+				// Logger.getLogger("findLine").log(Level.INFO,
+				// "pageid: " + t.line.getPageId() + ", lineid: " + t.line.getLineId());
 				if (t.line.getPageId() == pageno && t.line.getLineId() == lineno) {
 					line = t.line;
 				}
