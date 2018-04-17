@@ -14,14 +14,14 @@ import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
 
-public class DocumentFactory {
-	public Document createOcropusDocumentFromZipArchive(String ar) throws IOException {
+public class Archive {
+	public static Document createOcropusDocumentFromZipArchive(String ar) throws IOException {
 		try (ZipFile zip = new ZipFile(ar)) {
 			return createOcropusDocumentFromZipArchive(zip);
 		}
 	}
 
-	public Document createOcropusDocumentFromZipArchive(ZipFile zip) throws IOException {
+	public static Document createOcropusDocumentFromZipArchive(ZipFile zip) throws IOException {
 		// gather valid `.txt` files
 		ArrayList<Path> lines = new ArrayList<Path>();
 		for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
