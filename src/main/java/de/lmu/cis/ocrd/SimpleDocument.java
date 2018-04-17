@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class DocumentImpl implements Document {
+public class SimpleDocument implements Document {
 
 	private String path, ocrEngine;
 	private boolean isMasterOCR;
@@ -24,7 +24,7 @@ public class DocumentImpl implements Document {
 			assert (e.getValue() != null);
 			int lineid = 0;
 			for (String line : e.getValue()) {
-				LineImpl tmp = new LineImpl().withOcr(line).withLineId(lineid).withPageId(e.getKey());
+				SimpleLine tmp = new SimpleLine().withOcr(line).withLineId(lineid).withPageId(e.getKey());
 				OCRLine ocrLine = new OCRLine(ocrEngine, tmp, pageseq, isMasterOCR);
 				v.visit(ocrLine);
 				++lineid;
@@ -37,17 +37,17 @@ public class DocumentImpl implements Document {
 		return this.path;
 	}
 
-	public DocumentImpl withIsMasterOcr(boolean mocr) {
+	public SimpleDocument withIsMasterOcr(boolean mocr) {
 		this.isMasterOCR = mocr;
 		return this;
 	}
 
-	public DocumentImpl withOcrEngine(String engine) {
+	public SimpleDocument withOcrEngine(String engine) {
 		this.ocrEngine = engine;
 		return this;
 	}
 
-	public DocumentImpl withPath(String path) {
+	public SimpleDocument withPath(String path) {
 		this.path = path;
 		return this;
 	}
