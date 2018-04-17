@@ -16,13 +16,13 @@ public class OcropusZipArchiveTest {
 	private Line line;
 
 	@Test
-	public void checkLineA() throws Exception {
+	public void checkFirstLine() throws Exception {
 		assertThat(findLine(179392, 0).getNormalized(), is("Deuiſchland und Belgien"));
 	}
 
-	@Before
-	public void readOcropusZipArchive() throws IOException {
-		doc = Archive.createOcropusDocumentFromZipArchive("src/test/resources/1841-DieGrenzboten-ocropus.zip");
+	@Test
+	public void checkLastLine() throws Exception {
+		assertThat(findLine(179492, 0x1F - 1).getNormalized(), is("a4"));
 	}
 
 	private Line findLine(int pageno, int lineno) throws Exception {
@@ -38,5 +38,10 @@ public class OcropusZipArchiveTest {
 			throw new Exception("cannot find line");
 		}
 		return this.line;
+	}
+
+	@Before
+	public void readOcropusZipArchive() throws IOException {
+		doc = Archive.createOcropusDocumentFromZipArchive("src/test/resources/1841-DieGrenzboten-ocropus.zip");
 	}
 }

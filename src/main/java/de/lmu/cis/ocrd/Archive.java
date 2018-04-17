@@ -15,13 +15,13 @@ import java.util.zip.ZipFile;
 import org.apache.commons.io.IOUtils;
 
 public class Archive {
-	public static Document createOcropusDocumentFromZipArchive(String ar) throws IOException {
+	public static DocumentImpl createOcropusDocumentFromZipArchive(String ar) throws IOException {
 		try (ZipFile zip = new ZipFile(ar)) {
 			return createOcropusDocumentFromZipArchive(zip);
 		}
 	}
 
-	public static Document createOcropusDocumentFromZipArchive(ZipFile zip) throws IOException {
+	public static DocumentImpl createOcropusDocumentFromZipArchive(ZipFile zip) throws IOException {
 		// gather valid `.txt` files
 		ArrayList<Path> lines = new ArrayList<Path>();
 		for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {

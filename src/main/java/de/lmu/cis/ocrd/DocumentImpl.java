@@ -1,16 +1,36 @@
 package de.lmu.cis.ocrd;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class DocumentImpl implements Document {
 
 	private String path, ocrEngine;
 	private boolean isMasterOCR;
-	private final ArrayList<ArrayList<String>> lines = new ArrayList<ArrayList<String>>();
+	private final TreeMap<Integer, ArrayList<String>> lines = new TreeMap<Integer, ArrayList<String>>();
 
-	public DocumentImpl withPath(String path) {
-		this.path = path;
-		return this;
+	public void add(int pageno, String line) {
+		if (!this.lines.containsKey(pageno)) {
+			this.lines.put(pageno, new ArrayList<String>());
+		}
+		lines.get(pageno).add(line);
+	}
+
+	@Override
+	public void eachLine(Visitor v) throws Exception {
+		int pageseq = 0;
+		for (Map.Entry<Integer, ArrayList<String>> e : this.lines.entrySet()) {
+			assert (e.getValue() != null);
+			int lineid = 0;
+			for (String line : e.getValue()) {
+				LineImpl tmp = new LineImpl().withOcr(line).withLineId(lineid).withPageId(e.getKey());
+				OCRLine ocrLine = new OCRLine(ocrEngine, tmp, pageseq, isMasterOCR);
+				v.visit(ocrLine);
+				++lineid;
+			}
+			++pageseq;
+		}
 	}
 
 	public String getPath() {
@@ -27,30 +47,8 @@ public class DocumentImpl implements Document {
 		return this;
 	}
 
-	public void add(int pageno, String line) {
-		while (lines.size() <= pageno) {
-			lines.add(null);
-		}
-		if (lines.get(pageno) == null) {
-			lines.set(pageno, new ArrayList<String>());
-		}
-		lines.get(pageno).add(line);
+	public DocumentImpl withPath(String path) {
+		this.path = path;
+		return this;
 	}
-
-	@Override
-	public void eachLine(Visitor v) throws Exception {
-		int pageseq = 0;
-		for (int i = 0; i < lines.size(); i++) {
-			if (lines.get(i) == null) {
-				continue;
-			}
-			for (int j = 0; j < lines.get(i).size(); j++) {
-				LineImpl line = new LineImpl().withOcr(lines.get(i).get(j)).withLineId(j).withPageId(i);
-				OCRLine ocrLine = new OCRLine(ocrEngine, line, pageseq, isMasterOCR);
-				v.visit(ocrLine);
-			}
-			pageseq++;
-		}
-	}
-
 }
