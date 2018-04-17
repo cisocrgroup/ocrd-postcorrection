@@ -1,13 +1,20 @@
 import java.io.IOException;
 
+import org.junit.Before;
+
 import de.lmu.cis.ocrd.Archive;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.Line;
 import de.lmu.cis.ocrd.OCRLine;
 
-class BaseDocumentTest {
+public class BaseDocumentTest {
 	private Document doc;
 	private Line line;
+	private final String ar;
+
+	public BaseDocumentTest(String ar) {
+		this.ar = ar;
+	}
 
 	protected Line findLine(int pageno, int lineno) throws Exception {
 		this.doc.eachLine(new Document.Visitor() {
@@ -24,7 +31,8 @@ class BaseDocumentTest {
 		return this.line;
 	}
 
-	protected void readArchive(String ar) throws IOException {
-		this.doc = Archive.createOcropusDocumentFromZipArchive(ar);
+	@Before
+	public void readArchive() throws IOException {
+		this.doc = Archive.createOcropusDocumentFromZipArchive(this.ar);
 	}
 }
