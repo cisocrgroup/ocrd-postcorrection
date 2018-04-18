@@ -13,6 +13,7 @@ public class ABBYYZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/1841-DieGrenzboten-abbyy.zip";
 
 	public ABBYYZipArchiveTest() throws Exception {
+		setResource(resource);
 		try (ZipFile zip = new ZipFile(resource)) {
 			setDocument(new ZipParser(new ABBYYXMLParserFactory(), new ABBYYXMLFileType(), zip).parse());
 		}

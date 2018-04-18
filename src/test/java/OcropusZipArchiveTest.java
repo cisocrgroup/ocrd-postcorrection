@@ -12,6 +12,7 @@ public class OcropusZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/1841-DieGrenzboten-ocropus.zip";
 
 	public OcropusZipArchiveTest() throws Exception {
+		setResource(resource);
 		try (ZipFile zip = new ZipFile(resource)) {
 			setDocument(new OcropusZipParser(zip).parse());
 		}

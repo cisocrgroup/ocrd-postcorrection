@@ -13,6 +13,7 @@ public class HOCRZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/1841-DieGrenzboten-tesseract.zip";
 
 	public HOCRZipArchiveTest() throws Exception {
+		setResource(resource);
 		try (ZipFile zip = new ZipFile(resource)) {
 			setDocument(new ZipParser(new HOCRParserFactory(), new HOCRFileType(), zip).parse());
 		}
