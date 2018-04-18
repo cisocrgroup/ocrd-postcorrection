@@ -1,5 +1,8 @@
 package de.lmu.cis.ocrd.parsers;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -11,10 +14,23 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apache.commons.io.IOUtils;
+
 import de.lmu.cis.ocrd.SimpleDocument;
 import de.lmu.cis.ocrd.SimpleLine;
 
 public class OcropusZipParser implements Parser {
+	private static boolean isOcropusLine(String name) {
+		return name.endsWith(".txt") && !name.endsWith(".gt.txt");
+	}
+
+	private static String slurpZipFile(ZipFile zip, String path) throws IOException {
+		ZipEntry entry = zip.getEntry(path);
+		try (InputStream in = zip.getInputStream(entry)) {
+			return IOUtils.toString(in, Charset.forName("UTF-8"));
+		}
+	}
+
 	private static final void sort(List<Path> lines) {
 		Collections.sort(lines, new Comparator<Path>() {
 			@Override
@@ -40,7 +56,7 @@ public class OcropusZipParser implements Parser {
 		ArrayList<Path> lines = new ArrayList<Path>();
 		for (Enumeration<? extends ZipEntry> entries = this.zip.entries(); entries.hasMoreElements();) {
 			ZipEntry entry = entries.nextElement();
-			if (!Archive.isOcropusLine(entry.getName())) {
+			if (!isOcropusLine(entry.getName())) {
 				continue;
 			}
 			Path path = Paths.get(entry.getName());
@@ -59,7 +75,7 @@ public class OcropusZipParser implements Parser {
 				lineIDs.put(pageno, 0);
 			}
 			final int lid = lineIDs.get(pageno) + 1;
-			String ocr = Archive.slurpZipFile(zip, line.toString());
+			String ocr = slurpZipFile(zip, line.toString());
 			doc.add(pageno, new SimpleLine().withOcr(ocr).withPageId(pageno).withLineId(lid));
 			lineIDs.put(pageno, lid);
 		}
