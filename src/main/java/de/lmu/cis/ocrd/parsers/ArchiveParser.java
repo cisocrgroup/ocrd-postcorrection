@@ -36,7 +36,7 @@ public class ArchiveParser implements Parser {
 		this.archive = archive;
 	}
 
-	private final ArrayList<Entry> gatherPages() {
+	private final ArrayList<Entry> gatherEntries() {
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 		for (Entry entry : this.archive) {
 			if (!this.fileType.check(entry.getName().toString())) {
@@ -49,7 +49,7 @@ public class ArchiveParser implements Parser {
 
 	@Override
 	public SimpleDocument parse() throws Exception {
-		ArrayList<Entry> pages = gatherPages();
+		ArrayList<Entry> pages = gatherEntries();
 		SimpleDocument doc = new SimpleDocument().withPath(this.archive.getName().toString());
 		for (Entry entry : pages) {
 			doc.add(parsePage(entry, getPageID(entry.getName())));
