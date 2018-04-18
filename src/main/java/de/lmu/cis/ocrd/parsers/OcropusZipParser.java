@@ -7,33 +7,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import de.lmu.cis.ocrd.SimpleDocument;
 import de.lmu.cis.ocrd.SimpleLine;
 
-public class OcropusArchiveFactory extends ArchiveFactory {
-	public OcropusArchiveFactory(String ar) {
-		super(ar);
-	}
-
-	@Override
-	public SimpleDocument create(ZipFile zip) throws Exception {
-		// gather valid `.txt` files
-		ArrayList<Path> lines = new ArrayList<Path>();
-		for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
-			ZipEntry entry = entries.nextElement();
-			if (!Archive.isOcropusLine(entry.getName())) {
-				continue;
-			}
-			Path path = Paths.get(entry.getName());
-			if (path.getParent() == null) {
-				continue;
-			}
-			lines.add(path);
-		}
-		// sort by directory and then by filename
+public class OcropusZipParser implements Parser {
+	private static final void sort(List<Path> lines) {
 		Collections.sort(lines, new Comparator<Path>() {
 			@Override
 			public int compare(Path a, Path b) {
@@ -44,6 +26,30 @@ public class OcropusArchiveFactory extends ArchiveFactory {
 				return a.getFileName().compareTo(b.getFileName());
 			}
 		});
+	}
+
+	private final ZipFile zip;
+
+	public OcropusZipParser(ZipFile zip) {
+		this.zip = zip;
+	}
+
+	@Override
+	public SimpleDocument parse() throws Exception {
+		// gather valid `.txt` files
+		ArrayList<Path> lines = new ArrayList<Path>();
+		for (Enumeration<? extends ZipEntry> entries = this.zip.entries(); entries.hasMoreElements();) {
+			ZipEntry entry = entries.nextElement();
+			if (!Archive.isOcropusLine(entry.getName())) {
+				continue;
+			}
+			Path path = Paths.get(entry.getName());
+			if (path.getParent() == null) {
+				continue;
+			}
+			lines.add(path);
+		}
+		sort(lines);
 		// append lines to document
 		SimpleDocument doc = new SimpleDocument().withPath(zip.getName()).withOcrEngine("ocropus");
 		HashMap<Integer, Integer> lineIDs = new HashMap<Integer, Integer>();

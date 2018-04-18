@@ -1,14 +1,19 @@
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.zip.ZipFile;
+
 import org.junit.Test;
 
 import de.lmu.cis.ocrd.parsers.ABBYYZipParser;
 
 public class ABBYYZipArchiveTest extends BaseDocumentTest {
+	private static final String resource = "src/test/resources/1841-DieGrenzboten-abbyy.zip";
 
-	public ABBYYZipArchiveTest() {
-		super(new ABBYYZipParser("src/test/resources/1841-DieGrenzboten-abbyy.zip"));
+	public ABBYYZipArchiveTest() throws Exception {
+		try (ZipFile zip = new ZipFile(resource)) {
+			setDocument(new ABBYYZipParser(zip).parse());
+		}
 	}
 
 	@Test

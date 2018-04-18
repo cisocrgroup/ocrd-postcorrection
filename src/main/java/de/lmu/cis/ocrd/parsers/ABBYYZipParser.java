@@ -15,7 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import de.lmu.cis.ocrd.SimpleDocument;
 
-public class ABBYYZipParser extends ArchiveFactory {
+public class ABBYYZipParser implements Parser {
 	private final static Pattern num = Pattern.compile(".*?(\\p{Digit}+).*?");
 
 	private static int getPageID(Path path) throws Exception {
@@ -27,14 +27,14 @@ public class ABBYYZipParser extends ArchiveFactory {
 	}
 
 	private SimpleDocument doc;
+	private final ZipFile zip;
 
-	public ABBYYZipParser(String ar) {
-		super(ar);
+	public ABBYYZipParser(ZipFile zip) {
+		this.zip = zip;
 	}
 
 	@Override
-	protected SimpleDocument create(ZipFile zip) throws Exception {
-		// gather XML ABBYY files
+	public SimpleDocument parse() throws Exception {
 		ArrayList<Path> pages = new ArrayList<Path>();
 		for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
 			ZipEntry entry = entries.nextElement();
@@ -43,10 +43,9 @@ public class ABBYYZipParser extends ArchiveFactory {
 			}
 			pages.add(Paths.get(entry.getName()));
 		}
-		// parse XML files
-		this.doc = new SimpleDocument().withPath(zip.getName());
-		for (Path path : pages) {
-			parsePage(zip, path);
+		this.doc = new SimpleDocument().withPath(this.zip.getName());
+		for (Path page : pages) {
+			parsePage(this.zip, page);
 		}
 		return this.doc;
 	}

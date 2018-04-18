@@ -1,18 +1,10 @@
-import org.junit.Before;
-
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.Line;
 import de.lmu.cis.ocrd.OCRLine;
-import de.lmu.cis.ocrd.parsers.ArchiveFactory;
 
 public class BaseDocumentTest {
 	private Document doc;
 	private Line line;
-	private final ArchiveFactory factory;
-
-	public BaseDocumentTest(ArchiveFactory factory) {
-		this.factory = factory;
-	}
 
 	protected Line findLine(int pageno, int lineno) throws Exception {
 		this.doc.eachLine(new Document.Visitor() {
@@ -31,8 +23,7 @@ public class BaseDocumentTest {
 		return this.line;
 	}
 
-	@Before
-	public void readArchive() throws Exception {
-		this.doc = this.factory.create();
+	protected void setDocument(Document doc) {
+		this.doc = doc;
 	}
 }

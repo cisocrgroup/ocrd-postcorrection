@@ -1,14 +1,20 @@
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.zip.ZipFile;
+
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.parsers.OcropusArchiveFactory;
+import de.lmu.cis.ocrd.parsers.OcropusZipParser;
 
 public class OcropusZipArchiveTest extends BaseDocumentTest {
 
-	public OcropusZipArchiveTest() {
-		super(new OcropusArchiveFactory("src/test/resources/1841-DieGrenzboten-ocropus.zip"));
+	private static final String resource = "src/test/resources/1841-DieGrenzboten-ocropus.zip";
+
+	public OcropusZipArchiveTest() throws Exception {
+		try (ZipFile zip = new ZipFile(resource)) {
+			setDocument(new OcropusZipParser(zip).parse());
+		}
 	}
 
 	@Test
