@@ -1,21 +1,21 @@
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.util.zip.ZipFile;
-
 import org.junit.Test;
 
+import de.lmu.cis.ocrd.archive.Archive;
+import de.lmu.cis.ocrd.archive.ZipArchive;
+import de.lmu.cis.ocrd.parsers.ArchiveParser;
 import de.lmu.cis.ocrd.parsers.HOCRFileType;
 import de.lmu.cis.ocrd.parsers.HOCRParserFactory;
-import de.lmu.cis.ocrd.parsers.ZipParser;
 
 public class HOCRZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/1841-DieGrenzboten-tesseract.zip";
 
 	public HOCRZipArchiveTest() throws Exception {
 		setResource(resource);
-		try (ZipFile zip = new ZipFile(resource)) {
-			setDocument(new ZipParser(new HOCRParserFactory(), new HOCRFileType(), zip).parse());
+		try (Archive ar = new ZipArchive(resource)) {
+			setDocument(new ArchiveParser(new HOCRParserFactory(), new HOCRFileType(), ar).parse());
 		}
 	}
 

@@ -1,21 +1,21 @@
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.util.zip.ZipFile;
-
 import org.junit.Test;
 
+import de.lmu.cis.ocrd.archive.Archive;
+import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.parsers.ALTOXMLFileType;
 import de.lmu.cis.ocrd.parsers.ALTOXMLParserFactory;
-import de.lmu.cis.ocrd.parsers.ZipParser;
+import de.lmu.cis.ocrd.parsers.ArchiveParser;
 
 public class ALTOZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/euler_rechenkunst01_1738.zip";
 
 	public ALTOZipArchiveTest() throws Exception {
 		setResource(resource);
-		try (ZipFile zip = new ZipFile(resource)) {
-			setDocument(new ZipParser(new ALTOXMLParserFactory(), new ALTOXMLFileType(), zip).parse());
+		try (Archive ar = new ZipArchive(resource)) {
+			setDocument(new ArchiveParser(new ALTOXMLParserFactory(), new ALTOXMLFileType(), ar).parse());
 		}
 	}
 
