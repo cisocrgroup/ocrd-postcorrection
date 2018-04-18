@@ -17,7 +17,7 @@ import de.lmu.cis.ocrd.SimpleDocument;
 
 public class ZipParser implements Parser {
 
-	private final static Pattern num = Pattern.compile(".*?(\\p{Digit}+).*?");
+	private final static Pattern num = Pattern.compile(".*?(\\p{Digit}+)\\..*?");
 
 	private static int getPageID(Path path) throws Exception {
 		Matcher m = num.matcher(path.getFileName().toString());
@@ -54,6 +54,8 @@ public class ZipParser implements Parser {
 		ArrayList<Path> pages = gatherPages();
 		SimpleDocument doc = new SimpleDocument().withPath(this.zip.getName());
 		for (Path page : pages) {
+			// final int pageID = getPageID(page);
+			// System.out.println("path = " + page.toString() + ", pageID = " + pageID);
 			doc.add(parsePage(page, getPageID(page)));
 		}
 		return doc;
