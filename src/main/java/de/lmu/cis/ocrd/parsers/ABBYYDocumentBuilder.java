@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd;
+package de.lmu.cis.ocrd.parsers;
 
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -12,6 +12,8 @@ import java.util.zip.ZipFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import de.lmu.cis.ocrd.SimpleDocument;
 
 public class ABBYYDocumentBuilder extends ArchiveFactory {
 	private final static Pattern num = Pattern.compile(".*?(\\p{Digit}+).*?");
@@ -53,7 +55,7 @@ public class ABBYYDocumentBuilder extends ArchiveFactory {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 		org.w3c.dom.Document xml = docBuilder.parse(is);
-		this.doc.add(new ABBYYPageParser(xml, pid).parse());
+		this.doc.add(new ABBYYXMLParser(xml, pid).parse());
 	}
 
 	private void parsePage(ZipFile zip, Path path) throws Exception {

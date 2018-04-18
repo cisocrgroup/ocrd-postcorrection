@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd;
+package de.lmu.cis.ocrd.parsers;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -3,7 +3,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.OcropusArchiveFactory;
+import de.lmu.cis.ocrd.parsers.OcropusArchiveFactory;
 
 public class OcropusZipArchiveTest extends BaseDocumentTest {
 

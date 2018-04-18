@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd;
+package de.lmu.cis.ocrd.parsers;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,6 +9,9 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import de.lmu.cis.ocrd.SimpleDocument;
+import de.lmu.cis.ocrd.SimpleLine;
 
 public class OcropusArchiveFactory extends ArchiveFactory {
 	public OcropusArchiveFactory(String ar) {

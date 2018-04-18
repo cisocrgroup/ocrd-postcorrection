@@ -1,6 +1,8 @@
-package de.lmu.cis.ocrd;
+package de.lmu.cis.ocrd.parsers;
 
 import java.util.zip.ZipFile;
+
+import de.lmu.cis.ocrd.SimpleDocument;
 
 public abstract class ArchiveFactory {
 	private final String ar;

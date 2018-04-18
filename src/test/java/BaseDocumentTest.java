@@ -1,9 +1,9 @@
 import org.junit.Before;
 
-import de.lmu.cis.ocrd.ArchiveFactory;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.Line;
 import de.lmu.cis.ocrd.OCRLine;
+import de.lmu.cis.ocrd.parsers.ArchiveFactory;
 
 public class BaseDocumentTest {
 	private Document doc;

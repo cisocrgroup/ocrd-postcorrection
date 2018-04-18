@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd;
+package de.lmu.cis.ocrd.parsers;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class ABBYYPageParser {
+import de.lmu.cis.ocrd.SimpleDocument;
+import de.lmu.cis.ocrd.SimpleLine;
+
+public class ABBYYXMLParser implements Parser {
 	private static String parseChar(Node charParam) throws Exception {
 		Node data = charParam.getFirstChild();
 		if (data == null) {
@@ -39,11 +42,12 @@ public class ABBYYPageParser {
 
 	private SimpleDocument doc;
 
-	public ABBYYPageParser(org.w3c.dom.Document xml, int pageid) {
+	public ABBYYXMLParser(org.w3c.dom.Document xml, int pageid) {
 		this.xml = xml;
 		this.pageid = pageid;
 	}
 
+	@Override
 	public SimpleDocument parse() throws Exception {
 		NodeList lines = xml.getElementsByTagName("line");
 		final int n = lines.getLength();

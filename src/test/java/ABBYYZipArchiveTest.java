@@ -3,7 +3,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.ABBYYDocumentBuilder;
+import de.lmu.cis.ocrd.parsers.ABBYYDocumentBuilder;
 
 public class ABBYYZipArchiveTest extends BaseDocumentTest {
 
