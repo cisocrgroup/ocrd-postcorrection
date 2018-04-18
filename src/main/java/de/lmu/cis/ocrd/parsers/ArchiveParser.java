@@ -66,9 +66,9 @@ public class ArchiveParser implements Parser {
 		docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
 		docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-		InputStream is = this.archive.open(entry);
-		org.w3c.dom.Document xml = docBuilder.parse(is);
-		return this.factory.create(xml, pageID).parse();
+		try (InputStream is = this.archive.open(entry)) {
+			org.w3c.dom.Document xml = docBuilder.parse(is);
+			return this.factory.create(xml, pageID).parse();
+		}
 	}
-
 }
