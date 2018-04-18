@@ -1,21 +1,15 @@
 package de.lmu.cis.ocrd.parsers;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import de.lmu.cis.ocrd.SimpleDocument;
-import de.lmu.cis.ocrd.SimpleLine;
-
-public class HOCRParser implements Parser {
+public class HOCRParser extends AbstractXPathParser {
 
 	private static final Pattern confidence = Pattern.compile(".*x_wconf\\s*(\\p{Digit}+).*");
 
@@ -45,58 +39,25 @@ public class HOCRParser implements Parser {
 		return (double) 1 / Integer.parseInt(m.group(1));
 	}
 
-	private static String getWord(Node word) throws Exception {
-		Node data = word.getFirstChild();
-		if (data == null || data.getNodeType() != Node.TEXT_NODE) {
-			return "";
-		}
-		String w = data.getNodeValue();
-		if (w == null) {
-			return "";
-		}
-		return w;
-	}
-
-	private final org.w3c.dom.Document xml;
-
-	private SimpleDocument doc;
-	private final int pageid;
-
-	public HOCRParser(org.w3c.dom.Document xml, int pageid) {
-		this.xml = xml;
-		this.pageid = pageid;
+	public HOCRParser(org.w3c.dom.Document xml, int pageID) {
+		super(xml, pageID);
 	}
 
 	@Override
-	public SimpleDocument parse() throws Exception {
-		NodeList lines = (NodeList) linesXPath.evaluate(this.xml, XPathConstants.NODESET);
-		final int n = lines.getLength();
-		this.doc = new SimpleDocument();
-		for (int i = 0; i < n; i++) {
-			parseLine(i + 1, lines.item(i));
-		}
-		return this.doc;
+	protected XPathExpression getLinesXPath() {
+		return linesXPath;
 	}
 
-	private void parseLine(int lid, Node line) throws Exception {
-		NodeList words = (NodeList) wordsXPath.evaluate(line, XPathConstants.NODESET);
-		final int n = words.getLength();
-		StringBuilder str = new StringBuilder();
-		ArrayList<Double> cs = new ArrayList<Double>();
-		for (int i = 0; i < n; i++) {
-			if (i > 0) {
-				str.append(' ');
-			}
-			final String w = getWord(words.item(i));
-			final double c = getConfidence(words.item(i));
-			final int m = w.codePointCount(0, w.length());
-			for (int j = 0; j < m; j++) {
-				cs.add(c);
-			}
-			str.append(w);
+	@Override
+	protected XPathExpression getWordsXPath() {
+		return wordsXPath;
+	}
 
+	@Override
+	Word parseWord(Node word) throws Exception {
+		if (word.getFirstChild() == null || word.getFirstChild().getNodeType() != Node.TEXT_NODE) {
+			return new Word("", true);
 		}
-		doc.add(this.pageid,
-				new SimpleLine().withLineId(lid).withPageId(this.pageid).withOcr(str.toString()).withConfidences(cs));
+		return new Word(word.getFirstChild().getNodeValue(), false).fillConfidences(getConfidence(word));
 	}
 }
