@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.archive;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ZipEntry implements Entry {
+class ZipEntry implements Entry {
 
 	private final java.util.zip.ZipEntry entry;
 
