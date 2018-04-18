@@ -24,8 +24,8 @@ public class HOCRParser implements Parser {
 	private static final XPathExpression wordsXPath;
 	static {
 		try {
-			linesXPath = XPathFactory.newInstance().newXPath().compile("./span[@class=ocr_line]");
-			wordsXPath = XPathFactory.newInstance().newXPath().compile("./span[@class=ocrx_word]");
+			linesXPath = XPathFactory.newInstance().newXPath().compile("//span[@class=\"ocr_line\"]");
+			wordsXPath = XPathFactory.newInstance().newXPath().compile("./span[@class=\"ocrx_word\"]");
 		} catch (XPathException e) {
 			throw new RuntimeException(e);
 		}
@@ -47,15 +47,12 @@ public class HOCRParser implements Parser {
 
 	private static String getWord(Node word) throws Exception {
 		Node data = word.getFirstChild();
-		if (data == null) {
-			throw new Exception("invalid span class=ocrx_word element encountered: missing text node");
-		}
-		if (data.getNodeType() != Node.TEXT_NODE) {
-			throw new Exception("invalid span class=ocrx_word element encountered: missing text node");
+		if (data == null || data.getNodeType() != Node.TEXT_NODE) {
+			return "";
 		}
 		String w = data.getNodeValue();
 		if (w == null) {
-			throw new Exception("invalid span class=ocrx_word element encountered: null string");
+			return "";
 		}
 		return w;
 	}
@@ -74,6 +71,7 @@ public class HOCRParser implements Parser {
 	public SimpleDocument parse() throws Exception {
 		NodeList lines = (NodeList) linesXPath.evaluate(this.xml, XPathConstants.NODESET);
 		final int n = lines.getLength();
+		this.doc = new SimpleDocument();
 		for (int i = 0; i < n; i++) {
 			parseLine(i + 1, lines.item(i));
 		}
@@ -81,7 +79,7 @@ public class HOCRParser implements Parser {
 	}
 
 	private void parseLine(int lid, Node line) throws Exception {
-		NodeList words = (NodeList) wordsXPath.evaluate(this.xml, XPathConstants.NODESET);
+		NodeList words = (NodeList) wordsXPath.evaluate(line, XPathConstants.NODESET);
 		final int n = words.getLength();
 		StringBuilder str = new StringBuilder();
 		ArrayList<Double> cs = new ArrayList<Double>();
@@ -95,7 +93,7 @@ public class HOCRParser implements Parser {
 			for (int j = 0; j < m; j++) {
 				cs.add(c);
 			}
-			str.append(getWord(words.item(i)));
+			str.append(w);
 
 		}
 		doc.add(this.pageid,

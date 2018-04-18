@@ -61,6 +61,12 @@ public class ZipParser implements Parser {
 
 	private final SimpleDocument parsePage(Path page, int pageID) throws Exception {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		// make the parsing faster
+		docBuilderFactory.setValidating(false); // do *not* validate DTDs; its too slow.
+		docBuilderFactory.setFeature("http://xml.org/sax/features/namespaces", false);
+		docBuilderFactory.setFeature("http://xml.org/sax/features/validation", false);
+		docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+		docBuilderFactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 		DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 		InputStream is = this.zip.getInputStream(zip.getEntry(page.toString()));
 		org.w3c.dom.Document xml = docBuilder.parse(is);
