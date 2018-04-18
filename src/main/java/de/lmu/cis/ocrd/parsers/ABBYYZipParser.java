@@ -15,7 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import de.lmu.cis.ocrd.SimpleDocument;
 
-public class ABBYYDocumentBuilder extends ArchiveFactory {
+public class ABBYYZipParser extends ArchiveFactory {
 	private final static Pattern num = Pattern.compile(".*?(\\p{Digit}+).*?");
 
 	private static int getPageID(Path path) throws Exception {
@@ -28,7 +28,7 @@ public class ABBYYDocumentBuilder extends ArchiveFactory {
 
 	private SimpleDocument doc;
 
-	public ABBYYDocumentBuilder(String ar) {
+	public ABBYYZipParser(String ar) {
 		super(ar);
 	}
 

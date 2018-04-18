@@ -3,12 +3,12 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.parsers.ABBYYDocumentBuilder;
+import de.lmu.cis.ocrd.parsers.ABBYYZipParser;
 
 public class ABBYYZipArchiveTest extends BaseDocumentTest {
 
 	public ABBYYZipArchiveTest() {
-		super(new ABBYYDocumentBuilder("src/test/resources/1841-DieGrenzboten-abbyy.zip"));
+		super(new ABBYYZipParser("src/test/resources/1841-DieGrenzboten-abbyy.zip"));
 	}
 
 	@Test
