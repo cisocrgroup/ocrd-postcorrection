@@ -1,17 +1,23 @@
-import org.junit.Before;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-import de.lmu.cis.ocrd.ArchiveFactory;
+import org.junit.Test;
+
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.Line;
 import de.lmu.cis.ocrd.OCRLine;
+import de.lmu.cis.ocrd.SimpleDocument;
 
 public class BaseDocumentTest {
 	private Document doc;
 	private Line line;
-	private final ArchiveFactory factory;
+	private String resource;
 
-	public BaseDocumentTest(ArchiveFactory factory) {
-		this.factory = factory;
+	@Test
+	public void checkResource() {
+		if (this.doc instanceof SimpleDocument) {
+			assertThat(this.resource, is(((SimpleDocument) doc).getPath()));
+		}
 	}
 
 	protected Line findLine(int pageno, int lineno) throws Exception {
@@ -31,8 +37,11 @@ public class BaseDocumentTest {
 		return this.line;
 	}
 
-	@Before
-	public void readArchive() throws Exception {
-		this.doc = this.factory.create();
+	protected void setDocument(Document doc) {
+		this.doc = doc;
+	}
+
+	protected void setResource(String resource) {
+		this.resource = resource;
 	}
 }

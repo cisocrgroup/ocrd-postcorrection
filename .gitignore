@@ -2,6 +2,7 @@
 /target/test-classes/
 
 .project
+.dir-locals.el
 .classpath
 .settings/
 doc
