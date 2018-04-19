@@ -1,0 +1,82 @@
+package de.lmu.cis.ocrd.profile;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.lang.reflect.Type;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.io.IOUtils;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+public class Profile {
+	public static Profile read(InputStream is) throws IOException {
+		StringWriter out = new StringWriter();
+		IOUtils.copy(is, out, Charset.forName("UTF-8"));
+		Gson gson = new Gson();
+		Type map = new TypeToken<HashMap<String, Candidates>>() {
+		}.getType();
+		HashMap<String, Candidates> data = gson.fromJson(out.toString(), map);
+		return new Profile(toLowerCase(data));
+	}
+
+	public static Profile read(Path path) throws IOException {
+		try (InputStream is = new FileInputStream(path.toFile())) {
+			return read(is);
+		}
+	}
+
+	public static Profile read(String path) throws IOException {
+		return read(Paths.get(path));
+	}
+
+	private static HashMap<String, Candidates> toLowerCase(HashMap<String, Candidates> map) {
+		HashMap<String, Candidates> newMap = new HashMap<String, Candidates>();
+		for (Map.Entry<String, Candidates> entry : map.entrySet()) {
+			String lower = entry.getKey().toLowerCase();
+			Candidates clower = entry.getValue().toLowerCase();
+			newMap.put(lower, clower);
+		}
+		return newMap;
+	}
+
+	private final HashMap<String, Candidates> data;
+
+	private Profile(HashMap<String, Candidates> data) {
+		this.data = data;
+	}
+
+	public boolean containsKey(String key) {
+		if (key == null) {
+			return false;
+		}
+		return this.data.containsKey(key.toLowerCase());
+	}
+
+	public Set<Map.Entry<String, Candidates>> entrySet() {
+		return this.data.entrySet();
+	}
+
+	public Candidates get(String key) {
+		if (key == null) {
+			return null;
+		}
+		return this.data.get(key.toLowerCase());
+	}
+
+	public Set<String> keySet() {
+		return this.data.keySet();
+	}
+
+	public int size() {
+		return this.data.size();
+	}
+}
