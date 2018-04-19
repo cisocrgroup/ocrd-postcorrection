@@ -44,7 +44,7 @@ public class ZipArchive implements Archive {
 	@Override
 	public InputStream open(Entry entry) throws IOException {
 		if (!(entry instanceof ZipEntry)) {
-			throw new IOException("invalid entry");
+				throw new InvalidEntryException(entry);
 		}
 		return this.zip.getInputStream(((ZipEntry) entry).getUnderlying());
 	}

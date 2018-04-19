@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 
 public interface Archive extends Closeable, Iterable<Entry> {
-	public Path getName();
+		public Path getName();
 
-	public InputStream open(Entry entry) throws IOException;
+		public InputStream open(Entry entry) throws IOException;
 }
