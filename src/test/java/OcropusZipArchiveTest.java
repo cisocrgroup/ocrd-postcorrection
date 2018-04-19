@@ -5,7 +5,9 @@ import java.util.zip.ZipFile;
 
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.parsers.OcropusZipParser;
+import de.lmu.cis.ocrd.parsers.OcropusArchiveParser;
+import de.lmu.cis.ocrd.archive.Archive;
+import de.lmu.cis.ocrd.archive.ZipArchive;
 
 public class OcropusZipArchiveTest extends BaseDocumentTest {
 
@@ -13,8 +15,8 @@ public class OcropusZipArchiveTest extends BaseDocumentTest {
 
 	public OcropusZipArchiveTest() throws Exception {
 		setResource(resource);
-		try (ZipFile zip = new ZipFile(resource)) {
-			setDocument(new OcropusZipParser(zip).parse());
+		try (Archive ar = new ZipArchive(resource)) {
+			setDocument(new OcropusArchiveParser(ar).parse());
 		}
 	}
 
