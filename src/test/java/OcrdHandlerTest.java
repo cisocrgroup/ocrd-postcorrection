@@ -15,7 +15,7 @@ import ocrd.rest.raml.handler.ProjectsHandler;
 import ocrd.rest.raml.impl.OcrdResourceImpl;
 
 @Ignore
-class OcrdHandlerTest {
+public class OcrdHandlerTest {
 
 	private HttpServer server;
 
