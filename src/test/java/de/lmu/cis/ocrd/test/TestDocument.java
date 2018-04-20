@@ -1,3 +1,4 @@
+package de.lmu.cis.ocrd.test;
 import java.util.ArrayList;
 
 import de.lmu.cis.ocrd.Document;

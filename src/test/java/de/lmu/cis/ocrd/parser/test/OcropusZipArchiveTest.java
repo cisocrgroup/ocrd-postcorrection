@@ -1,13 +1,13 @@
+package de.lmu.cis.ocrd.parser.test;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.util.zip.ZipFile;
-
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.parsers.OcropusArchiveParser;
 import de.lmu.cis.ocrd.archive.Archive;
 import de.lmu.cis.ocrd.archive.ZipArchive;
+import de.lmu.cis.ocrd.parsers.OcropusArchiveParser;
 
 public class OcropusZipArchiveTest extends BaseDocumentTest {
 
