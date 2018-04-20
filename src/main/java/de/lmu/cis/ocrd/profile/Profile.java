@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
@@ -65,11 +66,11 @@ public class Profile {
 		return this.data.entrySet();
 	}
 
-	public Candidates get(String key) {
+	public Optional<Candidates> get(String key) {
 		if (key == null) {
-			return null;
+			return Optional.empty();
 		}
-		return this.data.get(key.toLowerCase());
+		return Optional.ofNullable(this.data.get(key.toLowerCase()));
 	}
 
 	public Set<String> keySet() {

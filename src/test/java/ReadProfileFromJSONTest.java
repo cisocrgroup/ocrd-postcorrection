@@ -1,8 +1,8 @@
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,12 +45,12 @@ public class ReadProfileFromJSONTest {
 
 	@Test
 	public void testGetHandlesNull() {
-		assertNull(profile.get(null));
+		assertThat(profile.get(null), is(Optional.empty()));
 	}
 
 	@Test
 	public void testGetNotFoundReturnsNull() {
-		assertNull(profile.get("null"));
+		assertThat(profile.get("null"), is(Optional.empty()));
 	}
 
 	@Test
@@ -60,12 +60,12 @@ public class ReadProfileFromJSONTest {
 
 	@Test
 	public void testNumberOfCandidatesForFirstToken() {
-		assertThat(profile.get("Vnheilfolles").Candidates.length, is(41));
+		assertThat(profile.get("Vnheilfolles").get().Candidates.length, is(41));
 	}
 
 	@Test
 	public void testNumberOfCandidatesForSecondToken() {
-		assertThat(profile.get("Waſſer").Candidates.length, is(6));
+		assertThat(profile.get("Waſſer").get().Candidates.length, is(6));
 	}
 
 	@Test
