@@ -1,20 +1,20 @@
 package de.lmu.cis.ocrd.cli;
 
 import java.util.HashMap;
-import java.util.Optional;
 
 public class CommandFactory {
 	private final HashMap<String, Command> commands = new HashMap<String, Command>();
 
-	public Optional<Command> get(String command) {
+	// Never returns null.
+	public Command get(String command) {
 		if (command == null) {
-			return Optional.empty();
+			return new InvalidCommand("missing command");
 		}
 		String key = command.toLowerCase();
 		if (!this.commands.containsKey(key)) {
-			return Optional.empty();
+			return new InvalidCommand(key.toLowerCase());
 		}
-		return Optional.ofNullable(this.commands.get(key));
+		return this.commands.get(key.toLowerCase());
 	}
 
 	public CommandFactory register(String commandName, Command command) {

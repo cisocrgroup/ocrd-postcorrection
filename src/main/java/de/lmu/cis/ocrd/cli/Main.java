@@ -1,8 +1,5 @@
 package de.lmu.cis.ocrd.cli;
 
-import java.util.Optional;
-
-import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
@@ -14,7 +11,7 @@ public class Main {
 	private static final Options options = options();
 
 	private static CommandFactory commands() {
-		return new CommandFactory().register("info", new InfoCommand());
+		return new CommandFactory().register("info", new InfoCommand()).register("env", new EnvironmentCommand());
 	}
 
 	public static void main(String[] args) {
@@ -30,18 +27,14 @@ public class Main {
 	}
 
 	private static Options options() {
-		return new Options().addOption(
+		return Configuration.createOptions().addOption(
 				Option.builder("c").longOpt("command").hasArg().required().desc("sets command (required)").build());
-
 	}
 
+	// Parses command line arguments and execute command.
 	private static void run(String[] args) throws Exception {
 		CommandLineParser parser = new DefaultParser();
-		CommandLine line = parser.parse(options, args);
-		Optional<Command> command = commands.get(line.getOptionValue("command"));
-		if (!command.isPresent()) {
-			throw new Exception("invalid command: " + line.getOptionValue("command"));
-		}
-		command.get().execute();
+		Configuration configuration = new Configuration(parser.parse(options, args));
+		commands.get(configuration.getCommandLine().getOptionValue("command")).execute(configuration);
 	}
 }
