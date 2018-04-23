@@ -1,3 +1,4 @@
+package de.lmu.cis.ocrd.test;
 
 import java.net.URI;
 
