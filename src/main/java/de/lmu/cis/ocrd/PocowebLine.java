@@ -7,83 +7,91 @@ import de.lmu.cis.pocoweb.Client;
 import de.lmu.cis.pocoweb.Token;
 
 public class PocowebLine extends de.lmu.cis.api.model.Line implements de.lmu.cis.ocrd.Line {
-  private final Client client;
-  private final List<Token> tokens;
-  private final String normalized;
-  private final List<Token> tokenAlignements;
-  public PocowebLine(Client client, de.lmu.cis.api.model.Line line) throws Exception {
-    this.withProjectId(line.getProjectId())
-        .withPageId(line.getPageId())
-        .withLineId(line.getLineId())
-        .withOcr(line.getOcr())
-        .withCor(line.getCor())
-        .withCuts(line.getCuts())
-        .withConfidences(line.getConfidences())
-        .withAverageConfidence(line.getAverageConfidence())
-        .withIsFullyCorrected(line.getIsFullyCorrected())
-        .withIsPartiallyCorrected(line.getIsPartiallyCorrected())
-        .withBox(line.getBox());
-    this.client = client;
-    this.tokens = loadTokens();
-    Pair pair = getNormalizedData();
-    this.normalized = pair.normalized;
-    this.tokenAlignements = pair.tokenAlignements;
-  }
+	private class Pair {
+		public String normalized;
+		public List<Token> tokenAlignements;
 
-  @Override
-  public String toString() {
-    return this.getNormalized();
-  }
+		public Pair(String normalized, List<Token> tokenAlignements) {
+			this.normalized = normalized;
+			this.tokenAlignements = tokenAlignements;
+		}
+	}
 
-  @Override
-public String getNormalized() {
-    return normalized;
-  }
+	private final Client client;
+	private final List<Token> tokens;
+	private final String normalized;
+	private final List<Token> tokenAlignements;
 
-  @Override
-public Token getTokenAt(int i) {
-    return tokenAlignements.get(i);
-  }
+	public PocowebLine(Client client, de.lmu.cis.api.model.Line line) throws Exception {
+		this.withProjectId(line.getProjectId()).withPageId(line.getPageID()).withLineId(line.getLineID())
+				.withOcr(line.getOcr()).withCor(line.getCor()).withCuts(line.getCuts())
+				.withConfidences(line.getConfidences()).withAverageConfidence(line.getAverageConfidence())
+				.withIsFullyCorrected(line.getIsFullyCorrected())
+				.withIsPartiallyCorrected(line.getIsPartiallyCorrected()).withBox(line.getBox());
+		this.client = client;
+		this.tokens = loadTokens();
+		Pair pair = getNormalizedData();
+		this.normalized = pair.normalized;
+		this.tokenAlignements = pair.tokenAlignements;
+	}
 
-  @Override
-public List<Token> getTokens() {
-    return tokens;
-  }
+	@Override
+	public int getLineId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-  private class Pair {
-    public Pair(String normalized, List<Token> tokenAlignements) {
-      this.normalized = normalized;
-      this.tokenAlignements = tokenAlignements;
-    }
-    public String normalized;
-    public List<Token> tokenAlignements;
-  }
+	@Override
+	public String getNormalized() {
+		return normalized;
+	}
 
-  private Pair getNormalizedData() {
-    StringBuilder builder = new StringBuilder();
+	private Pair getNormalizedData() {
+		StringBuilder builder = new StringBuilder();
 
-    boolean first = true;
-    List<Token> alignements = new ArrayList<Token>();
-    for (Token t : tokens) {
-      if (first) {
-        first = false;
-      } else {
-        builder.append(' ');
-        alignements.add(null);  // there is surely a better way
-      }
-      builder.append(t.getCor());
-      for (int i = 0; i < t.getCor().length(); i++) {
-        alignements.add(t);
-      }
-    }
-    return new Pair(builder.toString(), alignements);
-  }
+		boolean first = true;
+		List<Token> alignements = new ArrayList<Token>();
+		for (Token t : tokens) {
+			if (first) {
+				first = false;
+			} else {
+				builder.append(' ');
+				alignements.add(null); // there is surely a better way
+			}
+			builder.append(t.getCor());
+			for (int i = 0; i < t.getCor().length(); i++) {
+				alignements.add(t);
+			}
+		}
+		return new Pair(builder.toString(), alignements);
+	}
 
-  private List<Token> loadTokens() throws Exception {
-    List<Token> tokens = client.getTokens(projectId, pageId, lineId);
-    if (tokens == null) {
-      return new ArrayList<Token>();
-    }
-    return tokens;
-  }
+	@Override
+	public int getPageId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Token getTokenAt(int i) {
+		return tokenAlignements.get(i);
+	}
+
+	@Override
+	public List<Token> getTokens() {
+		return tokens;
+	}
+
+	private List<Token> loadTokens() throws Exception {
+		List<Token> tokens = client.getTokens(projectId, pageId, lineId);
+		if (tokens == null) {
+			return new ArrayList<Token>();
+		}
+		return tokens;
+	}
+
+	@Override
+	public String toString() {
+		return this.getNormalized();
+	}
 }
