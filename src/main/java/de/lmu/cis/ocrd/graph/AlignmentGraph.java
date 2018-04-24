@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import de.lmu.cis.iba.Pairwise_LCS_Alignment.AlignmentPair;
 
 public class AlignmentGraph {
-	private Node _final;
 
 	private final String s1, s2;
 
@@ -25,30 +24,33 @@ public class AlignmentGraph {
 		return new Tokenizer(start);
 	}
 
+	public Traverser getTraverser() {
+		return new Traverser(start);
+	}
+
 	private void build(ArrayList<AlignmentPair> ps) {
 		if (ps.isEmpty()) {
 			return;
 		}
 		// System.out.println(new Gson().toJson(ps.get(0)));
-		start = new Node(ps.get(0).label, this);
+		start = new Node(ps.get(0).label);
 		Node prevn = start;
 		AlignmentPair prevp = ps.get(0);
 		for (int i = 1; i < ps.size(); i++) {
 			final AlignmentPair curp = handleOverlap(prevp, ps.get(i));
-			final Node curn = new Node(curp.label, this);
+			final Node curn = new Node(curp.label);
 			// System.out.println(new Gson().toJson(curp));
 			final String s1gap = getGapLabel(prevp.epos1, curp.spos1, s1);
 			// System.out.println("s1gap: " + s1gap);
 			final String s2gap = getGapLabel(prevp.epos2, curp.spos2, s2);
 			// System.out.println("s2gap: " + s2gap);
-			Gap g1 = new Gap(0, s1gap, curn);
-			Gap g2 = new Gap(1, s2gap, curn);
-			prevn.gaps.add(g1);
-			prevn.gaps.add(g2);
+			Gap g1 = new Gap(s1gap, curn);
+			Gap g2 = new Gap(s2gap, curn);
+			prevn.add(g1);
+			prevn.add(g2);
 			prevp = curp;
 			prevn = curn;
 		}
-		_final = prevn;
 	}
 
 	private String getGapLabel(int s, int e, String str) {

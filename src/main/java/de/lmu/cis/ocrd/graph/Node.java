@@ -2,15 +2,38 @@ package de.lmu.cis.ocrd.graph;
 
 import java.util.ArrayList;
 
-public class Node {
-	final ArrayList<Gap> gaps;
-	private final AlignmentGraph graph;
+class Node implements Label {
+	private ArrayList<Gap> gaps;
 	private final String label;
 
-	Node(String label, AlignmentGraph graph) {
+	public Node(String label) {
 		this.label = label;
-		this.graph = graph;
-		gaps = new ArrayList<Gap>();
+	}
+
+	public Node add(Gap gap) {
+		if (gaps == null) {
+			gaps = new ArrayList<Gap>();
+		}
+		gaps.add(gap);
+		return this;
+	}
+
+	@Override
+	public String getLabel() {
+		return label;
+	}
+
+	@Override
+	public boolean isSynchronization() {
+		return true;
+	}
+
+	@Override
+	public Label next(int id) {
+		if (gaps == null) {
+			return null;
+		}
+		return gaps.get(id);
 	}
 
 	public String toDot() {
@@ -31,22 +54,26 @@ public class Node {
 	private void appendDot(StringBuilder builder) {
 		builder.append("\"" + label + "\"");
 		builder.append(" [label=\"" + label + "\"] // dotcode\n");
+		if (gaps == null) {
+			return;
+		}
+		int id = 0;
 		for (Gap g : gaps) {
 			builder.append("\"" + label + "\"");
 			builder.append(" -> ");
-			builder.append("\"" + g.target.label + "\"");
-			builder.append(" [label=\"" + g.toString() + "\"] // dotcode\n");
+			builder.append("\"" + g.next(0).getLabel() + "\"");
+			builder.append(" [label=\"" + id + ":" + g.toString() + "\"] // dotcode\n");
+			++id;
 		}
-		if (!gaps.isEmpty()) {
-			gaps.get(0).target.appendDot(builder);
-		}
+		gaps.get(0).next(0).appendDot(builder);
 	}
 
 	private void traverse(int id, StringBuilder builder) {
 		builder.append(label);
-		if (!gaps.isEmpty()) {
-			builder.append(gaps.get(id).o);
-			gaps.get(id).target.traverse(id, builder);
+		if (gaps == null) {
+			return;
 		}
+		builder.append(gaps.get(id).getLabel());
+		gaps.get(id).next(id).traverse(id, builder);
 	}
 }

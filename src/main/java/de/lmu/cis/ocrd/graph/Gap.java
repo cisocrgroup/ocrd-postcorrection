@@ -1,25 +1,37 @@
 package de.lmu.cis.ocrd.graph;
 
-class Gap {
-	final int id;
-	final String o;
-	final Node target;
+class Gap implements Label {
+	private final String label;
+	private final Node target;
 
-	Gap(int id, String o, Node t) {
-		this.id = id;
-		this.o = o;
-		target = t;
+	public Gap(String label, Node target) {
+		this.label = label;
+		this.target = target;
+	}
+
+	@Override
+	public String getLabel() {
+		return label;
+	}
+
+	@Override
+	public boolean isSynchronization() {
+		return false;
+	}
+
+	@Override
+	public Node next(int id) {
+		return target;
 	}
 
 	@Override
 	public String toString() {
-		String output = o;
-		if (output.length() == 0) {
-			output = "ε";
+		if (label.isEmpty()) {
+			return "ε";
 		}
-		if (" ".equals(output)) {
-			output = "<SP>";
+		if (" ".equals(label)) {
+			return "<SP>";
 		}
-		return id + ":" + output;
+		return label;
 	}
 }
