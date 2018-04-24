@@ -1,16 +1,19 @@
 package de.lmu.cis.ocrd;
 
 public class OCRLine implements Comparable<OCRLine> {
+	public String ocrEngine;
+
+	public final Line line;
+
+	public final int pageSeq;
+
+	public boolean isMasterOCR;
+
 	public OCRLine(String ocrEngine, Line line, int pageSeq, boolean isMasterOCR) {
 		this.ocrEngine = ocrEngine;
 		this.line = line;
 		this.pageSeq = pageSeq;
 		this.isMasterOCR = isMasterOCR;
-	}
-
-	@Override
-	public String toString() {
-		return this.line.toString();
 	}
 
 	@Override
@@ -30,8 +33,8 @@ public class OCRLine implements Comparable<OCRLine> {
 		return this.ocrEngine.compareTo(other.ocrEngine);
 	}
 
-	public final String ocrEngine;
-	public final Line line;
-	public final int pageSeq;
-	public final boolean isMasterOCR;
+	@Override
+	public String toString() {
+		return this.line.toString();
+	}
 }

@@ -1,18 +1,12 @@
 package de.lmu.cis.ocrd.cli;
 
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.pmw.tinylog.Configurator;
+import org.pmw.tinylog.Level;
 
+// java -cp target/ocrd-0.1-jar-with-dependencies.jar de.lmu.cis.ocrd.cli.Main -m x -w w -I w -O x -c align src/test/resources/1841-DieGrenzboten-abbyy.zip src/test/resources/1841-DieGrenzboten-ocropus.zip
 public class Main {
 	private static final CommandFactory commands = commands();
-	private static final Options options = options();
-
-	private static CommandFactory commands() {
-		return new CommandFactory().register("info", new InfoCommand()).register("env", new EnvironmentCommand());
-	}
 
 	public static void main(String[] args) {
 		try {
@@ -26,15 +20,15 @@ public class Main {
 		}
 	}
 
-	private static Options options() {
-		return Configuration.createOptions().addOption(
-				Option.builder("c").longOpt("command").hasArg().required().desc("sets command (required)").build());
+	private static CommandFactory commands() {
+		return new CommandFactory().register("info", new InfoCommand()).register("env", new EnvironmentCommand())
+				.register("align", new AlignCommand());
 	}
 
 	// Parses command line arguments and execute command.
 	private static void run(String[] args) throws Exception {
-		CommandLineParser parser = new DefaultParser();
-		Configuration configuration = new Configuration(parser.parse(options, args));
-		commands.get(configuration.getCommandLine().getOptionValue("command")).execute(configuration);
+		Configurator.defaultConfig().level(Level.DEBUG);
+		Configuration configuration = Configuration.fromCommandLine(args);
+		commands.get(configuration.getCommand()).execute(configuration);
 	}
 }

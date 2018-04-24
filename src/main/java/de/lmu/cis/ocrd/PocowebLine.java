@@ -23,7 +23,7 @@ public class PocowebLine extends de.lmu.cis.api.model.Line implements de.lmu.cis
 	private final List<Token> tokenAlignements;
 
 	public PocowebLine(Client client, de.lmu.cis.api.model.Line line) throws Exception {
-		this.withProjectId(line.getProjectId()).withPageId(line.getPageID()).withLineId(line.getLineID())
+		this.withProjectId(line.getProjectId()).withPageId(line.getLineId()).withLineId(line.getLineId())
 				.withOcr(line.getOcr()).withCor(line.getCor()).withCuts(line.getCuts())
 				.withConfidences(line.getConfidences()).withAverageConfidence(line.getAverageConfidence())
 				.withIsFullyCorrected(line.getIsFullyCorrected())
