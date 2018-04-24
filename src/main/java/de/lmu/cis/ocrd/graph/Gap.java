@@ -1,17 +1,21 @@
 package de.lmu.cis.ocrd.graph;
 
 class Gap implements Label {
+	private final int e;
 	private final String label;
+	private final int s;
 	private final Node target;
 
-	public Gap(String label, Node target) {
+	public Gap(int s, int e, String label, Node target) {
+		this.s = s;
+		this.e = e;
 		this.label = label;
 		this.target = target;
 	}
 
 	@Override
 	public String getLabel() {
-		return label;
+		return label.substring(s, e);
 	}
 
 	@Override
@@ -26,12 +30,12 @@ class Gap implements Label {
 
 	@Override
 	public String toString() {
-		if (label.isEmpty()) {
+		if (getLabel().isEmpty()) {
 			return "ε";
 		}
-		if (" ".equals(label)) {
+		if (" ".equals(getLabel())) {
 			return "<SP>";
 		}
-		return label;
+		return getLabel();
 	}
 }

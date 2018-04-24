@@ -5,10 +5,10 @@ public class Tokenizer {
 		public void visit(String a, String b);
 	}
 
-	private final Node node;
+	private final Traverser traverser;
 
-	public Tokenizer(Node node) {
-		this.node = node;
+	public Tokenizer(Traverser traverser) {
+		this.traverser = traverser;
 	}
 
 	public void eachPair(Visitor v) {

@@ -6,14 +6,15 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import de.lmu.cis.ocrd.graph.AlignmentGraph;
+import de.lmu.cis.ocrd.graph.LabelIterator;
 
-public class AlignmentGraphTest {
+public class AlignmentGraphIteratorTest {
 
 	private static String makeString(AlignmentGraph g, int id) {
 		StringBuilder builder = new StringBuilder();
-		g.getTraverser().eachLabel(id, (label) -> {
-			builder.append(label.getLabel());
-		});
+		for (LabelIterator it = g.iterator(id); it.hasNext();) {
+			builder.append(it.next().getChar());
+		}
 		return builder.toString();
 	}
 

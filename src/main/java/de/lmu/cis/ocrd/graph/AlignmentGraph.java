@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.graph;
 
 import java.util.ArrayList;
 
+import de.lmu.cis.iba.Pairwise_LCS_Alignment;
 import de.lmu.cis.iba.Pairwise_LCS_Alignment.AlignmentPair;
 
 public class AlignmentGraph {
@@ -10,10 +11,12 @@ public class AlignmentGraph {
 
 	private Node start;
 
-	public AlignmentGraph(ArrayList<AlignmentPair> ps, String s1, String s2) {
-		this.s1 = '#' + s1 + '$';
-		this.s2 = '#' + s2 + '$';
-		build(ps);
+	public AlignmentGraph(String a, String b) {
+		Pairwise_LCS_Alignment algn = new Pairwise_LCS_Alignment(a, b);
+		algn.align();
+		s1 = a;
+		s2 = b;
+		build(algn.getAligmentPairs());
 	}
 
 	public Node getStartNode() {
@@ -21,11 +24,15 @@ public class AlignmentGraph {
 	}
 
 	public Tokenizer getTokenizer() {
-		return new Tokenizer(start);
+		return new Tokenizer(getTraverser());
 	}
 
 	public Traverser getTraverser() {
 		return new Traverser(start);
+	}
+
+	public LabelIterator iterator(int id) {
+		return new LabelIterator(start, id);
 	}
 
 	private void build(ArrayList<AlignmentPair> ps) {
@@ -40,27 +47,19 @@ public class AlignmentGraph {
 			final AlignmentPair curp = handleOverlap(prevp, ps.get(i));
 			final Node curn = new Node(curp.label);
 			// System.out.println(new Gson().toJson(curp));
-			final String s1gap = getGapLabel(prevp.epos1, curp.spos1, s1);
+			final Gap g1 = makeGap(prevp.epos1, curp.spos1, s1, curn);// getGapLabel(prevp.epos1, curp.spos1, s1);
 			// System.out.println("s1gap: " + s1gap);
-			final String s2gap = getGapLabel(prevp.epos2, curp.spos2, s2);
+			final Gap g2 = makeGap(prevp.epos2, curp.spos2, s2, curn);// getGapLabel(prevp.epos2, curp.spos2, s2);
 			// System.out.println("s2gap: " + s2gap);
-			Gap g1 = new Gap(s1gap, curn);
-			Gap g2 = new Gap(s2gap, curn);
+			System.out.println("prevn: '" + prevn.getLabel() + "'");
+			System.out.println("g1: '" + g1.getLabel() + "'");
+			System.out.println("g2: '" + g2.getLabel() + "'");
+			System.out.println("curn: '" + curn.getLabel() + "'");
 			prevn.add(g1);
 			prevn.add(g2);
 			prevp = curp;
 			prevn = curn;
 		}
-	}
-
-	private String getGapLabel(int s, int e, String str) {
-		// System.out.println("getGapLabel(" + s + ", " + e + ", " + str + ")");
-		s += 1;
-		e += 1;
-		if (s > e) { // overlaps
-			return "";
-		}
-		return str.substring(s, e);
 	}
 
 	private AlignmentPair handleOverlap(AlignmentPair p, AlignmentPair c) {
@@ -73,5 +72,15 @@ public class AlignmentGraph {
 			return new AlignmentPair(label, c.epos1, c.epos2);
 		}
 		return c;
+	}
+
+	private Gap makeGap(int s, int e, String str, Node node) {
+		// System.out.println("getGapLabel(" + s + ", " + e + ", " + str + ")");
+		// s += 1;
+		// e += 1;
+		if (s > e) {
+			s = e;
+		}
+		return new Gap(s, e, str, node);
 	}
 }
