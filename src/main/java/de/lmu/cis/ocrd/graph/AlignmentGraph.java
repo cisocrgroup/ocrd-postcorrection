@@ -39,22 +39,14 @@ public class AlignmentGraph {
 		if (ps.isEmpty()) {
 			return;
 		}
-		// System.out.println(new Gson().toJson(ps.get(0)));
 		start = new Node(ps.get(0).label);
 		Node prevn = start;
 		AlignmentPair prevp = ps.get(0);
 		for (int i = 1; i < ps.size(); i++) {
 			final AlignmentPair curp = handleOverlap(prevp, ps.get(i));
 			final Node curn = new Node(curp.label);
-			// System.out.println(new Gson().toJson(curp));
-			final Gap g1 = makeGap(prevp.epos1, curp.spos1, s1, curn);// getGapLabel(prevp.epos1, curp.spos1, s1);
-			// System.out.println("s1gap: " + s1gap);
-			final Gap g2 = makeGap(prevp.epos2, curp.spos2, s2, curn);// getGapLabel(prevp.epos2, curp.spos2, s2);
-			// System.out.println("s2gap: " + s2gap);
-			System.out.println("prevn: '" + prevn.getLabel() + "'");
-			System.out.println("g1: '" + g1.getLabel() + "'");
-			System.out.println("g2: '" + g2.getLabel() + "'");
-			System.out.println("curn: '" + curn.getLabel() + "'");
+			final Gap g1 = makeGap(prevp.epos1, curp.spos1, s1, curn);
+			final Gap g2 = makeGap(prevp.epos2, curp.spos2, s2, curn);
 			prevn.add(g1);
 			prevn.add(g2);
 			prevp = curp;

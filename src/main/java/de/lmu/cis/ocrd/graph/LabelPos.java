@@ -13,7 +13,7 @@ public class LabelPos {
 			if (this.pos < this.label.getLabel().length()) {
 				break;
 			}
-			this.label = label.next(id);
+			this.label = this.label.next(this.id);
 			this.pos = 0;
 		}
 	}
