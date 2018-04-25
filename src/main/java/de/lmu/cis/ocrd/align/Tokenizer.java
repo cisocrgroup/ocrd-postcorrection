@@ -7,7 +7,7 @@ public class Tokenizer {
 
 	private final Alignment a;
 
-	public Tokenizer(AlignmentGraph g) {
+	public Tokenizer(Graph g) {
 		a = new Alignment().addAll(g.getStartNode());
 	}
 

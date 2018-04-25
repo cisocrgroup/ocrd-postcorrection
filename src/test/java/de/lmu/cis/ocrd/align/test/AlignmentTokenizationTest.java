@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.align.AlignmentGraph;
+import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.Tokenizer;
 
 public class AlignmentTokenizationTest {
@@ -17,7 +17,7 @@ public class AlignmentTokenizationTest {
 	}
 
 	private static ArrayList<Pair> align(String a, String b) {
-		final AlignmentGraph g = new AlignmentGraph(a, b);
+		final Graph g = new Graph(a, b);
 		final Tokenizer t = g.getTokenizer();
 		final ArrayList<Pair> pairs = new ArrayList<Pair>();
 		t.eachPair((s1, s2) -> {

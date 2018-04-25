@@ -11,7 +11,7 @@ import de.lmu.cis.api.model.Project;
 import de.lmu.cis.ocrd.Config;
 import de.lmu.cis.ocrd.OCRLine;
 import de.lmu.cis.ocrd.PocowebDocument;
-import de.lmu.cis.ocrd.align.AlignmentGraph;
+import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.pocoweb.Client;
 
 class Main {
@@ -67,7 +67,7 @@ class Main {
 					ArrayList<Pairwise_LCS_Alignment.AlignmentPair> as = alignment.getAligmentPairs();
 					System.out.println(new Gson().toJson(as));
 					if (as.size() > 2) {
-						new AlignmentGraph(alignment, mocr.line.getNormalized(), line.line.getNormalized());
+						new Graph(alignment, mocr.line.getNormalized(), line.line.getNormalized());
 						// System.out.println(g.getStartNode().toDot());
 						return;
 					}

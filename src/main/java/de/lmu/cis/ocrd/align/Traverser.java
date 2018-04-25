@@ -7,7 +7,7 @@ public class Traverser {
 
 	private final Node node;
 
-	public Traverser(AlignmentGraph g) {
+	public Traverser(Graph g) {
 		node = g.getStartNode();
 	}
 

@@ -5,19 +5,19 @@ import java.util.ArrayList;
 import de.lmu.cis.iba.Pairwise_LCS_Alignment;
 import de.lmu.cis.iba.Pairwise_LCS_Alignment.AlignmentPair;
 
-public class AlignmentGraph {
+public class Graph {
 
 	private final String s1, s2;
 
 	private Node start;
 
-	public AlignmentGraph(Pairwise_LCS_Alignment algn, String a, String b) {
+	public Graph(Pairwise_LCS_Alignment algn, String a, String b) {
 		s1 = a;
 		s2 = b;
 		build(algn.getAligmentPairs());
 	}
 
-	public AlignmentGraph(String a, String b) {
+	public Graph(String a, String b) {
 		Pairwise_LCS_Alignment algn = new Pairwise_LCS_Alignment(a, b);
 		algn.align();
 		s1 = a;
