@@ -156,6 +156,10 @@ class Configuration {
 		return notNull(parameter);
 	}
 
+	public String getProfilerCommand() {
+		return notNull(data.profilerCommand);
+	}
+
 	public String getWorkDir() {
 		return notNull(workdir);
 	}
