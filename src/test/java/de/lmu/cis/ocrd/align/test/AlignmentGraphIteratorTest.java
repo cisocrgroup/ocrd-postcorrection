@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.graph.test;
+package de.lmu.cis.ocrd.align.test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
