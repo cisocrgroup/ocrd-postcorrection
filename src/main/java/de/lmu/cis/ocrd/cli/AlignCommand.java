@@ -30,11 +30,11 @@ class AlignCommand implements Command {
 	}
 
 	private void align(Document doc) throws Exception {
-		Logger.info("aligning lines ...");
+		Logger.debug("aligning lines ...");
 		LineAlignment lalignment = new LineAlignment(doc, 2);
-		Logger.info("done aligning lines");
+		Logger.debug("done aligning lines");
 		int i = 0;
-		Logger.info("iterating ...");
+		Logger.debug("iterating ...");
 		for (ArrayList<OCRLine> lines : lalignment) {
 			System.out.println(++i + ":");
 			System.out.println(lines.get(0).line.getNormalized());
@@ -44,6 +44,6 @@ class AlignCommand implements Command {
 						System.out.println(a + "|" + b);
 					});
 		}
-		Logger.info("done iterating");
+		Logger.debug("done iterating");
 	}
 }
