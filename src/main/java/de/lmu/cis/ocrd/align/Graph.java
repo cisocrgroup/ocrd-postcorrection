@@ -52,6 +52,12 @@ public class Graph {
 		start = new Node(ps.get(0).label);
 		Node prevn = start;
 		AlignmentPair prevp = ps.get(0);
+		// System.out.println("size = " + ps.size());
+		// System.out.println("label = " + ps.get(0).label);
+		// System.out.println("spos1 = " + ps.get(0).spos1);
+		// System.out.println("spos2 = " + ps.get(0).spos2);
+		// System.out.println("epos1 = " + ps.get(0).epos1);
+		// System.out.println("epos2 = " + ps.get(0).epos2);
 		for (int i = 1; i < ps.size(); i++) {
 			final AlignmentPair curp = handleOverlap(prevp, ps.get(i));
 			final Node curn = new Node(curp.label);
@@ -62,6 +68,7 @@ public class Graph {
 			prevp = curp;
 			prevn = curn;
 		}
+		System.out.println("start: " + start.getLabel());
 	}
 
 	private AlignmentPair handleOverlap(AlignmentPair p, AlignmentPair c) {

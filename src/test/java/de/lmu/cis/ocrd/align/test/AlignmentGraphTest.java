@@ -27,6 +27,16 @@ public class AlignmentGraphTest {
 		assertThat(makeString(g, 1), is('#' + b + '$'));
 	}
 
+	// TODO: Should be handled
+	// @Test
+	// public void testSelf() {
+	// final String s = "one two three";
+	// final Graph g = new Graph(s, s);
+	// assertThat(makeString(g, 0), is('#' + s + '$'));
+	// assertThat(makeString(g, 1), is('#' + s + '$'));
+	// assertThat(makeString(g, 0), is(makeString(g, 1)));
+	// }
+
 	@Test
 	public void testSimple() throws Exception {
 		String a = "die Presse";

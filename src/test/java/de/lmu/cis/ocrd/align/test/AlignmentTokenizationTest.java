@@ -24,10 +24,21 @@ public class AlignmentTokenizationTest {
 			pairs.add(new Pair());
 			pairs.get(pairs.size() - 1).first = s1;
 			pairs.get(pairs.size() - 1).second = s2;
-			// System.out.println("a = '" + s1 + "' b = " + s2 + "'");
+			System.out.println("a = '" + s1 + "' b = " + s2 + "'");
 		});
 		return pairs;
 	}
+
+	// TODO: Should be handled
+	// @Test
+	// public void testAlignToSelf() {
+	// final String a = "one two three tokens";
+	// ArrayList<Pair> self = align(a, a);
+	// assertThat(self.size(), is(4));
+	// for (Pair p : self) {
+	// assertThat(p.first, is(p.second));
+	// }
+	// }
 
 	@Test
 	public void testDeletion() {
