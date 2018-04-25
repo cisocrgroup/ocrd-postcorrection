@@ -1,3 +1,4 @@
+![build status](https://travis-ci.org/cisocrgroup/ocrd-postcorrection.svg?branch=github)
 OCRD REST API
 ====================
 
@@ -13,7 +14,7 @@ Eclipse/Maven project for OCRD Application Server REST API & UIF
 ## build, run & dev-steps
 
 ### import to eclipse
-1. clone repo to your local machine 
+1. clone repo to your local machine
 2. Open Eclipse
 3. File->Import->Maven->existing Maven project
 4. Run from new projects's context menu Maven->Update project
@@ -45,8 +46,3 @@ all source files which are needed to build the webapp (e.g. backbone js code & H
 
 ### build
 use build scripts to create a build. The build-script shall sync the build to `src/webapp`
-
-
-
-
-
