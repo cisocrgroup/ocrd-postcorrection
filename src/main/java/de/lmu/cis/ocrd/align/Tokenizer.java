@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.align;
 
 public class Tokenizer {
 	public interface Visitor {
-		public void visit(String a, String b);
+		public void visit(String a, String b, boolean anew, boolean bnew);
 	}
 
 	private final Alignment a;
@@ -27,20 +27,24 @@ public class Tokenizer {
 			if (s1.toString().isEmpty() && s2.toString().isEmpty()) {
 				return;
 			}
-			v.visit(s1.toString(), s2.toString());
+			v.visit(s1.toString(), s2.toString(), true, true);
 			while (i1 < a.size() && i2 < a.size() && i1 != i2) {
+				boolean anew = false;
+				boolean bnew = false;
 				if (!a.get(i1).isAligned() || i1 < i2) {
+					anew = true;
 					s1.setLength(0);
 					i1 = nextToken(i1, 0, s1);
 				}
 				if (!a.get(i2).isAligned() || i2 < i1) {
+					bnew = true;
 					s2.setLength(0);
 					i2 = nextToken(i2, 1, s2);
 				}
 				// System.out.println("in inner while: " + i1 + ", " + i2 + " (" +
 				// a.get(i1).isAligned() + ", "
 				// + a.get(i2).isAligned() + ")");
-				v.visit(s1.toString(), s2.toString());
+				v.visit(s1.toString(), s2.toString(), anew, bnew);
 			}
 		}
 	}
