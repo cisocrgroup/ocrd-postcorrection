@@ -11,6 +11,12 @@ public class AlignmentGraph {
 
 	private Node start;
 
+	public AlignmentGraph(Pairwise_LCS_Alignment algn, String a, String b) {
+		s1 = a;
+		s2 = b;
+		build(algn.getAligmentPairs());
+	}
+
 	public AlignmentGraph(String a, String b) {
 		Pairwise_LCS_Alignment algn = new Pairwise_LCS_Alignment(a, b);
 		algn.align();
