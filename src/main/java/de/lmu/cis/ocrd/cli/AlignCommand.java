@@ -36,8 +36,9 @@ class AlignCommand implements Command {
 		int i = 0;
 		Logger.info("iterating ...");
 		for (ArrayList<OCRLine> lines : lalignment) {
-			System.out
-					.println(++i + ": " + lines.get(0).line.getNormalized() + "|" + lines.get(1).line.getNormalized());
+			System.out.println(++i + ":");
+			System.out.println(lines.get(0).line.getNormalized());
+			System.out.println(lines.get(1).line.getNormalized());
 			new Graph(lines.get(0).line.getNormalized(), lines.get(1).line.getNormalized()).getTokenizer()
 					.eachPair((a, b) -> {
 						System.out.println(a + "|" + b);

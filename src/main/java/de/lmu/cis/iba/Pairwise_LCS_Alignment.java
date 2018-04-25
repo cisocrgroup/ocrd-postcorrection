@@ -36,6 +36,16 @@ public class Pairwise_LCS_Alignment {
 	// calculate_LCS()
 	// *******************************************************************************
 
+	public Pairwise_LCS_Alignment(String n1, String n2) {
+		ArrayList<String> stringset = new ArrayList<String>();
+		stringset.add("#" + n1 + "$");
+		stringset.add("#" + n2 + "$");
+		Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset, false);
+		scdawg.determineAlphabet(false);
+		scdawg.build_cdawg();
+		this.scdawg = scdawg;
+	}
+
 	public void align() {
 		Logger.debug("Searching quasi max nodes for s1 and s2 pairs...");
 		ArrayList<Endpos_Pair> quasi_max_nodes = find_quasi_max_nodes_pairwise();
