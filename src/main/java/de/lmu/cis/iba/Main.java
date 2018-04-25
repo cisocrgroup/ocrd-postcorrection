@@ -11,7 +11,7 @@ import de.lmu.cis.api.model.Project;
 import de.lmu.cis.ocrd.Config;
 import de.lmu.cis.ocrd.OCRLine;
 import de.lmu.cis.ocrd.PocowebDocument;
-import de.lmu.cis.ocrd.graph.AlignmentGraph;
+import de.lmu.cis.ocrd.align.AlignmentGraph;
 import de.lmu.cis.pocoweb.Client;
 
 class Main {

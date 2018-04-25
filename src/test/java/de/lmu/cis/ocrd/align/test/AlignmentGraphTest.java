@@ -5,7 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.graph.AlignmentGraph;
+import de.lmu.cis.ocrd.align.AlignmentGraph;
 
 public class AlignmentGraphTest {
 

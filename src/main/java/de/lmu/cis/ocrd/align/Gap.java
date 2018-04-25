@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.graph;
+package de.lmu.cis.ocrd.align;
 
 class Gap implements Label {
 	private final int e;

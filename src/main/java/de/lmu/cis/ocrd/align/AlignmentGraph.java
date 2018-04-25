@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.graph;
+package de.lmu.cis.ocrd.align;
 
 import java.util.ArrayList;
 

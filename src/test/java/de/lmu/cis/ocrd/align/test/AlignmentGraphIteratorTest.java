@@ -5,8 +5,8 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.graph.AlignmentGraph;
-import de.lmu.cis.ocrd.graph.LabelIterator;
+import de.lmu.cis.ocrd.align.AlignmentGraph;
+import de.lmu.cis.ocrd.align.LabelIterator;
 
 public class AlignmentGraphIteratorTest {
 

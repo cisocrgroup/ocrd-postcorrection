@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.graph.AlignmentGraph;
-import de.lmu.cis.ocrd.graph.Tokenizer;
+import de.lmu.cis.ocrd.align.AlignmentGraph;
+import de.lmu.cis.ocrd.align.Tokenizer;
 
 public class AlignmentTokenizationTest {
 	private static class Pair {

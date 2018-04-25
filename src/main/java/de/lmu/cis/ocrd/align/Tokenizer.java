@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.graph;
+package de.lmu.cis.ocrd.align;
 
 public class Tokenizer {
 	public interface Visitor {
