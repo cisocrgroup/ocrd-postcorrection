@@ -30,6 +30,15 @@ public class AlignmentTokenizationTest {
 	}
 
 	@Test
+	public void testDeletion() {
+		final String a = "here is a deletion my friend";
+		final String b = "here is a del my friend";
+		assertThat(align(a, b).size(), is(6));
+		assertThat(align(a, b).get(3).first, is("deletion"));
+		assertThat(align(a, b).get(3).second, is("del"));
+	}
+
+	@Test
 	public void testFirstABPair() {
 		final String a = "schwärmt Der Name Belgien aber so uralt das Wort auch ist";
 		final String b = "ſchw rmt Der Name Belgien aber ſo uralt das Wort auch iſt";
