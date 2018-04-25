@@ -1,4 +1,4 @@
-![build status](https://travis-ci.org/cisocrgroup/ocrd-postcorrection.svg?branch=github)
+![build status](https://travis-ci.org/cisocrgroup/ocrd-postcorrection.svg?branch=dev)
 OCRD REST API
 ====================
 
