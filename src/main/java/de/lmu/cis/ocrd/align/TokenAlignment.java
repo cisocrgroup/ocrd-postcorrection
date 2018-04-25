@@ -34,8 +34,23 @@ public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 		public String getMaster() {
 			return master;
 		}
+
+		@Override
+		public String toString() {
+			StringBuilder str = new StringBuilder(master);
+			for (ArrayList<String> als : alignments) {
+				char pre = '|';
+				for (String s : als) {
+					str.append(pre);
+					str.append(s);
+					pre = ',';
+				}
+			}
+			return str.toString();
+		}
 	}
 
+	// counter to handle i++ in a closure.
 	private class Counter {
 		int i;
 
@@ -77,8 +92,16 @@ public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 		return this;
 	}
 
+	public Token get(int i) {
+		return alignments.get(i);
+	}
+
 	@Override
 	public Iterator<Token> iterator() {
 		return alignments.iterator();
+	}
+
+	public int size() {
+		return alignments.size();
 	}
 }
