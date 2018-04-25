@@ -8,6 +8,7 @@ import de.lmu.cis.iba.LineAlignment;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.OCRLine;
 import de.lmu.cis.ocrd.Project;
+import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.parsers.ABBYYXMLFileType;
 import de.lmu.cis.ocrd.parsers.ABBYYXMLParserFactory;
@@ -29,14 +30,20 @@ class AlignCommand implements Command {
 	}
 
 	private void align(Document doc) throws Exception {
-		Logger.info("aligning lines ...");
+		Logger.debug("aligning lines ...");
 		LineAlignment lalignment = new LineAlignment(doc, 2);
-		Logger.info("done aligning lines");
+		Logger.debug("done aligning lines");
 		int i = 0;
-		Logger.info("iterating ...");
+		Logger.debug("iterating ...");
 		for (ArrayList<OCRLine> lines : lalignment) {
-			Logger.info("{}: {} <-> {}", ++i, lines.get(0).line.getNormalized(), lines.get(1).line.getNormalized());
+			System.out.println(++i + ":");
+			System.out.println(lines.get(0).line.getNormalized());
+			System.out.println(lines.get(1).line.getNormalized());
+			new Graph(lines.get(0).line.getNormalized(), lines.get(1).line.getNormalized()).getTokenizer()
+					.eachPair((a, b) -> {
+						System.out.println(a + "|" + b);
+					});
 		}
-		Logger.info("done iterating");
+		Logger.debug("done iterating");
 	}
 }

@@ -1,5 +1,5 @@
 package de.lmu.cis.ocrd.cli;
 
-public interface Command {
+interface Command {
 	void execute(Configuration config) throws Exception;
 }
