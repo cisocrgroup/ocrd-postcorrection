@@ -18,6 +18,19 @@ public class LabelPos {
 		}
 	}
 
+	// Compare LabelPos based on the label and the position.
+	// Does *not* compare them based on the id.
+	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof LabelPos)) {
+			return false;
+		}
+		final LabelPos pos = (LabelPos) other;
+		// check if both point to the same label with the same position
+		return label == pos.label && this.pos == pos.pos;
+
+	}
+
 	public char getChar() {
 		return label.getLabel().charAt(pos);
 	}
@@ -27,7 +40,7 @@ public class LabelPos {
 	}
 
 	public boolean isSynchronization() {
-		return label.isSynchronization();
+		return label == null ? false : label.isSynchronization();
 	}
 
 	public LabelPos next() {

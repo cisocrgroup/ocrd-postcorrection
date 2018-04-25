@@ -7,8 +7,8 @@ public class Traverser {
 
 	private final Node node;
 
-	public Traverser(Node node) {
-		this.node = node;
+	public Traverser(AlignmentGraph g) {
+		node = g.getStartNode();
 	}
 
 	public void eachLabel(int id, Visitor v) {

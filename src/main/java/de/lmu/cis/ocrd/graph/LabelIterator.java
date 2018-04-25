@@ -11,8 +11,20 @@ public class LabelIterator implements Iterator<LabelPos> {
 	}
 
 	@Override
+	public boolean equals(Object other) {
+		if (other == null || !(other instanceof LabelIterator)) {
+			return false;
+		}
+		return pos.equals(((LabelIterator) other).pos);
+	}
+
+	@Override
 	public boolean hasNext() {
 		return pos.valid();
+	}
+
+	public boolean isSynchronization() {
+		return pos.isSynchronization();
 	}
 
 	@Override

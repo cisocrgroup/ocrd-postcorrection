@@ -24,15 +24,19 @@ public class AlignmentGraph {
 	}
 
 	public Tokenizer getTokenizer() {
-		return new Tokenizer(getTraverser());
+		return new Tokenizer(this);
 	}
 
 	public Traverser getTraverser() {
-		return new Traverser(start);
+		return new Traverser(this);
 	}
 
 	public LabelIterator iterator(int id) {
 		return new LabelIterator(start, id);
+	}
+
+	public String toDot() {
+		return start.toDot();
 	}
 
 	private void build(ArrayList<AlignmentPair> ps) {

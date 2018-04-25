@@ -29,7 +29,7 @@ class Node implements Label {
 	}
 
 	@Override
-	public Label next(int id) {
+	public Gap next(int id) {
 		if (gaps == null) {
 			return null;
 		}
