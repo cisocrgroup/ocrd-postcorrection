@@ -41,12 +41,13 @@ class AlignCommand implements Command {
 		for (ArrayList<OCRLine> lines : lalignment) {
 		    l++;
             TokenAlignment tokenAlignment = new TokenAlignment(lines.get(0).line.getNormalized());
+            System.out.println(l + ": " + lines.get(0).line.getNormalized());
 		    for (int i = 1; i < lines.size(); i++) {
                 System.out.println(l + ": " + lines.get(i).line.getNormalized());
                 tokenAlignment.add(lines.get(i).line.getNormalized());
             }
             for (TokenAlignment.Token token : tokenAlignment) {
-		        System.out.println(" " + token);
+		        System.out.println(" * " + token);
             }
 		}
 		Logger.debug("done iterating");
