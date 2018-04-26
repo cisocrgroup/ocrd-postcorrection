@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import de.lmu.cis.ocrd.Document;
 import org.pmw.tinylog.Logger;
 
 import de.lmu.cis.ocrd.archive.Archive;
@@ -61,20 +62,30 @@ public class FileTypes {
 				}
 		}
 
+		public static Document openDocument(String path) throws Exception {
+		    return openDocument(guess(path), path);
+        }
+
+		public static Document openDocument(Type type, String path) throws Exception {
+		    try (final Archive ar = newArchive(type.getArchiveType(), path)) {
+		        return newArchiveParser(type, ar).parse();
+            }
+        }
+
 		private static Type guess(ArchiveType archiveType, TreeMap<OCRType, Integer> counts) throws Exception {
 			int max = -1;
-			OCRType argmax = OCRType.PAGEXML;
+			OCRType argMax = OCRType.PAGEXML;
 			for (Map.Entry<OCRType, Integer> entry : counts.entrySet()) {
 				Logger.debug("{}: {}", entry.getKey(), entry.getValue());
 				if (entry.getValue() > max) {
 					max = entry.getValue();
-					argmax = entry.getKey();
+					argMax = entry.getKey();
 				}
 			}
 			if (max <= 0) {
 				throw new Exception("cannot determine type of archive: no usable files");
 			}
-			return new Type(archiveType, argmax);
+			return new Type(archiveType, argMax);
 		}
 
 		private static void updateCounts(Map<OCRType, Integer> counts, Map<OCRType, XMLFileType> types, Entry entry) {
@@ -96,6 +107,28 @@ public class FileTypes {
 				}
 				return map;
 		}
+
+		public static Parser newArchiveParser(Type type, Archive ar) throws Exception {
+		    if (type.getOCRType() == OCRType.OCROPUS) {
+		        return new OcropusArchiveParser(ar);
+            }
+            final OCRType ocrType = type.getOCRType();
+            return new ArchiveParser(newXMLParserFactory(ocrType), newXMLFileType(ocrType), ar);
+        }
+
+		public static XMLParserFactory newXMLParserFactory(OCRType ocrType) throws Exception {
+            switch(ocrType) {
+                case PAGEXML:
+                    return new PageXMLParserFactory();
+                case ALTOXML:
+                    return new ALTOXMLParserFactory();
+                case ABBYY:
+                    return new ABBYYXMLParserFactory();
+                case HOCR:
+                    return new HOCRParserFactory();
+            }
+            throw new Exception("invalid OCR type: " + ocrType);
+        }
 
 		public static XMLFileType newXMLFileType(OCRType ocrType) {
 				switch(ocrType) {
