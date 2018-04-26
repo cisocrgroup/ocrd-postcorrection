@@ -14,7 +14,7 @@ import org.junit.Test;
 import de.lmu.cis.ocrd.archive.Archive;
 import de.lmu.cis.ocrd.archive.DirectoryArchive;
 import de.lmu.cis.ocrd.archive.Entry;
-import de.lmu.cis.ocrd.parser.test.BaseDocumentTest;
+import de.lmu.cis.ocrd.parsers.test.BaseDocumentTest;
 
 public class ArchiveDirectoryTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/test-dir";

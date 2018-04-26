@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.parser.test;
+package de.lmu.cis.ocrd.parsers.test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -6,17 +6,17 @@ import org.junit.Test;
 
 import de.lmu.cis.ocrd.archive.Archive;
 import de.lmu.cis.ocrd.archive.ZipArchive;
+import de.lmu.cis.ocrd.parsers.ALTOXMLFileType;
+import de.lmu.cis.ocrd.parsers.ALTOXMLParserFactory;
 import de.lmu.cis.ocrd.parsers.ArchiveParser;
-import de.lmu.cis.ocrd.parsers.PageXMLFileType;
-import de.lmu.cis.ocrd.parsers.PageXMLParserFactory;
 
-public class PageXMLZipArchiveTest extends BaseDocumentTest {
+public class ALTOZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/euler_rechenkunst01_1738.zip";
 
-	public PageXMLZipArchiveTest() throws Exception {
+	public ALTOZipArchiveTest() throws Exception {
 		setResource(resource);
 		try (Archive ar = new ZipArchive(resource)) {
-			setDocument(new ArchiveParser(new PageXMLParserFactory(), new PageXMLFileType(), ar).parse());
+			setDocument(new ArchiveParser(new ALTOXMLParserFactory(), new ALTOXMLFileType(), ar).parse());
 		}
 	}
 
