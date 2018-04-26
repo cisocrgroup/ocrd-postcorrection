@@ -20,7 +20,7 @@ public class FileTypes {
 		// order of types is used to breaks ties:
 		// PAGEXML is preferred, then ALTOXML ...
 		public enum OCRType {
-				PAGEXML, ALTOXML, ABBYY, OCORPUS, HOCR
+				PAGEXML, ALTOXML, ABBYY, OCROPUS, HOCR
 		}
 		public class Type {
 				private final ArchiveType archiveType;
@@ -87,7 +87,7 @@ public class FileTypes {
 						return new ALTOXMLFileType();
 				case ABBYY:
 						return new ABBYYXMLFileType();
-				case OCORPUS:
+				case OCROPUS:
 						return new OcropusFileType();
 				case HOCR:
 						return new HOCRFileType();

@@ -20,8 +20,8 @@ import de.lmu.cis.ocrd.parsers.FileTypes;
 public class GuessFileTypeTest extends BaseDocumentTest {
 	
 	@Test
-	public void testABBYY() {
-		final String resource = "src/test/resources/";
+	public void testABBYY() throws Exception {
+		final String resource = "src/test/resources/1841-DieGrenzboten-abbyy.zip";
 		FileTypes.Type type = FileTypes.guess(resource);
 		assertThat(type.getArchiveType(), is(FileTypes.ArchiveType.ZIP));
 		assertThat(type.getOCRType(), is(FileTypes.OCRType.ABBYY));
