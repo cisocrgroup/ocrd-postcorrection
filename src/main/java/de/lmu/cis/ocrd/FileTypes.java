@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.parsers;
+package de.lmu.cis.ocrd;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.lmu.cis.ocrd.Document;
+import de.lmu.cis.ocrd.parsers.*;
 import org.pmw.tinylog.Logger;
 
 import de.lmu.cis.ocrd.archive.Archive;

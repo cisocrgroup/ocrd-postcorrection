@@ -1,10 +1,10 @@
-package de.lmu.cis.ocrd.parsers.test;
+package de.lmu.cis.ocrd.test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.parsers.FileTypes;
+import de.lmu.cis.ocrd.FileTypes;
 
 public class GuessFileTypeTest {
 	

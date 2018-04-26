@@ -2,16 +2,14 @@ package de.lmu.cis.ocrd.cli;
 
 import java.util.ArrayList;
 
+import de.lmu.cis.ocrd.FileTypes;
 import de.lmu.cis.ocrd.align.TokenAlignment;
-import de.lmu.cis.ocrd.parsers.*;
 import org.pmw.tinylog.Logger;
 
 import de.lmu.cis.iba.LineAlignment;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.OCRLine;
 import de.lmu.cis.ocrd.Project;
-import de.lmu.cis.ocrd.align.Graph;
-import de.lmu.cis.ocrd.archive.ZipArchive;
 
 class AlignCommand implements Command {
 
