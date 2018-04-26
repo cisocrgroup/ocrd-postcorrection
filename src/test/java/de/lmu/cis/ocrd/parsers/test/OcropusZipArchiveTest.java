@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.parser.test;
+package de.lmu.cis.ocrd.parsers.test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

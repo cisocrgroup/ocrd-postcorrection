@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.parsers;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class FileTypes {
 		public enum OCRType {
 				PAGEXML, ALTOXML, ABBYY, OCROPUS, HOCR
 		}
-		public class Type {
+		public static class Type {
 				private final ArchiveType archiveType;
 				private final OCRType ocrType;
 				public Type(ArchiveType archiveType, OCRType ocrType) {
@@ -49,17 +50,34 @@ public class FileTypes {
 				throw new Exception("cannot automatically determine type of file: " + path);
 		}
 
-		public static Type guess(ArchiveType archiveType, String path) {
+		public static Type guess(ArchiveType archiveType, String path) throws Exception {
 				try(final Archive ar = newArchive(archiveType, path)) {
-						final Map<OCRType, Integer> counts = new TreeMap<OCRType, Integer>(); // use ordered map to break ties
+						final TreeMap<OCRType, Integer> counts = new TreeMap<OCRType, Integer>(); // use ordered map to break ties
 						final Map<OCRType, XMLFileType> types = newOCRTypeMap();
 						for (Entry entry : ar) {
 								updateCounts(counts, types, entry);
 						}
+					return guess(archiveType, counts);
 				}
 		}
 
-		private static void updateCounts(Map<OCRType, int> counts, Map<OCRType, XMLFileType> types, Entry entry) {
+		private static Type guess(ArchiveType archiveType, TreeMap<OCRType, Integer> counts) throws Exception {
+			int max = -1;
+			OCRType argmax = OCRType.PAGEXML;
+			for (Map.Entry<OCRType, Integer> entry : counts.entrySet()) {
+				Logger.debug("{}: {}", entry.getKey(), entry.getValue());
+				if (entry.getValue() > max) {
+					max = entry.getValue();
+					argmax = entry.getKey();
+				}
+			}
+			if (max <= 0) {
+				throw new Exception("cannot determine type of archive: no usable files");
+			}
+			return new Type(archiveType, argmax);
+		}
+
+		private static void updateCounts(Map<OCRType, Integer> counts, Map<OCRType, XMLFileType> types, Entry entry) {
 				for (Map.Entry<OCRType, XMLFileType> type : types.entrySet()) {
 						if (type.getValue().check(entry.getName().toString())) {
 								Logger.debug("found file {} of type {}", entry.getName(), type.getKey());
@@ -92,14 +110,16 @@ public class FileTypes {
 				case HOCR:
 						return new HOCRFileType();
 				}
+				throw new RuntimeException("non-exhaustive switch");
 		}
 
-		public static Archive newArchive(ArchiveType archiveType, String path) {
+		public static Archive newArchive(ArchiveType archiveType, String path) throws IOException {
 				switch (archiveType) {
 				case ZIP:
 						return new ZipArchive(path);
 				case DIR:
 						return new DirectoryArchive(path);
 				}
+			throw new RuntimeException("non-exhaustive switch");
 		}
 }
