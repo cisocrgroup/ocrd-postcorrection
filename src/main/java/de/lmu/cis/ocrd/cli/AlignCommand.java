@@ -40,7 +40,7 @@ class AlignCommand implements Command {
 			System.out.println(lines.get(0).line.getNormalized());
 			System.out.println(lines.get(1).line.getNormalized());
 			new Graph(lines.get(0).line.getNormalized(), lines.get(1).line.getNormalized()).getTokenizer()
-					.eachPair((a, b) -> {
+					.eachPair((a, b, anew, bnew) -> {
 						System.out.println(a + "|" + b);
 					});
 		}
