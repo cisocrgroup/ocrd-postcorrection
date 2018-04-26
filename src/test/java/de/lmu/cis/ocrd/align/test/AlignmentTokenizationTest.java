@@ -20,13 +20,23 @@ public class AlignmentTokenizationTest {
 		final Graph g = new Graph(a, b);
 		final Tokenizer t = g.getTokenizer();
 		final ArrayList<Pair> pairs = new ArrayList<Pair>();
-		t.eachPair((s1, s2) -> {
+		t.eachPair((s1, s2, x, y) -> {
 			pairs.add(new Pair());
 			pairs.get(pairs.size() - 1).first = s1;
 			pairs.get(pairs.size() - 1).second = s2;
 			// System.out.println("a = '" + s1 + "' b = " + s2 + "'");
 		});
 		return pairs;
+	}
+
+	@Test
+	public void testAlignToSelf() {
+		final String a = "one two three tokens";
+		ArrayList<Pair> self = align(a, a);
+		assertThat(self.size(), is(4));
+		for (Pair p : self) {
+			assertThat(p.first, is(p.second));
+		}
 	}
 
 	@Test

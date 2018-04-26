@@ -49,6 +49,10 @@ public class Graph {
 		if (ps.isEmpty()) {
 			return;
 		}
+		if (s1.equals(s2)) {
+			start = new Node('#' + s1 + '$');
+			return;
+		}
 		start = new Node(ps.get(0).label);
 		Node prevn = start;
 		AlignmentPair prevp = ps.get(0);
