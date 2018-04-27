@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 class ProfilerCommand implements Command {
     private final String[] args = new String[] {
             "--types", "--inputFormat", "TXT"
-    }
+    };
     @Override
     public void execute(Configuration config) throws Exception {
         Profile profile = new Profiler()

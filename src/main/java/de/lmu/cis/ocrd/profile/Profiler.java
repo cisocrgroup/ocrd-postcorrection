@@ -70,7 +70,7 @@ public class Profiler {
         res.add(exe);
         res.addAll(Arrays.asList(defaultArgs()));
         res.add("--config");
-        res.add(Paths.get(dir, language + ".ini").toAbsolutePath().toString());
+        res.add(Paths.get(langdir, language + ".ini").toAbsolutePath().toString());
         res.addAll(Arrays.asList(this.args));
         return res;
     }
