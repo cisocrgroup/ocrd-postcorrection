@@ -10,7 +10,7 @@ class ProfilerCommand implements Command {
             "--types", "--inputFormat", "TXT"
     }
     @Override
-    void execute(Configuration config) throws Exception {
+    public void execute(Configuration config) throws Exception {
         Profile profile = new Profiler()
                 .withExecutable("/home/flo/devel/work/Profiler/build/bin/profiler")
                 .withLanguage("german")
