@@ -1,5 +1,9 @@
 package de.lmu.cis.ocrd.profile;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.apache.commons.io.IOUtils;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,11 +16,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import org.apache.commons.io.IOUtils;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 public class Profile {
 	public static Profile read(InputStream is) throws IOException {
@@ -38,6 +37,10 @@ public class Profile {
 	public static Profile read(String path) throws IOException {
 		return read(Paths.get(path));
 	}
+
+	public String toJSON() {
+        return new Gson().toJson(this);
+    }
 
 	private static HashMap<String, Candidates> toLowerCase(HashMap<String, Candidates> map) {
 		HashMap<String, Candidates> newMap = new HashMap<String, Candidates>();
