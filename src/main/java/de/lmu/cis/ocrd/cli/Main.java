@@ -10,10 +10,10 @@ public class Main {
 		try {
 			run(args);
 		} catch (ParseException e) {
-			System.err.println("[error] " + e.getMessage());
+		    e.printStackTrace(System.err);
 			System.exit(2);
 		} catch (Exception e) {
-			System.err.println("[error] " + e.getMessage());
+            e.printStackTrace(System.err);
 			System.exit(1);
 		}
 	}
