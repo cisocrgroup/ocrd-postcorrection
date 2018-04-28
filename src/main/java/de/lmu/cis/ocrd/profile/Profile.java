@@ -48,8 +48,8 @@ public class Profile {
 		HashMap<String, Candidates> newMap = new HashMap<String, Candidates>();
 		for (Map.Entry<String, Candidates> entry : map.entrySet()) {
 			String lower = entry.getKey().toLowerCase();
-			Candidates clower = entry.getValue().toLowerCase();
-			newMap.put(lower, clower);
+			Candidates cLower = entry.getValue().toLowerCase();
+			newMap.put(lower, cLower);
 		}
 		return newMap;
 	}
