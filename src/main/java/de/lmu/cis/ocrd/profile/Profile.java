@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.profile;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
+import org.pmw.tinylog.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class Profile {
 		Gson gson = new Gson();
 		Type map = new TypeToken<HashMap<String, Candidates>>() {
 		}.getType();
+        Logger.debug("profile: {}", out.toString());
 		HashMap<String, Candidates> data = gson.fromJson(out.toString(), map);
 		return new Profile(toLowerCase(data));
 	}
@@ -39,7 +41,7 @@ public class Profile {
 	}
 
 	public String toJSON() {
-        return new Gson().toJson(this);
+        return new Gson().toJson(this.data);
     }
 
 	private static HashMap<String, Candidates> toLowerCase(HashMap<String, Candidates> map) {

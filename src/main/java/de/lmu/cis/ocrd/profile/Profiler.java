@@ -2,9 +2,7 @@ package de.lmu.cis.ocrd.profile;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -15,6 +13,13 @@ public class Profiler {
     private String exe, language, workdir, langdir;
     private String[] args;
     private Reader stdin;
+
+    public Profiler() {
+        this.exe = "profiler";
+        this.workdir = ".";
+        this.langdir = "/data";
+        this.args = new String[]{"--sourceFormat", "TXT"};
+    }
 
     public Profiler withStdin(Reader r) {
         this.stdin = r;
@@ -50,12 +55,19 @@ public class Profiler {
         return String.join(" ", makeArgs());
     }
 
-    public Profile run() throws IOException {
+    public Profile run() throws Exception {
         Process profiler = createCommand();
         // write stdin to profiler
         IOUtils.copy(stdin, profiler.getOutputStream(), Charset.defaultCharset());
+        profiler.getOutputStream().flush();
+        profiler.getOutputStream().close();
         // read profile from profiler's stdout
-        return Profile.read(profiler.getInputStream());
+        Profile profile =  Profile.read(profiler.getInputStream());
+        final int exitStatus = profiler.waitFor();
+        if (exitStatus != 0) {
+            throw new Exception("profiler returned with exit value: " + exitStatus);
+        }
+        return profile;
     }
 
     private Process createCommand() throws IOException {
