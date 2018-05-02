@@ -23,8 +23,6 @@ public class LineAlignmentTest {
 		doc.withLine("zzzabczz", 1, 4, "abbyy", true);
 		doc.withLine("rrrrrbcaoo", 1, 5, "tess", false);
 
-		String correct_seq = "024135";
-
 		LineAlignment la = align(doc, 3);
 
 		ArrayList<HashSet<Integer>> correct_ids = new ArrayList<HashSet<Integer>>();
