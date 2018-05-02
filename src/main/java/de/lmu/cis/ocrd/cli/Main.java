@@ -22,7 +22,8 @@ public class Main {
 		return new CommandFactory().register("info", new InfoCommand())
 				.register("env", new EnvironmentCommand())
                 .register("profiler", new ProfilerCommand())
-				.register("align", new AlignCommand());
+				.register("align", new AlignCommand())
+				.register("tryout", new TryoutCommand());
 	}
 
 	// Parses command line arguments and execute command.
