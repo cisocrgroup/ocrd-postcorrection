@@ -6,22 +6,21 @@ import java.util.Optional;
 // TODO: Merge with Alignment.Token
 public class Token {
     private final String masterOCR;
-    private Optional<String> gt;
+    private String gt;
     private ArrayList<String> otherOCR;
 
     public Token(String masterOCR) {
         assert masterOCR != null;
         this.masterOCR = masterOCR;
-        this.gt = Optional.empty();
     }
 
     public Token withGT(String gt) {
-        this.gt = Optional.ofNullable(gt);
+        this.gt = gt;
         return this;
     }
 
     public Optional<String> getGT() {
-        return this.gt;
+        return Optional.ofNullable(gt);
     }
 
     public String getMasterOCR() {
@@ -31,7 +30,7 @@ public class Token {
     public Token addOCR(String ocr) {
         assert ocr != null;
         if (this.otherOCR == null) {
-            this.otherOCR = new ArrayList<String>();
+            this.otherOCR = new ArrayList<>();
         }
         this.otherOCR.add(ocr);
         return this;
@@ -46,5 +45,21 @@ public class Token {
 
     public String getOtherOCRAt(int i) {
         return otherOCR.get(i);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder(masterOCR);
+        char sep = '|';
+        for (String other : otherOCR) {
+            str.append(sep);
+            str.append(other);
+            sep = ',';
+        }
+        if (gt != null) {
+            str.append("|GT:");
+            str.append(gt);
+        }
+        return str.toString();
     }
 }
