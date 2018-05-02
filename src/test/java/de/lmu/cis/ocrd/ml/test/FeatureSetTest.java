@@ -1,26 +1,30 @@
 package de.lmu.cis.ocrd.ml.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+import de.lmu.cis.ocrd.ml.Feature;
+import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.ml.Token;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.ml.Feature;
-import de.lmu.cis.ocrd.ml.FeatureSet;
-import de.lmu.cis.pocoweb.Token;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class FeatureSetTest {
 	private class MockFeature implements Feature {
-		private final double n;
+		private final double val;
 
 		public MockFeature(double n) {
-			this.n = n;
+			this.val = n;
+		}
+
+		@Override
+		public String getName() {
+			return "MockFeature";
 		}
 
 		@Override
 		public double calculate(Token token) {
-			return this.n;
+			return val;
 		}
 	}
 
@@ -38,16 +42,16 @@ public class FeatureSetTest {
 
 	@Test
 	public void testFirstFeatureValue() {
-		assertThat(features.calculateFeatureVector(new Token()).get(0), is(1.0));
+		assertThat(features.calculateFeatureVector(new Token("a")).get(0), is(1.0));
 	}
 
 	@Test
 	public void testLenFeatureVector() {
-		assertThat(features.calculateFeatureVector(new Token()).size(), is(2));
+		assertThat(features.calculateFeatureVector(new Token("a")).size(), is(2));
 	}
 
 	@Test
 	public void testSecondFeatureValue() {
-		assertThat(features.calculateFeatureVector(new Token()).get(1), is(3.0));
+		assertThat(features.calculateFeatureVector(new Token("a")).get(1), is(3.0));
 	}
 }

@@ -3,12 +3,14 @@ package de.lmu.cis.ocrd.ml;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.lmu.cis.pocoweb.Token;
-
 public class FeatureSet {
 	public interface Callback {
-		void apply(double d);
+		void apply(double v);
 	}
+
+	public interface FeatureCallback {
+	    void apply(Feature f);
+    }
 
 	private final List<Feature> features = new ArrayList<Feature>();
 
@@ -18,9 +20,9 @@ public class FeatureSet {
 	}
 
 	public ArrayList<Double> calculateFeatureVector(Token token) {
-		ArrayList<Double> vec = new ArrayList<Double>(this.size());
-		each(token, (double d) -> {
-			vec.add(d);
+		ArrayList<Double> vec = new ArrayList<>(this.size());
+		each(token, (double v) -> {
+			vec.add(v);
 		});
 		return vec;
 	}
@@ -28,6 +30,12 @@ public class FeatureSet {
 	public void each(Token token, Callback callback) {
 		for (Feature feature : this.features) {
 			callback.apply(feature.calculate(token));
+		}
+	}
+
+	public void each(FeatureCallback cb) {
+		for (Feature feature : features) {
+			cb.apply(feature);
 		}
 	}
 
