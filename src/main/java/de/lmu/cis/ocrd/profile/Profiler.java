@@ -73,6 +73,7 @@ public class Profiler {
     private Process createCommand() throws IOException {
        ProcessBuilder builder = new ProcessBuilder();
        builder.command(makeArgs());
+       // TODO: check if the work-dir really is needed
        builder.directory(new File(this.workdir));
        return builder.start();
     }
