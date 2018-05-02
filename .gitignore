@@ -5,6 +5,7 @@
 .dir-locals.el
 .classpath
 .settings/
+.idea
 doc
 
 src/webapp/assets/
