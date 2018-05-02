@@ -5,8 +5,12 @@ import java.util.List;
 
 public class FeatureSet {
 	public interface Callback {
-		void apply(Value v);
+		void apply(double v);
 	}
+
+	public interface FeatureCallback {
+	    void apply(Feature f);
+    }
 
 	private final List<Feature> features = new ArrayList<Feature>();
 
@@ -15,9 +19,9 @@ public class FeatureSet {
 		return this;
 	}
 
-	public ArrayList<Value> calculateFeatureVector(Token token) {
-		ArrayList<Value> vec = new ArrayList<Value>(this.size());
-		each(token, (Value v) -> {
+	public ArrayList<Double> calculateFeatureVector(Token token) {
+		ArrayList<Double> vec = new ArrayList<>(this.size());
+		each(token, (double v) -> {
 			vec.add(v);
 		});
 		return vec;
@@ -26,6 +30,12 @@ public class FeatureSet {
 	public void each(Token token, Callback callback) {
 		for (Feature feature : this.features) {
 			callback.apply(feature.calculate(token));
+		}
+	}
+
+	public void each(FeatureCallback cb) {
+		for (Feature feature : features) {
+			cb.apply(feature);
 		}
 	}
 
