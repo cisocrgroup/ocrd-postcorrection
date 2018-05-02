@@ -35,6 +35,16 @@ public class FeatureSetTest {
 		}
 
 		@Override
+		public String getName() {
+			return "MockFeature";
+		}
+
+		@Override
+		public boolean isBoolean() {
+			return false;
+		}
+
+		@Override
 		public Value calculate(Token token) {
 			return val;
 		}
