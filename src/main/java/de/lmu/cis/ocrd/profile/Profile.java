@@ -1,5 +1,10 @@
 package de.lmu.cis.ocrd.profile;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.apache.commons.io.IOUtils;
+import org.pmw.tinylog.Logger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,11 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 public class Profile {
 	public static Profile read(InputStream is) throws IOException {
 		StringWriter out = new StringWriter();
@@ -25,6 +25,7 @@ public class Profile {
 		Gson gson = new Gson();
 		Type map = new TypeToken<HashMap<String, Candidates>>() {
 		}.getType();
+        Logger.debug("profile: {}", out.toString());
 		HashMap<String, Candidates> data = gson.fromJson(out.toString(), map);
 		return new Profile(toLowerCase(data));
 	}
@@ -39,12 +40,16 @@ public class Profile {
 		return read(Paths.get(path));
 	}
 
+	public String toJSON() {
+        return new Gson().toJson(this.data);
+    }
+
 	private static HashMap<String, Candidates> toLowerCase(HashMap<String, Candidates> map) {
 		HashMap<String, Candidates> newMap = new HashMap<String, Candidates>();
 		for (Map.Entry<String, Candidates> entry : map.entrySet()) {
 			String lower = entry.getKey().toLowerCase();
-			Candidates clower = entry.getValue().toLowerCase();
-			newMap.put(lower, clower);
+			Candidates cLower = entry.getValue().toLowerCase();
+			newMap.put(lower, cLower);
 		}
 		return newMap;
 	}

@@ -145,41 +145,19 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- build simple executable file -->
-			<!-- <plugin> -->
-			<!--   <artifactId>maven-assembly-plugin</artifactId> -->
-			<!--   <configuration> -->
-			<!-- 	<archive> -->
-			<!-- 	  <manifest> -->
-			<!-- 		<mainClass>de.lmu.cis.pocoweb.Main</mainClass> -->
-			<!-- 	  </manifest> -->
-			<!-- 	</archive> -->
-			<!-- 	<descriptorRefs> -->
-			<!-- 	  <descriptorRef>jar-with-dependencies</descriptorRef> -->
-			<!-- 	</descriptorRefs> -->
-			<!--   </configuration> -->
-			<!--   <executions> -->
-			<!-- 	<execution> -->
-			<!-- 	  <id>make-assembly</id> -->
-			<!-- 	  <phase>package</phase> -->
-			<!-- 	  <goals> -->
-			<!-- 		<goal>single</goal> -->
-			<!-- 	  </goals> -->
-			<!-- 	</execution> -->
-			<!--   </executions> -->
-			<!-- </plugin> -->
-			<!-- build local grizzly -->
 			<plugin>
 			  <artifactId>maven-assembly-plugin</artifactId>
 			  <configuration>
 					<archive>
 						<manifest>
-							<mainClass>ocrd.rest.raml.impl.RunLocalGrizzly</mainClass>
+							<mainClass>de.lmu.cis.ocrd.cli.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+				  <finalName>${project.artifactId}-${project.version}-cli</finalName>
+				  <appendAssemblyId>false</appendAssemblyId>
 			  </configuration>
 			  <executions>
 					<execution>

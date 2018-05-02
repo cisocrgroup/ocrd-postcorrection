@@ -10,17 +10,20 @@ public class Main {
 		try {
 			run(args);
 		} catch (ParseException e) {
-			System.err.println("[error] " + e.getMessage());
+		    e.printStackTrace(System.err);
 			System.exit(2);
 		} catch (Exception e) {
-			System.err.println("[error] " + e.getMessage());
+            e.printStackTrace(System.err);
 			System.exit(1);
 		}
 	}
 
 	private static CommandFactory commands() {
-		return new CommandFactory().register("info", new InfoCommand()).register("env", new EnvironmentCommand())
-				.register("align", new AlignCommand());
+		return new CommandFactory().register("info", new InfoCommand())
+				.register("env", new EnvironmentCommand())
+                .register("profiler", new ProfilerCommand())
+				.register("align", new AlignCommand())
+				.register("tryout", new TryoutCommand());
 	}
 
 	// Parses command line arguments and execute command.
