@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.ml;
 import java.util.ArrayList;
 import java.util.Optional;
 
+// TODO: Merge with Alignment.Token
 public class Token {
     private final String masterOCR;
     private Optional<String> gt;
