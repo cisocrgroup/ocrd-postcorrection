@@ -1,7 +1,5 @@
 package de.lmu.cis.ocrd.ml;
 
-import de.lmu.cis.pocoweb.Token;
-
 import java.util.ArrayList;
 import java.util.List;
 

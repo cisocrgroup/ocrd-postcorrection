@@ -2,8 +2,8 @@ package de.lmu.cis.ocrd.ml.test;
 
 import de.lmu.cis.ocrd.ml.Feature;
 import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.ml.Value;
-import de.lmu.cis.pocoweb.Token;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -54,16 +54,16 @@ public class FeatureSetTest {
 
 	@Test
 	public void testFirstFeatureValue() {
-		assertThat(features.calculateFeatureVector(new Token()).get(0).getDouble(), is(1.0));
+		assertThat(features.calculateFeatureVector(new Token("a")).get(0).getDouble(), is(1.0));
 	}
 
 	@Test
 	public void testLenFeatureVector() {
-		assertThat(features.calculateFeatureVector(new Token()).size(), is(2));
+		assertThat(features.calculateFeatureVector(new Token("a")).size(), is(2));
 	}
 
 	@Test
 	public void testSecondFeatureValue() {
-		assertThat(features.calculateFeatureVector(new Token()).get(1).getDouble(), is(3.0));
+		assertThat(features.calculateFeatureVector(new Token("a")).get(1).getDouble(), is(3.0));
 	}
 }
