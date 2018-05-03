@@ -1,15 +1,14 @@
 package de.lmu.cis.ocrd.cli;
 
-import java.util.ArrayList;
-
+import de.lmu.cis.iba.LineAlignment;
 import de.lmu.cis.ocrd.FileTypes;
+import de.lmu.cis.ocrd.OCRLine;
+import de.lmu.cis.ocrd.Page;
+import de.lmu.cis.ocrd.Project;
 import de.lmu.cis.ocrd.align.TokenAlignment;
 import org.pmw.tinylog.Logger;
 
-import de.lmu.cis.iba.LineAlignment;
-import de.lmu.cis.ocrd.Document;
-import de.lmu.cis.ocrd.OCRLine;
-import de.lmu.cis.ocrd.Project;
+import java.util.ArrayList;
 
 class AlignCommand implements Command {
 
@@ -32,24 +31,28 @@ class AlignCommand implements Command {
         align(project, args.length);
 	}
 
-	private static void align(Document doc, int n) throws Exception {
-		Logger.debug("aligning lines ...");
-		LineAlignment lalignment = new LineAlignment(doc, n);
+	private static void align(Project project, int n) throws Exception {
+		project.eachPage((page)->{
+			align(page, n);
+		});
+	}
+
+	private static void align(Page page, int n) throws Exception {
+		Logger.debug("aligning lines for page {}...", page.getPageSeq());
+		LineAlignment lineAlignment = new LineAlignment(page, n);
 		Logger.debug("done aligning lines");
 		int l = 0;
-		Logger.debug("iterating ...");
-		for (ArrayList<OCRLine> lines : lalignment) {
-		    l++;
-            TokenAlignment tokenAlignment = new TokenAlignment(lines.get(0).line.getNormalized());
-            System.out.println(l + ": " + lines.get(0).line.getNormalized());
-		    for (int i = 1; i < lines.size(); i++) {
-                System.out.println(l + ": " + lines.get(i).line.getNormalized());
-                tokenAlignment.add(lines.get(i).line.getNormalized());
-            }
-            for (TokenAlignment.Token token : tokenAlignment) {
-		        System.out.println(" * " + token);
-            }
+		for (ArrayList<OCRLine> lines : lineAlignment) {
+			l++;
+			TokenAlignment tokenAlignment = new TokenAlignment(lines.get(0).line.getNormalized());
+			System.out.println(page.getPageSeq() + ":" + l + ": " + lines.get(0).line.getNormalized());
+			for (int i = 1; i < lines.size(); i++) {
+				System.out.println(page.getPageSeq() + ":" + l + ": " + lines.get(i).line.getNormalized());
+				tokenAlignment.add(lines.get(i).line.getNormalized());
+			}
+			for (TokenAlignment.Token token : tokenAlignment) {
+				System.out.println(" * " + token);
+			}
 		}
-		Logger.debug("done iterating");
 	}
 }
