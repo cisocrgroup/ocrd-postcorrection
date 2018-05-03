@@ -52,12 +52,12 @@ public class ARFFWriter {
            throw new Exception("sizes of features and feature vector do not match: " + this.features.size() + " != " + features.size());
         }
         boolean first = true;
-        for (double d : features) {
+        for (Double d : features) {
             if (first) {
-                writer.printf("%f", d);
+                writer.print(d.toString());
                 first = false;
             } else {
-                writer.printf(",%f", d);
+                writer.printf(",%s", d.toString());
             }
         }
         writer.println();
