@@ -1,9 +1,10 @@
 package de.lmu.cis.ocrd.align;
 
-import java.util.ArrayList;
-
 import de.lmu.cis.iba.Pairwise_LCS_Alignment;
 import de.lmu.cis.iba.Pairwise_LCS_Alignment.AlignmentPair;
+import org.pmw.tinylog.Logger;
+
+import java.util.ArrayList;
 
 public class Graph {
 
@@ -61,6 +62,7 @@ public class Graph {
 			final Node curn = new Node(curp.label);
 			final Gap g1 = makeGap(prevp.epos1, curp.spos1, s1, curn);
 			final Gap g2 = makeGap(prevp.epos2, curp.spos2, s2, curn);
+            Logger.info("s1: '{}'\nINFO: s2: '{}'\nINFO: pl: '{}'\nINFO: g1: '{}'\nINFO: g2: '{}'\nINFO: cl: '{}'", s1, s2, prevn.getLabel(), g1.getLabel(), g2.getLabel(), curn.getLabel());
 			prevn.add(g1);
 			prevn.add(g2);
 			prevp = curp;
@@ -68,16 +70,20 @@ public class Graph {
 		}
 	}
 
-	private AlignmentPair handleOverlap(AlignmentPair p, AlignmentPair c) {
-		if (p.epos1 > c.spos1) {
-			String label = c.label.substring(p.epos1 - c.spos1);
-			return new AlignmentPair(label, c.epos1, c.epos2);
-		}
-		if (p.epos2 > c.spos2) {
-			String label = c.label.substring(p.epos2 - c.spos2);
-			return new AlignmentPair(label, c.epos1, c.epos2);
-		}
-		return c;
+	private AlignmentPair handleOverlap(AlignmentPair previous, AlignmentPair current) {
+		// Logger.info("previous.epos1: {}, previous.epos2: {}, previous.label: '{}'", previous.epos1, previous.epos2, previous.label);
+		// Logger.info("current.spos1: {}, current.spos2: {}, current.label: '{}'", current.spos1, current.spos2, current.label);
+		// Logger.info("s1: '{}'\nINFO: s2: '{}'", s1, s2);
+		// Logger.info("sub1: '{}'\nINFO: sub2: '{}'", s1.substring(previous.epos1), s2.substring(previous.epos2));
+		// if (previous.epos1 > current.spos1) {
+		// 	String label = current.label.substring(previous.epos1 - current.spos1);
+		// 	return new AlignmentPair(label, current.epos1, current.epos2);
+		// }
+		// if (previous.epos2 > current.spos2) {
+		// 	String label = current.label.substring(previous.epos2 - current.spos2);
+		// 	return new AlignmentPair(label, current.epos1, current.epos2);
+		// }
+		return current;
 	}
 
 	private Gap makeGap(int s, int e, String str, Node node) {
