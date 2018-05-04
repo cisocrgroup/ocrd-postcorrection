@@ -1,13 +1,12 @@
 package de.lmu.cis.ocrd.parsers;
 
-import java.util.ArrayList;
-
+import de.lmu.cis.ocrd.SimpleDocument;
+import de.lmu.cis.ocrd.SimpleLine;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import de.lmu.cis.ocrd.SimpleDocument;
-import de.lmu.cis.ocrd.SimpleLine;
+import java.util.ArrayList;
 
 public class ABBYYXMLParser implements Parser {
 	private static String parseChar(Node charParam) throws Exception {
@@ -65,15 +64,16 @@ public class ABBYYXMLParser implements Parser {
 		NodeList charParams = ((Element) line).getElementsByTagName("charParams");
 		final int n = charParams.getLength();
 		StringBuilder str = new StringBuilder();
-		ArrayList<Double> cs = new ArrayList<Double>();
+		ArrayList<Double> cs = new ArrayList<>();
 		for (int i = 0; i < n; i++) {
 			String r = parseChar(charParams.item(i));
 			double c = parseConfidence(charParams.item(i));
-			str.append(r);
-			cs.add(c);
+			r.codePoints().forEach((letter)->{
+			    str.appendCodePoint(letter);
+			    cs.add(c);
+            });
 		}
-		SimpleLine tmp = new SimpleLine().withOcr(str.toString()).withConfidences(cs).withLineId(lid)
-				.withPageId(this.pageid);
+		SimpleLine tmp = SimpleLine.normalized(str.toString(), cs).withLineID(lid).withPageID(pageid);
 		this.doc.add(this.pageid, tmp);
 	}
 

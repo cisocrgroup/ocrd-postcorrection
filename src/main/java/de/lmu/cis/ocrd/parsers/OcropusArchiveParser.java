@@ -16,7 +16,7 @@ import java.util.List;
 public class OcropusArchiveParser implements Parser {
     protected Line readLine(InputStream is, int pageID, int lineID) throws Exception {
         final String ocr = IOUtils.toString(is, Charset.forName("UTF-8"));
-		return new SimpleLine().withOcr(ocr).withPageId(pageID).withLineId(lineID);
+		return SimpleLine.normalized(ocr, 0).withPageID(pageID).withLineID(lineID);
 	}
 
 	private static void sort(List<Entry> lines) {

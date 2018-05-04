@@ -31,7 +31,7 @@ public class SimpleLine implements Line {
 	    Iterator<Double> it = cs.iterator();
 	    ocr.codePoints().forEach((letter)->{
 	        if (!it.hasNext()) {
-	            throw new IndexOutOfBoundsException("too few confidences for: " + ocr);
+	            throw new IndexOutOfBoundsException("too few confidences for: " + ocr + " (" + cs.size() + " vs. " + ocr.length() + ")");
             }
 	        t.delta(letter, it.next());
         });
@@ -67,7 +67,7 @@ public class SimpleLine implements Line {
 
 	@Override
 	public List<Token> getTokens() {
-		ArrayList<Token> tokens = new ArrayList<Token>();
+		ArrayList<Token> tokens = new ArrayList<>();
 		int tid = 0;
 		for (String t : this.line.split("\\s+")) {
 			tokens.add(new Token().withLineId(lineID).withPageId(pageID).withTokenId(tid).withOcr(t));
@@ -76,22 +76,12 @@ public class SimpleLine implements Line {
 		return tokens;
 	}
 
-	public SimpleLine withConfidences(ArrayList<Double> cs) {
-		this.cs = cs;
-		return this;
-	}
-
-	public SimpleLine withLineId(int id) {
+	public SimpleLine withLineID(int id) {
 		this.lineID = id;
 		return this;
 	}
 
-	public SimpleLine withOcr(String line) {
-		this.line = normalize(line);
-		return this;
-	}
-
-	public SimpleLine withPageId(int id) {
+	public SimpleLine withPageID(int id) {
 		this.pageID = id;
 		return this;
 	}

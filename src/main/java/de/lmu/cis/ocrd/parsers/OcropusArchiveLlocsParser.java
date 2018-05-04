@@ -27,6 +27,6 @@ public class OcropusArchiveLlocsParser extends OcropusArchiveParser {
             str.append(fields[0]);
             cs.add(Double.parseDouble(fields[0]));
         }
-        return new SimpleLine().withOcr(str.toString()).withLineId(lineID).withPageId(pageID).withConfidences(cs);
+        return SimpleLine.normalized(str.toString(), cs).withLineID(lineID).withPageID(pageID);
     }
 }
