@@ -1,19 +1,18 @@
 package de.lmu.cis.ocrd;
 
+import de.lmu.cis.ocrd.archive.Archive;
+import de.lmu.cis.ocrd.archive.DirectoryArchive;
+import de.lmu.cis.ocrd.archive.Entry;
+import de.lmu.cis.ocrd.archive.ZipArchive;
+import de.lmu.cis.ocrd.parsers.*;
+import org.pmw.tinylog.Logger;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-
-import de.lmu.cis.ocrd.parsers.*;
-import org.pmw.tinylog.Logger;
-
-import de.lmu.cis.ocrd.archive.Archive;
-import de.lmu.cis.ocrd.archive.DirectoryArchive;
-import de.lmu.cis.ocrd.archive.Entry;
-import de.lmu.cis.ocrd.archive.ZipArchive;
 
 public class FileTypes {
 		public enum ArchiveType {
