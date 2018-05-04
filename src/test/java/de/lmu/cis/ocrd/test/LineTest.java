@@ -42,4 +42,34 @@ public class LineTest {
             i++;
         }
     }
+
+    @Test
+    public void testGetWordFind() {
+        SimpleLine line = SimpleLine.normalized("first second third", 1);
+        assertThat(line.getWord("first").isPresent(), is(true));
+        assertThat(line.getWord("first").get().toString(), is("first"));
+        assertThat(line.getWord("second").isPresent(), is(true));
+        assertThat(line.getWord("second").get().toString(), is("second"));
+        assertThat(line.getWord("third").isPresent(), is(true));
+        assertThat(line.getWord("third").get().toString(), is("third"));
+        assertThat(line.getWord("fourth").isPresent(), is(false));
+    }
+
+    @Test
+    public void testGetWordConfidences() {
+        SimpleLine line = SimpleLine.normalized("first second third", 0.8);
+        assertThat(line.getWord("first").isPresent(), is(true));
+        assertThat(line.getWord("first").get().getConfidenceAt(0), is(0.8));
+        assertThat(line.getWord("first").get().getConfidenceAt(1), is(0.8));
+    }
+
+    @Test
+    public void testGetWordWithOffset() {
+        Double[] cs = new Double[]{0.1,0.1,0.0, 0.2,0.2};
+        SimpleLine line = SimpleLine.normalized("aa aa", new ArrayList<>(Arrays.asList(cs)));
+        assertThat(line.getWord(0, "aa").isPresent(), is(true));
+        assertThat(line.getWord(0, "aa").get().getConfidenceAt(0), is(0.1));
+        assertThat(line.getWord(2, "aa").isPresent(), is(true));
+        assertThat(line.getWord(2, "aa").get().getConfidenceAt(0), is(0.2));
+    }
 }

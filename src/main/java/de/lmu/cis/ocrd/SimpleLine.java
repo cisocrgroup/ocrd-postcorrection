@@ -5,6 +5,7 @@ import de.lmu.cis.pocoweb.Token;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public class SimpleLine implements Line {
 
@@ -85,4 +86,16 @@ public class SimpleLine implements Line {
 		this.pageID = id;
 		return this;
 	}
+
+	public Optional<Word> getWord(String word) {
+	    return getWord(0, word);
+    }
+
+    public Optional<Word> getWord(int offset, String word) {
+	    final int pos = line.indexOf(word, offset);
+	    if (pos < 0) {
+	        return Optional.empty();
+        }
+        return Optional.of(new Word(pos, pos + word.length(), this));
+    }
 }
