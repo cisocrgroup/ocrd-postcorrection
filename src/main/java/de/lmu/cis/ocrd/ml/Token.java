@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.ml;
 import de.lmu.cis.ocrd.Word;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 // TODO: Merge with Alignment.Token
@@ -17,6 +18,11 @@ public class Token {
     public Token(Word masterOCR) {
         assert masterOCR != null;
         this.masterOCR = masterOCR;
+    }
+
+    public Token withGT(List<String> gtTokens) {
+        this.gt = String.join("-", gtTokens);
+        return this;
     }
 
     public Token withGT(String gt) {
@@ -56,13 +62,15 @@ public class Token {
     public String toString() {
         StringBuilder str = new StringBuilder(masterOCR.toString());
         char sep = '|';
-        for (Word other : otherOCR) {
-            str.append(sep);
-            str.append(other.toString());
-            sep = ',';
+        if (otherOCR != null) {
+            for (Word other : otherOCR) {
+                str.append(sep);
+                str.append(other.toString());
+                sep = ',';
+            }
         }
         if (gt != null) {
-            str.append("|GT:");
+            str.append("|");
             str.append(gt);
         }
         return str.toString();

@@ -21,11 +21,11 @@ public class OcropusArchiveLlocsParser extends OcropusArchiveParser {
         String line;
         while ((line = r.readLine()) != null) {
             final String[] fields = line.split("\\s+");
-            if (fields.length < 2) {
+            if (fields.length < 3) {
                 throw new Exception("invalid llocs line: " + line);
             }
             str.append(fields[0]);
-            cs.add(Double.parseDouble(fields[0]));
+            cs.add(Double.parseDouble(fields[2]));
         }
         return SimpleLine.normalized(str.toString(), cs).withLineID(lineID).withPageID(pageID);
     }
