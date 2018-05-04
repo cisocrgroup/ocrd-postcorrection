@@ -56,25 +56,14 @@ public class SimpleLine implements Line {
 		return this.line;
 	}
 
-	@Override
+    @Override
+    public List<Token> getTokens() {
+        return null;
+    }
+
+    @Override
 	public int getPageId() {
 		return this.pageID;
-	}
-
-	@Override
-	public Token getTokenAt(int i) {
-		return getTokens().get(i);
-	}
-
-	@Override
-	public List<Token> getTokens() {
-		ArrayList<Token> tokens = new ArrayList<>();
-		int tid = 0;
-		for (String t : this.line.split("\\s+")) {
-			tokens.add(new Token().withLineId(lineID).withPageId(pageID).withTokenId(tid).withOcr(t));
-			tid++;
-		}
-		return tokens;
 	}
 
 	public SimpleLine withLineID(int id) {

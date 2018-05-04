@@ -11,7 +11,5 @@ public interface Line {
 
 	String getNormalized();
 
-	Token getTokenAt(int i);
-
 	List<Token> getTokens();
 }

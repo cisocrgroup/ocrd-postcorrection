@@ -1,8 +1,8 @@
 package de.lmu.cis.ocrd.test;
-import java.util.List;
-
 import de.lmu.cis.ocrd.Line;
 import de.lmu.cis.pocoweb.Token;
+
+import java.util.List;
 
 public class TestLine implements Line {
 	private final int id, pageid;
@@ -22,11 +22,6 @@ public class TestLine implements Line {
 	@Override
 	public String getNormalized() {
 		return norm;
-	}
-
-	@Override
-	public Token getTokenAt(int i) {
-		return null;
 	}
 
 	@Override
