@@ -11,9 +11,6 @@ public class GTFeature extends NamedFeature {
     }
     @Override
     public double calculate(Token token) {
-        if (token.getGT().isPresent() && token.getGT().get().equals(token.getMasterOCR())) {
-            return 1.0;
-        }
-        return 0.0;
+        return token.isCorrectToken() ? 1.0 : 0.0;
     }
 }

@@ -34,6 +34,13 @@ public class Token {
         return Optional.ofNullable(gt);
     }
 
+    public boolean isCorrectToken() {
+        if (gt == null) {
+            return false;
+        }
+        return gt.equals(masterOCR.toString());
+    }
+
     public Word getMasterOCR() {
         return this.masterOCR;
     }

@@ -31,15 +31,15 @@ public class TrainDynamicDictionaryCommand implements Command {
         project.put("gt", FileTypes.openDocument(args[0]), false);
         final FreqMap<String> ocrUnigrams = getOCRUnigrams(project);
         final FeatureSet features = getFeatureSet(ocrUnigrams);
+        OutputStreamWriter osw = new OutputStreamWriter(System.out);
         final ARFFWriter w = ARFFWriter.fromFeatureSet(features)
                 .withRelation("dynamic-lexicon")
-                .withWriter(new OutputStreamWriter(System.out));
+                .withWriter(osw);
         w.writeHeader();
         for (Token token : getTokens(project)) {
-            System.out.println(token);
-            System.out.flush();
             w.writeFeatureVector(features.calculateFeatureVector(token));
         }
+        osw.close();
     }
 
     private static FreqMap<String> getOCRUnigrams(Project project) throws Exception {
@@ -77,18 +77,12 @@ public class TrainDynamicDictionaryCommand implements Command {
                 TokenAlignment tokenAlignment = new TokenAlignment(master.getNormalized());
                 tokenAlignment.add(gt.getNormalized());
                 int offset = 0;
-                System.out.println("ALING LINE: " + master.getNormalized());
-                System.out.println("ALING LINE: " + gt.getNormalized());
                 for (TokenAlignment.Token token : tokenAlignment) {
                     Optional<Word> masterToken = master.getWord(offset, token.getMaster());
                     assert masterToken.isPresent();
                     offset += token.getMaster().length();
-                    System.out.println("ALIGN: " + token);
                     tokens.add(new Token(masterToken.get()).withGT(token.getAlignment(0)));
-                    Token last = tokens.get(tokens.size() - 1);
-                    System.out.println("ALIGN-token: " + last);
                 }
-                System.out.flush();
             }
         });
         return tokens;
