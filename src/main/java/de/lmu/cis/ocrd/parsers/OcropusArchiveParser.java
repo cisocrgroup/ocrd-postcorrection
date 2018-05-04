@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.parsers;
 
+import de.lmu.cis.ocrd.Line;
 import de.lmu.cis.ocrd.SimpleDocument;
 import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.archive.Archive;
@@ -14,13 +15,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class OcropusArchiveParser implements Parser {
-	private static boolean isOcropusLine(String name) {
-		return name.endsWith(".txt") && !name.endsWith(".gt.txt");
-	}
+    protected boolean isLine(String name) {return name.endsWith(".txt") && !name.endsWith("gt.txt");}
 
-	private static String slurpArchiveFile(Archive ar, Entry entry) throws IOException {
-		try (InputStream in = ar.open(entry)) {
-			return IOUtils.toString(in, Charset.forName("UTF-8"));
+    protected Line readLine(Archive ar, Entry entry, int pageID, int lineID) throws IOException {
+    	try (InputStream is = ar.open(entry)) {
+    		final String ocr = IOUtils.toString(is, Charset.forName("UTF-8"));
+			return new SimpleLine().withOcr(ocr).withPageId(pageID).withLineId(lineID);
 		}
 	}
 
@@ -32,7 +32,6 @@ public class OcropusArchiveParser implements Parser {
 				return c;
 			}
 			return a.getName().toString().compareTo(b.getName().toString());
-
 		});
 	}
 
@@ -47,7 +46,7 @@ public class OcropusArchiveParser implements Parser {
 		// gather valid `.txt` files
 		ArrayList<Entry> entries = new ArrayList<>();
 		for (Entry entry : this.ar) {
-			if (!isOcropusLine(entry.getName().toString())) {
+			if (!isLine(entry.getName().toString())) {
 				continue;
 			}
 			entries.add(entry);
@@ -62,8 +61,7 @@ public class OcropusArchiveParser implements Parser {
 				lineIDs.put(pageno, 0);
 			}
 			final int lid = lineIDs.get(pageno) + 1;
-			String ocr = slurpArchiveFile(ar, entry);
-			doc.add(pageno, new SimpleLine().withOcr(ocr).withPageId(pageno).withLineId(lid));
+			doc.add(pageno, readLine(ar, entry, pageno, lid));
 			lineIDs.put(pageno, lid);
 		}
 		return doc;
