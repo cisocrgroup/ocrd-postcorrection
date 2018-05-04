@@ -42,8 +42,12 @@ public class TokenAlignmentTest {
 	@Test
 	public void testBug1() {
 		final String a = "nen in dem Momente wo der Wagenzug anrasselte die gräßliche Zerschmettere er";
-		// final String b = "nen in dem Momente wo der Wagenzug anrafſelte die gräßiliche Zerſchmetterung er";
-		final String c = "nen in de m Momente wo der Wagenzug anrasseltez die CgräßlichksZekschmktkckking ex";
-		TokenAlignment tokens = new TokenAlignment(a).add(c);
+		final String b = "nen in de m Momente wo der Wagenzug anrasseltez die CgräßlichksZekschmktkckking ex";
+		TokenAlignment tokens = new TokenAlignment(a).add(b);
+		assertThat(tokens.size(), is(12));
+		assertThat(tokens.get(0).toString(), is("nen|nen"));
+		assertThat(tokens.get(3).toString(), is("Momente|Momente"));
+		assertThat(tokens.get(6).toString(), is("Wagenzug|Wagenzug"));
+		// TODO: add more tests for token alignment
 	}
 }
