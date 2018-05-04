@@ -1,0 +1,32 @@
+package de.lmu.cis.ocrd.parsers;
+
+import de.lmu.cis.ocrd.Line;
+import de.lmu.cis.ocrd.SimpleLine;
+import de.lmu.cis.ocrd.archive.Archive;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class OcropusArchiveLlocsParser extends OcropusArchiveParser {
+    public OcropusArchiveLlocsParser(Archive ar) {
+        super(ar, new OcropusLlocsFileType());
+    }
+    @Override
+    protected Line readLine(InputStream is,  int pageID, int lineID) throws Exception {
+        BufferedReader r = new BufferedReader(new InputStreamReader(is));
+        StringBuilder str = new StringBuilder();
+        ArrayList<Double> cs = new ArrayList<>();
+        String line;
+        while ((line = r.readLine()) != null) {
+            final String[] fields = line.split("\\s+");
+            if (fields.length < 2) {
+                throw new Exception("invalid llocs line: " + line);
+            }
+            str.append(fields[0]);
+            cs.add(Double.parseDouble(fields[0]));
+        }
+        return new SimpleLine().withOcr(str.toString()).withLineId(lineID).withPageId(pageID).withConfidences(cs);
+    }
+}

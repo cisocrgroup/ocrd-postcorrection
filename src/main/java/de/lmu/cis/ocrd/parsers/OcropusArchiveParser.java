@@ -7,7 +7,6 @@ import de.lmu.cis.ocrd.archive.Archive;
 import de.lmu.cis.ocrd.archive.Entry;
 import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -15,11 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class OcropusArchiveParser implements Parser {
-    protected Line readLine(Archive ar, Entry entry, int pageID, int lineID) throws IOException {
-    	try (InputStream is = ar.open(entry)) {
-    		final String ocr = IOUtils.toString(is, Charset.forName("UTF-8"));
-			return new SimpleLine().withOcr(ocr).withPageId(pageID).withLineId(lineID);
-		}
+    protected Line readLine(InputStream is, int pageID, int lineID) throws Exception {
+        final String ocr = IOUtils.toString(is, Charset.forName("UTF-8"));
+		return new SimpleLine().withOcr(ocr).withPageId(pageID).withLineId(lineID);
 	}
 
 	private static void sort(List<Entry> lines) {
@@ -65,7 +62,9 @@ public class OcropusArchiveParser implements Parser {
 				lineIDs.put(pageno, 0);
 			}
 			final int lid = lineIDs.get(pageno) + 1;
-			doc.add(pageno, readLine(ar, entry, pageno, lid));
+			try (InputStream is = ar.open(entry)) {
+			    doc.add(pageno, readLine(is, pageno, lid));
+            }
 			lineIDs.put(pageno, lid);
 		}
 		return doc;
