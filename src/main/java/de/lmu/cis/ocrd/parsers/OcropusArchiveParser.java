@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class OcropusArchiveParser implements Parser {
-    protected boolean isLine(String name) {return name.endsWith(".txt") && !name.endsWith("gt.txt");}
-
     protected Line readLine(Archive ar, Entry entry, int pageID, int lineID) throws IOException {
     	try (InputStream is = ar.open(entry)) {
     		final String ocr = IOUtils.toString(is, Charset.forName("UTF-8"));
@@ -35,18 +33,24 @@ public class OcropusArchiveParser implements Parser {
 		});
 	}
 
+	private final XMLFileType filetype;
 	private final Archive ar;
 
 	public OcropusArchiveParser(Archive ar) {
-		this.ar = ar;
+	    this(ar, new OcropusFileType());
 	}
+
+	protected OcropusArchiveParser(Archive ar, XMLFileType filetype) {
+	    this.filetype = filetype;
+	    this.ar = ar;
+    }
 
 	@Override
 	public SimpleDocument parse() throws Exception {
 		// gather valid `.txt` files
 		ArrayList<Entry> entries = new ArrayList<>();
 		for (Entry entry : this.ar) {
-			if (!isLine(entry.getName().toString())) {
+			if (!filetype.check(entry.getName().toString())) {
 				continue;
 			}
 			entries.add(entry);
