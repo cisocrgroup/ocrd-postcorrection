@@ -30,7 +30,7 @@ public class ARFFWriterTest {
         }
         @Override
         public double calculate(Token token) {
-            return token.getMasterOCR().length() * n;
+            return token.getMasterOCR().toString().length() * n;
         }
     }
 
@@ -44,9 +44,9 @@ public class ARFFWriterTest {
         StringWriter str = new StringWriter();
         ARFFWriter arff = ARFFWriter.fromFeatureSet(fs).withRelation("test").withWriter(str);
         arff.writeHeader();
-        arff.writeFeatureVector(fs.calculateFeatureVector(new Token("a")));
-        arff.writeFeatureVector(fs.calculateFeatureVector(new Token("aa")));
-        arff.writeFeatureVector(fs.calculateFeatureVector(new Token("aaa")));
+        arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("a")));
+        arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("aa")));
+        arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("aaa")));
         // System.out.println(str.toString());
         this.is = new DataSource(IOUtils.toInputStream(str.toString(), Charset.defaultCharset())).getDataSet();
     }

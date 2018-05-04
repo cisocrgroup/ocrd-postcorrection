@@ -9,7 +9,7 @@ public class IsLongerThan extends NamedFeature{
         this.n = n;
     }
     public double calculate(Token token) {
-        if (token.getMasterOCR().length() > n) {
+        if (token.getMasterOCR().toString().length() > n) {
             return 1;
         }
         return 0;

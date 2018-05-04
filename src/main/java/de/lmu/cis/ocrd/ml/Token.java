@@ -1,15 +1,20 @@
 package de.lmu.cis.ocrd.ml;
 
+import de.lmu.cis.ocrd.Word;
+
 import java.util.ArrayList;
 import java.util.Optional;
 
 // TODO: Merge with Alignment.Token
 public class Token {
-    private final String masterOCR;
+    private final Word masterOCR;
     private String gt;
-    private ArrayList<String> otherOCR;
+    private ArrayList<Word> otherOCR;
 
-    public Token(String masterOCR) {
+    public static Token create(String str) {
+        return new Token(Word.create(str));
+    }
+    public Token(Word masterOCR) {
         assert masterOCR != null;
         this.masterOCR = masterOCR;
     }
@@ -23,11 +28,11 @@ public class Token {
         return Optional.ofNullable(gt);
     }
 
-    public String getMasterOCR() {
+    public Word getMasterOCR() {
         return this.masterOCR;
     }
 
-    public Token addOCR(String ocr) {
+    public Token addOCR(Word ocr) {
         assert ocr != null;
         if (this.otherOCR == null) {
             this.otherOCR = new ArrayList<>();
@@ -43,17 +48,17 @@ public class Token {
         return otherOCR.size();
     }
 
-    public String getOtherOCRAt(int i) {
+    public Word getOtherOCRAt(int i) {
         return otherOCR.get(i);
     }
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder(masterOCR);
+        StringBuilder str = new StringBuilder(masterOCR.toString());
         char sep = '|';
-        for (String other : otherOCR) {
+        for (Word other : otherOCR) {
             str.append(sep);
-            str.append(other);
+            str.append(other.toString());
             sep = ',';
         }
         if (gt != null) {

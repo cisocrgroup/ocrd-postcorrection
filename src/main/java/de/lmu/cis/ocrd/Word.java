@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd;
 
+import java.util.Optional;
+
 public class Word {
     private final SimpleLine line;
     private final int s, e;
@@ -8,6 +10,12 @@ public class Word {
         this.s = s;
         this.e = e;
         this.line = line;
+    }
+
+    public static Word create(String str) {
+        Optional<Word> word = SimpleLine.normalized(str, 0.0).getWord(str);
+        assert(word.isPresent());
+        return word.get();
     }
 
     public SimpleLine getLine() {
