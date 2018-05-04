@@ -1,9 +1,9 @@
 package de.lmu.cis.ocrd;
 
+import de.lmu.cis.pocoweb.Token;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import de.lmu.cis.pocoweb.Token;
 
 public class SimpleLine implements Line {
 
@@ -15,6 +15,17 @@ public class SimpleLine implements Line {
 	private String line;
 
 	private ArrayList<Double> cs;
+
+	public static SimpleLine normalized(String ocr, double c) {
+	    NormalizerTransducer t = new NormalizerTransducer(ocr.length());
+	    ocr.codePoints().forEach((letter)->{
+	        t.delta(letter, c);
+        });
+	    SimpleLine line = new SimpleLine();
+	    line.line = t.getNormalized();
+	    line.cs = t.getConfidences();
+	    return line;
+	}
 
 	public double getConfidenceAt(int i) {
 		return cs.get(i);
