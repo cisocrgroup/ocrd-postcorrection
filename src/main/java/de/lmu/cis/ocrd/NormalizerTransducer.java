@@ -23,7 +23,6 @@ class NormalizerTransducer {
     // state 2 -- !alpha:epsilon -> 2
     public void delta(int letter, double confidence) {
         final boolean isAlpha = Unicode.isLetter(letter);
-        prevConfidence = confidence;
 
         switch (state) {
             case 0:
@@ -58,6 +57,7 @@ class NormalizerTransducer {
             default:
                 throw new RuntimeException("normalizing: invalid state encountered: " + state);
         }
+        prevConfidence = confidence;
     }
 
     public String getNormalized() {

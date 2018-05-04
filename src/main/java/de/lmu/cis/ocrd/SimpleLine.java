@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd;
 import de.lmu.cis.pocoweb.Token;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class SimpleLine implements Line {
@@ -18,14 +19,27 @@ public class SimpleLine implements Line {
 
 	public static SimpleLine normalized(String ocr, double c) {
 	    NormalizerTransducer t = new NormalizerTransducer(ocr.length());
-	    ocr.codePoints().forEach((letter)->{
-	        t.delta(letter, c);
-        });
+	    ocr.codePoints().forEach((letter)-> t.delta(letter, c));
 	    SimpleLine line = new SimpleLine();
 	    line.line = t.getNormalized();
 	    line.cs = t.getConfidences();
 	    return line;
 	}
+
+	public static SimpleLine normalized(String ocr, List<Double> cs) {
+	    NormalizerTransducer t = new NormalizerTransducer(ocr.length());
+	    Iterator<Double> it = cs.iterator();
+	    ocr.codePoints().forEach((letter)->{
+	        if (!it.hasNext()) {
+	            throw new IndexOutOfBoundsException("too few confidences for: " + ocr);
+            }
+	        t.delta(letter, it.next());
+        });
+	    SimpleLine line = new SimpleLine();
+	    line.line = t.getNormalized();
+	    line.cs = t.getConfidences();
+	    return line;
+    }
 
 	public double getConfidenceAt(int i) {
 		return cs.get(i);

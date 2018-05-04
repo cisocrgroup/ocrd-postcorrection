@@ -7,7 +7,7 @@ public class Unicode {
         }
         switch (Character.getType(c)) {
             case Character.COMBINING_SPACING_MARK:
-            // case Character.DIRECTIONALITY_NONSPACING_MARK: /* seems to be the same? */
+            case Character.NON_SPACING_MARK:
                 return true;
             default:
                 return false;
