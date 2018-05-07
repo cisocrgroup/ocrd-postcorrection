@@ -27,8 +27,6 @@ public class Project implements Document {
 	public void eachLine(Visitor v) throws Exception {
 		for (Map.Entry<String, Entry> entry : this.documents.entrySet()) {
 			entry.getValue().document.eachLine((line) -> {
-				line.ocrEngine = entry.getKey();
-				line.isMasterOCR = entry.getValue().isMasterOCR;
 				v.visit(line);
 			});
 		}
@@ -50,8 +48,9 @@ public class Project implements Document {
             if (!this.pages.containsKey(line.pageSeq)) {
                 this.pages.put(line.pageSeq, new Page(line.pageSeq));
             }
+            line.isMasterOCR = isMasterOCR;
+            line.ocrEngine = ocr;
             this.pages.get(line.pageSeq).add(line);
-
         });
 		return this;
 	}
