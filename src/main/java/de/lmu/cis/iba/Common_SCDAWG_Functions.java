@@ -2,8 +2,11 @@ package de.lmu.cis.iba;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+
+
 
 /**
  * @author Tobias Englmeier (CIS)
@@ -514,8 +517,9 @@ public class Common_SCDAWG_Functions {
 
 			public void visit(Node n) {
 
-				if (n.is_endNode)
+				if (n.is_endNode){
 					return;
+				}
 
 				boolean child_has_multiple_occurrences = false;
 				ArrayList sinkshit = new ArrayList();
@@ -529,7 +533,7 @@ public class Common_SCDAWG_Functions {
 					if (n2.is_endNode & !sinkshit.contains(n2))
 						sinkshit.add(n2);
 
-					if (marked_nodes.containsKey(n2))
+					if (marked_nodes.containsKey(n2)&&marked_nodes.get(n2))
 						child_has_multiple_occurrences = marked_nodes.get(n2);
 				}
 
@@ -542,7 +546,7 @@ public class Common_SCDAWG_Functions {
 					if (n2.is_endNode & !sinkshit.contains(n2))
 						sinkshit.add(n2);
 
-					if (marked_nodes.containsKey(n2))
+					if (marked_nodes.containsKey(n2)&&marked_nodes.get(n2))
 						child_has_multiple_occurrences = marked_nodes.get(n2);
 				}
 				if (sinkshit.size() > 1 || child_has_multiple_occurrences)
@@ -552,25 +556,121 @@ public class Common_SCDAWG_Functions {
 
 			}
 		});
-		// System.out.println("Size " + marked_nodes.size());
+		
+//		for (Node sink : scdawg.sinks){
+//			marked_nodes.put(sink, false);
+//
+//		}
+		 System.out.println("Size " + marked_nodes.size());
 
-		// Iterator it2 = marked_nodes.entrySet().iterator();
-		//
-		// while (it2.hasNext()) {
-		// Map.Entry pair = (Map.Entry) it2.next();
-		// Node n = (Node) pair.getKey();
-		// Boolean count = (Boolean) pair.getValue();
-		//
-		// System.out.println(count + " " + this.get_node_label(n));
-		//
-		// }
+		 Iterator it2 = marked_nodes.entrySet().iterator();
+		
+		 while (it2.hasNext()) {
+		 Map.Entry pair = (Map.Entry) it2.next();
+		 Node n = (Node) pair.getKey();
+		 Boolean count = (Boolean) pair.getValue();
+		
+		 System.out.println(count + " " + scdawg.get_node_label(n));
+		
+		 }
 
 		return marked_nodes;
 
 	}
 
 	/*********************************************************************************
-	 * get_string_occurences()
+	 * get_n_string_occurences()
+	 * 
+	 * Returns HashMap with nodes and a HashSet value, whether the nodes occurs in
+	 * one or more strings
+	 **********************************************************************************/
+
+	public HashMap<Node, HashSet<Integer>> get_n_string_occurences(int n) {
+
+		HashMap<Node, HashSet<Integer>> marked_nodes = new HashMap();
+		HashMap<Node, HashSet<Integer>> result = new HashMap();
+
+		scdawg.eachNode_DFS(scdawg.root, true, true, new Online_CDAWG_sym.Visitor() {
+
+			public void visit(Node n) {
+
+				if (n.is_endNode){
+					return;
+				}
+
+//				System.out.println(" node: " + scdawg.get_node_label(n) + " " + marked_nodes.get(n));
+
+				
+				HashSet<Integer> child_occurrences = new HashSet();
+				HashSet sinkshit = new HashSet();
+
+				Iterator it2 = n.children.entrySet().iterator();
+
+				while (it2.hasNext()) {
+					Map.Entry pair2 = (Map.Entry) it2.next();
+					Node n2 = (Node) pair2.getValue();
+
+					if (n2.is_endNode)
+						sinkshit.add(n2);
+
+					if (marked_nodes.containsKey(n2))
+						child_occurrences = marked_nodes.get(n2);
+				}
+
+				it2 = n.children_left.entrySet().iterator();
+
+				while (it2.hasNext()) {
+					Map.Entry pair2 = (Map.Entry) it2.next();
+					Node n2 = (Node) pair2.getValue();
+
+					if (n2.is_endNode)
+						sinkshit.add(n2);
+
+					if (marked_nodes.containsKey(n2))
+						child_occurrences = marked_nodes.get(n2);
+				}
+				
+				sinkshit.addAll(child_occurrences);
+				
+				marked_nodes.put(n, sinkshit);
+
+			}
+		});
+		
+//		for (Node sink : scdawg.sinks){
+//			marked_nodes.put(sink, false);
+//
+//		}
+		 System.out.println("Size " + marked_nodes.size());
+
+		 Iterator it2 = marked_nodes.entrySet().iterator();
+		
+		 while (it2.hasNext()) {
+		 Map.Entry pair = (Map.Entry) it2.next();
+		 Node node = (Node) pair.getKey();
+		 HashSet count = (HashSet) pair.getValue();
+		 
+		 if(count.size()==n) {
+		 Iterator it3 = count.iterator();
+			HashSet<Integer> ids = new HashSet();	
+			 while (it3.hasNext()) {
+				  Node nx = (Node) it3.next();
+				  ids.add(nx.stringnr);
+				 System.out.print(nx.stringnr+" ");
+			 }
+		 System.out.println(count.size() + " " + scdawg.get_node_label(node));
+		 result.put(node,ids);
+
+		 }
+		 }
+
+		return result;
+
+	}
+
+	
+	/*********************************************************************************
+	 * get_quasiminimal_nodes()
 	 * 
 	 * Finds all quasiminimal nodes in an SCDAWG Quasiminimal defined as all nodes
 	 * with parent nodes occuring in more then one string while they only occur in
@@ -583,32 +683,44 @@ public class Common_SCDAWG_Functions {
 	public HashMap<Node, Integer> get_quasiminimal_nodes(HashMap<Node, Boolean> marked_nodes) {
 
 		HashMap<Node, Integer> quasi_minimal_nodes = new HashMap<Node, Integer>();
+		HashMap<Node, Integer> quasi_maximal_nodes = new HashMap<Node, Integer>();
 
-		scdawg.eachNode_DFS(scdawg.root, true, false, new Online_CDAWG_sym.Visitor() {
+		scdawg.eachNode_DFS(scdawg.root, false, false, new Online_CDAWG_sym.Visitor() {
+
+			Node quasi_minimal_candidate = null;
+			int count = 0;
 
 			public void visit(Node n) {
 
-				if (n.is_endNode)
+				System.out.println(" node: " + scdawg.get_node_label(n) + " " + marked_nodes.get(n));
+
+				
+				if (n.is_endNode||n==scdawg.root||marked_nodes.get(n))
 					return;
 
-				// System.out.println(" node: " + get_node_label(n));
 
-				if (!marked_nodes.containsKey(n))
-					return;
+
+				if (quasi_minimal_candidate == null &! quasi_minimal_nodes.containsKey(n.suffixLink)) {
+					quasi_minimal_candidate = n;
+				}
+				System.out.println(" candidate : " + scdawg.get_node_label(quasi_minimal_candidate));
+
 
 				if (!marked_nodes.get(n)) {
 
 					Iterator it2 = n.children.entrySet().iterator();
-					int count = 0;
+					int sinkshit = 0;
 
 					while (it2.hasNext()) {
-						count++;
 						Map.Entry pair2 = (Map.Entry) it2.next();
 						Node n2 = (Node) pair2.getValue();
 
-						if (marked_nodes.containsKey(n2)) {
-							if (marked_nodes.get(n2) == false)
-								marked_nodes.remove(n2);
+						if (scdawg.sinks.contains(n2)) {
+							sinkshit++;
+						}
+						if(quasi_maximal_nodes.containsKey(n2)&&quasi_minimal_candidate!=null){
+							quasi_minimal_nodes.put(quasi_minimal_candidate, count);
+							quasi_minimal_candidate = null;
 						}
 					}
 
@@ -618,13 +730,30 @@ public class Common_SCDAWG_Functions {
 						Map.Entry pair2 = (Map.Entry) it2.next();
 						Node n2 = (Node) pair2.getValue();
 
-						if (marked_nodes.containsKey(n2)) {
-							if (marked_nodes.get(n2) == false)
-								marked_nodes.remove(n2);
+						if (scdawg.sinks.contains(n2)) {
+							sinkshit++;
+						}
+						if(quasi_maximal_nodes.containsKey(n2)&&quasi_minimal_candidate!=null){
+							quasi_minimal_nodes.put(quasi_minimal_candidate, count);
+							quasi_minimal_candidate = null;
 						}
 					}
+					
+ 				System.out.println((n.children.size()+n.children_left.size())+ " "+sinkshit);
+					
+										
+    				if (sinkshit == (n.children.size())+n.children_left.size()) {
+						if (count == 0)
+							count += n.children.size();
 
-					quasi_minimal_nodes.put(n, count);
+						if(quasi_minimal_candidate!=null){
+							quasi_minimal_nodes.put(quasi_minimal_candidate, count);
+							quasi_minimal_candidate = null;
+						}
+					    quasi_maximal_nodes.put(n,n.stringnr);
+						count = 0;
+					} else
+						count += n.children.size();
 
 				}
 
@@ -647,6 +776,303 @@ public class Common_SCDAWG_Functions {
 
 		return result;
 
+	}
+	
+	
+	/*********************************************************************************
+	 * get_quasiminimal_nodes_new()
+	 * 
+	 * Finds all quasiminimal nodes in an SCDAWG Quasiminimal defined as all nodes
+	 * with parent nodes occuring in more then one string while they only occur in
+	 * one string
+	 * 
+	 * @param marked_nodes:
+	 *            Result from get_string_occurences()
+	 **********************************************************************************/
+
+	public HashMap<Node, Integer> get_quasiminimal_nodes_new(HashMap<Node, Boolean> marked_nodes) {
+
+		HashMap<Node, Integer> quasi_minimal_nodes = new HashMap<Node, Integer>();
+
+		scdawg.eachNode_DFS(scdawg.root, true, false, new Online_CDAWG_sym.Visitor() {
+
+			Node quasi_minimal_candidate = null;
+			int count = 0;
+			HashSet<Integer> sinkset = new HashSet<Integer>();
+
+			public void visit(Node n) {
+
+				if (n.is_endNode||n==scdawg.root)
+					return;
+
+				Iterator it2 = n.children.entrySet().iterator();
+				int sinkshit = 0;
+
+				while (it2.hasNext()) {
+					Map.Entry pair2 = (Map.Entry) it2.next();
+					Node n2 = (Node) pair2.getValue();
+					
+					if(marked_nodes.get(n2)){
+						return;
+					}
+					
+					if (scdawg.sinks.contains(n2)) {
+						sinkset.add(n2.stringnr);
+					}
+					
+				}
+
+				it2 = n.children_left.entrySet().iterator();
+
+				while (it2.hasNext()) {
+					Map.Entry pair2 = (Map.Entry) it2.next();
+					Node n2 = (Node) pair2.getValue();
+
+					if (scdawg.sinks.contains(n2)) {
+						sinkset.add(n2.stringnr);
+					}
+					
+					if(marked_nodes.get(n2)){
+						return;
+					}
+					
+				}
+				
+				if(n.suffixLink==scdawg.root&&marked_nodes.get(n)==false){				
+				quasi_minimal_nodes.put(n, 0);
+				}
+				
+
+			}
+		});
+		System.out.println("Size minimal " + quasi_minimal_nodes.size());
+
+		HashMap<Node, Integer> result = Util.sortByValues(quasi_minimal_nodes, "DESC");
+
+		Iterator it2 = result.entrySet().iterator();
+
+		while (it2.hasNext()) {
+			Map.Entry pair = (Map.Entry) it2.next();
+			Node n = (Node) pair.getKey();
+			Integer count = (Integer) pair.getValue();
+
+			System.out.println(count + " xxx " + scdawg.get_node_label(n));
+
+		}
+
+		return result;
+
+	}
+	
+	
+	/*********************************************************************************
+	 * get_quasimaximal_nodes()
+	 * 
+	 * Finds all quasimaximal nodes in an SCDAWG quasimaximal defined as longest
+	 * nodes occuring in (n) strings
+	 * 
+	 * @param marked_nodes:
+	 *            Result from get_string_occurences()
+	 **********************************************************************************/
+
+	public HashMap<Node, Integer> get_quasimaximal_nodes(HashMap<Node, Boolean> marked_nodes) {
+
+		HashMap<Node, Integer> quasi_maximal_nodes = new HashMap<Node, Integer>();
+		HashMap<Node, Integer> quasi_maximal_nodes_help = new HashMap<Node, Integer>();
+
+		scdawg.eachNode_DFS(scdawg.root, true, false, new Online_CDAWG_sym.Visitor() {
+
+			Node quasi_maximal_candidate = null;
+			HashSet<Integer> sinkset = new HashSet<Integer>();
+			
+			
+			int count = 0;
+
+			public void visit(Node n) {
+				// WELCHE SINKS STATT NUR ZÄHLEN!!?
+				if (n.is_endNode||n==scdawg.root)
+					return;
+
+				System.out.println(" node: " + scdawg.get_node_label(n) + " " + marked_nodes.get(n));
+				
+			
+				if (marked_nodes.get(n) && quasi_maximal_candidate == null) {
+					quasi_maximal_candidate = n;
+				}
+
+				if(quasi_maximal_candidate!=null) System.out.println(" candidate: "+scdawg.get_node_label(quasi_maximal_candidate));
+				else System.out.println(" candidate: null");
+				
+				if (marked_nodes.get(n)) {
+
+					Iterator it2 = n.children.entrySet().iterator();
+
+					while (it2.hasNext()) {
+						Map.Entry pair2 = (Map.Entry) it2.next();
+						Node n2 = (Node) pair2.getValue();
+
+						if (scdawg.sinks.contains(n2)) {
+							sinkset.add(n2.stringnr);
+						}
+						if(quasi_maximal_nodes_help.containsKey(n2)&&quasi_maximal_candidate!=null){
+							
+							
+							System.out.println(" candidate: "+ quasi_maximal_candidate.children.entrySet().iterator().hasNext());
+
+							Iterator it3 = quasi_maximal_candidate.children.entrySet().iterator();
+							int sinkshit_candidate = 0;
+
+							while (it3.hasNext()) {
+								Map.Entry pair3 = (Map.Entry) it3.next();
+								Node n3 = (Node) pair3.getValue();
+
+								if (scdawg.sinks.contains(n3)) {
+									sinkshit_candidate++;
+								}
+							}
+							
+							it3 = n2.children.entrySet().iterator();
+							int sinkshit_n2 = 0;
+
+							while (it3.hasNext()) {
+								Map.Entry pair3 = (Map.Entry) it3.next();
+								Node n3 = (Node) pair3.getValue();
+
+								if (scdawg.sinks.contains(n3)) {
+									sinkshit_n2++;
+								}
+							}
+							
+							int sinkshit_total = sinkshit_candidate + sinkshit_n2;
+							
+							
+							
+							if(sinkshit_total == scdawg.sinks.size()){
+								System.out.println("NIMM IHN");
+								quasi_maximal_nodes.put(quasi_maximal_candidate, count);
+								quasi_maximal_candidate = null;
+								sinkset = new HashSet<Integer>();
+
+								return;
+							}
+						}
+					}
+
+					it2 = n.children_left.entrySet().iterator();
+
+					while (it2.hasNext()) {
+						Map.Entry pair2 = (Map.Entry) it2.next();
+						Node n2 = (Node) pair2.getValue();
+
+						if (scdawg.sinks.contains(n2)) {
+							sinkset.add(n2.stringnr);
+
+						}
+					}
+					
+					System.out.println(sinkset.size()+ " "+scdawg.sinks.size());
+
+					if (sinkset.size()==scdawg.sinks.size()) { // wenn in allen sinks vorkommt
+						if (count == 0)
+							count += n.children.size();
+
+						quasi_maximal_nodes.put(quasi_maximal_candidate, count);
+						quasi_maximal_candidate = null;
+						sinkset = new HashSet<Integer>();
+						quasi_maximal_nodes_help.put(n,n.stringnr);
+						count = 0;
+					} else
+						count += n.children.size();
+
+				}
+
+			}
+		});
+		System.out.println("Size maximal " + quasi_maximal_nodes.size());
+
+		HashMap<Node, Integer> result = Util.sortByValues(quasi_maximal_nodes, "DESC");
+
+		Iterator it2 = result.entrySet().iterator();
+
+		while (it2.hasNext()) {
+			Map.Entry pair = (Map.Entry) it2.next();
+			Node n = (Node) pair.getKey();
+			Integer count = (Integer) pair.getValue();
+
+			System.out.println(count + " xxx " + scdawg.get_node_label(n));
+
+		}
+
+		return result;
+
+	}
+	
+	
+	/*********************************************************************************
+	 * find_n_transitions_to_sinks()
+	 * 
+	 * Method searches for all nodes with occurences in n strings
+	 * @param node:
+	 *           node from which search will be started
+	 **********************************************************************************/
+	
+	public static HashSet<Integer> find_n_transitions_to_sinks(Node node, Online_CDAWG_sym scdawg,
+			HashSet<Integer> acc) {
+
+		Iterator it = node.children.entrySet().iterator();
+		HashSet<Integer> result = new HashSet<Integer>();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry) it.next();
+			Node child = (Node) pair.getValue();
+			for (int j = 0; j < scdawg.sinks.size(); j++) {
+				if (scdawg.sinks.get(j) == child) {
+//					if (!sinks.contains(scdawg.sinks.get(j))) {
+						for (int k = 0; k < scdawg.sinks.get(j).stringnumbers.size(); k++) {
+							acc.add(scdawg.sinks.get(j).stringnumbers.get(k));
+							// sinks.add(scdawg.sinks.get(j));
+						}
+//					}
+				}
+			}
+		}
+
+		Iterator it2 = node.children_left.entrySet().iterator();
+
+		while (it2.hasNext()) {
+
+			Map.Entry pair = (Map.Entry) it2.next();
+			Node child = (Node) pair.getValue();
+
+			for (int j = 0; j < scdawg.sinks.size(); j++) {
+				if (scdawg.sinks.get(j) == child) {
+//					if (!sinks.contains(scdawg.sinks.get(j))) {
+						for (int k = 0; k < scdawg.sinks.get(j).stringnumbers.size(); k++) {
+							acc.add(scdawg.sinks.get(j).stringnumbers.get(k));
+							// sinks.add(scdawg.sinks.get(j));
+						}
+//					}
+				}
+			}
+		}
+
+		// REC AUFRUF der Funktion mit den Kindern
+		Iterator it3 = node.children.entrySet().iterator();
+
+		while (it3.hasNext()) {
+
+			Map.Entry pair = (Map.Entry) it3.next();
+			Node child = (Node) pair.getValue();
+			find_n_transitions_to_sinks(child, scdawg, acc);
+		}
+
+		Iterator it4 = node.children_left.entrySet().iterator();
+
+		while (it4.hasNext()) {
+			Map.Entry pair = (Map.Entry) it4.next();
+			Node child = (Node) pair.getValue();
+			find_n_transitions_to_sinks(child, scdawg, acc);
+		}
+		return acc;
 	}
 
 }
