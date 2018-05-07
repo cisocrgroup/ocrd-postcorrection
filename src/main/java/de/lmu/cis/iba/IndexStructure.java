@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
+
 public abstract class IndexStructure {
 
 	public HashMap<String, Integer> utf8_sequence_map;
@@ -222,7 +223,7 @@ public abstract class IndexStructure {
 		return count;
 	}
 
-	public void eachNode_BFS(Node s, Visitor v) {
+	public void eachNode_BFS(Node s, boolean sym, boolean rev, Visitor v) {
 
 		HashMap<Node, Boolean> visited = new HashMap<Node, Boolean>();
 
@@ -233,7 +234,8 @@ public abstract class IndexStructure {
 
 		while (queue.size() != 0) {
 			s = queue.poll();
-			v.visit(s);
+			if (!rev)
+				v.visit(s);
 
 			Iterator it = s.children.entrySet().iterator();
 			while (it.hasNext()) {
@@ -249,6 +251,27 @@ public abstract class IndexStructure {
 				}
 
 			}
+
+			if (sym) {
+				it = s.children_left.entrySet().iterator();
+				while (it.hasNext()) {
+
+					Map.Entry pair = (Map.Entry) it.next();
+					int key = (int) pair.getKey();
+					Node child = (Node) pair.getValue();
+
+					if (!visited.containsKey(child)) {
+						visited.put(child, true);
+
+						queue.add(child);
+					}
+
+				}
+
+			}
+
+			if (rev)
+				v.visit(s);
 
 		}
 
@@ -273,7 +296,7 @@ public abstract class IndexStructure {
 		if (sym) {
 
 			Iterator it2 = s.children_left.entrySet().iterator();
-			while (it.hasNext()) {
+			while (it2.hasNext()) {
 
 				Map.Entry pair = (Map.Entry) it2.next();
 				int key = (int) pair.getKey();
