@@ -20,7 +20,7 @@ public class OcropusArchiveLlocsParser extends OcropusArchiveParser {
         ArrayList<Double> cs = new ArrayList<>();
         String line;
         while ((line = r.readLine()) != null) {
-            final String[] fields = line.split("\\s+");
+            final String[] fields = line.split("\t+");
             if (fields.length < 3) {
                 throw new Exception("invalid llocs line: " + line);
             }
