@@ -1,9 +1,11 @@
 package de.lmu.cis.ocrd;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.lmu.cis.pocoweb.Token;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 public class SimpleLine implements Line {
 
@@ -15,6 +17,30 @@ public class SimpleLine implements Line {
 	private String line;
 
 	private ArrayList<Double> cs;
+
+	public static SimpleLine normalized(String ocr, double c) {
+	    NormalizerTransducer t = new NormalizerTransducer(ocr.length());
+	    ocr.codePoints().forEach((letter)-> t.delta(letter, c));
+	    SimpleLine line = new SimpleLine();
+	    line.line = t.getNormalized();
+	    line.cs = t.getConfidences();
+	    return line;
+	}
+
+	public static SimpleLine normalized(String ocr, List<Double> cs) {
+	    NormalizerTransducer t = new NormalizerTransducer(ocr.length());
+	    Iterator<Double> it = cs.iterator();
+	    ocr.codePoints().forEach((letter)->{
+	        if (!it.hasNext()) {
+	            throw new IndexOutOfBoundsException("too few confidences for: " + ocr + " (" + cs.size() + " vs. " + ocr.length() + ")");
+            }
+	        t.delta(letter, it.next());
+        });
+	    SimpleLine line = new SimpleLine();
+	    line.line = t.getNormalized();
+	    line.cs = t.getConfidences();
+	    return line;
+    }
 
 	public double getConfidenceAt(int i) {
 		return cs.get(i);
@@ -30,44 +56,35 @@ public class SimpleLine implements Line {
 		return this.line;
 	}
 
-	@Override
+    @Override
+    public List<Token> getTokens() {
+        return null;
+    }
+
+    @Override
 	public int getPageId() {
 		return this.pageID;
 	}
 
-	@Override
-	public Token getTokenAt(int i) {
-		return getTokens().get(i);
-	}
-
-	@Override
-	public List<Token> getTokens() {
-		ArrayList<Token> tokens = new ArrayList<Token>();
-		int tid = 0;
-		for (String t : this.line.split("\\s+")) {
-			tokens.add(new Token().withLineId(lineID).withPageId(pageID).withTokenId(tid).withOcr(t));
-			tid++;
-		}
-		return tokens;
-	}
-
-	public SimpleLine withConfidences(ArrayList<Double> cs) {
-		this.cs = cs;
-		return this;
-	}
-
-	public SimpleLine withLineId(int id) {
+	public SimpleLine withLineID(int id) {
 		this.lineID = id;
 		return this;
 	}
 
-	public SimpleLine withOcr(String line) {
-		this.line = normalize(line);
-		return this;
-	}
-
-	public SimpleLine withPageId(int id) {
+	public SimpleLine withPageID(int id) {
 		this.pageID = id;
 		return this;
 	}
+
+	public Optional<Word> getWord(String word) {
+	    return getWord(0, word);
+    }
+
+    public Optional<Word> getWord(int offset, String word) {
+	    final int pos = line.indexOf(word, offset);
+	    if (pos < 0) {
+	        return Optional.empty();
+        }
+        return Optional.of(new Word(pos, pos + word.length(), this));
+    }
 }

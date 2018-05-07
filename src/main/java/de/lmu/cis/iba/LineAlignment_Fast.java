@@ -118,16 +118,15 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 		// ArrayList<String> xyz = new ArrayList<String>(stringset.size());
 		String[] xyz = new String[stringset.size()];
 		for (pair p : nodes_sink_set) {
-			// System.out.println(scdawg.get_node_label(p.node));
-			// System.out.println(p.ids);
+			 System.out.println(scdawg.get_node_label(p.node));
+			 System.out.println(p.ids);
 			ArrayList<OCRLine> linetupel = new ArrayList<OCRLine>();
 			for (Integer id : p.ids) {
 				int idx = id;
 
 				linetupel.add(ocrlines.get(idx));
 
-				// System.out.println("- " + stringset.get(idx) + ": " +
-				// strids.get(idx));
+				 System.out.println("- " + stringset.get(idx));
 				xyz[idx] = stringset.get(idx);
 			}
 			this.add(linetupel);

@@ -20,6 +20,7 @@ public class Main {
 
 	private static CommandFactory commands() {
 		return new CommandFactory().register("info", new InfoCommand())
+				.register("train-dynamic-lexicon", new TrainDynamicDictionaryCommand())
 				.register("env", new EnvironmentCommand())
                 .register("profiler", new ProfilerCommand())
 				.register("align", new AlignCommand())

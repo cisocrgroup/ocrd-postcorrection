@@ -1,10 +1,10 @@
 package de.lmu.cis.ocrd;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.lmu.cis.pocoweb.Client;
 import de.lmu.cis.pocoweb.Token;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PocowebLine extends de.lmu.cis.api.model.Line implements de.lmu.cis.ocrd.Line {
 	private class Pair {
@@ -50,7 +50,7 @@ public class PocowebLine extends de.lmu.cis.api.model.Line implements de.lmu.cis
 		StringBuilder builder = new StringBuilder();
 
 		boolean first = true;
-		List<Token> alignements = new ArrayList<Token>();
+		List<Token> alignements = new ArrayList<>();
 		for (Token t : tokens) {
 			if (first) {
 				first = false;
@@ -73,11 +73,6 @@ public class PocowebLine extends de.lmu.cis.api.model.Line implements de.lmu.cis
 	}
 
 	@Override
-	public Token getTokenAt(int i) {
-		return tokenAlignements.get(i);
-	}
-
-	@Override
 	public List<Token> getTokens() {
 		return tokens;
 	}
@@ -85,7 +80,7 @@ public class PocowebLine extends de.lmu.cis.api.model.Line implements de.lmu.cis
 	private List<Token> loadTokens() throws Exception {
 		List<Token> tokens = client.getTokens(projectId, pageId, lineId);
 		if (tokens == null) {
-			return new ArrayList<Token>();
+			return new ArrayList<>();
 		}
 		return tokens;
 	}

@@ -1,15 +1,13 @@
 package de.lmu.cis.ocrd.parsers;
 
-import java.util.ArrayList;
-
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-
+import de.lmu.cis.ocrd.SimpleDocument;
+import de.lmu.cis.ocrd.SimpleLine;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import de.lmu.cis.ocrd.SimpleDocument;
-import de.lmu.cis.ocrd.SimpleLine;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import java.util.ArrayList;
 
 public abstract class AbstractXPathParser implements Parser {
 
@@ -23,7 +21,7 @@ public abstract class AbstractXPathParser implements Parser {
 		}
 
 		public Word(String word, boolean explicitWhitespace) {
-			this(word, explicitWhitespace, new ArrayList<Double>());
+			this(word, explicitWhitespace, new ArrayList<>());
 		}
 
 		public Word(String word, boolean prepend, ArrayList<Double> cs) {
@@ -83,17 +81,18 @@ public abstract class AbstractXPathParser implements Parser {
 		NodeList words = (NodeList) getWordsXPath().evaluate(line, XPathConstants.NODESET);
 		final int n = words.getLength();
 		StringBuilder str = new StringBuilder();
-		ArrayList<Double> cs = new ArrayList<Double>();
+		ArrayList<Double> cs = new ArrayList<>();
 		for (int i = 0; i < n; i++) {
 			Word word = parseWord(words.item(i));
 			if (i > 0 && !word.hasExplicitWhitespace()) {
 				str.append(' ');
+				// add a confidence of 0 for implicit white space
+				cs.add(0.0);
 			}
 			str.append(word.getWord());
 			cs.addAll(word.getConfidences());
 		}
-		this.doc.add(this.pageID,
-				new SimpleLine().withLineId(lid).withPageId(this.pageID).withOcr(str.toString()).withConfidences(cs));
+		this.doc.add(this.pageID, SimpleLine.normalized(str.toString(), cs).withPageID(pageID).withLineID(lid));
 	}
 
 	abstract Word parseWord(Node word) throws Exception;

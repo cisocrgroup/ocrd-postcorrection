@@ -1,16 +1,9 @@
 package de.lmu.cis.iba;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
-
+import com.google.gson.Gson;
 import org.pmw.tinylog.Logger;
 
-import com.google.gson.Gson;
+import java.util.*;
 
 // import cdawg_sym.Online_CDAWG_sym;
 // import indexstructure.Node;
@@ -27,6 +20,11 @@ public class Pairwise_LCS_Alignment {
 			this.label = label;
 			spos1 = epos1 - this.label.length();
 			spos2 = epos2 - this.label.length();
+		}
+
+		@Override
+		public String toString() {
+			return String.format("{%s,%d,%d,%d,%d}", label, spos1, epos1, spos2, epos2);
 		}
 	}
 

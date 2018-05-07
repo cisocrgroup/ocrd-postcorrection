@@ -1,17 +1,15 @@
 package de.lmu.cis.ocrd;
 
-import java.util.List;
-
 import de.lmu.cis.pocoweb.Token;
 
+import java.util.List;
+
 public interface Line {
-	public int getLineId();
+	int getLineId();
 
-	public int getPageId();
+	int getPageId();
 
-	public String getNormalized();
+	String getNormalized();
 
-	public Token getTokenAt(int i);
-
-	public List<Token> getTokens();
+	List<Token> getTokens();
 }

@@ -1,11 +1,10 @@
 package de.lmu.cis.ocrd.align.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+import de.lmu.cis.ocrd.align.TokenAlignment;
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.align.TokenAlignment;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class TokenAlignmentTest {
 	@Test
@@ -38,5 +37,17 @@ public class TokenAlignmentTest {
 		assertThat(tokens.get(0).toString(), is("abc|abc"));
 		assertThat(tokens.get(1).toString(), is("def|def"));
 		assertThat(tokens.get(2).toString(), is("ghi|ghi"));
+	}
+
+	@Test
+	public void testBug1() {
+		final String a = "nen in dem Momente wo der Wagenzug anrasselte die gräßliche Zerschmettere er";
+		final String b = "nen in de m Momente wo der Wagenzug anrasseltez die CgräßlichksZekschmktkckking ex";
+		TokenAlignment tokens = new TokenAlignment(a).add(b);
+		assertThat(tokens.size(), is(12));
+		assertThat(tokens.get(0).toString(), is("nen|nen"));
+		assertThat(tokens.get(3).toString(), is("Momente|Momente"));
+		assertThat(tokens.get(6).toString(), is("Wagenzug|Wagenzug"));
+		// TODO: add more tests for token alignment
 	}
 }
