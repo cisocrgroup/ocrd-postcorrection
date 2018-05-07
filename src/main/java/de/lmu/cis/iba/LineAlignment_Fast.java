@@ -11,7 +11,8 @@ import org.pmw.tinylog.Logger;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.OCRLine;
 
-public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
+
+public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 	private static class pair {
 		public HashSet<Integer> ids;
 		public Node node;
@@ -20,7 +21,7 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 	static ArrayList<Node> sinks = new ArrayList<Node>();
 	public ArrayList<String> stringset = new ArrayList<String>();
 
-	public LineAlignment(Document doc, int nlines) throws Exception {
+	public LineAlignment_Fast(Document doc, int nlines) throws Exception {
 		super();
 
 		if (nlines <= 0) {
@@ -45,13 +46,12 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 
 		Common_SCDAWG_Functions scdawg_functions = new Common_SCDAWG_Functions(scdawg);
 
-		HashMap<Node, Integer> nodes_count = scdawg_functions.count_nodes();
+		HashMap<Node,HashSet<Integer>> nodes_with_n_occs = scdawg_functions.get_n_string_occurences(3);
 
-		HashMap count_nodes_sorted = Util.sortByValues(nodes_count, "DESC");
+		HashMap<Node,HashSet<Integer>> nodes_sorted = Util.sortByNodeLength(nodes_with_n_occs, "DESC",scdawg);
 		ArrayList<pair> nodes_sink_set = new ArrayList<pair>();
 
-		count_nodes_sorted.put(scdawg.root, null);
-		Iterator it3 = count_nodes_sorted.entrySet().iterator();
+		Iterator it3 = nodes_sorted.entrySet().iterator();
 
 		Logger.info("starting main loop ...");
 		HashSet<Integer> usedIDs = new HashSet<Integer>();
@@ -60,7 +60,7 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 
 			Node n = (Node) pair.getKey();
 
-			HashSet<Integer> ids = scdawg_functions.find_n_transitions_to_sinks(n, scdawg, new HashSet<Integer>());
+			HashSet<Integer> ids = (HashSet<Integer>) pair.getValue();
 
 			if (ids.size() != nlines) {
 				continue;
