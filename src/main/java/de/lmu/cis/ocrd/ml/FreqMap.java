@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.ml;
 import java.util.HashMap;
 
 public class FreqMap<T> {
-  private final HashMap<T, Integer> freqs = new HashMap<T, Integer>();
+  private final HashMap<T, Integer> freqs = new HashMap<>();
   private int total;
 
   public int add(T t) {
@@ -29,10 +29,10 @@ public class FreqMap<T> {
     return total;
   }
 
-  private final int doGet(T t) {
+  private int doGet(T t) {
     Integer n = freqs.get(t);
     if (n == null) {
-      n = new Integer(0);
+      return 0;
     }
     return n;
   }
