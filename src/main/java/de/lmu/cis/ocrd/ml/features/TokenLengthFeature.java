@@ -2,18 +2,18 @@ package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.ml.Token;
 
-public class TokenLengthFeature extends NamedFeature{
+public class TokenLengthFeature extends NamedBooleanFeature{
     private final int min, max;
+
     public TokenLengthFeature(int min, int max, String name) {
         super(name);
         this.min = min;
         this.max = max;
     }
-    public double calculate(Token token) {
+
+    @Override
+    protected final boolean doCalculate(Token token) {
         final int n = token.getMasterOCR().toString().length();
-        if (n >= min && n <= max) {
-            return 1;
-        }
-        return 0;
+        return n>=min && n <= max;
     }
 }
