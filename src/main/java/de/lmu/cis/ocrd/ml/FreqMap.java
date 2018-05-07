@@ -7,11 +7,15 @@ public class FreqMap<T> {
   private int total;
 
   public int add(T t) {
-    int n = doGet(t);
-    n++;
-    freqs.put(t, n);
-    total++;
-    return n;
+      return add(t, 1);
+  }
+
+  public int add(T t, int n) {
+      int x = doGet(t);
+      x += n;
+      total += n;
+      freqs.put(t, x);
+      return x;
   }
 
   public int getAbsolute(T t) {
