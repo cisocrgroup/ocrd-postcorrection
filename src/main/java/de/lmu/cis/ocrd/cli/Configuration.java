@@ -1,25 +1,14 @@
 package de.lmu.cis.ocrd.cli;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import com.google.gson.Gson;
+import org.apache.commons.cli.*;
 import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 
-import com.google.gson.Gson;
+import java.io.*;
+import java.nio.charset.Charset;
 
 class Configuration {
 	private static final Option COMMAND = Option.builder("c").longOpt("command").desc("set CLI command (required)")
@@ -157,7 +146,7 @@ class Configuration {
 	}
 
 	public String getProfilerCommand() {
-		return notNull(data.profilerCommand);
+		return notNull(data.getProfilerCommand());
 	}
 
 	public String getWorkDir() {
