@@ -7,7 +7,7 @@ public class TokenLengthFeature extends NamedBooleanFeature{
     private final int min, max;
 
     public TokenLengthFeature(JsonObject o, ArgumentFactory args) {
-        this(JSONUtil.mustGet(o, "min").getAsInt(), JSONUtil.mustGet(o, "max").getAsInt(), JSONUtil.mustGetValidName(o));
+        this(JSONUtil.mustGet(o, "min").getAsInt(), JSONUtil.mustGet(o, "max").getAsInt(), JSONUtil.mustGetNameOrType(o));
     }
 
     // for testing

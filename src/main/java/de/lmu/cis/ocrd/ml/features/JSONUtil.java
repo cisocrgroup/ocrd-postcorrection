@@ -12,7 +12,7 @@ public class JSONUtil {
         return val;
     }
 
-    public static String mustGetValidName(JsonObject o) {
+    public static String mustGetNameOrType(JsonObject o) {
         JsonElement val = o.get("name");
         if (val != null) {
            return val.getAsString();

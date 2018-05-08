@@ -8,7 +8,7 @@ public class UnigramFeature extends NamedFeature {
     private final FreqMap<String> unigrams;
 
     public UnigramFeature(JsonObject o, ArgumentFactory args) {
-        this(args.getOCRUnigrams(), JSONUtil.mustGetValidName(o));
+        this(args.getOCRUnigrams(), JSONUtil.mustGetNameOrType(o));
     }
 
     public UnigramFeature(FreqMap<String>unigrams, String name) {
