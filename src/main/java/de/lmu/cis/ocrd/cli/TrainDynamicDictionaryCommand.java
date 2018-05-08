@@ -7,6 +7,7 @@ import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.Token;
+import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.GTFeature;
 import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
 
@@ -21,22 +22,21 @@ public class TrainDynamicDictionaryCommand implements Command {
         if (config.getArgs().length != 2) {
             throw new Exception("usage: gt master-ocr [other-ocr...]");
         }
-        execute(config.getArgs());
-    }
-
-    private static void execute(String[] args) throws Exception {
         Project project = new Project();
-        project.put("masterOCR", FileTypes.openDocument(args[1]), true);
-        project.put("gt", FileTypes.openDocument(args[0]), false);
-        final FreqMap<String> ocrUnigrams = getOCRUnigrams(project);
-        final FeatureSet features = getFeatureSet(ocrUnigrams);
+        project.put("masterOCR", FileTypes.openDocument(config.getArgs()[1]), true);
+        project.put("gt", FileTypes.openDocument(config.getArgs()[0]), false);
+        // final FreqMap<String> ocrUnigrams = getOCRUnigrams(project);
+        // final FeatureSet features = getFeatureSet(ocrUnigrams);
         OutputStreamWriter osw = new OutputStreamWriter(System.out);
-        final ARFFWriter w = ARFFWriter.fromFeatureSet(features)
+        final List<Token> tokens = getTokens(project);
+        final ArgumentFactory factory = new ArgumentFactory(config.getParameters(), tokens);
+        final FeatureSet fs = FeatureFactory.getDefault().withArgumentFactory(factory).createFeatureSet(config.getParameters().getDynamicLexiconFeatures());
+        final ARFFWriter w = ARFFWriter.fromFeatureSet(fs)
                 .withRelation("dynamic-lexicon")
                 .withWriter(osw);
         w.writeHeader();
-        for (Token token : getTokens(project)) {
-            w.writeFeatureVector(features.calculateFeatureVector(token));
+        for (Token token : tokens) {
+            w.writeFeatureVector(fs.calculateFeatureVector(token));
         }
         osw.close();
     }

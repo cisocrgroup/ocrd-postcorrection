@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.Feature;
+import de.lmu.cis.ocrd.ml.FeatureSet;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -37,5 +38,17 @@ public class FeatureFactory {
     public <F extends Feature> FeatureFactory register(Class<F> feature) {
         features.add(feature.getName());
         return this;
+    }
+
+    public FeatureSet createFeatureSet(JsonObject[] os) throws Exception {
+        FeatureSet fs = new FeatureSet();
+        for (JsonObject o : os) {
+            Optional<Feature> feature = create(o);
+            if (!feature.isPresent()) {
+                throw new Exception("cannot create feature from: " + o.toString());
+            }
+            fs.add(feature.get());
+        }
+        return fs;
     }
 }
