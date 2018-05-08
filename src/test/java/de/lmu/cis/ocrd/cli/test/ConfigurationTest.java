@@ -28,6 +28,7 @@ public class ConfigurationTest {
     public void test() {
         assertThat(configuration.getParameters().getProfiler().getExecutable(), is("/test/profiler/executable"));
         assertThat(configuration.getParameters().getProfiler().getLanguageDirectory(), is("/test/profiler/language/directory"));
+        assertThat(configuration.getParameters().getProfiler().getLanguage(), is("/test/profiler/language"));
         assertThat(configuration.getParameters().getLanguageModel().getCharacterTrigrams(), is("/test/language/model/character/trigrams"));
         assertThat(configuration.getParameters().getDynamicLexiconFeatures().length, is(2));
         assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconFeatures()[0], "name").getAsString(), is("name1"));

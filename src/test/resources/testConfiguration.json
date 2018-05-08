@@ -1,7 +1,8 @@
 {
   "profiler": {
     "executable": "/test/profiler/executable",
-    "languageDirectory": "/test/profiler/language/directory"
+    "languageDirectory": "/test/profiler/language/directory",
+    "language": "/test/profiler/language"
   },
   "languageModel": {
     "characterTrigrams": "/test/language/model/character/trigrams"

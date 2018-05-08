@@ -16,6 +16,11 @@ public class ConfigurationJSON {
 
         private String executable;
         private String languageDirectory;
+        private String language;
+
+        public String getLanguage() {
+            return language;
+        }
     }
 
     public Profiler getProfiler() {
@@ -47,6 +52,7 @@ public class ConfigurationJSON {
 		c.profiler = new Profiler();
 		c.profiler.executable = "/apps/profiler";
 		c.profiler.languageDirectory = "/data/ProfilerLanguages";
+		c.profiler.language = "german";
 		c.languageModel = new LanguageModel();
 		c.languageModel.characterTrigrams = "/data/languageModel/characterTrigrams.csv";
 		c.dynamicLexiconFeatures = new JsonObject[0];

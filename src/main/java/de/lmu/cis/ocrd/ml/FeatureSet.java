@@ -29,8 +29,12 @@ public class FeatureSet {
 
 	public void each(Token token, Callback callback) {
 		for (Feature feature : this.features) {
-			callback.apply(feature.calculate(token));
-		}
+            try {
+                callback.apply(feature.calculate(token));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 	}
 
 	public void each(FeatureCallback cb) {

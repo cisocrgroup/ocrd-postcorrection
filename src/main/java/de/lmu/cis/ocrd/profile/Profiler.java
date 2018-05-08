@@ -45,7 +45,7 @@ public class Profiler {
         return this;
     }
 
-    public Profiler withArgs(String[] args) {
+    public Profiler withArgs(String... args) {
         this.args = args;
         return this;
     }

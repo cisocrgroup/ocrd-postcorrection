@@ -9,7 +9,6 @@ import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.ml.features.GTFeature;
 import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
-import de.lmu.cis.ocrd.ml.features.UnigramFeature;
 
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public class TrainDynamicDictionaryCommand implements Command {
 
     private static FeatureSet getFeatureSet(FreqMap<String> ocrUnigrams) {
         final FeatureSet features = new FeatureSet();
-        features.add(new UnigramFeature(ocrUnigrams, "MasterOCRUnigramRelativeFrequency"));
+        // features.add(new UnigramFeature(ocrUnigrams, "MasterOCRUnigramRelativeFrequency"));
         features.add(new TokenLengthFeature(5, 9, "MediumToken"));
         features.add(new TokenLengthFeature(10, 14, "LongToken"));
         features.add(new TokenLengthFeature(15, Integer.MAX_VALUE, "VeryLongToken"));

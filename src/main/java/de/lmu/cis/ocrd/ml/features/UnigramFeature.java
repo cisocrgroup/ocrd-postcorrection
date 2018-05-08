@@ -11,7 +11,7 @@ public class UnigramFeature extends NamedFeature {
         this(args.getOCRUnigrams(), JSONUtil.mustGetNameOrType(o));
     }
 
-    public UnigramFeature(FreqMap<String>unigrams, String name) {
+    public UnigramFeature(FreqMap<String> unigrams, String name) {
         super(name);
         this.unigrams = unigrams;
     }
