@@ -1,0 +1,13 @@
+{
+  "profiler": {
+    "executable": "/test/profiler/executable",
+    "languageDirectory": "/test/profiler/language/directory"
+  },
+  "languageModel": {
+    "characterTrigrams": "/test/language/model/character/trigrams"
+  },
+  "dynamicLexiconFeatures": [
+    {"name": "name1", "type": "type1", "min": 0, "max": 1},
+    {"name": "name2", "type": "type2", "arg": "some arg"}
+  ]
+}

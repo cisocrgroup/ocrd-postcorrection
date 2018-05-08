@@ -10,7 +10,7 @@ import org.pmw.tinylog.Logger;
 import java.io.*;
 import java.nio.charset.Charset;
 
-class Configuration {
+public class Configuration {
 	private static final Option COMMAND = Option.builder("c").longOpt("command").desc("set CLI command (required)")
 			.hasArg().required().build();
 	private static final Option GROUPID = Option.builder("g").longOpt("group-id")
@@ -72,7 +72,7 @@ class Configuration {
 	}
 
 	public static Configuration fromCommandLine(String[] args)
-			throws ParseException, FileNotFoundException, IOException {
+			throws ParseException, IOException {
 		CommandLineParser parser = new DefaultParser();
 		CommandLine line = parser.parse(createOptions(), args);
 		return Configuration.fromCommandLine(line);
@@ -145,8 +145,9 @@ class Configuration {
 		return notNull(parameter);
 	}
 
-	public String getProfilerCommand() {
-		return notNull(data.getProfilerCommand());
+	public ConfigurationJSON getParameters() {
+		assert(data != null);
+		return data;
 	}
 
 	public String getWorkDir() {
@@ -154,8 +155,8 @@ class Configuration {
 	}
 
 	private void setupJSON() throws FileNotFoundException, IOException {
+		data = ConfigurationJSON.getDefault();
 		if (parameter == null) {
-			data = new ConfigurationJSON();
 			return;
 		}
 		Logger.debug("reading configuration {}", parameter);

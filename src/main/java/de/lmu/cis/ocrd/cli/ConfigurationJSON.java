@@ -4,28 +4,51 @@ import com.google.gson.JsonObject;
 
 // Data class that is used to map the
 // JSON configuration.
-class ConfigurationJSON {
-	public String getProfilerCommand() {
-		return profilerCommand;
-	}
+public class ConfigurationJSON {
+    public static class Profiler {
+        public String getExecutable() {
+            return executable;
+        }
 
-	public JsonObject[] getDynamicLexiconFeatures() {
+        public String getLanguageDirectory() {
+            return languageDirectory;
+        }
+
+        private String executable;
+        private String languageDirectory;
+    }
+
+    public Profiler getProfiler() {
+        return profiler;
+    }
+
+    public static class LanguageModel {
+        private String characterTrigrams;
+
+        public String getCharacterTrigrams() {
+            return characterTrigrams;
+        }
+    }
+
+    public LanguageModel getLanguageModel() {
+        return languageModel;
+    }
+
+    public JsonObject[] getDynamicLexiconFeatures() {
 		return dynamicLexiconFeatures;
 	}
 
-	public String getCharacterNGrams() {
-
-		return characterNGrams;
-	}
-
-	private String profilerCommand;
-	private String characterNGrams;
+	private Profiler profiler;
+	private LanguageModel languageModel;
 	private JsonObject[] dynamicLexiconFeatures;
 
 	public static ConfigurationJSON getDefault() {
 		final ConfigurationJSON c = new ConfigurationJSON();
-		c.profilerCommand = "/apps/profiler";
-		c.characterNGrams = "/data/characterNGrams.csv";
+		c.profiler = new Profiler();
+		c.profiler.executable = "/apps/profiler";
+		c.profiler.languageDirectory = "/data/ProfilerLanguages";
+		c.languageModel = new LanguageModel();
+		c.languageModel.characterTrigrams = "/data/languageModel/characterTrigrams.csv";
 		c.dynamicLexiconFeatures = new JsonObject[0];
 		return c;
 	}
