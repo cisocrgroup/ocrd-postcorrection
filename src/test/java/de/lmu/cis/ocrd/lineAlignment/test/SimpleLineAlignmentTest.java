@@ -1,17 +1,17 @@
-package de.lmu.cis.ocrd.test;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+package de.lmu.cis.ocrd.lineAlignment.test;
+import de.lmu.cis.iba.LineAlignment;
+import de.lmu.cis.ocrd.OCRLine;
+import de.lmu.cis.ocrd.test.TestDocument;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-import de.lmu.cis.iba.LineAlignment;
-import de.lmu.cis.ocrd.OCRLine;
-
-public class LineAlignmentTest {
+public class SimpleLineAlignmentTest {
 	@Test
 	public void testSimple() throws Exception {
 
