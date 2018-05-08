@@ -30,7 +30,7 @@ public class TrainDynamicDictionaryCommand implements Command {
         OutputStreamWriter osw = new OutputStreamWriter(System.out);
         final List<Token> tokens = getTokens(project);
         final ArgumentFactory factory = new ArgumentFactory(config.getParameters(), tokens);
-        final FeatureSet fs = FeatureFactory.getDefault().withArgumentFactory(factory).createFeatureSet(config.getParameters().getDynamicLexiconFeatures());
+        final FeatureSet fs = FeatureFactory.getDefault().withArgumentFactory(factory).createFeatureSet(config.getParameters().getDynamicLexiconFeatures()).add(new GTFeature());
         final ARFFWriter w = ARFFWriter.fromFeatureSet(fs)
                 .withRelation("dynamic-lexicon")
                 .withWriter(osw);
