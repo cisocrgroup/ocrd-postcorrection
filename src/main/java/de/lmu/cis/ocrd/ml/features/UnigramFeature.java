@@ -1,10 +1,15 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.Token;
 
 public class UnigramFeature extends NamedFeature {
     private final FreqMap<String> unigrams;
+
+    public UnigramFeature(JsonObject o, ArgumentFactory args) {
+        this(args.getOCRUnigrams(), JSONUtil.mustGetValidName(o));
+    }
 
     public UnigramFeature(FreqMap<String>unigrams, String name) {
         super(name);
