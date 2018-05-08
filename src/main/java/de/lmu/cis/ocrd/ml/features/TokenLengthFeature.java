@@ -6,11 +6,18 @@ import de.lmu.cis.ocrd.ml.Token;
 public class TokenLengthFeature extends NamedBooleanFeature{
     private final int min, max;
 
-    public static TokenLengthFeature fromJSON(JsonObject configuration) {
-        return new TokenLengthFeature(
-                JSONUtil.mustGet(configuration, "min").getAsInt(),
-                JSONUtil.mustGet(configuration, "max").getAsInt(),
-                JSONUtil.mustGetValidName(configuration));
+    public TokenLengthFeature(JsonObject o, ArgumentFactory args) {
+        this(JSONUtil.mustGet(o, "min").getAsInt(), JSONUtil.mustGet(o, "max").getAsInt(), JSONUtil.mustGetValidName(o));
+    }
+
+    // for testing
+    public int getMin() {
+        return min;
+    }
+
+    // for testing
+    public int getMax() {
+        return max;
     }
 
     public TokenLengthFeature(int min, int max, String name) {
