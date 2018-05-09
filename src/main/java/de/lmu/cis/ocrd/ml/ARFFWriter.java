@@ -16,6 +16,7 @@ public class ARFFWriter {
     private String relation;
     private PrintWriter writer;
     private ArrayList<Feature> features = new ArrayList<>();
+    private boolean debugToken;
 
     public static ARFFWriter fromFeatureSet(FeatureSet fs) {
         ARFFWriter arff = new ARFFWriter();
@@ -23,6 +24,11 @@ public class ARFFWriter {
            arff.addFeature(f);
         }
         return arff;
+    }
+
+    public ARFFWriter withDebugToken(boolean debugToken) {
+        this.debugToken = debugToken;
+        return this;
     }
 
     public ARFFWriter withRelation(String relation) {
@@ -47,6 +53,13 @@ public class ARFFWriter {
             writer.printf("@ATTRIBUTE\t%s\tREAL\n", feature.getName());
         }
         writer.println("@DATA");
+    }
+
+    public void writeToken(Token token) {
+        if (!debugToken) {
+            return;
+        }
+        writer.printf("%% %s\n", token.toString());
     }
 
     public void writeFeatureVector(List<Double> features) throws Exception {

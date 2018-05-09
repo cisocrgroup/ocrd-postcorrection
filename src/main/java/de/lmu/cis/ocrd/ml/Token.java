@@ -73,13 +73,16 @@ public class Token {
             for (Word other : otherOCR) {
                 str.append(sep);
                 str.append(other.toString());
-                sep = ',';
             }
         }
         if (gt != null) {
-            str.append("|");
+            str.append(sep);
             str.append(gt);
         }
         return str.toString();
+    }
+
+    public boolean hasGT() {
+        return gt != null;
     }
 }

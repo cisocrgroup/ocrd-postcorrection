@@ -1,0 +1,20 @@
+% Created by de.lmu.cis.ocrd.ml.ARFFWriter at 2018-05-09
+@RELATION	TestWithOnlyMasterOCR
+@ATTRIBUTE	ShortToken	REAL
+@ATTRIBUTE	MediumToken	REAL
+@ATTRIBUTE	LongToken	REAL
+@ATTRIBUTE	Uppercase	REAL
+@ATTRIBUTE	TitleCase	REAL
+@ATTRIBUTE	WeirdCase	REAL
+@ATTRIBUTE	GT	REAL
+@DATA
+% first|First|frst|First
+1.0,-1.0,-1.0,-1.0,-1.0,1.0,-1.0
+% second|second|second|second
+-1.0,1.0,-1.0,-1.0,-1.0,1.0,1.0
+% ThIrD|second|third|second
+1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0
+% ALONGTOKEN|third alongtoken|alongtoken|third-alongtoken
+-1.0,1.0,-1.0,1.0,-1.0,-1.0,-1.0
+% anotherevenlongertoken|anotherevnlongertkn|anotherevnlongertkn|anotherevenlongertoken
+-1.0,-1.0,1.0,-1.0,-1.0,1.0,1.0

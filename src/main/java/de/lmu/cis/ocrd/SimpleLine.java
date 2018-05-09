@@ -81,10 +81,21 @@ public class SimpleLine implements Line {
     }
 
     public Optional<Word> getWord(int offset, String word) {
-	    final int pos = line.indexOf(word, offset);
-	    if (pos < 0) {
-	        return Optional.empty();
+	    int pos = line.indexOf(word, offset);
+	    if (pos >= 0) {
+            return Optional.of(new Word(pos, pos + word.length(), this));
         }
-        return Optional.of(new Word(pos, pos + word.length(), this));
+        // Fallback: try whole line
+        pos = line.indexOf(word);
+	    if (pos >= 0) {
+	        return Optional.of(new Word(pos, pos + word.length(), this));
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Word> getWord(List<String> words) {return getWord(0, words);}
+
+    public Optional<Word> getWord(int offset, List<String> words) {
+	    return getWord(offset, String.join(" ", words));
     }
 }
