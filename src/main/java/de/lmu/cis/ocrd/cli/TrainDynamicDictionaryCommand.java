@@ -18,6 +18,11 @@ import java.util.Optional;
 
 public class TrainDynamicDictionaryCommand implements Command {
     @Override
+    public String getName() {
+        return "train";
+    }
+
+    @Override
     public void execute(Configuration config) throws Exception {
         if (config.getArgs().length != 2) {
             throw new Exception("usage: gt master-ocr [other-ocr...]");

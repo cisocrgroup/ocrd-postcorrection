@@ -1,24 +1,26 @@
 package de.lmu.cis.ocrd.cli;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 
-class CommandFactory {
-	private final HashMap<String, Command> commands = new HashMap<String, Command>();
+public class CommandFactory {
+	private final HashMap<String, String> registry = new HashMap<>();
 
-	// Never returns null.
-	public Command get(String command) {
+    @NotNull
+	public Command get(String command) throws Exception {
 		if (command == null) {
 			return new InvalidCommand("missing command");
 		}
 		String key = command.toLowerCase();
-		if (!commands.containsKey(key)) {
+		if (!registry.containsKey(key)) {
 			return new InvalidCommand(key.toLowerCase());
 		}
-		return commands.get(key.toLowerCase());
+		return (Command)Class.forName(registry.get(key)).newInstance();
 	}
 
-	public CommandFactory register(String commandName, Command command) {
-		commands.put(commandName.toLowerCase(), command);
+	// Puts the lower case getName() into the registry.
+	public <E extends Command> CommandFactory register(Class<E> command) throws Exception {
+	    registry.put(((Command)Class.forName(command.getName()).newInstance()).getName().toLowerCase(), command.getName());
 		return this;
 	}
 
