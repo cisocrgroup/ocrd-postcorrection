@@ -8,9 +8,9 @@ abstract class NamedBooleanFeature extends NamedFeature {
     }
 
     @Override
-    public final double calculate(Token token, int additionalOCR) {
-        return this.doCalculate(token, additionalOCR) ? 1 : 0;
+    public final double calculate(Token token, int i, int n) {
+        return this.doCalculate(token, i, n) ? 1 : -1;
     }
 
-    protected abstract boolean doCalculate(Token token, int additionalOCR);
+    abstract boolean doCalculate(Token token, int i, int n);
 }

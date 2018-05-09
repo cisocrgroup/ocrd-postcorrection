@@ -14,7 +14,7 @@ public class FeatureSet {
 	    void apply(Feature f);
     }
 
-	private final List<Feature> features = new ArrayList<Feature>();
+	private final List<Feature> features = new ArrayList<>();
 
 	public FeatureSet add(Feature feature) {
 		this.features.add(feature);
@@ -23,16 +23,14 @@ public class FeatureSet {
 
 	public ArrayList<Double> calculateFeatureVector(Token token) {
 		ArrayList<Double> vec = new ArrayList<>(this.size());
-		each(token, (double v) -> {
-			vec.add(v);
-		});
+		each(token, vec::add);
 		return vec;
 	}
 
 	public void each(Token token, Callback callback) {
 		for (Feature feature : this.features) {
             try {
-                callback.apply(feature.calculate(token, -1));
+                callback.apply(feature.calculate(token, 0, 1));
             } catch (Exception e) {
                 e.printStackTrace();
             }
