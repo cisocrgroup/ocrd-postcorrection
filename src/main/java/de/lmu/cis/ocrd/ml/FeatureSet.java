@@ -3,16 +3,10 @@ package de.lmu.cis.ocrd.ml;
 import de.lmu.cis.ocrd.ml.features.Feature;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class FeatureSet {
-	public interface Callback {
-		void apply(double v);
-	}
-
-	public interface FeatureCallback {
-	    void apply(Feature f);
-    }
+public class FeatureSet implements Iterable<Feature> {
 
 	private final List<Feature> features = new ArrayList<>();
 
@@ -21,29 +15,30 @@ public class FeatureSet {
 		return this;
 	}
 
-	public ArrayList<Double> calculateFeatureVector(Token token) {
+	public List<Double> calculateFeatureVector(Token token) {
+		return calculateFeatureVector(token, 1);
+	}
+
+	public List<Double> calculateFeatureVector(Token token, int n) {
 		ArrayList<Double> vec = new ArrayList<>(this.size());
-		each(token, vec::add);
-		return vec;
-	}
-
-	public void each(Token token, Callback callback) {
 		for (Feature feature : this.features) {
-            try {
-                callback.apply(feature.calculate(token, 0, 1));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-	}
-
-	public void each(FeatureCallback cb) {
-		for (Feature feature : features) {
-			cb.apply(feature);
+		    for (int i = 0; i < n; i++) {
+		    	if (!feature.handlesOCR(i, n)) {
+		    		continue;
+				}
+				vec.add(feature.calculate(token, i, n));
+			}
 		}
+		return vec;
 	}
 
 	public int size() {
 		return this.features.size();
 	}
+
+	@Override
+	public Iterator<Feature> iterator() {
+		return this.features.iterator();
+	}
+
 }

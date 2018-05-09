@@ -19,9 +19,9 @@ public class ARFFWriter {
 
     public static ARFFWriter fromFeatureSet(FeatureSet fs) {
         ARFFWriter arff = new ARFFWriter();
-        fs.each((Feature f)->{
-            arff.addFeature(f);
-        });
+        for (Feature f : fs) {
+           arff.addFeature(f);
+        }
         return arff;
     }
 
