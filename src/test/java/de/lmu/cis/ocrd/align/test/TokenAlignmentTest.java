@@ -50,4 +50,19 @@ public class TokenAlignmentTest {
 		assertThat(tokens.get(6).toString(), is("Wagenzug|Wagenzug"));
 		// TODO: add more tests for token alignment
 	}
+
+	@Test
+	public void testBug2() {
+		final String a = "first second ThIrD ALONGTOKEN anotherevenlongertoken";
+		final String b = "First second third alongtoken anotherevenlongertoken";
+		final String c = "First second third alongtoken anotherevnlongertkn";
+		final String d = "frst second third alongtoken anotherevnlongertkn";
+		final TokenAlignment tokens = new TokenAlignment(a).add(b).add(c).add(d);
+		assertThat(tokens.size(), is(5));
+		assertThat(tokens.get(0).toString(), is("first|First|First|frst"));
+		assertThat(tokens.get(1).toString(), is("second|second|second|second"));
+		assertThat(tokens.get(2).toString(), is("ThIrD|third|third|third"));
+		assertThat(tokens.get(3).toString(), is("ALONGTOKEN|alongtoken|alongtoken|alongtoken"));
+		assertThat(tokens.get(4).toString(), is("anotherevenlongertoken|anotherevenlongertoken|anotherevnlongertkn|anotherevnlongertkn"));
+	}
 }
