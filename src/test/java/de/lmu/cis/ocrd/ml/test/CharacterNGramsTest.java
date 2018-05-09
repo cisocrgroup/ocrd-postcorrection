@@ -18,7 +18,7 @@ public class CharacterNGramsTest {
 
     @Test
     public void testTotal() {
-        assertThat(nGrams.getTotal(), is(27));
+        assertThat(nGrams.getTotal(), is(36));
     }
 
     @Test
@@ -30,7 +30,7 @@ public class CharacterNGramsTest {
         assertThat(nGrams.getAbsolute("def"), is(3));
     }
     @Test
-    public void testGHI() {
-        assertThat(nGrams.getAbsolute("ghi"), is(4));
+    public void testNDS() {
+        assertThat(nGrams.getAbsolute("nd$"), is(4));
     }
 }
