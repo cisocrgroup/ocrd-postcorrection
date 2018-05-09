@@ -101,7 +101,7 @@ public class MultipleOCRFeatureExtractionTest {
         // w.flush();
         final Instances got = new ConverterUtils.DataSource(IOUtils.toInputStream(w.toString(), Charset.defaultCharset())).getDataSet();
         ArffLoader loader = new ArffLoader();
-        loader.setFile(new File("src/test/resources/multipleOCRFeatureExtraction1.csv"));
+        loader.setFile(new File("src/test/resources/multipleOCRFeatureExtraction1.arff"));
         final Instances want = new ConverterUtils.DataSource(loader).getDataSet();
         check(got, want);
     }
