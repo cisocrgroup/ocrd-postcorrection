@@ -6,15 +6,17 @@
 @ATTRIBUTE	Uppercase	REAL
 @ATTRIBUTE	TitleCase	REAL
 @ATTRIBUTE	WeirdCase	REAL
+@ATTRIBUTE	MaxCharNGramFeature	REAL
+@ATTRIBUTE	MinCharNGramFeature	REAL
 @ATTRIBUTE	GT	REAL
 @DATA
 % first|First|frst|First
-1.0,-1.0,-1.0,-1.0,-1.0,1.0,-1.0
+1.0,-1.0,-1.0,-1.0,-1.0,1.0,0.08333333333333333,0.0,-1.0
 % second|second|second|second
--1.0,1.0,-1.0,-1.0,-1.0,1.0,1.0
+-1.0,1.0,-1.0,-1.0,-1.0,1.0,4.9E-324,0.0,1.0
 % ThIrD|second|third|second
-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0
+1.0,-1.0,-1.0,-1.0,-1.0,-1.0,0.05555555555555555,0.0,-1.0
 % ALONGTOKEN|third alongtoken|alongtoken|third-alongtoken
--1.0,1.0,-1.0,1.0,-1.0,-1.0,-1.0
+-1.0,1.0,-1.0,1.0,-1.0,-1.0,4.9E-324,0.0,-1.0
 % anotherevenlongertoken|anotherevnlongertkn|anotherevnlongertkn|anotherevenlongertoken
--1.0,-1.0,1.0,-1.0,-1.0,1.0,1.0
+-1.0,-1.0,1.0,-1.0,-1.0,1.0,4.9E-324,0.0,1.0

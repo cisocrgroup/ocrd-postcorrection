@@ -3,9 +3,7 @@ package de.lmu.cis.ocrd.ml.test;
 import de.lmu.cis.iba.LineAlignment;
 import de.lmu.cis.ocrd.*;
 import de.lmu.cis.ocrd.align.TokenAlignment;
-import de.lmu.cis.ocrd.ml.ARFFWriter;
-import de.lmu.cis.ocrd.ml.FeatureSet;
-import de.lmu.cis.ocrd.ml.Token;
+import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.parsers.StringParser;
 import org.apache.commons.io.IOUtils;
@@ -35,6 +33,7 @@ public class MultipleOCRFeatureExtractionTest {
 
     @Before
     public void init() throws Exception {
+        final FreqMap<String> ngrams = CharacterNGrams.fromCSV("src/test/resources/nGrams.csv");
         fs = new FeatureSet()
                 .add(new TokenLengthFeature(1, 5, "ShortToken"))
                 .add(new TokenLengthFeature(6, 10, "MediumToken"))
@@ -43,6 +42,8 @@ public class MultipleOCRFeatureExtractionTest {
                 .add(new TitleCaseFeature("TitleCase"))
                 .add(new WeirdCaseFeature("WeirdCase"))
                 .add(new SumOfMatchingAdditionalOCRFeature("SumOfMatches"))
+                .add(new MaxCharNGramsFeature("MaxCharNGramFeature", ngrams))
+                .add(new MinCharNGramsFeature("MinCharNGramFeature", ngrams))
                 .add(new GTFeature());
         final Document gtDoc = new StringParser(0, gt).parse().withPath("GT");
         final Document mOCRDoc = new StringParser(0, mOCR).parse().withPath("master OCR");
@@ -99,7 +100,7 @@ public class MultipleOCRFeatureExtractionTest {
             arff.writeToken(token);
             arff.writeFeatureVector(fs.calculateFeatureVector(token, 1));
         }
-        // w.flush();
+        w.flush();
         final Instances got = new ConverterUtils.DataSource(IOUtils.toInputStream(w.toString(), Charset.defaultCharset())).getDataSet();
         ArffLoader loader = new ArffLoader();
         loader.setFile(new File("src/test/resources/multipleOCRFeatureExtraction1.arff"));
@@ -108,13 +109,12 @@ public class MultipleOCRFeatureExtractionTest {
     }
 
     private static void check(Instances got, Instances want) {
-        assertThat(got.size(), is(want.size()));
-        for (int i = 0; i < want.size(); i++) {
+        assertThat(got.numAttributes(), is(want.numAttributes()));
+        for (int i = 0; i < want.numAttributes(); i++) {
             assertThat(got.attributeToDoubleArray(i).length, is(want.attributeToDoubleArray(i).length));
             for (int j = 0; j < want.attributeToDoubleArray(i).length; j++) {
                 assertThat(got.attributeToDoubleArray(i)[j], is(want.attributeToDoubleArray(i)[j]));
             }
         }
-
     }
 }
