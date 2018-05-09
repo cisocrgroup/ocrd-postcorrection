@@ -54,7 +54,11 @@ public class ARFFWriter {
                 if (!feature.handlesOCR(i, n)) {
                     continue;
                 }
-                writer.printf("@ATTRIBUTE\t%s\tREAL\n", feature.getName());
+                if (i > 0) {
+                    writer.printf("@ATTRIBUTE\t%s%d\tREAL\n", feature.getName(), i);
+                } else {
+                    writer.printf("@ATTRIBUTE\t%s\tREAL\n", feature.getName());
+                }
             }
         }
         writer.println("@DATA");

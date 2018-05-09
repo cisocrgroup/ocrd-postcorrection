@@ -86,24 +86,38 @@ public class MultipleOCRFeatureExtractionTest {
     }
 
     @Test
-    public void testWithOnlyMasterOCR() throws Exception {
-        // OutputStreamWriter w = new OutputStreamWriter(System.out);
-        StringWriter w = new StringWriter();
+    public void testWithMasterOCR() throws Exception {
+        runTest(1, "src/test/resources/multipleOCRFeatureExtraction1.arff");
+    }
+
+    @Test
+    public void testWithOneAdditionalOCR() throws Exception {
+        runTest(2, "src/test/resources/multipleOCRFeatureExtraction2.arff");
+    }
+
+    @Test
+    public void testWithTwoAdditionalOCR() throws Exception {
+        runTest(3, "src/test/resources/multipleOCRFeatureExtraction3.arff");
+    }
+
+    private void runTest(int n, String arffFile) throws Exception {
+        // final OutputStreamWriter w = new OutputStreamWriter(System.out);
+        final StringWriter w = new StringWriter();
         final ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
                 .withDebugToken(true)
                 .withRelation("TestWithOnlyMasterOCR")
                 .withWriter(w);
-        arff.writeHeader(1);
+        arff.writeHeader(n);
         for (Token token : tokens) {
             assertThat(token.getNumberOfOtherOCRs(), is(2));
             assertThat(token.hasGT(), is(true));
             arff.writeToken(token);
-            arff.writeFeatureVector(fs.calculateFeatureVector(token, 1));
+            arff.writeFeatureVector(fs.calculateFeatureVector(token, n));
         }
         w.flush();
         final Instances got = new ConverterUtils.DataSource(IOUtils.toInputStream(w.toString(), Charset.defaultCharset())).getDataSet();
         ArffLoader loader = new ArffLoader();
-        loader.setFile(new File("src/test/resources/multipleOCRFeatureExtraction1.arff"));
+        loader.setFile(new File(arffFile));
         final Instances want = new ConverterUtils.DataSource(loader).getDataSet();
         check(got, want);
     }
