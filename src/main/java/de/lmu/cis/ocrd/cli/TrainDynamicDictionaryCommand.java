@@ -39,7 +39,7 @@ public class TrainDynamicDictionaryCommand implements Command {
         final ARFFWriter w = ARFFWriter.fromFeatureSet(fs)
                 .withRelation("dynamic-lexicon")
                 .withWriter(osw);
-        w.writeHeader();
+        w.writeHeader(1);
         for (Token token : tokens) {
             w.writeFeatureVector(fs.calculateFeatureVector(token));
         }

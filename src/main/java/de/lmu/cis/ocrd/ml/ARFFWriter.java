@@ -46,11 +46,16 @@ public class ARFFWriter {
         return this;
     }
 
-    public void writeHeader() {
+    public void writeHeader(int n) {
         writer.printf("%% Created by de.lmu.cis.ocrd.ml.ARFFWriter at %s\n", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         writer.printf("@RELATION\t%s\n", relation);
         for (Feature feature : features) {
-            writer.printf("@ATTRIBUTE\t%s\tREAL\n", feature.getName());
+            for (int i = 0; i < n; i++) {
+                if (!feature.handlesOCR(i, n)) {
+                    continue;
+                }
+                writer.printf("@ATTRIBUTE\t%s\tREAL\n", feature.getName());
+            }
         }
         writer.println("@DATA");
     }

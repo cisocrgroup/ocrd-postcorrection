@@ -72,10 +72,10 @@ public class MultipleOCRFeatureExtractionTest {
                     final Optional<Word> add1Word = add1Line.getWord(offset2, token.getAlignment(1));
                     final Optional<Word> add2Word = add2Line.getWord(offset3, token.getAlignment(2));
                     assertThat(masterWord.isPresent(), is(true));
-                    assertThat(add1Word.isPresent(), is(true));
-                    assertThat(add2Word.isPresent(), is(true));
                     offset += masterWord.get().toString().length();
+                    assertThat(add1Word.isPresent(), is(true));
                     offset2 += add1Word.get().toString().length();
+                    assertThat(add2Word.isPresent(), is(true));
                     offset3 += add2Word.get().toString().length();
                     tokens.add(new Token(masterWord.get()).withGT(token.getAlignment(0)).addOCR(add1Word.get()).addOCR(add2Word.get()));
                 }
@@ -91,7 +91,7 @@ public class MultipleOCRFeatureExtractionTest {
                 .withDebugToken(true)
                 .withRelation("TestWithOnlyMasterOCR")
                 .withWriter(w);
-        arff.writeHeader();
+        arff.writeHeader(1);
         for (Token token : tokens) {
             assertThat(token.getNumberOfOtherOCRs(), is(2));
             assertThat(token.hasGT(), is(true));

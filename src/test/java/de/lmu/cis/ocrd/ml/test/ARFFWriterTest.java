@@ -38,7 +38,7 @@ public class ARFFWriterTest {
         .add(new MockFeature("b", 2));
         StringWriter str = new StringWriter();
         ARFFWriter arff = ARFFWriter.fromFeatureSet(fs).withRelation("test").withWriter(str);
-        arff.writeHeader();
+        arff.writeHeader(1);
         arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("a")));
         arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("aa")));
         arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("aaa")));
