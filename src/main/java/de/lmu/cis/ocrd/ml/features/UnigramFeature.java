@@ -17,7 +17,12 @@ public class UnigramFeature extends NamedFeature {
     }
 
     @Override
-    public double calculate(Token token) {
+    public boolean isAdditionalOCRFeature() {
+        return false;
+    }
+
+    @Override
+    public double calculate(Token token, int ignored) {
         return unigrams.getRelative(token.getMasterOCR().toString());
     }
 }

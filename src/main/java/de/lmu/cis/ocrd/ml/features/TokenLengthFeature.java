@@ -27,7 +27,12 @@ public class TokenLengthFeature extends NamedBooleanFeature{
     }
 
     @Override
-    protected final boolean doCalculate(Token token) {
+    public boolean isAdditionalOCRFeature() {
+        return false;
+    }
+
+    @Override
+    protected final boolean doCalculate(Token token, int ignored) {
         final int n = token.getMasterOCR().toString().length();
         return n>=min && n <= max;
     }

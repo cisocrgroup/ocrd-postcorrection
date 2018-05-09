@@ -10,7 +10,12 @@ public class GTFeature extends NamedFeature {
         super("GT");
     }
     @Override
-    public double calculate(Token token) {
+    public boolean isAdditionalOCRFeature() {
+        return false;
+    }
+
+    @Override
+    public double calculate(Token token, int ignored) {
         return token.isCorrectToken() ? 1.0 : 0.0;
     }
 }

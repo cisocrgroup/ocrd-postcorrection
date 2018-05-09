@@ -32,7 +32,7 @@ public class FeatureSet {
 	public void each(Token token, Callback callback) {
 		for (Feature feature : this.features) {
             try {
-                callback.apply(feature.calculate(token));
+                callback.apply(feature.calculate(token, -1));
             } catch (Exception e) {
                 e.printStackTrace();
             }

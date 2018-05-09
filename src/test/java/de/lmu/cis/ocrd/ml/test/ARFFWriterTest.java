@@ -25,11 +25,15 @@ public class ARFFWriterTest {
             this.n = n;
         }
         @Override
+        public boolean isAdditionalOCRFeature() {
+            return false;
+        }
+        @Override
         public String getName() {
             return name;
         }
         @Override
-        public double calculate(Token token) {
+        public double calculate(Token token, int ignored) {
             return token.getMasterOCR().toString().length() * n;
         }
     }

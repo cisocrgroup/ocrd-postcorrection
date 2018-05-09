@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.ml.features;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+// TODO: move this elsewhere
 public class JSONUtil {
     public static JsonElement mustGet(JsonObject o, String key) {
         final JsonElement val = o.get(key);

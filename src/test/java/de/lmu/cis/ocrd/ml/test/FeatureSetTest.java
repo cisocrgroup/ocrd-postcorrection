@@ -23,7 +23,12 @@ public class FeatureSetTest {
 		}
 
 		@Override
-		public double calculate(Token token) {
+		public boolean isAdditionalOCRFeature() {
+			return false;
+		}
+
+		@Override
+		public double calculate(Token token, int ignored) {
 			return val;
 		}
 	}
