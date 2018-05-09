@@ -68,9 +68,6 @@ public class ARFFWriter {
     }
 
     public void writeFeatureVector(List<Double> features) throws Exception {
-        if (this.features.size() != features.size()) {
-           throw new Exception("sizes of features and feature vector do not match: " + this.features.size() + " != " + features.size());
-        }
         boolean first = true;
         for (Double d : features) {
             if (first) {

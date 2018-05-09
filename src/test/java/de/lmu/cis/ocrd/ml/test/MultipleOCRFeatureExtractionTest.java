@@ -42,6 +42,7 @@ public class MultipleOCRFeatureExtractionTest {
                 .add(new ScreamCaseFeature("Uppercase"))
                 .add(new TitleCaseFeature("TitleCase"))
                 .add(new WeirdCaseFeature("WeirdCase"))
+                .add(new SumOfMatchingAdditionalOCRFeature("SumOfMatches"))
                 .add(new GTFeature());
         final Document gtDoc = new StringParser(0, gt).parse().withPath("GT");
         final Document mOCRDoc = new StringParser(0, mOCR).parse().withPath("master OCR");
