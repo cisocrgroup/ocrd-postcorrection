@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml;
 
+import de.lmu.cis.ocrd.ml.features.Feature;
+
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;

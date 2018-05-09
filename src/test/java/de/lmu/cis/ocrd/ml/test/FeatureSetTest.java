@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.ml.test;
 
-import de.lmu.cis.ocrd.ml.Feature;
+import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.Token;
 import org.junit.Before;
