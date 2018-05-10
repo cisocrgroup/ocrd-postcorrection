@@ -37,7 +37,7 @@ public class EnvironmentTest {
     @Test
     public void testWithGT() throws IOException {
         final String gt = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
-        environment.withCopyData(true);
+        environment.withCopyTrainingFiles(true);
         environment.withGT(gt);
         assertThat(Files.exists(environment.getGT()), is(true));
     }
@@ -45,7 +45,7 @@ public class EnvironmentTest {
     @Test
     public void testWithMasterOCR() throws IOException {
         final String masterOCR = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
-        environment.withCopyData(true);
+        environment.withCopyTrainingFiles(true);
         environment.withMasterOCR(masterOCR);
         assertThat(Files.exists(environment.getMasterOCR()), is(true));
     }
@@ -54,7 +54,7 @@ public class EnvironmentTest {
     public void testAddOtherOCR() throws IOException {
         final String otherOCR1 = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
         final String otherOCR2 = "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
-        environment.withCopyData(true);
+        environment.withCopyTrainingFiles(true);
         environment.addOtherOCR(otherOCR1).addOtherOCR(otherOCR2);
         assertThat(environment.getNumberOfOtherOCR(), is(2));
         assertThat(Files.exists(environment.getOtherOCR(0)), is(true));

@@ -14,7 +14,7 @@ public class Environment {
     private final Path path;
     private Path gt, masterOCR;
     private final List<Path> otherOCR = new ArrayList<>();
-    private boolean copyData;
+    private boolean copyTrainingFiles;
 
     public Environment(String base, String name) throws IOException {
         this.path = Paths.get(base, name);
@@ -34,7 +34,7 @@ public class Environment {
     }
 
     public Environment withGT(String gt) throws IOException {
-        if (!copyData) {
+        if (!copyTrainingFiles) {
             this.gt = Paths.get(gt);
         } else {
             this.gt = copy(Paths.get(gt));
@@ -47,7 +47,7 @@ public class Environment {
     }
 
     public Environment withMasterOCR(String masterOCR) throws IOException {
-        if (!copyData) {
+        if (!copyTrainingFiles) {
             this.masterOCR = Paths.get(masterOCR);
         } else {
             this.masterOCR = copy(Paths.get(masterOCR));
@@ -56,7 +56,7 @@ public class Environment {
     }
 
     public Environment addOtherOCR(String otherOCR) throws IOException {
-       if (!copyData) {
+       if (!copyTrainingFiles) {
             this.otherOCR.add(Paths.get(otherOCR));
        } else {
            this.otherOCR.add(copy(Paths.get(otherOCR)));
@@ -72,8 +72,8 @@ public class Environment {
         return otherOCR.size();
     }
 
-    public Environment withCopyData(boolean copyData) {
-        this.copyData = copyData;
+    public Environment withCopyTrainingFiles(boolean copy) {
+        this.copyTrainingFiles = copy;
         return this;
     }
 
