@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.align;
 
 public class Tokenizer {
 	public interface Visitor {
-		public void visit(String a, String b, boolean anew, boolean bnew);
+		void visit(String a, String b, boolean anew, boolean bnew);
 	}
 
 	private final Alignment a;
