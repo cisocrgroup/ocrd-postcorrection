@@ -170,4 +170,8 @@ public class Environment {
     public Path getDynamicLexiconTrainingFile(int n) {
         return Paths.get(getDynamicLexiconTrainingDirectory(n).toString(), trainingFile);
     }
+
+    public Path getConfiguraionFile() {
+        return Paths.get(getResourcesDirectory().toString(), "configuration.json");
+    }
 }

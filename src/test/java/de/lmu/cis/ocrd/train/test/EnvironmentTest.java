@@ -52,6 +52,11 @@ public class EnvironmentTest {
     }
 
     @Test
+    public void testConfigurationFile() {
+        assertThat(environment.getConfiguraionFile(), is(Paths.get(base, name, "resources", "configuration.json")));
+    }
+
+    @Test
     public void testSetupDirs() {
         assertThat(Files.exists(environment.getResourcesDirectory()), is(true));
         assertThat(Files.exists(environment.getPath()), is(true));
