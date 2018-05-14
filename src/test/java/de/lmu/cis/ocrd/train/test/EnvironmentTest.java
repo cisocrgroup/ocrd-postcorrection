@@ -47,6 +47,11 @@ public class EnvironmentTest {
     }
 
     @Test
+    public void testDynamicLexiconTrainingFile() {
+        assertThat(environment.getDynamicLexiconTrainingFile(1), is(Paths.get(base, name, "dLex", "1", "training.arff")));
+    }
+
+    @Test
     public void testSetupDirs() {
         assertThat(Files.exists(environment.getResourcesDirectory()), is(true));
         assertThat(Files.exists(environment.getPath()), is(true));

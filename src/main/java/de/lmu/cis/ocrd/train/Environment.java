@@ -17,6 +17,7 @@ public class Environment {
     private static final String resources = "resources";
     private static final String dLex = "dLex";
     private static final String dLexFS = "features.ser";
+    private static final String trainingFile = "training.arff";
     private final Path path;
     private Path gt, masterOCR;
     private final List<Path> otherOCR = new ArrayList<>();
@@ -164,5 +165,9 @@ public class Environment {
 
     public Path getDynamicLexiconFeatureSet() {
         return Paths.get(getDynamicLexiconTrainingDirectory().toString(), dLexFS);
+    }
+
+    public Path getDynamicLexiconTrainingFile(int n) {
+        return Paths.get(getDynamicLexiconTrainingDirectory(n).toString(), trainingFile);
     }
 }
