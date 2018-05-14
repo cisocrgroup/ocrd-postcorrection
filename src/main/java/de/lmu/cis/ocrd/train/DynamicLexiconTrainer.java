@@ -1,8 +1,12 @@
 package de.lmu.cis.ocrd.train;
 
+import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 public class DynamicLexiconTrainer {
     private final Environment environment;
@@ -21,8 +25,14 @@ public class DynamicLexiconTrainer {
     }
 
     private void train(int n) throws Exception {
-        new Tokenizer(environment).eachToken((token)->{
-
-        });
+        try (Writer w = new BufferedWriter(new FileWriter(environment.getDynamicLexiconTrainingFile(n).toFile()))) {
+            final ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
+                    .withRelation("DynamicLexiconExpansion_" + n)
+                    .withWriter(w);
+            // TODO: withDebugToken?
+            arff.writeHeader(n);
+            new Tokenizer(environment).eachToken((token) -> arff.writeFeatureVector(fs.calculateFeatureVector(token)));
+            w.flush();
+        }
     }
 }

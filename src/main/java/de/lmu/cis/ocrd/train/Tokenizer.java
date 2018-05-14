@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class Tokenizer {
     public interface Visitor {
-        void visit(Token token);
+        void visit(Token token) throws Exception;
     }
     private final Environment environment;
 
