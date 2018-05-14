@@ -1,5 +1,8 @@
 package de.lmu.cis.ocrd.train;
 
+import de.lmu.cis.ocrd.archive.Archive;
+import de.lmu.cis.ocrd.archive.DirectoryArchive;
+import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import org.apache.commons.io.FileUtils;
 
@@ -56,6 +59,10 @@ public class Environment {
         return this;
     }
 
+    public Archive loadGT() throws IOException {
+        return loadArchive(getGT());
+    }
+
     public Path getMasterOCR() {
         return masterOCR;
     }
@@ -67,6 +74,10 @@ public class Environment {
             this.masterOCR = copy(Paths.get(masterOCR));
         }
         return this;
+    }
+
+    public Archive loadMasterOCR() throws IOException {
+        return loadArchive(getMasterOCR());
     }
 
     public Environment addOtherOCR(String otherOCR) throws IOException {
@@ -81,6 +92,10 @@ public class Environment {
 
     public Path getOtherOCR(int i) {
         return otherOCR.get(i);
+    }
+
+    public Archive loadOtherOCR(int i) throws IOException {
+        return loadArchive(getOtherOCR(i));
     }
 
     public int getNumberOfOtherOCR() {
@@ -104,6 +119,14 @@ public class Environment {
     private static void serializeFeatureSet(FeatureSet fs, Path path) throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path.toFile()))) {
             out.writeObject(fs);
+        }
+    }
+
+    private static Archive loadArchive(Path path) throws IOException {
+        if (Files.isDirectory(path)) {
+            return new DirectoryArchive(path.toString());
+        } else {
+            return new ZipArchive(path.toString());
         }
     }
 

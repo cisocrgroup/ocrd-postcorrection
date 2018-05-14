@@ -1,5 +1,8 @@
 package de.lmu.cis.ocrd.train.test;
 
+import de.lmu.cis.ocrd.archive.Archive;
+import de.lmu.cis.ocrd.archive.DirectoryArchive;
+import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.GTFeature;
 import de.lmu.cis.ocrd.ml.features.ScreamCaseFeature;
@@ -86,23 +89,32 @@ public class EnvironmentTest {
     }
 
     @Test
-    public void testSerializeDynamicLexiconFeatureSet() throws IOException {
-        FeatureSet fs = new FeatureSet().add(new ScreamCaseFeature("x")).add(new WeirdCaseFeature("y")).add(new GTFeature());
+    public void testSerializationOfDynamicLexiconFeatureSet() throws IOException, ClassNotFoundException {
+        final FeatureSet fs = new FeatureSet()
+                .add(new ScreamCaseFeature("x"))
+                .add(new WeirdCaseFeature("y"))
+                .add(new GTFeature());
         environment.withDynamicLexiconFeatureSet(fs);
         assertThat(Files.exists(environment.getDynamicLexiconFeatureSet()), is(true));
+        final FeatureSet ofs = environment.loadDynamicLexiconFeatureSet();
+        assertThat(ofs.size(), is(3));
+        assertThat(ofs.get(0).getName(), is("x"));
+        assertThat(ofs.get(1).getName(), is("y"));
+        assertThat(ofs.get(2).getName(), is("GT"));
+        assertThat((ofs.get(0) instanceof ScreamCaseFeature), is(true));
+        assertThat((ofs.get(1) instanceof WeirdCaseFeature), is(true));
+        assertThat((ofs.get(2) instanceof GTFeature), is(true));
     }
 
     @Test
-    public void testDeSerializeDynamicLexiconFeatureSet() throws IOException, ClassNotFoundException {
-        testSerializeDynamicLexiconFeatureSet();
-        FeatureSet fs = environment.loadDynamicLexiconFeatureSet();
-        assertThat(fs.size(), is(3));
-        assertThat(fs.get(0).getName(), is("x"));
-        assertThat(fs.get(1).getName(), is("y"));
-        assertThat(fs.get(2).getName(), is("GT"));
-        assertThat((fs.get(0) instanceof ScreamCaseFeature), is(true));
-        assertThat((fs.get(1) instanceof WeirdCaseFeature), is(true));
-        assertThat((fs.get(2) instanceof GTFeature), is(true));
+    public void testLoadArchives() throws Exception {
+        final String zipArchive = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
+        final String dirArchive = "src/test/resources/test-dir";
+        environment.withGT(zipArchive).withMasterOCR(dirArchive);
+        try (final Archive d = environment.loadMasterOCR(); final Archive z = environment.loadGT()) {
+            assertThat((z instanceof ZipArchive), is(true));
+            assertThat((d instanceof DirectoryArchive), is(true));
+        }
     }
 
     @After
