@@ -2,13 +2,18 @@ package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.Feature;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class FeatureSet implements Iterable<Feature> {
+public class FeatureSet implements Iterable<Feature>, Serializable {
 
 	private final List<Feature> features = new ArrayList<>();
+
+	public Feature get(int i) {
+	    return features.get(i);
+    }
 
 	public FeatureSet add(Feature feature) {
 		this.features.add(feature);

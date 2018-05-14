@@ -2,10 +2,12 @@ package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.ml.Token;
 
+import java.io.Serializable;
+
 // Feature represents the feature for the training and evaluation of a document.
 // Features are allowed to handle different multiple OCRs.
 // The master OCR has index 0. Additional features have an index > 0.
-public interface Feature {
+public interface Feature extends Serializable {
     // Returns the name of the feature.
 	String getName();
 
