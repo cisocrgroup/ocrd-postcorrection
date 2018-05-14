@@ -20,16 +20,17 @@ public class Environment {
     public Environment(String base, String name) throws IOException {
         this.path = Paths.get(base, name);
         setupDirectories();
+        setupTrainingDirectories(1);
     }
 
-    private final void setupDirectories() throws IOException {
+    private void setupDirectories() throws IOException {
         Files.createDirectory(path);
         Files.createDirectory(getResourcesDirectory());
         Files.createDirectory(getDynamicLexiconTrainingDirectory());
     }
 
-    private final void setupTrainingDirectories(int n) {
-
+    private void setupTrainingDirectories(int n) throws IOException {
+        Files.createDirectory(getDynamicLexiconTrainingDirectory(n));
     }
 
     public String getName() {
@@ -72,6 +73,7 @@ public class Environment {
        } else {
            this.otherOCR.add(copy(Paths.get(otherOCR)));
        }
+       setupTrainingDirectories(1 + this.otherOCR.size());
        return this;
     }
 
@@ -93,9 +95,6 @@ public class Environment {
     }
 
     private Path copy(Path path) throws IOException {
-        if (!Files.exists(getResourcesDirectory())) {
-            getResourcesDirectory().toFile().mkdirs();
-        }
         final Path target = Paths.get(getResourcesDirectory().toString(), path.getFileName().toString());
         if (Files.isDirectory(path)) {
             FileUtils.copyDirectory(path.toFile(), target.toFile());
@@ -113,4 +112,7 @@ public class Environment {
         return Paths.get(path.toString(), dLex);
     }
 
+    public Path getDynamicLexiconTrainingDirectory(int n) {
+        return Paths.get(getDynamicLexiconTrainingDirectory().toString(), Integer.toString(n));
+    }
 }

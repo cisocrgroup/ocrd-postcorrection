@@ -39,6 +39,7 @@ public class EnvironmentTest {
         assertThat(Files.exists(environment.getResourcesDirectory()), is(true));
         assertThat(Files.exists(environment.getPath()), is(true));
         assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory()), is(true));
+        assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory(1)), is(true));
     }
 
     @Test
@@ -68,6 +69,9 @@ public class EnvironmentTest {
         assertThat(environment.getNumberOfOtherOCR(), is(2));
         assertThat(environment.getOtherOCR(0).toString(), is(base + "/" + name + "/resources/1841-DieGrenzboten-abbyy-small.zip"));
         assertThat(environment.getOtherOCR(1).toString(), is(base + "/" + name + "/resources/1841-DieGrenzboten-tesseract-small.zip"));
+        assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory(2)), is(true));
+        assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory(3)), is(true));
+        assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory(4)), is(false));
         assertThat(Files.exists(environment.getOtherOCR(0)), is(true));
         assertThat(Files.exists(environment.getOtherOCR(1)), is(true));
     }
