@@ -7,6 +7,7 @@ import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.GTFeature;
 import de.lmu.cis.ocrd.ml.features.ScreamCaseFeature;
 import de.lmu.cis.ocrd.ml.features.WeirdCaseFeature;
+import de.lmu.cis.ocrd.train.Configuration;
 import de.lmu.cis.ocrd.train.Environment;
 import org.junit.After;
 import org.junit.Before;
@@ -53,7 +54,7 @@ public class EnvironmentTest {
 
     @Test
     public void testConfigurationFile() {
-        assertThat(environment.getConfiguraionFile(), is(Paths.get(base, name, "resources", "configuration.json")));
+        assertThat(environment.getConfigurationFile(), is(Paths.get(base, name, "resources", "configuration.json")));
     }
 
     @Test
@@ -125,6 +126,25 @@ public class EnvironmentTest {
             assertThat((z instanceof ZipArchive), is(true));
             assertThat((d instanceof DirectoryArchive), is(true));
         }
+    }
+
+    @Test
+    public void testLoadConfigurationFile() throws IOException {
+        final String abbyy = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
+        final String tess = "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
+        final String ocropus = "src/test/resources/1841-DieGrenzboten-ocropus-small.zip";
+        environment.withGT(abbyy).withMasterOCR(tess).addOtherOCR(ocropus);
+        environment.writeConfiguration();
+        assertThat(Files.exists(environment.getConfigurationFile()), is(true));
+        final Configuration configuration = environment.loadConfiguration();
+        assertThat(configuration.gt, is(abbyy));
+        assertThat(configuration.masterOCR, is(tess));
+        assertThat(configuration.dynamicLexiconFeatureSet, is(environment.getDynamicLexiconFeatureSet().toString()));
+        assertThat(configuration.otherOCR.length, is(1));
+        assertThat(configuration.otherOCR[0], is(ocropus));
+        assertThat(configuration.dynamicLexiconTrainingFiles.length, is(2));
+        assertThat(configuration.dynamicLexiconTrainingFiles[0], is(environment.getDynamicLexiconTrainingFile(1).toString()));
+        assertThat(configuration.dynamicLexiconTrainingFiles[1], is(environment.getDynamicLexiconTrainingFile(2).toString()));
     }
 
     @After

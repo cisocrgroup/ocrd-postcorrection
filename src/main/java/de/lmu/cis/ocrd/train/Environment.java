@@ -141,6 +141,31 @@ public class Environment {
         FileUtils.deleteDirectory(path.toFile());
     }
 
+    private Configuration newConfiguration() {
+        Configuration c = new Configuration();
+        c.gt = gt.toString();
+        c.masterOCR = masterOCR.toString();
+        c.dynamicLexiconFeatureSet = getDynamicLexiconFeatureSet().toString();
+        c.dynamicLexiconTrainingFiles = new String[1+otherOCR.size()];
+        c.dynamicLexiconTrainingFiles[0] = getDynamicLexiconTrainingFile(1).toString();
+        c.otherOCR = new String[otherOCR.size()];
+        for (int i = 0; i < otherOCR.size(); i++) {
+            c.dynamicLexiconTrainingFiles[i+1] = getDynamicLexiconTrainingFile(i+2).toString();
+            c.otherOCR[i] = otherOCR.get(i).toString();
+        }
+        return c;
+    }
+
+    public Configuration loadConfiguration() throws IOException {
+        return Configuration.fromJSON(getConfigurationFile());
+    }
+
+    public void writeConfiguration() throws IOException {
+        try (PrintWriter out = new PrintWriter(getConfigurationFile().toFile())) {
+            out.println(newConfiguration().toJSON());
+        }
+    }
+
     private Path copy(Path path) throws IOException {
         final Path target = Paths.get(getResourcesDirectory().toString(), path.getFileName().toString());
         if (Files.isDirectory(path)) {
@@ -171,7 +196,7 @@ public class Environment {
         return Paths.get(getDynamicLexiconTrainingDirectory(n).toString(), trainingFile);
     }
 
-    public Path getConfiguraionFile() {
+    public Path getConfigurationFile() {
         return Paths.get(getResourcesDirectory().toString(), "configuration.json");
     }
 }
