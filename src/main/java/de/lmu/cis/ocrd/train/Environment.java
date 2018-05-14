@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Environment {
     private static final String resources = "resources";
+    private static final String dLex = "dLex";
     private final Path path;
     private Path gt, masterOCR;
     private final List<Path> otherOCR = new ArrayList<>();
@@ -18,7 +19,17 @@ public class Environment {
 
     public Environment(String base, String name) throws IOException {
         this.path = Paths.get(base, name);
+        setupDirectories();
+    }
+
+    private final void setupDirectories() throws IOException {
         Files.createDirectory(path);
+        Files.createDirectory(getResourcesDirectory());
+        Files.createDirectory(getDynamicLexiconTrainingDirectory());
+    }
+
+    private final void setupTrainingDirectories(int n) {
+
     }
 
     public String getName() {
@@ -96,6 +107,10 @@ public class Environment {
 
     public Path getResourcesDirectory() {
         return Paths.get(path.toString(), resources);
+    }
+
+    public Path getDynamicLexiconTrainingDirectory() {
+        return Paths.get(path.toString(), dLex);
     }
 
 }

@@ -35,6 +35,13 @@ public class EnvironmentTest {
     }
 
     @Test
+    public void testSetupDirs() {
+        assertThat(Files.exists(environment.getResourcesDirectory()), is(true));
+        assertThat(Files.exists(environment.getPath()), is(true));
+        assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory()), is(true));
+    }
+
+    @Test
     public void testWithGT() throws IOException {
         final String gt = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
         environment.withCopyTrainingFiles(true);
