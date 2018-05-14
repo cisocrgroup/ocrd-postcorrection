@@ -39,6 +39,7 @@ public class EnvironmentTest {
         final String gt = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
         environment.withCopyTrainingFiles(true);
         environment.withGT(gt);
+        assertThat(environment.getGT().toString(), is(base + "/" + name + "/resources/1841-DieGrenzboten-abbyy-small.zip"));
         assertThat(Files.exists(environment.getGT()), is(true));
     }
 
@@ -47,9 +48,10 @@ public class EnvironmentTest {
         final String masterOCR = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
         environment.withCopyTrainingFiles(true);
         environment.withMasterOCR(masterOCR);
+        assertThat(environment.getMasterOCR().toString(), is(base + "/" + name + "/resources/1841-DieGrenzboten-abbyy-small.zip"));
         assertThat(Files.exists(environment.getMasterOCR()), is(true));
     }
-    
+
     @Test
     public void testAddOtherOCR() throws IOException {
         final String otherOCR1 = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
@@ -57,10 +59,12 @@ public class EnvironmentTest {
         environment.withCopyTrainingFiles(true);
         environment.addOtherOCR(otherOCR1).addOtherOCR(otherOCR2);
         assertThat(environment.getNumberOfOtherOCR(), is(2));
+        assertThat(environment.getOtherOCR(0).toString(), is(base + "/" + name + "/resources/1841-DieGrenzboten-abbyy-small.zip"));
+        assertThat(environment.getOtherOCR(1).toString(), is(base + "/" + name + "/resources/1841-DieGrenzboten-tesseract-small.zip"));
         assertThat(Files.exists(environment.getOtherOCR(0)), is(true));
         assertThat(Files.exists(environment.getOtherOCR(1)), is(true));
     }
-        
+
     @After
     public void deInit() throws IOException {
         this.environment.remove();
