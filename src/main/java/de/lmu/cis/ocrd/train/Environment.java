@@ -18,7 +18,7 @@ public class Environment {
     private static final String dLex = "dLex";
     private static final String dLexFS = "features.ser";
     private final Path path;
-    private Path gt, masterOCR, featureSet;
+    private Path gt, masterOCR;
     private final List<Path> otherOCR = new ArrayList<>();
     private boolean copyTrainingFiles;
 
