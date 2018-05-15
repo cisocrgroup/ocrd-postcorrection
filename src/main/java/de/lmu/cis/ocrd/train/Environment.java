@@ -22,6 +22,7 @@ public class Environment {
     private Path gt, masterOCR;
     private final List<Path> otherOCR = new ArrayList<>();
     private boolean copyTrainingFiles;
+    private boolean debugTokenAlignment;
 
     public Environment(String base, String name) throws IOException {
         this.path = Paths.get(base, name);
@@ -108,6 +109,15 @@ public class Environment {
         return this;
     }
 
+    public Environment withDebugTokenAlignment(boolean debug) {
+        this.debugTokenAlignment = debug;
+        return this;
+    }
+
+    public boolean isDebugTokenAlignment() {
+        return debugTokenAlignment;
+    }
+
     public Environment withDynamicLexiconFeatureSet(FeatureSet fs) throws IOException {
         serializeFeatureSet(fs, getDynamicLexiconFeatureSet());
         return this;
@@ -153,6 +163,8 @@ public class Environment {
             c.dynamicLexiconTrainingFiles[i+1] = getDynamicLexiconTrainingFile(i+2).toString();
             c.otherOCR[i] = otherOCR.get(i).toString();
         }
+        c.copyTrainingFiles = this.copyTrainingFiles;
+        c.debugTokenAlignment = this.debugTokenAlignment;
         return c;
     }
 

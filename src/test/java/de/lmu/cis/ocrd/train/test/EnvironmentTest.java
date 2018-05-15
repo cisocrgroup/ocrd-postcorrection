@@ -133,7 +133,7 @@ public class EnvironmentTest {
         final String abbyy = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
         final String tess = "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
         final String ocropus = "src/test/resources/1841-DieGrenzboten-ocropus-small.zip";
-        environment.withGT(abbyy).withMasterOCR(tess).addOtherOCR(ocropus);
+        environment.withGT(abbyy).withMasterOCR(tess).addOtherOCR(ocropus).withDebugTokenAlignment(true);
         environment.writeConfiguration();
         assertThat(Files.exists(environment.getConfigurationFile()), is(true));
         final Configuration configuration = environment.loadConfiguration();
@@ -145,6 +145,8 @@ public class EnvironmentTest {
         assertThat(configuration.dynamicLexiconTrainingFiles.length, is(2));
         assertThat(configuration.dynamicLexiconTrainingFiles[0], is(environment.getDynamicLexiconTrainingFile(1).toString()));
         assertThat(configuration.dynamicLexiconTrainingFiles[1], is(environment.getDynamicLexiconTrainingFile(2).toString()));
+        assertThat(configuration.debugTokenAlignment, is(environment.isDebugTokenAlignment()));
+        assertThat(configuration.copyTrainingFiles, is(false));
     }
 
     @After

@@ -13,6 +13,7 @@ import java.nio.file.Path;
 public class Configuration {
     public String gt, masterOCR, dynamicLexiconFeatureSet;
     public String[] otherOCR, dynamicLexiconTrainingFiles;
+    public boolean copyTrainingFiles, debugTokenAlignment;
 
     static Configuration fromJSON(Path path) throws IOException {
         try (InputStream in = new FileInputStream(path.toFile())) {
