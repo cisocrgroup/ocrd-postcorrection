@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.parsers;
 
-public class ABBYYXMLFileType implements XMLFileType {
+public class ABBYYXMLFileType implements OCRFileType {
 
 	@Override
 	public boolean check(String name) {

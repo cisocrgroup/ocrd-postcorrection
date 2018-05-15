@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.parsers;
 
-public class OcropusFileType implements XMLFileType {
+public class OcropusFileType implements OCRFileType {
 
 	@Override
 	public boolean check(String name) {

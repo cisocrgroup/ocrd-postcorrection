@@ -58,7 +58,7 @@ public class FileTypes {
     public static Type guess(ArchiveType archiveType, String path) throws Exception {
         try (final Archive ar = newArchive(archiveType, path)) {
             final TreeMap<OCRType, Integer> counts = new TreeMap<>(); // use ordered map to break ties
-            final Map<OCRType, XMLFileType> types = newOCRTypeMap();
+            final Map<OCRType, OCRFileType> types = newOCRTypeMap();
             for (Entry entry : ar) {
                 updateCounts(counts, types, entry);
             }
@@ -92,8 +92,8 @@ public class FileTypes {
         return new Type(archiveType, argMax);
     }
 
-    private static void updateCounts(Map<OCRType, Integer> counts, Map<OCRType, XMLFileType> types, Entry entry) {
-        for (Map.Entry<OCRType, XMLFileType> type : types.entrySet()) {
+    private static void updateCounts(Map<OCRType, Integer> counts, Map<OCRType, OCRFileType> types, Entry entry) {
+        for (Map.Entry<OCRType, OCRFileType> type : types.entrySet()) {
             if (type.getValue().check(entry.getName().toString())) {
                 Logger.debug("found file {} of type {}", entry.getName(), type.getKey());
                 if (!counts.containsKey(type.getKey())) {
@@ -105,8 +105,8 @@ public class FileTypes {
         }
     }
 
-    private static Map<OCRType, XMLFileType> newOCRTypeMap() {
-        Map<OCRType, XMLFileType> map = new HashMap<>();
+    private static Map<OCRType, OCRFileType> newOCRTypeMap() {
+        Map<OCRType, OCRFileType> map = new HashMap<>();
         for (OCRType t : OCRType.values()) {
             map.put(t, newXMLFileType(t));
         }
@@ -140,7 +140,7 @@ public class FileTypes {
         throw new Exception("invalid OCR type: " + ocrType);
     }
 
-    public static XMLFileType newXMLFileType(OCRType ocrType) {
+    public static OCRFileType newXMLFileType(OCRType ocrType) {
         switch (ocrType) {
             case PAGEXML:
                 return new PageXMLFileType();

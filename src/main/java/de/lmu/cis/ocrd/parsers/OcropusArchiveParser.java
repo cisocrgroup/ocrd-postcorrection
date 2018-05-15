@@ -30,14 +30,14 @@ public class OcropusArchiveParser implements Parser {
 		});
 	}
 
-	private final XMLFileType filetype;
+	private final OCRFileType filetype;
 	private final Archive ar;
 
 	public OcropusArchiveParser(Archive ar) {
 	    this(ar, new OcropusFileType());
 	}
 
-	protected OcropusArchiveParser(Archive ar, XMLFileType filetype) {
+	OcropusArchiveParser(Archive ar, OCRFileType filetype) {
 	    this.filetype = filetype;
 	    this.ar = ar;
     }

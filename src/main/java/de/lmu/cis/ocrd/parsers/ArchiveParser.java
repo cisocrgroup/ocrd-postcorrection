@@ -1,17 +1,16 @@
 package de.lmu.cis.ocrd.parsers;
 
+import de.lmu.cis.ocrd.SimpleDocument;
+import de.lmu.cis.ocrd.archive.Archive;
+import de.lmu.cis.ocrd.archive.Entry;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import de.lmu.cis.ocrd.SimpleDocument;
-import de.lmu.cis.ocrd.archive.Archive;
-import de.lmu.cis.ocrd.archive.Entry;
 
 public class ArchiveParser implements Parser {
 
@@ -26,18 +25,18 @@ public class ArchiveParser implements Parser {
 	}
 
 	private final XMLParserFactory factory;
-	private final XMLFileType fileType;
+	private final OCRFileType fileType;
 
 	private final Archive archive;
 
-	public ArchiveParser(XMLParserFactory f, XMLFileType t, Archive archive) {
+	public ArchiveParser(XMLParserFactory f, OCRFileType t, Archive archive) {
 		this.factory = f;
 		this.fileType = t;
 		this.archive = archive;
 	}
 
-	private final ArrayList<Entry> gatherEntries() {
-		ArrayList<Entry> entries = new ArrayList<Entry>();
+	final ArrayList<Entry> gatherEntries() {
+		ArrayList<Entry> entries = new ArrayList<>();
 		for (Entry entry : this.archive) {
 			if (!this.fileType.check(entry.getName().toString())) {
 				continue;
@@ -57,7 +56,7 @@ public class ArchiveParser implements Parser {
 		return doc;
 	}
 
-	private final SimpleDocument parsePage(Entry entry, int pageID) throws Exception {
+	private SimpleDocument parsePage(Entry entry, int pageID) throws Exception {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 		// make the parsing faster
 		docBuilderFactory.setValidating(false); // do *not* validate DTDs; its too slow.
