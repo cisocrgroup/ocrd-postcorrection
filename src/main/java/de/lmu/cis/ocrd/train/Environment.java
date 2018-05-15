@@ -5,6 +5,7 @@ import de.lmu.cis.ocrd.archive.DirectoryArchive;
 import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -12,40 +13,47 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class Environment {
     private static final String resources = "resources";
     private static final String dLex = "dLex";
     private static final String dLexFS = "features.ser";
     private static final String trainingFile = "training.arff";
-    private final Path path;
+    private final String path, name;
     private Path gt, masterOCR;
     private final List<Path> otherOCR = new ArrayList<>();
     private boolean copyTrainingFiles;
     private boolean debugTokenAlignment;
 
     public Environment(String base, String name) throws IOException {
-        this.path = Paths.get(base, name);
+        this.path = base;
+        this.name = name;
         setupDirectories();
         setupTrainingDirectories(1);
     }
 
     private void setupDirectories() throws IOException {
-        Files.createDirectory(path);
-        Files.createDirectory(getResourcesDirectory());
-        Files.createDirectory(getDynamicLexiconTrainingDirectory());
+        Files.createDirectory(getPath());
+        Files.createDirectory(Paths.get(path, getResourcesDirectory().toString()));
+        Files.createDirectory(Paths.get(path, getDynamicLexiconTrainingDirectory().toString()));
     }
 
     private void setupTrainingDirectories(int n) throws IOException {
-        Files.createDirectory(getDynamicLexiconTrainingDirectory(n));
+        Files.createDirectory(Paths.get(path, getDynamicLexiconTrainingDirectory(n).toString()));
     }
 
     public String getName() {
-        return path.getFileName().toString();
+        return name;
     }
 
     public Path getPath() {
-        return path;
+        return Paths.get(path, name);
+    }
+
+    public Path fullPath(Path path) {
+        return Paths.get(this.path, path.toString());
     }
 
     public Path getGT() {
@@ -119,12 +127,12 @@ public class Environment {
     }
 
     public Environment withDynamicLexiconFeatureSet(FeatureSet fs) throws IOException {
-        serializeFeatureSet(fs, getDynamicLexiconFeatureSet());
+        serializeFeatureSet(fs, fullPath(getDynamicLexiconFeatureSet()));
         return this;
     }
 
     public FeatureSet loadDynamicLexiconFeatureSet() throws IOException, ClassNotFoundException {
-        return deSerializeFeatureSet(getDynamicLexiconFeatureSet());
+        return deSerializeFeatureSet(fullPath(getDynamicLexiconFeatureSet()));
     }
 
     private static void serializeFeatureSet(FeatureSet fs, Path path) throws IOException {
@@ -148,7 +156,7 @@ public class Environment {
     }
 
     public void remove() throws IOException {
-        FileUtils.deleteDirectory(path.toFile());
+        FileUtils.deleteDirectory(getPath().toFile());
     }
 
     private Configuration newConfiguration() {
@@ -165,35 +173,36 @@ public class Environment {
         }
         c.copyTrainingFiles = this.copyTrainingFiles;
         c.debugTokenAlignment = this.debugTokenAlignment;
+        c.configuration = getConfigurationFile().toString();
         return c;
     }
 
     public Configuration loadConfiguration() throws IOException {
-        return Configuration.fromJSON(getConfigurationFile());
+        return Configuration.fromJSON(fullPath(getConfigurationFile()));
     }
 
     public void writeConfiguration() throws IOException {
-        try (PrintWriter out = new PrintWriter(getConfigurationFile().toFile())) {
+        try (PrintWriter out = new PrintWriter(fullPath(getConfigurationFile()).toFile())) {
             out.println(newConfiguration().toJSON());
         }
     }
 
     private Path copy(Path path) throws IOException {
-        final Path target = Paths.get(getResourcesDirectory().toString(), path.getFileName().toString());
+        final Path target = Paths.get(fullPath(getResourcesDirectory()).toString(), path.getFileName().toString());
         if (Files.isDirectory(path)) {
             FileUtils.copyDirectory(path.toFile(), target.toFile());
         } else {
             FileUtils.copyFile(path.toFile(), target.toFile());
         }
-        return target;
+        return Paths.get(getResourcesDirectory().toString(), path.getFileName().toString());
     }
 
     public Path getResourcesDirectory() {
-        return Paths.get(path.toString(), resources);
+        return Paths.get(name, resources);
     }
 
     public Path getDynamicLexiconTrainingDirectory() {
-        return Paths.get(path.toString(), dLex);
+        return Paths.get(name, dLex);
     }
 
     public Path getDynamicLexiconTrainingDirectory(int n) {
@@ -210,5 +219,48 @@ public class Environment {
 
     public Path getConfigurationFile() {
         return Paths.get(getResourcesDirectory().toString(), "configuration.json");
+    }
+
+    public void zipTo(Path zip) throws IOException {
+        writeConfiguration();
+        try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip.toFile()))) {
+            eachFile((p)-> putZIPEntry(out, fullPath(p), p.toString()));
+        }
+    }
+
+    private void putZIPEntry(ZipOutputStream out, Path path, String e) throws IOException {
+        try {
+            ZipEntry entry = new ZipEntry(e);
+            out.putNextEntry(entry);
+            IOUtils.copy(new FileInputStream(path.toFile()), out);
+        } finally {
+            out.closeEntry();
+        }
+    }
+
+    private interface EachFileCallback {
+        void apply(Path path) throws IOException;
+    }
+
+    private void eachFile(EachFileCallback f) throws IOException {
+        final Configuration configuration = newConfiguration();
+        applyIfFileExists(f, Paths.get(configuration.configuration));
+        applyIfFileExists(f, Paths.get(configuration.dynamicLexiconFeatureSet));
+        for (int i = 0; i < configuration.dynamicLexiconTrainingFiles.length; i++) {
+            applyIfFileExists(f, Paths.get(configuration.dynamicLexiconTrainingFiles[i]));
+        }
+        if (configuration.copyTrainingFiles) {
+            applyIfFileExists(f, Paths.get(configuration.masterOCR));
+            applyIfFileExists(f, Paths.get(configuration.gt));
+            for (int i = 0; i < configuration.otherOCR.length; i++) {
+                applyIfFileExists(f, Paths.get(configuration.otherOCR[i]));
+            }
+        }
+    }
+
+    private static void applyIfFileExists(EachFileCallback f, Path path) throws IOException {
+        if (Files.exists(path)) {
+            f.apply(path);
+        }
     }
 }

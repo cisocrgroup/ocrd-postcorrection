@@ -44,25 +44,25 @@ public class EnvironmentTest {
 
     @Test
     public void testDynamicLexiconFeatureSetPath() {
-        assertThat(environment.getDynamicLexiconFeatureSet(), is(Paths.get(base, name, "dLex", "features.ser")));
+        assertThat(environment.getDynamicLexiconFeatureSet(), is(Paths.get( name, "dLex", "features.ser")));
     }
 
     @Test
     public void testDynamicLexiconTrainingFile() {
-        assertThat(environment.getDynamicLexiconTrainingFile(1), is(Paths.get(base, name, "dLex", "1", "training.arff")));
+        assertThat(environment.getDynamicLexiconTrainingFile(1), is(Paths.get( name, "dLex", "1", "training.arff")));
     }
 
     @Test
     public void testConfigurationFile() {
-        assertThat(environment.getConfigurationFile(), is(Paths.get(base, name, "resources", "configuration.json")));
+        assertThat(environment.getConfigurationFile(), is(Paths.get( name, "resources", "configuration.json")));
     }
 
     @Test
     public void testSetupDirs() {
-        assertThat(Files.exists(environment.getResourcesDirectory()), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getResourcesDirectory())), is(true));
         assertThat(Files.exists(environment.getPath()), is(true));
-        assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory()), is(true));
-        assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory(1)), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingDirectory())), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingDirectory(1))), is(true));
     }
 
     @Test
@@ -70,8 +70,8 @@ public class EnvironmentTest {
         final String gt = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
         environment.withCopyTrainingFiles(true);
         environment.withGT(gt);
-        assertThat(environment.getGT().toString(), is(base + "/" + name + "/resources/1841-DieGrenzboten-abbyy-small.zip"));
-        assertThat(Files.exists(environment.getGT()), is(true));
+        assertThat(environment.fullPath(environment.getGT()), is(Paths.get(base, name, "resources", "1841-DieGrenzboten-abbyy-small.zip")));
+        assertThat(Files.exists(environment.fullPath(environment.getGT())), is(true));
     }
 
     @Test
@@ -79,8 +79,8 @@ public class EnvironmentTest {
         final String masterOCR = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
         environment.withCopyTrainingFiles(true);
         environment.withMasterOCR(masterOCR);
-        assertThat(environment.getMasterOCR().toString(), is(base + "/" + name + "/resources/1841-DieGrenzboten-abbyy-small.zip"));
-        assertThat(Files.exists(environment.getMasterOCR()), is(true));
+        assertThat(environment.fullPath(environment.getMasterOCR()), is(Paths.get(base, name, "resources", "1841-DieGrenzboten-abbyy-small.zip")));
+        assertThat(Files.exists(environment.fullPath(environment.getMasterOCR())), is(true));
     }
 
     @Test
@@ -90,13 +90,13 @@ public class EnvironmentTest {
         environment.withCopyTrainingFiles(true);
         environment.addOtherOCR(otherOCR1).addOtherOCR(otherOCR2);
         assertThat(environment.getNumberOfOtherOCR(), is(2));
-        assertThat(environment.getOtherOCR(0).toString(), is(base + "/" + name + "/resources/1841-DieGrenzboten-abbyy-small.zip"));
-        assertThat(environment.getOtherOCR(1).toString(), is(base + "/" + name + "/resources/1841-DieGrenzboten-tesseract-small.zip"));
-        assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory(2)), is(true));
-        assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory(3)), is(true));
-        assertThat(Files.exists(environment.getDynamicLexiconTrainingDirectory(4)), is(false));
-        assertThat(Files.exists(environment.getOtherOCR(0)), is(true));
-        assertThat(Files.exists(environment.getOtherOCR(1)), is(true));
+        assertThat(environment.fullPath(environment.getOtherOCR(0)), is(Paths.get(base, name, "resources", "1841-DieGrenzboten-abbyy-small.zip")));
+        assertThat(environment.fullPath(environment.getOtherOCR(1)), is(Paths.get(base, name, "resources", "1841-DieGrenzboten-tesseract-small.zip")));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingDirectory(2))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingDirectory(3))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingDirectory(4))), is(false));
+        assertThat(Files.exists(environment.fullPath(environment.getOtherOCR(0))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getOtherOCR(1))), is(true));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class EnvironmentTest {
                 .add(new WeirdCaseFeature("y"))
                 .add(new GTFeature());
         environment.withDynamicLexiconFeatureSet(fs);
-        assertThat(Files.exists(environment.getDynamicLexiconFeatureSet()), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconFeatureSet())), is(true));
         final FeatureSet ofs = environment.loadDynamicLexiconFeatureSet();
         assertThat(ofs.size(), is(3));
         assertThat(ofs.get(0).getName(), is("x"));
@@ -135,7 +135,7 @@ public class EnvironmentTest {
         final String ocropus = "src/test/resources/1841-DieGrenzboten-ocropus-small.zip";
         environment.withGT(abbyy).withMasterOCR(tess).addOtherOCR(ocropus).withDebugTokenAlignment(true);
         environment.writeConfiguration();
-        assertThat(Files.exists(environment.getConfigurationFile()), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getConfigurationFile())), is(true));
         final Configuration configuration = environment.loadConfiguration();
         assertThat(configuration.gt, is(abbyy));
         assertThat(configuration.masterOCR, is(tess));
@@ -147,6 +147,21 @@ public class EnvironmentTest {
         assertThat(configuration.dynamicLexiconTrainingFiles[1], is(environment.getDynamicLexiconTrainingFile(2).toString()));
         assertThat(configuration.debugTokenAlignment, is(environment.isDebugTokenAlignment()));
         assertThat(configuration.copyTrainingFiles, is(false));
+        assertThat(configuration.configuration, is(environment.getConfigurationFile().toString()));
+    }
+
+    @Test
+    public void testZIPTo() throws IOException {
+        final String abbyy = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
+        final String tess = "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
+        final String ocropus = "src/test/resources/1841-DieGrenzboten-ocropus-small.zip";
+        environment.withCopyTrainingFiles(true).withGT(abbyy).withMasterOCR(tess).addOtherOCR(ocropus);
+        try {
+            environment.zipTo(Paths.get("src/test/resources/test.zip"));
+            assertThat(Files.exists(Paths.get("src/test/resources/test.zip")), is(true));
+        } finally {
+            Files.delete(Paths.get("src/test/resources/test.zip"));
+        }
     }
 
     @After

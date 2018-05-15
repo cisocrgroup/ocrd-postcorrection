@@ -18,21 +18,37 @@ public class DynamicLexiconTrainer {
     }
 
     public void train() throws Exception {
-        train(1);
-        for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
-            train(i + 2);
-        }
+        eachN(this::writeARFFiles);
+        trainModels();
     }
 
-    private void train(int n) throws Exception {
+    private void writeARFFiles(int n) throws Exception {
         try (Writer w = new BufferedWriter(new FileWriter(environment.getDynamicLexiconTrainingFile(n).toFile()))) {
             final ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
                     .withRelation("DynamicLexiconExpansion_" + n)
-                    .withWriter(w);
-            // TODO: withDebugToken?
+                    .withWriter(w)
+                    .withDebugToken(environment.isDebugTokenAlignment());
             arff.writeHeader(n);
-            new Tokenizer(environment).eachToken((token) -> arff.writeFeatureVector(fs.calculateFeatureVector(token)));
+            new Tokenizer(environment).eachToken((token) -> {
+                arff.writeToken(token);
+                arff.writeFeatureVector(fs.calculateFeatureVector(token));
+            });
             w.flush();
         }
+    }
+
+    private void trainModels() {
+
+    }
+
+    private interface EachNCallback {
+        void apply(int n) throws Exception;
+    }
+
+    private void eachN(EachNCallback f) throws Exception {
+       f.apply(1);
+       for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
+           f.apply(i+2);
+       }
     }
 }
