@@ -20,6 +20,7 @@ public class Environment {
     private static final String dLex = "dLex";
     private static final String dLexFS = "features.ser";
     private static final String trainingFile = "training.arff";
+    private static final String evaluationFile = "evaluation.arff";
     private final String path, name;
     private Path gt, masterOCR;
     private final List<Path> otherOCR = new ArrayList<>();
@@ -68,7 +69,7 @@ public class Environment {
         return this;
     }
 
-    public Document openGT() throws Exception {
+    Document openGT() throws Exception {
         return FileTypes.openDocument(getOCRPath(getGT()).toString());
     }
 
@@ -85,7 +86,7 @@ public class Environment {
         return this;
     }
 
-    public Document openMasterOCR() throws Exception {
+    Document openMasterOCR() throws Exception {
         return FileTypes.openDocument(getOCRPath(getMasterOCR()).toString());
     }
 
@@ -107,7 +108,7 @@ public class Environment {
         return otherOCR.get(i);
     }
 
-    public Document openOtherOCR(int i) throws Exception {
+    Document openOtherOCR(int i) throws Exception {
         return FileTypes.openDocument(getOCRPath(getOtherOCR(i)).toString());
     }
 
@@ -231,6 +232,10 @@ public class Environment {
         } finally {
             out.closeEntry();
         }
+    }
+
+    public Path getDynamicLexiconEvaluationFile(int n) {
+        return Paths.get(getDynamicLexiconTrainingDirectory(n).toString(), evaluationFile);
     }
 
     private interface EachFileCallback {

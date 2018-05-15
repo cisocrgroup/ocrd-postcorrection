@@ -36,11 +36,14 @@ public class DynamicLexiconTrainerTest {
 
     @Test
     public void test() throws Exception {
-        DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment, fs);
+        DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment, fs).withSplitFraction(2);
         trainer.train();
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingDirectory(1))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingDirectory(1))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingDirectory(1))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(1))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(2))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(3))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(1))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(2))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(3))), is(true));
     }
 
     @After

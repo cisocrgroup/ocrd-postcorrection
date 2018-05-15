@@ -2,6 +2,12 @@ package de.lmu.cis.ocrd.train;
 
 import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.ml.Token;
+import de.lmu.cis.ocrd.ml.features.GTFeature;
+import weka.classifiers.AbstractClassifier;
+import weka.classifiers.functions.Logistic;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -12,34 +18,61 @@ import java.nio.file.Path;
 public class DynamicLexiconTrainer {
     private final Environment environment;
     private final FeatureSet fs;
+    private AbstractClassifier classifier;
+    private int n;
 
     public DynamicLexiconTrainer(Environment environment, FeatureSet fs) throws IOException {
         this.environment = environment.withDynamicLexiconFeatureSet(fs);
-        this.fs = fs;
+        this.fs = fs.add(new GTFeature());
+        this.classifier = new Logistic();
+        this.n = 10;
+    }
+
+    public DynamicLexiconTrainer withClassifier(AbstractClassifier classififer) {
+        this.classifier = classififer;
+        return this;
+    }
+
+    public DynamicLexiconTrainer withSplitFraction(int n) {
+        this.n = n;
+        return this;
     }
 
     public void train() throws Exception {
         eachN(this::writeARFFiles);
-        trainModels();
+        eachN(this::trainModels);
     }
 
     private void writeARFFiles(int n) throws Exception {
-        final Path f = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
-        try (Writer w = new BufferedWriter(new FileWriter(f.toFile()))) {
-            final ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
+        final Path trainPath = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
+        final Path evalPath = environment.fullPath(environment.getDynamicLexiconEvaluationFile(n));
+        try (final Writer trainWriter = new BufferedWriter(new FileWriter(trainPath.toFile()));
+             final Writer evalWriter = new BufferedWriter(new FileWriter(evalPath.toFile()))) {
+            final ARFFWriter trainARFFWriter = ARFFWriter.fromFeatureSet(fs)
                     .withRelation("DynamicLexiconExpansion_" + n)
-                    .withWriter(w)
+                    .withWriter(trainWriter)
                     .withDebugToken(environment.isDebugTokenAlignment());
-            arff.writeHeader(n);
-            new Tokenizer(environment).eachToken((token) -> {
-                arff.writeToken(token);
-                arff.writeFeatureVector(fs.calculateFeatureVector(token));
+            final ARFFWriter evalARFFWriter = ARFFWriter.fromFeatureSet(fs)
+                    .withRelation("DynamicLexiconExpansion_" + n)
+                    .withWriter(evalWriter)
+                    .withDebugToken(environment.isDebugTokenAlignment());
+            trainARFFWriter.writeHeader(n);
+            evalARFFWriter.writeHeader(n);
+            final Tokenizer tokenizer = new Tokenizer(environment);
+            new TrainSetSplitter(n).eachToken(tokenizer, (Token token, boolean isTrain) -> {
+                ARFFWriter w = isTrain ? trainARFFWriter : evalARFFWriter;
+                w.writeToken(token);
+                w.writeFeatureVector(fs.calculateFeatureVector(token));
             });
-            w.flush();
+            trainWriter.flush();
+            evalWriter.flush();
         }
     }
 
-    private void trainModels() {
+    private void trainModels(int n) throws Exception {
+        final Instances train = new DataSource(environment.fullPath(environment.getDynamicLexiconTrainingFile(n)).toString()).getDataSet();
+        train.setClassIndex(train.numAttributes() - 1);
+        // classifier.buildClassifier(train);
 
     }
 
