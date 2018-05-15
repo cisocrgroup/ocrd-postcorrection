@@ -1,8 +1,10 @@
 package de.lmu.cis.ocrd.parsers;
 
+import java.nio.file.Path;
+
 public class PageXMLFileType implements OCRFileType {
 	@Override
-	public boolean check(String name) {
-		return name.contains("page") || name.contains("PAGE");
+	public boolean check(Path path) {
+		return path.toString().toLowerCase().contains("page");
 	}
 }

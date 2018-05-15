@@ -47,7 +47,7 @@ public class OcropusArchiveParser implements Parser {
 		// gather valid `.txt` files
 		ArrayList<Entry> entries = new ArrayList<>();
 		for (Entry entry : this.ar) {
-			if (!filetype.check(entry.getName().toString())) {
+			if (!filetype.check(entry.getName())) {
 				continue;
 			}
 			entries.add(entry);

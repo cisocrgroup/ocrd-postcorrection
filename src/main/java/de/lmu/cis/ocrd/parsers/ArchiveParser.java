@@ -35,10 +35,10 @@ public class ArchiveParser implements Parser {
 		this.archive = archive;
 	}
 
-	final ArrayList<Entry> gatherEntries() {
+	private ArrayList<Entry> gatherEntries() {
 		ArrayList<Entry> entries = new ArrayList<>();
 		for (Entry entry : this.archive) {
-			if (!this.fileType.check(entry.getName().toString())) {
+			if (!this.fileType.check(entry.getName())) {
 				continue;
 			}
 			entries.add(entry);

@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.parsers;
 
+import java.nio.file.Path;
+
 public interface OCRFileType {
-	boolean check(String name);
+	boolean check(Path path);
 }

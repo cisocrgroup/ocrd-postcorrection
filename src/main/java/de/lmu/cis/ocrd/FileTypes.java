@@ -94,7 +94,7 @@ public class FileTypes {
 
     private static void updateCounts(Map<OCRType, Integer> counts, Map<OCRType, OCRFileType> types, Entry entry) {
         for (Map.Entry<OCRType, OCRFileType> type : types.entrySet()) {
-            if (type.getValue().check(entry.getName().toString())) {
+            if (type.getValue().check(entry.getName())) {
                 Logger.debug("found file {} of type {}", entry.getName(), type.getKey());
                 if (!counts.containsKey(type.getKey())) {
                     counts.put(type.getKey(), 0);

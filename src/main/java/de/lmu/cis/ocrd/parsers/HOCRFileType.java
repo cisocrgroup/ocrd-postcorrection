@@ -1,9 +1,11 @@
 package de.lmu.cis.ocrd.parsers;
 
-public class HOCRFileType implements OCRFileType {
+import java.nio.file.Path;
 
+public class HOCRFileType implements OCRFileType {
 	@Override
-	public boolean check(String name) {
-		return name.contains("hocr") || name.contains("HOCR") || name.endsWith(".html") || name.endsWith(".htm");
+	public boolean check(Path path) {
+	    final String lcName = path.toString().toLowerCase();
+	    return lcName.contains("hocr") || lcName.endsWith(".html") || lcName.endsWith(".htm");
 	}
 }
