@@ -30,7 +30,7 @@ public class OcropusArchiveParser implements Parser {
 		});
 	}
 
-	private final OCRFileType filetype;
+	private final OCRFileType ocrFileType;
 	private final Archive ar;
 
 	public OcropusArchiveParser(Archive ar) {
@@ -38,7 +38,7 @@ public class OcropusArchiveParser implements Parser {
 	}
 
 	OcropusArchiveParser(Archive ar, OCRFileType filetype) {
-	    this.filetype = filetype;
+	    this.ocrFileType = filetype;
 	    this.ar = ar;
     }
 
@@ -47,7 +47,7 @@ public class OcropusArchiveParser implements Parser {
 		// gather valid `.txt` files
 		ArrayList<Entry> entries = new ArrayList<>();
 		for (Entry entry : this.ar) {
-			if (!filetype.check(entry.getName())) {
+			if (!ocrFileType.check(entry.getName())) {
 				continue;
 			}
 			entries.add(entry);
@@ -67,6 +67,7 @@ public class OcropusArchiveParser implements Parser {
             }
 			lineIDs.put(pageno, lid);
 		}
+		ar.close();
 		return doc;
 	}
 }

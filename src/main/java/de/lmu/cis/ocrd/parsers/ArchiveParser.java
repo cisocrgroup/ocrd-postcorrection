@@ -53,6 +53,7 @@ public class ArchiveParser implements Parser {
 		for (Entry entry : pages) {
 			doc.add(parsePage(entry, getPageID(entry.getName())));
 		}
+		archive.close();
 		return doc;
 	}
 

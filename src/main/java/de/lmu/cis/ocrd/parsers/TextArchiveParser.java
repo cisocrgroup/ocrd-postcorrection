@@ -35,6 +35,7 @@ public class TextArchiveParser implements Parser {
                 doc.add(parser.parse());
             }
         }
+        ar.close();
         return doc;
     }
 }
