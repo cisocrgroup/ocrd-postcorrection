@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.file.Path;
 
 public class DynamicLexiconTrainer {
     private final Environment environment;
@@ -23,7 +24,8 @@ public class DynamicLexiconTrainer {
     }
 
     private void writeARFFiles(int n) throws Exception {
-        try (Writer w = new BufferedWriter(new FileWriter(environment.getDynamicLexiconTrainingFile(n).toFile()))) {
+        final Path f = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
+        try (Writer w = new BufferedWriter(new FileWriter(f.toFile()))) {
             final ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
                     .withRelation("DynamicLexiconExpansion_" + n)
                     .withWriter(w)

@@ -1,8 +1,7 @@
 package de.lmu.cis.ocrd.train;
 
-import de.lmu.cis.ocrd.archive.Archive;
-import de.lmu.cis.ocrd.archive.DirectoryArchive;
-import de.lmu.cis.ocrd.archive.ZipArchive;
+import de.lmu.cis.ocrd.Document;
+import de.lmu.cis.ocrd.FileTypes;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -69,8 +68,8 @@ public class Environment {
         return this;
     }
 
-    public Archive loadGT() throws IOException {
-        return loadArchive(getGT());
+    public Document openGT() throws Exception {
+        return FileTypes.openDocument(getOCRPath(getGT()).toString());
     }
 
     public Path getMasterOCR() {
@@ -86,8 +85,12 @@ public class Environment {
         return this;
     }
 
-    public Archive loadMasterOCR() throws IOException {
-        return loadArchive(getMasterOCR());
+    public Document openMasterOCR() throws Exception {
+        return FileTypes.openDocument(getOCRPath(getMasterOCR()).toString());
+    }
+
+    private Path getOCRPath(Path ocr) {
+        return copyTrainingFiles ? fullPath(ocr) : ocr;
     }
 
     public Environment addOtherOCR(String otherOCR) throws IOException {
@@ -104,8 +107,8 @@ public class Environment {
         return otherOCR.get(i);
     }
 
-    public Archive loadOtherOCR(int i) throws IOException {
-        return loadArchive(getOtherOCR(i));
+    public Document openOtherOCR(int i) throws Exception {
+        return FileTypes.openDocument(getOCRPath(getOtherOCR(i)).toString());
     }
 
     public int getNumberOfOtherOCR() {
@@ -138,14 +141,6 @@ public class Environment {
     private static void serializeFeatureSet(FeatureSet fs, Path path) throws IOException {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path.toFile()))) {
             out.writeObject(fs);
-        }
-    }
-
-    private static Archive loadArchive(Path path) throws IOException {
-        if (Files.isDirectory(path)) {
-            return new DirectoryArchive(path.toString());
-        } else {
-            return new ZipArchive(path.toString());
         }
     }
 

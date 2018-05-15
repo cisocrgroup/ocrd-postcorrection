@@ -1,8 +1,5 @@
 package de.lmu.cis.ocrd.train.test;
 
-import de.lmu.cis.ocrd.archive.Archive;
-import de.lmu.cis.ocrd.archive.DirectoryArchive;
-import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.GTFeature;
 import de.lmu.cis.ocrd.ml.features.ScreamCaseFeature;
@@ -115,17 +112,6 @@ public class EnvironmentTest {
         assertThat((ofs.get(0) instanceof ScreamCaseFeature), is(true));
         assertThat((ofs.get(1) instanceof WeirdCaseFeature), is(true));
         assertThat((ofs.get(2) instanceof GTFeature), is(true));
-    }
-
-    @Test
-    public void testLoadArchives() throws Exception {
-        final String zipArchive = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
-        final String dirArchive = "src/test/resources/test-dir";
-        environment.withGT(zipArchive).withMasterOCR(dirArchive);
-        try (final Archive d = environment.loadMasterOCR(); final Archive z = environment.loadGT()) {
-            assertThat((z instanceof ZipArchive), is(true));
-            assertThat((d instanceof DirectoryArchive), is(true));
-        }
     }
 
     @Test

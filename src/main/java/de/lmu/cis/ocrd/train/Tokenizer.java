@@ -61,10 +61,10 @@ public class Tokenizer {
 
     private Project newProject() throws Exception {
         Project project = new Project();
-        project.put("masterOCR", FileTypes.openDocument(environment.getMasterOCR().toString()));
-        project.put("GT", FileTypes.openDocument(environment.getGT().toString()));
+        project.put("masterOCR", environment.openMasterOCR());
+        project.put("GT", environment.openGT());
         for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
-            project.put("otherOCR_" + (i+1), FileTypes.openDocument(environment.getOtherOCR(i).toString()));
+            project.put("otherOCR_" + (i+1), environment.openOtherOCR(i));
         }
         return project;
     }
