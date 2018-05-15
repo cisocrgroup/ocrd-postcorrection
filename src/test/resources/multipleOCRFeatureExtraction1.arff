@@ -8,7 +8,7 @@
 @ATTRIBUTE	WeirdCase	REAL
 @ATTRIBUTE	MaxCharNGramFeature	REAL
 @ATTRIBUTE	MinCharNGramFeature	REAL
-@ATTRIBUTE	GT	REAL
+@ATTRIBUTE	class {-1.0,1.0}
 @DATA
 % first|First|frst|First
 1.0,-1.0,-1.0,-1.0,-1.0,1.0,0.08333333333333333,0.0,-1.0

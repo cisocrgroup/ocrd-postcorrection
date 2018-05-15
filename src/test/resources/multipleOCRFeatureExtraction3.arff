@@ -13,7 +13,7 @@
 @ATTRIBUTE	MinCharNGramFeature	REAL
 @ATTRIBUTE	MinCharNGramFeature1	REAL
 @ATTRIBUTE	MinCharNGramFeature2	REAL
-@ATTRIBUTE	GT	REAL
+@ATTRIBUTE	class {-1.0,1.0}
 @DATA
 % first|First|frst|First
 1.0,-1.0,-1.0,-1.0,-1.0,1.0,0.0,0.08333333333333333,4.9E-324,4.9E-324,0.0,0.0,0.0,-1.0

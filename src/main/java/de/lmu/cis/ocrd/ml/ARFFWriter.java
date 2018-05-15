@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.Feature;
+import de.lmu.cis.ocrd.ml.features.GTFeature;
 
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -41,7 +42,7 @@ public class ARFFWriter {
         return this;
     }
 
-    public ARFFWriter addFeature(Feature feature) {
+    private ARFFWriter addFeature(Feature feature) {
         this.features.add(feature);
         return this;
     }
@@ -54,10 +55,19 @@ public class ARFFWriter {
                 if (!feature.handlesOCR(i, n)) {
                     continue;
                 }
+                final boolean isGT = (feature instanceof GTFeature);
                 if (i > 0) {
-                    writer.printf("@ATTRIBUTE\t%s%d\tREAL\n", feature.getName(), i);
+                    if (isGT) {
+                        writer.printf("@ATTRIBUTE\tclass {-1.0,1.0}\n");
+                    } else {
+                        writer.printf("@ATTRIBUTE\t%s_%d\tREAL\n", feature.getName(), i);
+                    }
                 } else {
-                    writer.printf("@ATTRIBUTE\t%s\tREAL\n", feature.getName());
+                    if (isGT) {
+                        writer.printf("@ATTRIBUTE\tclass {-1.0,1.0}\n");
+                    } else {
+                        writer.printf("@ATTRIBUTE\t%s\tREAL\n", feature.getName());
+                    }
                 }
             }
         }
@@ -68,10 +78,11 @@ public class ARFFWriter {
         if (!debugToken) {
             return;
         }
-        writer.printf("%% %s\n", token.toString());
+        writer.printf("%% %s (pageID: %d, lineID: %d)\n",
+                token.toString(), token.getMasterOCR().getLine().getPageId(), token.getMasterOCR().getLine().getLineId());
     }
 
-    public void writeFeatureVector(List<Double> features) throws Exception {
+    public void writeFeatureVector(List<Double> features) {
         boolean first = true;
         for (Double d : features) {
             if (first) {

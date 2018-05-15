@@ -7,7 +7,7 @@ import de.lmu.cis.ocrd.ml.features.GTFeature;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.functions.Logistic;
 import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
+import weka.core.converters.ConverterUtils;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -70,10 +70,9 @@ public class DynamicLexiconTrainer {
     }
 
     private void trainModels(int n) throws Exception {
-        final Instances train = new DataSource(environment.fullPath(environment.getDynamicLexiconTrainingFile(n)).toString()).getDataSet();
+        final Instances train = new ConverterUtils.DataSource(environment.fullPath(environment.getDynamicLexiconTrainingFile(n)).toString()).getDataSet();
         train.setClassIndex(train.numAttributes() - 1);
-        // classifier.buildClassifier(train);
-
+        classifier.buildClassifier(train);
     }
 
     private interface EachNCallback {

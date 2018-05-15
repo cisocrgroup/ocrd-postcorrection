@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -35,7 +36,7 @@ public class DynamicLexiconTrainerTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void testTrainEvalSplit() throws Exception {
         DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment, fs).withSplitFraction(2);
         trainer.train();
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(1))), is(true));
