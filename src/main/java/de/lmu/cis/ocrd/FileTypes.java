@@ -20,9 +20,9 @@ public class FileTypes {
     }
 
     // order of types is used to breaks ties:
-    // PAGEXML is preferred, then ALTOXML ...
+    // PAGE_XML is preferred, then ALTO_XML ...
     public enum OCRType {
-        PAGEXML, ALTOXML, ABBYY, OCROPUS_LLOCS, OCROPUS_GT, OCROPUS, HOCR
+        PAGE_XML, ALTO_XML, ABBYY_XML, OCROPUS_LLOCS, OCROPUS_GT, OCROPUS, HOCR
     }
 
     public static class Type {
@@ -78,7 +78,7 @@ public class FileTypes {
 
     private static Type guess(ArchiveType archiveType, TreeMap<OCRType, Integer> counts) throws Exception {
         int max = -1;
-        OCRType argMax = OCRType.PAGEXML;
+        OCRType argMax = OCRType.PAGE_XML;
         for (Map.Entry<OCRType, Integer> entry : counts.entrySet()) {
             Logger.debug("{}: {}", entry.getKey(), entry.getValue());
             if (entry.getValue() > max) {
@@ -128,11 +128,11 @@ public class FileTypes {
 
     public static XMLParserFactory newXMLParserFactory(OCRType ocrType) throws Exception {
         switch (ocrType) {
-            case PAGEXML:
+            case PAGE_XML:
                 return new PageXMLParserFactory();
-            case ALTOXML:
+            case ALTO_XML:
                 return new ALTOXMLParserFactory();
-            case ABBYY:
+            case ABBYY_XML:
                 return new ABBYYXMLParserFactory();
             case HOCR:
                 return new HOCRParserFactory();
@@ -142,11 +142,11 @@ public class FileTypes {
 
     public static OCRFileType newXMLFileType(OCRType ocrType) {
         switch (ocrType) {
-            case PAGEXML:
+            case PAGE_XML:
                 return new PageXMLFileType();
-            case ALTOXML:
+            case ALTO_XML:
                 return new ALTOXMLFileType();
-            case ABBYY:
+            case ABBYY_XML:
                 return new ABBYYXMLFileType();
             case OCROPUS_LLOCS:
                 return new OcropusLlocsFileType();
