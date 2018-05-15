@@ -19,7 +19,7 @@ public class Tokenizer {
     }
 
     // TODO: ugly
-    public void eachToken(Visitor v) throws Exception {
+    void eachToken(Visitor v) throws Exception {
         final Project project = newProject();
         project.eachPage((page)->{
             LineAlignment lineAlignment = new LineAlignment(page, 2 + environment.getNumberOfOtherOCR());
@@ -61,7 +61,7 @@ public class Tokenizer {
         project.put("masterOCR", FileTypes.openDocument(environment.getMasterOCR().toString()));
         project.put("GT", FileTypes.openDocument(environment.getGT().toString()));
         for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
-            project.put("otherOCR" + (i+1), FileTypes.openDocument(environment.getOtherOCR(i).toString()));
+            project.put("otherOCR_" + (i+1), FileTypes.openDocument(environment.getOtherOCR(i).toString()));
         }
         return project;
     }
