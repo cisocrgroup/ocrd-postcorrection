@@ -63,10 +63,15 @@ public class Graph {
 			final Gap g1 = makeGap(prevp.epos1, curp.spos1, s1, curn);
 			final Gap g2 = makeGap(prevp.epos2, curp.spos2, s2, curn);
             Logger.info("s1: '{}'\nINFO: s2: '{}'\nINFO: pl: '{}'\nINFO: g1: '{}'\nINFO: g2: '{}'\nINFO: cl: '{}'", s1, s2, prevn.getLabel(), g1.getLabel(), g2.getLabel(), curn.getLabel());
+			Logger.info("previous: {}", prevp);
+			Logger.info("current:  {}", curp);
 			prevn.add(g1);
 			prevn.add(g2);
 			prevp = curp;
 			prevn = curn;
+		}
+		for (AlignmentPair p : ps) {
+			System.out.println("ALIGNMENT PAIR: " + p);
 		}
 	}
 
