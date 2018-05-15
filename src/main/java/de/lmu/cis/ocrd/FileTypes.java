@@ -22,7 +22,7 @@ public class FileTypes {
     // order of types is used to breaks ties:
     // PAGE_XML is preferred, then ALTO_XML ...
     public enum OCRType {
-        PAGE_XML, ALTO_XML, ABBYY_XML, OCROPUS_LLOCS, OCROPUS_GT, OCROPUS, HOCR
+        PAGE_XML, ALTO_XML, ABBYY_XML, OCROPUS_LLOCS, OCROPUS_GT, OCROPUS, HOCR, TEXT,
     }
 
     public static class Type {
@@ -121,6 +121,8 @@ public class FileTypes {
                 return new OcropusArchiveParser(ar);
             case OCROPUS_GT:
                 return new OcropusArchiveGTParser(ar);
+            case TEXT:
+                return new TextArchiveParser(ar, new TextFileType());
         }
         final OCRType ocrType = type.getOCRType();
         return new ArchiveParser(newXMLParserFactory(ocrType), newXMLFileType(ocrType), ar);
@@ -156,6 +158,8 @@ public class FileTypes {
                 return new OcropusFileType();
             case HOCR:
                 return new HOCRFileType();
+            case TEXT:
+                return new TextFileType();
         }
         throw new RuntimeException("non-exhaustive switch");
     }

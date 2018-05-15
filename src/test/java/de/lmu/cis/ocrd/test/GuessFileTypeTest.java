@@ -10,7 +10,7 @@ public class GuessFileTypeTest {
 	@Test
 	public void testABBYY() throws Exception {
 		final String resource = "src/test/resources/1841-DieGrenzboten-abbyy.zip";
-		FileTypes.Type type = FileTypes.guess(resource);
+		final FileTypes.Type type = FileTypes.guess(resource);
 		assertThat(type.getArchiveType(), is(FileTypes.ArchiveType.ZIP));
 		assertThat(type.getOCRType(), is(FileTypes.OCRType.ABBYY_XML));
 	}
@@ -18,7 +18,7 @@ public class GuessFileTypeTest {
 	@Test
 	public void testHOCR() throws Exception {
 		final String resource = "src/test/resources/1841-DieGrenzboten-tesseract.zip";
-		FileTypes.Type type = FileTypes.guess(resource);
+		final FileTypes.Type type = FileTypes.guess(resource);
 		assertThat(type.getArchiveType(), is(FileTypes.ArchiveType.ZIP));
 		assertThat(type.getOCRType(), is(FileTypes.OCRType.HOCR));
 	}
@@ -26,7 +26,7 @@ public class GuessFileTypeTest {
 	@Test
 	public void testOcropus() throws Exception {
 		final String resource = "src/test/resources/1841-DieGrenzboten-ocropus.zip";
-		FileTypes.Type type = FileTypes.guess(resource);
+		final FileTypes.Type type = FileTypes.guess(resource);
 		assertThat(type.getArchiveType(), is(FileTypes.ArchiveType.ZIP));
 		assertThat(type.getOCRType(), is(FileTypes.OCRType.OCROPUS_LLOCS));
 	}
@@ -34,7 +34,7 @@ public class GuessFileTypeTest {
 	@Test
 	public void testOcropusNoLlocs() throws Exception {
 		final String resource = "src/test/resources/1841-DieGrenzboten-ocropus-no-llocs.zip";
-		FileTypes.Type type = FileTypes.guess(resource);
+		final FileTypes.Type type = FileTypes.guess(resource);
 		assertThat(type.getArchiveType(), is(FileTypes.ArchiveType.ZIP));
 		assertThat(type.getOCRType(), is(FileTypes.OCRType.OCROPUS));
 	}
@@ -42,10 +42,18 @@ public class GuessFileTypeTest {
 	@Test
 	public void testOcropusGT() throws Exception {
 		final String resource = "src/test/resources/1841-DieGrenzboten-ocropus-gt.zip";
-		FileTypes.Type type = FileTypes.guess(resource);
+		final FileTypes.Type type = FileTypes.guess(resource);
 		assertThat(type.getArchiveType(), is(FileTypes.ArchiveType.ZIP));
 		assertThat(type.getOCRType(), is(FileTypes.OCRType.OCROPUS_GT));
 	}
+
+	@Test
+    public void testText() throws Exception {
+        final String resource = "src/test/resources/1841-DieGrenzboten-gt.zip";
+        final FileTypes.Type type = FileTypes.guess(resource);
+        assertThat(type.getArchiveType(), is(FileTypes.ArchiveType.ZIP));
+        assertThat(type.getOCRType(), is(FileTypes.OCRType.TEXT));
+    }
 
 
 	@Test

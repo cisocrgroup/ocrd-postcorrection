@@ -10,7 +10,7 @@ public class TextParser implements Parser {
     private final Reader reader;
     private final int pageID;
 
-    public TextParser(int pageID, Reader reader) {
+    TextParser(int pageID, Reader reader) {
         this.reader = reader;
         this.pageID = pageID;
     }
@@ -26,7 +26,7 @@ public class TextParser implements Parser {
             if (line.trim().isEmpty()) {
                 continue;
             }
-            final SimpleLine l = SimpleLine.normalized(line, 0).withLineID(lineID).withPageID(pageID);
+            final SimpleLine l = SimpleLine.normalized(line, 0).withLineID(++lineID).withPageID(pageID);
             document.add(pageID, l);
         }
         return document;

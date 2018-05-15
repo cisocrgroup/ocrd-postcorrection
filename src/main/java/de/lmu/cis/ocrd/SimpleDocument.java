@@ -8,13 +8,13 @@ public class SimpleDocument implements Document {
 
 	private String path, ocrEngine;
 	private boolean isMasterOCR;
-	private final TreeMap<Integer, ArrayList<Line>> lines = new TreeMap<Integer, ArrayList<Line>>();
+	private final TreeMap<Integer, ArrayList<Line>> lines = new TreeMap<>();
 
-	public void add(int pageno, Line line) {
-		if (!this.lines.containsKey(pageno)) {
-			this.lines.put(pageno, new ArrayList<Line>());
+	public void add(int pageID, Line line) {
+		if (!this.lines.containsKey(pageID)) {
+			this.lines.put(pageID, new ArrayList<>());
 		}
-		lines.get(pageno).add(line);
+		lines.get(pageID).add(line);
 	}
 
 	public void add(SimpleDocument o) {

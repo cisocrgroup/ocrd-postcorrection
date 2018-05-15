@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OcropusFileType implements OCRFileType {
-	private final static Pattern pattern = Pattern.compile("[0-9]+");
+	final static Pattern pattern = Pattern.compile("[0-9]+");
 	@Override
 	public boolean check(Path path) {
 	    final Matcher m = pattern.matcher(path.getParent().getFileName().toString());
