@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.ml.test;
 import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.ml.features.NamedMasterOCRFeature;
+import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,15 +17,20 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ARFFWriterTest {
-    private class MockFeature extends NamedMasterOCRFeature {
+    private class MockFeature extends NamedDoubleFeature {
         private final double n;
         MockFeature(String name, double n) {
             super(name);
             this.n = n;
         }
         @Override
-        public double calculate(Token token, int ignored1, int ignored2) {
+        protected double doCalculate(Token token, int ignored1, int ignored2) {
             return token.getMasterOCR().toString().length() * n;
+        }
+
+        @Override
+        public boolean handlesOCR(int i, int n) {
+            return handlesOnlyMasterOCR(i, n);
         }
     }
 

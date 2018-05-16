@@ -20,5 +20,5 @@ public interface Feature extends Serializable {
 
 	// Calculate the value of a feature.
     // The index i and the number of OCRs n are given with each call to calculate (see above).
-	double calculate(Token token, int i, int n);
+	Object calculate(Token token, int i, int n);
 }

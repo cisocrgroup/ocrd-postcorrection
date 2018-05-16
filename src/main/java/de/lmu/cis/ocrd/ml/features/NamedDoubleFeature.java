@@ -2,8 +2,8 @@ package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.ml.Token;
 
-abstract class NamedBooleanFeature extends NamedFeature {
-    NamedBooleanFeature(String name) {
+public abstract class NamedDoubleFeature extends NamedFeature {
+    protected NamedDoubleFeature(String name) {
         super(name);
     }
 
@@ -12,5 +12,5 @@ abstract class NamedBooleanFeature extends NamedFeature {
         return this.doCalculate(token, i, n);
     }
 
-    abstract boolean doCalculate(Token token, int i, int n);
+    protected abstract double doCalculate(Token token, int i, int n);
 }

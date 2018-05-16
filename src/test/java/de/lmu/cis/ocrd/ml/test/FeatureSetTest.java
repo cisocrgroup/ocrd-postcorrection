@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.ml.test;
 
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.ml.features.NamedMasterOCRFeature;
+import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class FeatureSetTest {
-	private class MockFeature extends NamedMasterOCRFeature {
+	private class MockFeature extends NamedDoubleFeature {
 		private final double val;
 
 		MockFeature(double n) {
@@ -19,7 +19,12 @@ public class FeatureSetTest {
 		}
 
 		@Override
-		public double calculate(Token token, int ignored1, int ignored2) {
+		public boolean handlesOCR(int i, int n) {
+			return handlesOnlyMasterOCR(i, n);
+		}
+
+		@Override
+		protected double doCalculate(Token token, int ignored1, int ignored2) {
 			return val;
 		}
 	}

@@ -78,18 +78,19 @@ public class ARFFWriter {
         if (!debugToken) {
             return;
         }
-        writer.printf("%% %s (pageID: %d, lineID: %d)\n",
-                token.toString(), token.getMasterOCR().getLine().getPageId(), token.getMasterOCR().getLine().getLineId());
+        writer.printf("%% {\"token\": \"%s\", \"pageID\"p: %d, \"lineID\": %d}\n",
+                token.toString().replaceAll("\"", "\\\""),
+                token.getMasterOCR().getLine().getPageId(), token.getMasterOCR().getLine().getLineId());
     }
 
-    public void writeFeatureVector(List<Double> features) {
+    public void writeFeatureVector(List<Object> features) {
         boolean first = true;
-        for (Double d : features) {
+        for (Object val : features) {
             if (first) {
-                writer.print(d.toString());
+                writer.print(val.toString());
                 first = false;
             } else {
-                writer.printf(",%s", d.toString());
+                writer.printf(",%s", val.toString());
             }
         }
         writer.println();

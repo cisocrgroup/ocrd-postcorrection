@@ -11,12 +11,11 @@ public class MinCharNGramsFeature extends NamedCharacterNGramFeature {
 
     @Override
     public boolean handlesOCR(int i, int n) {
-        // handles any OCR
-        return true;
+        return handlesAnyOCR(i, n);
     }
 
     @Override
-    public double calculate(Token token, int i, int n) {
+    public Object calculate(Token token, int i, int n) {
         double min = Double.MAX_VALUE;
         final Word word = i == 0 ? token.getMasterOCR() : token.getOtherOCRAt(i - 1);
         for (String trigram : splitIntoCharacterNGrams(word.toString(), 3)) {
