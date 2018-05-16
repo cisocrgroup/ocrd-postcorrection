@@ -28,13 +28,13 @@ public class Tokenizer {
                 final SimpleLine gt = (SimpleLine) line.get(1).line;
                 final ArrayList<SimpleLine> otherOCRs = new ArrayList<>();
 
-                System.out.println("ALIGNMENT MASTER: " + master.getNormalized());
+                // System.out.println("ALIGNMENT MASTER: " + master.getNormalized());
                 TokenAlignment tokenAlignment = new TokenAlignment(master.getNormalized());
-                System.out.println("ALIGNMENT GT: " + gt.getNormalized());
+                // System.out.println("ALIGNMENT GT: " + gt.getNormalized());
                 tokenAlignment.add(gt.getNormalized());
                 for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
                     otherOCRs.add((SimpleLine)line.get(i+2).line);
-                    System.out.println("ALIGNMENT OTHER: " + otherOCRs.get(i).getNormalized());
+                    // System.out.println("ALIGNMENT OTHER: " + otherOCRs.get(i).getNormalized());
                     tokenAlignment.add(otherOCRs.get(i).getNormalized());
                 }
                 int offset = 0;

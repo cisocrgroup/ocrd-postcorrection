@@ -53,7 +53,7 @@ public class Tokenizer {
 	    // for (Alignment.Tuple t : a) {
 	    //     System.out.printf("(%c %c %b)\n", t.get(0), t.get(1), t.isAligned());
         // }
-		System.out.println("i = " + i + " id = " + id);
+		// System.out.println("i = " + i + " id = " + id);
 		assert (a.get(i).isEndOfToken(id));
 		for (i++; i < a.size(); i++) {
 			Alignment.Tuple tuple = a.get(i);
