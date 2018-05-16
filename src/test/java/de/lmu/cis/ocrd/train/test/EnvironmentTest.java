@@ -134,6 +134,8 @@ public class EnvironmentTest {
         assertThat(configuration.dynamicLexiconTrainingFiles.length, is(2));
         assertThat(configuration.dynamicLexiconTrainingFiles[0], is(environment.getDynamicLexiconTrainingFile(1).toString()));
         assertThat(configuration.dynamicLexiconTrainingFiles[1], is(environment.getDynamicLexiconTrainingFile(2).toString()));
+        assertThat(configuration.dynamicLexiconEvaluationFiles[0], is(environment.getDynamicLexiconEvaluationFile(1).toString()));
+        assertThat(configuration.dynamicLexiconEvaluationFiles[1], is(environment.getDynamicLexiconEvaluationFile(2).toString()));
         assertThat(configuration.debugTokenAlignment, is(environment.isDebugTokenAlignment()));
         assertThat(configuration.copyTrainingFiles, is(false));
         assertThat(configuration.configuration, is(environment.getConfigurationFile().toString()));
