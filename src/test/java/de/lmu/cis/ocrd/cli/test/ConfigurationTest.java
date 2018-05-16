@@ -30,13 +30,15 @@ public class ConfigurationTest {
         assertThat(configuration.getParameters().getProfiler().getLanguageDirectory(), is("/test/profiler/language/directory"));
         assertThat(configuration.getParameters().getProfiler().getLanguage(), is("/test/profiler/language"));
         assertThat(configuration.getParameters().getLanguageModel().getCharacterTrigrams(), is("/test/language/model/character/trigrams"));
-        assertThat(configuration.getParameters().getDynamicLexiconFeatures().length, is(2));
-        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconFeatures()[0], "name").getAsString(), is("name1"));
-        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconFeatures()[0], "type").getAsString(), is("type1"));
-        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconFeatures()[0], "min").getAsInt(), is(0));
-        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconFeatures()[0], "max").getAsInt(), is(1));
-        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconFeatures()[1], "name").getAsString(), is("name2"));
-        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconFeatures()[1], "type").getAsString(), is("type2"));
-        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconFeatures()[1], "arg").getAsString(), is("some arg"));
+        assertThat(configuration.getParameters().getDynamicLexiconTrainig().isDebugTrainingTokens(), is(true));
+        assertThat(configuration.getParameters().getDynamicLexiconTrainig().isCopyTrainingFiles(), is(false));
+        assertThat(configuration.getParameters().getDynamicLexiconTrainig().getFeatures().length, is(2));
+        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "name").getAsString(), is("name1"));
+        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "type").getAsString(), is("type1"));
+        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "min").getAsInt(), is(0));
+        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "max").getAsInt(), is(1));
+        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "name").getAsString(), is("name2"));
+        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "type").getAsString(), is("type2"));
+        assertThat(JSONUtil.mustGet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "arg").getAsString(), is("some arg"));
     }
 }

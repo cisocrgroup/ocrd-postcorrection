@@ -7,8 +7,21 @@
   "languageModel": {
     "characterTrigrams": "/test/language/model/character/trigrams"
   },
-  "dynamicLexiconFeatures": [
-    {"name": "name1", "type": "type1", "min": 0, "max": 1},
-    {"name": "name2", "type": "type2", "arg": "some arg"}
-  ]
+  "dynamicLexiconTraining": {
+    "copyTrainingFiles": false,
+    "debugTrainingTokens": true,
+    "features": [
+      {
+        "name": "name1",
+        "type": "type1",
+        "min": 0,
+        "max": 1
+      },
+      {
+        "name": "name2",
+        "type": "type2",
+        "arg": "some arg"
+      }
+    ]
+  }
 }

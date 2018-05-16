@@ -39,7 +39,7 @@ public class DynamicLexiconTrainer {
         return prepare().train().evaluate();
     }
 
-    DynamicLexiconTrainer prepare() throws Exception {
+    public DynamicLexiconTrainer prepare() throws Exception {
         eachN(this::prepare);
         return this;
     }
