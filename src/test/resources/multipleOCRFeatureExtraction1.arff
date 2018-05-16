@@ -8,15 +8,15 @@
 @ATTRIBUTE	WeirdCase	REAL
 @ATTRIBUTE	MaxCharNGramFeature	REAL
 @ATTRIBUTE	MinCharNGramFeature	REAL
-@ATTRIBUTE	class {-1.0,1.0}
+@ATTRIBUTE	class {true,false}
 @DATA
 % first|First|frst|First
-1.0,-1.0,-1.0,-1.0,-1.0,1.0,0.08333333333333333,0.0,-1.0
+1.0,-1.0,-1.0,-1.0,-1.0,1.0,0.08333333333333333,0.0,false
 % second|second|second|second
--1.0,1.0,-1.0,-1.0,-1.0,1.0,4.9E-324,0.0,1.0
+-1.0,1.0,-1.0,-1.0,-1.0,1.0,4.9E-324,0.0,true
 % ThIrD|second|third|second
-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,0.05555555555555555,0.0,-1.0
+1.0,-1.0,-1.0,-1.0,-1.0,-1.0,0.05555555555555555,0.0,false
 % ALONGTOKEN|third alongtoken|alongtoken|third-alongtoken
--1.0,1.0,-1.0,1.0,-1.0,-1.0,4.9E-324,0.0,-1.0
+-1.0,1.0,-1.0,1.0,-1.0,-1.0,4.9E-324,0.0,false
 % anotherevenlongertoken|anotherevnlongertkn|anotherevnlongertkn|anotherevenlongertoken
--1.0,-1.0,1.0,-1.0,-1.0,1.0,4.9E-324,0.0,1.0
+-1.0,-1.0,1.0,-1.0,-1.0,1.0,4.9E-324,0.0,true

@@ -128,8 +128,10 @@ public class MultipleOCRFeatureExtractionTest {
         for (int i = 0; i < want.numAttributes(); i++) {
             assertThat(got.attributeToDoubleArray(i).length, is(want.attributeToDoubleArray(i).length));
             for (int j = 0; j < want.attributeToDoubleArray(i).length; j++) {
+                System.out.print(got.attributeToDoubleArray(i)[j] + " ");
                 assertThat(got.attributeToDoubleArray(i)[j], is(want.attributeToDoubleArray(i)[j]));
             }
+            System.out.println();
         }
     }
 }

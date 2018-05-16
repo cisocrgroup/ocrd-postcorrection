@@ -55,20 +55,11 @@ public class ARFFWriter {
                 if (!feature.handlesOCR(i, n)) {
                     continue;
                 }
-                final boolean isGT = (feature instanceof GTFeature);
-                if (i > 0) {
-                    if (isGT) {
-                        writer.printf("@ATTRIBUTE\tclass {-1.0,1.0}\n");
-                    } else {
-                        writer.printf("@ATTRIBUTE\t%s_%d\tREAL\n", feature.getName(), i);
-                    }
-                } else {
-                    if (isGT) {
-                        writer.printf("@ATTRIBUTE\tclass {-1.0,1.0}\n");
-                    } else {
-                        writer.printf("@ATTRIBUTE\t%s\tREAL\n", feature.getName());
-                    }
+                String attribute = String.format("%s_%d\tREAL", feature.getName(), i+1);
+                if (feature instanceof GTFeature) {
+                   attribute = String.format("class {%s,%s}", Boolean.toString(true), Boolean.toString(false));
                 }
+                writer.printf("@ATTRIBUTE\t%s\n", attribute);
             }
         }
         writer.println("@DATA");
