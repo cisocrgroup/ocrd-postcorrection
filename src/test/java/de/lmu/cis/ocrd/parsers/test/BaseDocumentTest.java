@@ -36,6 +36,10 @@ public class BaseDocumentTest {
 		this.doc = doc;
 	}
 
+	Document getDocument() {
+		return doc;
+	}
+
 	protected void setResource(String resource) {
 		this.resource = resource;
 	}
