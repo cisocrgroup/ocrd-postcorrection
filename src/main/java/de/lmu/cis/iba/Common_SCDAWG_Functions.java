@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+
+
 /**
  * @author Tobias Englmeier (CIS)
  */
@@ -86,174 +88,234 @@ public class Common_SCDAWG_Functions {
 
 	public ArrayList<Endpos_Pair> get_quasi_maximal_nodes_pairwise() {
 
+		int[] marked_nodes = this.get_string_occurences();
+
 		ArrayList<Endpos_Pair> result = new ArrayList();
+		Node[] nodes_in_s1 = new Node[scdawg.stringset.get(0).length()];
 
-		for (int u = 0; u < scdawg.stringset.size() - 1; u++) {
+		mainloop: for (int i = 0; i < scdawg.all_nodes.size(); i++) {
 
-			// nur für ersten string??? Array länge aus allen positionen immer knoten
+			Node node = scdawg.all_nodes.get(i);
 
-			// dann iterieren auf pos und wenn konten gefunden => pos in zweiten string =>
-			// paare in s2 (s1,s2)..
+			if (marked_nodes[node.id] != -1 || node == scdawg.root)
+				continue;
 
-			Node[] nodes_in_s1 = new Node[scdawg.stringset.get(u).length()];
+			// all nodes except last alignment part
+			ArrayList endpos_s1 = new ArrayList();
+			ArrayList endpos_s2 = new ArrayList();
 
-			HashMap<Node, ArrayList> nodes_endpos_s2 = new HashMap();
+			HashSet sinkshit = new HashSet();
 
-			for (int i = 0; i < scdawg.all_nodes.size(); i++) {
+			Iterator it = node.children.entrySet().iterator();
 
-				Node node = scdawg.all_nodes.get(i);
+			while (it.hasNext()) {
+				Map.Entry pair2 = (Map.Entry) it.next();
+				Node n2 = (Node) pair2.getValue();
+				int letter = (int) pair2.getKey();
 
-				// all nodes except first and last alignment part
+				if (n2.is_endNode) {
+					sinkshit.add(n2.stringnr);
 
-				Iterator it = node.children.entrySet().iterator();
-
-				while (it.hasNext()) {
-					Map.Entry pair = (Map.Entry) it.next();
-					Node child = (Node) pair.getValue();
-
-					int letter = (int) pair.getKey();
-
-					for (int j = 0; j < scdawg.sinks.size(); j++) {
-
-						if (scdawg.sinks.get(j) == child) { // wenn rechtsübergang auf sink
-
-							Iterator it2 = node.children_left.entrySet().iterator();
-
-							while (it2.hasNext()) {
-
-								Map.Entry pair_left = (Map.Entry) it2.next();
-								Node child_left = (Node) pair_left.getValue();
-
-								if (child_left == child) {
-									int endpos = scdawg.get_node_length(child)
-											- scdawg.get_edge_length(letter, node, child) - 1;
-
-									if (node.start == -1)
-										continue;
-
-									if (scdawg.sinks.get(j).stringnr == u)
-										nodes_in_s1[endpos] = node;
-									if (scdawg.sinks.get(j).stringnr == u + 1) {
-
-										if (nodes_endpos_s2.containsKey(node)) {
-											if (!nodes_endpos_s2.get(node).contains(endpos)) {
-												nodes_endpos_s2.get(node).add(endpos);
-											}
-
-										} else {
-											nodes_endpos_s2.put(node, new ArrayList());
-
-											nodes_endpos_s2.get(node).add(endpos);
-
-										}
-
-									}
-
-								}
-
-							}
-
+					int endpos = scdawg.get_node_length(n2) - scdawg.get_edge_length(letter, node, n2)-1;
+					if (n2.stringnr == 0) {
+						if (!endpos_s1.contains(endpos)) {
+							endpos_s1.add(endpos);
+						}
+					} else {
+						if (!endpos_s2.contains(endpos)) {
+							endpos_s2.add(endpos);
 						}
 					}
 
 				}
+			}
 
-				// last alignment part
+			Iterator it2 = node.children_left.entrySet().iterator();
 
-				if (scdawg.get_node_label(node).endsWith("$") & !scdawg.get_node_label(node).startsWith("#")) {
+			while (it2.hasNext()) {
+				Map.Entry pair2 = (Map.Entry) it2.next();
+				Node n2 = (Node) pair2.getValue();
+				int letter = (int) pair2.getKey();
 
-					for (int j = 0; j < scdawg.sinks.size(); j++) {
+				if (n2.is_endNode) {
+					sinkshit.add(n2.stringnr);
 
-						Iterator it2 = node.children_left.entrySet().iterator();
+					// last Node with $
+					if (scdawg.get_node_label(node).endsWith("$")) {
 
-						while (it2.hasNext()) {
-
-							Map.Entry pair_left = (Map.Entry) it2.next();
-							Node child_left = (Node) pair_left.getValue();
-
-							int letter = (int) pair_left.getKey();
-
-							if (child_left == scdawg.sinks.get(j)) {
-								int endpos = scdawg.sinks.get(j).start
-										+ scdawg.get_edge_label_left(letter, node, child_left).length()
-										+ scdawg.get_node_length(node) - 1;
-
-								if (scdawg.sinks.get(j).stringnr == u)
-									nodes_in_s1[endpos] = node;
-								if (scdawg.sinks.get(j).stringnr == u + 1) {
-
-									if (nodes_endpos_s2.containsKey(node)) {
-										if (!nodes_endpos_s2.get(node).contains(endpos)) {
-											nodes_endpos_s2.get(node).add(endpos);
-										}
-
-									} else {
-										nodes_endpos_s2.put(node, new ArrayList());
-
-										nodes_endpos_s2.get(node).add(endpos);
-
-									}
-
-								}
-
+						int endpos = n2.end;
+						if (n2.stringnr == 0) {
+							if (!endpos_s1.contains(endpos)) {
+								endpos_s1.add(endpos);
 							}
-
-						} // while
-
-					} // for sinks
-
-				} // last alignment part
-
-				// first alignment part
-
-				if (scdawg.get_node_label(node).startsWith("#") & !scdawg.get_node_label(node).startsWith("$")) {
-
-					for (int j = 0; j < scdawg.sinks.size(); j++) {
-
-						Iterator it2 = node.children.entrySet().iterator();
-
-						while (it2.hasNext()) {
-
-							Map.Entry pair = (Map.Entry) it2.next();
-							Node child = (Node) pair.getValue();
-
-							int letter = (int) pair.getKey();
-
-							if (child == scdawg.sinks.get(j)) {
-								int endpos = scdawg.get_node_length(scdawg.sinks.get(j))
-										- scdawg.get_edge_length(letter, node, scdawg.sinks.get(j)) - 1;
-
-								if (scdawg.sinks.get(j).stringnr == u)
-									nodes_in_s1[endpos] = node;
-								if (scdawg.sinks.get(j).stringnr == u + 1) {
-
-									if (nodes_endpos_s2.containsKey(node)) {
-										if (!nodes_endpos_s2.get(node).contains(endpos)) {
-											nodes_endpos_s2.get(node).add(endpos);
-										}
-
-									} else {
-										nodes_endpos_s2.put(node, new ArrayList());
-
-										nodes_endpos_s2.get(node).add(endpos);
-
-									}
-
-								}
-
+						} else {
+							if (!endpos_s2.contains(endpos)) {
+								endpos_s2.add(endpos);
 							}
+						}
 
-						} // while
+					}
 
-					} // for sinks
+				}
+			}
 
-				} // first alignment part
+			if (sinkshit.size() == 2 && (endpos_s1.size() > 0 && endpos_s2.size() > 0)) {
+				result.add(new Endpos_Pair(node, endpos_s1, endpos_s2));
+			}
 
-			} // all Nodes
+			//
+			// while (it.hasNext()) {
+			// Map.Entry pair = (Map.Entry) it.next();
+			// Node child = (Node) pair.getValue();
+			//
+			// int letter = (int) pair.getKey();
+			//
+			// if (child.is_endNode) { // wenn rechtsübergang auf sink
+			//
+			// Iterator it2 = node.children_left.entrySet().iterator();
+			//
+			// while (it2.hasNext()) {
+			//
+			// Map.Entry pair_left = (Map.Entry) it2.next();
+			// Node child_left = (Node) pair_left.getValue();
+			//
+			// if (child_left == child) {
+			// int endpos = scdawg.get_node_length(child) - scdawg.get_edge_length(letter,
+			// node, child)
+			// - 1;
+			//
+			// if (node.start == -1)
+			// continue;
+			//
+			// if (child.stringnr == 0) {
+			// endpos_s1 = endpos;
+			// }
+			// if (child.stringnr == 1) {
+			//
+			// if (nodes_endpos_s2.containsKey(node)) {
+			// if (!nodes_endpos_s2.get(node).contains(endpos)) {
+			// nodes_endpos_s2.get(node).add(endpos);
+			// }
+			//
+			// } else {
+			// nodes_endpos_s2.put(node, new ArrayList());
+			//
+			// nodes_endpos_s2.get(node).add(endpos);
+			//
+			// }
+			//
+			// }
+			//
+			// }
+			//
+			// }
+			//
+			// }
+			//
+			// }
+			//
+			// if (endpos_s1 != -1) {
+			// result.add(new Endpos_Pair(node, endpos_s1, nodes_endpos_s2));
+			// endpos_s1 = -1;
+			// }
 
-			result.add(new Endpos_Pair(nodes_in_s1, nodes_endpos_s2));
+			// // last alignment part
+			//
+			// if (scdawg.get_node_label(node).endsWith("$") &
+			// !scdawg.get_node_label(node).startsWith("#")) {
+			//
+			// Iterator it2 = node.children_left.entrySet().iterator();
+			//
+			// while (it2.hasNext()) {
+			//
+			// Map.Entry pair_left = (Map.Entry) it2.next();
+			// Node child_left = (Node) pair_left.getValue();
+			//
+			// int letter = (int) pair_left.getKey();
+			//
+			// if (child_left.is_endNode) {
+			// int endpos = child_left.start + scdawg.get_edge_label_left(letter, node,
+			// child_left).length()
+			// + scdawg.get_node_length(node) - 1;
+			//
+			// if (child_left.stringnr == 0) {
+			// endpos_s1 = endpos;
+			// }
+			// if (child_left.stringnr == 1) {
+			//
+			// if (nodes_endpos_s2.containsKey(node)) {
+			// if (!nodes_endpos_s2.get(node).contains(endpos)) {
+			// nodes_endpos_s2.get(node).add(endpos);
+			// }
+			//
+			// } else {
+			// nodes_endpos_s2.put(node, new ArrayList());
+			//
+			// nodes_endpos_s2.get(node).add(endpos);
+			//
+			// }
+			//
+			// }
+			//
+			// }
+			//
+			// } // while
+			//
+			// } // last alignment part
+			//
+			// if (endpos_s1 != -1) {
+			// result.add(new Endpos_Pair(node, endpos_s1, nodes_endpos_s2));
+			// endpos_s1 = -1;
+			// }
+			//
+			// // first alignment part
+			//
+			// if (scdawg.get_node_label(node).startsWith("#") &
+			// !scdawg.get_node_label(node).startsWith("$")) {
+			//
+			// Iterator it2 = node.children.entrySet().iterator();
+			//
+			// while (it2.hasNext()) {
+			//
+			// Map.Entry pair = (Map.Entry) it2.next();
+			// Node child = (Node) pair.getValue();
+			//
+			// int letter = (int) pair.getKey();
+			//
+			// if (child.is_endNode) {
+			// int endpos = scdawg.get_node_length(child) - scdawg.get_edge_length(letter,
+			// node, child) - 1;
+			//
+			// if (child.stringnr == 0)
+			// endpos_s1 = endpos;
+			// if (child.stringnr == 1) {
+			//
+			// if (nodes_endpos_s2.containsKey(node)) {
+			// if (!nodes_endpos_s2.get(node).contains(endpos)) {
+			// nodes_endpos_s2.get(node).add(endpos);
+			// }
+			//
+			// } else {
+			// nodes_endpos_s2.put(node, new ArrayList());
+			//
+			// nodes_endpos_s2.get(node).add(endpos);
+			//
+			// }
+			//
+			// }
+			//
+			// }
 
-		} // for u
+			// } // while
+
+			// } // first alignment part
+
+			// if (endpos_s1 != -1) {
+			// result.add(new Endpos_Pair(node, endpos_s1, nodes_endpos_s2));
+			// endpos_s1 = -1;
+			// }
+
+		} // all Nodes
 
 		return result;
 
@@ -389,7 +451,7 @@ public class Common_SCDAWG_Functions {
 
 			public void visit(Node n) {
 
-				System.out.println("Node " + scdawg.get_node_label(n));
+				// System.out.println("Node " + scdawg.get_node_label(n));
 
 				if (n.is_endNode) {
 					marked_nodes[n.id] = n.stringnr;
@@ -397,7 +459,6 @@ public class Common_SCDAWG_Functions {
 				}
 
 				int k = -2;
-				ArrayList sinkshit = new ArrayList();
 
 				Iterator it2 = n.children.entrySet().iterator();
 
@@ -439,10 +500,11 @@ public class Common_SCDAWG_Functions {
 			Node n = scdawg.all_nodes.get(i);
 			System.out.println(scdawg.get_node_label(n) + " " + marked_nodes[n.id]);
 
-			if (scdawg.stringset.get(0).contains(scdawg.get_node_label(n))
-					&& scdawg.stringset.get(0).contains(scdawg.get_node_label(n)) && marked_nodes[n.id] != -1) {
-				System.out.println("ALRAR");
-			}
+			// if (scdawg.stringset.get(0).contains(scdawg.get_node_label(n))
+			// && scdawg.stringset.get(0).contains(scdawg.get_node_label(n)) &&
+			// marked_nodes[n.id] != -1) {
+			// System.out.println("ALARM");
+			// }
 		}
 
 		return marked_nodes;
@@ -554,11 +616,9 @@ public class Common_SCDAWG_Functions {
 	public HashMap<Node, Boolean> mark_children_of_single_occ_nodes(int[] marked_nodes) {
 
 		HashMap<Node, Boolean> result = new HashMap();
-
 		scdawg.eachNode_DFS(scdawg.root, true, false, new Online_CDAWG_sym.Visitor() {
 
 			public void visit(Node n) {
-
 				if (n.is_endNode) {
 					return;
 				}
@@ -572,22 +632,31 @@ public class Common_SCDAWG_Functions {
 					Map.Entry pair2 = (Map.Entry) it2.next();
 					Node n2 = (Node) pair2.getValue();
 
-					result.put(n2, true);
+					if (marked_nodes[n2.id] > -1)
+						result.put(n2, true);
+					if (scdawg.get_node_label(n2).equals(" gott")) {
+						System.out.println("cxx " + scdawg.get_node_label(n));
+						System.out.println(marked_nodes[-1]);
+					}
 
 				}
 
-				it2 = n.children_left.entrySet().iterator();
+				Iterator it3 = n.children_left.entrySet().iterator();
 
-				while (it2.hasNext()) {
-					Map.Entry pair2 = (Map.Entry) it2.next();
-					Node n2 = (Node) pair2.getValue();
+				while (it3.hasNext()) {
+					Map.Entry pair3 = (Map.Entry) it3.next();
+					Node n3 = (Node) pair3.getValue();
 
-					result.put(n2, true);
+					if (marked_nodes[n3.id] > -1)
+						result.put(n3, true);
+					if (scdawg.get_node_label(n3).equals(" gott")) {
+						System.out.println("cxx " + scdawg.get_node_label(n));
+						System.out.println(marked_nodes[-1]);
+					}
 
 				}
 
 			}
-
 		});
 
 		// for (Node sink : scdawg.sinks){
@@ -624,9 +693,10 @@ public class Common_SCDAWG_Functions {
 	 *            Result from get_string_occurences()
 	 **********************************************************************************/
 
-	public ArrayList<Node> get_quasiminimal_nodes() {
+	public HashMap<Node, Integer> get_quasiminimal_nodes() {
 
-		ArrayList<Node> result = new ArrayList<Node>();
+		HashMap<Node, Integer> result = new HashMap<Node, Integer>();
+		ArrayList<Node> quasiminimal_nodes = new ArrayList<Node>();
 
 		int[] marked_nodes = this.get_string_occurences();
 		HashMap<Node, Boolean> marked_nodes2 = this.mark_children_of_single_occ_nodes(marked_nodes);
@@ -642,25 +712,25 @@ public class Common_SCDAWG_Functions {
 				if (marked_nodes[n.id] == -1)
 					return;
 
-				if (marked_nodes2.containsKey(n))
+				if (marked_nodes2.containsKey(n)) {
 					if (marked_nodes2.get(n))
 						return;
-
-				result.add(n);
-
+				} else {
+					quasiminimal_nodes.add(n);
+				}
 			}
 
 		});
 
 		HashMap<Node, Integer> right_edges_count = this.count_quasiminimal_nodes(marked_nodes);
 
-		System.out.println("QUASIMINIMAL Size " + result.size());
+		System.out.println("QUASIMINIMAL Size " + quasiminimal_nodes.size());
 
-		for (Node n : result) {
+		for (Node n : quasiminimal_nodes) {
 
 			Iterator it2 = n.children.entrySet().iterator();
 
-			System.out.println(scdawg.get_node_label(n) + "->" + right_edges_count.get(n));
+			result.put(n, right_edges_count.get(n));
 		}
 
 		return result;
@@ -712,20 +782,20 @@ public class Common_SCDAWG_Functions {
 
 		});
 
-		System.out.println("-----------------------------------------------------------------------");
-
-		System.out.println("COUNT");
-
-		Iterator it2 = result.entrySet().iterator();
-
-		while (it2.hasNext()) {
-			Map.Entry pair = (Map.Entry) it2.next();
-			Node n = (Node) pair.getKey();
-			Integer count = (Integer) pair.getValue();
-
-			System.out.println(count + " " + scdawg.get_node_label(n));
-
-		}
+		// System.out.println("-----------------------------------------------------------------------");
+		//
+		// System.out.println("COUNT");
+		//
+		// Iterator it2 = result.entrySet().iterator();
+		//
+		// while (it2.hasNext()) {
+		// Map.Entry pair = (Map.Entry) it2.next();
+		// Node n = (Node) pair.getKey();
+		// Integer count = (Integer) pair.getValue();
+		//
+		// System.out.println(count + " " + scdawg.get_node_label(n));
+		//
+		// }
 
 		return result;
 	}

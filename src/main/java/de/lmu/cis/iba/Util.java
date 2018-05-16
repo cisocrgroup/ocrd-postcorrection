@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,7 +36,6 @@ public class Util {
 
 	public static HashMap sortByValues(HashMap map, String mode) {
 		List list = new LinkedList(map.entrySet());
-		// Defined Custom Comparator here
 
 		if (mode.equals("ASC")) {
 
@@ -59,8 +57,7 @@ public class Util {
 
 		}
 
-		// Here I am copying the sorted list in HashMap
-		// using LinkedHashMap to preserve the insertion order
+		
 		HashMap sortedHashMap = new LinkedHashMap();
 		for (Iterator it = list.iterator(); it.hasNext();) {
 			Map.Entry entry = (Map.Entry) it.next();
@@ -68,16 +65,16 @@ public class Util {
 		}
 		return sortedHashMap;
 	}
-	
-	public static HashMap sortByNodeLength(HashMap map, String mode,Online_CDAWG_sym scdawg) {
+
+	public static HashMap sortByNodeLength(HashMap map, String mode, Online_CDAWG_sym scdawg) {
 		List list = new LinkedList(map.entrySet());
-		// Defined Custom Comparator here
 
 		if (mode.equals("ASC")) {
 
 			Collections.sort(list, new Comparator() {
 				public int compare(Object o1, Object o2) {
-					return ((Comparable) scdawg.get_node_label((Node) ((Map.Entry) (o1)).getKey()).length()).compareTo(scdawg.get_node_label((Node) ((Map.Entry) (o2)).getKey()).length());
+					return ((Comparable) scdawg.get_node_label((Node) ((Map.Entry) (o1)).getKey()).length())
+							.compareTo(scdawg.get_node_label((Node) ((Map.Entry) (o2)).getKey()).length());
 				}
 			});
 
@@ -87,14 +84,14 @@ public class Util {
 
 			Collections.sort(list, new Comparator() {
 				public int compare(Object o2, Object o1) {
-					return ((Comparable) scdawg.get_node_label((Node) ((Map.Entry) (o1)).getKey()).length()).compareTo(scdawg.get_node_label((Node) ((Map.Entry) (o2)).getKey()).length());
+					return ((Comparable) scdawg.get_node_label((Node) ((Map.Entry) (o1)).getKey()).length())
+							.compareTo(scdawg.get_node_label((Node) ((Map.Entry) (o2)).getKey()).length());
 				}
 			});
 
 		}
 
-		// Here I am copying the sorted list in HashMap
-		// using LinkedHashMap to preserve the insertion order
+
 		HashMap sortedHashMap = new LinkedHashMap();
 		for (Iterator it = list.iterator(); it.hasNext();) {
 			Map.Entry entry = (Map.Entry) it.next();
@@ -104,26 +101,41 @@ public class Util {
 	}
 	
 	
-	public static <K extends Comparable, V> Map<K,V> sortByKeys(Map<K,V> map) {
-	    return new TreeMap<>(map);
+	public static ArrayList<Endpos_Pair> sortEndposPair(ArrayList<Endpos_Pair> pairs, String mode, Online_CDAWG_sym scdawg) {
+
+		Collections.sort(pairs, new Comparator<Endpos_Pair>() {	  
+			@Override
+			public int compare(Endpos_Pair o1, Endpos_Pair o2) {
+		        return o1.endpos_s1.get(0).compareTo(o2.endpos_s1.get(0));
+
+			}
+		});
+
+		return pairs;
 	}
 	
 
-	
+	public static <K extends Comparable, V> Map<K, V> sortByKeys(Map<K, V> map) {
+		return new TreeMap<>(map);
+	}
 
 	public static ArrayList readInputFile(String filename) throws IOException {
 
 		ArrayList result = new ArrayList();
 
-		BufferedReader br = new BufferedReader(
-				new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8));
+		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF8"));
+
 		try {
 			File f = new File(filename);
-			byte[] fileBytes = readBytes(f);
+			// byte[] fileBytes = readBytes(f);
 
-			String str = new String(fileBytes, StandardCharsets.UTF_8);
+			// String str = new String(fileBytes, StandardCharsets.UTF_8);
+			String str = "";
+			String strarray[] = null;
+			while ((str = br.readLine()) != null) {
+				strarray = str.split("\\r?\\n");
 
-			String strarray[] = str.split("\\r?\\n");
+			}
 
 			for (int i = strarray.length - 1; i >= 0; i--) {
 				result.add("#" + strarray[i].trim() + "$");

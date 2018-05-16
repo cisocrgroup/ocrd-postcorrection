@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.align;
 
-import de.lmu.cis.iba.Pairwise_LCS_Alignment;
-import de.lmu.cis.iba.Pairwise_LCS_Alignment.AlignmentPair;
+import de.lmu.cis.iba.LCS_Alignment_Pairwise;
+import de.lmu.cis.iba.LCS_Alignment_Pairwise.AlignmentPair;
 import org.pmw.tinylog.Logger;
 
 import java.util.ArrayList;
@@ -12,14 +12,14 @@ public class Graph {
 
 	private Node start;
 
-	public Graph(Pairwise_LCS_Alignment algn, String a, String b) {
+	public Graph(LCS_Alignment_Pairwise algn, String a, String b) {
 		s1 = a;
 		s2 = b;
 		build(algn.getAligmentPairs());
 	}
 
 	public Graph(String a, String b) {
-		Pairwise_LCS_Alignment algn = new Pairwise_LCS_Alignment(a, b);
+		LCS_Alignment_Pairwise algn = new LCS_Alignment_Pairwise(a, b);
 		algn.align();
 		s1 = a;
 		s2 = b;

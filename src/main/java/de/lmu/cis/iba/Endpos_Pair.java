@@ -1,15 +1,20 @@
 package de.lmu.cis.iba;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Endpos_Pair {
-  public Node[] nodes_in_s1;
-  public HashMap<Node, ArrayList> nodes_endpos_s2 = new HashMap();
 
-  public Endpos_Pair(Node[] nodes_in_s1,
-                     HashMap<Node, ArrayList> nodes_endpos_s2) {
-    this.nodes_in_s1 = nodes_in_s1;
-    this.nodes_endpos_s2 = nodes_endpos_s2;
-  }
+	public Node node;
+	public ArrayList<Integer> endpos_s2 = new ArrayList<Integer>();
+	public ArrayList<Integer> endpos_s1 = new ArrayList<Integer>();
+
+	public Endpos_Pair(Node node, ArrayList endpos_s1, ArrayList endpos_s2) {
+		this.endpos_s1 = endpos_s1;
+		this.endpos_s2 = endpos_s2;
+
+		this.node = node;
+	}
+	
+	
+
 }

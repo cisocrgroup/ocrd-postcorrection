@@ -61,10 +61,10 @@ class Main {
 					throw new Exception("no master ocr");
 				}
 				for (OCRLine line : other) {
-					Pairwise_LCS_Alignment alignment = new Pairwise_LCS_Alignment(mocr.line.getNormalized(),
+					LCS_Alignment_Pairwise alignment = new LCS_Alignment_Pairwise(mocr.line.getNormalized(),
 							line.line.getNormalized());
 					alignment.align();
-					ArrayList<Pairwise_LCS_Alignment.AlignmentPair> as = alignment.getAligmentPairs();
+					ArrayList<LCS_Alignment_Pairwise.AlignmentPair> as = alignment.getAligmentPairs();
 					System.out.println(new Gson().toJson(as));
 					if (as.size() > 2) {
 						new Graph(alignment, mocr.line.getNormalized(), line.line.getNormalized());
