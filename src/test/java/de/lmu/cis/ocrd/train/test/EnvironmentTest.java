@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.train.test;
 
+import de.lmu.cis.ocrd.archive.Entry;
+import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.GTFeature;
 import de.lmu.cis.ocrd.ml.features.ScreamCaseFeature;
@@ -12,6 +14,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -149,6 +152,33 @@ public class EnvironmentTest {
             Files.delete(Paths.get("src/test/resources/test.zip"));
         }
     }
+
+    @Test
+    public void testZIPContent() throws Exception {
+        final String abbyy = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
+        final String tess = "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
+        final String ocropus = "src/test/resources/1841-DieGrenzboten-ocropus-small.zip";
+        environment
+                .withCopyTrainingFiles(true)
+                .withGT(abbyy)
+                .withMasterOCR(tess)
+                .addOtherOCR(ocropus)
+                .withDynamicLexiconFeatureSet(new FeatureSet().add(new GTFeature()));
+        final Path zip = Paths.get("src","test","resources","test.zip");
+        environment.zipTo(zip);
+        assertThat(Files.exists(zip), is(true));
+        try (ZipArchive ar = new ZipArchive(zip.toString())) {
+            int n = 0;
+            for (Entry e : ar) {
+                n++;
+            }
+            // 3 (training files) + 1 (configuration file) + 1 (serialization file) = 5
+            assertThat(n, is(5));
+        } finally {
+            Files.delete(zip);
+        }
+    }
+
 
     @After
     public void deInit() throws IOException {

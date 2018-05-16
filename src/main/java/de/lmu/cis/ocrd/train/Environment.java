@@ -161,10 +161,13 @@ public class Environment {
         c.masterOCR = masterOCR.toString();
         c.dynamicLexiconFeatureSet = getDynamicLexiconFeatureSet().toString();
         c.dynamicLexiconTrainingFiles = new String[1+otherOCR.size()];
+        c.dynamicLexiconEvaluationFiles= new String[1+otherOCR.size()];
         c.dynamicLexiconTrainingFiles[0] = getDynamicLexiconTrainingFile(1).toString();
+        c.dynamicLexiconEvaluationFiles[0] = getDynamicLexiconEvaluationFile(1).toString();
         c.otherOCR = new String[otherOCR.size()];
         for (int i = 0; i < otherOCR.size(); i++) {
             c.dynamicLexiconTrainingFiles[i+1] = getDynamicLexiconTrainingFile(i+2).toString();
+            c.dynamicLexiconEvaluationFiles[i+1] = getDynamicLexiconEvaluationFile(i+2).toString();
             c.otherOCR[i] = otherOCR.get(i).toString();
         }
         c.copyTrainingFiles = this.copyTrainingFiles;
@@ -221,6 +224,7 @@ public class Environment {
         writeConfiguration();
         try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip.toFile()))) {
             eachFile((p)-> putZIPEntry(out, fullPath(p), p.toString()));
+            out.finish();
         }
     }
 
@@ -248,6 +252,7 @@ public class Environment {
         applyIfFileExists(f, Paths.get(configuration.dynamicLexiconFeatureSet));
         for (int i = 0; i < configuration.dynamicLexiconTrainingFiles.length; i++) {
             applyIfFileExists(f, Paths.get(configuration.dynamicLexiconTrainingFiles[i]));
+            applyIfFileExists(f, Paths.get(configuration.dynamicLexiconEvaluationFiles[i]));
         }
         if (configuration.copyTrainingFiles) {
             applyIfFileExists(f, Paths.get(configuration.masterOCR));
@@ -258,8 +263,8 @@ public class Environment {
         }
     }
 
-    private static void applyIfFileExists(EachFileCallback f, Path path) throws IOException {
-        if (Files.exists(path)) {
+    private void applyIfFileExists(EachFileCallback f, Path path) throws IOException {
+        if (Files.exists(fullPath(path))) {
             f.apply(path);
         }
     }
