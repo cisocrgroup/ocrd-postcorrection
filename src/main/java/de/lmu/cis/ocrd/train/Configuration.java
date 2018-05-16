@@ -12,7 +12,10 @@ import java.nio.file.Path;
 // Data class for the configuration of the training environment.
 public class Configuration {
     public String gt, masterOCR, dynamicLexiconFeatureSet, configuration;
-    public String[] otherOCR, dynamicLexiconTrainingFiles, dynamicLexiconEvaluationFiles;
+    public String[] otherOCR;
+    public String[] dynamicLexiconTrainingFiles;
+    public String[] dynamicLexiconEvaluationFiles;
+    String[] dynamicLexiconModelFiles;
     public boolean copyTrainingFiles, debugTokenAlignment;
 
     static Configuration fromJSON(Path path) throws IOException {

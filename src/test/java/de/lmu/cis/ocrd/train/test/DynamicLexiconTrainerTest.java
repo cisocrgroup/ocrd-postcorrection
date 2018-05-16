@@ -38,13 +38,16 @@ public class DynamicLexiconTrainerTest {
     @Test
     public void testTrainEvalSplit() throws Exception {
         DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment, fs).withSplitFraction(2);
-        trainer.train();
+        trainer.run();
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(1))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(2))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(3))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(1))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(2))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(3))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(1))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(2))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(3))), is(true));
         // environment.zipTo(Paths.get("src", "test", "resources", "test.zip"));
     }
 

@@ -9,10 +9,7 @@ import weka.classifiers.functions.Logistic;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.nio.file.Path;
 
 public class DynamicLexiconTrainer {
@@ -38,12 +35,26 @@ public class DynamicLexiconTrainer {
         return this;
     }
 
-    public void train() throws Exception {
-        eachN(this::writeARFFiles);
-        eachN(this::trainModels);
+    public DynamicLexiconTrainer run() throws Exception {
+        return prepare().train().evaluate();
     }
 
-    private void writeARFFiles(int n) throws Exception {
+    DynamicLexiconTrainer prepare() throws Exception {
+        eachN(this::prepare);
+        return this;
+    }
+
+    public DynamicLexiconTrainer train() throws Exception {
+        eachN(this::train);
+        return this;
+    }
+
+    public DynamicLexiconTrainer evaluate() throws Exception {
+        eachN(this::evaluate);
+        return this;
+    }
+
+    private void prepare(int n) throws Exception {
         final Path trainPath = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
         final Path evalPath = environment.fullPath(environment.getDynamicLexiconEvaluationFile(n));
         try (final Writer trainWriter = new BufferedWriter(new FileWriter(trainPath.toFile()));
@@ -69,10 +80,20 @@ public class DynamicLexiconTrainer {
         }
     }
 
-    private void trainModels(int n) throws Exception {
-        final Instances train = new ConverterUtils.DataSource(environment.fullPath(environment.getDynamicLexiconTrainingFile(n)).toString()).getDataSet();
+    private void train(int n) throws Exception {
+        final Path trainingFile = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
+        final Instances train = new ConverterUtils.DataSource(trainingFile.toString()).getDataSet();
         train.setClassIndex(train.numAttributes() - 1);
         classifier.buildClassifier(train);
+        final Path modelFile = environment.fullPath(environment.getDynamicLexiconModel(n));
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(modelFile.toFile()))) {
+            out.writeObject(classifier);
+            out.flush();
+        }
+    }
+
+    private void evaluate(int n) {
+
     }
 
     private interface EachNCallback {
