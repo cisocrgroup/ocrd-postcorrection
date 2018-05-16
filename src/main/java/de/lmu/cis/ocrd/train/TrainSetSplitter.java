@@ -8,11 +8,11 @@ public class TrainSetSplitter {
     }
     private final int n;
 
-    TrainSetSplitter(int n) {
+    public TrainSetSplitter(int n) {
         this.n = n;
     }
 
-    void eachToken(Tokenizer t, Visitor v) throws Exception {
+    public void eachToken(Tokenizer t, Visitor v) throws Exception {
         Counter c = new Counter(n);
         t.eachToken((token)->{
             c.inc(token);

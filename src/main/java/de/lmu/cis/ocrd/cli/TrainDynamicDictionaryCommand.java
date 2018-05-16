@@ -84,8 +84,9 @@ public class TrainDynamicDictionaryCommand implements Command {
                 for (TokenAlignment.Token token : tokenAlignment) {
                     Optional<Word> masterToken = master.getWord(offset, token.getMaster());
                     assert masterToken.isPresent();
+                    final int tokenID = offset;
                     offset += token.getMaster().length();
-                    tokens.add(new Token(masterToken.get()).withGT(token.getAlignment(0)));
+                    tokens.add(new Token(masterToken.get(), tokenID).withGT(token.getAlignment(0)));
                 }
             }
         });

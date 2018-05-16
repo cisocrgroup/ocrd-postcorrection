@@ -9,15 +9,21 @@ import java.util.Optional;
 // TODO: Merge with Alignment.Token
 public class Token {
     private final Word masterOCR;
+    private final int id;
     private String gt;
     private ArrayList<Word> otherOCR;
 
-    public static Token create(String str) {
-        return new Token(Word.create(str));
+    public static Token create(String str, int id) {
+        return new Token(Word.create(str), id);
     }
-    public Token(Word masterOCR) {
+    public Token(Word masterOCR, int id) {
         assert masterOCR != null;
         this.masterOCR = masterOCR;
+        this.id = id;
+    }
+
+    public int getID() {
+        return id;
     }
 
     public Token withGT(List<String> gtTokens) {

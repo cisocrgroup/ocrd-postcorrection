@@ -34,14 +34,14 @@ public class ARFFWriterTest {
     @Before
     public void init() throws Exception {
         FeatureSet fs = new FeatureSet()
-        .add(new MockFeature("a", 1))
-        .add(new MockFeature("b", 2));
+            .add(new MockFeature("a", 1))
+            .add(new MockFeature("b", 2));
         StringWriter str = new StringWriter();
         ARFFWriter arff = ARFFWriter.fromFeatureSet(fs).withRelation("test").withWriter(str);
         arff.writeHeader(1);
-        arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("a")));
-        arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("aa")));
-        arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("aaa")));
+        arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("a", 1)));
+        arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("aa", 2)));
+        arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("aaa", 3)));
         // System.out.println(str.toString());
         this.is = new DataSource(IOUtils.toInputStream(str.toString(), Charset.defaultCharset())).getDataSet();
     }

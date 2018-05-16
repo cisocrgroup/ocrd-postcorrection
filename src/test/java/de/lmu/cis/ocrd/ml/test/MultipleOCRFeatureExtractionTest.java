@@ -69,6 +69,7 @@ public class MultipleOCRFeatureExtractionTest {
                 int offset = 0;
                 int offset2 = 0;
                 int offset3 = 0;
+                int tokenID = 0;
                 for (TokenAlignment.Token token : tokenAlignment) {
                     final Optional<Word> masterWord = master.getWord(offset, token.getMaster());
                     final Optional<Word> add1Word = add1Line.getWord(offset2, token.getAlignment(1));
@@ -79,7 +80,7 @@ public class MultipleOCRFeatureExtractionTest {
                     offset2 += add1Word.get().toString().length();
                     assertThat(add2Word.isPresent(), is(true));
                     offset3 += add2Word.get().toString().length();
-                    tokens.add(new Token(masterWord.get()).withGT(token.getAlignment(0)).addOCR(add1Word.get()).addOCR(add2Word.get()));
+                    tokens.add(new Token(masterWord.get(), ++tokenID).withGT(token.getAlignment(0)).addOCR(add1Word.get()).addOCR(add2Word.get()));
                 }
             }
         });

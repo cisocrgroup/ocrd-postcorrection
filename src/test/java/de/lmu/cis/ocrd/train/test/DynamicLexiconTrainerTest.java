@@ -45,6 +45,7 @@ public class DynamicLexiconTrainerTest {
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(1))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(2))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(3))), is(true));
+        // environment.zipTo(Paths.get("src", "test", "resources", "test.zip"));
     }
 
     @After
