@@ -20,9 +20,9 @@ public class FileTypes {
     }
 
     // order of types is used to breaks ties:
-    // PAGEXML is preferred, then ALTOXML ...
+    // PAGE_XML is preferred, then ALTO_XML ...
     public enum OCRType {
-        PAGEXML, ALTOXML, ABBYY, OCROPUS_LLOCS, OCROPUS_GT, OCROPUS, HOCR
+        PAGE_XML, ALTO_XML, ABBYY_XML, OCROPUS_LLOCS, OCROPUS_GT, OCROPUS, HOCR, TEXT,
     }
 
     public static class Type {
@@ -58,7 +58,7 @@ public class FileTypes {
     public static Type guess(ArchiveType archiveType, String path) throws Exception {
         try (final Archive ar = newArchive(archiveType, path)) {
             final TreeMap<OCRType, Integer> counts = new TreeMap<>(); // use ordered map to break ties
-            final Map<OCRType, XMLFileType> types = newOCRTypeMap();
+            final Map<OCRType, OCRFileType> types = newOCRTypeMap();
             for (Entry entry : ar) {
                 updateCounts(counts, types, entry);
             }
@@ -78,7 +78,7 @@ public class FileTypes {
 
     private static Type guess(ArchiveType archiveType, TreeMap<OCRType, Integer> counts) throws Exception {
         int max = -1;
-        OCRType argMax = OCRType.PAGEXML;
+        OCRType argMax = OCRType.PAGE_XML;
         for (Map.Entry<OCRType, Integer> entry : counts.entrySet()) {
             Logger.debug("{}: {}", entry.getKey(), entry.getValue());
             if (entry.getValue() > max) {
@@ -92,9 +92,9 @@ public class FileTypes {
         return new Type(archiveType, argMax);
     }
 
-    private static void updateCounts(Map<OCRType, Integer> counts, Map<OCRType, XMLFileType> types, Entry entry) {
-        for (Map.Entry<OCRType, XMLFileType> type : types.entrySet()) {
-            if (type.getValue().check(entry.getName().toString())) {
+    private static void updateCounts(Map<OCRType, Integer> counts, Map<OCRType, OCRFileType> types, Entry entry) {
+        for (Map.Entry<OCRType, OCRFileType> type : types.entrySet()) {
+            if (type.getValue().check(entry.getName())) {
                 Logger.debug("found file {} of type {}", entry.getName(), type.getKey());
                 if (!counts.containsKey(type.getKey())) {
                     counts.put(type.getKey(), 0);
@@ -105,8 +105,8 @@ public class FileTypes {
         }
     }
 
-    private static Map<OCRType, XMLFileType> newOCRTypeMap() {
-        Map<OCRType, XMLFileType> map = new HashMap<>();
+    private static Map<OCRType, OCRFileType> newOCRTypeMap() {
+        Map<OCRType, OCRFileType> map = new HashMap<>();
         for (OCRType t : OCRType.values()) {
             map.put(t, newXMLFileType(t));
         }
@@ -121,6 +121,8 @@ public class FileTypes {
                 return new OcropusArchiveParser(ar);
             case OCROPUS_GT:
                 return new OcropusArchiveGTParser(ar);
+            case TEXT:
+                return new TextArchiveParser(ar, new TextFileType());
         }
         final OCRType ocrType = type.getOCRType();
         return new ArchiveParser(newXMLParserFactory(ocrType), newXMLFileType(ocrType), ar);
@@ -128,11 +130,11 @@ public class FileTypes {
 
     public static XMLParserFactory newXMLParserFactory(OCRType ocrType) throws Exception {
         switch (ocrType) {
-            case PAGEXML:
+            case PAGE_XML:
                 return new PageXMLParserFactory();
-            case ALTOXML:
+            case ALTO_XML:
                 return new ALTOXMLParserFactory();
-            case ABBYY:
+            case ABBYY_XML:
                 return new ABBYYXMLParserFactory();
             case HOCR:
                 return new HOCRParserFactory();
@@ -140,13 +142,13 @@ public class FileTypes {
         throw new Exception("invalid OCR type: " + ocrType);
     }
 
-    public static XMLFileType newXMLFileType(OCRType ocrType) {
+    public static OCRFileType newXMLFileType(OCRType ocrType) {
         switch (ocrType) {
-            case PAGEXML:
+            case PAGE_XML:
                 return new PageXMLFileType();
-            case ALTOXML:
+            case ALTO_XML:
                 return new ALTOXMLFileType();
-            case ABBYY:
+            case ABBYY_XML:
                 return new ABBYYXMLFileType();
             case OCROPUS_LLOCS:
                 return new OcropusLlocsFileType();
@@ -156,6 +158,8 @@ public class FileTypes {
                 return new OcropusFileType();
             case HOCR:
                 return new HOCRFileType();
+            case TEXT:
+                return new TextFileType();
         }
         throw new RuntimeException("non-exhaustive switch");
     }

@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.ml.features;
 import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.Token;
 
-public class TokenLengthFeature extends NamedBooleanMasterOCRFeature {
+public class TokenLengthFeature extends NamedBooleanFeature {
     private final int min, max;
 
     public TokenLengthFeature(JsonObject o, ArgumentFactory args) {
@@ -27,8 +27,13 @@ public class TokenLengthFeature extends NamedBooleanMasterOCRFeature {
     }
 
     @Override
-    protected final boolean doCalculate(Token token) {
-        final int n = token.getMasterOCR().toString().length();
-        return n>=min && n <= max;
+    public boolean handlesOCR(int i, int n) {
+        return handlesOnlyMasterOCR(i, n);
+    }
+
+    @Override
+    protected final boolean doCalculate(Token token, int i, int n) {
+        final int len = token.getMasterOCR().toString().length();
+        return len>=min && len <= max;
     }
 }

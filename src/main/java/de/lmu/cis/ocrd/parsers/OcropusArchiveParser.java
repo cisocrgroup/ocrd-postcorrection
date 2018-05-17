@@ -30,15 +30,15 @@ public class OcropusArchiveParser implements Parser {
 		});
 	}
 
-	private final XMLFileType filetype;
+	private final OCRFileType ocrFileType;
 	private final Archive ar;
 
 	public OcropusArchiveParser(Archive ar) {
 	    this(ar, new OcropusFileType());
 	}
 
-	protected OcropusArchiveParser(Archive ar, XMLFileType filetype) {
-	    this.filetype = filetype;
+	OcropusArchiveParser(Archive ar, OCRFileType filetype) {
+	    this.ocrFileType = filetype;
 	    this.ar = ar;
     }
 
@@ -47,7 +47,7 @@ public class OcropusArchiveParser implements Parser {
 		// gather valid `.txt` files
 		ArrayList<Entry> entries = new ArrayList<>();
 		for (Entry entry : this.ar) {
-			if (!filetype.check(entry.getName().toString())) {
+			if (!ocrFileType.check(entry.getName())) {
 				continue;
 			}
 			entries.add(entry);
@@ -57,16 +57,17 @@ public class OcropusArchiveParser implements Parser {
 		SimpleDocument doc = new SimpleDocument().withPath(ar.getName().toString());
 		HashMap<Integer, Integer> lineIDs = new HashMap<>();
 		for (Entry entry : entries) {
-			int pageno = Integer.parseInt(entry.getName().getParent().getFileName().toString());
-			if (!lineIDs.containsKey(pageno)) {
-				lineIDs.put(pageno, 0);
+			int pageID = Integer.parseInt(entry.getName().getParent().getFileName().toString());
+			if (!lineIDs.containsKey(pageID)) {
+				lineIDs.put(pageID, 0);
 			}
-			final int lid = lineIDs.get(pageno) + 1;
+			final int lid = lineIDs.get(pageID) + 1;
 			try (InputStream is = ar.open(entry)) {
-			    doc.add(pageno, readLine(is, pageno, lid));
+			    doc.add(pageID, readLine(is, pageID, lid));
             }
-			lineIDs.put(pageno, lid);
+			lineIDs.put(pageID, lid);
 		}
+		ar.close();
 		return doc;
 	}
 }

@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.align;
 
 public class Tokenizer {
 	public interface Visitor {
-		public void visit(String a, String b, boolean anew, boolean bnew);
+		void visit(String a, String b, boolean anew, boolean bnew);
 	}
 
 	private final Alignment a;
@@ -50,6 +50,10 @@ public class Tokenizer {
 	}
 
 	private int nextToken(int i, int id, StringBuilder s) {
+	    // for (Alignment.Tuple t : a) {
+	    //     System.out.printf("(%c %c %b)\n", t.get(0), t.get(1), t.isAligned());
+        // }
+		// System.out.println("i = " + i + " id = " + id);
 		assert (a.get(i).isEndOfToken(id));
 		for (i++; i < a.size(); i++) {
 			Alignment.Tuple tuple = a.get(i);

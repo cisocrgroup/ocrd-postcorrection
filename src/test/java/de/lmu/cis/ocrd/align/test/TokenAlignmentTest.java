@@ -65,4 +65,20 @@ public class TokenAlignmentTest {
 		assertThat(tokens.get(3).toString(), is("ALONGTOKEN|alongtoken|alongtoken|alongtoken"));
 		assertThat(tokens.get(4).toString(), is("anotherevenlongertoken|anotherevenlongertoken|anotherevnlongertkn|anotherevnlongertkn"));
 	}
+
+	@Test
+	public void testBug3() {
+        TokenAlignment tokens;
+		final String a = "geſgenen eentraliſirten Volkes fragt die alten Städte Gent Briggr";
+		final String b = "gesogenen centralisirtenVollesz fragt die alten Städte Gent Brügge";
+        final String c = "gesogcnen centralisirten Volkes fragt die alten Städte Gent Brügge";
+        tokens = new TokenAlignment(a).add(b);
+        assertThat(tokens.size(), is (9));
+        tokens = new TokenAlignment(a).add(c);
+		assertThat(tokens.size(), is(9));
+        tokens = new TokenAlignment(a).add(b).add(c);
+        assertThat(tokens.size(), is(9));
+        tokens = new TokenAlignment(a).add(c).add(b);
+        assertThat(tokens.size(), is(9));
+	}
 }

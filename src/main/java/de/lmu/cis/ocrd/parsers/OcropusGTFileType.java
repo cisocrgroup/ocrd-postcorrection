@@ -1,8 +1,15 @@
 package de.lmu.cis.ocrd.parsers;
 
-public class OcropusGTFileType implements XMLFileType {
+import java.nio.file.Path;
+import java.util.regex.Matcher;
+
+public class OcropusGTFileType implements OCRFileType {
 	@Override
-	public boolean check(String name) {
-			return name.endsWith(".gt.txt");
+	public boolean check(Path path) {
+		final Matcher m = OcropusFileType.pattern.matcher(path.getParent().getFileName().toString());
+		if (m.matches()) {
+		    return path.toString().toLowerCase().endsWith(".gt.txt");
+		}
+		return false;
 	}
 }

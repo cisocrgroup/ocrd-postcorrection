@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.Token;
 
-public class UnigramFeature extends NamedMasterOCRFeature {
+public class UnigramFeature extends NamedDoubleFeature {
     private final FreqMap<String> unigrams;
 
     public UnigramFeature(JsonObject o, ArgumentFactory args) {
@@ -17,7 +17,12 @@ public class UnigramFeature extends NamedMasterOCRFeature {
     }
 
     @Override
-    public double calculate(Token token, int ignored1, int ignored2) {
+    public boolean handlesOCR(int i, int n) {
+        return handlesOnlyLastOtherOCR(i, n);
+    }
+
+    @Override
+    public double doCalculate(Token token, int i, int n) {
         return unigrams.getRelative(token.getMasterOCR().toString());
     }
 }

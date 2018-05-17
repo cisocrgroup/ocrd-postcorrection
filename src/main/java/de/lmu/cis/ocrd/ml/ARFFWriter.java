@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.Feature;
+import de.lmu.cis.ocrd.ml.features.GTFeature;
 
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -41,7 +42,7 @@ public class ARFFWriter {
         return this;
     }
 
-    public ARFFWriter addFeature(Feature feature) {
+    private ARFFWriter addFeature(Feature feature) {
         this.features.add(feature);
         return this;
     }
@@ -54,11 +55,11 @@ public class ARFFWriter {
                 if (!feature.handlesOCR(i, n)) {
                     continue;
                 }
-                if (i > 0) {
-                    writer.printf("@ATTRIBUTE\t%s%d\tREAL\n", feature.getName(), i);
-                } else {
-                    writer.printf("@ATTRIBUTE\t%s\tREAL\n", feature.getName());
+                String attribute = String.format("%s_%d\tREAL", feature.getName(), i+1);
+                if (feature instanceof GTFeature) {
+                   attribute = String.format("class {%s,%s}", Boolean.toString(true), Boolean.toString(false));
                 }
+                writer.printf("@ATTRIBUTE\t%s\n", attribute);
             }
         }
         writer.println("@DATA");
@@ -68,17 +69,19 @@ public class ARFFWriter {
         if (!debugToken) {
             return;
         }
-        writer.printf("%% %s\n", token.toString());
+        writer.printf("%% {\"token\": \"%s\", \"pageID\"p: %d, \"lineID\": %d}\n",
+                token.toString().replaceAll("\"", "\\\""),
+                token.getMasterOCR().getLine().getPageId(), token.getMasterOCR().getLine().getLineId());
     }
 
-    public void writeFeatureVector(List<Double> features) throws Exception {
+    public void writeFeatureVector(List<Object> features) {
         boolean first = true;
-        for (Double d : features) {
+        for (Object val : features) {
             if (first) {
-                writer.print(d.toString());
+                writer.print(val.toString());
                 first = false;
             } else {
-                writer.printf(",%s", d.toString());
+                writer.printf(",%s", val.toString());
             }
         }
         writer.println();
