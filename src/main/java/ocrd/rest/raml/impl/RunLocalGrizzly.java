@@ -1,16 +1,13 @@
 
 package ocrd.rest.raml.impl;
 
-import java.net.URI;
-import java.util.Scanner;
-
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import ocrd.rest.raml.handler.ProjectsHandler;
+import java.net.URI;
 
 public class RunLocalGrizzly {
   @SuppressWarnings("resource")
@@ -22,8 +19,6 @@ public class RunLocalGrizzly {
     final ResourceConfig config = new ResourceConfig();
 
     config.register(OcrdResourceImpl.class);
-    config.register(ProjectsResourceImpl.class);
-    config.register(LanguagesResourceImpl.class);
     config.register(MultiPartFeature.class);
 
     // Define static webcontent
@@ -39,9 +34,6 @@ public class RunLocalGrizzly {
     // Disable file locking of static webcontent
     server.getListener("grizzly").getFileCache().setEnabled(false);
 
-    // System.out.println("Strike ENTER to stop...");
-    while (true) {
-    }
     // new Scanner(System.in).nextLine();
 
     // server.stop();

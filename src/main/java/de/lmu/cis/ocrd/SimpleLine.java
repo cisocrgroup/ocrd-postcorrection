@@ -1,7 +1,5 @@
 package de.lmu.cis.ocrd;
 
-import de.lmu.cis.pocoweb.Token;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -55,11 +53,6 @@ public class SimpleLine implements Line {
 	public String getNormalized() {
 		return this.line;
 	}
-
-    @Override
-    public List<Token> getTokens() {
-        return null;
-    }
 
     @Override
 	public int getPageId() {
