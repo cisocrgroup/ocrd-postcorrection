@@ -13,10 +13,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class Profile {
     // for testing and mocking
@@ -32,7 +29,21 @@ public class Profile {
 		}.getType();
         Logger.debug("profile: {}", out.toString());
 		HashMap<String, Candidates> data = gson.fromJson(out.toString(), map);
-		return new Profile(toLowerCase(data));
+        return new Profile(toLowerCase(data))
+                .removeEmptyCandidates()
+                .sortCandidatesByVoteWeight();
+    }
+
+    private Profile removeEmptyCandidates() {
+        data.entrySet().removeIf((e) -> e.getValue().Candidates == null || e.getValue().Candidates.length == 0);
+        return this;
+    }
+
+    private Profile sortCandidatesByVoteWeight() {
+        for (Map.Entry<String, Candidates> e : data.entrySet()) {
+            Arrays.sort(e.getValue().Candidates, (Candidate a, Candidate b) -> (int) (b.Weight - a.Weight));
+        }
+        return this;
 	}
 
 	public static Profile read(Path path) throws IOException {

@@ -1394,5 +1394,13 @@
         "Weight": 6.09889e-10
       }
     ]
+  },
+  "empty": {
+    "OCR": "empty",
+    "Candidates": []
+  },
+  "null": {
+    "OCR": "null",
+    "Candidates": null
   }
 }

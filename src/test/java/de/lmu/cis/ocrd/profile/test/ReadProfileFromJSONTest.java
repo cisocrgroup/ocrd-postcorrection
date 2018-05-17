@@ -1,14 +1,15 @@
 package de.lmu.cis.ocrd.profile.test;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+
+import de.lmu.cis.ocrd.profile.Candidate;
+import de.lmu.cis.ocrd.profile.Profile;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import de.lmu.cis.ocrd.profile.Profile;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ReadProfileFromJSONTest {
 	private static final String resource = "src/test/resources/profile-test.json";
@@ -64,13 +65,33 @@ public class ReadProfileFromJSONTest {
 		assertThat(profile.get("Vnheilfolles").get().Candidates.length, is(41));
 	}
 
+    @Test
+    public void testNumberOfCandidatesForFirstTokenIgnoresCase() {
+        assertThat(profile.get("vnheilfolles").get().Candidates.length, is(41));
+    }
+
 	@Test
 	public void testNumberOfCandidatesForSecondToken() {
 		assertThat(profile.get("Waſſer").get().Candidates.length, is(6));
 	}
 
+    @Test
+    public void testNumberOfCandidatesForSecondTokenIgnoresCase() {
+        assertThat(profile.get("waſſer").get().Candidates.length, is(6));
+    }
+
 	@Test
 	public void testProfileContainsTwoTypes() {
 		assertThat(profile.size(), is(2));
 	}
+
+    @Test
+    public void testCandidatesAreSortedInDescendingOrderOfVoteWeights() {
+        double prev = Double.MAX_VALUE;
+        for (Candidate candidate : profile.get("vnheilfolles").get().Candidates) {
+            assertThat(candidate.Weight <= prev, is(true));
+            prev = candidate.Weight;
+        }
+
+    }
 }
