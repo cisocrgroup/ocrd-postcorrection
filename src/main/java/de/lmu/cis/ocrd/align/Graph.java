@@ -52,6 +52,11 @@ public class Graph {
 			start = new Node('#' + s1 + '$');
 			return;
 		}
+		// System.out.println("s1: " + s1);
+        // System.out.println("s2: " + s2);
+        // for (AlignmentPair p : ps) {
+        //     System.out.println("ALIGNMENT PAIR: " + p);
+        // }
 		start = new Node(ps.get(0).label);
 		Node prevn = start;
 		AlignmentPair prevp = ps.get(0);
@@ -68,9 +73,9 @@ public class Graph {
 			prevp = curp;
 			prevn = curn;
 		}
-		for (AlignmentPair p : ps) {
-			System.out.println("ALIGNMENT PAIR: " + p);
-		}
+		System.out.println("s1:    " + s1);
+        System.out.println("s2:    " + s2);
+		System.out.println("START: " + start.toString());
 	}
 
 	private AlignmentPair handleOverlap(AlignmentPair previous, AlignmentPair current) {
@@ -80,14 +85,14 @@ public class Graph {
 		Logger.info("sub1: '{}'\nINFO: sub2: '{}'", s1.substring(previous.epos1), s2.substring(previous.epos2));
 	    Logger.info("previous: {}", previous);
         Logger.info("current:  {}", current);
-		if (previous.epos1 > current.spos1) {
-			String label = current.label.substring(previous.epos1 - current.spos1);
-			return new AlignmentPair(label, current.epos1, current.epos2);
-		}
-		if (previous.epos2 > current.spos2) {
-			String label = current.label.substring(previous.epos2 - current.spos2);
-			return new AlignmentPair(label, current.epos1, current.epos2);
-		}
+		// if (previous.epos1 > current.spos1) {
+		// 	String label = current.label.substring(previous.epos1 - current.spos1);
+		// 	return new AlignmentPair(label, current.epos1, current.epos2);
+		// }
+		// if (previous.epos2 > current.spos2) {
+		// 	String label = current.label.substring(previous.epos2 - current.spos2);
+		// 	return new AlignmentPair(label, current.epos1, current.epos2);
+		// }
 		return current;
 	}
 

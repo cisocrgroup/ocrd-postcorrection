@@ -8,6 +8,7 @@ import de.lmu.cis.ocrd.train.DynamicLexiconTrainer;
 import de.lmu.cis.ocrd.train.Environment;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.nio.file.Files;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+@Ignore
 public class DynamicLexiconTrainerTest {
     private Environment environment;
     private FeatureSet fs;
