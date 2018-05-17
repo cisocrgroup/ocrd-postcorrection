@@ -12,7 +12,7 @@ class Node implements Label {
 
 	public Node add(Gap gap) {
 		if (gaps == null) {
-			gaps = new ArrayList<Gap>();
+			gaps = new ArrayList<>();
 		}
 		gaps.add(gap);
 		return this;
@@ -36,7 +36,30 @@ class Node implements Label {
 		return gaps.get(id);
 	}
 
-	public String toDot() {
+	@Override
+    public String toString() {
+	    StringBuilder builder = new StringBuilder(getLabel());
+	    boolean first = true;
+	    if (gaps == null)  {
+	        return builder.toString();
+        }
+        builder.append('[');
+	    for (Gap gap: gaps) {
+	        if (!first) {
+	            builder.append('|');
+            }
+            builder.append(gap.getLabel());
+	        first = false;
+        }
+        builder.append(']');
+	    if (gaps.isEmpty()) {
+	        return builder.toString();
+        }
+	    builder.append(gaps.get(0).next(0).toString());
+	    return builder.toString();
+    }
+
+	String toDot() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("digraph g { // dotcode\n");
 		builder.append("rankdir=LR; // dotcode\n");
@@ -52,17 +75,17 @@ class Node implements Label {
 	}
 
 	private void appendDot(StringBuilder builder) {
-		builder.append("\"" + label + "\"");
-		builder.append(" [label=\"" + label + "\"] // dotcode\n");
+		builder.append("\"").append(label).append("\"");
+		builder.append(" [label=\"").append(label).append("\"] // dotcode\n");
 		if (gaps == null) {
 			return;
 		}
 		int id = 0;
 		for (Gap g : gaps) {
-			builder.append("\"" + label + "\"");
+			builder.append("\"").append(label).append("\"");
 			builder.append(" -> ");
-			builder.append("\"" + g.next(0).getLabel() + "\"");
-			builder.append(" [label=\"" + id + ":" + g.toString() + "\"] // dotcode\n");
+			builder.append("\"").append(g.next(0).getLabel()).append("\"");
+			builder.append(" [label=\"").append(id).append(":").append(g.toString()).append("\"] // dotcode\n");
 			++id;
 		}
 		gaps.get(0).next(0).appendDot(builder);
