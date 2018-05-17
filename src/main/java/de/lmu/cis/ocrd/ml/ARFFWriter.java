@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.GTFeature;
+import de.lmu.cis.ocrd.ml.features.NamedStringSetFeature;
 
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -57,7 +58,9 @@ public class ARFFWriter {
                 }
                 String attribute = String.format("%s_%d\tREAL", feature.getName(), i+1);
                 if (feature instanceof GTFeature) {
-                   attribute = String.format("class {%s,%s}", Boolean.toString(true), Boolean.toString(false));
+                    attribute = getAttributeOfGTFeature();
+                } else if (feature instanceof NamedStringSetFeature) {
+                    attribute = getAttributeOfNamedStringSetFeature((NamedStringSetFeature) feature);
                 }
                 writer.printf("@ATTRIBUTE\t%s\n", attribute);
             }
@@ -85,5 +88,23 @@ public class ARFFWriter {
             }
         }
         writer.println();
+    }
+
+    private String getAttributeOfGTFeature() {
+        return String.format("class {%s,%s}", Boolean.toString(true), Boolean.toString(false));
+
+    }
+
+    private String getAttributeOfNamedStringSetFeature(NamedStringSetFeature feature) {
+        StringBuilder builder = new StringBuilder("class {");
+        boolean first = true;
+        for (String s : feature.getSet()) {
+            if (!first) {
+                builder.append(',');
+            }
+            builder.append(s);
+            first = false;
+        }
+        return builder.append('}').toString();
     }
 }

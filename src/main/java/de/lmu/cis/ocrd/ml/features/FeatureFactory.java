@@ -16,7 +16,8 @@ public class FeatureFactory {
     public static FeatureFactory getDefault() {
         return new FeatureFactory()
                 .register(TokenLengthFeature.class)
-                .register(UnigramFeature.class);
+                .register(UnigramFeature.class)
+                .register(TokenLengthClassFeature.class);
     }
 
     public FeatureFactory withArgumentFactory(ArgumentFactory args) {
