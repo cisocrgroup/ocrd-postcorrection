@@ -14,7 +14,7 @@ import java.util.concurrent.FutureTask;
 class AsyncOCRUnigrams {
     private final Path path;
     private final Future<List<String>> tokens;
-    private FreqMap<String> freqMap;
+    private FreqMap freqMap;
 
     AsyncOCRUnigrams(Path path) {
         this.path = path;
@@ -25,15 +25,15 @@ class AsyncOCRUnigrams {
         return tokens.get();
     }
 
-    FreqMap<String> getFreqMap() throws Exception {
+    FreqMap getFreqMap() throws Exception {
         if (freqMap == null) {
             freqMap = makeFreqMap(getTokens());
         }
         return freqMap;
     }
 
-    private static FreqMap<String> makeFreqMap(List<String> tokens) {
-        final FreqMap<String> freqMap = new FreqMap<>();
+    private static FreqMap makeFreqMap(List<String> tokens) {
+        final FreqMap freqMap = new FreqMap();
         for (String token : tokens) {
             freqMap.add(token);
         }

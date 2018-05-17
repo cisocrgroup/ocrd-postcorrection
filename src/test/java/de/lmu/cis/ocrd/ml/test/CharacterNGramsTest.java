@@ -9,7 +9,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class CharacterNGramsTest {
-    private FreqMap<String> nGrams;
+    private FreqMap nGrams;
 
     @Before
     public void init() throws Exception {

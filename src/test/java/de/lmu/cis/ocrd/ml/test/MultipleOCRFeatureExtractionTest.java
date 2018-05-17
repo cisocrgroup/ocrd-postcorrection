@@ -33,7 +33,7 @@ public class MultipleOCRFeatureExtractionTest {
 
     @Before
     public void init() throws Exception {
-        final FreqMap<String> ngrams = CharacterNGrams.fromCSV("src/test/resources/nGrams.csv");
+        final FreqMap ngrams = CharacterNGrams.fromCSV("src/test/resources/nGrams.csv");
         fs = new FeatureSet()
                 .add(new TokenLengthFeature(3, 8, 13, "TokenLength"))
                 .add(new TokenCaseFeature("TokenCase"))

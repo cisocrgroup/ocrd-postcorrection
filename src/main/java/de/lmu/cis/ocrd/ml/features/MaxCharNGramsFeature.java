@@ -9,7 +9,8 @@ public class MaxCharNGramsFeature extends NamedCharacterNGramFeature {
     public MaxCharNGramsFeature(JsonObject o, ArgumentFactory factory) {
         this(JSONUtil.mustGetNameOrType(o), factory.getCharacterTrigrams());
     }
-    public MaxCharNGramsFeature(String name, FreqMap<String> ngrams) {
+
+    public MaxCharNGramsFeature(String name, FreqMap ngrams) {
         super(name, ngrams);
     }
 

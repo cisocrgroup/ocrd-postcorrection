@@ -10,7 +10,7 @@ public class MinCharNGramsFeature extends NamedCharacterNGramFeature {
         this(JSONUtil.mustGetNameOrType(o), factory.getCharacterTrigrams());
     }
 
-    public MinCharNGramsFeature(String name, FreqMap<String> ngrams) {
+    public MinCharNGramsFeature(String name, FreqMap ngrams) {
         super(name, ngrams);
     }
 

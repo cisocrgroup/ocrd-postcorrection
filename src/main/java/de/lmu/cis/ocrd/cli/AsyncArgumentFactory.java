@@ -30,16 +30,16 @@ public class AsyncArgumentFactory implements ArgumentFactory {
     }
 
     @Override
-    public FreqMap<String> getMasterOCRUnigrams() {
+    public FreqMap getMasterOCRUnigrams() {
         return doGetFreqMap(0);
     }
 
     @Override
-    public FreqMap<String> getOtherOCRUnigrams(int i) {
+    public FreqMap getOtherOCRUnigrams(int i) {
         return doGetFreqMap(i + 1);
     }
 
-    private FreqMap<String> doGetFreqMap(int i) {
+    private FreqMap doGetFreqMap(int i) {
         try {
             return ocrUnigrams.get(i).getFreqMap();
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class AsyncArgumentFactory implements ArgumentFactory {
     }
 
     @Override
-    public FreqMap<String> getCharacterTrigrams() {
+    public FreqMap getCharacterTrigrams() {
         try {
             return charTrigrams.getFreqMap();
         } catch (Exception e) {

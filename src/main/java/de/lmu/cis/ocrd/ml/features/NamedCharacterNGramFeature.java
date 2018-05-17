@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract class NamedCharacterNGramFeature extends NamedFeature {
-    private final FreqMap<String> ngrams;
+    private final FreqMap ngrams;
 
-    NamedCharacterNGramFeature(String name, FreqMap<String> ngrams) {
+    NamedCharacterNGramFeature(String name, FreqMap ngrams) {
         super(name);
         this.ngrams = ngrams;
     }
 
-    protected FreqMap<String> getNgrams() {
+    protected FreqMap getNgrams() {
         return ngrams;
     }
 

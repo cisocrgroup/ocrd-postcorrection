@@ -1,19 +1,18 @@
 package de.lmu.cis.ocrd.ml.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
+import de.lmu.cis.ocrd.ml.FreqMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.ml.FreqMap;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class FreqMapTest {
-	private FreqMap<String> freqs;
+	private FreqMap freqs;
 
 	@Before
 	public void init() {
-		freqs = new FreqMap<String>();
+		freqs = new FreqMap();
 		freqs.add("A");
 		freqs.add("A");
 		freqs.add("A");
@@ -23,38 +22,38 @@ public class FreqMapTest {
 	}
 
 	@Test
-	public void test0() throws Exception {
-		freqs = new FreqMap<String>();
+	public void test0() {
+		freqs = new FreqMap();
 		assertThat(freqs.getAbsolute("A"), is(0));
 		assertThat(freqs.getRelative("A"), is(0.0));
 	}
 
 	@Test
-	public void testA() throws Exception {
+	public void testA() {
 		assertThat(freqs.getAbsolute("A"), is(3));
 		assertThat(freqs.getRelative("A"), is(3.0 / 6.0));
 	}
 
 	@Test
-	public void testB() throws Exception {
+	public void testB() {
 		assertThat(freqs.getAbsolute("B"), is(2));
 		assertThat(freqs.getRelative("B"), is(2.0 / 6.0));
 	}
 
 	@Test
-	public void testC() throws Exception {
+	public void testC() {
 		assertThat(freqs.getAbsolute("C"), is(1));
 		assertThat(freqs.getRelative("C"), is(1.0 / 6.0));
 	}
 
 	@Test
-	public void testD() throws Exception {
+	public void testD() {
 		assertThat(freqs.getAbsolute("D"), is(0));
 		assertThat(freqs.getRelative("D"), is(0.0));
 	}
 
 	@Test
-	public void testTotal() throws Exception {
+	public void testTotal() {
 		assertThat(freqs.getTotal(), is(6));
 	}
 }
