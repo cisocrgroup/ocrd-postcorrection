@@ -66,7 +66,8 @@ public class LCS_Alignment_Pairwise {
 
 		Logger.debug("Calculating LCS for s1 and s2 pairs...");
 
-		ArrayList lcs = this.calculate_LCS(quasi_max_sorted);
+        // ArrayList lcs = this.calculate_LCS(quasi_max_sorted); // OLD
+        ArrayList lcs = this.calculate_LCS(quasi_max_nodes_reduced);
 		this.longest_common_subsequences.add(lcs);
 		this.printLCS();
 
@@ -74,8 +75,38 @@ public class LCS_Alignment_Pairwise {
 
 	public ArrayList<Endpos_Pair> reduce_nodes (ArrayList<Endpos_Pair> quasi_max_nodes){
 
-ArrayList<Endpos_Pair> result = new ArrayList<Endpos_Pair>();
+        final ArrayList<Endpos_Pair> result = new ArrayList<>();
+        for (Endpos_Pair pair : quasi_max_nodes) {
+            System.out.println("LABEL: '" + scdawg.get_node_label(pair.node) + "'");
+            if (pair.endpos_s1.size() != pair.endpos_s2.size()) {
+                System.out.println(" -> not the same lengtheses");
+                continue;
+            }
+            if (pair.endpos_s1.size() != 1) {
+                System.out.println(" -> not length 1");
+                continue;
+            }
+            // #... and ...$ will always have exactly one alignment.
+            // make sure that these two will not get filtered even if the according labels are too short
+            final int epos = pair.endpos_s1.get(0);
+            final int spos = epos - scdawg.get_node_length(pair.node);
+            System.out.println("PAIR: " + new AlignmentPair(scdawg.get_node_label(pair.node), pair.endpos_s1.get(0), pair.endpos_s2.get(0)));
+            final char letter = scdawg.stringset.get(0).charAt(epos);
+            System.out.println("ENDNODE: " + letter);
+            if (spos != -1 && letter != '$' && scdawg.get_node_length(pair.node) < 3) {
+                System.out.println(" -> label too short");
+                continue;
+            }
+            System.out.println("LENGTH: " + scdawg.get_node_length(pair.node));
+            System.out.println("LENGTH: " + scdawg.get_node_label(pair.node).length());
+            result.add(pair);
+        }
 
+        for (Endpos_Pair pair : result) {
+            System.out.println("PAIR: " + scdawg.get_node_label(pair.node));
+        }
+
+    /* BEGIN OLD
 
 		for(int i=0;i<quasi_max_nodes.size();i++) {
 
@@ -134,6 +165,8 @@ ArrayList<Endpos_Pair> result = new ArrayList<Endpos_Pair>();
 				result.add(p);
 			}
 		}
+
+		// END_OLD */
 
 		return result;
 

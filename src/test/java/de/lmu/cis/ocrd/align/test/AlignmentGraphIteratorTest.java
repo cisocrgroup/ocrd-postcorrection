@@ -2,7 +2,6 @@ package de.lmu.cis.ocrd.align.test;
 
 import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.LabelIterator;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -18,9 +17,8 @@ public class AlignmentGraphIteratorTest {
 		return builder.toString();
 	}
 
-	@Ignore
 	@Test
-	public void testOverlap() throws Exception {
+	public void testOverlap() {
 		String a = "diee Presse";
 		String b = "die Preſſe";
 		Graph g = new Graph(a, b);
@@ -30,7 +28,7 @@ public class AlignmentGraphIteratorTest {
 	}
 
 	@Test
-	public void testSimple() throws Exception {
+	public void testSimple() {
 		String a = "die Presse";
 		String b = "di Preſſe";
 		Graph g = new Graph(a, b);

@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.align.test;
 
 import de.lmu.cis.ocrd.align.Graph;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -11,15 +10,12 @@ public class AlignmentGraphTest {
 
 	private static String makeString(Graph g, int id) {
 		StringBuilder builder = new StringBuilder();
-		g.getTraverser().eachLabel(id, (label) -> {
-			builder.append(label.getLabel());
-		});
+		g.getTraverser().eachLabel(id, (label) -> builder.append(label.getLabel()));
 		return builder.toString();
 	}
 
-	@Ignore
 	@Test
-	public void testOverlap() throws Exception {
+	public void testOverlap() {
 		String a = "diee Presse";
 		String b = "die Preſſe";
 		Graph g = new Graph(a, b);
@@ -38,7 +34,7 @@ public class AlignmentGraphTest {
 	}
 
 	@Test
-	public void testSimple() throws Exception {
+	public void testSimple() {
 		String a = "die Presse";
 		String b = "di Preſſe";
 		Graph g = new Graph(a, b);
