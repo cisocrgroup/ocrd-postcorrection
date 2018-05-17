@@ -16,7 +16,11 @@ public class FeatureFactory {
     public static FeatureFactory getDefault() {
         return new FeatureFactory()
                 .register(UnigramFeature.class)
-                .register(TokenLengthFeature.class);
+                .register(TokenLengthFeature.class)
+                .register(SumOfMatchingAdditionalOCRsFeature.class)
+                .register(TokenCaseFeature.class)
+                .register(MinCharNGramsFeature.class)
+                .register(MaxCharNGramsFeature.class);
     }
 
     public FeatureFactory withArgumentFactory(ArgumentFactory args) {

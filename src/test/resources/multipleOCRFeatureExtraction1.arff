@@ -1,22 +1,18 @@
 % Created by de.lmu.cis.ocrd.ml.ARFFWriter at 2018-05-17
 @RELATION	TestWithOnlyMasterOCR
 @ATTRIBUTE	TokenLength	{long-token,medium-token,short-token,very-long-token}
-@ATTRIBUTE	Uppercase_1	REAL
-@ATTRIBUTE	TitleCase_1	REAL
-@ATTRIBUTE	WeirdCase_1	REAL
+@ATTRIBUTE	TokenCase	{all-lower-case,all-upper-case,mixed-case,title-case}
 @ATTRIBUTE	MaxCharNGramFeature_1	REAL
 @ATTRIBUTE	MinCharNGramFeature_1	REAL
 @ATTRIBUTE	GT	{true,false}
 @DATA
 % {"token": "first|First|frst|First", "pageID"p: 0, "lineID": 1}
-medium-token,-1.0,-1.0,1.0,0.08333333333333333,0.0,false
+medium-token,all-lower-case,0.08333333333333333,0.0,false
 % {"token": "second|second|second|second", "pageID"p: 0, "lineID": 1}
-medium-token,-1.0,-1.0,1.0,4.9E-324,0.0,true
+medium-token,all-lower-case,4.9E-324,0.0,true
 % {"token": "ThIrD|third|third|third", "pageID"p: 0, "lineID": 1}
-medium-token,-1.0,-1.0,-1.0,0.05555555555555555,0.0,false
+medium-token,mixed-case,0.05555555555555555,0.0,false
 % {"token": "ALONGTOKEN|alongtoken|alongtoken|alongtoken", "pageID"p: 0, "lineID": 1}
-long-token,1.0,-1.0,-1.0,4.9E-324,0.0,false
+long-token,all-upper-case,4.9E-324,0.0,false
 % {"token": "anotherevenlongertoken|anotherevnlongertkn|anotherevnlongertkn|anotherevenlongertoken", "pageID"p: 0, "lineID": 1}
-very-long-token,-1.0,-1.0,1.0,4.9E-324,0.0,true
-
-
+very-long-token,all-lower-case,4.9E-324,0.0,true

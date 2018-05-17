@@ -4,8 +4,8 @@ import de.lmu.cis.ocrd.archive.Entry;
 import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.GTFeature;
-import de.lmu.cis.ocrd.ml.features.ScreamCaseFeature;
-import de.lmu.cis.ocrd.ml.features.WeirdCaseFeature;
+import de.lmu.cis.ocrd.ml.features.TokenCaseFeature;
+import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
 import de.lmu.cis.ocrd.train.Configuration;
 import de.lmu.cis.ocrd.train.Environment;
 import org.junit.After;
@@ -102,8 +102,8 @@ public class EnvironmentTest {
     @Test
     public void testSerializationOfDynamicLexiconFeatureSet() throws IOException, ClassNotFoundException {
         final FeatureSet fs = new FeatureSet()
-                .add(new ScreamCaseFeature("x"))
-                .add(new WeirdCaseFeature("y"))
+                .add(new TokenCaseFeature("x"))
+                .add(new TokenLengthFeature(3, 8, 13, "y"))
                 .add(new GTFeature());
         environment.withDynamicLexiconFeatureSet(fs);
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconFeatureSet())), is(true));
@@ -112,8 +112,8 @@ public class EnvironmentTest {
         assertThat(ofs.get(0).getName(), is("x"));
         assertThat(ofs.get(1).getName(), is("y"));
         assertThat(ofs.get(2).getName(), is("GT"));
-        assertThat((ofs.get(0) instanceof ScreamCaseFeature), is(true));
-        assertThat((ofs.get(1) instanceof WeirdCaseFeature), is(true));
+        assertThat((ofs.get(0) instanceof TokenCaseFeature), is(true));
+        assertThat((ofs.get(1) instanceof TokenLengthFeature), is(true));
         assertThat((ofs.get(2) instanceof GTFeature), is(true));
     }
 

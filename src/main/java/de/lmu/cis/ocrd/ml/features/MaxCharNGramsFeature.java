@@ -1,10 +1,14 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.Word;
 import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.Token;
 
 public class MaxCharNGramsFeature extends NamedCharacterNGramFeature {
+    public MaxCharNGramsFeature(JsonObject o, ArgumentFactory factory) {
+        this(JSONUtil.mustGetNameOrType(o), factory.getCharacterTrigrams());
+    }
     public MaxCharNGramsFeature(String name, FreqMap<String> ngrams) {
         super(name, ngrams);
     }

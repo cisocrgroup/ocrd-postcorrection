@@ -1,9 +1,14 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.Token;
 
-public class SumOfMatchingAdditionalOCRFeature extends NamedDoubleFeature {
-    public SumOfMatchingAdditionalOCRFeature(String name) {
+public class SumOfMatchingAdditionalOCRsFeature extends NamedDoubleFeature {
+    public SumOfMatchingAdditionalOCRsFeature(JsonObject o, ArgumentFactory factory) {
+        this(JSONUtil.mustGetNameOrType(o));
+    }
+
+    public SumOfMatchingAdditionalOCRsFeature(String name) {
         super(name);
     }
 

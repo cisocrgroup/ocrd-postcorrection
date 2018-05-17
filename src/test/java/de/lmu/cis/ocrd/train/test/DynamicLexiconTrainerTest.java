@@ -1,9 +1,8 @@
 package de.lmu.cis.ocrd.train.test;
 
 import de.lmu.cis.ocrd.ml.FeatureSet;
-import de.lmu.cis.ocrd.ml.features.ScreamCaseFeature;
-import de.lmu.cis.ocrd.ml.features.TitleCaseFeature;
-import de.lmu.cis.ocrd.ml.features.WeirdCaseFeature;
+import de.lmu.cis.ocrd.ml.features.TokenCaseFeature;
+import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
 import de.lmu.cis.ocrd.train.DynamicLexiconTrainer;
 import de.lmu.cis.ocrd.train.Environment;
 import org.junit.After;
@@ -32,9 +31,8 @@ public class DynamicLexiconTrainerTest {
                 .addOtherOCR("src/test/resources/1841-DieGrenzboten-ocropus-small.zip")
                 .withDebugTokenAlignment(true);
         this.fs = new FeatureSet()
-                .add(new WeirdCaseFeature("weird-case"))
-                .add(new ScreamCaseFeature("scream-case"))
-                .add(new TitleCaseFeature("title-case"));
+                .add(new TokenLengthFeature(3, 8, 13, "TokenLength"))
+                .add(new TokenCaseFeature("TokenCase"));
     }
 
     @Test
