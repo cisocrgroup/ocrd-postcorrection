@@ -6,13 +6,13 @@
 @ATTRIBUTE	MinCharNGramFeature_1	REAL
 @ATTRIBUTE	GT	{true,false}
 @DATA
-% {"token": "first|First|frst|First", "pageID"p: 0, "lineID": 1}
+% {"ocr":["first","First","frst"],"gt":"First","pageID":0,"lineID":1}
 medium-token,all-lower-case,0.08333333333333333,0.0,false
-% {"token": "second|second|second|second", "pageID"p: 0, "lineID": 1}
+% {"ocr":["second","second","second"],"gt":"second","pageID":0,"lineID":1}
 medium-token,all-lower-case,4.9E-324,0.0,true
-% {"token": "ThIrD|third|third|third", "pageID"p: 0, "lineID": 1}
+% {"ocr":["ThIrD","third","third"],"gt":"third","pageID":0,"lineID":1}
 medium-token,mixed-case,0.05555555555555555,0.0,false
-% {"token": "ALONGTOKEN|alongtoken|alongtoken|alongtoken", "pageID"p: 0, "lineID": 1}
+% {"ocr":["ALONGTOKEN","alongtoken","alongtoken"],"gt":"alongtoken","pageID":0,"lineID":1}
 long-token,all-upper-case,4.9E-324,0.0,false
-% {"token": "anotherevenlongertoken|anotherevnlongertkn|anotherevnlongertkn|anotherevenlongertoken", "pageID"p: 0, "lineID": 1}
+% {"ocr":["anotherevenlongertoken","anotherevnlongertkn","anotherevnlongertkn"],"gt":"anotherevenlongertoken","pageID":0,"lineID":1}
 very-long-token,all-lower-case,4.9E-324,0.0,true

@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.ml;
 
+import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.GTFeature;
 import de.lmu.cis.ocrd.ml.features.NamedStringSetFeature;
@@ -68,13 +69,28 @@ public class ARFFWriter {
         writer.println("@DATA");
     }
 
+    private static class DebugToken {
+        final String[] ocr;
+        final String gt;
+        final int pageID, lineID;
+
+        DebugToken(Token token) {
+            pageID = token.getMasterOCR().getLine().getPageId();
+            lineID = token.getMasterOCR().getLine().getLineId();
+            gt = token.getGT().isPresent() ? token.getGT().get() : "";
+            ocr = new String[1 + token.getNumberOfOtherOCRs()];
+            ocr[0] = token.getMasterOCR().toString();
+            for (int i = 0; i < token.getNumberOfOtherOCRs(); i++) {
+                ocr[i + 1] = token.getOtherOCRAt(i).toString();
+            }
+        }
+
+    }
     public void writeToken(Token token) {
         if (!debugToken) {
             return;
         }
-        writer.printf("%% {\"token\": \"%s\", \"pageID\"p: %d, \"lineID\": %d}\n",
-                token.toString().replaceAll("\"", "\\\""),
-                token.getMasterOCR().getLine().getPageId(), token.getMasterOCR().getLine().getLineId());
+        writer.printf("%% %s\n", new Gson().toJson(new DebugToken(token)));
     }
 
     public void writeFeatureVector(List<Object> features) {
@@ -92,7 +108,6 @@ public class ARFFWriter {
 
     private String getAttributeOfGTFeature(GTFeature feature) {
         return String.format("%s\t{%s,%s}", feature.getName(), Boolean.toString(true), Boolean.toString(false));
-
     }
 
     private String getAttributeOfNamedStringSetFeature(NamedStringSetFeature feature) {
