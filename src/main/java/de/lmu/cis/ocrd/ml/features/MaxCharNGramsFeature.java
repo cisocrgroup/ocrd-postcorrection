@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.Word;
+import de.lmu.cis.ocrd.json.JSONUtil;
 import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.Token;
 

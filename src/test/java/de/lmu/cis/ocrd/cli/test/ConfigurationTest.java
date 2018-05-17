@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.cli.test;
 
 import de.lmu.cis.ocrd.cli.Configuration;
-import de.lmu.cis.ocrd.ml.features.JSONUtil;
+import de.lmu.cis.ocrd.json.JSONUtil;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
