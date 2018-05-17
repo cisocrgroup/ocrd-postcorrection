@@ -1,19 +1,13 @@
 package de.lmu.cis.iba;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
-
 import org.pmw.tinylog.Logger;
+
+import java.util.*;
 
 
 
 public class LCS_Alignment_Pairwise {
-	
+
 	public static class AlignmentPair {
 		public final int epos1, epos2, spos1, spos2;
 		public final String label;
@@ -33,13 +27,13 @@ public class LCS_Alignment_Pairwise {
 	}
 
 	Online_CDAWG_sym scdawg;
-	public ArrayList<ArrayList<LCS_Triple>> longest_common_subsequences = new ArrayList<ArrayList<LCS_Triple>>();
+	public ArrayList<ArrayList<LCS_Triple>> longest_common_subsequences = new ArrayList<>();
 
 	Common_SCDAWG_Functions scdawg_functions;
 
 	public LCS_Alignment_Pairwise(String n1,String n2) {
 
-		ArrayList<String> stringset = new ArrayList<String>();
+		ArrayList<String> stringset = new ArrayList<>();
 		stringset.add("#" + n1 + "$");
 		stringset.add("#" + n2 + "$");
 		Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset, false);
@@ -47,7 +41,6 @@ public class LCS_Alignment_Pairwise {
 		scdawg.build_cdawg();
 		this.scdawg = scdawg;
 
-		this.scdawg = scdawg;
 		Common_SCDAWG_Functions scdawg_functions = new Common_SCDAWG_Functions(scdawg);
 		this.scdawg_functions = scdawg_functions;
 
@@ -62,7 +55,7 @@ public class LCS_Alignment_Pairwise {
 		ArrayList<Endpos_Pair> quasi_max_sorted = Util.sortEndposPair(quasi_max_nodes, "ASC", scdawg);		// nach dem ersten String sortieren.
 	  	ArrayList<Endpos_Pair> quasi_max_nodes_reduced = reduce_nodes(quasi_max_sorted);
 
-		
+
 		for (Endpos_Pair pair : quasi_max_nodes_reduced) {
 			Node x = pair.node;
 
@@ -70,7 +63,7 @@ public class LCS_Alignment_Pairwise {
 
 			Logger.debug("\n--------------------------------------------");
 		}
-		
+
 		Logger.debug("Calculating LCS for s1 and s2 pairs...");
 
 		ArrayList lcs = this.calculate_LCS(quasi_max_sorted);
@@ -78,24 +71,24 @@ public class LCS_Alignment_Pairwise {
 		this.printLCS();
 
 	}
-	
+
 	public ArrayList<Endpos_Pair> reduce_nodes (ArrayList<Endpos_Pair> quasi_max_nodes){
-		
+
 ArrayList<Endpos_Pair> result = new ArrayList<Endpos_Pair>();
-		
-		
+
+
 		for(int i=0;i<quasi_max_nodes.size();i++) {
-			
+
 			Endpos_Pair p1 = quasi_max_nodes.get(i);
-			
+
 			for(int j=0;j<quasi_max_nodes.size();j++) {
-				
+
 				Endpos_Pair p2 = quasi_max_nodes.get(j);
-				
+
 				if(i==j)
 					continue;
-				
-					
+
+
 					for(int ik=0;ik<p1.endpos_s1.size();ik++) {
 						int e_s1 = p1.endpos_s1.get(ik);
 						int s_s1 = e_s1-scdawg.get_node_length(p1.node);
@@ -103,16 +96,16 @@ ArrayList<Endpos_Pair> result = new ArrayList<Endpos_Pair>();
 						for(int jk=0;jk<p2.endpos_s1.size();jk++) {
 							int e_s2 = p2.endpos_s1.get(jk);
 							int s_s2 = e_s2-scdawg.get_node_length(p2.node);
-							
+
 							if(s_s1>=s_s2&&s_s1<=e_s2&&e_s1>=s_s2&&e_s1<=e_s2) {
 								System.out.printf("%d,%d,%d,%d ",s_s2,s_s1,e_s1,e_s2);
 								System.out.println("remove " + scdawg.get_node_label(p1.node) +" " + scdawg.get_node_label(p2.node)+ " -> " + p1.endpos_s1.get(ik) );
 								p1.endpos_s1.remove(ik);
 							}
-							
+
 						}
 					}
-					
+
 					for(int ik=0;ik<p1.endpos_s2.size();ik++) {
 						int e_s1 = p1.endpos_s2.get(ik);
 						int s_s1 = e_s1-scdawg.get_node_length(p1.node);
@@ -124,26 +117,26 @@ ArrayList<Endpos_Pair> result = new ArrayList<Endpos_Pair>();
 							if(s_s1>=s_s2&&s_s1<=e_s2&&e_s1>=s_s2&&e_s1<=e_s2) {
 								p1.endpos_s2.remove(ik);
 							}
-							
+
 						}
 					}
 
-				
-				
+
+
 			}
-			
-			
-			
+
+
+
 		}
-		
+
 		for (Endpos_Pair p : quasi_max_nodes) {
 			if(p.endpos_s1.size()>0&&p.endpos_s2.size()>0) {
 				result.add(p);
 			}
 		}
-		
+
 		return result;
-		
+
 	}
 
 	public ArrayList[] build_greedy_cover(ArrayList<Endpos_Pair> quasi_max_nodes, ArrayList<LCS_Triple> lcs_triples,
@@ -170,7 +163,7 @@ ArrayList<Endpos_Pair> result = new ArrayList<Endpos_Pair>();
 
 					int elem_s1 = (int) p.endpos_s1.get(l);
 
-					
+
 					for (int j = p.endpos_s2.size() - 1; j >= 0; j--) { // iterieren über alle
 																		// dec sequences ;//
 																		// HIER EIN TRIPEL! //
@@ -250,8 +243,8 @@ ArrayList<Endpos_Pair> result = new ArrayList<Endpos_Pair>();
 
 	public ArrayList<LCS_Triple> calculate_LCS(ArrayList<Endpos_Pair> quasi_max_nodes) {
 
-		ArrayList<LCS_Triple> lcs_triples = new ArrayList<LCS_Triple>();
-		HashMap<Node, Node> node_ancestors = new HashMap<Node, Node>();
+		ArrayList<LCS_Triple> lcs_triples = new ArrayList<>();
+		HashMap<Node, Node> node_ancestors = new HashMap<>();
 		ArrayList[] greedy_cover = build_greedy_cover(quasi_max_nodes, lcs_triples, node_ancestors);
 		this.print_greedy_cover(greedy_cover,lcs_triples);
 		// calculate lis
@@ -262,7 +255,10 @@ ArrayList<Endpos_Pair> result = new ArrayList<Endpos_Pair>();
 				i_count++;
 		}
 
-		ArrayList<LCS_Triple> lis = new ArrayList<LCS_Triple>();
+		ArrayList<LCS_Triple> lis = new ArrayList<>();
+		if (i_count <= 0) {
+		    return lis;
+        }
 		int x = lcs_triples.get((int) greedy_cover[i_count - 1].get(0)).endpos_s2; // pick any??
 		lis.add(lcs_triples.get((int) greedy_cover[i_count - 1].get(0)));
 
@@ -358,7 +354,7 @@ ArrayList<Endpos_Pair> result = new ArrayList<Endpos_Pair>();
 		// lis.add(lcs_triples.get((int) greedy_cover[i_count - 1].get(0)));
 
 	}
-	
+
 	public ArrayList<AlignmentPair> getAligmentPairs() {
 		ArrayList<AlignmentPair> res = new ArrayList<AlignmentPair>();
 		for (int u = 0; u < longest_common_subsequences.size(); u++) {
@@ -390,8 +386,8 @@ ArrayList<Endpos_Pair> result = new ArrayList<Endpos_Pair>();
 		}
 
 	}
-	
-	
+
+
 
 	public void print_greedy_cover(ArrayList[] greedy_cover,ArrayList<LCS_Triple> lcs_triples) {
 

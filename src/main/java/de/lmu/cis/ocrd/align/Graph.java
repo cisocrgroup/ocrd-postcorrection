@@ -47,10 +47,8 @@ public class Graph {
 	}
 
 	private void build(ArrayList<AlignmentPair> ps) {
-		if (ps.isEmpty()) {
-			return;
-		}
-		if (s1.equals(s2)) {
+        // explicitly handle cases where both strings are equal
+		if (ps.isEmpty() || s1.equals(s2)) {
 			start = new Node('#' + s1 + '$');
 			return;
 		}

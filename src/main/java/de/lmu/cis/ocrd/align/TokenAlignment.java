@@ -7,12 +7,11 @@ import java.util.List;
 public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 
 	public class Token {
-		private final ArrayList<ArrayList<String>> alignments;
+		private final ArrayList<ArrayList<String>> alignments = new ArrayList<>();
 		private final String master;
 
 		public Token(String master) {
 			this.master = master;
-			alignments = new ArrayList<ArrayList<String>>();
 		}
 
 		public void addExistingAlignment(String b) {
@@ -23,7 +22,7 @@ public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 		}
 
 		public void addNewAlignment(String b) {
-			alignments.add(new ArrayList<String>());
+			alignments.add(new ArrayList<>());
 			addExistingAlignment(b);
 		}
 
@@ -67,7 +66,7 @@ public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 		}
 	}
 
-	private final ArrayList<Token> alignments = new ArrayList<Token>();
+	private final ArrayList<Token> alignments = new ArrayList<>();
 
 	private final String master;
 
@@ -82,6 +81,7 @@ public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 		final Tokenizer t = new Graph(master, str).getTokenizer();
 		Counter i = new Counter(-1); // really, java?
 		t.eachPair((a, b, anew, bnew) -> {
+		    // System.out.printf("a: %s, b: %s, anew: %b, bnew: %b\n", a, b, anew, bnew);
 			if (anew) {
 				i.inc();
 				alignments.get(i.get()).addNewAlignment(b);
