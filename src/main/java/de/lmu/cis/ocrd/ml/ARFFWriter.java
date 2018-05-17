@@ -58,7 +58,7 @@ public class ARFFWriter {
                 }
                 String attribute = String.format("%s_%d\tREAL", feature.getName(), i+1);
                 if (feature instanceof GTFeature) {
-                    attribute = getAttributeOfGTFeature();
+                    attribute = getAttributeOfGTFeature((GTFeature) feature);
                 } else if (feature instanceof NamedStringSetFeature) {
                     attribute = getAttributeOfNamedStringSetFeature((NamedStringSetFeature) feature);
                 }
@@ -90,13 +90,14 @@ public class ARFFWriter {
         writer.println();
     }
 
-    private String getAttributeOfGTFeature() {
-        return String.format("class {%s,%s}", Boolean.toString(true), Boolean.toString(false));
+    private String getAttributeOfGTFeature(GTFeature feature) {
+        return String.format("%s\t{%s,%s}", feature.getName(), Boolean.toString(true), Boolean.toString(false));
 
     }
 
     private String getAttributeOfNamedStringSetFeature(NamedStringSetFeature feature) {
-        StringBuilder builder = new StringBuilder("class {");
+        StringBuilder builder = new StringBuilder(feature.getName());
+        builder.append("\t{");
         boolean first = true;
         for (String s : feature.getSet()) {
             if (!first) {

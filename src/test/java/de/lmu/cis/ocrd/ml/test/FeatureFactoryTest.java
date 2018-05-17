@@ -2,8 +2,8 @@ package de.lmu.cis.ocrd.ml.test;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
+import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
 import org.junit.Before;
@@ -22,8 +22,8 @@ public class FeatureFactoryTest {
             super(o, args);
         }
 
-        public TestFeature(int min, int max, String name) {
-            super(min, max, name);
+        TestFeature(int zhort, int medium, int lng, String name) {
+            super(zhort, medium, lng, name);
         }
 
         @Override
@@ -31,7 +31,7 @@ public class FeatureFactoryTest {
             if (o == null) return false;
             if (!(o instanceof TestFeature)) return false;
             TestFeature that = (TestFeature) o;
-            return that.getMin() == this.getMin() && that.getMax() == this.getMax() && that.getName().equals(this.getName());
+            return that.getSet().equals(this.getSet()) && that.getName().equals(this.getName());
         }
     }
 
@@ -42,11 +42,11 @@ public class FeatureFactoryTest {
 
     @Test
     public void testWithValidName() throws Exception {
-        final String json = "{\"name\": \"test\", \"type\": \"de.lmu.cis.ocrd.ml.test.FeatureFactoryTest$TestFeature\", \"min\": 0, \"max\": 1}";
+        final String json = "{\"name\": \"test\", \"type\": \"de.lmu.cis.ocrd.ml.test.FeatureFactoryTest$TestFeature\", \"short\": 3, \"medium\": 8, \"long\": 13}";
         JsonObject o = new Gson().fromJson(json, JsonObject.class);
         Optional<Feature> feature = featureFactory.create(o);
         assertThat(feature.isPresent(), is(true));
-        assertThat(feature.get(), is(new TestFeature(0, 1, "test")));
+        assertThat(feature.get(), is(new TestFeature(3, 8, 13, "test")));
     }
 
     @Test

@@ -15,9 +15,8 @@ public class FeatureFactory {
 
     public static FeatureFactory getDefault() {
         return new FeatureFactory()
-                .register(TokenLengthFeature.class)
                 .register(UnigramFeature.class)
-                .register(TokenLengthClassFeature.class);
+                .register(TokenLengthFeature.class);
     }
 
     public FeatureFactory withArgumentFactory(ArgumentFactory args) {
@@ -32,7 +31,7 @@ public class FeatureFactory {
         }
         Class clazz = Class.forName(type);
         Constructor c = clazz.getConstructor(constructorParams);
-        return Optional.ofNullable((Feature)c.newInstance(o, args));
+        return Optional.of((Feature) c.newInstance(o, args));
     }
 
     public <F extends Feature> FeatureFactory register(Class<F> feature) {

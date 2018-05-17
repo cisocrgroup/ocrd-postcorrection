@@ -35,9 +35,7 @@ public class MultipleOCRFeatureExtractionTest {
     public void init() throws Exception {
         final FreqMap<String> ngrams = CharacterNGrams.fromCSV("src/test/resources/nGrams.csv");
         fs = new FeatureSet()
-                .add(new TokenLengthFeature(1, 5, "ShortToken"))
-                .add(new TokenLengthFeature(6, 10, "MediumToken"))
-                .add(new TokenLengthFeature(11, 50, "LongToken"))
+                .add(new TokenLengthFeature(3, 8, 13, "TokenLength"))
                 .add(new ScreamCaseFeature("Uppercase"))
                 .add(new TitleCaseFeature("TitleCase"))
                 .add(new WeirdCaseFeature("WeirdCase"))
@@ -102,7 +100,7 @@ public class MultipleOCRFeatureExtractionTest {
     }
 
     private void runTest(int n, String arffFile) throws Exception {
-        // final OutputStreamWriter w = new OutputStreamWriter(System.out);
+        // final OutputStreamWriter w = new OutputStreamWriter(System.out); // to update test files
         final StringWriter w = new StringWriter();
         final ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
                 .withDebugToken(true)
