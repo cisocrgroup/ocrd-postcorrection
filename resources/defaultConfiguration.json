@@ -1,0 +1,47 @@
+{
+  "profiler": {
+    "executable": "/apps/profiler",
+    "languageDirectory": "/data/profiler-backend",
+    "language": "german"
+  },
+  "languageModel": {
+    "characterTrigrams": "/data/language-model/character-trigrams.csv"
+  },
+  "dynamicLexiconTraining": {
+    "copyTrainingFiles": true,
+    "debugTrainingTokens": true,
+    "features": [
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.TokenLengthFeature",
+        "name": "TokenLength",
+        "short": 3,
+        "medium": 8,
+        "long": 13
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.TokenCaseFeature",
+        "name": "TokenCase"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.MaxCharNGramsFeature",
+        "name": "MaxCharTrigram"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.MinCharNGramsFeature",
+        "name": "MinCharTrigram"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.SumOfMatchingAdditionalOCRsFeature",
+        "name": "SumOfMatching"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.UnigramFeature",
+        "name": "UnigramOCRRelativeFrequency"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.ProfilerHighestVoteWeightFeature",
+        "name": "HighestVoteWeight"
+      }
+    ]
+  }
+}
