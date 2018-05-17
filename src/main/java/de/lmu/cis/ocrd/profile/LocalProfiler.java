@@ -2,14 +2,16 @@ package de.lmu.cis.ocrd.profile;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class LocalProfiler {
+public class LocalProfiler implements Profiler {
     private String exe, language, workdir, langdir;
     private String[] args;
     private Reader stdin;
@@ -55,7 +57,8 @@ public class LocalProfiler {
         return String.join(" ", makeArgs());
     }
 
-    public Profile run() throws Exception {
+    @Override
+    public Profile profile() throws Exception {
         Process profiler = createCommand();
         // write stdin to profiler
         IOUtils.copy(stdin, profiler.getOutputStream(), Charset.defaultCharset());

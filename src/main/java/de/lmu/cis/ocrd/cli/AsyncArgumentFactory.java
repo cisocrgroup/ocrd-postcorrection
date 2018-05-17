@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.cli;
 import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
 import de.lmu.cis.ocrd.profile.Profile;
+import de.lmu.cis.ocrd.profile.Profiler;
 import de.lmu.cis.ocrd.train.Environment;
 
 import java.nio.file.Paths;
@@ -15,8 +16,9 @@ public class AsyncArgumentFactory implements ArgumentFactory {
     private final ConfigurationJSON data;
     private final List<AsyncOCRUnigrams> ocrUnigrams = new ArrayList<>();
     private final AsyncCharTrigrams charTrigrams;
+    private final Profiler profiler;
 
-    public AsyncArgumentFactory(ConfigurationJSON data, Environment environment) {
+    public AsyncArgumentFactory(ConfigurationJSON data, Environment environment, Profiler profiler) {
         this.data = data;
         this.environment = environment;
         ocrUnigrams.add(new AsyncOCRUnigrams(environment.getMasterOCR()));
@@ -24,6 +26,7 @@ public class AsyncArgumentFactory implements ArgumentFactory {
             ocrUnigrams.add(new AsyncOCRUnigrams(environment.getOtherOCR(i)));
         }
         charTrigrams = new AsyncCharTrigrams(Paths.get(data.getLanguageModel().getCharacterTrigrams()));
+        this.profiler = new AsyncProfiler(profiler);
     }
 
     @Override
@@ -55,6 +58,10 @@ public class AsyncArgumentFactory implements ArgumentFactory {
 
     @Override
     public Profile getProfile() {
-        throw new RuntimeException("not implemented");
+        try {
+            return profiler.profile();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

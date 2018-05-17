@@ -19,6 +19,11 @@ import java.util.Optional;
 import java.util.Set;
 
 public class Profile {
+    // for testing and mocking
+    public static Profile empty() {
+        return new Profile(new HashMap<>());
+    }
+
 	public static Profile read(InputStream is) throws IOException {
 		StringWriter out = new StringWriter();
 		IOUtils.copy(is, out, Charset.forName("UTF-8"));
@@ -45,7 +50,7 @@ public class Profile {
     }
 
 	private static HashMap<String, Candidates> toLowerCase(HashMap<String, Candidates> map) {
-		HashMap<String, Candidates> newMap = new HashMap<String, Candidates>();
+        HashMap<String, Candidates> newMap = new HashMap<>();
 		for (Map.Entry<String, Candidates> entry : map.entrySet()) {
 			String lower = entry.getKey().toLowerCase();
 			Candidates cLower = entry.getValue().toLowerCase();

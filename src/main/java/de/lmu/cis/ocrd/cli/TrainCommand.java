@@ -2,6 +2,8 @@ package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
+import de.lmu.cis.ocrd.profile.Profile;
+import de.lmu.cis.ocrd.profile.Profiler;
 import de.lmu.cis.ocrd.train.DynamicLexiconTrainer;
 import de.lmu.cis.ocrd.train.Environment;
 
@@ -27,9 +29,16 @@ public class TrainCommand implements Command {
         trainer.prepare().train().evaluate();
     }
 
+    private class MockProfiler implements Profiler {
+        @Override
+        public Profile profile() {
+            return Profile.empty();
+        }
+    }
+
     private FeatureSet newFeatureSet(Configuration configuration) throws Exception {
         return new FeatureFactory()
-                .withArgumentFactory(new AsyncArgumentFactory(configuration.getParameters(), environment))
+                .withArgumentFactory(new AsyncArgumentFactory(configuration.getParameters(), environment, new MockProfiler()))
                 .createFeatureSet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures());
     }
 
