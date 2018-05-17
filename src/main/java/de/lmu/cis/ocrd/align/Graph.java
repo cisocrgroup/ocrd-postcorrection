@@ -73,12 +73,12 @@ public class Graph {
 			prevp = curp;
 			prevn = curn;
 		}
-		System.out.println("s1: " + s1);
-		System.out.println("s2: " + s2);
-		for (AlignmentPair p : ps) {
-			System.out.println("ALIGNMENT PAIR: " + p);
-		}
-		System.out.println("START: " + start.toString());
+		// System.out.println("s1: " + s1);
+		// System.out.println("s2: " + s2);
+		// for (AlignmentPair p : ps) {
+		// 	System.out.println("ALIGNMENT PAIR: " + p);
+		// }
+		// System.out.println("START: " + start.toString());
 	}
 
 	private AlignmentPair handleOverlap(AlignmentPair previous, AlignmentPair current) {
