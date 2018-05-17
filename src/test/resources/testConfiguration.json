@@ -5,7 +5,7 @@
     "language": "/test/profiler/language"
   },
   "languageModel": {
-    "characterTrigrams": "/test/language/model/character/trigrams"
+    "characterTrigrams": "src/test/resources/nGrams.csv"
   },
   "dynamicLexiconTraining": {
     "copyTrainingFiles": false,

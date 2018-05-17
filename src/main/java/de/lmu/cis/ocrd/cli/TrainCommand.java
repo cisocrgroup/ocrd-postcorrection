@@ -29,7 +29,7 @@ public class TrainCommand implements Command {
 
     private FeatureSet newFeatureSet(Configuration configuration) throws Exception {
         return new FeatureFactory()
-                .withArgumentFactory(new ArgumentFactory(configuration.getParameters(), environment))
+                .withArgumentFactory(new AsyncArgumentFactory(configuration.getParameters(), environment))
                 .createFeatureSet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures());
     }
 
