@@ -9,43 +9,43 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Profiler {
+public class LocalProfiler {
     private String exe, language, workdir, langdir;
     private String[] args;
     private Reader stdin;
 
-    public Profiler() {
+    public LocalProfiler() {
         this.exe = "profiler";
         this.workdir = ".";
         this.langdir = "/data";
         this.args = new String[]{"--sourceFormat", "TXT"};
     }
 
-    public Profiler withStdin(Reader r) {
+    public LocalProfiler withStdin(Reader r) {
         this.stdin = r;
         return this;
     }
 
-    public Profiler withExecutable(String exe) {
+    public LocalProfiler withExecutable(String exe) {
         this.exe = exe;
         return this;
     }
 
-    public Profiler withWorkDirectory(String workdir) {
+    public LocalProfiler withWorkDirectory(String workdir) {
         this.workdir = workdir;
         return this;
     }
-    public Profiler withLanguage(String language) {
+    public LocalProfiler withLanguage(String language) {
         this.language = language;
         return this;
     }
 
-    public Profiler withLanguageDirectory(String langdir) {
+    public LocalProfiler withLanguageDirectory(String langdir) {
         this.langdir = langdir;
         return this;
     }
 
-    public Profiler withArgs(String... args) {
+    public LocalProfiler withArgs(String... args) {
         this.args = args;
         return this;
     }
