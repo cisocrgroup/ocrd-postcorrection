@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import de.lmu.cis.ocrd.cli.AsyncArgumentFactory;
 import de.lmu.cis.ocrd.cli.ConfigurationJSON;
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
-import de.lmu.cis.ocrd.profile.Profile;
+import de.lmu.cis.ocrd.profile.FileProfiler;
 import de.lmu.cis.ocrd.profile.Profiler;
 import de.lmu.cis.ocrd.train.Environment;
 import org.apache.commons.io.IOUtils;
@@ -14,9 +14,9 @@ import org.junit.Test;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.file.Paths;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class AsyncArgumentFactoryTest {
@@ -25,13 +25,6 @@ public class AsyncArgumentFactoryTest {
     private Environment environment;
     private ConfigurationJSON configuration;
     private ArgumentFactory factory;
-
-    private class MockProfiler implements Profiler {
-        @Override
-        public Profile profile() {
-            return Profile.empty();
-        }
-    }
 
     @Before
     public void init() throws Exception {
@@ -45,7 +38,8 @@ public class AsyncArgumentFactoryTest {
              IOUtils.copy(is, out, Charset.forName("UTF-8"));
              configuration = new Gson().fromJson(out.toString(), ConfigurationJSON.class);
         }
-        factory = new AsyncArgumentFactory(configuration, environment, new MockProfiler());
+        final Profiler profiler = new FileProfiler(Paths.get("src", "test", "resources", "profile-test.json"));
+        factory = new AsyncArgumentFactory(configuration, environment, profiler);
     }
 
     @Test
@@ -70,7 +64,8 @@ public class AsyncArgumentFactoryTest {
 
     @Test
     public void testGetProfile() {
-        assertNotNull(factory.getProfile());
+        final String lookup = "Vnheilfolles";
+        assertThat(factory.getProfile().containsKey(lookup), is(true));
     }
 
     @After
