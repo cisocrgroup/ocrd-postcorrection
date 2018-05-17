@@ -29,7 +29,7 @@ public class ConfigurationTest {
         assertThat(configuration.getParameters().getProfiler().getExecutable(), is("/test/profiler/executable"));
         assertThat(configuration.getParameters().getProfiler().getLanguageDirectory(), is("/test/profiler/language/directory"));
         assertThat(configuration.getParameters().getProfiler().getLanguage(), is("/test/profiler/language"));
-        assertThat(configuration.getParameters().getLanguageModel().getCharacterTrigrams(), is("/test/language/model/character/trigrams"));
+        assertThat(configuration.getParameters().getLanguageModel().getCharacterTrigrams(), is("src/test/resources/nGrams.csv"));
         assertThat(configuration.getParameters().getDynamicLexiconTrainig().isDebugTrainingTokens(), is(true));
         assertThat(configuration.getParameters().getDynamicLexiconTrainig().isCopyTrainingFiles(), is(false));
         assertThat(configuration.getParameters().getDynamicLexiconTrainig().getFeatures().length, is(2));
