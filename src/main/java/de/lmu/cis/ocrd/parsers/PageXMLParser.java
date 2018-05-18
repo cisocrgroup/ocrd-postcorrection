@@ -1,11 +1,11 @@
 package de.lmu.cis.ocrd.parsers;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
 import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 public class PageXMLParser extends AbstractXPathParser {
 	private static final XPathExpression linesXPath;
@@ -21,9 +21,8 @@ public class PageXMLParser extends AbstractXPathParser {
 		}
 	}
 
-	protected PageXMLParser(Document xml, int pageID) {
+    PageXMLParser(Document xml, int pageID) {
 		super(xml, pageID);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
