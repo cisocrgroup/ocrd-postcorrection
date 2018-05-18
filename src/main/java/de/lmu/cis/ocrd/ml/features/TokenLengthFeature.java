@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.json.JSONUtil;
 import de.lmu.cis.ocrd.ml.Token;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TokenLengthFeature extends NamedStringSetFeature {
     private final static String SHORT = "short-token";
@@ -13,7 +13,7 @@ public class TokenLengthFeature extends NamedStringSetFeature {
     private final static String LONG = "long-token";
     private final static String VERY_LONG = "very-long-token";
 
-    private static final Set<String> CLASSES = new TreeSet<>();
+    private static final List<String> CLASSES = new ArrayList<>();
 
     static {
         CLASSES.add(SHORT);

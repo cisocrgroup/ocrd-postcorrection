@@ -72,11 +72,12 @@ public class ARFFWriter {
     private static class DebugToken {
         final String[] ocr;
         final String gt;
-        final int pageID, lineID;
+        final int pageID, lineID, tokenID;
 
         DebugToken(Token token) {
             pageID = token.getMasterOCR().getLine().getPageId();
             lineID = token.getMasterOCR().getLine().getLineId();
+            tokenID = token.getID();
             gt = token.getGT().isPresent() ? token.getGT().get() : "";
             ocr = new String[1 + token.getNumberOfOtherOCRs()];
             ocr[0] = token.getMasterOCR().toString();

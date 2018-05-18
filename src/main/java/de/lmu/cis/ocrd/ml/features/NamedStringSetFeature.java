@@ -1,16 +1,16 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import java.util.Set;
+import java.util.List;
 
 public abstract class NamedStringSetFeature extends NamedFeature {
-    private final Set<String> set;
+    private final List<String> set;
 
-    protected NamedStringSetFeature(String name, Set<String> set) {
+    NamedStringSetFeature(String name, List<String> set) {
         super(name);
         this.set = set;
     }
 
-    public final Set<String> getSet() {
+    public final List<String> getSet() {
         return set;
     }
 }

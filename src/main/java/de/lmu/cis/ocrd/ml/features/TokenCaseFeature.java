@@ -4,15 +4,15 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.json.JSONUtil;
 import de.lmu.cis.ocrd.ml.Token;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TokenCaseFeature extends NamedStringSetFeature {
     private static final String LOWER = "all-lower-case";
     private static final String UPPER = "all-upper-case";
     private static final String TITLE = "title-case";
     private static final String MIXED = "mixed-case";
-    private static final Set<String> CLASSES = new TreeSet<>();
+    private static final List<String> CLASSES = new ArrayList<>();
 
     static {
         CLASSES.add(LOWER);
