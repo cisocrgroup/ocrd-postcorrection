@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Optional;
 
 public class FeatureFactory {
-    private static final Class[] constructorParams = new Class[]{JsonObject.class, ArgumentFactory.class};
     private final HashSet<String> features = new HashSet<>();
     private ArgumentFactory args;
 
@@ -35,8 +34,9 @@ public class FeatureFactory {
         if (!features.contains(type)) {
             return Optional.empty();
         }
-        Class clazz = Class.forName(type);
-        Constructor c = clazz.getConstructor(constructorParams);
+        final Class<?> clazz = Class.forName(type);
+        final Class<?>[] parameters = new Class[]{JsonObject.class, ArgumentFactory.class};
+        final Constructor c = clazz.getConstructor(parameters);
         return Optional.of((Feature) c.newInstance(o, args));
     }
 
