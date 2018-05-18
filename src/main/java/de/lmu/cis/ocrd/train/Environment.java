@@ -20,7 +20,7 @@ public class Environment {
     private static final String dLex = "dLex";
     private static final String dLexFS = "features.ser";
     private static final String trainingFile = "training.arff";
-    private static final String evaluationFile = "evaluation.arff";
+    private static final String testFile = "test.arff";
     private static final String model = "model.ser";
     private final String path, name;
     private Path gt, masterOCR;
@@ -162,14 +162,16 @@ public class Environment {
         c.masterOCR = masterOCR.toString();
         c.dynamicLexiconFeatureSet = getDynamicLexiconFeatureSet().toString();
         c.dynamicLexiconTrainingFiles = new String[1+otherOCR.size()];
-        c.dynamicLexiconEvaluationFiles= new String[1+otherOCR.size()];
+        c.dynamicLexiconTestFiles = new String[1 + otherOCR.size()];
         c.dynamicLexiconModelFiles= new String[1+otherOCR.size()];
         c.dynamicLexiconTrainingFiles[0] = getDynamicLexiconTrainingFile(1).toString();
-        c.dynamicLexiconEvaluationFiles[0] = getDynamicLexiconEvaluationFile(1).toString();
+        c.dynamicLexiconModelFiles[0] = getDynamicLexiconModel(1).toString();
+        c.dynamicLexiconTrainingFiles[0] = getDynamicLexiconTrainingFile(1).toString();
+        c.dynamicLexiconTestFiles[0] = getDynamicLexiconTestFile(1).toString();
         c.otherOCR = new String[otherOCR.size()];
         for (int i = 0; i < otherOCR.size(); i++) {
             c.dynamicLexiconTrainingFiles[i+1] = getDynamicLexiconTrainingFile(i+2).toString();
-            c.dynamicLexiconEvaluationFiles[i+1] = getDynamicLexiconEvaluationFile(i+2).toString();
+            c.dynamicLexiconTestFiles[i + 1] = getDynamicLexiconTestFile(i + 2).toString();
             c.dynamicLexiconModelFiles[i+1] = getDynamicLexiconModel(i+2).toString();
             c.otherOCR[i] = otherOCR.get(i).toString();
         }
@@ -241,8 +243,8 @@ public class Environment {
         }
     }
 
-    public Path getDynamicLexiconEvaluationFile(int n) {
-        return Paths.get(getDynamicLexiconTrainingDirectory(n).toString(), evaluationFile);
+    public Path getDynamicLexiconTestFile(int n) {
+        return Paths.get(getDynamicLexiconTrainingDirectory(n).toString(), testFile);
     }
 
     public Path getDynamicLexiconModel(int n) {
@@ -259,7 +261,7 @@ public class Environment {
         applyIfFileExists(f, Paths.get(configuration.dynamicLexiconFeatureSet));
         for (int i = 0; i < configuration.dynamicLexiconTrainingFiles.length; i++) {
             applyIfFileExists(f, Paths.get(configuration.dynamicLexiconTrainingFiles[i]));
-            applyIfFileExists(f, Paths.get(configuration.dynamicLexiconEvaluationFiles[i]));
+            applyIfFileExists(f, Paths.get(configuration.dynamicLexiconTestFiles[i]));
         }
         if (configuration.copyTrainingFiles) {
             applyIfFileExists(f, Paths.get(configuration.masterOCR));

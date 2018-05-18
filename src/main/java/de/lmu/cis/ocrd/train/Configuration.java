@@ -14,8 +14,8 @@ public class Configuration {
     public String gt, masterOCR, dynamicLexiconFeatureSet, configuration;
     public String[] otherOCR;
     public String[] dynamicLexiconTrainingFiles;
-    public String[] dynamicLexiconEvaluationFiles;
-    String[] dynamicLexiconModelFiles;
+    public String[] dynamicLexiconTestFiles;
+    public String[] dynamicLexiconModelFiles;
     public boolean copyTrainingFiles, debugTokenAlignment;
 
     static Configuration fromJSON(Path path) throws IOException {

@@ -18,6 +18,7 @@ import static org.junit.Assert.assertThat;
 public class DynamicLexiconTrainerTest {
     private Environment environment;
     private FeatureSet fs;
+    private DynamicLexiconTrainer trainer;
 
     @Before
     public void init() throws IOException {
@@ -31,22 +32,35 @@ public class DynamicLexiconTrainerTest {
         this.fs = new FeatureSet()
                 .add(new TokenLengthFeature(3, 8, 13, "TokenLength"))
                 .add(new TokenCaseFeature("TokenCase"));
+        trainer = new DynamicLexiconTrainer(environment, fs).withSplitFraction(2);
     }
 
     @Test
-    public void testTrainEvalSplit() throws Exception {
-        DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment, fs).withSplitFraction(2);
-        trainer.run();
+    public void testPrepare() throws Exception {
+        trainer.prepare();
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(1))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(2))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(3))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(1))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(2))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(3))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(1))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(2))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(3))), is(true));
+        // environment.zipTo(Paths.get("src", "test", "resources", "test.zip"));
+    }
+
+    @Test
+    public void testTrain() throws Exception {
+        trainer.prepare().train();
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(1))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(2))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(3))), is(true));
-        // environment.zipTo(Paths.get("src", "test", "resources", "test.zip"));
+    }
+
+    @Test
+    public void testEvaluation() throws Exception {
+        trainer.prepare().train().evaluate();
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(1))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(2))), is(true));
+        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(3))), is(true));
     }
 
     @After

@@ -56,7 +56,7 @@ public class DynamicLexiconTrainer {
 
     private void prepare(int n) throws Exception {
         final Path trainPath = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
-        final Path evalPath = environment.fullPath(environment.getDynamicLexiconEvaluationFile(n));
+        final Path evalPath = environment.fullPath(environment.getDynamicLexiconTestFile(n));
         try (final Writer trainWriter = new BufferedWriter(new FileWriter(trainPath.toFile()));
              final Writer evalWriter = new BufferedWriter(new FileWriter(evalPath.toFile()))) {
             final ARFFWriter trainARFFWriter = ARFFWriter.fromFeatureSet(fs)
@@ -92,8 +92,11 @@ public class DynamicLexiconTrainer {
         }
     }
 
-    private void evaluate(int n) {
-
+    private void evaluate(int n) throws Exception {
+        final Path modelFile = environment.fullPath(environment.getDynamicLexiconModel(n));
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(modelFile.toFile()))) {
+            classifier = (AbstractClassifier) in.readObject();
+        }
     }
 
     private interface EachNCallback {
