@@ -4,10 +4,6 @@ import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
-import weka.classifiers.AbstractClassifier;
-import weka.classifiers.functions.Logistic;
-import weka.core.DenseInstance;
-import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
@@ -81,9 +77,10 @@ public class DynamicLexiconTrainer {
 
     private void train(int n) throws Exception {
         final Path trainingFile = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
-        final Instances train = new ConverterUtils.DataSource(trainingFile.toString()).getDataSet();
+        final ConverterUtils.DataSource dataSource = new ConverterUtils.DataSource(trainingFile.toString());
+        final Instances train = dataSource.getDataSet();
         train.setClassIndex(train.numAttributes() - 1);
-        final AbstractClassifier classifier = newClassifier();
+        final Classifier classifier = new Classifier(dataSource.getStructure());
         classifier.buildClassifier(train);
         final Path modelFile = environment.fullPath(environment.getDynamicLexiconModel(n));
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(modelFile.toFile()))) {
@@ -93,33 +90,29 @@ public class DynamicLexiconTrainer {
     }
 
     private void evaluate(int n) throws Exception {
-        final AbstractClassifier classifier = openClassifier(n);
+        final Classifier classifier = openClassifier(n);
         final List<Token> testTokens = openTestFile(n);
         for (Token token : testTokens) {
-            final List<Object> featureVector = fs.calculateFeatureVector(token);
-            final Instance instance = new DenseInstance(featureVector.size() - 1);
-            for (int i = 0; i < featureVector.size()-1; i++) {
-                instance.setValue(i, featureVector.get(i).toString());
-            }
-            final double res = classifier.classifyInstance(instance);
-            for (int i = 0; i < featureVector.size(); i++) {
-                System.out.printf("%s,", featureVector.get(i).toString());
-            }
-            System.out.printf("%d\n", res);
+            System.out.println("predicting: " + token);
+            final FeatureSet.Vector featureVector = fs.calculateFeatureVector(token);
+            System.out.println("vector: " + featureVector);
+            classifier.setClassIndex(featureVector.size() - 1);
+            final double res = classifier.predict(featureVector);
+            System.out.printf("prediction: %f\n", res);
         }
     }
 
-    private AbstractClassifier openClassifier(int n) throws Exception {
+    private Classifier openClassifier(int n) throws Exception {
         final Path modelFile = environment.fullPath(environment.getDynamicLexiconModel(n));
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(modelFile.toFile()))) {
-            return (AbstractClassifier) in.readObject();
+            return (Classifier) in.readObject();
         }
     }
 
     private List<Token> openTestFile(int n) throws Exception {
         final Path testFile = environment.fullPath(environment.getDynamicLexiconTestFile(n));
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(testFile.toFile()))) {
-            return (List<Token>) in.readObject();
+            return (ArrayList<Token>) in.readObject();
         }
     }
 
@@ -132,9 +125,5 @@ public class DynamicLexiconTrainer {
        for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
            f.apply(i+2);
        }
-    }
-
-    private static AbstractClassifier newClassifier() {
-        return new Logistic();
     }
 }

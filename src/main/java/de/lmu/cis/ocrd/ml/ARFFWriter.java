@@ -10,7 +10,6 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 // ARFFWriter writes feature vectors into WEKAs ARFF (Attribute-Relation-File-Format).
 // After all features have been added to this writer using `addFeature()`,
@@ -94,17 +93,8 @@ public class ARFFWriter {
         writer.printf("%% %s\n", new Gson().toJson(new DebugToken(token)));
     }
 
-    public void writeFeatureVector(List<Object> features) {
-        boolean first = true;
-        for (Object val : features) {
-            if (first) {
-                writer.print(val.toString());
-                first = false;
-            } else {
-                writer.printf(",%s", val.toString());
-            }
-        }
-        writer.println();
+    public void writeFeatureVector(FeatureSet.Vector features) {
+        writer.println(features);
     }
 
     private String getAttributeOfNamedBooleanFeature(NamedBooleanFeature feature) {

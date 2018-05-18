@@ -9,6 +9,26 @@ import java.util.List;
 
 public class FeatureSet implements Iterable<Feature>, Serializable {
 
+    public static class Vector extends ArrayList<Object> {
+        Vector(int n) {
+            super(n);
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            boolean first = true;
+            for (Object feature : this) {
+                if (!first) {
+                    builder.append(',');
+                }
+                builder.append(feature.toString());
+                first = false;
+            }
+            return builder.toString();
+        }
+    }
+
 	private final List<Feature> features = new ArrayList<>();
 
 	public Feature get(int i) {
@@ -20,12 +40,12 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 		return this;
 	}
 
-	public List<Object> calculateFeatureVector(Token token) {
+    public Vector calculateFeatureVector(Token token) {
 		return calculateFeatureVector(token, 1);
 	}
 
-	public List<Object> calculateFeatureVector(Token token, int n) {
-		ArrayList<Object> vec = new ArrayList<>(this.size());
+    public Vector calculateFeatureVector(Token token, int n) {
+        Vector vec = new Vector(this.size());
 		for (Feature feature : this.features) {
 		    for (int i = 0; i < n; i++) {
 		    	if (!feature.handlesOCR(i, n)) {
