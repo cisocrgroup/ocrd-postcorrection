@@ -2,12 +2,13 @@ package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.Word;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 // TODO: Merge with Alignment.Token
-public class Token {
+public class Token implements Serializable {
     private final Word masterOCR;
     private final int id;
     private String gt;

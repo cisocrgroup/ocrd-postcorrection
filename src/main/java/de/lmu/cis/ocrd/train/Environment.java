@@ -20,7 +20,8 @@ public class Environment {
     private static final String dLex = "dLex";
     private static final String dLexFS = "features.ser";
     private static final String trainingFile = "training.arff";
-    private static final String testFile = "test.arff";
+    private static final String testFile = "test.ser";
+    private static final String evaluationFile = "evaluation.txt";
     private static final String model = "model.ser";
     private final String path, name;
     private Path gt, masterOCR;
@@ -249,6 +250,10 @@ public class Environment {
 
     public Path getDynamicLexiconModel(int n) {
         return Paths.get(getDynamicLexiconTrainingDirectory(n).toString(), model);
+    }
+
+    public Path getDynamicLexiconEvaluationFile(int i) {
+        return Paths.get(getDynamicLexiconTrainingDirectory(i).toString(), evaluationFile);
     }
 
     private interface EachFileCallback {

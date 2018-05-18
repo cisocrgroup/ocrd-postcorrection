@@ -1,11 +1,12 @@
 package de.lmu.cis.ocrd;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-public class SimpleLine implements Line {
+public class SimpleLine implements Line, Serializable {
 
 	private static String normalize(String line) {
 		return line.replaceAll("[^\\p{L}\\p{Nd}]+", " ").trim();

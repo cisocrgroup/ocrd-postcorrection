@@ -1,8 +1,9 @@
 package de.lmu.cis.ocrd;
 
+import java.io.Serializable;
 import java.util.Optional;
 
-public class Word {
+public class Word implements Serializable {
     private final SimpleLine line;
     private final int s, e;
 
