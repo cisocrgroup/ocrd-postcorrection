@@ -33,6 +33,7 @@ public class Classifier extends Logistic implements Serializable {
         for (int i = 0; i < n; i++) {
             System.out.println(Arrays.toString(structure.attributeToDoubleArray(i)));
         }
+        System.out.println("prediction by value: " + instance.classAttribute().value((int) res));
         return res;
     }
 }
