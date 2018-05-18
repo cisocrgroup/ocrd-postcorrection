@@ -9,7 +9,7 @@ public abstract class NamedBooleanFeature extends NamedFeature {
 
     @Override
     public final Object calculate(Token token, int i, int n) {
-        return this.doCalculate(token, i, n) ? 1.0 : -1.0;
+        return this.doCalculate(token, i, n);
     }
 
     abstract boolean doCalculate(Token token, int i, int n);

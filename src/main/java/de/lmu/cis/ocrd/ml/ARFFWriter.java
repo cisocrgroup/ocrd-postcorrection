@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.ml;
 
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.GTFeature;
+import de.lmu.cis.ocrd.ml.features.NamedBooleanFeature;
 import de.lmu.cis.ocrd.ml.features.NamedStringSetFeature;
 
 import java.io.PrintWriter;
@@ -58,8 +58,8 @@ public class ARFFWriter {
                     continue;
                 }
                 String attribute = String.format("%s_%d\tREAL", feature.getName(), i+1);
-                if (feature instanceof GTFeature) {
-                    attribute = getAttributeOfGTFeature((GTFeature) feature);
+                if (feature instanceof NamedBooleanFeature) {
+                    attribute = getAttributeOfNamedBooleanFeature((NamedBooleanFeature) feature);
                 } else if (feature instanceof NamedStringSetFeature) {
                     attribute = getAttributeOfNamedStringSetFeature((NamedStringSetFeature) feature);
                 }
@@ -106,7 +106,7 @@ public class ARFFWriter {
         writer.println();
     }
 
-    private String getAttributeOfGTFeature(GTFeature feature) {
+    private String getAttributeOfNamedBooleanFeature(NamedBooleanFeature feature) {
         return String.format("%s\t{%s,%s}", feature.getName(), Boolean.toString(true), Boolean.toString(false));
     }
 
