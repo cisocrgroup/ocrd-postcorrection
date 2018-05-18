@@ -5,6 +5,7 @@ ENV PROFILER_GIT https://github.com/cisocrgroup/Profiler
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
+VOLUME ["/data"]
 RUN apt-get update && \
     apt-get install -y git cmake g++ libxerces-c-dev libcppunit-dev && \
     apt-get install -y openjdk-8-jre && \
@@ -19,6 +20,7 @@ RUN apt-get update && \
     cd / && \
     rm -rf /src/Profiler
 COPY target/${OCRD_VERSION}-cli.jar /apps/
+COPY resources/defaultConfiguration.json /apps/${OCRD_VERSION}-config.json
 ENTRYPOINT ["/bin/sh", "-c"]
 #COPY target/${OCRD_VERSION}.war /usr/local/tomcat/webapps
 #COPY tomcat-users.xml ${CATALINA_HOME}/conf/tomcat-users.xml
