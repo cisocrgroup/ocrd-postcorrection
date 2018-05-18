@@ -19,3 +19,5 @@ medium-token,mixed-case,0.0,0.05555555555555555,0.05555555555555555,0.0,0.0,fals
 long-token,all-upper-case,0.0,4.9E-324,4.9E-324,0.0,0.0,false
 % {"ocr":["anotherevenlongertoken","anotherevnlongertkn","anotherevnlongertkn"],"gt":"anotherevenlongertoken","pageID":0,"lineID":1,"tokenID":5}
 very-long-token,all-lower-case,0.0,4.9E-324,4.9E-324,0.0,0.0,true
+% {"ocr":["the","THE","ThE"],"gt":"the","pageID":0,"lineID":1,"tokenID":6}
+short-token,all-lower-case,0.0,0.05555555555555555,0.05555555555555555,0.0,0.0,false

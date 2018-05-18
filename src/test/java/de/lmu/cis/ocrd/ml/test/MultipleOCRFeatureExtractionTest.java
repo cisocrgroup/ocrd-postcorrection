@@ -24,10 +24,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class MultipleOCRFeatureExtractionTest {
-    private final String gt = "First second third alongtoken anotherevenlongertoken";
-    private final String mOCR = "first second ThIrD ALONGTOKEN anotherevenlongertoken";
-    private final String aOCR1 = "First second third alongtoken anotherevnlongertkn";
-    private final String aOCR2 = "frst second third alongtoken anotherevnlongertkn";
+    private final String gt = "First second third alongtoken anotherevenlongertoken the";
+    private final String mOCR = "first second ThIrD ALONGTOKEN anotherevenlongertoken the";
+    private final String aOCR1 = "First second third alongtoken anotherevnlongertkn THE";
+    private final String aOCR2 = "frst second third alongtoken anotherevnlongertkn ThE";
     private FeatureSet fs;
     private List<Token> tokens;
 
