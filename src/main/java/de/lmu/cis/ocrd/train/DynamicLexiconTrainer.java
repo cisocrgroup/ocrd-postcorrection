@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.train;
 import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.ml.features.GTFeature;
+import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.functions.Logistic;
 import weka.core.Instances;
@@ -20,7 +20,7 @@ public class DynamicLexiconTrainer {
 
     public DynamicLexiconTrainer(Environment environment, FeatureSet fs) throws IOException {
         this.environment = environment.withDynamicLexiconFeatureSet(fs);
-        this.fs = fs.add(new GTFeature());
+        this.fs = fs.add(new DynamicLexiconGTFeature());
         this.classifier = new Logistic();
         this.n = 10;
     }

@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.train.test;
 import de.lmu.cis.ocrd.archive.Entry;
 import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.ml.FeatureSet;
-import de.lmu.cis.ocrd.ml.features.GTFeature;
+import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.TokenCaseFeature;
 import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
 import de.lmu.cis.ocrd.train.Configuration;
@@ -104,17 +104,17 @@ public class EnvironmentTest {
         final FeatureSet fs = new FeatureSet()
                 .add(new TokenCaseFeature("x"))
                 .add(new TokenLengthFeature(3, 8, 13, "y"))
-                .add(new GTFeature());
+                .add(new DynamicLexiconGTFeature());
         environment.withDynamicLexiconFeatureSet(fs);
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconFeatureSet())), is(true));
         final FeatureSet ofs = environment.loadDynamicLexiconFeatureSet();
         assertThat(ofs.size(), is(3));
         assertThat(ofs.get(0).getName(), is("x"));
         assertThat(ofs.get(1).getName(), is("y"));
-        assertThat(ofs.get(2).getName(), is("GT"));
+        assertThat(ofs.get(2).getName(), is("DynamicLexiconGT"));
         assertThat((ofs.get(0) instanceof TokenCaseFeature), is(true));
         assertThat((ofs.get(1) instanceof TokenLengthFeature), is(true));
-        assertThat((ofs.get(2) instanceof GTFeature), is(true));
+        assertThat((ofs.get(2) instanceof DynamicLexiconGTFeature), is(true));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class EnvironmentTest {
                 .withGT(abbyy)
                 .withMasterOCR(tess)
                 .addOtherOCR(ocropus)
-                .withDynamicLexiconFeatureSet(new FeatureSet().add(new GTFeature()));
+                .withDynamicLexiconFeatureSet(new FeatureSet().add(new DynamicLexiconGTFeature()));
         final Path zip = Paths.get("src","test","resources","test.zip");
         environment.zipTo(zip);
         assertThat(Files.exists(zip), is(true));

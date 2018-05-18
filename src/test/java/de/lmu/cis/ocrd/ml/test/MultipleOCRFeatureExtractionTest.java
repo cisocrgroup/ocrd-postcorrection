@@ -40,7 +40,7 @@ public class MultipleOCRFeatureExtractionTest {
                 .add(new SumOfMatchingAdditionalOCRsFeature("SumOfMatches"))
                 .add(new MaxCharNGramsFeature("MaxCharNGramFeature", ngrams))
                 .add(new MinCharNGramsFeature("MinCharNGramFeature", ngrams))
-                .add(new GTFeature());
+                .add(new DynamicLexiconGTFeature());
         final Document gtDoc = new StringParser(0, gt).parse().withPath("GT");
         final Document mOCRDoc = new StringParser(0, mOCR).parse().withPath("master OCR");
         final Document aOCR1Doc = new StringParser(0, aOCR1).parse().withPath("additional OCR 1");
