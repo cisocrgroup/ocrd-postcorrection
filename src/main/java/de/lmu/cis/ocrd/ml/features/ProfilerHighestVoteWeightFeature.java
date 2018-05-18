@@ -8,7 +8,7 @@ import de.lmu.cis.ocrd.profile.Profile;
 
 import java.util.Optional;
 
-public class ProfilerHighestVoteWeightFeature extends NamedFeature {
+public class ProfilerHighestVoteWeightFeature extends NamedDoubleFeature {
     private final ArgumentFactory args;
     private Profile profile;
 
@@ -27,11 +27,11 @@ public class ProfilerHighestVoteWeightFeature extends NamedFeature {
     }
 
     @Override
-    public Object calculate(Token token, int i, int n) {
+    protected double doCalculate(Token token, int i, int n) {
         if (profile == null) {
             profile = args.getProfile();
         }
         final Optional<Candidates> candidates = profile.get(getWord(token, i, n).toString());
-        return candidates.<Object>map(candidates1 -> candidates1.Candidates[0].Weight).orElse(0.0);
+        return candidates.map(candidates1 -> candidates1.Candidates[0].Weight).orElse(0.0);
     }
 }
