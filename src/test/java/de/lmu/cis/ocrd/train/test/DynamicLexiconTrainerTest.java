@@ -49,7 +49,6 @@ public class DynamicLexiconTrainerTest {
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(1))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(2))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(3))), is(true));
-        // environment.zipTo(Paths.get("src", "test", "resources", "test.zip"));
     }
 
     @Test
@@ -66,7 +65,6 @@ public class DynamicLexiconTrainerTest {
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(1))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(2))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(3))), is(true));
-		// environment.zipTo(Paths.get("src", "test", "resources", "test.zip"));
     }
 
 	@Test
