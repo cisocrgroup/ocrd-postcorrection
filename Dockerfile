@@ -20,7 +20,7 @@ RUN apt-get update && \
     cd / && \
     rm -rf /src/Profiler
 COPY target/${OCRD_VERSION}-cli.jar /apps/
-COPY resources/defaultConfiguration.json /apps/${OCRD_VERSION}-config.json
+COPY src/main/resources/defaultConfiguration.json /apps/${OCRD_VERSION}-config.json
 ENTRYPOINT ["/bin/sh", "-c"]
 #COPY target/${OCRD_VERSION}.war /usr/local/tomcat/webapps
 #COPY tomcat-users.xml ${CATALINA_HOME}/conf/tomcat-users.xml
