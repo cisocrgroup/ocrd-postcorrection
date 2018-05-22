@@ -1,8 +1,6 @@
 package de.lmu.cis.ocrd.train;
 
-import de.lmu.cis.ocrd.ml.ARFFWriter;
-import de.lmu.cis.ocrd.ml.FeatureSet;
-import de.lmu.cis.ocrd.ml.Token;
+import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
@@ -79,9 +77,9 @@ public class DynamicLexiconTrainer {
         final Path trainingFile = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
         final ConverterUtils.DataSource dataSource = new ConverterUtils.DataSource(trainingFile.toString());
         final Instances train = dataSource.getDataSet();
+		final Instances structure = dataSource.getStructure();
         train.setClassIndex(train.numAttributes() - 1);
-        final Classifier classifier = new Classifier(dataSource.getStructure());
-        classifier.buildClassifier(train);
+		final de.lmu.cis.ocrd.ml.Classifier classifier = LogisticClassifier.train(train, structure);
         final Path modelFile = environment.fullPath(environment.getDynamicLexiconModel(n));
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(modelFile.toFile()))) {
             out.writeObject(classifier);
@@ -90,31 +88,59 @@ public class DynamicLexiconTrainer {
     }
 
     private void evaluate(int n) throws Exception {
-        final Classifier classifier = openClassifier(n);
+		final de.lmu.cis.ocrd.ml.Classifier classifier = openClassifier(n);
         final List<Token> testTokens = openTestFile(n);
-        for (Token token : testTokens) {
-            System.out.println("predicting: " + token);
-            final FeatureSet.Vector featureVector = fs.calculateFeatureVector(token);
-            System.out.println("vector: " + featureVector);
-            classifier.setClassIndex(featureVector.size() - 1);
-            final double res = classifier.predict(featureVector);
-            System.out.printf("prediction: %f\n", res);
+		final Path evaluationFile = environment.fullPath(environment.getDynamicLexiconEvaluationFile(n));
+		final ErrorCounts errorCounts = new ErrorCounts();
+		try (PrintWriter out = new PrintWriter(new FileOutputStream(evaluationFile.toFile()))) {
+			for (Token token : testTokens) {
+				System.out.println("---");
+				out.println("---");
+				System.out.println("predicting: " + token.toJSON());
+				out.println("predicting: " + token.toJSON());
+				final FeatureSet.Vector featureVector = fs.calculateFeatureVector(token);
+				System.out.println("features: " + featureVector.toJSON());
+				out.println("features: " + featureVector.toJSON());
+				// classifier.setClassIndex(featureVector.size() - 1);
+				final Prediction prediction = classifier.predict(featureVector);
+				System.out.printf("prediction: %s\n", prediction.toJSON());
+				out.printf("prediction: %s\n", prediction.toJSON());
+				errorCounts.add(token, prediction, featureVector.get(featureVector.size() - 1));
+			}
+			for (Token token : errorCounts.getTruePositives()) {
+				System.out.println("good lexicon entry: " + token.toJSON());
+				out.println("good lexicon entry: " + token.toJSON());
+			}
+			for (Token token : errorCounts.getFalsePositives()) {
+				System.out.println("bad lexicon entry: " + token.toJSON());
+				out.println("bad lexicon entry: " + token.toJSON());
+			}
+			for (Token token : errorCounts.getFalseNegatives()) {
+				System.out.println("missed lexicon entry: " + token.toJSON());
+				out.println("missed lexicon entry: " + token.toJSON());
+			}
+			System.out.println("rate of bad lexicon entries [1-precision]: " + (1 - errorCounts.getPrecision()));
+			out.println("rate of bad lexicon entries [1-precision]: " + (1 - errorCounts.getPrecision()));
+			System.out.println("rate of missed opportunities [1-recall]: " + (1 - errorCounts.getRecall()));
+			out.println("rate of missed opportunities [1-recall]: " + (1 - errorCounts.getRecall()));
+			out.flush();
         }
     }
 
-    private Classifier openClassifier(int n) throws Exception {
+	private de.lmu.cis.ocrd.ml.Classifier openClassifier(int n) throws Exception {
         final Path modelFile = environment.fullPath(environment.getDynamicLexiconModel(n));
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(modelFile.toFile()))) {
-            return (Classifier) in.readObject();
+			return (de.lmu.cis.ocrd.ml.Classifier) in.readObject();
         }
     }
 
-    private List<Token> openTestFile(int n) throws Exception {
-        final Path testFile = environment.fullPath(environment.getDynamicLexiconTestFile(n));
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(testFile.toFile()))) {
-            return (ArrayList<Token>) in.readObject();
-        }
-    }
+	@SuppressWarnings("unchecked")
+	private List<Token> openTestFile(int n) throws Exception {
+		final Path testFile = environment.fullPath(environment.getDynamicLexiconTestFile(n));
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(testFile.toFile()))) {
+			return (ArrayList<Token>) in.readObject();
+		}
+	}
 
     private interface EachNCallback {
         void apply(int n) throws Exception;

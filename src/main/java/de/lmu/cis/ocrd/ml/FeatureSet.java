@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.ml;
 
+import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.Feature;
 
 import java.io.Serializable;
@@ -27,6 +28,10 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
             }
             return builder.toString();
         }
+
+		public String toJSON() {
+			return new Gson().toJson(this);
+		}
     }
 
 	private final List<Feature> features = new ArrayList<>();
