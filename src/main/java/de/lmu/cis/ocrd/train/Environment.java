@@ -163,17 +163,20 @@ public class Environment {
         c.masterOCR = masterOCR.toString();
         c.dynamicLexiconFeatureSet = getDynamicLexiconFeatureSet().toString();
         c.dynamicLexiconTrainingFiles = new String[1+otherOCR.size()];
-        c.dynamicLexiconTestFiles = new String[1 + otherOCR.size()];
-        c.dynamicLexiconModelFiles= new String[1+otherOCR.size()];
+		c.dynamicLexiconEvaluationFiles = new String[1 + otherOCR.size()];
+		c.dynamicLexiconModelFiles = new String[1 + otherOCR.size()];
+		c.dynamicLexiconTestFiles = new String[1 + otherOCR.size()];
         c.dynamicLexiconTrainingFiles[0] = getDynamicLexiconTrainingFile(1).toString();
         c.dynamicLexiconModelFiles[0] = getDynamicLexiconModel(1).toString();
         c.dynamicLexiconTrainingFiles[0] = getDynamicLexiconTrainingFile(1).toString();
+		c.dynamicLexiconEvaluationFiles[0] = getDynamicLexiconEvaluationFile(1).toString();
         c.dynamicLexiconTestFiles[0] = getDynamicLexiconTestFile(1).toString();
         c.otherOCR = new String[otherOCR.size()];
         for (int i = 0; i < otherOCR.size(); i++) {
             c.dynamicLexiconTrainingFiles[i+1] = getDynamicLexiconTrainingFile(i+2).toString();
-            c.dynamicLexiconTestFiles[i + 1] = getDynamicLexiconTestFile(i + 2).toString();
+			c.dynamicLexiconEvaluationFiles[i + 1] = getDynamicLexiconEvaluationFile(i + 2).toString();
             c.dynamicLexiconModelFiles[i+1] = getDynamicLexiconModel(i+2).toString();
+			c.dynamicLexiconTestFiles[i + 1] = getDynamicLexiconTestFile(i + 2).toString();
             c.otherOCR[i] = otherOCR.get(i).toString();
         }
         c.copyTrainingFiles = this.copyTrainingFiles;
@@ -267,6 +270,7 @@ public class Environment {
         for (int i = 0; i < configuration.dynamicLexiconTrainingFiles.length; i++) {
             applyIfFileExists(f, Paths.get(configuration.dynamicLexiconTrainingFiles[i]));
             applyIfFileExists(f, Paths.get(configuration.dynamicLexiconTestFiles[i]));
+			applyIfFileExists(f, Paths.get(configuration.dynamicLexiconEvaluationFiles[i]));
         }
         if (configuration.copyTrainingFiles) {
             applyIfFileExists(f, Paths.get(configuration.masterOCR));

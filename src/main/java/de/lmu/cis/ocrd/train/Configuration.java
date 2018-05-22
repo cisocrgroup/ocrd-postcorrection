@@ -14,6 +14,7 @@ public class Configuration {
     public String gt, masterOCR, dynamicLexiconFeatureSet, configuration;
     public String[] otherOCR;
     public String[] dynamicLexiconTrainingFiles;
+    public String[] dynamicLexiconEvaluationFiles;
     public String[] dynamicLexiconTestFiles;
     public String[] dynamicLexiconModelFiles;
     public boolean copyTrainingFiles, debugTokenAlignment;
