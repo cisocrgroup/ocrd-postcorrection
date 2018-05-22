@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.ml;
 
+import com.google.gson.Gson;
 import de.lmu.cis.ocrd.Word;
 
 import java.io.Serializable;
@@ -91,5 +92,28 @@ public class Token implements Serializable {
 
     public boolean hasGT() {
         return gt != null;
+    }
+
+    public String toJSON() {
+        return new Gson().toJson(new Data(this));
+    }
+
+    static class Data {
+        final String[] ocr;
+        final String gt;
+        final int pageID, lineID, tokenID;
+
+        Data(Token token) {
+            pageID = token.getMasterOCR().getLine().getPageId();
+            lineID = token.getMasterOCR().getLine().getLineId();
+            tokenID = token.getID();
+            gt = token.getGT().isPresent() ? token.getGT().get() : "";
+            ocr = new String[1 + token.getNumberOfOtherOCRs()];
+            ocr[0] = token.getMasterOCR().toString();
+            for (int i = 0; i < token.getNumberOfOtherOCRs(); i++) {
+                ocr[i + 1] = token.getOtherOCRAt(i).toString();
+            }
+        }
+
     }
 }
