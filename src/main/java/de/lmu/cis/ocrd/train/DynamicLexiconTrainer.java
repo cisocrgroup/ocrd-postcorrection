@@ -13,16 +13,16 @@ import java.util.List;
 public class DynamicLexiconTrainer {
     private final Environment environment;
     private final FeatureSet fs;
-    private int n;
+	private int testEvaluationSplitFraction;
 
     public DynamicLexiconTrainer(Environment environment, FeatureSet fs) throws IOException {
         this.environment = environment.withDynamicLexiconFeatureSet(fs);
         this.fs = fs.add(new DynamicLexiconGTFeature());
-        this.n = 10;
+		this.testEvaluationSplitFraction = 10;
     }
 
     public DynamicLexiconTrainer withSplitFraction(int n) {
-        this.n = n;
+		this.testEvaluationSplitFraction = n;
         return this;
     }
 
@@ -57,7 +57,7 @@ public class DynamicLexiconTrainer {
                     .withDebugToken(environment.isDebugTokenAlignment());
             trainARFFWriter.writeHeader(n);
             final Tokenizer tokenizer = new Tokenizer(environment);
-            new TrainSetSplitter(n).eachToken(tokenizer, (Token token, boolean isTrain) -> {
+			new TrainSetSplitter(this.testEvaluationSplitFraction).eachToken(tokenizer, (Token token, boolean isTrain) -> {
                 if (isTrain) {
                     trainARFFWriter.writeToken(token);
                     trainARFFWriter.writeFeatureVector(fs.calculateFeatureVector(token));

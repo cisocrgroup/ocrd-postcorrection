@@ -39,15 +39,18 @@ class ErrorCounts {
 	}
 
 	double getPrecision() {
-		final double tp = getTruePositiveCount();
-		final double fp = getFalsePositiveCount();
-		return tp / (tp + fp);
+		return calculateRate(getTruePositiveCount(), getFalsePositiveCount());
 	}
 
 	double getRecall() {
-		final double tp = getTruePositiveCount();
-		final double fn = getFalseNegativeCount();
-		return tp / (tp + fn);
+		return calculateRate(getTruePositiveCount(), getFalseNegativeCount());
+	}
+
+	private static double calculateRate(int a, int b) {
+		if (a + b == 0) {
+			return 1;
+		}
+		return (double) a / ((double) (a + b));
 	}
 
 	Iterable<Token> getTruePositives() {

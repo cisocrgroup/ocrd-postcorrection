@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.train.test;
 
 import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.ml.features.TokenCaseFeature;
 import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
 import de.lmu.cis.ocrd.train.DynamicLexiconTrainer;
@@ -9,8 +10,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -61,7 +66,23 @@ public class DynamicLexiconTrainerTest {
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(1))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(2))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(3))), is(true));
+		// environment.zipTo(Paths.get("src", "test", "resources", "test.zip"));
     }
+
+	@Test
+	public void checkTestFileContent() throws Exception {
+		trainer.prepare();
+		assertThat(getNumberOfTestTokens(environment.fullPath(environment.getDynamicLexiconTestFile(1))), is(432));
+		assertThat(getNumberOfTestTokens(environment.fullPath(environment.getDynamicLexiconTestFile(2))), is(432));
+		assertThat(getNumberOfTestTokens(environment.fullPath(environment.getDynamicLexiconTestFile(3))), is(432));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static int getNumberOfTestTokens(Path path) throws IOException, ClassNotFoundException {
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path.toFile()))) {
+			return ((ArrayList<Token>) in.readObject()).size();
+		}
+	}
 
     @After
     public void deInit() throws Exception {
