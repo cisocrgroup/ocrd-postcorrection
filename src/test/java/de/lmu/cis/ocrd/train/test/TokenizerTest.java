@@ -21,11 +21,12 @@ public class TokenizerTest {
 
     @Before
     public void init() throws IOException {
+		final String resources = "src/test/resources";
         environment = new Environment(base, name)
                 .withCopyTrainingFiles(false)
-                .withGT(base + "/1841-DieGrenzboten-gt-small.zip")
-                .withMasterOCR(base + "/1841-DieGrenzboten-abbyy-small.zip")
-                .addOtherOCR(base + "/1841-DieGrenzboten-tesseract-small.zip");
+				.withGT(resources + "/1841-DieGrenzboten-gt-small.zip")
+				.withMasterOCR(resources + "/1841-DieGrenzboten-abbyy-small.zip")
+				.addOtherOCR(resources + "/1841-DieGrenzboten-tesseract-small.zip");
         tokenizer = new Tokenizer(environment);
     }
 
