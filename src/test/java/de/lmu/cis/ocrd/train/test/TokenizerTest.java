@@ -14,7 +14,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class TokenizerTest {
-    private static final String base = "src/test/resources";
+    private static final String base = "/tmp";
     private static final String name = "training-test";
     private Environment environment;
     private Tokenizer tokenizer;

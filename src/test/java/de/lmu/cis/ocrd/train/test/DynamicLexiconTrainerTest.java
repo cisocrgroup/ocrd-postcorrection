@@ -27,7 +27,7 @@ public class DynamicLexiconTrainerTest {
 
     @Before
     public void init() throws IOException {
-        this.environment = new Environment("src/test/resources/", "train-test")
+        this.environment = new Environment("/tmp/", "train-test")
                 .withCopyTrainingFiles(true)
                 .withGT("src/test/resources/1841-DieGrenzboten-gt-small.zip")
                 .withMasterOCR("src/test/resources/1841-DieGrenzboten-tesseract-small.zip")

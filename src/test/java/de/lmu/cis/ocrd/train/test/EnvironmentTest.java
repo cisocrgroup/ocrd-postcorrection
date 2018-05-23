@@ -21,7 +21,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 public class EnvironmentTest {
 
-    private final static String base = "src/test/resources";
+    private final static String base = "/tmp";
     private final static String name = "test-environment";
     private Environment environment;
 
