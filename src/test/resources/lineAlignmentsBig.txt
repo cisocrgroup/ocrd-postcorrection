@@ -8470,10 +8470,6 @@
 # von uns ſagen der Menſch iſt verriickt toll es iſt jammerſchade ich
 # von uns sagen der Mensch ist verrückt toll es ist iammerschade ich
 |55:27:abbyy|55:27:ocropus|55:27:tesseract
-# A W e i l
-# M e i e b r i e f e
-# e i l
-|55:3:abbyy|55:1:ocropus|55:3:ocropus
 # Von
 # V o n
 # Von
