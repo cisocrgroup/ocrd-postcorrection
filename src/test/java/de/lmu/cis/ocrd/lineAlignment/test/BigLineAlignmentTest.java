@@ -16,6 +16,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -33,6 +34,9 @@ public class BigLineAlignmentTest {
         Document d1 = new ArchiveParser(new ABBYYXMLParserFactory(), new ABBYYXMLFileType(), new ZipArchive(r1)).parse();
         Document d2 = new ArchiveParser(new HOCRParserFactory(), new HOCRFileType(), new ZipArchive(r2)).parse();
         Document d3 = new OcropusArchiveLlocsParser(new ZipArchive(r3)).parse();
+		// Document d1 = new TestDocument().withLine("Tief im längst versunken Schlosse", 1, 1, "abbyy", true);
+		// Document d2 = new TestDocument().withLine("Tief im lngſt verfunknen Schloſſe", 1, 1, "tesseract", false);
+		// Document d3 = new TestDocument().withLine("Tief im längst V ersunt nen Schlosse", 1, 1, "ocropus", false);
         project = new Project().put("abbyy", d1, true).put("tesseract", d2).put("ocropus", d3);
         gold = new HashSet<>();
         try (BufferedReader r = new BufferedReader(new FileReader(new File("src/test/resources/lineAlignmentsBig.txt")))) {
@@ -47,19 +51,27 @@ public class BigLineAlignmentTest {
 
     @Test
     public void testFast() throws Exception {
-        project.eachPage((page)-> {
-            LineAlignment_Fast la = new LineAlignment_Fast(page, 3);
-            // LineAlignment la = new LineAlignment(page, 3);
-            for (ArrayList<OCRLine> alignments : la) {
-                final String x = makeID(alignments);
-                for (OCRLine line : alignments) {
-                    System.out.println("# " + line.line.getNormalized());
-                }
-                System.out.println(x);
-                assertThat(gold.contains(x), is(true));
-            }
-        });
-    }
+		final Set<String> got = getLineAlignments();
+		for (String gotStr : got) {
+			// System.out.println("GOT_STR: " + gotStr);
+			assertThat(gold.contains(gotStr), is(true));
+		}
+		for (String goldStr : gold) {
+			System.out.println("GOLD_STR: " + goldStr);
+			assertThat(got.contains(goldStr), is(true));
+		}
+	}
+
+	private Set<String> getLineAlignments() throws Exception {
+		HashSet<String> set = new HashSet<>();
+		project.eachPage((page) -> {
+			LineAlignment_Fast la = new LineAlignment_Fast(page, 3);
+			for (ArrayList<OCRLine> alignments : la) {
+				set.add(makeID(alignments));
+			}
+		});
+		return set;
+	}
 
     private static String makeID(ArrayList<OCRLine> alignments) {
         StringBuilder builder = new StringBuilder();
