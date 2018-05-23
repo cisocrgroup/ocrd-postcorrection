@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.ml;
 import java.util.HashMap;
 
 public class FreqMap {
-    private final HashMap<String, Integer> freqs = new HashMap<>();
+	private final HashMap<String, Integer> frequencies = new HashMap<>();
     private int total;
 
     public int add(String t) {
@@ -14,7 +14,7 @@ public class FreqMap {
         int x = doGet(t);
         x += n;
         total += n;
-        freqs.put(t.toLowerCase(), x);
+		frequencies.put(t.toLowerCase(), x);
         return x;
     }
 
@@ -34,7 +34,7 @@ public class FreqMap {
     }
 
     private int doGet(String t) {
-        Integer n = freqs.get(t.toLowerCase());
+		Integer n = frequencies.get(t.toLowerCase());
         return n == null ? 0 : n;
     }
 }
