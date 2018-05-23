@@ -494,18 +494,17 @@ public class Common_SCDAWG_Functions {
 			}
 		});
 
-		System.out.println("Size " + marked_nodes.length);
+//		System.out.println("Size " + marked_nodes.length);
 
-		for (int i = 0; i < scdawg.all_nodes.size(); i++) {
-			Node n = scdawg.all_nodes.get(i);
-			System.out.println(scdawg.get_node_label(n) + " " + marked_nodes[n.id]);
+//		for (int i = 0; i < scdawg.all_nodes.size(); i++) {
+//			Node n = scdawg.all_nodes.get(i);
+//			System.out.println(scdawg.get_node_label(n) + " " + marked_nodes[n.id]);
 
 			// if (scdawg.stringset.get(0).contains(scdawg.get_node_label(n))
 			// && scdawg.stringset.get(0).contains(scdawg.get_node_label(n)) &&
 			// marked_nodes[n.id] != -1) {
-			// System.out.println("ALARM");
 			// }
-		}
+//		}
 
 		return marked_nodes;
 
