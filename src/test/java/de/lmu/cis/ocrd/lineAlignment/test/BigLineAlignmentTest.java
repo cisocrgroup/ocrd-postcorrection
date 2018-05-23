@@ -4,10 +4,7 @@ import de.lmu.cis.iba.LineAlignment_Fast;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.OCRLine;
 import de.lmu.cis.ocrd.Project;
-import de.lmu.cis.ocrd.archive.ZipArchive;
-import de.lmu.cis.ocrd.parsers.*;
 import de.lmu.cis.ocrd.test.TestDocument;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,17 +28,17 @@ public class BigLineAlignmentTest {
 
     @Before
     public void init() throws Exception {
-        Document d1 = new ArchiveParser(new ABBYYXMLParserFactory(), new ABBYYXMLFileType(), new ZipArchive(r1)).parse();
-        Document d2 = new ArchiveParser(new HOCRParserFactory(), new HOCRFileType(), new ZipArchive(r2)).parse();
-        Document d3 = new OcropusArchiveLlocsParser(new ZipArchive(r3)).parse();
+//        Document d1 = new ArchiveParser(new ABBYYXMLParserFactory(), new ABBYYXMLFileType(), new ZipArchive(r1)).parse();
+//        Document d2 = new ArchiveParser(new HOCRParserFactory(), new HOCRFileType(), new ZipArchive(r2)).parse();
+//        Document d3 = new OcropusArchiveLlocsParser(new ZipArchive(r3)).parse();
 		// Document d1 = new TestDocument().withLine("Tief im längst versunken Schlosse", 1, 1, "abbyy", true);
 		// Document d2 = new TestDocument().withLine("Tief im lngſt verfunknen Schloſſe", 1, 1, "tesseract", false);
 		// Document d3 = new TestDocument().withLine("Tief im längst V ersunt nen Schlosse", 1, 1, "ocropus", false);
-        
-//		Document d1 = new TestDocument().withLine("I Kuranda", 1, 1, "abbyy", true);
-//		Document d2 = new TestDocument().withLine("V Kuranda", 1, 1, "tesseract", false);
-//		Document d3 = new TestDocument().withLine("J Kuranda", 1, 1, "ocropus", false);
-//        
+
+		Document d1 = new TestDocument().withLine("I Kuranda", 1, 1, "abbyy", true).withLine("J a", 1, 1, "abbyy", true);
+		Document d2 = new TestDocument().withLine("V Kuranda", 1, 1, "tesseract", false);
+		Document d3 = new TestDocument().withLine("J Kuranda", 1, 1, "ocropus", false);
+//
   
         
         
