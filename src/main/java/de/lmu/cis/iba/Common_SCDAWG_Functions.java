@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-
+import de.lmu.cis.ocrd.OCRLine;
 
 /**
  * @author Tobias Englmeier (CIS)
@@ -116,7 +116,7 @@ public class Common_SCDAWG_Functions {
 				if (n2.is_endNode) {
 					sinkshit.add(n2.stringnr);
 
-					int endpos = scdawg.get_node_length(n2) - scdawg.get_edge_length(letter, node, n2)-1;
+					int endpos = scdawg.get_node_length(n2) - scdawg.get_edge_length(letter, node, n2) - 1;
 					if (n2.stringnr == 0) {
 						if (!endpos_s1.contains(endpos)) {
 							endpos_s1.add(endpos);
@@ -494,17 +494,17 @@ public class Common_SCDAWG_Functions {
 			}
 		});
 
-//		System.out.println("Size " + marked_nodes.length);
+		// System.out.println("Size " + marked_nodes.length);
 
-//		for (int i = 0; i < scdawg.all_nodes.size(); i++) {
-//			Node n = scdawg.all_nodes.get(i);
-//			System.out.println(scdawg.get_node_label(n) + " " + marked_nodes[n.id]);
+		// for (int i = 0; i < scdawg.all_nodes.size(); i++) {
+		// Node n = scdawg.all_nodes.get(i);
+		// System.out.println(scdawg.get_node_label(n) + " " + marked_nodes[n.id]);
 
-			// if (scdawg.stringset.get(0).contains(scdawg.get_node_label(n))
-			// && scdawg.stringset.get(0).contains(scdawg.get_node_label(n)) &&
-			// marked_nodes[n.id] != -1) {
-			// }
-//		}
+		// if (scdawg.stringset.get(0).contains(scdawg.get_node_label(n))
+		// && scdawg.stringset.get(0).contains(scdawg.get_node_label(n)) &&
+		// marked_nodes[n.id] != -1) {
+		// }
+		// }
 
 		return marked_nodes;
 
@@ -517,7 +517,7 @@ public class Common_SCDAWG_Functions {
 	 * one or more strings
 	 **********************************************************************************/
 
-	public HashMap<Node, HashSet<Integer>> get_n_string_occurences(int n) {
+	public HashMap<Node, HashSet<Integer>> get_n_string_occurences(int n, ArrayList<OCRLine> ocrlines) {
 
 		HashMap<Node, HashSet<Integer>> marked_nodes = new HashMap();
 		HashMap<Node, HashSet<Integer>> result = new HashMap();
@@ -585,15 +585,19 @@ public class Common_SCDAWG_Functions {
 			if (count.size() <= n) {
 				Iterator it3 = count.iterator();
 				HashSet<Integer> ids = new HashSet();
-				int final_count = 0;
+
+				HashSet<String> ocrEngines = new HashSet<>();
 
 				while (it3.hasNext()) {
 					Integer id = (Integer) it3.next();
 					ids.add(id);
 					System.out.print(id + " ");
+					ocrEngines.add(ocrlines.get(id).ocrEngine);
+
 				}
 				System.out.println(":" + ids.size() + " " + scdawg.get_node_label(node));
-				if (ids.size() == n) {
+				System.out.println(ocrEngines);
+				if (ids.size() == n && ocrEngines.size() == n) {
 					result.put(node, ids);
 				}
 			}

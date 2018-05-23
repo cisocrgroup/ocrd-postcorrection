@@ -6,6 +6,8 @@ import de.lmu.cis.ocrd.OCRLine;
 import de.lmu.cis.ocrd.Project;
 import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.parsers.*;
+import de.lmu.cis.ocrd.test.TestDocument;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,6 +37,14 @@ public class BigLineAlignmentTest {
 		// Document d1 = new TestDocument().withLine("Tief im längst versunken Schlosse", 1, 1, "abbyy", true);
 		// Document d2 = new TestDocument().withLine("Tief im lngſt verfunknen Schloſſe", 1, 1, "tesseract", false);
 		// Document d3 = new TestDocument().withLine("Tief im längst V ersunt nen Schlosse", 1, 1, "ocropus", false);
+        
+//		Document d1 = new TestDocument().withLine("I Kuranda", 1, 1, "abbyy", true);
+//		Document d2 = new TestDocument().withLine("V Kuranda", 1, 1, "tesseract", false);
+//		Document d3 = new TestDocument().withLine("J Kuranda", 1, 1, "ocropus", false);
+//        
+  
+        
+        
         project = new Project().put("abbyy", d1, true).put("tesseract", d2).put("ocropus", d3);
         gold = new HashSet<>();
         try (BufferedReader r = new BufferedReader(new FileReader(new File("src/test/resources/lineAlignmentsBig.txt")))) {
@@ -51,11 +61,11 @@ public class BigLineAlignmentTest {
     public void testFast() throws Exception {
 		final Set<String> got = getLineAlignments();
 		for (String gotStr : got) {
-			// System.out.println("GOT_STR: " + gotStr);
+			 System.out.println("GOT_STR: " + gotStr);
 			assertThat(gold.contains(gotStr), is(true));
 		}
 		for (String goldStr : gold) {
-			// System.out.println("GOLD_STR: " + goldStr);
+			 System.out.println("GOLD_STR: " + goldStr);
 			assertThat(got.contains(goldStr), is(true));
 		}
 	}

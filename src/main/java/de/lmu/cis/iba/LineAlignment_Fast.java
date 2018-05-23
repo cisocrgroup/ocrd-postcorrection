@@ -35,7 +35,7 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 
 		Common_SCDAWG_Functions scdawg_functions = new Common_SCDAWG_Functions(scdawg);
 
-		HashMap<Node,HashSet<Integer>> nodes_with_n_occs = scdawg_functions.get_n_string_occurences(3);
+		HashMap<Node,HashSet<Integer>> nodes_with_n_occs = scdawg_functions.get_n_string_occurences(3,ocrlines);
 
 		HashMap<Node,HashSet<Integer>> nodes_sorted = Util.sortByNodeLength(nodes_with_n_occs, "DESC",scdawg);
 		ArrayList<pair> nodes_sink_set = new ArrayList<>();
