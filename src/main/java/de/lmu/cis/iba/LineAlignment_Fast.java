@@ -1,15 +1,10 @@
 package de.lmu.cis.iba;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.pmw.tinylog.Logger;
-
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.OCRLine;
+import org.pmw.tinylog.Logger;
+
+import java.util.*;
 
 
 public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
@@ -18,9 +13,6 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 		public Node node;
 	}
 
-	static ArrayList<Node> sinks = new ArrayList<Node>();
-	public ArrayList<String> stringset = new ArrayList<String>();
-
 	public LineAlignment_Fast(Document doc, int nlines) throws Exception {
 		super();
 
@@ -28,15 +20,12 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 			throw new Exception("cannot allign " + nlines + " lines");
 		}
 
-		ArrayList<String> stringset = new ArrayList<String>();
-		ArrayList<OCRLine> ocrlines = new ArrayList<OCRLine>();
+		ArrayList<String> stringset = new ArrayList<>();
+		ArrayList<OCRLine> ocrlines = new ArrayList<>();
 
-		doc.eachLine(new Document.Visitor() {
-			@Override
-			public void visit(OCRLine l) throws Exception {
-				stringset.add("#" + l.line.getNormalized() + "$");
-				ocrlines.add(l);
-			}
+		doc.eachLine(l -> {
+			stringset.add("#" + l.line.getNormalized() + "$");
+			ocrlines.add(l);
 		});
 
 		Online_CDAWG_sym scdawg = new Online_CDAWG_sym(stringset, false);
@@ -49,12 +38,12 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 		HashMap<Node,HashSet<Integer>> nodes_with_n_occs = scdawg_functions.get_n_string_occurences(3);
 
 		HashMap<Node,HashSet<Integer>> nodes_sorted = Util.sortByNodeLength(nodes_with_n_occs, "DESC",scdawg);
-		ArrayList<pair> nodes_sink_set = new ArrayList<pair>();
+		ArrayList<pair> nodes_sink_set = new ArrayList<>();
 
 		Iterator it3 = nodes_sorted.entrySet().iterator();
 
 		Logger.info("starting main loop ...");
-		HashSet<Integer> usedIDs = new HashSet<Integer>();
+		HashSet<Integer> usedIDs = new HashSet<>();
 		main_loop: while (it3.hasNext()) {
 			Map.Entry pair = (Map.Entry) it3.next();
 
@@ -70,9 +59,14 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 					continue main_loop;
 				}
 			}
+			HashSet<String> ocrEngines = new HashSet<>();
 			for (Integer id : ids) {
-				usedIDs.add(id);
+				ocrEngines.add(ocrlines.get(id).ocrEngine);
 			}
+			if (ocrEngines.size() != nlines) {
+				continue main_loop;
+			}
+			usedIDs.addAll(ids);
 			pair p = new pair();
 			p.ids = ids;
 			p.node = n;
@@ -91,11 +85,9 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 
 				for (pair pn : nodes_sink_set) {
 					HashSet<Integer> ids = pn.ids;
-					HashSet<Integer> sink_ids = new HashSet<Integer>();
+					HashSet<Integer> sink_ids = new HashSet<>();
 
-					for (Integer i : sink.stringnumbers) {
-						sink_ids.add(i);
-					}
+					sink_ids.addAll(sink.stringnumbers);
 
 					if (sink_ids.equals(ids)) {
 						continue sinkloop;
@@ -105,32 +97,26 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 				// end special case
 
 				pair p = new pair();
-				p.ids = new HashSet<Integer>();
-				for (Integer id : sink.stringnumbers) {
-					p.ids.add(id);
-				}
+				p.ids = new HashSet<>();
+				p.ids.addAll(sink.stringnumbers);
 				p.node = scdawg.root;
 				nodes_sink_set.add(p);
 			}
 		}
 		Logger.info("done with sink loop");
 
-		// ArrayList<String> xyz = new ArrayList<String>(stringset.size());
-		String[] xyz = new String[stringset.size()];
 		for (pair p : nodes_sink_set) {
 			 System.out.println(scdawg.get_node_label(p.node));
 			 System.out.println(p.ids);
-			ArrayList<OCRLine> linetupel = new ArrayList<OCRLine>();
+			ArrayList<OCRLine> linetupel = new ArrayList<>();
 			for (Integer id : p.ids) {
 				int idx = id;
 
 				linetupel.add(ocrlines.get(idx));
 
 				 System.out.println("- " + stringset.get(idx));
-				xyz[idx] = stringset.get(idx);
 			}
 			this.add(linetupel);
-			// System.out.println();
 		}
 	}
 
