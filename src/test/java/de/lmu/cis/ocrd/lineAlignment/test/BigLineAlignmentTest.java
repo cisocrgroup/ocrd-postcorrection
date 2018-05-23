@@ -7,7 +7,6 @@ import de.lmu.cis.ocrd.Project;
 import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.parsers.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -21,7 +20,6 @@ import java.util.Set;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@Ignore
 public class BigLineAlignmentTest {
     private final String r1 = "src/test/resources/1841-DieGrenzboten-abbyy.zip";
     private final String r2 = "src/test/resources/1841-DieGrenzboten-tesseract.zip";
