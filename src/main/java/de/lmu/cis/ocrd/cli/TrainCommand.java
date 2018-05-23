@@ -17,19 +17,28 @@ public class TrainCommand implements Command {
         return "train";
     }
 
-    @Override
     public void execute(Configuration config) throws Exception {
-        if (config.getArgs().length < 3) {
+    	if (config.getArgs().length < 3) {
             throw new Exception("usage: name gt master-ocr [other-ocr...]");
         }
-        environment = newEnvironment(config);
-        featureSet = newFeatureSet(config);
-        final DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment, featureSet);
-        trainer.prepare().train().evaluate();
+		boolean ok = false;
+		environment = newEnvironment(config);
+		try {
+			featureSet = newFeatureSet(config);
+			final DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment, featureSet);
+			trainer.prepare().train().evaluate();
+			ok = true;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			if (!ok) {
+				environment.remove();
+			}
+		}
     }
 
     private FeatureSet newFeatureSet(Configuration configuration) throws Exception {
-        return new FeatureFactory()
+        return FeatureFactory.getDefault()
                 .withArgumentFactory(new AsyncArgumentFactory(configuration.getParameters(), environment, new LocalProfiler()))
                 .createFeatureSet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures());
     }
