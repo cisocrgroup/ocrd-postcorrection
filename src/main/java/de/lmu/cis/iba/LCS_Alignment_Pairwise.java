@@ -56,20 +56,19 @@ public class LCS_Alignment_Pairwise {
 	  	ArrayList<Endpos_Pair> quasi_max_nodes_reduced = reduce_nodes(quasi_max_sorted);
 
 
-		for (Endpos_Pair pair : quasi_max_nodes_reduced) {
-			Node x = pair.node;
-
-			Logger.debug(scdawg.get_node_label(x) + ", s1= " + pair.endpos_s1 + " :: s2=" + pair.endpos_s2);
-
-			Logger.debug("\n--------------------------------------------");
-		}
+//		for (Endpos_Pair pair : quasi_max_nodes_reduced) {
+//			Node x = pair.node;
+//
+//			Logger.debug(scdawg.get_node_label(x) + ", s1= " + pair.endpos_s1 + " :: s2=" + pair.endpos_s2);
+//
+//			Logger.debug("\n--------------------------------------------");
+//		}
 
 		Logger.debug("Calculating LCS for s1 and s2 pairs...");
 
         // ArrayList lcs = this.calculate_LCS(quasi_max_sorted); // OLD
         ArrayList lcs = this.calculate_LCS(quasi_max_nodes_reduced);
 		this.longest_common_subsequences.add(lcs);
-		this.printLCS();
 
 	}
 
@@ -205,7 +204,7 @@ public class LCS_Alignment_Pairwise {
 																		// abc;11;15 abc;11;4
 						int dec_elem= (int) p.endpos_s2.get(j);
 
-						System.out.println(scdawg.get_node_label(p.node)+" "+elem_s1 + " :: " + dec_elem);
+//						System.out.println(scdawg.get_node_label(p.node)+" "+elem_s1 + " :: " + dec_elem);
 
 						lcs_triples.add(new LCS_Triple(elem_s1, dec_elem, p.node));
 						int lcs_index = lcs_triples.size() - 1;
@@ -279,7 +278,7 @@ public class LCS_Alignment_Pairwise {
 		ArrayList<LCS_Triple> lcs_triples = new ArrayList<>();
 		HashMap<Node, Node> node_ancestors = new HashMap<>();
 		ArrayList[] greedy_cover = build_greedy_cover(quasi_max_nodes, lcs_triples, node_ancestors);
-		this.print_greedy_cover(greedy_cover,lcs_triples);
+//		this.print_greedy_cover(greedy_cover,lcs_triples);
 		// calculate lis
 
 		int i_count = 0;
