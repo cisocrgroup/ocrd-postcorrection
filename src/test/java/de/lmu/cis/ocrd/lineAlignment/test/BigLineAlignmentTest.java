@@ -57,7 +57,7 @@ public class BigLineAlignmentTest {
 			assertThat(gold.contains(gotStr), is(true));
 		}
 		for (String goldStr : gold) {
-			System.out.println("GOLD_STR: " + goldStr);
+			// System.out.println("GOLD_STR: " + goldStr);
 			assertThat(got.contains(goldStr), is(true));
 		}
 	}
