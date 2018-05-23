@@ -7154,10 +7154,6 @@
 # Es wiſſen alle Zeitungsleſer daß die frangöͤſiſche Nritik jedes neue
 # Es wissen Zeitungsleser daß die französische Kritik jedes neue
 |46:24:abbyy|46:24:ocropus|46:24:tesseract
-# L7
-# 77i4
-# 417
-|46:1:abbyy|46:42:tesseract|46:1:tesseract
 # nius der jüngsten Zeit der gewaltige Grabbe hungerte eine Zeitlang in
 # nius der jüngſten Zeit der gewaltige Grabbe hungerte eine Zeitlang in
 # nius der jüngsten Zeit der gewaltige Grabbe hungerte eine Zeitlang in
