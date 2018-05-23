@@ -1,30 +1,15 @@
-SUDO ?= "sudo"
-TAG ?= "ocrd"
-P ?= "8888:8080"
+OCRD_VERSION ?= "ocrd-0.1"
 
-default: compile
+default: docker
 
-package:
-	mvn package
-
-compile:
+src := ${shell find src/main/java -type f -iname '*.java'}
+target/${OCRD_VERSION}-cli.jar: ${src}
 	mvn compile
 
-test:
-	mvn test
+docker: target/${OCRD_VERSION}-cli.jar Dockerfile
+	docker build -t ${OCRD_VERSION} .
 
-deploy: Dockerfile target/ocrd-0.1.war
-	${SUDO} docker build --tag ${TAG} .
-#	${SUDO} docker run -it -p ${P} --entrypoint /bin/bash ${TAG}
-	${SUDO} docker run -it -p ${P} ${TAG}
+train:
+	docker run -v "${HOME}/data/ocrd-volume:/data" ${OCRD_VERSION} "java -jar /apps/${OCRD_VERSION}-cli.jar -m m -w /data -I I -O O -c train --parameter /data/defaultConfiguration.json ocrd-train /data/ocr/1841-DieGrenzboten-gt.zip /data/ocr/1841-DieGrenzboten-abbyy.zip /data/ocr/1841-DieGrenzboten-ocropus.zip /data/ocr/1841-DieGrenzboten-tesseract.zip"
 
-target/ocrd-0.1.war: webapp
-	mvn  war:war
-
-webapp: src/webapp/api.html
-	cd src/webapp-src && ./build.sh
-
-clean:
-	$(RM) -f target
-
-.PHONY: copile test deploy package clean
+.PHONY: docker
