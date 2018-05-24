@@ -1,17 +1,11 @@
 package de.lmu.cis.ocrd.cli;
 
-import de.lmu.cis.ocrd.ml.FeatureSet;
-import de.lmu.cis.ocrd.ml.features.FeatureFactory;
-import de.lmu.cis.ocrd.profile.LocalProfiler;
 import de.lmu.cis.ocrd.train.DynamicLexiconTrainer;
 import de.lmu.cis.ocrd.train.Environment;
 
 import java.io.IOException;
 
 public class TrainCommand implements Command {
-    private Environment environment;
-    private FeatureSet featureSet;
-
     @Override
     public String getName() {
         return "train";
@@ -22,9 +16,8 @@ public class TrainCommand implements Command {
             throw new Exception("usage: name gt master-ocr [other-ocr...]");
         }
 		boolean ok = false;
-		environment = newEnvironment(config).withConfiguration(config.getParameters());
+		final Environment environment = newEnvironment(config).withConfiguration(config.getParameters());
 		try {
-			featureSet = newFeatureSet(config);
 			final DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment);
 			trainer.prepare().train().evaluate();
 			ok = true;
@@ -33,12 +26,6 @@ public class TrainCommand implements Command {
 				environment.remove();
 			}
 		}
-    }
-
-	private FeatureSet newFeatureSet(CommandLineArguments commandLineArguments) throws Exception {
-        return FeatureFactory.getDefault()
-				.withArgumentFactory(new AsyncArgumentFactory(commandLineArguments.getParameters(), environment, new LocalProfiler()))
-				.createFeatureSet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures());
     }
 
 	private static Environment newEnvironment(CommandLineArguments commandLineArguments) throws IOException {
