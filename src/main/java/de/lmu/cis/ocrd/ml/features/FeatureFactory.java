@@ -41,7 +41,7 @@ public class FeatureFactory {
     }
 
     public <F extends Feature> FeatureFactory register(Class<F> feature) {
-        features.add(feature.getName());
+		features.add(feature.getName());
         return this;
     }
 
