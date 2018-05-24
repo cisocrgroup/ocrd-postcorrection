@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.cli;
 import com.google.gson.JsonObject;
 
 // Data class that is used to map the
-// JSON configuration.
+// JSON data.
 public class ConfigurationJSON {
     public static class Profiler {
         private String executable;

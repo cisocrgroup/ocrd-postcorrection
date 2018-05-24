@@ -159,7 +159,7 @@ public class Configuration {
 		if (parameter == null) {
 			return;
 		}
-		Logger.debug("reading configuration {}", parameter);
+		Logger.debug("reading data {}", parameter);
 		try (InputStream is = new FileInputStream(new File(parameter))) {
 			StringWriter out = new StringWriter();
 			IOUtils.copy(is, out, Charset.forName("UTF-8"));

@@ -160,41 +160,41 @@ public class Environment {
         FileUtils.deleteDirectory(getPath().toFile());
     }
 
-    private Configuration newConfiguration() {
-        Configuration c = new Configuration();
-        c.gt = gt.toString();
-        c.masterOCR = masterOCR.toString();
-        c.dynamicLexiconFeatureSet = getDynamicLexiconFeatureSet().toString();
-        c.dynamicLexiconTrainingFiles = new String[1+otherOCR.size()];
-		c.dynamicLexiconEvaluationFiles = new String[1 + otherOCR.size()];
-		c.dynamicLexiconModelFiles = new String[1 + otherOCR.size()];
-		c.dynamicLexiconTestFiles = new String[1 + otherOCR.size()];
-        c.dynamicLexiconTrainingFiles[0] = getDynamicLexiconTrainingFile(1).toString();
-        c.dynamicLexiconModelFiles[0] = getDynamicLexiconModel(1).toString();
-        c.dynamicLexiconTrainingFiles[0] = getDynamicLexiconTrainingFile(1).toString();
-		c.dynamicLexiconEvaluationFiles[0] = getDynamicLexiconEvaluationFile(1).toString();
-        c.dynamicLexiconTestFiles[0] = getDynamicLexiconTestFile(1).toString();
-        c.otherOCR = new String[otherOCR.size()];
+    private Data newData() {
+        Data data = new Data();
+        data.gt = gt.toString();
+        data.masterOCR = masterOCR.toString();
+        data.dynamicLexiconFeatureSet = getDynamicLexiconFeatureSet().toString();
+        data.dynamicLexiconTrainingFiles = new String[1 + otherOCR.size()];
+        data.dynamicLexiconEvaluationFiles = new String[1 + otherOCR.size()];
+        data.dynamicLexiconModelFiles = new String[1 + otherOCR.size()];
+        data.dynamicLexiconTestFiles = new String[1 + otherOCR.size()];
+        data.dynamicLexiconTrainingFiles[0] = getDynamicLexiconTrainingFile(1).toString();
+        data.dynamicLexiconModelFiles[0] = getDynamicLexiconModel(1).toString();
+        data.dynamicLexiconTrainingFiles[0] = getDynamicLexiconTrainingFile(1).toString();
+        data.dynamicLexiconEvaluationFiles[0] = getDynamicLexiconEvaluationFile(1).toString();
+        data.dynamicLexiconTestFiles[0] = getDynamicLexiconTestFile(1).toString();
+        data.otherOCR = new String[otherOCR.size()];
         for (int i = 0; i < otherOCR.size(); i++) {
-            c.dynamicLexiconTrainingFiles[i+1] = getDynamicLexiconTrainingFile(i+2).toString();
-			c.dynamicLexiconEvaluationFiles[i + 1] = getDynamicLexiconEvaluationFile(i + 2).toString();
-            c.dynamicLexiconModelFiles[i+1] = getDynamicLexiconModel(i+2).toString();
-			c.dynamicLexiconTestFiles[i + 1] = getDynamicLexiconTestFile(i + 2).toString();
-            c.otherOCR[i] = otherOCR.get(i).toString();
+            data.dynamicLexiconTrainingFiles[i + 1] = getDynamicLexiconTrainingFile(i + 2).toString();
+            data.dynamicLexiconEvaluationFiles[i + 1] = getDynamicLexiconEvaluationFile(i + 2).toString();
+            data.dynamicLexiconModelFiles[i + 1] = getDynamicLexiconModel(i + 2).toString();
+            data.dynamicLexiconTestFiles[i + 1] = getDynamicLexiconTestFile(i + 2).toString();
+            data.otherOCR[i] = otherOCR.get(i).toString();
         }
-        c.copyTrainingFiles = this.copyTrainingFiles;
-        c.debugTokenAlignment = this.debugTokenAlignment;
-		c.configuration = getDataFile().toString();
-        return c;
+        data.copyTrainingFiles = this.copyTrainingFiles;
+        data.debugTokenAlignment = this.debugTokenAlignment;
+        data.data = getDataFile().toString();
+        return data;
     }
 
-    public Configuration loadConfiguration() throws IOException {
-		return Configuration.fromJSON(fullPath(getDataFile()));
+    public Data loadData() throws IOException {
+        return Data.fromJSON(fullPath(getDataFile()));
     }
 
-    public void writeConfiguration() throws IOException {
+    public void writeData() throws IOException {
 		try (PrintWriter out = new PrintWriter(fullPath(getDataFile()).toFile())) {
-            out.println(newConfiguration().toJSON());
+            out.println(newData().toJSON());
         }
     }
 
@@ -233,7 +233,7 @@ public class Environment {
     }
 
     public void zipTo(Path zip) throws IOException {
-        writeConfiguration();
+        writeData();
         try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip.toFile()))) {
             eachFile((p)-> putZIPEntry(out, fullPath(p), p.toString()));
             out.finish();
@@ -267,19 +267,19 @@ public class Environment {
     }
 
     private void eachFile(EachFileCallback f) throws IOException {
-        final Configuration configuration = newConfiguration();
-        applyIfFileExists(f, Paths.get(configuration.configuration));
-        applyIfFileExists(f, Paths.get(configuration.dynamicLexiconFeatureSet));
-        for (int i = 0; i < configuration.dynamicLexiconTrainingFiles.length; i++) {
-            applyIfFileExists(f, Paths.get(configuration.dynamicLexiconTrainingFiles[i]));
-            applyIfFileExists(f, Paths.get(configuration.dynamicLexiconTestFiles[i]));
-			applyIfFileExists(f, Paths.get(configuration.dynamicLexiconEvaluationFiles[i]));
+        final Data data = newData();
+        applyIfFileExists(f, Paths.get(data.data));
+        applyIfFileExists(f, Paths.get(data.dynamicLexiconFeatureSet));
+        for (int i = 0; i < data.dynamicLexiconTrainingFiles.length; i++) {
+            applyIfFileExists(f, Paths.get(data.dynamicLexiconTrainingFiles[i]));
+            applyIfFileExists(f, Paths.get(data.dynamicLexiconTestFiles[i]));
+            applyIfFileExists(f, Paths.get(data.dynamicLexiconEvaluationFiles[i]));
         }
-        if (configuration.copyTrainingFiles) {
-            applyIfFileExists(f, Paths.get(configuration.masterOCR));
-            applyIfFileExists(f, Paths.get(configuration.gt));
-            for (int i = 0; i < configuration.otherOCR.length; i++) {
-                applyIfFileExists(f, Paths.get(configuration.otherOCR[i]));
+        if (data.copyTrainingFiles) {
+            applyIfFileExists(f, Paths.get(data.masterOCR));
+            applyIfFileExists(f, Paths.get(data.gt));
+            for (int i = 0; i < data.otherOCR.length; i++) {
+                applyIfFileExists(f, Paths.get(data.otherOCR[i]));
             }
         }
     }
@@ -290,9 +290,9 @@ public class Environment {
         }
     }
 
-	// Data class for the configuration of the training environment.
-	public static class Configuration {
-		public String gt, masterOCR, dynamicLexiconFeatureSet, configuration;
+    // Data class for the data of the training environment.
+    public static class Data {
+        public String gt, masterOCR, dynamicLexiconFeatureSet, data;
 		public String[] otherOCR;
 		public String[] dynamicLexiconTrainingFiles;
 		public String[] dynamicLexiconEvaluationFiles;
@@ -300,15 +300,15 @@ public class Environment {
 		public String[] dynamicLexiconModelFiles;
 		public boolean copyTrainingFiles, debugTokenAlignment;
 
-		static Configuration fromJSON(Path path) throws IOException {
+        static Data fromJSON(Path path) throws IOException {
 			try (InputStream in = new FileInputStream(path.toFile())) {
 				return fromJSON(in);
 			}
 		}
 
-		private static Configuration fromJSON(InputStream in) throws IOException {
+        private static Data fromJSON(InputStream in) throws IOException {
 			final String json = IOUtils.toString(in, Charsets.UTF_8);
-			return new Gson().fromJson(json, Configuration.class);
+            return new Gson().fromJson(json, Data.class);
 		}
 
 		public String toJSON() {

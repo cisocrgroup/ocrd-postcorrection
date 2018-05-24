@@ -21,7 +21,7 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class DefaultConfigurationTest {
+public class DefaultDataTest {
 	private ConfigurationJSON data;
 
 	@Before
