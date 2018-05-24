@@ -20,14 +20,14 @@ import java.util.ArrayList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class DynamicLexiconTrainerTest {
+public class DynamicLexiconTrainerTest extends TestBase {
     private Environment environment;
     private FeatureSet fs;
     private DynamicLexiconTrainer trainer;
 
     @Before
     public void init() throws IOException {
-        this.environment = new Environment("/tmp/", "train-test")
+		this.environment = newEnvironment()
                 .withCopyTrainingFiles(true)
                 .withGT("src/test/resources/1841-DieGrenzboten-gt-small.zip")
                 .withMasterOCR("src/test/resources/1841-DieGrenzboten-tesseract-small.zip")

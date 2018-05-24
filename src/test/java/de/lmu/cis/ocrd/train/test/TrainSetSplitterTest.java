@@ -16,16 +16,14 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class TrainSetSplitterTest {
-    private static final String base = "/tmp";
-    private static final String name = "training-test";
-    private Environment environment;
+public class TrainSetSplitterTest extends TestBase {
+	private Environment environment;
     private Tokenizer tokenizer;
 
     @Before
     public void init() throws IOException {
 		final String resources = "src/test/resources";
-       environment = new Environment(base, name)
+		environment = newEnvironment()
                .withCopyTrainingFiles(false)
 			   .withGT(resources + "/1841-DieGrenzboten-gt-small.zip")
 			   .withMasterOCR(resources + "/1841-DieGrenzboten-abbyy-small.zip")
