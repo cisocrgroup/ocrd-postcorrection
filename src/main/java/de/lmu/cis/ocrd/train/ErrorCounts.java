@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 class ErrorCounts {
+	int getTotalCount() {
+		return getTruePositiveCount() + getTrueNegativeCount() + getFalsePositiveCount() + getFalseNegativeCount();
+	}
+
 	private enum ErrorType {TRUE_POSITIVE, FALSE_POSITIVE, TRUE_NEGATIVE, FALSE_NEGATIVE}
 
 	private Map<ErrorType, List<Token>> counts;

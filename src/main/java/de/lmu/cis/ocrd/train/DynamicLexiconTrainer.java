@@ -136,6 +136,7 @@ public class DynamicLexiconTrainer {
 			fprintf(out, "Number of correctly unused extensions:   %d", errorCounts.getTrueNegativeCount());
 			fprintf(out, "Number of incorrectly used extensions:   %d", errorCounts.getFalsePositiveCount());
 			fprintf(out, "Number of incorrectly unused extensions: %d", errorCounts.getFalseNegativeCount());
+			fprintf(out, "Total number of tokens:                  %d", errorCounts.getTotalCount());
 			out.flush();
         }
     }
