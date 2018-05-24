@@ -5,7 +5,7 @@ import de.lmu.cis.ocrd.cli.AsyncArgumentFactory;
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
 import de.lmu.cis.ocrd.profile.FileProfiler;
 import de.lmu.cis.ocrd.profile.Profiler;
-import de.lmu.cis.ocrd.train.ConfigurationJSON;
+import de.lmu.cis.ocrd.train.Configuration;
 import de.lmu.cis.ocrd.train.Environment;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -23,7 +23,7 @@ public class AsyncArgumentFactoryTest {
     private final static String base = "src/test/resources";
     private final static String name = "test-environment";
     private Environment environment;
-    private ConfigurationJSON configuration;
+	private Configuration configuration;
     private ArgumentFactory factory;
 
     @Before
@@ -36,7 +36,7 @@ public class AsyncArgumentFactoryTest {
         try (InputStream is = new FileInputStream(new File(base + "/testConfiguration.json"))) {
              StringWriter out = new StringWriter();
              IOUtils.copy(is, out, Charset.forName("UTF-8"));
-             configuration = new Gson().fromJson(out.toString(), ConfigurationJSON.class);
+			configuration = new Gson().fromJson(out.toString(), Configuration.class);
         }
         final Profiler profiler = new FileProfiler(Paths.get("src", "test", "resources", "profile-test.json"));
         factory = new AsyncArgumentFactory(configuration, environment, profiler);

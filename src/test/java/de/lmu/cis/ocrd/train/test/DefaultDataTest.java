@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
-import de.lmu.cis.ocrd.train.ConfigurationJSON;
+import de.lmu.cis.ocrd.train.Configuration;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,14 +22,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class DefaultDataTest {
-	private ConfigurationJSON data;
+	private Configuration data;
 
 	@Before
 	public void init() throws IOException {
 		try (InputStream is = new FileInputStream(Paths.get("src", "main", "resources", "defaultConfiguration.json").toFile())) {
 			StringWriter out = new StringWriter();
 			IOUtils.copy(is, out, Charset.forName("UTF-8"));
-			data = new Gson().fromJson(out.toString(), ConfigurationJSON.class);
+			data = new Gson().fromJson(out.toString(), Configuration.class);
 		}
 	}
 

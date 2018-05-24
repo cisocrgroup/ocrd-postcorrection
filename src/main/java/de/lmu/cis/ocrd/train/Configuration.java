@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 
 // Data class that is used to map the
 // JSON data.
-public class ConfigurationJSON {
+public class Configuration {
     public static class Profiler {
         private String executable;
         private String languageDirectory;
@@ -55,8 +55,8 @@ public class ConfigurationJSON {
 	private LanguageModel languageModel;
 	private DynamicLexiconTraining dynamicLexiconTraining;
 
-	public static ConfigurationJSON getDefault() {
-		final ConfigurationJSON c = new ConfigurationJSON();
+	public static Configuration getDefault() {
+		final Configuration c = new Configuration();
 		c.profiler = new Profiler();
 		c.profiler.executable = "/apps/profiler";
 		c.profiler.languageDirectory = "/data/ProfilerLanguages";
@@ -70,8 +70,8 @@ public class ConfigurationJSON {
 		return c;
 	}
 
-	public static ConfigurationJSON fromJSON(String json) {
-		return new Gson().fromJson(json, ConfigurationJSON.class);
+	public static Configuration fromJSON(String json) {
+		return new Gson().fromJson(json, Configuration.class);
 	}
 
 	public String toJson() {

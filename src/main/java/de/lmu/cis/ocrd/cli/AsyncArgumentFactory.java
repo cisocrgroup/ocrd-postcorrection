@@ -4,7 +4,7 @@ import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
 import de.lmu.cis.ocrd.profile.Profile;
 import de.lmu.cis.ocrd.profile.Profiler;
-import de.lmu.cis.ocrd.train.ConfigurationJSON;
+import de.lmu.cis.ocrd.train.Configuration;
 import de.lmu.cis.ocrd.train.Environment;
 
 import java.nio.file.Paths;
@@ -14,12 +14,12 @@ import java.util.List;
 public class AsyncArgumentFactory implements ArgumentFactory {
 
     private final Environment environment;
-    private final ConfigurationJSON data;
+	private final Configuration data;
     private final List<AsyncOCRUnigrams> ocrUnigrams = new ArrayList<>();
     private final AsyncCharTrigrams charTrigrams;
     private final Profiler profiler;
 
-    public AsyncArgumentFactory(ConfigurationJSON data, Environment environment, Profiler profiler) {
+	public AsyncArgumentFactory(Configuration data, Environment environment, Profiler profiler) {
         this.data = data;
         this.environment = environment;
         ocrUnigrams.add(new AsyncOCRUnigrams(environment.getMasterOCR()));

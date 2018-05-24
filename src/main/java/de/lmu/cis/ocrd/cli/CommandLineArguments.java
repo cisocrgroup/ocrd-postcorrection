@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.cli;
 
-import de.lmu.cis.ocrd.train.ConfigurationJSON;
+import de.lmu.cis.ocrd.train.Configuration;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Configurator;
@@ -103,7 +103,7 @@ public class CommandLineArguments {
 		return strs == null ? new String[0] : strs;
 	}
 
-	private ConfigurationJSON data;
+	private Configuration data;
 
 	private String groupID, logLevel, parameter, workdir, mets, output, command;
 
@@ -145,7 +145,7 @@ public class CommandLineArguments {
 		return notNull(parameter);
 	}
 
-	public ConfigurationJSON getParameters() {
+	public Configuration getParameters() {
 		assert (data != null);
 		return data;
 	}
@@ -155,7 +155,7 @@ public class CommandLineArguments {
 	}
 
 	private void setupJSON() throws IOException {
-		data = ConfigurationJSON.getDefault();
+		data = Configuration.getDefault();
 		if (parameter == null) {
 			return;
 		}
@@ -163,7 +163,7 @@ public class CommandLineArguments {
 		try (InputStream is = new FileInputStream(new File(parameter))) {
 			StringWriter out = new StringWriter();
 			IOUtils.copy(is, out, Charset.forName("UTF-8"));
-			data = ConfigurationJSON.fromJSON(out.toString());
+			data = Configuration.fromJSON(out.toString());
 		}
 	}
 
