@@ -6,7 +6,6 @@ import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.TokenCaseFeature;
 import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
-import de.lmu.cis.ocrd.train.Configuration;
 import de.lmu.cis.ocrd.train.Environment;
 import org.junit.After;
 import org.junit.Before;
@@ -53,7 +52,7 @@ public class EnvironmentTest extends TestBase {
 
     @Test
     public void testConfigurationFile() {
-		assertThat(environment.getConfigurationFile(), is(Paths.get(getName(), "resources", "configuration.json")));
+		assertThat(environment.getDataFile(), is(Paths.get(getName(), "resources", "data.json")));
     }
 
     @Test
@@ -123,8 +122,8 @@ public class EnvironmentTest extends TestBase {
         final String ocropus = "src/test/resources/1841-DieGrenzboten-ocropus-small.zip";
         environment.withGT(abbyy).withMasterOCR(tess).addOtherOCR(ocropus).withDebugTokenAlignment(true);
         environment.writeConfiguration();
-        assertThat(Files.exists(environment.fullPath(environment.getConfigurationFile())), is(true));
-        final Configuration configuration = environment.loadConfiguration();
+		assertThat(Files.exists(environment.fullPath(environment.getDataFile())), is(true));
+		final Environment.Configuration configuration = environment.loadConfiguration();
         assertThat(configuration.gt, is(abbyy));
         assertThat(configuration.masterOCR, is(tess));
         assertThat(configuration.dynamicLexiconFeatureSet, is(environment.getDynamicLexiconFeatureSet().toString()));
@@ -143,7 +142,7 @@ public class EnvironmentTest extends TestBase {
         assertThat(configuration.dynamicLexiconEvaluationFiles[1], is(environment.getDynamicLexiconEvaluationFile(2).toString()));
         assertThat(configuration.debugTokenAlignment, is(environment.isDebugTokenAlignment()));
         assertThat(configuration.copyTrainingFiles, is(false));
-        assertThat(configuration.configuration, is(environment.getConfigurationFile().toString()));
+		assertThat(configuration.configuration, is(environment.getDataFile().toString()));
     }
 
     @Test
@@ -152,11 +151,14 @@ public class EnvironmentTest extends TestBase {
         final String tess = "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
         final String ocropus = "src/test/resources/1841-DieGrenzboten-ocropus-small.zip";
         environment.withCopyTrainingFiles(true).withGT(abbyy).withMasterOCR(tess).addOtherOCR(ocropus);
+		final Path zip = Paths.get(getPath(), "test.zip");
         try {
-            environment.zipTo(Paths.get("src/test/resources/test.zip"));
-            assertThat(Files.exists(Paths.get("src/test/resources/test.zip")), is(true));
-        } finally {
-            Files.delete(Paths.get("src/test/resources/test.zip"));
+			environment.zipTo(zip);
+			assertThat(Files.exists(zip), is(true));
+		} finally {
+			if (Files.exists(zip)) {
+				Files.delete(zip);
+			}
         }
     }
 
@@ -171,12 +173,12 @@ public class EnvironmentTest extends TestBase {
                 .withMasterOCR(tess)
                 .addOtherOCR(ocropus)
                 .withDynamicLexiconFeatureSet(new FeatureSet().add(new DynamicLexiconGTFeature()));
-        final Path zip = Paths.get("src","test","resources","test.zip");
+		final Path zip = Paths.get(getPath(), "test.zip");
         environment.zipTo(zip);
         assertThat(Files.exists(zip), is(true));
         try (ZipArchive ar = new ZipArchive(zip.toString())) {
             int n = 0;
-            for (Entry e : ar) {
+			for (Entry ignored : ar) {
                 n++;
             }
             // 3 (training files) + 1 (configuration file) + 1 (serialization file) = 5

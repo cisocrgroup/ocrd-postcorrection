@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.train;
 
+import com.google.common.base.Charsets;
+import com.google.gson.Gson;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.FileTypes;
 import de.lmu.cis.ocrd.ml.FeatureSet;
@@ -23,6 +25,7 @@ public class Environment {
     private static final String testFile = "test.ser";
     private static final String evaluationFile = "evaluation.txt";
     private static final String model = "model.ser";
+	private static final String dataFile = "data.json";
     private final String path, name;
     private Path gt, masterOCR;
     private final List<Path> otherOCR = new ArrayList<>();
@@ -181,16 +184,16 @@ public class Environment {
         }
         c.copyTrainingFiles = this.copyTrainingFiles;
         c.debugTokenAlignment = this.debugTokenAlignment;
-        c.configuration = getConfigurationFile().toString();
+		c.configuration = getDataFile().toString();
         return c;
     }
 
     public Configuration loadConfiguration() throws IOException {
-        return Configuration.fromJSON(fullPath(getConfigurationFile()));
+		return Configuration.fromJSON(fullPath(getDataFile()));
     }
 
     public void writeConfiguration() throws IOException {
-        try (PrintWriter out = new PrintWriter(fullPath(getConfigurationFile()).toFile())) {
+		try (PrintWriter out = new PrintWriter(fullPath(getDataFile()).toFile())) {
             out.println(newConfiguration().toJSON());
         }
     }
@@ -225,8 +228,8 @@ public class Environment {
         return Paths.get(getDynamicLexiconTrainingDirectory(n).toString(), trainingFile);
     }
 
-    public Path getConfigurationFile() {
-        return Paths.get(getResourcesDirectory().toString(), "configuration.json");
+	public Path getDataFile() {
+		return Paths.get(getResourcesDirectory().toString(), dataFile);
     }
 
     public void zipTo(Path zip) throws IOException {
@@ -286,4 +289,30 @@ public class Environment {
             f.apply(path);
         }
     }
+
+	// Data class for the configuration of the training environment.
+	public static class Configuration {
+		public String gt, masterOCR, dynamicLexiconFeatureSet, configuration;
+		public String[] otherOCR;
+		public String[] dynamicLexiconTrainingFiles;
+		public String[] dynamicLexiconEvaluationFiles;
+		public String[] dynamicLexiconTestFiles;
+		public String[] dynamicLexiconModelFiles;
+		public boolean copyTrainingFiles, debugTokenAlignment;
+
+		static Configuration fromJSON(Path path) throws IOException {
+			try (InputStream in = new FileInputStream(path.toFile())) {
+				return fromJSON(in);
+			}
+		}
+
+		private static Configuration fromJSON(InputStream in) throws IOException {
+			final String json = IOUtils.toString(in, Charsets.UTF_8);
+			return new Gson().fromJson(json, Configuration.class);
+		}
+
+		public String toJSON() {
+			return new Gson().toJson(this);
+		}
+	}
 }

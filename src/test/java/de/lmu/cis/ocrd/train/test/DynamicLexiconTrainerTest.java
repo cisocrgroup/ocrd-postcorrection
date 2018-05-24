@@ -65,7 +65,7 @@ public class DynamicLexiconTrainerTest extends TestBase {
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(1))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(2))), is(true));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(3))), is(true));
-    }
+	}
 
 	@Test
 	public void checkTestFileContent() throws Exception {
