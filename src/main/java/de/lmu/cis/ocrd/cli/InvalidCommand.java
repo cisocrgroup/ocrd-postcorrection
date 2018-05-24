@@ -13,7 +13,7 @@ public class InvalidCommand implements Command {
 	}
 
 	@Override
-	public void execute(Configuration config) throws Exception {
+	public void execute(CommandLineArguments config) throws Exception {
 		throw new Exception("invalid command: " + this.command);
 	}
 

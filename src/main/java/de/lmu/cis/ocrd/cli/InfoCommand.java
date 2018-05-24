@@ -1,9 +1,9 @@
 package de.lmu.cis.ocrd.cli;
 
 public class InfoCommand implements Command {
-	public static final String NAME = "ocrd-profiler-autocorrection";
-	public static final String PROJECT = "OCR-D";
-	public static final String INSTITUTION = "CIS";
+	private static final String NAME = "ocrd-profiler-autocorrection";
+	private final String PROJECT = "OCR-D";
+	private final String INSTITUTION = "CIS";
 
 	@Override
 	public String getName() {
@@ -11,7 +11,7 @@ public class InfoCommand implements Command {
 	}
 
 	@Override
-	public void execute(Configuration config) {
+	public void execute(CommandLineArguments config) {
 		System.out.println("info:        " + NAME);
 		System.out.println("project:     " + PROJECT);
 		System.out.println("institution: " + INSTITUTION);

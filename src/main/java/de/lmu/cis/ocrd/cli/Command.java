@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.cli;
 
 public interface Command {
-	void execute(Configuration config) throws Exception;
+	void execute(CommandLineArguments config) throws Exception;
 	String getName();
 }

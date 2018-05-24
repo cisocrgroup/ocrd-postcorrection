@@ -17,7 +17,7 @@ public class TrainCommand implements Command {
         return "train";
     }
 
-    public void execute(Configuration config) throws Exception {
+	public void execute(CommandLineArguments config) throws Exception {
     	if (config.getArgs().length < 3) {
             throw new Exception("usage: name gt master-ocr [other-ocr...]");
         }
@@ -28,8 +28,6 @@ public class TrainCommand implements Command {
 			final DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment, featureSet);
 			trainer.prepare().train().evaluate();
 			ok = true;
-		} catch (Exception e) {
-			throw e;
 		} finally {
 			if (!ok) {
 				environment.remove();
@@ -37,23 +35,23 @@ public class TrainCommand implements Command {
 		}
     }
 
-    private FeatureSet newFeatureSet(Configuration configuration) throws Exception {
+	private FeatureSet newFeatureSet(CommandLineArguments commandLineArguments) throws Exception {
         return FeatureFactory.getDefault()
-                .withArgumentFactory(new AsyncArgumentFactory(configuration.getParameters(), environment, new LocalProfiler()))
-                .createFeatureSet(configuration.getParameters().getDynamicLexiconTrainig().getFeatures());
+				.withArgumentFactory(new AsyncArgumentFactory(commandLineArguments.getParameters(), environment, new LocalProfiler()))
+				.createFeatureSet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures());
     }
 
-    private static Environment newEnvironment(Configuration configuration) throws IOException {
-        final String name = configuration.getArgs()[0];
-        final String gt = configuration.getArgs()[1];
-        final String masterOCR = configuration.getArgs()[2];
-        final Environment environment = new Environment(configuration.getWorkDir(), name)
-                .withDebugTokenAlignment(configuration.getParameters().getDynamicLexiconTrainig().isDebugTrainingTokens())
-                .withCopyTrainingFiles(configuration.getParameters().getDynamicLexiconTrainig().isCopyTrainingFiles())
+	private static Environment newEnvironment(CommandLineArguments commandLineArguments) throws IOException {
+		final String name = commandLineArguments.getArgs()[0];
+		final String gt = commandLineArguments.getArgs()[1];
+		final String masterOCR = commandLineArguments.getArgs()[2];
+		final Environment environment = new Environment(commandLineArguments.getWorkDir(), name)
+				.withDebugTokenAlignment(commandLineArguments.getParameters().getDynamicLexiconTrainig().isDebugTrainingTokens())
+				.withCopyTrainingFiles(commandLineArguments.getParameters().getDynamicLexiconTrainig().isCopyTrainingFiles())
                 .withGT(gt)
                 .withMasterOCR(masterOCR);
-        for (int i = 3; i < configuration.getArgs().length; i++) {
-            environment.addOtherOCR(configuration.getArgs()[i]);
+		for (int i = 3; i < commandLineArguments.getArgs().length; i++) {
+			environment.addOtherOCR(commandLineArguments.getArgs()[i]);
         }
         return environment;
     }

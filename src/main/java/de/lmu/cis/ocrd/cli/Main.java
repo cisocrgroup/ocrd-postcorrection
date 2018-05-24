@@ -23,7 +23,7 @@ public class Main {
 	// Parses command line arguments and execute command.
 	private static void run(String[] args) throws Exception {
 	    final CommandFactory commandFactory = makeCommandFactory();
-		Configuration configuration = Configuration.fromCommandLine(args);
-		commandFactory.get(configuration.getCommand()).execute(configuration);
+		CommandLineArguments commandLineArguments = CommandLineArguments.fromCommandLine(args);
+		commandFactory.get(commandLineArguments.getCommand()).execute(commandLineArguments);
 	}
 }

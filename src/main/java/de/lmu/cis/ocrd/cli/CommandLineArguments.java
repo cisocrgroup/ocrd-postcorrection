@@ -9,7 +9,7 @@ import org.pmw.tinylog.Logger;
 import java.io.*;
 import java.nio.charset.Charset;
 
-public class Configuration {
+public class CommandLineArguments {
 	private static final Option COMMAND = Option.builder("c").longOpt("command").desc("set CLI command (required)")
 			.hasArg().required().build();
 	private static final Option GROUPID = Option.builder("g").longOpt("group-id")
@@ -29,14 +29,14 @@ public class Configuration {
 	private static final Option WORKDIR = Option.builder("w").longOpt("working-dir")
 			.desc("Arbeitsverzeichnis (required").hasArg().required().build();
 
-	private static Configuration defaultConfiguration() {
-		Configuration c = new Configuration();
+	private static CommandLineArguments defaultConfiguration() {
+		CommandLineArguments c = new CommandLineArguments();
 		c.logLevel = "INFO";
 		return c;
 	}
 
-	private static Configuration fromCommandLine(CommandLine line) throws IOException {
-		Configuration c = defaultConfiguration();
+	private static CommandLineArguments fromCommandLine(CommandLine line) throws IOException {
+		CommandLineArguments c = defaultConfiguration();
 		if (isSet(line, LOG_LEVEL)) {
 			c.logLevel = getArg(line, LOG_LEVEL);
 		}
@@ -70,11 +70,11 @@ public class Configuration {
 		return c;
 	}
 
-	public static Configuration fromCommandLine(String[] args)
+	public static CommandLineArguments fromCommandLine(String[] args)
 			throws ParseException, IOException {
 		CommandLineParser parser = new DefaultParser();
 		CommandLine line = parser.parse(createOptions(), args);
-		return Configuration.fromCommandLine(line);
+		return CommandLineArguments.fromCommandLine(line);
 	}
 
 	private static Options createOptions() {
@@ -145,7 +145,7 @@ public class Configuration {
 	}
 
 	public ConfigurationJSON getParameters() {
-		assert(data != null);
+		assert (data != null);
 		return data;
 	}
 

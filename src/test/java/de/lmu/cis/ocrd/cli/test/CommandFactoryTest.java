@@ -1,11 +1,12 @@
 package de.lmu.cis.ocrd.cli.test;
 
 import de.lmu.cis.ocrd.cli.Command;
-import de.lmu.cis.ocrd.cli.InvalidCommand;
 import de.lmu.cis.ocrd.cli.CommandFactory;
-import de.lmu.cis.ocrd.cli.Configuration;
+import de.lmu.cis.ocrd.cli.CommandLineArguments;
+import de.lmu.cis.ocrd.cli.InvalidCommand;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -45,6 +46,7 @@ public class CommandFactoryTest {
         }
 
         @Override
-        public void execute(Configuration configuration) {}
+		public void execute(CommandLineArguments commandLineArguments) {
+		}
     }
 }
