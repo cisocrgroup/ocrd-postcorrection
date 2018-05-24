@@ -106,7 +106,7 @@ public class EnvironmentTest extends TestBase {
                 .add(new DynamicLexiconGTFeature());
         environment.withDynamicLexiconFeatureSet(fs);
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconFeatureSet())), is(true));
-        final FeatureSet ofs = environment.loadDynamicLexiconFeatureSet();
+		final FeatureSet ofs = environment.openDynamicLexiconFeatureSet();
         assertThat(ofs.size(), is(3));
         assertThat(ofs.get(0).getName(), is("x"));
         assertThat(ofs.get(1).getName(), is("y"));
@@ -124,7 +124,7 @@ public class EnvironmentTest extends TestBase {
         environment.withGT(abbyy).withMasterOCR(tess).addOtherOCR(ocropus).withDebugTokenAlignment(true);
         environment.writeData();
 		assertThat(Files.exists(environment.fullPath(environment.getDataFile())), is(true));
-        final Environment.Data data = environment.loadData();
+		final Environment.Data data = environment.openData();
         assertThat(data.gt, is(abbyy));
         assertThat(data.masterOCR, is(tess));
         assertThat(data.dynamicLexiconFeatureSet, is(environment.getDynamicLexiconFeatureSet().toString()));

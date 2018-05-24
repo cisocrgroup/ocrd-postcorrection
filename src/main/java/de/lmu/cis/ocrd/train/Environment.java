@@ -165,7 +165,7 @@ public class Environment {
 		return Paths.get(getDynamicLexiconTestFile(n).toString(), testTokensFile);
 	}
 
-    public FeatureSet loadDynamicLexiconFeatureSet() throws IOException, ClassNotFoundException {
+	public FeatureSet openDynamicLexiconFeatureSet() throws IOException, ClassNotFoundException {
         return deSerializeFeatureSet(fullPath(getDynamicLexiconFeatureSet()));
     }
 
@@ -213,7 +213,7 @@ public class Environment {
         return data;
     }
 
-    public Data loadData() throws IOException {
+	public Data openData() throws IOException {
         return Data.fromJSON(fullPath(getDataFile()));
     }
 
