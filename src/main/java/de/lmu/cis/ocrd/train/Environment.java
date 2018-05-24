@@ -145,7 +145,7 @@ public class Environment {
 
 	public Environment withConfiguration(Configuration c) throws IOException {
 		try (OutputStream out = new FileOutputStream(fullPath(getConfigurationFile()).toFile())) {
-			IOUtils.write(c.toJson(), out, Charset.forName("UTF-8"));
+			IOUtils.write(c.toJSON(), out, Charset.forName("UTF-8"));
 		}
 		return this;
 	}

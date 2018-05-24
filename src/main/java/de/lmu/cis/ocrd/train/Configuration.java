@@ -74,7 +74,7 @@ public class Configuration {
 		return new Gson().fromJson(json, Configuration.class);
 	}
 
-	public String toJson() {
+	public String toJSON() {
 		return new Gson().toJson(this);
 	}
 }
