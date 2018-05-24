@@ -26,16 +26,20 @@ class ErrorCounts {
 	}
 
 
-	private int getTruePositiveCount() {
+	int getTruePositiveCount() {
 		return getCount(ErrorType.TRUE_POSITIVE);
 	}
 
-	private int getFalsePositiveCount() {
+	int getFalsePositiveCount() {
 		return getCount(ErrorType.FALSE_POSITIVE);
 	}
 
-	private int getFalseNegativeCount() {
+	int getFalseNegativeCount() {
 		return getCount(ErrorType.FALSE_NEGATIVE);
+	}
+
+	int getTrueNegativeCount() {
+		return getCount(ErrorType.TRUE_NEGATIVE);
 	}
 
 	double getPrecision() {

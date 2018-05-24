@@ -115,36 +115,35 @@ public class DynamicLexiconTrainer {
 			for (Token token : testTokens) {
 				System.out.println("---");
 				out.println("---");
-				System.out.println("predicting: " + token.toJSON());
-				out.println("predicting: " + token.toJSON());
+				fprintf(out, "predicting: %s", token.toJSON());
 				final FeatureSet.Vector featureVector = fs.calculateFeatureVector(token);
-				System.out.println("features: " + featureVector.toJSON());
-				out.println("features: " + featureVector.toJSON());
+				fprintf(out, "features: %s", featureVector.toJSON());
 				// classifier.setClassIndex(featureVector.size() - 1);
 				final Prediction prediction = classifier.predict(featureVector);
-				System.out.printf("prediction: %s\n", prediction.toJSON());
-				out.printf("prediction: %s\n", prediction.toJSON());
+				fprintf(out, "prediction: %s\n", prediction.toJSON());
 				errorCounts.add(token, prediction, featureVector.get(featureVector.size() - 1));
 			}
 			for (Token token : errorCounts.getTruePositives()) {
-				System.out.println("good lexicon entry: " + token.toJSON());
-				out.println("good lexicon entry: " + token.toJSON());
+				fprintf(out, "correctly used for extension: %s", token.toJSON());
 			}
 			for (Token token : errorCounts.getFalsePositives()) {
-				System.out.println("bad lexicon entry: " + token.toJSON());
-				out.println("bad lexicon entry: " + token.toJSON());
+				fprintf(out, "incorrectly used for extension: %s", token.toJSON());
 			}
 			for (Token token : errorCounts.getFalseNegatives()) {
-				System.out.println("missed lexicon entry: " + token.toJSON());
-				out.println("missed lexicon entry: " + token.toJSON());
+				fprintf(out, "incorrectly not used for extension: %s", token.toJSON());
 			}
-			System.out.println("rate of bad lexicon entries [1-precision]: " + (1 - errorCounts.getPrecision()));
-			out.println("rate of bad lexicon entries [1-precision]: " + (1 - errorCounts.getPrecision()));
-			System.out.println("rate of missed opportunities [1-recall]: " + (1 - errorCounts.getRecall()));
-			out.println("rate of missed opportunities [1-recall]: " + (1 - errorCounts.getRecall()));
+			fprintf(out, "Number of correctly used extensions:     %d", errorCounts.getTruePositiveCount());
+			fprintf(out, "Number of correctly unused extensions:   %d", errorCounts.getTrueNegativeCount());
+			fprintf(out, "Number of incorrectly used extensions:   %d", errorCounts.getFalsePositiveCount());
+			fprintf(out, "Number of incorrectly unused extensions: %d", errorCounts.getFalseNegativeCount());
 			out.flush();
         }
     }
+
+	private static void fprintf(Writer w, String fmt, Object... args) throws IOException {
+		System.out.println(String.format(fmt, args));
+		w.write(String.format(fmt, args));
+	}
 
 	private de.lmu.cis.ocrd.ml.Classifier openClassifier(int n) throws Exception {
         final Path modelFile = environment.fullPath(environment.getDynamicLexiconModel(n));
