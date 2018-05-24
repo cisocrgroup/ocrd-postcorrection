@@ -108,26 +108,26 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
-				<data>
+				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
-				</data>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
-				<data>
+				<configuration>
 					<!-- <webappDirectory>/usr/local/tomcat/webapps</webappDirectory> -->
 					<webappDirectory>${basedir}/target/ocrd</webappDirectory>
 					<warSourceDirectory>src/webapp</warSourceDirectory>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</data>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.onpositive.aml</groupId>
 				<artifactId>raml-jaxrs-maven-plugin</artifactId>
 				<version>1.3.8</version>
-				<data>
+				<configuration>
 					<sourceDirectory>${basedir}/src/main/resources/raml</sourceDirectory>
 					<basePackageName>de.lmu.cis.api</basePackageName>
 					<!-- <basePackageName>org.raml.jaxrs.example</basePackageName> -->
@@ -135,7 +135,7 @@
 					<useJsr303Annotations>false</useJsr303Annotations>
 					<jsonMapper>jackson2</jsonMapper>
 					<removeOldOutput>true</removeOldOutput>
-				</data>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -147,7 +147,7 @@
 			</plugin>
 			<plugin>
 			  <artifactId>maven-assembly-plugin</artifactId>
-				<data>
+				<configuration>
 					<archive>
 						<manifest>
 							<mainClass>de.lmu.cis.ocrd.cli.Main</mainClass>
@@ -158,7 +158,7 @@
 					</descriptorRefs>
 				  <finalName>${project.artifactId}-${project.version}-cli</finalName>
 				  <appendAssemblyId>false</appendAssemblyId>
-				</data>
+				</configuration>
 			  <executions>
 					<execution>
 						<id>make-assembly</id>
