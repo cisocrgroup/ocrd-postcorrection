@@ -1,11 +1,15 @@
 package de.lmu.cis.ocrd.profile;
 
+import de.lmu.cis.ocrd.Document;
+import de.lmu.cis.ocrd.FileTypes;
 import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,18 +18,13 @@ import java.util.List;
 public class LocalProfiler implements Profiler {
     private String exe, language, workdir, langdir;
     private String[] args;
-    private Reader stdin;
+	private Path path;
 
     public LocalProfiler() {
         this.exe = "profiler";
         this.workdir = ".";
         this.langdir = "/data";
         this.args = new String[]{"--sourceFormat", "TXT"};
-    }
-
-    public LocalProfiler withStdin(Reader r) {
-        this.stdin = r;
-        return this;
     }
 
     public LocalProfiler withExecutable(String exe) {
@@ -52,6 +51,11 @@ public class LocalProfiler implements Profiler {
         return this;
     }
 
+	public LocalProfiler withInputDocumentPath(Path path) {
+		this.path = path;
+		return this;
+	}
+
     @Override
     public String toString() {
         return String.join(" ", makeArgs());
@@ -61,7 +65,7 @@ public class LocalProfiler implements Profiler {
     public Profile profile() throws Exception {
         Process profiler = createCommand();
         // write stdin to profiler
-        IOUtils.copy(stdin, profiler.getOutputStream(), Charset.defaultCharset());
+		IOUtils.copy(openInputPath(), profiler.getOutputStream(), Charset.defaultCharset());
         profiler.getOutputStream().flush();
         profiler.getOutputStream().close();
         // read profile from profiler's stdout
@@ -81,7 +85,7 @@ public class LocalProfiler implements Profiler {
        return builder.start();
     }
 
-    private List<String> makeArgs() {
+	private List<String> makeArgs() {
         List<String> res = new ArrayList<>();
         res.add(exe);
         res.addAll(Arrays.asList(defaultArgs()));
@@ -98,4 +102,16 @@ public class LocalProfiler implements Profiler {
                 "--jsonOutput"
         };
     }
+
+	private Reader openInputPath() throws Exception {
+		final Document document = FileTypes.openDocument(path.toString());
+		final StringBuilder builder = new StringBuilder();
+		document.eachLine((line) -> {
+			for (String token : line.line.getNormalized().split("\\s+")) {
+				builder.append(token);
+				builder.append('\n');
+			}
+		});
+		return new StringReader(builder.toString());
+	}
 }
