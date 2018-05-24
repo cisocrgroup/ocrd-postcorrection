@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.cli;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 // Data class that is used to map the
@@ -67,5 +68,13 @@ public class ConfigurationJSON {
         c.dynamicLexiconTraining.debugTrainingTokens = true;
         c.dynamicLexiconTraining.copyTrainingFiles = true;
 		return c;
+	}
+
+	static ConfigurationJSON fromJSON(String json) {
+		return new Gson().fromJson(json, ConfigurationJSON.class);
+	}
+
+	public String toJson() {
+		return new Gson().toJson(this);
 	}
 }

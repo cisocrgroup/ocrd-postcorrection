@@ -1,6 +1,5 @@
 package de.lmu.cis.ocrd.cli;
 
-import com.google.gson.Gson;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Configurator;
@@ -30,13 +29,13 @@ public class Configuration {
 	private static final Option WORKDIR = Option.builder("w").longOpt("working-dir")
 			.desc("Arbeitsverzeichnis (required").hasArg().required().build();
 
-	public static Configuration defaultConfiguration() {
+	private static Configuration defaultConfiguration() {
 		Configuration c = new Configuration();
 		c.logLevel = "INFO";
 		return c;
 	}
 
-	public static Configuration fromCommandLine(CommandLine line) throws FileNotFoundException, IOException {
+	private static Configuration fromCommandLine(CommandLine line) throws IOException {
 		Configuration c = defaultConfiguration();
 		if (isSet(line, LOG_LEVEL)) {
 			c.logLevel = getArg(line, LOG_LEVEL);
@@ -96,7 +95,7 @@ public class Configuration {
 	}
 
 	private static String notNull(String str) {
-		return str == null ? new String() : str;
+		return str == null ? "" : str;
 	}
 
 	private static String[] notNull(String[] strs) {
@@ -150,11 +149,11 @@ public class Configuration {
 		return data;
 	}
 
-	public String getWorkDir() {
+	String getWorkDir() {
 		return notNull(workdir);
 	}
 
-	private void setupJSON() throws FileNotFoundException, IOException {
+	private void setupJSON() throws IOException {
 		data = ConfigurationJSON.getDefault();
 		if (parameter == null) {
 			return;
@@ -163,7 +162,7 @@ public class Configuration {
 		try (InputStream is = new FileInputStream(new File(parameter))) {
 			StringWriter out = new StringWriter();
 			IOUtils.copy(is, out, Charset.forName("UTF-8"));
-			data = new Gson().fromJson(out.toString(), ConfigurationJSON.class);
+			data = ConfigurationJSON.fromJSON(out.toString());
 		}
 	}
 
