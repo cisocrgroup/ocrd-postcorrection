@@ -44,7 +44,6 @@ public class DynamicLexiconTrainer {
 
     private void prepare(int n) throws Exception {
         final Path trainPath = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
-		final Path testPath = environment.fullPath(environment.getDynamicLexiconTestFile(n));
         final List<Token> testTokens = new ArrayList<>();
 		final FeatureSet fs = newFeatureSet();
 		try (final Writer trainWriter = new BufferedWriter(new FileWriter(trainPath.toFile()))) {
@@ -63,8 +62,8 @@ public class DynamicLexiconTrainer {
             });
             trainWriter.flush();
         }
-		final Path testTokensPath = environment.fullPath(environment.getDynamicLexiconTestFile(n));
-		try (final ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(testTokensPath.toFile()))) {
+		final Path testPath = environment.fullPath(environment.getDynamicLexiconTestFile(n));
+		try (final ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(testPath.toFile()))) {
             out.writeObject(testTokens);
             out.flush();
         }
