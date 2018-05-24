@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,10 +23,12 @@ public class Environment {
     private static final String dLex = "dLex";
     private static final String dLexFS = "features.ser";
     private static final String trainingFile = "training.arff";
-    private static final String testFile = "test.ser";
+	private static final String testFile = "test.arff";
+	private static final String testTokensFile = "test-tokens.ser";
     private static final String evaluationFile = "evaluation.txt";
     private static final String model = "model.ser";
 	private static final String dataFile = "data.json";
+	private static final String configurationFile = "configuration.json";
     private final String path, name;
     private Path gt, masterOCR;
     private final List<Path> otherOCR = new ArrayList<>();
@@ -139,6 +142,28 @@ public class Environment {
         serializeFeatureSet(fs, fullPath(getDynamicLexiconFeatureSet()));
         return this;
     }
+
+	public Environment withConfiguration(Configuration c) throws IOException {
+		try (OutputStream out = new FileOutputStream(fullPath(getConfigurationFile()).toFile())) {
+			IOUtils.write(c.toJson(), out, Charset.forName("UTF-8"));
+		}
+		return this;
+	}
+
+	public Configuration openConfiguration() throws IOException {
+		try (InputStream in = new FileInputStream(fullPath(getConfigurationFile()).toFile())) {
+			final String json = IOUtils.toString(in, Charset.forName("UTF-8"));
+			return Configuration.fromJSON(json);
+		}
+	}
+
+	public Path getConfigurationFile() {
+		return Paths.get(getResourcesDirectory().toString(), configurationFile);
+	}
+
+	public Path getTestDynamicLexiconTestTokensFile(int n) {
+		return Paths.get(getDynamicLexiconTestFile(n).toString(), testTokensFile);
+	}
 
     public FeatureSet loadDynamicLexiconFeatureSet() throws IOException, ClassNotFoundException {
         return deSerializeFeatureSet(fullPath(getDynamicLexiconFeatureSet()));

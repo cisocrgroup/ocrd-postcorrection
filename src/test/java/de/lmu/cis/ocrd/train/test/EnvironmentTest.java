@@ -6,6 +6,7 @@ import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.TokenCaseFeature;
 import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
+import de.lmu.cis.ocrd.train.Configuration;
 import de.lmu.cis.ocrd.train.Environment;
 import org.junit.After;
 import org.junit.Before;
@@ -51,7 +52,7 @@ public class EnvironmentTest extends TestBase {
     }
 
     @Test
-    public void testConfigurationFile() {
+	public void testData() {
 		assertThat(environment.getDataFile(), is(Paths.get(getName(), "resources", "data.json")));
     }
 
@@ -116,7 +117,7 @@ public class EnvironmentTest extends TestBase {
     }
 
     @Test
-    public void testLoadConfigurationFile() throws IOException {
+	public void testLoadDataFile() throws IOException {
         final String abbyy = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
         final String tess = "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
         final String ocropus = "src/test/resources/1841-DieGrenzboten-ocropus-small.zip";
@@ -188,6 +189,17 @@ public class EnvironmentTest extends TestBase {
         }
     }
 
+	@Test
+	public void testConfigurationFile() throws IOException {
+		environment = environment.withConfiguration(Configuration.getDefault());
+		assertThat(Files.exists(environment.fullPath(environment.getConfigurationFile())), is(true));
+	}
+
+	@Test
+	public void testOpenConfigurationFile() throws IOException {
+		environment = environment.withConfiguration(Configuration.getDefault());
+		assertThat(environment.openConfiguration().getProfiler().getExecutable(), is(Configuration.getDefault().getProfiler().getExecutable()));
+	}
 
     @After
     public void deInit() throws IOException {
