@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.cli;
+package de.lmu.cis.ocrd.train;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -70,7 +70,7 @@ public class ConfigurationJSON {
 		return c;
 	}
 
-	static ConfigurationJSON fromJSON(String json) {
+	public static ConfigurationJSON fromJSON(String json) {
 		return new Gson().fromJson(json, ConfigurationJSON.class);
 	}
 

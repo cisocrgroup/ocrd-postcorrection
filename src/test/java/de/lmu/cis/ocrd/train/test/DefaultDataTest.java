@@ -1,10 +1,10 @@
-package de.lmu.cis.ocrd.cli.test;
+package de.lmu.cis.ocrd.train.test;
 
 import com.google.gson.Gson;
-import de.lmu.cis.ocrd.cli.ConfigurationJSON;
 import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
+import de.lmu.cis.ocrd.train.ConfigurationJSON;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;

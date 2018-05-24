@@ -4,6 +4,7 @@ import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
 import de.lmu.cis.ocrd.profile.Profile;
 import de.lmu.cis.ocrd.profile.Profiler;
+import de.lmu.cis.ocrd.train.ConfigurationJSON;
 import de.lmu.cis.ocrd.train.Environment;
 
 import java.nio.file.Paths;

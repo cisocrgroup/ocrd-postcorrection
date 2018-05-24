@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.cli;
 
+import de.lmu.cis.ocrd.train.ConfigurationJSON;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Configurator;

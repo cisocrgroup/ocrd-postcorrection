@@ -2,10 +2,10 @@ package de.lmu.cis.ocrd.cli.test;
 
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.cli.AsyncArgumentFactory;
-import de.lmu.cis.ocrd.cli.ConfigurationJSON;
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
 import de.lmu.cis.ocrd.profile.FileProfiler;
 import de.lmu.cis.ocrd.profile.Profiler;
+import de.lmu.cis.ocrd.train.ConfigurationJSON;
 import de.lmu.cis.ocrd.train.Environment;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
