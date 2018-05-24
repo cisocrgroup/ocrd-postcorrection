@@ -2,10 +2,6 @@ package de.lmu.cis.ocrd.train.test;
 
 import de.lmu.cis.ocrd.archive.Entry;
 import de.lmu.cis.ocrd.archive.ZipArchive;
-import de.lmu.cis.ocrd.ml.FeatureSet;
-import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
-import de.lmu.cis.ocrd.ml.features.TokenCaseFeature;
-import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
 import de.lmu.cis.ocrd.train.Configuration;
 import de.lmu.cis.ocrd.train.Environment;
 import org.junit.After;
@@ -99,24 +95,6 @@ public class EnvironmentTest extends TestBase {
     }
 
     @Test
-    public void testSerializationOfDynamicLexiconFeatureSet() throws IOException, ClassNotFoundException {
-        final FeatureSet fs = new FeatureSet()
-                .add(new TokenCaseFeature("x"))
-                .add(new TokenLengthFeature(3, 8, 13, "y"))
-                .add(new DynamicLexiconGTFeature());
-        environment.withDynamicLexiconFeatureSet(fs);
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconFeatureSet())), is(true));
-		final FeatureSet ofs = environment.openDynamicLexiconFeatureSet();
-        assertThat(ofs.size(), is(3));
-        assertThat(ofs.get(0).getName(), is("x"));
-        assertThat(ofs.get(1).getName(), is("y"));
-        assertThat(ofs.get(2).getName(), is("DynamicLexiconGT"));
-        assertThat((ofs.get(0) instanceof TokenCaseFeature), is(true));
-        assertThat((ofs.get(1) instanceof TokenLengthFeature), is(true));
-        assertThat((ofs.get(2) instanceof DynamicLexiconGTFeature), is(true));
-    }
-
-    @Test
 	public void testLoadDataFile() throws IOException {
         final String abbyy = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
         final String tess = "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
@@ -172,8 +150,8 @@ public class EnvironmentTest extends TestBase {
                 .withCopyTrainingFiles(true)
                 .withGT(abbyy)
                 .withMasterOCR(tess)
-                .addOtherOCR(ocropus)
-                .withDynamicLexiconFeatureSet(new FeatureSet().add(new DynamicLexiconGTFeature()));
+				.withConfiguration(Configuration.getDefault())
+				.addOtherOCR(ocropus);
 		final Path zip = Paths.get(getPath(), "test.zip");
         environment.zipTo(zip);
         assertThat(Files.exists(zip), is(true));
@@ -182,7 +160,7 @@ public class EnvironmentTest extends TestBase {
 			for (Entry ignored : ar) {
                 n++;
             }
-            // 3 (training files) + 1 (data file) + 1 (serialization file) = 5
+			// 3 (training files) + 1 (data file)+ 1 (configuration file) =
             assertThat(n, is(5));
         } finally {
             Files.delete(zip);

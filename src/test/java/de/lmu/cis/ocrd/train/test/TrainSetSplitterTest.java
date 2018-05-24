@@ -37,7 +37,7 @@ public class TrainSetSplitterTest extends TestBase {
         // - 179392 is training
         // - 179393 is evaluation
         final HashMap<Integer, Boolean> pages = new HashMap<>();
-        new TrainSetSplitter(2).eachToken(tokenizer, (Token t, boolean isTrain)->{
+        new TrainSetSplitter(new Tokenizer(environment), 2).eachToken((Token t, boolean isTrain) -> {
             final int pageID =  t.getMasterOCR().getLine().getPageId();
             pages.put(pageID, isTrain);
         });
@@ -49,7 +49,7 @@ public class TrainSetSplitterTest extends TestBase {
     @Test
     public void testLineOrdering() throws Exception {
         final HashMap<Integer, ArrayList<Integer>> pageLines = new HashMap<>();
-        new TrainSetSplitter(2).eachToken(tokenizer, (Token t, boolean isTrain)->{
+        new TrainSetSplitter(new Tokenizer(environment), 2).eachToken((Token t, boolean isTrain) -> {
             final int pageID = t.getMasterOCR().getLine().getPageId();
             final int lineID = t.getMasterOCR().getLine().getPageId();
             if (!pageLines.containsKey(pageID)) {
@@ -71,7 +71,7 @@ public class TrainSetSplitterTest extends TestBase {
     @Test
     public void testTokenOrdering() throws Exception {
         final HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> pageLineTokens = new HashMap<>();
-        new TrainSetSplitter(2).eachToken(tokenizer, (Token t, boolean isTrain)->{
+        new TrainSetSplitter(new Tokenizer(environment), 2).eachToken((Token t, boolean isTrain) -> {
             final int pageID = t.getMasterOCR().getLine().getPageId();
             final int lineID = t.getMasterOCR().getLine().getLineId();
             if (!pageLineTokens.containsKey(pageID)) {

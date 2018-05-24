@@ -7,14 +7,16 @@ public class TrainSetSplitter {
         void visit(Token token, boolean isTrain) throws Exception;
     }
     private final int n;
+	private final Tokenizer tokenizer;
 
-    public TrainSetSplitter(int n) {
+	public TrainSetSplitter(Tokenizer tokenizer, int n) {
+		this.tokenizer = tokenizer;
         this.n = n;
     }
 
-    public void eachToken(Tokenizer t, Visitor v) throws Exception {
+	public void eachToken(Visitor v) throws Exception {
         Counter c = new Counter(n);
-        t.eachToken((token)->{
+		tokenizer.eachToken((token) -> {
             c.inc(token);
             v.visit(token, c.isTrain());
         });

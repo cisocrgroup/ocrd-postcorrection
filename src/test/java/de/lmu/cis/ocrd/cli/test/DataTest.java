@@ -29,16 +29,19 @@ public class DataTest {
 		assertThat(commandLineArguments.getParameters().getProfiler().getExecutable(), is("/test/profiler/executable"));
 		assertThat(commandLineArguments.getParameters().getProfiler().getLanguageDirectory(), is("/test/profiler/language/directory"));
 		assertThat(commandLineArguments.getParameters().getProfiler().getLanguage(), is("/test/profiler/language"));
+		assertThat(commandLineArguments.getParameters().getProfiler().getArguments().length, is(2));
+		assertThat(commandLineArguments.getParameters().getProfiler().getArguments()[0], is("arg1"));
+		assertThat(commandLineArguments.getParameters().getProfiler().getArguments()[1], is("arg2"));
 		assertThat(commandLineArguments.getParameters().getLanguageModel().getCharacterTrigrams(), is("src/test/resources/nGrams.csv"));
 		assertThat(commandLineArguments.getParameters().getDynamicLexiconTrainig().isDebugTrainingTokens(), is(true));
 		assertThat(commandLineArguments.getParameters().getDynamicLexiconTrainig().isCopyTrainingFiles(), is(false));
 		assertThat(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures().length, is(2));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "name").getAsString(), is("name1"));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "type").getAsString(), is("type1"));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "min").getAsInt(), is(0));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "max").getAsInt(), is(1));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "name").getAsString(), is("name2"));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "type").getAsString(), is("type2"));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "arg").getAsString(), is("some arg"));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "name").getAsString(), is("TokenLength"));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.TokenLengthFeature"));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "short").getAsInt(), is(3));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "medium").getAsInt(), is(8));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "long").getAsInt(), is(13));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "name").getAsString(), is("TokenCase"));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.TokenCaseFeature"));
     }
 }

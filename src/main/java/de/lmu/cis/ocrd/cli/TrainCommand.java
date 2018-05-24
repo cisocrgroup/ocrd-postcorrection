@@ -22,10 +22,10 @@ public class TrainCommand implements Command {
             throw new Exception("usage: name gt master-ocr [other-ocr...]");
         }
 		boolean ok = false;
-		environment = newEnvironment(config);
+		environment = newEnvironment(config).withConfiguration(config.getParameters());
 		try {
 			featureSet = newFeatureSet(config);
-			final DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment, featureSet);
+			final DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment);
 			trainer.prepare().train().evaluate();
 			ok = true;
 		} finally {

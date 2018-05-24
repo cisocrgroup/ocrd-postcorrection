@@ -1,9 +1,7 @@
 package de.lmu.cis.ocrd.train.test;
 
-import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.ml.features.TokenCaseFeature;
-import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
+import de.lmu.cis.ocrd.train.Configuration;
 import de.lmu.cis.ocrd.train.DynamicLexiconTrainer;
 import de.lmu.cis.ocrd.train.Environment;
 import org.junit.After;
@@ -15,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -22,7 +21,6 @@ import static org.junit.Assert.assertThat;
 
 public class DynamicLexiconTrainerTest extends TestBase {
     private Environment environment;
-    private FeatureSet fs;
     private DynamicLexiconTrainer trainer;
 
     @Before
@@ -33,11 +31,9 @@ public class DynamicLexiconTrainerTest extends TestBase {
                 .withMasterOCR("src/test/resources/1841-DieGrenzboten-tesseract-small.zip")
                 .addOtherOCR("src/test/resources/1841-DieGrenzboten-abbyy-small.zip")
                 .addOtherOCR("src/test/resources/1841-DieGrenzboten-ocropus-small.zip")
+				.withConfiguration(Configuration.fromJSON(Paths.get("src", "test", "resources", "testConfiguration.json")))
                 .withDebugTokenAlignment(true);
-        this.fs = new FeatureSet()
-                .add(new TokenLengthFeature(3, 8, 13, "TokenLength"))
-                .add(new TokenCaseFeature("TokenCase"));
-        trainer = new DynamicLexiconTrainer(environment, fs).withSplitFraction(2);
+		trainer = new DynamicLexiconTrainer(environment);
     }
 
     @Test
@@ -84,6 +80,8 @@ public class DynamicLexiconTrainerTest extends TestBase {
 
     @After
     public void deInit() throws Exception {
-        this.environment.remove();
+		if (this.environment != null) {
+			this.environment.remove();
+		}
     }
 }

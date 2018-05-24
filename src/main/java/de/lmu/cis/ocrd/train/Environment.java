@@ -4,7 +4,6 @@ import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.FileTypes;
-import de.lmu.cis.ocrd.ml.FeatureSet;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -23,8 +22,7 @@ public class Environment {
     private static final String dLex = "dLex";
     private static final String dLexFS = "features.ser";
     private static final String trainingFile = "training.arff";
-	private static final String testFile = "test.arff";
-	private static final String testTokensFile = "test-tokens.ser";
+	private static final String testFile = "tokens.ser";
     private static final String evaluationFile = "evaluation.txt";
     private static final String model = "model.ser";
 	private static final String dataFile = "data.json";
@@ -138,10 +136,6 @@ public class Environment {
         return debugTokenAlignment;
     }
 
-    public Environment withDynamicLexiconFeatureSet(FeatureSet fs) throws IOException {
-        serializeFeatureSet(fs, fullPath(getDynamicLexiconFeatureSet()));
-        return this;
-    }
 
 	public Environment withConfiguration(Configuration c) throws IOException {
 		try (OutputStream out = new FileOutputStream(fullPath(getConfigurationFile()).toFile())) {
@@ -161,32 +155,13 @@ public class Environment {
 		return Paths.get(getResourcesDirectory().toString(), configurationFile);
 	}
 
-	public Path getTestDynamicLexiconTestTokensFile(int n) {
-		return Paths.get(getDynamicLexiconTestFile(n).toString(), testTokensFile);
-	}
-
-	public FeatureSet openDynamicLexiconFeatureSet() throws IOException, ClassNotFoundException {
-        return deSerializeFeatureSet(fullPath(getDynamicLexiconFeatureSet()));
-    }
-
-    private static void serializeFeatureSet(FeatureSet fs, Path path) throws IOException {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path.toFile()))) {
-            out.writeObject(fs);
-        }
-    }
-
-    private static FeatureSet deSerializeFeatureSet(Path path) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path.toFile()))) {
-            return (FeatureSet) in.readObject();
-        }
-    }
-
     public void remove() throws IOException {
         FileUtils.deleteDirectory(getPath().toFile());
     }
 
     private Data newData() {
         Data data = new Data();
+		data.configuration = getConfigurationFile().toString();
         data.gt = gt.toString();
         data.masterOCR = masterOCR.toString();
         data.dynamicLexiconFeatureSet = getDynamicLexiconFeatureSet().toString();
@@ -293,7 +268,8 @@ public class Environment {
 
     private void eachFile(EachFileCallback f) throws IOException {
         final Data data = newData();
-        applyIfFileExists(f, Paths.get(data.data));
+		applyIfFileExists(f, Paths.get(data.configuration));
+		applyIfFileExists(f, Paths.get(data.data));
         applyIfFileExists(f, Paths.get(data.dynamicLexiconFeatureSet));
         for (int i = 0; i < data.dynamicLexiconTrainingFiles.length; i++) {
             applyIfFileExists(f, Paths.get(data.dynamicLexiconTrainingFiles[i]));
@@ -317,7 +293,7 @@ public class Environment {
 
     // Data class for the data of the training environment.
     public static class Data {
-        public String gt, masterOCR, dynamicLexiconFeatureSet, data;
+		public String gt, masterOCR, dynamicLexiconFeatureSet, data, configuration;
 		public String[] otherOCR;
 		public String[] dynamicLexiconTrainingFiles;
 		public String[] dynamicLexiconEvaluationFiles;

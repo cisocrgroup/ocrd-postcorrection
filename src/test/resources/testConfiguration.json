@@ -1,5 +1,9 @@
 {
   "profiler": {
+    "arguments": [
+      "arg1",
+      "arg2"
+    ],
     "executable": "/test/profiler/executable",
     "languageDirectory": "/test/profiler/language/directory",
     "language": "/test/profiler/language"
@@ -10,17 +14,18 @@
   "dynamicLexiconTraining": {
     "copyTrainingFiles": false,
     "debugTrainingTokens": true,
+    "testEvaluationFraction": 2,
     "features": [
       {
-        "name": "name1",
-        "type": "type1",
-        "min": 0,
-        "max": 1
+        "type": "de.lmu.cis.ocrd.ml.features.TokenLengthFeature",
+        "name": "TokenLength",
+        "short": 3,
+        "medium": 8,
+        "long": 13
       },
       {
-        "name": "name2",
-        "type": "type2",
-        "arg": "some arg"
+        "type": "de.lmu.cis.ocrd.ml.features.TokenCaseFeature",
+        "name": "TokenCase"
       }
     ]
   }

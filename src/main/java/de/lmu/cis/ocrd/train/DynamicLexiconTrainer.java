@@ -1,7 +1,11 @@
 package de.lmu.cis.ocrd.train;
 
+import de.lmu.cis.ocrd.cli.AsyncArgumentFactory;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
+import de.lmu.cis.ocrd.ml.features.FeatureFactory;
+import de.lmu.cis.ocrd.profile.LocalProfiler;
+import de.lmu.cis.ocrd.profile.Profiler;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
@@ -12,19 +16,12 @@ import java.util.List;
 
 public class DynamicLexiconTrainer {
     private final Environment environment;
-    private final FeatureSet fs;
-	private int testEvaluationSplitFraction;
+	private final Configuration configuration;
 
-    public DynamicLexiconTrainer(Environment environment, FeatureSet fs) throws IOException {
-        this.environment = environment.withDynamicLexiconFeatureSet(fs);
-        this.fs = fs.add(new DynamicLexiconGTFeature());
-		this.testEvaluationSplitFraction = 10;
-    }
-
-    public DynamicLexiconTrainer withSplitFraction(int n) {
-		this.testEvaluationSplitFraction = n;
-        return this;
-    }
+	public DynamicLexiconTrainer(Environment environment) throws IOException {
+		this.environment = environment;
+		this.configuration = environment.openConfiguration();
+	}
 
     public DynamicLexiconTrainer run() throws Exception {
         return prepare().train().evaluate();
@@ -47,31 +44,53 @@ public class DynamicLexiconTrainer {
 
     private void prepare(int n) throws Exception {
         final Path trainPath = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
-        final Path evalPath = environment.fullPath(environment.getDynamicLexiconTestFile(n));
+		final Path testPath = environment.fullPath(environment.getDynamicLexiconTestFile(n));
         final List<Token> testTokens = new ArrayList<>();
-
-        try (final Writer trainWriter = new BufferedWriter(new FileWriter(trainPath.toFile()))) {
-            final ARFFWriter trainARFFWriter = ARFFWriter.fromFeatureSet(fs)
-                    .withRelation("DynamicLexiconExpansion_" + n)
-                    .withWriter(trainWriter)
-                    .withDebugToken(environment.isDebugTokenAlignment());
-            trainARFFWriter.writeHeader(n);
-            final Tokenizer tokenizer = new Tokenizer(environment);
-			new TrainSetSplitter(this.testEvaluationSplitFraction).eachToken(tokenizer, (Token token, boolean isTrain) -> {
-                if (isTrain) {
-                    trainARFFWriter.writeToken(token);
-                    trainARFFWriter.writeFeatureVector(fs.calculateFeatureVector(token));
-                } else {
-                    testTokens.add(token);
-                }
+		final FeatureSet fs = newFeatureSet();
+		try (final Writer trainWriter = new BufferedWriter(new FileWriter(trainPath.toFile()))) {
+			final ARFFWriter trainARFFWriter = ARFFWriter.fromFeatureSet(fs)
+					.withRelation("DynamicLexiconExpansion_train_" + n)
+					.withWriter(trainWriter)
+					.withDebugToken(configuration.getDynamicLexiconTrainig().isDebugTrainingTokens());
+			trainARFFWriter.writeHeader(n);
+			newTrainSetSplitter().eachToken((Token token, boolean isTrain) -> {
+				if (isTrain) {
+					trainARFFWriter.writeToken(token);
+					trainARFFWriter.writeFeatureVector(fs.calculateFeatureVector(token));
+				} else {
+					testTokens.add(token);
+				}
             });
             trainWriter.flush();
         }
-        try (final ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(evalPath.toFile()))) {
+		final Path testTokensPath = environment.fullPath(environment.getDynamicLexiconTestFile(n));
+		try (final ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(testTokensPath.toFile()))) {
             out.writeObject(testTokens);
             out.flush();
         }
     }
+
+	private FeatureSet newFeatureSet() throws Exception {
+		return FeatureFactory.getDefault()
+				.withArgumentFactory(new AsyncArgumentFactory(configuration, environment, newProfiler()))
+				.createFeatureSet(configuration.getDynamicLexiconTrainig().getFeatures())
+				.add(new DynamicLexiconGTFeature());
+	}
+
+	private Profiler newProfiler() {
+		return new LocalProfiler()
+				.withExecutable(configuration.getProfiler().getExecutable())
+				.withLanguage(configuration.getProfiler().getLanguage())
+				.withLanguageDirectory(configuration.getProfiler().getLanguageDirectory())
+				.withArgs(configuration.getProfiler().getArguments())
+				.withInputDocumentPath(environment.getMasterOCR());
+	}
+
+	private TrainSetSplitter newTrainSetSplitter() {
+		final int n = configuration.getDynamicLexiconTrainig().getTestEvaluationFraction();
+		final Tokenizer tokenizer = new Tokenizer(environment);
+		return new TrainSetSplitter(tokenizer, n);
+	}
 
     private void train(int n) throws Exception {
         final Path trainingFile = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
@@ -92,6 +111,7 @@ public class DynamicLexiconTrainer {
         final List<Token> testTokens = openTestFile(n);
 		final Path evaluationFile = environment.fullPath(environment.getDynamicLexiconEvaluationFile(n));
 		final ErrorCounts errorCounts = new ErrorCounts();
+		final FeatureSet fs = newFeatureSet();
 		try (PrintWriter out = new PrintWriter(new FileOutputStream(evaluationFile.toFile()))) {
 			for (Token token : testTokens) {
 				System.out.println("---");

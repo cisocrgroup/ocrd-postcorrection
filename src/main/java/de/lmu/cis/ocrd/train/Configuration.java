@@ -3,6 +3,12 @@ package de.lmu.cis.ocrd.train;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+
 // Data class that is used to map the
 // JSON data.
 public class Configuration {
@@ -10,6 +16,11 @@ public class Configuration {
         private String executable;
         private String languageDirectory;
         private String language;
+		private String[] arguments;
+
+		public String[] getArguments() {
+			return arguments;
+		}
         public String getExecutable() {
             return executable;
         }
@@ -37,6 +48,12 @@ public class Configuration {
     public static class DynamicLexiconTraining {
         private JsonObject[] features;
         private boolean copyTrainingFiles, debugTrainingTokens;
+
+		public int getTestEvaluationFraction() {
+			return testEvaluationFraction;
+		}
+
+		private int testEvaluationFraction;
         public boolean isCopyTrainingFiles() {
             return copyTrainingFiles;
         }
@@ -61,15 +78,23 @@ public class Configuration {
 		c.profiler.executable = "/apps/profiler";
 		c.profiler.languageDirectory = "/data/ProfilerLanguages";
 		c.profiler.language = "german";
+		c.profiler.arguments = new String[0];
 		c.languageModel = new LanguageModel();
 		c.languageModel.characterTrigrams = "/data/languageModel/characterTrigrams.csv";
 		c.dynamicLexiconTraining = new DynamicLexiconTraining();
 		c.dynamicLexiconTraining.features = new JsonObject[0];
         c.dynamicLexiconTraining.debugTrainingTokens = true;
         c.dynamicLexiconTraining.copyTrainingFiles = true;
+		c.dynamicLexiconTraining.testEvaluationFraction = 10;
 		return c;
 	}
 
+	public static Configuration fromJSON(Path path) throws IOException {
+		try (InputStream in = new FileInputStream(path.toFile())) {
+			final String json = org.apache.commons.io.IOUtils.toString(in, Charset.forName("UTF-8"));
+			return fromJSON(json);
+		}
+	}
 	public static Configuration fromJSON(String json) {
 		return new Gson().fromJson(json, Configuration.class);
 	}
