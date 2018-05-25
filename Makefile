@@ -6,7 +6,7 @@ default: docker
 
 src := ${shell find src/main/java -type f -iname '*.java'}
 target/${JAR}: ${src}
-	mvn -q package
+	mvn -q -Dmaven.test.skip=true package
 
 docker: target/${JAR} Dockerfile
 	docker build -t ${OCRD_VERSION} .
