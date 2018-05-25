@@ -1,12 +1,10 @@
 package de.lmu.cis.ocrd.cli;
 
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 
 public class CommandFactory {
 	private final HashMap<String, String> registry = new HashMap<>();
 
-    @NotNull
 	public Command get(String command) throws Exception {
 		if (command == null) {
 			return new InvalidCommand("missing command");

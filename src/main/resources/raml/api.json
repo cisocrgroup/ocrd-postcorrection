@@ -1,1 +1,0 @@
-{"title":"OCRD API Spec","types":{"TrainData":{"type":"object","properties":{"methods":"object"}},"EvaluationResult":{"type":"object","properties":{"result":"string"}}},"/trainclassifier":{"post":{"body":{"application/json":{"type":"TrainData"}},"responses":{"200":{"body":{"application/json":{"type":"EvaluationResult"}}}}}}}
