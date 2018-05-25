@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.train.DynamicLexiconTrainer;
 import de.lmu.cis.ocrd.train.Environment;
+import de.lmu.cis.ocrd.train.LazyArgumentFactory;
 
 import java.io.IOException;
 
@@ -18,7 +19,7 @@ public class TrainCommand implements Command {
 		boolean ok = false;
 		final Environment environment = newEnvironment(config).withConfiguration(config.getParameters());
 		try {
-			final DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment);
+			final DynamicLexiconTrainer trainer = new DynamicLexiconTrainer(environment, new LazyArgumentFactory(environment));
 			trainer.prepare().train().evaluate();
 			ok = true;
 		} finally {

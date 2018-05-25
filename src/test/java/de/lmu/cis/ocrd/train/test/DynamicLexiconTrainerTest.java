@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.train.test;
 
 import de.lmu.cis.ocrd.ml.Token;
+import de.lmu.cis.ocrd.ml.features.EmptyArgumentFactory;
 import de.lmu.cis.ocrd.train.Configuration;
 import de.lmu.cis.ocrd.train.DynamicLexiconTrainer;
 import de.lmu.cis.ocrd.train.Environment;
@@ -33,7 +34,7 @@ public class DynamicLexiconTrainerTest extends TestBase {
                 .addOtherOCR("src/test/resources/1841-DieGrenzboten-ocropus-small.zip")
 				.withConfiguration(Configuration.fromJSON(Paths.get("src", "test", "resources", "testConfiguration.json")))
                 .withDebugTokenAlignment(true);
-		trainer = new DynamicLexiconTrainer(environment);
+		trainer = new DynamicLexiconTrainer(environment, new EmptyArgumentFactory());
     }
 
     @Test

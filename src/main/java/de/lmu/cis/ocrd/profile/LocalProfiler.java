@@ -18,7 +18,7 @@ import java.util.List;
 public class LocalProfiler implements Profiler {
     private String exe, language, workdir, langdir;
     private String[] args;
-	private Path path;
+	private Document inputDocument;
 
     public LocalProfiler() {
         this.exe = "profiler";
@@ -51,9 +51,13 @@ public class LocalProfiler implements Profiler {
         return this;
     }
 
-	public LocalProfiler withInputDocumentPath(Path path) {
-		this.path = path;
+	public LocalProfiler withInputDocument(Document document) {
+		inputDocument = document;
 		return this;
+	}
+
+	public LocalProfiler withInputDocumentPath(Path path) throws Exception {
+		return withInputDocument(FileTypes.openDocument(path.toString()));
 	}
 
     @Override
@@ -104,9 +108,8 @@ public class LocalProfiler implements Profiler {
     }
 
 	private Reader openInputPath() throws Exception {
-		final Document document = FileTypes.openDocument(path.toString());
 		final StringBuilder builder = new StringBuilder();
-		document.eachLine((line) -> {
+		inputDocument.eachLine((line) -> {
 			for (String token : line.line.getNormalized().split("\\s+")) {
 				builder.append(token);
 				builder.append('\n');

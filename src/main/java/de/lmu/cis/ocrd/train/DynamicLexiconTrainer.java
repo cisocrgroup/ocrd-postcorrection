@@ -1,11 +1,9 @@
 package de.lmu.cis.ocrd.train;
 
-import de.lmu.cis.ocrd.cli.AsyncArgumentFactory;
 import de.lmu.cis.ocrd.ml.*;
+import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
-import de.lmu.cis.ocrd.profile.LocalProfiler;
-import de.lmu.cis.ocrd.profile.Profiler;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
@@ -17,10 +15,12 @@ import java.util.List;
 public class DynamicLexiconTrainer {
     private final Environment environment;
 	private final Configuration configuration;
+	private final ArgumentFactory argumentFactory;
 
-	public DynamicLexiconTrainer(Environment environment) throws IOException {
+	public DynamicLexiconTrainer(Environment environment, ArgumentFactory argumentFactory) throws IOException {
 		this.environment = environment;
 		this.configuration = environment.openConfiguration();
+		this.argumentFactory = argumentFactory;
 	}
 
     public DynamicLexiconTrainer run() throws Exception {
@@ -71,18 +71,9 @@ public class DynamicLexiconTrainer {
 
 	private FeatureSet newFeatureSet() throws Exception {
 		return FeatureFactory.getDefault()
-				.withArgumentFactory(new AsyncArgumentFactory(configuration, environment, newProfiler()))
+				.withArgumentFactory(argumentFactory)
 				.createFeatureSet(configuration.getDynamicLexiconTrainig().getFeatures())
 				.add(new DynamicLexiconGTFeature());
-	}
-
-	private Profiler newProfiler() {
-		return new LocalProfiler()
-				.withExecutable(configuration.getProfiler().getExecutable())
-				.withLanguage(configuration.getProfiler().getLanguage())
-				.withLanguageDirectory(configuration.getProfiler().getLanguageDirectory())
-				.withArgs(configuration.getProfiler().getArguments())
-				.withInputDocumentPath(environment.getMasterOCR());
 	}
 
 	private TrainSetSplitter newTrainSetSplitter() {
