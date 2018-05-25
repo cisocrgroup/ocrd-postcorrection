@@ -47,10 +47,14 @@ public class TokenCaseFeature extends NamedStringSetFeature {
                 allLowerCase = false;
             } else if (type == Character.LOWERCASE_LETTER) {
                 allUpperCase = false;
-            }
+			} else {
+				allUpperCase = false;
+				allLowerCase = false;
+			}
             first = false;
         }
-        if (allLowerCase) {
+
+		if (allLowerCase) {
             return LOWER;
         }
         if (allUpperCase) {

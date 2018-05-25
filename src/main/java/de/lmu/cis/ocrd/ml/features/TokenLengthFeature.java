@@ -22,16 +22,18 @@ public class TokenLengthFeature extends NamedStringSetFeature {
         CLASSES.add(VERY_LONG);
     }
 
-    private final int zhort, medium, lng;
+	private final int shrt, medium, lng;
 
     public TokenLengthFeature(JsonObject o, ArgumentFactory args) {
-        this(JSONUtil.mustGet(o, "short").getAsInt(), JSONUtil.mustGet(o, "medium").getAsInt(),
-                JSONUtil.mustGet(o, "long").getAsInt(), JSONUtil.mustGetNameOrType(o));
+		this(JSONUtil.mustGetNameOrType(o),
+				JSONUtil.mustGet(o, "short").getAsInt(),
+				JSONUtil.mustGet(o, "medium").getAsInt(),
+				JSONUtil.mustGet(o, "long").getAsInt());
     }
 
-    public TokenLengthFeature(int zhort, int medium, int lng, String name) {
+	public TokenLengthFeature(String name, int shrt, int medium, int lng) {
         super(name, CLASSES);
-        this.zhort = zhort;
+		this.shrt = shrt;
         this.medium = medium;
         this.lng = lng;
     }
@@ -44,7 +46,7 @@ public class TokenLengthFeature extends NamedStringSetFeature {
     @Override
     public Object calculate(Token token, int i, int n) {
         final int tokenLength = token.getMasterOCR().toString().length();
-        if (tokenLength <= zhort) {
+		if (tokenLength <= shrt) {
             return SHORT;
         }
         if (tokenLength <= medium) {

@@ -35,7 +35,7 @@ public class MultipleOCRFeatureExtractionTest {
     public void init() throws Exception {
         final FreqMap ngrams = CharacterNGrams.fromCSV("src/test/resources/nGrams.csv");
         fs = new FeatureSet()
-                .add(new TokenLengthFeature(3, 8, 13, "TokenLength"))
+                .add(new TokenLengthFeature("TokenLength", 3, 8, 13))
                 .add(new TokenCaseFeature("TokenCase"))
                 .add(new SumOfMatchingAdditionalOCRsFeature("SumOfMatches"))
                 .add(new MaxCharNGramsFeature("MaxCharNGramFeature", ngrams))

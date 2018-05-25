@@ -2,9 +2,7 @@ package de.lmu.cis.ocrd.ml.test;
 
 import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.MaxOCRConfidenceFeature;
-import de.lmu.cis.ocrd.ml.features.MinOCRConfidenceFeature;
+import de.lmu.cis.ocrd.ml.features.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,5 +33,17 @@ public class FeaturesTest {
 		assertThat(feature.calculate(t2, 0, 1), is(0.8));
 	}
 
+	@Test
+	public void testTokenCaseFeature() {
+		final Feature feature = new TokenCaseFeature("TokenCase");
+		assertThat(feature.calculate(t1, 0, 1), is("all-lower-case"));
+		assertThat(feature.calculate(t2, 0, 1), is("mixed-case"));
+	}
 
+	@Test
+	public void testTokenLengthFeature() {
+		final Feature feature = new TokenLengthFeature("TokenCase", 3, 8, 13);
+		assertThat(feature.calculate(t1, 0, 1), is("short-token"));
+		assertThat(feature.calculate(t2, 0, 1), is("medium-token"));
+	}
 }

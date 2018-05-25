@@ -22,8 +22,8 @@ public class FeatureFactoryTest {
             super(o, args);
         }
 
-        TestFeature(int zhort, int medium, int lng, String name) {
-            super(zhort, medium, lng, name);
+        TestFeature(int shrt, int medium, int lng, String name) {
+            super(name, shrt, medium, lng);
         }
 
         @Override
