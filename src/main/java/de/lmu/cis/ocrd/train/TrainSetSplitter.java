@@ -39,6 +39,9 @@ public class TrainSetSplitter {
         }
 
         boolean isTrain() {
+			if (n < 1) {
+				return true;
+			}
             return ((i+1) % n) == 0;
         }
     }

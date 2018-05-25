@@ -31,19 +31,31 @@ public class TrainSetSplitterTest extends TestBase {
         tokenizer = new Tokenizer(environment);
     }
 
+	@Test
+	public void testTrainSplitWithZero() throws Exception {
+		final HashMap<Integer, Boolean> pages = new HashMap<>();
+		new TrainSetSplitter(new Tokenizer(environment), 0).eachToken((Token t, boolean isTrain) -> {
+			final int pageID = t.getMasterOCR().getLine().getPageId();
+			pages.put(pageID, isTrain);
+		});
+		assertThat(pages.size(), is(2));
+		assertThat(pages.get(179392), is(true));
+		assertThat(pages.get(179393), is(true));
+	}
+
     @Test
     public void testTrainSplit() throws Exception {
         // two page ids: 179392 and 179393
         // - 179392 is training
         // - 179393 is evaluation
-        final HashMap<Integer, Boolean> pages = new HashMap<>();
-        new TrainSetSplitter(new Tokenizer(environment), 2).eachToken((Token t, boolean isTrain) -> {
-            final int pageID =  t.getMasterOCR().getLine().getPageId();
-            pages.put(pageID, isTrain);
-        });
-        assertThat(pages.size(), is(2));
-        assertThat(pages.get(179392), is(true));
-        assertThat(pages.get(179393), is(false));
+		final HashMap<Integer, Boolean> pages = new HashMap<>();
+		new TrainSetSplitter(new Tokenizer(environment), 2).eachToken((Token t, boolean isTrain) -> {
+			final int pageID = t.getMasterOCR().getLine().getPageId();
+			pages.put(pageID, isTrain);
+		});
+		assertThat(pages.size(), is(2));
+		assertThat(pages.get(179392), is(true));
+		assertThat(pages.get(179393), is(false));
     }
 
     @Test
