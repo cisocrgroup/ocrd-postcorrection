@@ -23,7 +23,6 @@ public class MaxOCRConfidenceFeature extends NamedDoubleFeature {
 		double max = 0;
 		for (int j = 0; j < word.getSize(); j++) {
 			final double confidence = word.getConfidenceAt(j);
-			System.out.println("[" + i + "]: " + confidence);
 			if (confidence > max) {
 				max = confidence;
 			}
