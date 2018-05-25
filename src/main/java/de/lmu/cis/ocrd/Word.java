@@ -23,6 +23,10 @@ public class Word implements Serializable {
         return line;
     }
 
+	public int getSize() {
+		return e - s;
+	}
+
     public double getConfidenceAt(int i) {
         return line.getConfidenceAt(s + i);
     }

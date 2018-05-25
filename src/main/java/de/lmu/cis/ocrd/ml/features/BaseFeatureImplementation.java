@@ -7,7 +7,6 @@ abstract class BaseFeatureImplementation implements Feature {
     protected static boolean handlesOnlyMasterOCR(int i, int ignored) {
         return i == 0;
     }
-
     static boolean handlesOnlyLastOtherOCR(int i, int n) {
         return (i+1) == n && i > 0;
     }
@@ -15,6 +14,9 @@ abstract class BaseFeatureImplementation implements Feature {
         return !handlesOnlyMasterOCR(i, n);
     }
 
+	static boolean handlesExactlyOCR(int ocr, int i, int n) {
+		return ocr == i;
+	}
     static boolean handlesAnyOCR(int i, int n) {
         return true;
     }

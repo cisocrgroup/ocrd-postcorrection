@@ -20,6 +20,8 @@ public class FeatureFactory {
                 .register(SumOfMatchingAdditionalOCRsFeature.class)
                 .register(TokenCaseFeature.class)
                 .register(ProfilerHighestVoteWeightFeature.class)
+				.register(MinOCRConfidenceFeature.class)
+				.register(MaxOCRConfidenceFeature.class)
                 .register(MinCharNGramsFeature.class)
                 .register(MaxCharNGramsFeature.class);
     }
