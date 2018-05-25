@@ -1,10 +1,7 @@
 package de.lmu.cis.ocrd;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class SimpleLine implements Line, Serializable {
 
@@ -24,6 +21,10 @@ public class SimpleLine implements Line, Serializable {
 	    line.line = t.getNormalized();
 	    line.cs = t.getConfidences();
 	    return line;
+	}
+
+	public static SimpleLine normalized(String ocr, Double... cs) {
+		return normalized(ocr, Arrays.asList(cs));
 	}
 
 	public static SimpleLine normalized(String ocr, List<Double> cs) {

@@ -12,7 +12,7 @@ public class MinOCRConfidenceFeature extends NamedDoubleFeature {
 		this(JSONUtil.mustGetNameOrType(o), JSONUtil.mustGet(o, "ocrIndex").getAsInt());
 	}
 
-	private MinOCRConfidenceFeature(String name, int ocrIndex) {
+	public MinOCRConfidenceFeature(String name, int ocrIndex) {
 		super(name);
 		this.ocrIndex = ocrIndex;
 	}
@@ -20,14 +20,14 @@ public class MinOCRConfidenceFeature extends NamedDoubleFeature {
 	@Override
 	protected double doCalculate(Token token, int i, int n) {
 		final Word word = getWord(token, i, n);
-		double min = -1; // assume confidences are always larger than 0
+		double min = Double.MAX_VALUE;
 		for (int j = 0; j < word.getSize(); j++) {
 			final double confidence = word.getConfidenceAt(j);
 			if (confidence < min) {
 				min = confidence;
 			}
 		}
-		return min > -1 ? min : 0;
+		return min;
 	}
 
 	@Override
