@@ -10,6 +10,7 @@
   "dynamicLexiconTraining": {
     "copyTrainingFiles": true,
     "debugTrainingTokens": true,
+    "testEvaluationFraction": 10,
     "features": [
       {
         "type": "de.lmu.cis.ocrd.ml.features.TokenLengthFeature",
