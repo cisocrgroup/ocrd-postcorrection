@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.align.test;
 
+import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.TokenAlignment;
 import org.junit.Test;
 
@@ -80,5 +81,14 @@ public class TokenAlignmentTest {
         assertThat(tokens.size(), is(9));
         tokens = new TokenAlignment(a).add(c).add(b);
         assertThat(tokens.size(), is(9));
+	}
+
+	@Test
+	public void testBug4() {
+		final String a = "je nachdem sich die vorbildenden und die entscheidenden Perioden die Zeiten";
+		final String b = "je nachdem sich die dorbildenden und die entscheidenden Perioden sdie Zeiten";
+		System.out.println(new Graph(a, b).getStartNode());
+		final TokenAlignment tokens = new TokenAlignment(a).add(b);
+		assertThat(tokens.size(), is(11));
 	}
 }
