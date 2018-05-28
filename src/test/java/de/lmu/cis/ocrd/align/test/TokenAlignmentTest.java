@@ -49,7 +49,6 @@ public class TokenAlignmentTest {
 		assertThat(tokens.get(0).toString(), is("nen|nen"));
 		assertThat(tokens.get(3).toString(), is("Momente|Momente"));
 		assertThat(tokens.get(6).toString(), is("Wagenzug|Wagenzug"));
-		// TODO: add more tests for token alignment
 	}
 
 	@Test
