@@ -46,31 +46,40 @@ public class LCS_Alignment_Pairwise {
 
 	}
 
-	public void align() {
-		Logger.debug("Searching quasi max nodes for s1 and s2 pairs...");
+	    public void align() {
+
+		System.out.println("Searching quasi max nodes for s1 and s2 pairs...");
+
 		ArrayList<Endpos_Pair> quasi_max_nodes = scdawg_functions.get_quasi_maximal_nodes_pairwise();
-		if (quasi_max_nodes == null) {
-			return;
+		if (quasi_max_nodes.size()==0) {
+		            return;
+	        }
+		Node[] nodes_in_s1 = new Node[scdawg.stringset.get(0).length()];
+		HashMap<Node, ArrayList> nodes_endpos_s2 = new HashMap();
+
+		for (Endpos_Pair pair : quasi_max_nodes) {
+		    Node x = pair.node;
+//		    System.out.println("-----------------------------------");
+	//
+//		     System.out.println(scdawg.get_node_label(x) + ", s1=" + pair.endpos_s1 + " :: s2=" + pair.endpos_s2);
+		    for (int e1 : pair.endpos_s1) {
+			nodes_in_s1[e1] = pair.node;
+		    }
+
+		    ArrayList e2 = pair.endpos_s2;
+		    Collections.sort(e2);
+		    nodes_endpos_s2.put(x, e2);
 		}
-		ArrayList<Endpos_Pair> quasi_max_sorted = Util.sortEndposPair(quasi_max_nodes, "ASC", scdawg);		// nach dem ersten String sortieren.
-	  	ArrayList<Endpos_Pair> quasi_max_nodes_reduced = reduce_nodes(quasi_max_sorted);
+		
+		
 
+		System.out.println("Calculating LCS for s1 and s2 pairs...");
 
-//		for (Endpos_Pair pair : quasi_max_nodes_reduced) {
-//			Node x = pair.node;
-//
-//			Logger.debug(scdawg.get_node_label(x) + ", s1= " + pair.endpos_s1 + " :: s2=" + pair.endpos_s2);
-//
-//			Logger.debug("\n--------------------------------------------");
-//		}
-
-		Logger.debug("Calculating LCS for s1 and s2 pairs...");
-
-        // ArrayList lcs = this.calculate_LCS(quasi_max_sorted); // OLD
-        ArrayList lcs = this.calculate_LCS(quasi_max_nodes_reduced);
+		ArrayList lcs = this.calculate_LCS(nodes_in_s1, nodes_endpos_s2);
 		this.longest_common_subsequences.add(lcs);
+		this.printLCS();
 
-	}
+	    }
 
 	public ArrayList<Endpos_Pair> reduce_nodes (ArrayList<Endpos_Pair> quasi_max_nodes){
 
@@ -171,146 +180,147 @@ public class LCS_Alignment_Pairwise {
 
 	}
 
-	public ArrayList[] build_greedy_cover(ArrayList<Endpos_Pair> quasi_max_nodes, ArrayList<LCS_Triple> lcs_triples,
-			HashMap<Node, Node> node_ancestors) {
+	public ArrayList[] build_greedy_cover(Node[] nodes_in_s1, HashMap<Node, ArrayList> nodes_endpos_s2,
+		    ArrayList<LCS_Triple> lcs_triples, HashMap<Node, Node> node_ancestors) {
 
 		// build greedy cover
 
-		ArrayList[] greedy_cover = new ArrayList[scdawg.all_nodes.size()];
+		ArrayList[] greedy_cover = new ArrayList[nodes_in_s1.length];
 
 		Node prev = null;
 
-		for (int i = 0; i < scdawg.all_nodes.size(); i++)
-			greedy_cover[i] = new ArrayList();
+		for (int i = 0; i < nodes_in_s1.length; i++)
+		    greedy_cover[i] = new ArrayList();
 
 		boolean first_node_found = false;
 
-		for (int i = 0; i < quasi_max_nodes.size(); i++) {
-			Endpos_Pair p = quasi_max_nodes.get(i);
-			if (p.endpos_s1.size() > 0) {
-				// System.out.println(scdawg.get_node_label(nodes_in_s1[i])+ i+
-				// nodes_endpos_s2.get(nodes_in_s1[i]) );
+		for (int i = 0; i < nodes_in_s1.length; i++) {
 
-				for (int l=0;l<p.endpos_s1.size(); l++) { // iterieren über alle
+		    if (nodes_in_s1[i] != null) {
+			// System.out.println(scdawg.get_node_label(nodes_in_s1[i])+ i+
+			// nodes_endpos_s2.get(nodes_in_s1[i]) );
 
-					int elem_s1 = (int) p.endpos_s1.get(l);
+			if (nodes_endpos_s2.get(nodes_in_s1[i]) == null)
+			    continue; // Wenn keine Endpos im zweiten String dann nix
+				      // machen
+
+//			System.out.println("Size: " + nodes_endpos_s2.get(nodes_in_s1[i]).size());
+
+			for (int j = nodes_endpos_s2.get(nodes_in_s1[i]).size() - 1; j >= 0; j--) { // iterieren
+												    // über
+												    // alle
+
+			    int dec_elem = (int) nodes_endpos_s2.get(nodes_in_s1[i]).get(j);
+
+			    // System.out.println(scdawg.get_node_label(p.node) + " " +
+			    // elem_s1 + " :: " + dec_elem);
+
+			    lcs_triples.add(new LCS_Triple(i, dec_elem, nodes_in_s1[i]));
+			    int lcs_index = lcs_triples.size() - 1;
+
+			    node_ancestors.put(nodes_in_s1[i], prev);
+			    prev = nodes_in_s1[i];
+
+	                    if ((j == nodes_endpos_s2.get(nodes_in_s1[i]).size() - 1) & !first_node_found) { // erstes
+	                                                                                                            // element
+	                                                                                                            // immer
+	                                                                                                            // hinzufügen
+	                                                                                                            // // HIER
+	                                                                                                            // NUN DIE
+	                                                                                                            // INDIZES
+	                                                                                                            // ANSTATT
+	                                                                                                            // DER WERTE
+	                                                                                                            // ABER
+	                                                                                                            // IMMER MIT
+	                                                                                                            // TRIPEL
 
 
-					for (int j = p.endpos_s2.size() - 1; j >= 0; j--) { // iterieren über alle
-																		// dec sequences ;//
-																		// HIER EIN TRIPEL! //
-																		// erstes paar abc;4;15
-																		// abc;4;4 mn;7;8
-																		// abc;11;15 abc;11;4
-						int dec_elem= (int) p.endpos_s2.get(j);
+				greedy_cover[0].add(lcs_index);
+				lcs_triples.get(lcs_index).column_number = 0;
+				first_node_found = true;
+			    }
 
-//						System.out.println(scdawg.get_node_label(p.node)+" "+elem_s1 + " :: " + dec_elem);
+			    else {
 
-						lcs_triples.add(new LCS_Triple(elem_s1, dec_elem, p.node));
-						int lcs_index = lcs_triples.size() - 1;
+				for (int k = 0; k < greedy_cover.length; k++) { // alle
+										// cover
+										// listen
+										// durchgehen
 
-						node_ancestors.put(p.node, prev);
-						prev = p.node;
+				    if (greedy_cover[k].size() == 0) {
+					greedy_cover[k].add(lcs_index);
+					lcs_triples.get(lcs_index).column_number = k;
 
-						if ((j == p.endpos_s2.size() - 1) & !first_node_found) { // erstes
-																											// element
-																											// immer
-																											// hinzufügen
-																											// // HIER
-																											// NUN DIE
-																											// INDIZES
-																											// ANSTATT
-																											// DER WERTE
-																											// ABER
-																											// IMMER MIT
-																											// TRIPEL
-							greedy_cover[0].add(lcs_index);
-							lcs_triples.get(lcs_index).column_number = 0;
-							first_node_found = true;
-						}
+					break;
+				    }
 
-						else {
+				    else if (dec_elem < lcs_triples
+					    .get((int) greedy_cover[k].get(greedy_cover[k].size() - 1)).endpos_s2) { // wenn
+														     // kleiner
+														     // als
+														     // das
+														     // letzte
+														     // dann
+														     // hinzufügen
+					greedy_cover[k].add(lcs_index);
+					lcs_triples.get(lcs_index).column_number = k;
 
-							for (int k = 0; k < greedy_cover.length; k++) { // alle cover listen durchgehen
+					break;
+				    }
 
-								if (greedy_cover[k].size() == 0) {
-									greedy_cover[k].add(lcs_index);
-									lcs_triples.get(lcs_index).column_number = k;
+				}
 
-									break;
-								}
+			    }
 
-								else if (dec_elem < lcs_triples
-										.get((int) greedy_cover[k].get(greedy_cover[k].size() - 1)).endpos_s2) { // wenn
-																													// kleiner
-																													// als
-																													// das
-																													// letzte
-																													// dann
-																													// hinzufügen
-									greedy_cover[k].add(lcs_index);
-									lcs_triples.get(lcs_index).column_number = k;
+			} // for j
 
-									break;
-								}
-
-							}
-
-						}
-
-					} // for j
-
-				} // for l
-
-			}
+		    }
 
 		}
 
 		return greedy_cover;
-	}
+	    }
 
-	// *******************************************************************************
-	// calculate_LCS()
-	// *******************************************************************************
+	    // *******************************************************************************
+	    // calculate_LCS()
+	    // *******************************************************************************
 
-	public ArrayList<LCS_Triple> calculate_LCS(ArrayList<Endpos_Pair> quasi_max_nodes) {
+	    public ArrayList<LCS_Triple> calculate_LCS(Node[] nodes_in_s1, HashMap<Node, ArrayList> nodes_endpos_s2) {
 
-		ArrayList<LCS_Triple> lcs_triples = new ArrayList<>();
-		HashMap<Node, Node> node_ancestors = new HashMap<>();
-		ArrayList[] greedy_cover = build_greedy_cover(quasi_max_nodes, lcs_triples, node_ancestors);
-//		this.print_greedy_cover(greedy_cover,lcs_triples);
+		ArrayList<LCS_Triple> lcs_triples = new ArrayList<LCS_Triple>();
+		HashMap<Node, Node> node_ancestors = new HashMap<Node, Node>();
+		ArrayList[] greedy_cover = build_greedy_cover(nodes_in_s1, nodes_endpos_s2, lcs_triples, node_ancestors);
+		 this.print_greedy_cover(greedy_cover, lcs_triples);
 		// calculate lis
 
 		int i_count = 0;
 		for (int i = 0; i < greedy_cover.length; i++) {
-			if (greedy_cover[i].size() > 0)
-				i_count++;
+		    if (greedy_cover[i].size() > 0)
+			i_count++;
 		}
 
-		ArrayList<LCS_Triple> lis = new ArrayList<>();
-		if (i_count <= 0) {
-		    return lis;
-        }
-		int x = lcs_triples.get((int) greedy_cover[i_count - 1].get(0)).endpos_s2; // pick any??
+		ArrayList<LCS_Triple> lis = new ArrayList<LCS_Triple>();
+		int x = lcs_triples.get((int) greedy_cover[i_count - 1].get(0)).endpos_s2; // pick
+											   // any??
 		lis.add(lcs_triples.get((int) greedy_cover[i_count - 1].get(0)));
 
 		i_count -= 2;
 
 		while (i_count >= 0) {
 
-			for (int j = 0; j < greedy_cover[i_count].size(); j++) {
-				if (lcs_triples.get((int) greedy_cover[i_count].get(j)).endpos_s2 < x) {
-					lis.add(0, lcs_triples.get((int) greedy_cover[i_count].get(j)));
-					x = lcs_triples.get((int) greedy_cover[i_count].get(j)).endpos_s2;
-					break;
-				}
+		    for (int j = 0; j < greedy_cover[i_count].size(); j++) {
+			if (lcs_triples.get((int) greedy_cover[i_count].get(j)).endpos_s2 < x) {
+			    lis.add(0, lcs_triples.get((int) greedy_cover[i_count].get(j)));
+			    x = lcs_triples.get((int) greedy_cover[i_count].get(j)).endpos_s2;
+			    break;
 			}
+		    }
 
-			i_count--;
+		    i_count--;
 		}
 		return lis;
 
-	}
+	    }
 
 	// *******************************************************************************
 	// calculate_LCS_New()
@@ -323,8 +333,8 @@ public class LCS_Alignment_Pairwise {
 		ArrayList<LCS_Triple> lcs_triples = new ArrayList<LCS_Triple>();
 		HashMap<Node, Node> node_ancestors = new HashMap<Node, Node>();
 
-		ArrayList[] greedy_cover = build_greedy_cover(quasi_max_nodes, lcs_triples, node_ancestors);
-		this.print_greedy_cover(greedy_cover,lcs_triples);
+//		ArrayList[] greedy_cover = build_greedy_cover(quasi_max_nodes, lcs_triples, node_ancestors);
+//		this.print_greedy_cover(greedy_cover,lcs_triples);
 		// Iterator it = node_ancestors.entrySet().iterator();
 		// while (it.hasNext()) {
 		// Map.Entry pair = (Map.Entry) it.next();
@@ -334,15 +344,15 @@ public class LCS_Alignment_Pairwise {
 		//
 		// calculate lis
 
-		LIS_Graph lis_graph = new LIS_Graph();
+//		LIS_Graph lis_graph = new LIS_Graph();
 
-		int i_count = 0;
-		for (int i = 0; i < greedy_cover.length; i++) {
-			if (greedy_cover[i].size() > 0)
-				i_count++;
-		}
-		determineLis(greedy_cover, lcs_triples, node_ancestors, lis_graph, lis_graph.root, i_count - 1);
-
+//		int i_count = 0;
+//		for (int i = 0; i < greedy_cover.length; i++) {
+//			if (greedy_cover[i].size() > 0)
+//				i_count++;
+//		}
+//		determineLis(greedy_cover, lcs_triples, node_ancestors, lis_graph, lis_graph.root, i_count - 1);
+//
 		return result;
 
 	}
@@ -421,17 +431,19 @@ public class LCS_Alignment_Pairwise {
 
 
 
-	public void print_greedy_cover(ArrayList[] greedy_cover,ArrayList<LCS_Triple> lcs_triples) {
+	public void print_greedy_cover(ArrayList[] greedy_cover, ArrayList<LCS_Triple> lcs_triples) {
 
 		for (int i = 0; i < greedy_cover.length; i++) {
-			for (int j = 0; j < greedy_cover[i].size(); j++) {
-				LCS_Triple t = lcs_triples.get((int) greedy_cover[i].get(j));
-				System.out.println(t.endpos_s2+" ("+scdawg.get_node_label(t.node)+")");
-			}
-			System.out.println("-------------------------------");
+		    if(greedy_cover[i].size()==0)
+			continue;
+		    for (int j = 0; j < greedy_cover[i].size(); j++) {
+			LCS_Triple t = lcs_triples.get((int) greedy_cover[i].get(j));
+			System.out.println(t.endpos_s2 + " (" + scdawg.get_node_label(t.node) + ")");
+		    }
+		    System.out.println("-------------------------------");
 		}
 
-	}
+	 }
 	// *******************************************************************************
 	// LCS_to_JSONString()
 	// *******************************************************************************

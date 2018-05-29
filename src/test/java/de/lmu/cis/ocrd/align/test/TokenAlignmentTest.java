@@ -86,7 +86,7 @@ public class TokenAlignmentTest {
 	public void testBug4() {
 		final String a = "je nachdem sich die vorbildenden und die entscheidenden Perioden die Zeiten";
 		final String b = "je nachdem sich die dorbildenden und die entscheidenden Perioden sdie Zeiten";
-		System.out.println(new Graph(a, b).getStartNode());
+//		System.out.println(new Graph(a, b).getStartNode());
 		final TokenAlignment tokens = new TokenAlignment(a).add(b);
 		assertThat(tokens.size(), is(11));
 	}
