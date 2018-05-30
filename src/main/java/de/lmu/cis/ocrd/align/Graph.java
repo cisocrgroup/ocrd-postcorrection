@@ -8,25 +8,17 @@ import java.util.ArrayList;
 
 public class Graph {
 
-	private final String s1, s2;
+	private final LCS_Alignment_Pairwise alignment;
 
 	private Node start;
 
-	public Graph(LCS_Alignment_Pairwise algn, String a, String b) {
-		s1 = a;
-		s2 = b;
-		build(algn.getAligmentPairs());
-	}
-
 	public Graph(String a, String b) {
-		LCS_Alignment_Pairwise algn = new LCS_Alignment_Pairwise(a, b);
-		algn.align();
-		s1 = a;
-		s2 = b;
-		build(algn.getAligmentPairs());
+		this.alignment = new LCS_Alignment_Pairwise(a, b);
+		this.alignment.align();
+		build(alignment.getAligmentPairs());
 	}
 
-	Node getStartNode() {
+	public Node getStartNode() {
 		return start;
 	}
 
@@ -47,9 +39,11 @@ public class Graph {
 	}
 
 	private void build(ArrayList<AlignmentPair> ps) {
-        // explicitly handle cases where both strings are equal
+		final String s1 = alignment.getString(0);
+		final String s2 = alignment.getString(1);
+		// explicitly handle cases where both strings are equal
 		if (ps.isEmpty() || s1.equals(s2)) {
-			start = new Node('#' + s1 + '$');
+			start = new Node(s1);
 			return;
 		}
 		// System.out.println("s1: " + s1);
@@ -82,6 +76,8 @@ public class Graph {
 	}
 
 	private AlignmentPair handleOverlap(AlignmentPair previous, AlignmentPair current) {
+		final String s1 = alignment.getString(0);
+		final String s2 = alignment.getString(1);
 		Logger.info("previous.epos1: {}, previous.epos2: {}, previous.label: '{}'", previous.epos1, previous.epos2, previous.label);
 		Logger.info("current.spos1: {}, current.spos2: {}, current.label: '{}'", current.spos1, current.spos2, current.label);
 		Logger.info("s1: '{}'\nINFO: s2: '{}'", s1, s2);
@@ -100,7 +96,7 @@ public class Graph {
 	}
 
 	private Gap makeGap(int s, int e, String str, Node node) {
-		// Logger.info("getGapLabel(" + s + ", " + e + ", " + str + ")");
+		System.out.println("getGapLabel(" + s + ", " + e + ", " + str + ")");
 		// s += 1;
 		// e += 1;
 		if (s > e) {

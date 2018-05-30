@@ -22,7 +22,7 @@ public class AlignmentGraphIteratorTest {
 		String a = "diee Presse";
 		String b = "die Preſſe";
 		Graph g = new Graph(a, b);
-		// System.out.println(g.getStartNode().toDot());
+		System.out.println(g.getStartNode());
 		assertThat(makeString(g, 0), is('#' + a + '$'));
 		assertThat(makeString(g, 1), is('#' + b + '$'));
 	}
@@ -32,7 +32,7 @@ public class AlignmentGraphIteratorTest {
 		String a = "die Presse";
 		String b = "di Preſſe";
 		Graph g = new Graph(a, b);
-		// System.out.println(g.getStartNode().toDot());
+		System.out.println(g.getStartNode());
 		assertThat(makeString(g, 0), is('#' + a + '$'));
 		assertThat(makeString(g, 1), is('#' + b + '$'));
 	}

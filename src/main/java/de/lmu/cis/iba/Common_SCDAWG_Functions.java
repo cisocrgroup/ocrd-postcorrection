@@ -1,12 +1,8 @@
 package de.lmu.cis.iba;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-
 import de.lmu.cis.ocrd.OCRLine;
+
+import java.util.*;
 
 /**
  * @author Tobias Englmeier (CIS)
@@ -93,7 +89,8 @@ public class Common_SCDAWG_Functions {
 		ArrayList<Endpos_Pair> result = new ArrayList();
 		Node[] nodes_in_s1 = new Node[scdawg.stringset.get(0).length()];
 
-		mainloop: for (int i = 0; i < scdawg.all_nodes.size(); i++) {
+		mainloop:
+		for (int i = 0; i < scdawg.all_nodes.size(); i++) {
 
 			Node node = scdawg.all_nodes.get(i);
 
@@ -104,7 +101,7 @@ public class Common_SCDAWG_Functions {
 			ArrayList endpos_s1 = new ArrayList();
 			ArrayList endpos_s2 = new ArrayList();
 
-			HashSet sinkshit = new HashSet();
+			HashSet<Integer> sinkshit = new HashSet<>();
 
 			Iterator it = node.children_new.entrySet().iterator();
 
@@ -113,94 +110,83 @@ public class Common_SCDAWG_Functions {
 				EdgeInfo e = (EdgeInfo) pair2.getValue();
 				int letter = (int) pair2.getKey();
 				Node n2 = e.child;
-				
-				if (n2.is_endNode) {
-				    	int start_in_sink = e.pos - scdawg.get_node_length(node) - 1;
-				    	
-				    	
-				    	if(start_in_sink>-1) {
-//				    		System.out.println(scdawg.get_node_label(node)+" "+scdawg.get_node_label(n2)+" :"+scdawg.get_node_length(node)+" "+e.pos+" "+start_in_sink);
-        				    	
-        				    	int start_letter = scdawg.get_letter(start_in_sink, n2.stringnr);
-        				    	
-        				    	if(node.children_left.containsKey(start_letter)) {
-        				    	    Node n_left = node.children_left.get(start_letter);
-        				    	    
-        				    	    if(n_left.is_endNode) {
-        				    	    
-                				    	sinkshit.add(n2.stringnr);
-                
-                					if (n2.stringnr == 0) {
-                						if (!endpos_s1.contains(e.pos)) {
-                							endpos_s1.add(e.pos);
-                						}
-                					} else {
-                						if (!endpos_s2.contains(e.pos)) {
-                							endpos_s2.add(e.pos);
-                						}
-                					}
-                					
-                				   }
-        				    	    
-        				    	}
-        				    	
-				    	
-				    	}
-				    	
-				    	else {
-				    	// start node #
-				    	if (!endpos_s1.contains(1)) {
-				    	sinkshit.add(0);
-				    	sinkshit.add(1);
-				    	endpos_s2.add(1);
-				    	endpos_s1.add(1);
-				    	}
-
-				    	}
-				
-
-				}
-			}
-
-			Iterator it2 = node.children_left.entrySet().iterator();
-
-			while (it2.hasNext()) {
-				Map.Entry pair2 = (Map.Entry) it2.next();
-				Node n2 = (Node) pair2.getValue();
-				int letter = (int) pair2.getKey();
 
 				if (n2.is_endNode) {
-					sinkshit.add(n2.stringnr);
+					int start_in_sink = e.pos - scdawg.get_node_length(node) - 1;
 
-					// last Node with $
-					if (scdawg.get_node_label(node).endsWith("$")) {
 
-						int endpos = n2.end;
-						if (n2.stringnr == 0) {
-							if (!endpos_s1.contains(endpos)) {
-								endpos_s1.add(endpos);
+					if (start_in_sink > -1) {
+						// System.out.println(scdawg.get_node_label(node)+" "+scdawg.get_node_label(n2)+" :"+scdawg.get_node_length(node)+" "+e.pos+" "+start_in_sink);
+
+						int start_letter = scdawg.get_letter(start_in_sink, n2.stringnr);
+
+						if (node.children_left.containsKey(start_letter)) {
+							Node n_left = node.children_left.get(start_letter);
+
+							if (n_left.is_endNode) {
+
+								sinkshit.add(n2.stringnr);
+
+								if (n2.stringnr == 0) {
+									if (!endpos_s1.contains(e.pos)) {
+										endpos_s1.add(e.pos);
+									}
+								} else {
+									if (!endpos_s2.contains(e.pos)) {
+										endpos_s2.add(e.pos);
+									}
+								}
+
 							}
-						} else {
-							if (!endpos_s2.contains(endpos)) {
-								endpos_s2.add(endpos);
-							}
+
 						}
-
 					}
-
 				}
 			}
-
 			if (sinkshit.size() == 2 && (endpos_s1.size() > 0 && endpos_s2.size() > 0)) {
 				result.add(new Endpos_Pair(node, endpos_s1, endpos_s2));
+				continue mainloop;
 			}
-						
+			// check for start node
+			if (node.children_new.size() == 2 && scdawg.get_node_label(node).startsWith("#")) {
+				sinkshit = new HashSet<>();
+				for (Map.Entry<Integer, EdgeInfo> e : node.children_new.entrySet()) {
+					if (e.getValue().child.is_endNode) {
+						sinkshit.add(e.getValue().child.stringnr);
+					}
+				}
+				if (sinkshit.size() == 2) {
+					endpos_s1.add(scdawg.get_node_length(node));
+					endpos_s2.add(scdawg.get_node_length(node));
+					result.add(new Endpos_Pair(node, endpos_s1, endpos_s2));
+					continue mainloop;
+				}
+			}
 
-		} // all Nodes
-		
-		
+			// check for end node
+			if (node.children_left.size() == 2 && scdawg.get_node_label(node).endsWith("$")) {
+				sinkshit = new HashSet<>();
+				for (Map.Entry<Integer, Node> e : node.children_left.entrySet()) {
+					if (e.getValue().is_endNode) {
+						sinkshit.add(e.getValue().stringnr);
+						if (e.getValue().stringnr == 0) {
+							if (!endpos_s1.contains(scdawg.stringset.get(0).length())) {
+								endpos_s1.add(scdawg.stringset.get(0).length());
+							}
+						} else {
+							if (!endpos_s2.contains(scdawg.stringset.get(1).length())) {
+								endpos_s2.add(scdawg.stringset.get(1).length());
+							}
+						}
+					}
+				}
+				if (sinkshit.size() == 2) {
+					result.add(new Endpos_Pair(node, endpos_s1, endpos_s2));
+					continue mainloop;
+				}
+			}
+		}
 		return result;
-
 	}
 
 	/*********************************************************************************

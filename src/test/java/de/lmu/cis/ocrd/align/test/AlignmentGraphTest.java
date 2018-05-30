@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+// TODO: merge with AlignmentGraphIteratorTest
 public class AlignmentGraphTest {
 
 	private static String makeString(Graph g, int id) {

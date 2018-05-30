@@ -1,14 +1,13 @@
 package de.lmu.cis.ocrd.align.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import de.lmu.cis.ocrd.align.Graph;
+import de.lmu.cis.ocrd.align.Tokenizer;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
-
-import de.lmu.cis.ocrd.align.Graph;
-import de.lmu.cis.ocrd.align.Tokenizer;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class AlignmentTokenizationTest {
 	private static class Pair {
@@ -43,6 +42,7 @@ public class AlignmentTokenizationTest {
 	public void testDeletion() {
 		final String a = "here is a deletion my friend";
 		final String b = "here is a del my friend";
+		System.out.println("HERE: " + new Graph(a, b).getStartNode());
 		assertThat(align(a, b).size(), is(6));
 		assertThat(align(a, b).get(3).first, is("deletion"));
 		assertThat(align(a, b).get(3).second, is("del"));

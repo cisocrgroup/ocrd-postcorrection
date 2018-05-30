@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.align;
 
 import java.util.Iterator;
 
+// TODO: check if this is still needed
 public class LabelIterator implements Iterator<LabelPos> {
 
 	private LabelPos pos;

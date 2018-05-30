@@ -1,7 +1,5 @@
 package de.lmu.cis.iba;
 
-import org.pmw.tinylog.Logger;
-
 import java.util.*;
 
 
@@ -46,6 +44,10 @@ public class LCS_Alignment_Pairwise {
 
 	}
 
+	public String getString(int i) {
+		return scdawg.stringset.get(i);
+	}
+
 	    public void align() {
 
 		System.out.println("Searching quasi max nodes for s1 and s2 pairs...");
@@ -54,14 +56,14 @@ public class LCS_Alignment_Pairwise {
 		if (quasi_max_nodes.size()==0) {
 		            return;
 	        }
-		Node[] nodes_in_s1 = new Node[scdawg.stringset.get(0).length()];
+			Node[] nodes_in_s1 = new Node[scdawg.stringset.get(0).length() + 1];
 		HashMap<Node, ArrayList> nodes_endpos_s2 = new HashMap();
 
 		for (Endpos_Pair pair : quasi_max_nodes) {
 		    Node x = pair.node;
-//		    System.out.println("-----------------------------------");
-	//
-//		     System.out.println(scdawg.get_node_label(x) + ", s1=" + pair.endpos_s1 + " :: s2=" + pair.endpos_s2);
+			System.out.println("-----------------------------------");
+
+			System.out.println(scdawg.get_node_label(x) + ", s1=" + pair.endpos_s1 + " :: s2=" + pair.endpos_s2);
 		    for (int e1 : pair.endpos_s1) {
 			nodes_in_s1[e1] = pair.node;
 		    }
