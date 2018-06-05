@@ -24,7 +24,6 @@ public class LocalProfiler implements Profiler {
         this.exe = "profiler";
         this.workdir = ".";
         this.langdir = "/data";
-        this.args = new String[]{"--sourceFormat", "TXT"};
     }
 
     public LocalProfiler withExecutable(String exe) {
@@ -67,7 +66,7 @@ public class LocalProfiler implements Profiler {
 
     @Override
     public Profile profile() throws Exception {
-        Process profiler = createCommand();
+		Process profiler = startCommand();
         // write stdin to profiler
 		IOUtils.copy(openInputPath(), profiler.getOutputStream(), Charset.defaultCharset());
         profiler.getOutputStream().flush();
@@ -81,11 +80,14 @@ public class LocalProfiler implements Profiler {
         return profile;
     }
 
-    private Process createCommand() throws IOException {
+	private Process startCommand() throws IOException {
        ProcessBuilder builder = new ProcessBuilder();
-       builder.command(makeArgs());
+		final List<String> command = makeArgs();
+		System.out.println("starting command: " + String.join(" ", command));
+		builder.command(command);
        // TODO: check if the work-dir really is needed
        builder.directory(new File(this.workdir));
+
        return builder.start();
     }
 
@@ -95,7 +97,9 @@ public class LocalProfiler implements Profiler {
         res.addAll(Arrays.asList(defaultArgs()));
         res.add("--config");
         res.add(Paths.get(langdir, language + ".ini").toAbsolutePath().toString());
-        res.addAll(Arrays.asList(this.args));
+		if (this.args != null) {
+			res.addAll(Arrays.asList(this.args));
+		}
         return res;
     }
 
@@ -103,7 +107,9 @@ public class LocalProfiler implements Profiler {
         return new String[]{
                 "--sourceFile",
                 "/dev/stdin",
-                "--jsonOutput"
+				"--jsonOutput",
+				"--sourceFormat",
+				"TXT",
         };
     }
 

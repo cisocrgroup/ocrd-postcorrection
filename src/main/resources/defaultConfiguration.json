@@ -2,7 +2,10 @@
   "profiler": {
     "executable": "/apps/profiler",
     "languageDirectory": "/data/profiler-backend",
-    "language": "german"
+    "language": "german",
+    "args": [
+      "--types"
+    ]
   },
   "languageModel": {
     "characterTrigrams": "/data/language-model/character-trigrams.csv"
