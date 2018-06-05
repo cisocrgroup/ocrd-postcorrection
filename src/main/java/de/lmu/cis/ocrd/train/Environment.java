@@ -4,6 +4,12 @@ import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.FileTypes;
+import de.lmu.cis.ocrd.ml.CharacterNGrams;
+import de.lmu.cis.ocrd.ml.FreqMap;
+import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
+import de.lmu.cis.ocrd.profile.FileProfiler;
+import de.lmu.cis.ocrd.profile.LocalProfiler;
+import de.lmu.cis.ocrd.profile.Profile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -17,7 +23,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class Environment {
+public class Environment implements ArgumentFactory {
     private static final String resources = "resources";
     private static final String dLex = "dLex";
     private static final String dLexFS = "features.ser";
@@ -27,13 +33,20 @@ public class Environment {
     private static final String model = "model.ser";
 	private static final String dataFile = "data.json";
 	private static final String configurationFile = "configuration.json";
+
     private final String path, name;
     private Path gt, masterOCR;
     private final List<Path> otherOCR = new ArrayList<>();
     private boolean copyTrainingFiles;
     private boolean debugTokenAlignment;
+	private Configuration configuration;
+	private Profile profile;
+	private FreqMap masterOCRUnigrams, charTrigrams;
+	private ArrayList<FreqMap> otherOCRUnigrams = new ArrayList<>();
+	private Document masterOCRDocument, gtDocument;
+	private ArrayList<Document> otherOCRDocuments = new ArrayList<>();
 
-    public Environment(String base, String name) throws IOException {
+	public Environment(String base, String name) throws IOException {
         this.path = base;
         this.name = name;
         setupDirectories();
@@ -76,7 +89,10 @@ public class Environment {
     }
 
     Document openGT() throws Exception {
-        return FileTypes.openDocument(getOCRPath(getGT()).toString());
+		if (gtDocument == null) {
+			gtDocument = FileTypes.openDocument(getOCRPath(getGT()).toString());
+		}
+		return gtDocument;
     }
 
     public Path getMasterOCR() {
@@ -93,7 +109,10 @@ public class Environment {
     }
 
     Document openMasterOCR() throws Exception {
-        return FileTypes.openDocument(getOCRPath(getMasterOCR()).toString());
+		if (masterOCRDocument == null) {
+			masterOCRDocument = FileTypes.openDocument(getOCRPath(getMasterOCR()).toString());
+		}
+		return masterOCRDocument;
     }
 
     private Path getOCRPath(Path ocr) {
@@ -115,8 +134,14 @@ public class Environment {
     }
 
     Document openOtherOCR(int i) throws Exception {
-        return FileTypes.openDocument(getOCRPath(getOtherOCR(i)).toString());
-    }
+		while (otherOCRDocuments.size() <= i) {
+			otherOCRDocuments.add(null);
+		}
+		if (otherOCRDocuments.get(i) == null) {
+			otherOCRDocuments.set(i, FileTypes.openDocument(getOCRPath(getOtherOCR(i)).toString()));
+		}
+		return otherOCRDocuments.get(i);
+	}
 
     public int getNumberOfOtherOCR() {
         return otherOCR.size();
@@ -145,10 +170,13 @@ public class Environment {
 	}
 
 	public Configuration openConfiguration() throws IOException {
-		try (InputStream in = new FileInputStream(fullPath(getConfigurationFile()).toFile())) {
-			final String json = IOUtils.toString(in, Charset.forName("UTF-8"));
-			return Configuration.fromJSON(json);
+		if (configuration == null) {
+			try (InputStream in = new FileInputStream(fullPath(getConfigurationFile()).toFile())) {
+				final String json = IOUtils.toString(in, Charset.forName("UTF-8"));
+				configuration = Configuration.fromJSON(json);
+			}
 		}
+		return configuration;
 	}
 
 	public Path getConfigurationFile() {
@@ -250,6 +278,10 @@ public class Environment {
         }
     }
 
+	private Path getLocalProfilePath() {
+		return Paths.get(getResourcesDirectory().toString(), getMasterOCR().getFileName().toString() + ".profile.json");
+	}
+
     public Path getDynamicLexiconTestFile(int n) {
         return Paths.get(getDynamicLexiconTrainingDirectory(n).toString(), testFile);
     }
@@ -292,8 +324,8 @@ public class Environment {
     }
 
     // Data class for the data of the training environment.
-    public static class Data {
-		public String gt, masterOCR, dynamicLexiconFeatureSet, data, configuration;
+	public static class Data {
+		String gt, masterOCR, dynamicLexiconFeatureSet, data, configuration;
 		public String[] otherOCR;
 		public String[] dynamicLexiconTrainingFiles;
 		public String[] dynamicLexiconEvaluationFiles;
@@ -312,8 +344,71 @@ public class Environment {
             return new Gson().fromJson(json, Data.class);
 		}
 
-		public String toJSON() {
+		String toJSON() {
 			return new Gson().toJson(this);
 		}
+	}
+
+	@Override
+	public Profile getProfile() throws Exception {
+		if (profile == null) {
+			profile = loadProfile();
+		}
+		return profile;
+	}
+
+	private Profile loadProfile() throws Exception {
+		final Path path = fullPath(getLocalProfilePath());
+		if (Files.exists(path)) {
+			return new FileProfiler(path).profile();
+		}
+		final Profile profile = new LocalProfiler()
+				.withInputDocument(openMasterOCR())
+				.withLanguage(openConfiguration().getProfiler().getLanguage())
+				.withLanguageDirectory(openConfiguration().getProfiler().getLanguageDirectory())
+				.withExecutable(openConfiguration().getProfiler().getExecutable())
+				.withArgs(openConfiguration().getProfiler().getArguments())
+				.profile();
+		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(path.toFile()))) {
+			out.write(new Gson().toJson(profile));
+		}
+		return profile;
+	}
+
+	@Override
+	public FreqMap getMasterOCRUnigrams() throws Exception {
+		if (masterOCRUnigrams == null) {
+			masterOCRUnigrams = loadUnigrams(openMasterOCR());
+		}
+		return masterOCRUnigrams;
+	}
+
+	@Override
+	public FreqMap getOtherOCRUnigrams(int i) throws Exception {
+		while (otherOCRUnigrams.size() <= i) {
+			otherOCRUnigrams.add(null);
+		}
+		if (otherOCRUnigrams.get(i) == null) {
+			otherOCRUnigrams.set(i, loadUnigrams(openOtherOCR(i)));
+		}
+		return otherOCRUnigrams.get(i);
+	}
+
+	@Override
+	public FreqMap getCharacterTrigrams() throws Exception {
+		if (charTrigrams == null) {
+			charTrigrams = CharacterNGrams.fromCSV(openConfiguration().getLanguageModel().getCharacterTrigrams());
+		}
+		return charTrigrams;
+	}
+
+	private FreqMap loadUnigrams(Document document) throws Exception {
+		FreqMap freqMap = new FreqMap();
+		document.eachLine((line) -> {
+			for (String token : line.line.getNormalized().split("\\s+")) {
+				freqMap.add(token);
+			}
+		});
+		return freqMap;
 	}
 }
