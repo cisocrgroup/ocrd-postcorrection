@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.ml;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class Prediction {
 	public final double value;
@@ -19,6 +19,7 @@ public class Prediction {
 	}
 
 	public String toJSON() {
-		return new Gson().toJson(this);
+		// handle NAN values in json
+		return new GsonBuilder().serializeSpecialFloatingPointValues().create().toJson(this);
 	}
 }
