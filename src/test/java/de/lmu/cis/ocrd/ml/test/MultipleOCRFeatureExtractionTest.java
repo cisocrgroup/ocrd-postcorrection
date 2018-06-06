@@ -15,7 +15,6 @@ import weka.core.converters.ArffLoader;
 import weka.core.converters.ConverterUtils;
 
 import java.io.File;
-import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -107,8 +106,8 @@ public class MultipleOCRFeatureExtractionTest {
     }
 
     private void runTest(int n, String arffFile) throws Exception {
-        final OutputStreamWriter w = new OutputStreamWriter(System.out); // to update test files
-        //final StringWriter w = new StringWriter();
+		//final OutputStreamWriter w = new OutputStreamWriter(System.out); // to update test files
+		final StringWriter w = new StringWriter();
         final ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
                 .withDebugToken(true)
                 .withRelation("TestWithOnlyMasterOCR")
