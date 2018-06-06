@@ -6,15 +6,18 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
 VOLUME ["/data"]
+# update
 RUN apt-get update && \
-    apt-get install -y git cmake g++ libxerces-c-dev libcppunit-dev && \
-    apt-get install -y openjdk-8-jre && \
-    mkdir /src && \
+    apt-get install -y git cmake g++ libxerces-c-dev libcppunit-dev openjdk-8-jre
+
+ENV VERSION "2018-06-06"
+# install profiler
+RUN mkdir /src && \
     cd /src && \
     git clone -b ocrd ${PROFILER_GIT} && \
     cd Profiler && mkdir build && cd build && \
     cmake -DCMAKE_BUILD_TYPE=release .. && \
-    make profiler && \
+    make -j 4 profiler && \
     mkdir /apps && \
     cp bin/profiler /apps/ && \
     cd / && \

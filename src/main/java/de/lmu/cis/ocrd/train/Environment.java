@@ -287,8 +287,12 @@ public class Environment implements ArgumentFactory {
 		}
 	}
 
-	private Path getLocalProfilePath() {
+	private Path getLocalProfileOutputPath() {
 		return Paths.get(getResourcesDirectory().toString(), getMasterOCR().getFileName().toString() + ".profile.json");
+	}
+
+	private Path getLocalProfileInputPath() {
+		return Paths.get(getResourcesDirectory().toString(), getMasterOCR().getFileName().toString() + ".profile.txt");
 	}
 
 	public Path getDynamicLexiconTestFile(int n) {
@@ -371,16 +375,19 @@ public class Environment implements ArgumentFactory {
 	}
 
 	private Profile loadProfile() throws Exception {
-		final Path path = fullPath(getLocalProfilePath());
+		final Path path = fullPath(getLocalProfileOutputPath());
 		if (Files.exists(path)) {
 			return new FileProfiler(path).profile();
 		}
+		final Path input = fullPath(getLocalProfileInputPath());
+		writeDocument(openMasterOCR(), input);
 		final Profile profile = new LocalProfiler()
-				.withInputDocument(openMasterOCR())
 				.withLanguage(openConfiguration().getProfiler().getLanguage())
 				.withLanguageDirectory(openConfiguration().getProfiler().getLanguageDirectory())
 				.withExecutable(openConfiguration().getProfiler().getExecutable())
 				.withArgs(openConfiguration().getProfiler().getArguments())
+				.withOutputPath(getLocalProfileOutputPath())
+				.withInputPath(input)
 				.profile();
 		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(path.toFile()))) {
 			out.write(new Gson().toJson(profile));
@@ -428,5 +435,14 @@ public class Environment implements ArgumentFactory {
 			}
 		});
 		return freqMap;
+	}
+
+	private static void writeDocument(Document doc, Path out) throws Exception {
+		try (OutputStreamWriter w = new OutputStreamWriter(new FileOutputStream(out.toFile()))) {
+			doc.eachLine((line) -> {
+				w.write(line.line.getNormalized());
+				w.write('\n');
+			});
+		}
 	}
 }
