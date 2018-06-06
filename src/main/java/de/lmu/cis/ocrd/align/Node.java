@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.align;
 
 import java.util.ArrayList;
 
-class Node implements Label {
+public class Node implements Label {
 	private ArrayList<Gap> gaps;
 	private final String label;
 
