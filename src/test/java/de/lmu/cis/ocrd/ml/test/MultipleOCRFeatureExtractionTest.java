@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.ml.test;
 
 import de.lmu.cis.iba.LineAlignment;
 import de.lmu.cis.ocrd.*;
+import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.TokenAlignment;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.*;
@@ -14,6 +15,7 @@ import weka.core.converters.ArffLoader;
 import weka.core.converters.ConverterUtils;
 
 import java.io.File;
+import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -54,10 +56,17 @@ public class MultipleOCRFeatureExtractionTest {
         project.eachPage((page)->{
             final LineAlignment lineAlignment = new LineAlignment(page, 4);
             for (ArrayList<OCRLine>lines : lineAlignment) {
+            	System.out.println(lines.get(0).line.getNormalized());
+            	System.out.println(lines.get(1).line.getNormalized());
+            	System.out.println(lines.get(2).line.getNormalized());
+            	System.out.println(lines.get(3).line.getNormalized());
+
                 final SimpleLine master = (SimpleLine) lines.get(0).line;
                 final SimpleLine gtLine = (SimpleLine) lines.get(1).line;
                 final SimpleLine add1Line = (SimpleLine) lines.get(2).line;
                 final SimpleLine add2Line = (SimpleLine) lines.get(3).line;
+                Graph g = new Graph(master.getNormalized(), add2Line.getNormalized());
+                System.out.println("xxx" + g.getStartNode().toString());
                 TokenAlignment tokenAlignment = new TokenAlignment(master.getNormalized())
                         .add(gtLine.getNormalized())
                         .add(add1Line.getNormalized())
@@ -98,8 +107,8 @@ public class MultipleOCRFeatureExtractionTest {
     }
 
     private void runTest(int n, String arffFile) throws Exception {
-        // final OutputStreamWriter w = new OutputStreamWriter(System.out); // to update test files
-        final StringWriter w = new StringWriter();
+        final OutputStreamWriter w = new OutputStreamWriter(System.out); // to update test files
+        //final StringWriter w = new StringWriter();
         final ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
                 .withDebugToken(true)
                 .withRelation("TestWithOnlyMasterOCR")
