@@ -59,9 +59,9 @@ public class Graph {
 			final Node curn = new Node(curp.label);
 			final Gap g1 = makeGap(prevp.epos1, curp.spos1, s1, curn);
 			final Gap g2 = makeGap(prevp.epos2, curp.spos2, s2, curn);
-            Logger.info("s1: '{}'\nINFO: s2: '{}'\nINFO: pl: '{}'\nINFO: g1: '{}'\nINFO: g2: '{}'\nINFO: cl: '{}'", s1, s2, prevn.getLabel(), g1.getLabel(), g2.getLabel(), curn.getLabel());
-			Logger.info("previous: {}", prevp);
-			Logger.info("current:  {}", curp);
+			Logger.debug("s1: '{}'\nINFO: s2: '{}'\nINFO: pl: '{}'\nINFO: g1: '{}'\nINFO: g2: '{}'\nINFO: cl: '{}'", s1, s2, prevn.getLabel(), g1.getLabel(), g2.getLabel(), curn.getLabel());
+			Logger.debug("previous: {}", prevp);
+			Logger.debug("current:  {}", curp);
 			prevn.add(g1);
 			prevn.add(g2);
 			prevp = curp;
@@ -78,12 +78,12 @@ public class Graph {
 	private AlignmentPair handleOverlap(AlignmentPair previous, AlignmentPair current) {
 		final String s1 = alignment.getString(0);
 		final String s2 = alignment.getString(1);
-		Logger.info("previous.epos1: {}, previous.epos2: {}, previous.label: '{}'", previous.epos1, previous.epos2, previous.label);
-		Logger.info("current.spos1: {}, current.spos2: {}, current.label: '{}'", current.spos1, current.spos2, current.label);
-		Logger.info("s1: '{}'\nINFO: s2: '{}'", s1, s2);
-		Logger.info("sub1: '{}'\nINFO: sub2: '{}'", s1.substring(previous.epos1), s2.substring(previous.epos2));
-	    Logger.info("previous: {}", previous);
-        Logger.info("current:  {}", current);
+		Logger.debug("previous.epos1: {}, previous.epos2: {}, previous.label: '{}'", previous.epos1, previous.epos2, previous.label);
+		Logger.debug("current.spos1: {}, current.spos2: {}, current.label: '{}'", current.spos1, current.spos2, current.label);
+		Logger.debug("s1: '{}'\nINFO: s2: '{}'", s1, s2);
+		Logger.debug("sub1: '{}'\nINFO: sub2: '{}'", s1.substring(previous.epos1), s2.substring(previous.epos2));
+		Logger.debug("previous: {}", previous);
+		Logger.debug("current:  {}", current);
 		if (previous.epos1 > current.spos1) {
 			String label = current.label.substring(previous.epos1 - current.spos1);
 			return new AlignmentPair(label, current.epos1, current.epos2);
