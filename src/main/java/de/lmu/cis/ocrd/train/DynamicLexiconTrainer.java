@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.train;
 
 import de.lmu.cis.ocrd.ml.*;
-import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import weka.core.Instances;
@@ -14,13 +13,9 @@ import java.util.List;
 
 public class DynamicLexiconTrainer {
     private final Environment environment;
-	private final Configuration configuration;
-	private final ArgumentFactory argumentFactory;
 
-	public DynamicLexiconTrainer(Environment environment, ArgumentFactory argumentFactory) throws IOException {
+	public DynamicLexiconTrainer(Environment environment) {
 		this.environment = environment;
-		this.configuration = environment.openConfiguration();
-		this.argumentFactory = argumentFactory;
 	}
 
     public DynamicLexiconTrainer run() throws Exception {
@@ -50,7 +45,7 @@ public class DynamicLexiconTrainer {
 			final ARFFWriter trainARFFWriter = ARFFWriter.fromFeatureSet(fs)
 					.withRelation("DynamicLexiconExpansion_train_" + n)
 					.withWriter(trainWriter)
-					.withDebugToken(configuration.getDynamicLexiconTrainig().isDebugTrainingTokens());
+					.withDebugToken(environment.openConfiguration().getDynamicLexiconTrainig().isDebugTrainingTokens());
 			trainARFFWriter.writeHeader(n);
 			newTrainSetSplitter().eachToken((Token token, boolean isTrain) -> {
 				if (isTrain) {
@@ -71,13 +66,13 @@ public class DynamicLexiconTrainer {
 
 	private FeatureSet newFeatureSet() throws Exception {
 		return FeatureFactory.getDefault()
-				.withArgumentFactory(argumentFactory)
-				.createFeatureSet(configuration.getDynamicLexiconTrainig().getFeatures())
+				.withArgumentFactory(environment)
+				.createFeatureSet(environment.openConfiguration().getDynamicLexiconTrainig().getFeatures())
 				.add(new DynamicLexiconGTFeature());
 	}
 
-	private TrainSetSplitter newTrainSetSplitter() {
-		final int n = configuration.getDynamicLexiconTrainig().getTestEvaluationFraction();
+	private TrainSetSplitter newTrainSetSplitter() throws IOException {
+		final int n = environment.openConfiguration().getDynamicLexiconTrainig().getTestEvaluationFraction();
 		final Tokenizer tokenizer = new Tokenizer(environment);
 		return new TrainSetSplitter(tokenizer, n);
 	}

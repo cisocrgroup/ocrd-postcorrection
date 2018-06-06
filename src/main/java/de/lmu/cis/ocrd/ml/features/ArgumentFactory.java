@@ -4,10 +4,11 @@ import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.profile.Profile;
 
 public interface ArgumentFactory {
-    FreqMap getMasterOCRUnigrams();
+	FreqMap getMasterOCRUnigrams() throws Exception;
 
-    FreqMap getOtherOCRUnigrams(int i);
+	FreqMap getOtherOCRUnigrams(int i) throws Exception;
 
-    FreqMap getCharacterTrigrams();
-    Profile getProfile();
+	FreqMap getCharacterTrigrams() throws Exception;
+
+	Profile getProfile() throws Exception;
 }
