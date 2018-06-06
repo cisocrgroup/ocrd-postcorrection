@@ -327,7 +327,11 @@ public class Environment implements ArgumentFactory {
 
 	// Data class for the data of the training environment.
 	public static class Data {
-		String gt, masterOCR, dynamicLexiconFeatureSet, data, configuration;
+		public String gt;
+		public String masterOCR;
+		public String dynamicLexiconFeatureSet;
+		public String data;
+		String configuration;
 		public String[] otherOCR;
 		public String[] dynamicLexiconTrainingFiles;
 		public String[] dynamicLexiconEvaluationFiles;
