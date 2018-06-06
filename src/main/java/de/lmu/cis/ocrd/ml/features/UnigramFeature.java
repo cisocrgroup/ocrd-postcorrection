@@ -2,18 +2,26 @@ package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.Token;
 
-public class UnigramFeature extends NamedDoubleFeature {
-    private final ArgumentFactory factory;
+import java.util.ArrayList;
+import java.util.List;
 
-    public UnigramFeature(JsonObject o, ArgumentFactory args) {
+public class UnigramFeature extends NamedDoubleFeature {
+	private final List<FreqMap> unigrams;
+
+	public UnigramFeature(JsonObject o, ArgumentFactory args) throws Exception {
         this(args, JSONUtil.mustGetNameOrType(o));
     }
 
-    private UnigramFeature(ArgumentFactory factory, String name) {
+	private UnigramFeature(ArgumentFactory factory, String name) throws Exception {
         super(name);
-        this.factory = factory;
+		unigrams = new ArrayList<>();
+		unigrams.add(factory.getMasterOCRUnigrams());
+		for (int i = 0; i < factory.getNumberOfOtherOCRs(); i++) {
+			unigrams.add(factory.getOtherOCRUnigrams(i));
+		}
     }
 
     @Override
@@ -23,9 +31,6 @@ public class UnigramFeature extends NamedDoubleFeature {
 
     @Override
     public double doCalculate(Token token, int i, int n) {
-        if (i == 0) {
-            return factory.getMasterOCRUnigrams().getRelative(getWord(token, i, n).toString());
-        }
-        return factory.getOtherOCRUnigrams(i - 1).getAbsolute(getWord(token, i, n).toString());
+		return unigrams.get(i).getRelative(getWord(token, i, n).toString());
     }
 }

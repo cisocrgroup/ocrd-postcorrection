@@ -7,7 +7,7 @@ import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.Token;
 
 public class MaxCharNGramsFeature extends NamedCharacterNGramFeature {
-    public MaxCharNGramsFeature(JsonObject o, ArgumentFactory factory) {
+	public MaxCharNGramsFeature(JsonObject o, ArgumentFactory factory) throws Exception {
         this(JSONUtil.mustGetNameOrType(o), factory.getCharacterTrigrams());
     }
 

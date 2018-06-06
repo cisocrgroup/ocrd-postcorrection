@@ -401,6 +401,11 @@ public class Environment implements ArgumentFactory {
 	}
 
 	@Override
+	public int getNumberOfOtherOCRs() {
+		return otherOCRUnigrams.size();
+	}
+
+	@Override
 	public FreqMap getCharacterTrigrams() throws Exception {
 		if (charTrigrams == null) {
 			charTrigrams = CharacterNGrams.fromCSV(openConfiguration().getLanguageModel().getCharacterTrigrams());

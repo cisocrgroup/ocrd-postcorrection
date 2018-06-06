@@ -8,6 +8,8 @@ public interface ArgumentFactory {
 
 	FreqMap getOtherOCRUnigrams(int i) throws Exception;
 
+	int getNumberOfOtherOCRs();
+
 	FreqMap getCharacterTrigrams() throws Exception;
 
 	Profile getProfile() throws Exception;
