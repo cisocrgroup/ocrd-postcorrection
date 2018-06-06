@@ -56,9 +56,16 @@ public class Environment implements ArgumentFactory {
 	}
 
 	private void setupDirectories() throws IOException {
-		Files.createDirectory(getPath());
-		Files.createDirectory(Paths.get(path, getResourcesDirectory().toString()));
-		Files.createDirectory(Paths.get(path, getDynamicLexiconTrainingDirectory().toString()));
+		makeDirectoryIfNotExists(getPath());
+		makeDirectoryIfNotExists(Paths.get(path, getResourcesDirectory().toString()));
+		makeDirectoryIfNotExists(Paths.get(path, getDynamicLexiconTrainingDirectory().toString()));
+	}
+
+	private void makeDirectoryIfNotExists(Path path) throws IOException {
+		if (Files.isDirectory(path)) {
+			return;
+		}
+		Files.createDirectory(path);
 	}
 
 	private void setupTrainingDirectories(int n) throws IOException {
