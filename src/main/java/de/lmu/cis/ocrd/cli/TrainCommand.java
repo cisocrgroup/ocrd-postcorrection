@@ -22,9 +22,9 @@ public class TrainCommand implements Command {
 			trainer.prepare().train().evaluate();
 			ok = true;
 		} finally {
-			if (!ok) {
-				environment.remove();
-			}
+			// if (!ok) {
+			// environment.remove();
+			// }
 		}
     }
 

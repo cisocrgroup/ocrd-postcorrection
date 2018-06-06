@@ -31,6 +31,7 @@ public class UnigramFeature extends NamedDoubleFeature {
 
     @Override
     public double doCalculate(Token token, int i, int n) {
+		// System.out.println("doCalculate(" + token + "," + i + "," + n + "): " + unigrams.size());
 		return unigrams.get(i).getRelative(getWord(token, i, n).toString());
     }
 }

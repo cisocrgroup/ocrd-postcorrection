@@ -36,6 +36,11 @@ public class DynamicLexiconTrainerTest extends TestBase {
 		trainer = new DynamicLexiconTrainer(environment);
     }
 
+	@Test
+	public void testEnvironment() {
+		assertThat(environment.getNumberOfOtherOCR(), is(2));
+	}
+
     @Test
     public void testPrepare() throws Exception {
         trainer.prepare();
@@ -81,7 +86,7 @@ public class DynamicLexiconTrainerTest extends TestBase {
     @After
     public void deInit() throws Exception {
 		if (this.environment != null) {
-			this.environment.remove();
+			// this.environment.remove();
 		}
     }
 }

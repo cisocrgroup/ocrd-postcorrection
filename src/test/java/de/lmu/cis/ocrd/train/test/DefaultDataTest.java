@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.train.test;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
-import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
+import de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature;
 import de.lmu.cis.ocrd.train.Configuration;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -37,7 +37,7 @@ public class DefaultDataTest {
 	public void testCreateTokenLengthFeature() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 		final Optional<Feature> feature = FeatureFactory.getDefault().create(data.getDynamicLexiconTrainig().getFeatures()[0]);
 		assertThat(feature.isPresent(), is(true));
-		assertThat(feature.get() instanceof TokenLengthFeature, is(true));
+		assertThat(feature.get() instanceof TokenLengthClassFeature, is(true));
 		//final FeatureSet fs = new FeatureFactory().createFeatureSet(data.)
 	}
 }

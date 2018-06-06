@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
 import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
-import de.lmu.cis.ocrd.ml.features.TokenLengthFeature;
+import de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 public class FeatureFactoryTest {
     private FeatureFactory featureFactory;
 
-    public static class TestFeature extends TokenLengthFeature {
+	public static class TestFeature extends TokenLengthClassFeature {
         public TestFeature(JsonObject o, ArgumentFactory args) {
             super(o, args);
         }

@@ -7,7 +7,7 @@ import de.lmu.cis.ocrd.ml.Token;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TokenCaseFeature extends NamedStringSetFeature {
+public class TokenCaseClassFeature extends NamedStringSetFeature {
     private static final String LOWER = "all-lower-case";
     private static final String UPPER = "all-upper-case";
     private static final String TITLE = "title-case";
@@ -21,11 +21,11 @@ public class TokenCaseFeature extends NamedStringSetFeature {
         CLASSES.add(MIXED);
     }
 
-    public TokenCaseFeature(JsonObject o, ArgumentFactory args) {
+	public TokenCaseClassFeature(JsonObject o, ArgumentFactory args) {
         this(JSONUtil.mustGetNameOrType(o));
     }
 
-    public TokenCaseFeature(String name) {
+	public TokenCaseClassFeature(String name) {
         super(name, CLASSES);
     }
 

@@ -23,7 +23,6 @@ RUN mkdir /src && \
     cd / && \
 		rm -rf /src/Profiler
 COPY target/${OCRD_VERSION}-cli.jar /apps/
-COPY src/main/resources/defaultConfiguration.json /apps/${OCRD_VERSION}-config.json
 
 ENTRYPOINT ["/bin/sh", "-c"]
 #COPY target/${OCRD_VERSION}.war /usr/local/tomcat/webapps

@@ -69,7 +69,7 @@ public class Environment implements ArgumentFactory {
 	}
 
 	private void setupTrainingDirectories(int n) throws IOException {
-		Files.createDirectory(Paths.get(path, getDynamicLexiconTrainingDirectory(n).toString()));
+		makeDirectoryIfNotExists(Paths.get(path, getDynamicLexiconTrainingDirectory(n).toString()));
 	}
 
 	public String getName() {
@@ -135,6 +135,10 @@ public class Environment implements ArgumentFactory {
 			this.otherOCR.add(copy(Paths.get(otherOCR)));
 		}
 		setupTrainingDirectories(1 + this.otherOCR.size());
+		// make sure that otherOCRDocuments and otherOCRUnigrams
+		// have the same size as otherOCR
+		otherOCRDocuments.add(null);
+		otherOCRUnigrams.add(null);
 		return this;
 	}
 
@@ -143,9 +147,6 @@ public class Environment implements ArgumentFactory {
 	}
 
 	Document openOtherOCR(int i) throws Exception {
-		while (otherOCRDocuments.size() <= i) {
-			otherOCRDocuments.add(null);
-		}
 		if (otherOCRDocuments.get(i) == null) {
 			otherOCRDocuments.set(i, FileTypes.openDocument(getOCRPath(getOtherOCR(i)).toString()));
 		}
@@ -375,21 +376,21 @@ public class Environment implements ArgumentFactory {
 	}
 
 	private Profile loadProfile() throws Exception {
-		final Path path = fullPath(getLocalProfileOutputPath());
-		if (Files.exists(path)) {
-			return new FileProfiler(path).profile();
+		final Path outputPath = fullPath(getLocalProfileOutputPath());
+		if (Files.exists(outputPath)) {
+			return new FileProfiler(outputPath).profile();
 		}
-		final Path input = fullPath(getLocalProfileInputPath());
-		writeDocument(openMasterOCR(), input);
+		final Path inputPath = fullPath(getLocalProfileInputPath());
+		writeDocument(openMasterOCR(), inputPath);
 		final Profile profile = new LocalProfiler()
 				.withLanguage(openConfiguration().getProfiler().getLanguage())
 				.withLanguageDirectory(openConfiguration().getProfiler().getLanguageDirectory())
 				.withExecutable(openConfiguration().getProfiler().getExecutable())
 				.withArgs(openConfiguration().getProfiler().getArguments())
-				.withOutputPath(getLocalProfileOutputPath())
-				.withInputPath(input)
+				.withOutputPath(outputPath)
+				.withInputPath(inputPath)
 				.profile();
-		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(path.toFile()))) {
+		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(outputPath.toFile()))) {
 			out.write(new Gson().toJson(profile));
 		}
 		return profile;
@@ -405,9 +406,6 @@ public class Environment implements ArgumentFactory {
 
 	@Override
 	public FreqMap getOtherOCRUnigrams(int i) throws Exception {
-		while (otherOCRUnigrams.size() <= i) {
-			otherOCRUnigrams.add(null);
-		}
 		if (otherOCRUnigrams.get(i) == null) {
 			otherOCRUnigrams.set(i, loadUnigrams(openOtherOCR(i)));
 		}

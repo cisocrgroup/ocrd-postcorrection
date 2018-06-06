@@ -28,7 +28,16 @@ public class LogisticClassifier implements Classifier {
 		final Instance instance = new DenseInstance(n);
 		instance.setDataset(structure);
 		for (int i = 0; i < n; i++) {
-			instance.setValue(i, features.get(i).toString());
+			final Object p = features.get(i);
+			if (p instanceof Double) {
+				instance.setValue(i, (double) p);
+			} else if (p instanceof String) {
+				instance.setValue(i, (String) p);
+			} else if (p instanceof Boolean) {
+				instance.setValue(i, (boolean) p ? "true" : "false");
+			} else {
+				throw new Exception("Invalid feature value of type: " + p.getClass());
+			}
 		}
 		final double res = classifier.classifyInstance(instance);
 		final double[] xy = classifier.distributionForInstance(instance);

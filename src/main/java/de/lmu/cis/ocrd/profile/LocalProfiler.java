@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.profile;
 
 import de.lmu.cis.ocrd.Document;
+import org.pmw.tinylog.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,14 +74,13 @@ public class LocalProfiler implements Profiler {
     }
 
 	private Process startCommand() throws IOException {
-       ProcessBuilder builder = new ProcessBuilder();
+		ProcessBuilder builder = new ProcessBuilder();
 		final List<String> command = makeArgs();
-		System.out.println("starting command: " + String.join(" ", command));
 		builder.command(command);
-       // TODO: check if the work-dir really is needed
-       builder.directory(new File(this.workdir));
-
-       return builder.start();
+		// TODO: check if the work-dir really is needed
+		builder.directory(new File(this.workdir));
+		Logger.info("profiler command: " + String.join(" ", command));
+		return builder.start();
     }
 
 	private List<String> makeArgs() {

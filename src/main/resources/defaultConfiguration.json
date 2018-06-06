@@ -16,15 +16,19 @@
     "testEvaluationFraction": 10,
     "features": [
       {
-        "type": "de.lmu.cis.ocrd.ml.features.TokenLengthFeature",
-        "name": "TokenLength",
+        "type": "de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature",
+        "name": "TokenLengthClass",
         "short": 3,
         "medium": 8,
         "long": 13
       },
       {
-        "type": "de.lmu.cis.ocrd.ml.features.TokenCaseFeature",
-        "name": "TokenCase"
+        "type": "de.lmu.cis.ocrd.ml.features.TokenCaseClassFeature",
+        "name": "TokenCaseClass"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.TokenLengthFeature",
+        "name": "TokenLength"
       },
       {
         "type": "de.lmu.cis.ocrd.ml.features.MaxCharNGramsFeature",

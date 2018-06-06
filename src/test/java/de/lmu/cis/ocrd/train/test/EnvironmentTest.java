@@ -76,6 +76,7 @@ public class EnvironmentTest extends TestBase {
         environment.withMasterOCR(masterOCR);
 		assertThat(environment.fullPath(environment.getMasterOCR()), is(Paths.get(getPath(), getName(), "resources", "1841-DieGrenzboten-abbyy-small.zip")));
         assertThat(Files.exists(environment.fullPath(environment.getMasterOCR())), is(true));
+		assertThat(environment.getNumberOfOtherOCR(), is(0));
     }
 
     @Test
@@ -84,7 +85,7 @@ public class EnvironmentTest extends TestBase {
         final String otherOCR2 = "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
         environment.withCopyTrainingFiles(true);
         environment.addOtherOCR(otherOCR1).addOtherOCR(otherOCR2);
-        assertThat(environment.getNumberOfOtherOCR(), is(2));
+		assertThat(environment.getNumberOfOtherOCR(), is(2));
 		assertThat(environment.fullPath(environment.getOtherOCR(0)), is(Paths.get(getPath(), getName(), "resources", "1841-DieGrenzboten-abbyy-small.zip")));
 		assertThat(environment.fullPath(environment.getOtherOCR(1)), is(Paths.get(getPath(), getName(), "resources", "1841-DieGrenzboten-tesseract-small.zip")));
         assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingDirectory(2))), is(true));

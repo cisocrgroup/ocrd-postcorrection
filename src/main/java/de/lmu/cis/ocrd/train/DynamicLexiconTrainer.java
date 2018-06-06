@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.train;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
+import org.pmw.tinylog.Logger;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
@@ -48,9 +49,10 @@ public class DynamicLexiconTrainer {
 					.withDebugToken(environment.openConfiguration().getDynamicLexiconTrainig().isDebugTrainingTokens());
 			trainARFFWriter.writeHeader(n);
 			newTrainSetSplitter().eachToken((Token token, boolean isTrain) -> {
+				Logger.debug(token.toJSON());
 				if (isTrain) {
 					trainARFFWriter.writeToken(token);
-					trainARFFWriter.writeFeatureVector(fs.calculateFeatureVector(token));
+					trainARFFWriter.writeFeatureVector(fs.calculateFeatureVector(token, n));
 				} else {
 					testTokens.add(token);
 				}
@@ -99,36 +101,34 @@ public class DynamicLexiconTrainer {
 		final FeatureSet fs = newFeatureSet();
 		try (PrintWriter out = new PrintWriter(new FileOutputStream(evaluationFile.toFile()))) {
 			for (Token token : testTokens) {
-				System.out.println("---");
-				out.println("---");
-				fprintf(out, "predicting: %s", token.toJSON());
-				final FeatureSet.Vector featureVector = fs.calculateFeatureVector(token);
-				fprintf(out, "features: %s", featureVector.toJSON());
+				printFormatted(out, "predicting: %s", token.toJSON());
+				final FeatureSet.Vector featureVector = fs.calculateFeatureVector(token, n);
+				printFormatted(out, "features: %s", featureVector.toJSON());
 				// classifier.setClassIndex(featureVector.size() - 1);
 				final Prediction prediction = classifier.predict(featureVector);
-				fprintf(out, "prediction: %s\n", prediction.toJSON());
+				printFormatted(out, "prediction: %s\n", prediction.toJSON());
 				errorCounts.add(token, prediction, featureVector.get(featureVector.size() - 1));
 			}
 			for (Token token : errorCounts.getTruePositives()) {
-				fprintf(out, "correctly used for extension: %s", token.toJSON());
+				printFormatted(out, "correctly used for extension: %s", token.toJSON());
 			}
 			for (Token token : errorCounts.getFalsePositives()) {
-				fprintf(out, "incorrectly used for extension: %s", token.toJSON());
+				printFormatted(out, "incorrectly used for extension: %s", token.toJSON());
 			}
 			for (Token token : errorCounts.getFalseNegatives()) {
-				fprintf(out, "incorrectly not used for extension: %s", token.toJSON());
+				printFormatted(out, "incorrectly not used for extension: %s", token.toJSON());
 			}
-			fprintf(out, "Number of correctly used extensions:     %d", errorCounts.getTruePositiveCount());
-			fprintf(out, "Number of correctly unused extensions:   %d", errorCounts.getTrueNegativeCount());
-			fprintf(out, "Number of incorrectly used extensions:   %d", errorCounts.getFalsePositiveCount());
-			fprintf(out, "Number of incorrectly unused extensions: %d", errorCounts.getFalseNegativeCount());
-			fprintf(out, "Total number of tokens:                  %d", errorCounts.getTotalCount());
+			printFormatted(out, "Number of correctly used extensions:     %d", errorCounts.getTruePositiveCount());
+			printFormatted(out, "Number of correctly unused extensions:   %d", errorCounts.getTrueNegativeCount());
+			printFormatted(out, "Number of incorrectly used extensions:   %d", errorCounts.getFalsePositiveCount());
+			printFormatted(out, "Number of incorrectly unused extensions: %d", errorCounts.getFalseNegativeCount());
+			printFormatted(out, "Total number of tokens:                  %d", errorCounts.getTotalCount());
 			out.flush();
         }
     }
 
-	private static void fprintf(Writer w, String fmt, Object... args) throws IOException {
-		System.out.println(String.format(fmt, args));
+	private static void printFormatted(Writer w, String fmt, Object... args) throws IOException {
+		Logger.info(String.format(fmt, args));
 		w.write(String.format(fmt, args));
 	}
 

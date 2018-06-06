@@ -35,14 +35,14 @@ public class FeaturesTest {
 
 	@Test
 	public void testTokenCaseFeature() {
-		final Feature feature = new TokenCaseFeature("TokenCase");
+		final Feature feature = new TokenCaseClassFeature("TokenCase");
 		assertThat(feature.calculate(t1, 0, 1), is("all-lower-case"));
 		assertThat(feature.calculate(t2, 0, 1), is("mixed-case"));
 	}
 
 	@Test
 	public void testTokenLengthFeature() {
-		final Feature feature = new TokenLengthFeature("TokenCase", 3, 8, 13);
+		final Feature feature = new TokenLengthClassFeature("TokenCase", 3, 8, 13);
 		assertThat(feature.calculate(t1, 0, 1), is("short-token"));
 		assertThat(feature.calculate(t2, 0, 1), is("medium-token"));
 	}

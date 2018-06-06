@@ -96,7 +96,7 @@ public class Graph {
 	}
 
 	private Gap makeGap(int s, int e, String str, Node node) {
-		System.out.println("getGapLabel(" + s + ", " + e + ", " + str + ")");
+		Logger.debug("getGapLabel(" + s + ", " + e + ", " + str + ")");
 		// s += 1;
 		// e += 1;
 		if (s > e) {
