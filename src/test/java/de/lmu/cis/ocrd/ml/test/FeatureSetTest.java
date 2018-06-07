@@ -43,16 +43,16 @@ public class FeatureSetTest {
 
 	@Test
 	public void testFirstFeatureValue() {
-		assertThat(features.calculateFeatureVector(Token.create("a", 1)).get(0), is(1.0));
+		assertThat(features.calculateFeatureVector(Token.create("a", 1), 1).get(0), is(1.0));
 	}
 
 	@Test
 	public void testLenFeatureVector() {
-		assertThat(features.calculateFeatureVector(Token.create("a", 1)).size(), is(2));
+		assertThat(features.calculateFeatureVector(Token.create("a", 1), 1).size(), is(2));
 	}
 
 	@Test
 	public void testSecondFeatureValue() {
-		assertThat(features.calculateFeatureVector(Token.create("a", 1)).get(1), is(3.0));
+		assertThat(features.calculateFeatureVector(Token.create("a", 1), 1).get(1), is(3.0));
 	}
 }

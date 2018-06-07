@@ -45,11 +45,7 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 		return this;
 	}
 
-    public Vector calculateFeatureVector(Token token) {
-		return calculateFeatureVector(token, 1);
-	}
-
-    public Vector calculateFeatureVector(Token token, int n) {
+	public Vector calculateFeatureVector(Token token, int n) {
         Vector vec = new Vector(this.size());
 		for (Feature feature : this.features) {
 		    for (int i = 0; i < n; i++) {
