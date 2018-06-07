@@ -1,9 +1,9 @@
 package de.lmu.cis.ocrd.align;
 
 public interface Label {
-	public String getLabel();
+	String getLabel();
 
-	public boolean isSynchronization();
+	boolean isSynchronization();
 
-	public Label next(int id);
+	Label next(int id);
 }
