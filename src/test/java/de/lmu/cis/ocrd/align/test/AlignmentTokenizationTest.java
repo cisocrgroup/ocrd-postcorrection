@@ -23,7 +23,6 @@ public class AlignmentTokenizationTest {
 			pairs.add(new Pair());
 			pairs.get(pairs.size() - 1).first = s1;
 			pairs.get(pairs.size() - 1).second = s2;
-			// System.out.println("a = '" + s1 + "' b = " + s2 + "'");
 		});
 		return pairs;
 	}
@@ -42,7 +41,6 @@ public class AlignmentTokenizationTest {
 	public void testDeletion() {
 		final String a = "here is a deletion my friend";
 		final String b = "here is a del my friend";
-		System.out.println("HERE: " + new Graph(a, b).getStartNode());
 		assertThat(align(a, b).size(), is(6));
 		assertThat(align(a, b).get(3).first, is("deletion"));
 		assertThat(align(a, b).get(3).second, is("del"));

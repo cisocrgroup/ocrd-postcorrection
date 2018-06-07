@@ -1,15 +1,10 @@
 package de.lmu.cis.iba;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.pmw.tinylog.Logger;
-
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.OCRLine;
+import org.pmw.tinylog.Logger;
+
+import java.util.*;
 
 public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 	private static class pair {
@@ -53,7 +48,7 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 		count_nodes_sorted.put(scdawg.root, null);
 		Iterator it3 = count_nodes_sorted.entrySet().iterator();
 
-		Logger.info("starting main loop ...");
+		Logger.debug("starting main loop ...");
 		HashSet<Integer> usedIDs = new HashSet<Integer>();
 		main_loop: while (it3.hasNext()) {
 			Map.Entry pair = (Map.Entry) it3.next();
@@ -78,20 +73,20 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 			p.node = n;
 			nodes_sink_set.add(p);
 		}
-		Logger.info("done with main loop");
-		Logger.info("starting sink loop");
+		Logger.debug("done with main loop");
+		Logger.debug("starting sink loop");
 		// handle final nodes (special case if all ocrs are identical)
 		sinkloop: for (Node sink : scdawg.sinks) {
 			if (sink.stringnumbers.size() == nlines) {
 				// it is impossilbe (?) that this node was used before
-				// System.out.println("got sink with " + N + " sinks");
+				// Logger.debug("got sink with " + N + " sinks");
 				// System.out.println(sink.stringnumbers);
 
 				// Special case if identical strings had an smaller quasi max node as their sink
 
 				for (pair pn : nodes_sink_set) {
 					HashSet<Integer> ids = pn.ids;
-					HashSet<Integer> sink_ids = new HashSet<Integer>();
+					HashSet<Integer> sink_ids = new HashSet<>();
 
 					for (Integer i : sink.stringnumbers) {
 						sink_ids.add(i);
@@ -113,25 +108,25 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 				nodes_sink_set.add(p);
 			}
 		}
-		Logger.info("done with sink loop");
+		Logger.debug("done with sink loop");
 
 		// ArrayList<String> xyz = new ArrayList<String>(stringset.size());
 		String[] xyz = new String[stringset.size()];
 		for (pair p : nodes_sink_set) {
-			// System.out.println(scdawg.get_node_label(p.node));
-			// System.out.println(p.ids);
+			// Logger.debug(scdawg.get_node_label(p.node));
+			// Logger.debug(p.ids);
 			ArrayList<OCRLine> linetupel = new ArrayList<OCRLine>();
 			for (Integer id : p.ids) {
 				int idx = id;
 
 				linetupel.add(ocrlines.get(idx));
 
-				// System.out.println("- " + stringset.get(idx) + ": " +
+				// Logger.debug("- " + stringset.get(idx) + ": " +
 				// strids.get(idx));
 				xyz[idx] = stringset.get(idx);
 			}
 			this.add(linetupel);
-			// System.out.println();
+			// Logger.debug();
 		}
 	}
 

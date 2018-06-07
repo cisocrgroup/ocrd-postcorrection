@@ -55,17 +55,17 @@ public class MultipleOCRFeatureExtractionTest {
         project.eachPage((page)->{
             final LineAlignment lineAlignment = new LineAlignment(page, 4);
             for (ArrayList<OCRLine>lines : lineAlignment) {
-            	System.out.println(lines.get(0).line.getNormalized());
-            	System.out.println(lines.get(1).line.getNormalized());
-            	System.out.println(lines.get(2).line.getNormalized());
-            	System.out.println(lines.get(3).line.getNormalized());
+//            	System.out.println(lines.get(0).line.getNormalized());
+//            	System.out.println(lines.get(1).line.getNormalized());
+//            	System.out.println(lines.get(2).line.getNormalized());
+//            	System.out.println(lines.get(3).line.getNormalized());
 
                 final SimpleLine master = (SimpleLine) lines.get(0).line;
                 final SimpleLine gtLine = (SimpleLine) lines.get(1).line;
                 final SimpleLine add1Line = (SimpleLine) lines.get(2).line;
                 final SimpleLine add2Line = (SimpleLine) lines.get(3).line;
                 Graph g = new Graph(master.getNormalized(), add2Line.getNormalized());
-                System.out.println("xxx" + g.getStartNode().toString());
+//                System.out.println("xxx" + g.getStartNode().toString());
                 TokenAlignment tokenAlignment = new TokenAlignment(master.getNormalized())
                         .add(gtLine.getNormalized())
                         .add(add1Line.getNormalized())
@@ -132,10 +132,10 @@ public class MultipleOCRFeatureExtractionTest {
         for (int i = 0; i < want.numAttributes(); i++) {
             assertThat(got.attributeToDoubleArray(i).length, is(want.attributeToDoubleArray(i).length));
             for (int j = 0; j < want.attributeToDoubleArray(i).length; j++) {
-                System.out.print(got.attributeToDoubleArray(i)[j] + " ");
+//                System.out.print(got.attributeToDoubleArray(i)[j] + " ");
                 assertThat(got.attributeToDoubleArray(i)[j], is(want.attributeToDoubleArray(i)[j]));
             }
-            System.out.println();
+//            System.out.println();
         }
     }
 }

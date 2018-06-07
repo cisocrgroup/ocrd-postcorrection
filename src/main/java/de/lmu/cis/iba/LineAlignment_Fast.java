@@ -72,14 +72,14 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 			p.node = n;
 			nodes_sink_set.add(p);
 		}
-		Logger.info("done with main loop");
-		Logger.info("starting sink loop");
+		Logger.debug("done with main loop");
+		Logger.debug("starting sink loop");
 		// handle final nodes (special case if all ocrs are identical)
 		sinkloop: for (Node sink : scdawg.sinks) {
 			if (sink.stringnumbers.size() == nlines) {
 				// it is impossilbe (?) that this node was used before
-				// System.out.println("got sink with " + N + " sinks");
-				// System.out.println(sink.stringnumbers);
+				// Logger.debug("got sink with " + N + " sinks");
+				// Logger.debug(sink.stringnumbers);
 
 				// Special case if identical strings had an smaller quasi max node as their sink
 
@@ -103,18 +103,18 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 				nodes_sink_set.add(p);
 			}
 		}
-		Logger.info("done with sink loop");
+		Logger.debug("done with sink loop");
 
 		for (pair p : nodes_sink_set) {
-			 System.out.println(scdawg.get_node_label(p.node));
-			 System.out.println(p.ids);
+			Logger.debug(scdawg.get_node_label(p.node));
+			Logger.debug(p.ids);
 			ArrayList<OCRLine> linetupel = new ArrayList<>();
 			for (Integer id : p.ids) {
 				int idx = id;
 
 				linetupel.add(ocrlines.get(idx));
 
-				 System.out.println("- " + stringset.get(idx));
+				Logger.debug("- " + stringset.get(idx));
 			}
 			this.add(linetupel);
 		}

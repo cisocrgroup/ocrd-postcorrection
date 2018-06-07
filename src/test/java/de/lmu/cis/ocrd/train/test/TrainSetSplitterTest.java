@@ -93,18 +93,18 @@ public class TrainSetSplitterTest extends TestBase {
                 pageLineTokens.get(pageID).put(lineID, new ArrayList<>());
             }
             pageLineTokens.get(pageID).get(lineID).add(t.getID());
-            System.out.println(pageID + " " + lineID + " " + t.getID());
-            System.out.println(t.getMasterOCR().getLine().getNormalized());
-            System.out.println(t.getOtherOCRAt(0).getLine().getNormalized());
-            System.out.println(t.getOtherOCRAt(0).getLine().getLineId());
-            System.out.println(t.getMasterOCR());
+//            System.out.println(pageID + " " + lineID + " " + t.getID());
+//            System.out.println(t.getMasterOCR().getLine().getNormalized());
+//            System.out.println(t.getOtherOCRAt(0).getLine().getNormalized());
+//            System.out.println(t.getOtherOCRAt(0).getLine().getLineId());
+//            System.out.println(t.getMasterOCR());
         });
         for (Map.Entry<Integer, HashMap<Integer, ArrayList<Integer>>> lineTokens: pageLineTokens.entrySet()) {
             for (Map.Entry<Integer, ArrayList<Integer>> tokenIDs : lineTokens.getValue().entrySet()) {
                 int last = -1; // tokenIDs start with 1
                 for (Integer id : tokenIDs.getValue()) {
-                    System.out.println("pageID: " + lineTokens.getKey() + ", lineID: " + tokenIDs.getKey());
-                    System.out.println("last: " + last + ", id: " + id);
+//                    System.out.println("pageID: " + lineTokens.getKey() + ", lineID: " + tokenIDs.getKey());
+//                    System.out.println("last: " + last + ", id: " + id);
                     // multiple tokens with the same ID are *not* possible
                     assertThat(last < id, is(true));
                     last = id;

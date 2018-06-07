@@ -1,26 +1,7 @@
 package de.lmu.cis.iba;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.io.*;
+import java.util.*;
 
 
 public class Util {
@@ -257,18 +238,18 @@ public class Util {
 	// printFrame
 	// =======================================
 	public static void printFrame(String text) {
-		System.out.println("");
-		System.out.print(" +-");
-		for (int i = 0; i < text.length(); i++)
-			System.out.print("-");
-		System.out.println("-+");
-
-		System.out.println(" | " + text + " |");
-		System.out.print(" +-");
-		for (int i = 0; i < text.length(); i++)
-			System.out.print("-");
-		System.out.println("-+");
-		System.out.println("");
+//		System.out.println("");
+//		System.out.print(" +-");
+//		for (int i = 0; i < text.length(); i++)
+//			System.out.print("-");
+//		System.out.println("-+");
+//
+//		System.out.println(" | " + text + " |");
+//		System.out.print(" +-");
+//		for (int i = 0; i < text.length(); i++)
+//			System.out.print("-");
+//		System.out.println("-+");
+//		System.out.println("");
 
 	}// printFrame
 
@@ -286,11 +267,11 @@ public class Util {
 				maxLength = s.length();
 		}
 
-		System.out.println("");
-		System.out.print(" +-");
-		for (int i = 0; i < maxLength; i++)
-			System.out.print("-");
-		System.out.println("-+");
+		// System.out.println("");
+		// System.out.print(" +-");
+		// for (int i = 0; i < maxLength; i++)
+		// System.out.print("-");
+		// System.out.println("-+");
 
 		for (int i = 0; i < textList.size(); i++) {
 			s = " | " + textList.get(i);
@@ -300,13 +281,13 @@ public class Util {
 
 			s += "|";
 
-			System.out.println(s);
+			// System.out.println(s);
 		}
-		System.out.print(" +-");
-		for (int i = 0; i < maxLength; i++)
-			System.out.print("-");
-		System.out.println("-+");
-		System.out.println("");
+		// System.out.print(" +-");
+		// for (int i = 0; i < maxLength; i++)
+		// System.out.print("-");
+		// System.out.println("-+");
+		// System.out.println("");
 
 	}// printFrame
 
@@ -315,9 +296,9 @@ public class Util {
 	// =======================================
 	public static void printArray(ArrayList list) {
 		// System.out.print("\n");
-		for (int i = 0; i < list.size(); i++) {
-			System.out.println("   - " + list.get(i));
-		}
+//		for (int i = 0; i < list.size(); i++) {
+//			// System.out.println("   - " + list.get(i));
+//		}
 		// System.out.print("\n");
 	}// printArray
 
@@ -330,7 +311,7 @@ public class Util {
 		Iterator it = trmp.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry me = (Map.Entry) it.next();
-			System.out.println(me);
+			// System.out.println(me);
 		}
 		// System.out.println(s1);
 

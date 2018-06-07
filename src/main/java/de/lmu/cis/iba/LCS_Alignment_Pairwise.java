@@ -1,5 +1,7 @@
 package de.lmu.cis.iba;
 
+import org.pmw.tinylog.Logger;
+
 import java.util.*;
 
 public class LCS_Alignment_Pairwise {
@@ -48,7 +50,7 @@ public class LCS_Alignment_Pairwise {
 
 	public void align() {
 
-		System.out.println("Searching quasi max nodes for s1 and s2 pairs...");
+		Logger.debug("Searching quasi max nodes for s1 and s2 pairs...");
 
 		ArrayList<Endpos_Pair> quasi_max_nodes = scdawg_functions.get_quasi_maximal_nodes_pairwise();
 		if (quasi_max_nodes.size() == 0) {
@@ -59,9 +61,9 @@ public class LCS_Alignment_Pairwise {
 
 		for (Endpos_Pair pair : quasi_max_nodes) {
 			Node x = pair.node;
-			System.out.println("-----------------------------------");
+			Logger.debug("-----------------------------------");
 
-			System.out.println(scdawg.get_node_label(x) + ", s1=" + pair.endpos_s1 + " :: s2=" + pair.endpos_s2);
+			Logger.debug(scdawg.get_node_label(x) + ", s1=" + pair.endpos_s1 + " :: s2=" + pair.endpos_s2);
 			for (int e1 : pair.endpos_s1) {
 				nodes_in_s1[e1] = pair.node;
 			}
@@ -71,7 +73,7 @@ public class LCS_Alignment_Pairwise {
 			nodes_endpos_s2.put(x, e2);
 		}
 
-		System.out.println("Calculating LCS for s1 and s2 pairs...");
+		Logger.debug("Calculating LCS for s1 and s2 pairs...");
 
 		ArrayList lcs = this.calculate_LCS_quadratic(nodes_in_s1, nodes_endpos_s2);
 		this.longest_common_subsequences.add(lcs);
@@ -83,13 +85,13 @@ public class LCS_Alignment_Pairwise {
 
 		final ArrayList<Endpos_Pair> result = new ArrayList<>();
 		for (Endpos_Pair pair : quasi_max_nodes) {
-			// System.out.println("LABEL: '" + scdawg.get_node_label(pair.node) + "'");
+			// Logger.debug("LABEL: '" + scdawg.get_node_label(pair.node) + "'");
 			if (pair.endpos_s1.size() != pair.endpos_s2.size()) {
-				// System.out.println(" -> not the same lengtheses");
+				// Logger.debug(" -> not the same lengtheses");
 				continue;
 			}
 			if (pair.endpos_s1.size() != 1) {
-				// System.out.println(" -> not length 1");
+				// Logger.debug(" -> not length 1");
 				continue;
 			}
 			// #... and ...$ will always have exactly one alignment.
@@ -97,22 +99,22 @@ public class LCS_Alignment_Pairwise {
 			// are too short
 			final int epos = pair.endpos_s1.get(0);
 			final int spos = epos - scdawg.get_node_length(pair.node);
-			// System.out.println("PAIR: " + new
+			// Logger.debug("PAIR: " + new
 			// AlignmentPair(scdawg.get_node_label(pair.node), pair.endpos_s1.get(0),
 			// pair.endpos_s2.get(0)));
 			final char letter = scdawg.stringset.get(0).charAt(epos);
-			// System.out.println("ENDNODE: " + letter);
+			// Logger.debug("ENDNODE: " + letter);
 			if (spos != -1 && letter != '$' && scdawg.get_node_length(pair.node) < 3) {
-				// System.out.println(" -> label too short");
+				// Logger.debug(" -> label too short");
 				continue;
 			}
-			// System.out.println("LENGTH: " + scdawg.get_node_length(pair.node));
-			// System.out.println("LENGTH: " + scdawg.get_node_label(pair.node).length());
+			// Logger.debug("LENGTH: " + scdawg.get_node_length(pair.node));
+			// Logger.debug("LENGTH: " + scdawg.get_node_label(pair.node).length());
 			result.add(pair);
 		}
 
 		// for (Endpos_Pair pair : result) {
-		// System.out.println("PAIR: " + scdawg.get_node_label(pair.node));
+		// Logger.debug("PAIR: " + scdawg.get_node_label(pair.node));
 		// }
 
 		/*
@@ -137,7 +139,7 @@ public class LCS_Alignment_Pairwise {
 		 * 
 		 * if(s_s1>=s_s2&&s_s1<=e_s2&&e_s1>=s_s2&&e_s1<=e_s2) {
 		 * System.out.printf("%d,%d,%d,%d ",s_s2,s_s1,e_s1,e_s2);
-		 * System.out.println("remove " + scdawg.get_node_label(p1.node) +" " +
+		 * Logger.debug("remove " + scdawg.get_node_label(p1.node) +" " +
 		 * scdawg.get_node_label(p2.node)+ " -> " + p1.endpos_s1.get(ik) );
 		 * p1.endpos_s1.remove(ik); }
 		 * 
@@ -189,14 +191,14 @@ public class LCS_Alignment_Pairwise {
 		for (int i = 0; i < nodes_in_s1.length; i++) {
 
 			if (nodes_in_s1[i] != null) {
-				// System.out.println(scdawg.get_node_label(nodes_in_s1[i])+ i+
+				// Logger.debug(scdawg.get_node_label(nodes_in_s1[i])+ i+
 				// nodes_endpos_s2.get(nodes_in_s1[i]) );
 
 				if (nodes_endpos_s2.get(nodes_in_s1[i]) == null)
 					continue; // Wenn keine Endpos im zweiten String dann nix
 				// machen
 
-				// System.out.println("Size: " + nodes_endpos_s2.get(nodes_in_s1[i]).size());
+				// Logger.debug("Size: " + nodes_endpos_s2.get(nodes_in_s1[i]).size());
 
 				for (int j = nodes_endpos_s2.get(nodes_in_s1[i]).size() - 1; j >= 0; j--) { // iterieren
 					// über
@@ -204,7 +206,7 @@ public class LCS_Alignment_Pairwise {
 
 					int dec_elem = (int) nodes_endpos_s2.get(nodes_in_s1[i]).get(j);
 
-					// System.out.println(scdawg.get_node_label(p.node) + " " +
+					// Logger.debug(scdawg.get_node_label(p.node) + " " +
 					// elem_s1 + " :: " + dec_elem);
 
 					lcs_triples.add(new LCS_Triple(i, dec_elem, nodes_in_s1[i]));
@@ -385,7 +387,7 @@ public class LCS_Alignment_Pairwise {
 		Iterator it = node_ancestors.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry pair = (Map.Entry) it.next();
-			System.out.println("Knoten: " + scdawg.get_node_label((Node) pair.getKey()) + "vorgänger "
+			Logger.debug("Knoten: " + scdawg.get_node_label((Node) pair.getKey()) + "vorgänger "
 					+ scdawg.get_node_label((Node) pair.getValue()));
 		}
 
@@ -408,12 +410,12 @@ public class LCS_Alignment_Pairwise {
 	public void determineLis(ArrayList[] greedy_cover, ArrayList<LCS_Triple> lcs_triples,
 			HashMap<Node, Node> node_ancestors, LIS_Graph lis_graph, Node node, int i) {
 
-		System.out.println(greedy_cover[i].size());
+		Logger.debug(greedy_cover[i].size());
 		for (int x = 0; x < greedy_cover[i].size(); x++) {
 			Node child_node = lcs_triples.get((int) greedy_cover[i].get(x)).node;
 			node.children.put(0, child_node);
 
-			System.out.println("Knoten: " + scdawg.get_node_label(child_node) + "  vorgänger "
+			Logger.debug("Knoten: " + scdawg.get_node_label(child_node) + "  vorgänger "
 					+ scdawg.get_node_label(node_ancestors.get(child_node)));
 
 			Node ancestor = node_ancestors.get(child_node);
@@ -427,8 +429,8 @@ public class LCS_Alignment_Pairwise {
 					next_column = t.column_number;
 				}
 			}
-			System.out.println("xxx " + next_column);
-			System.out.println("yyy " + lcs_triples.get((int) greedy_cover[i].get(x)).column_number);
+			Logger.debug("xxx " + next_column);
+			Logger.debug("yyy " + lcs_triples.get((int) greedy_cover[i].get(x)).column_number);
 
 			// wir müssen i berechenen = Spalte im cover in der k' vorkommt.
 
@@ -471,7 +473,7 @@ public class LCS_Alignment_Pairwise {
 				int e1 = lis.get(i).endpos_s1;
 				int e2 = lis.get(i).endpos_s2;
 				String nodelabel = scdawg.get_node_label(lis.get(i).node);
-				System.out.printf("\"%s\":e1:\"%s\", e2:\"%s\"\n", nodelabel, e1, e2);
+				Logger.debug("\"{}\":e1:\"{}\", e2:\"{}\"", nodelabel, e1, e2);
 			}
 		}
 
@@ -484,9 +486,9 @@ public class LCS_Alignment_Pairwise {
 				continue;
 			for (int j = 0; j < greedy_cover[i].size(); j++) {
 				LCS_Triple t = lcs_triples.get((int) greedy_cover[i].get(j));
-				System.out.println(t.endpos_s2 + " (" + scdawg.get_node_label(t.node) + ")");
+				Logger.debug(t.endpos_s2 + " (" + scdawg.get_node_label(t.node) + ")");
 			}
-			System.out.println("-------------------------------");
+			Logger.debug("-------------------------------");
 		}
 
 	}
@@ -507,7 +509,7 @@ public class LCS_Alignment_Pairwise {
 			String d = "";
 
 			for (int i = 0; i < lis.size(); i++) {
-				// System.out.println(lis.get(i).endpos_s1+" "+lis.get(i).endpos_s2+"
+				// Logger.debug(lis.get(i).endpos_s1+" "+lis.get(i).endpos_s2+"
 				// "+scdawg.get_node_label(lis.get(i).node));
 				String nodelabel = scdawg.get_node_label(lis.get(i).node).replace("\"", "\\\"");
 				alignment += d + "{\"endpos_s1\":\"" + lis.get(i).endpos_s1 + "\",\"endpos_s2\":\""
@@ -543,7 +545,7 @@ public class LCS_Alignment_Pairwise {
 		ArrayList<NavigableMap<Integer, Node>> reduced_candidates = this
 				.remove_included_substrings(filtered_candidates);
 
-		System.out.println("---------------------------------");
+		Logger.debug("---------------------------------");
 
 		for (int i = 0; i < reduced_candidates.size(); i++) {
 
@@ -551,10 +553,10 @@ public class LCS_Alignment_Pairwise {
 
 				Node currentNode = entry.getValue();
 				int endpos_n1 = scdawg.get_node_length(currentNode) + entry.getKey() - 1;
-				System.out.println(scdawg.get_node_label((Node) entry.getValue()) + " " + entry.getKey() + " "
+				Logger.debug(scdawg.get_node_label((Node) entry.getValue()) + " " + entry.getKey() + " "
 						+ (scdawg.get_node_length(currentNode) + entry.getKey() - 1));
 			}
-			System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXX");
+			Logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXXX");
 
 		}
 
@@ -598,7 +600,7 @@ public class LCS_Alignment_Pairwise {
 		}
 
 		// for(Node n : candidates) {
-		// System.out.println(scdawg.get_node_label(n));
+		// Logger.debug(scdawg.get_node_label(n));
 		// }
 
 		return candidates;
