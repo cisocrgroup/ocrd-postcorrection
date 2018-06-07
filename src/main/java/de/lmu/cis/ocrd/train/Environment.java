@@ -391,7 +391,7 @@ public class Environment implements ArgumentFactory {
 				.withInputPath(inputPath)
 				.profile();
 		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(outputPath.toFile()))) {
-			out.write(new Gson().toJson(profile));
+			out.write(profile.toJSON());
 		}
 		return profile;
 	}

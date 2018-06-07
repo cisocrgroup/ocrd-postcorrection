@@ -1,7 +1,6 @@
 package de.lmu.cis.iba;
 
 import de.lmu.cis.ocrd.OCRLine;
-import org.pmw.tinylog.Logger;
 
 import java.util.*;
 
@@ -255,7 +254,7 @@ public class Common_SCDAWG_Functions {
 
 			}
 		});
-		Logger.debug("Size " + distinct_nodes.size());
+		// Logger.debug("Size " + distinct_nodes.size());
 
 		HashMap distinct_nodes_sorted = Util.sortByValues(distinct_nodes, "DESC");
 
@@ -266,7 +265,7 @@ public class Common_SCDAWG_Functions {
 			Node n = (Node) pair.getKey();
 			Integer count = (Integer) pair.getValue();
 
-			Logger.debug(count + " " + scdawg.get_node_label(n));
+			// Logger.debug(count + " " + scdawg.get_node_label(n));
 
 		}
 
@@ -442,7 +441,7 @@ public class Common_SCDAWG_Functions {
 		// marked_nodes.put(sink, false);
 		//
 		// }
-		Logger.debug("Size " + marked_nodes.size());
+		// Logger.debug("Size " + marked_nodes.size());
 
 		Iterator it2 = marked_nodes.entrySet().iterator();
 
@@ -464,8 +463,8 @@ public class Common_SCDAWG_Functions {
 					ocrEngines.add(ocrlines.get(id).ocrEngine);
 
 				}
-				Logger.debug(":" + ids.size() + " " + scdawg.get_node_label(node));
-				Logger.debug(ocrEngines);
+				// Logger.debug(":" + ids.size() + " " + scdawg.get_node_label(node));
+				// Logger.debug(ocrEngines);
 				if (ids.size() == n && ocrEngines.size() == n) {
 					result.put(node, ids);
 				}
@@ -506,10 +505,10 @@ public class Common_SCDAWG_Functions {
 
 					if (marked_nodes[n2.id] > -1)
 						result.put(n2, true);
-					if (scdawg.get_node_label(n2).equals(" gott")) {
-						Logger.debug("cxx " + scdawg.get_node_label(n));
-						Logger.debug(marked_nodes[-1]);
-					}
+//					if (scdawg.get_node_label(n2).equals(" gott")) {
+//						Logger.debug("cxx " + scdawg.get_node_label(n));
+//						Logger.debug(marked_nodes[-1]);
+//					}
 
 				}
 
@@ -521,10 +520,10 @@ public class Common_SCDAWG_Functions {
 
 					if (marked_nodes[n3.id] > -1)
 						result.put(n3, true);
-					if (scdawg.get_node_label(n3).equals(" gott")) {
-						Logger.debug("cxx " + scdawg.get_node_label(n));
-						Logger.debug(marked_nodes[-1]);
-					}
+//					if (scdawg.get_node_label(n3).equals(" gott")) {
+//						Logger.debug("cxx " + scdawg.get_node_label(n));
+//						Logger.debug(marked_nodes[-1]);
+//					}
 
 				}
 
@@ -535,9 +534,9 @@ public class Common_SCDAWG_Functions {
 		// marked_nodes.put(sink, false);
 		//
 		// }
-		Logger.debug("-----------------------------------------------------------------------");
+		// Logger.debug("-----------------------------------------------------------------------");
 
-		Logger.debug("Size " + result.size());
+		// Logger.debug("Size " + result.size());
 
 		Iterator it2 = result.entrySet().iterator();
 
@@ -546,7 +545,7 @@ public class Common_SCDAWG_Functions {
 			Node n = (Node) pair.getKey();
 			Boolean count = (Boolean) pair.getValue();
 
-			Logger.debug(count + " " + scdawg.get_node_label(n));
+			// Logger.debug(count + " " + scdawg.get_node_label(n));
 
 		}
 
@@ -560,9 +559,6 @@ public class Common_SCDAWG_Functions {
 	 * Finds all quasiminimal nodes in an SCDAWG Quasiminimal defined as all nodes
 	 * with parent nodes occuring in more then one string while they only occur in
 	 * one string
-	 * 
-	 * @param marked_nodes:
-	 *            Result from get_string_occurences()
 	 **********************************************************************************/
 
 	public HashMap<Node, Integer> get_quasiminimal_nodes() {
@@ -596,7 +592,7 @@ public class Common_SCDAWG_Functions {
 
 		HashMap<Node, Integer> right_edges_count = this.count_quasiminimal_nodes(marked_nodes);
 
-		Logger.debug("QUASIMINIMAL Size " + quasiminimal_nodes.size());
+		// Logger.debug("QUASIMINIMAL Size " + quasiminimal_nodes.size());
 
 		for (Node n : quasiminimal_nodes) {
 
@@ -620,7 +616,7 @@ public class Common_SCDAWG_Functions {
 	public HashMap<Node, Integer> count_quasiminimal_nodes(int[] marked_nodes) {
 
 		HashMap<Node, Integer> result = new HashMap<Node, Integer>();
-		Logger.debug("-----------------------------------------------------------------------");
+		// Logger.debug("-----------------------------------------------------------------------");
 
 		scdawg.eachNode_DFS(scdawg.root, true, true, new Online_CDAWG_sym.Visitor() {
 
@@ -699,16 +695,16 @@ public class Common_SCDAWG_Functions {
 				if (n.is_endNode || n == scdawg.root)
 					return;
 
-				Logger.debug(" node: " + scdawg.get_node_label(n) + " " + marked_nodes.get(n));
+				// Logger.debug(" node: " + scdawg.get_node_label(n) + " " + marked_nodes.get(n));
 
 				if (marked_nodes.get(n) && quasi_maximal_candidate == null) {
 					quasi_maximal_candidate = n;
 				}
 
-				if (quasi_maximal_candidate != null)
-					Logger.debug(" candidate: " + scdawg.get_node_label(quasi_maximal_candidate));
-				else
-					Logger.debug(" candidate: null");
+				// if (quasi_maximal_candidate != null)
+				// Logger.debug(" candidate: " + scdawg.get_node_label(quasi_maximal_candidate));
+				// else
+				// Logger.debug(" candidate: null");
 
 				if (marked_nodes.get(n)) {
 
@@ -723,8 +719,8 @@ public class Common_SCDAWG_Functions {
 						}
 						if (quasi_maximal_nodes_help.containsKey(n2) && quasi_maximal_candidate != null) {
 
-							Logger.debug(
-									" candidate: " + quasi_maximal_candidate.children.entrySet().iterator().hasNext());
+							// Logger.debug(" candidate: " + quasi_maximal_candidate.children.entrySet().iterator().hasNext());
+
 
 							Iterator it3 = quasi_maximal_candidate.children.entrySet().iterator();
 							int sinkshit_candidate = 0;
@@ -753,7 +749,7 @@ public class Common_SCDAWG_Functions {
 							int sinkshit_total = sinkshit_candidate + sinkshit_n2;
 
 							if (sinkshit_total == scdawg.sinks.size()) {
-								Logger.debug("NIMM IHN");
+								// Logger.debug("NIMM IHN");
 								quasi_maximal_nodes.put(quasi_maximal_candidate, count);
 								quasi_maximal_candidate = null;
 								sinkset = new HashSet<Integer>();
@@ -775,7 +771,7 @@ public class Common_SCDAWG_Functions {
 						}
 					}
 
-					Logger.debug(sinkset.size() + " " + scdawg.sinks.size());
+					// Logger.debug(sinkset.size() + " " + scdawg.sinks.size());
 
 					if (sinkset.size() == scdawg.sinks.size()) { // wenn in allen sinks vorkommt
 						if (count == 0)
@@ -793,7 +789,7 @@ public class Common_SCDAWG_Functions {
 
 			}
 		});
-		Logger.debug("Size maximal " + quasi_maximal_nodes.size());
+		// Logger.debug("Size maximal " + quasi_maximal_nodes.size());
 
 		HashMap<Node, Integer> result = Util.sortByValues(quasi_maximal_nodes, "DESC");
 
@@ -804,7 +800,7 @@ public class Common_SCDAWG_Functions {
 			Node n = (Node) pair.getKey();
 			Integer count = (Integer) pair.getValue();
 
-			Logger.debug(count + " xxx " + scdawg.get_node_label(n));
+			// Logger.debug(count + " xxx " + scdawg.get_node_label(n));
 
 		}
 

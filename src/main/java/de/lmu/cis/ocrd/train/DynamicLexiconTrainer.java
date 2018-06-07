@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.train;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
+import de.lmu.cis.ocrd.profile.Profile;
 import org.pmw.tinylog.Logger;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
@@ -43,6 +44,7 @@ public class DynamicLexiconTrainer {
         final Path trainPath = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
         final List<Token> testTokens = new ArrayList<>();
 		final FeatureSet fs = newFeatureSet();
+		final Profile profile = environment.getProfile();
 		try (final Writer trainWriter = new BufferedWriter(new FileWriter(trainPath.toFile()))) {
 			final ARFFWriter trainARFFWriter = ARFFWriter.fromFeatureSet(fs)
 					.withRelation("DynamicLexiconExpansion_train_" + n)
@@ -50,15 +52,22 @@ public class DynamicLexiconTrainer {
 					.withDebugToken(environment.openConfiguration().getDynamicLexiconTrainig().isDebugTrainingTokens());
 			trainARFFWriter.writeHeader(n);
 			newTrainSetSplitter().eachToken((Token token, boolean isTrain) -> {
-				Logger.debug(token.toJSON());
+				final String masterOCRWord = token.getMasterOCR().toString();
+				if (!profile.get(masterOCRWord).isPresent() || profile.get(masterOCRWord).get().Candidates.length == 0) {
+					Logger.debug("skipping: {}", token.toJSON());
+					return;
+				}
+				// Logger.info("Profile[{}]: {}", masterOCRWord, profile.get(masterOCRWord).isPresent());
 				if (isTrain) {
+					Logger.debug("training token: {}", token.toJSON());
 					trainARFFWriter.writeToken(token);
 					final FeatureSet.Vector v = fs.calculateFeatureVector(token, n);
 					Logger.debug(v);
 					trainARFFWriter.writeFeatureVector(v);
-				} else {
-					testTokens.add(token);
+					return;
 				}
+				Logger.debug("evaluation token: {}", token.toJSON());
+				testTokens.add(token);
             });
             trainWriter.flush();
         }
@@ -111,7 +120,7 @@ public class DynamicLexiconTrainer {
 				printFormatted(out, "features: %s", featureVector.toJSON());
 				// classifier.setClassIndex(featureVector.size() - 1);
 				final Prediction prediction = classifier.predict(featureVector);
-				printFormatted(out, "prediction: %s\n", prediction.toJSON());
+				printFormatted(out, "prediction: %s", prediction.toJSON());
 				errorCounts.add(token, prediction, featureVector.get(featureVector.size() - 1));
 			}
 			for (Token token : errorCounts.getTruePositives()) {
@@ -134,7 +143,7 @@ public class DynamicLexiconTrainer {
 
 	private static void printFormatted(Writer w, String fmt, Object... args) throws IOException {
 		Logger.info(String.format(fmt, args));
-		w.write(String.format(fmt, args));
+		w.write(String.format(fmt, args) + "\n");
 	}
 
 	private de.lmu.cis.ocrd.ml.Classifier openClassifier(int n) throws Exception {
