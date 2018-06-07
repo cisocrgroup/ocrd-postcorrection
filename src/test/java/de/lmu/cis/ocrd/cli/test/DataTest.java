@@ -35,13 +35,15 @@ public class DataTest {
 		assertThat(commandLineArguments.getParameters().getLanguageModel().getCharacterTrigrams(), is("src/test/resources/nGrams.csv"));
 		assertThat(commandLineArguments.getParameters().getDynamicLexiconTrainig().isDebugTrainingTokens(), is(true));
 		assertThat(commandLineArguments.getParameters().getDynamicLexiconTrainig().isCopyTrainingFiles(), is(false));
-		assertThat(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures().length, is(2));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "name").getAsString(), is("TokenLength"));
+		assertThat(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures().length, is(3));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "name").getAsString(), is("TokenLengthClass"));
 		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature"));
 		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "short").getAsInt(), is(3));
 		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "medium").getAsInt(), is(8));
 		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "long").getAsInt(), is(13));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "name").getAsString(), is("TokenCase"));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "name").getAsString(), is("TokenCaseClass"));
 		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.TokenCaseClassFeature"));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[2], "name").getAsString(), is("UnigramOCRRelativeFrequency"));
+		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[2], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.UnigramFeature"));
     }
 }
