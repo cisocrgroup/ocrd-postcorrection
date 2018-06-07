@@ -86,7 +86,7 @@ public class DynamicLexiconTrainerTest extends TestBase {
     @After
     public void deInit() throws Exception {
 		if (this.environment != null) {
-			// this.environment.remove();
+			this.environment.remove();
 		}
     }
 }
