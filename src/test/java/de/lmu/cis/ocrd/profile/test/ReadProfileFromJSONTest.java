@@ -92,6 +92,18 @@ public class ReadProfileFromJSONTest {
             assertThat(candidate.Weight <= prev, is(true));
             prev = candidate.Weight;
         }
-
     }
+
+	@Test
+	public void testToJSON() {
+		final String json = profile.toJSON();
+		final Profile other = Profile.fromJSON(json);
+		profile = other;
+		testNotContainsToken();
+		testNumberOfCandidatesForFirstToken();
+		testNumberOfCandidatesForFirstTokenIgnoresCase();
+		testNumberOfCandidatesForSecondToken();
+		testNumberOfCandidatesForSecondTokenIgnoresCase();
+		testCandidatesAreSortedInDescendingOrderOfVoteWeights();
+	}
 }

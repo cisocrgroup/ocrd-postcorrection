@@ -3,7 +3,6 @@ package de.lmu.cis.ocrd.profile;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
-import org.pmw.tinylog.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,14 +23,7 @@ public class Profile {
 	public static Profile read(InputStream is) throws IOException {
 		StringWriter out = new StringWriter();
 		IOUtils.copy(is, out, Charset.forName("UTF-8"));
-		Gson gson = new Gson();
-		Type map = new TypeToken<HashMap<String, Candidates>>() {
-		}.getType();
-        Logger.debug("profile: {}", out.toString());
-		HashMap<String, Candidates> data = gson.fromJson(out.toString(), map);
-        return new Profile(toLowerCase(data))
-                .removeEmptyCandidates()
-                .sortCandidatesByVoteWeight();
+		return fromJSON(out.toString());
     }
 
     private Profile removeEmptyCandidates() {
@@ -54,6 +46,16 @@ public class Profile {
 
 	public static Profile read(String path) throws IOException {
 		return read(Paths.get(path));
+	}
+
+	public static Profile fromJSON(String json) {
+		Gson gson = new Gson();
+		Type map = new TypeToken<HashMap<String, Candidates>>() {
+		}.getType();
+		HashMap<String, Candidates> data = gson.fromJson(json, map);
+		return new Profile(toLowerCase(data))
+				.removeEmptyCandidates()
+				.sortCandidatesByVoteWeight();
 	}
 
 	public String toJSON() {
