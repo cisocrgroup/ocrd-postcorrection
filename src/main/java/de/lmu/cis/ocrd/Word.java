@@ -19,6 +19,14 @@ public class Word implements Serializable {
         return word.get();
     }
 
+	public boolean isLastInLine() {
+		return this.e == this.line.getNormalized().length();
+	}
+
+	public boolean isFirstInLine() {
+		return this.s == 0;
+	}
+
     public SimpleLine getLine() {
         return line;
     }

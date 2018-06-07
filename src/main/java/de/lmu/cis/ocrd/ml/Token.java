@@ -13,7 +13,8 @@ import java.util.Optional;
 public class Token implements Serializable {
     private final Word masterOCR;
     private final int id;
-    private String gt;
+
+	private String gt;
     private ArrayList<Word> otherOCR;
 
     public static Token create(String str, int id) {

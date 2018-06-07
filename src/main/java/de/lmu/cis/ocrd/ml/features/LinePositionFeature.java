@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
+import de.lmu.cis.ocrd.Word;
 import de.lmu.cis.ocrd.json.JSONUtil;
 import de.lmu.cis.ocrd.ml.Token;
 
@@ -26,10 +27,13 @@ public class LinePositionFeature extends NamedStringSetFeature {
 
 	@Override
 	public Object calculate(Token token, int i, int n) {
-		if (token.getID() == 1) {
+		final Word word = getWord(token, i, n);
+		if (word.isFirstInLine()) {
 			return FIRST;
 		}
-		// TODO: return LAST
+		if (word.isLastInLine()) {
+			return LAST;
+		}
 		return MIDDLE;
 	}
 }
