@@ -75,7 +75,6 @@ public class ARFFWriter {
     }
 
     public void writeFeatureVector(FeatureSet.Vector features) {
-		System.out.println(features);
         writer.println(features);
     }
 

@@ -39,6 +39,7 @@ public class DynamicLexiconTrainer {
     }
 
     private void prepare(int n) throws Exception {
+		Logger.info("preparing {} OCRs", n);
         final Path trainPath = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
         final List<Token> testTokens = new ArrayList<>();
 		final FeatureSet fs = newFeatureSet();
@@ -52,7 +53,9 @@ public class DynamicLexiconTrainer {
 				Logger.debug(token.toJSON());
 				if (isTrain) {
 					trainARFFWriter.writeToken(token);
-					trainARFFWriter.writeFeatureVector(fs.calculateFeatureVector(token, n));
+					final FeatureSet.Vector v = fs.calculateFeatureVector(token, n);
+					Logger.debug(v);
+					trainARFFWriter.writeFeatureVector(v);
 				} else {
 					testTokens.add(token);
 				}
@@ -80,6 +83,7 @@ public class DynamicLexiconTrainer {
 	}
 
     private void train(int n) throws Exception {
+		Logger.info("training {} OCRs", n);
         final Path trainingFile = environment.fullPath(environment.getDynamicLexiconTrainingFile(n));
         final ConverterUtils.DataSource dataSource = new ConverterUtils.DataSource(trainingFile.toString());
         final Instances train = dataSource.getDataSet();
@@ -94,6 +98,7 @@ public class DynamicLexiconTrainer {
     }
 
     private void evaluate(int n) throws Exception {
+		Logger.info("evaluating {} OCRs", n);
 		final de.lmu.cis.ocrd.ml.Classifier classifier = openClassifier(n);
         final List<Token> testTokens = openTestFile(n);
 		final Path evaluationFile = environment.fullPath(environment.getDynamicLexiconEvaluationFile(n));
