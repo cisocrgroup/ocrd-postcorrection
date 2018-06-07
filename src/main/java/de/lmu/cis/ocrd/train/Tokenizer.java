@@ -1,12 +1,13 @@
 package de.lmu.cis.ocrd.train;
 
-import de.lmu.cis.iba.LineAlignment;
+import de.lmu.cis.iba.LineAlignment_Fast;
 import de.lmu.cis.ocrd.OCRLine;
 import de.lmu.cis.ocrd.Project;
 import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.Word;
 import de.lmu.cis.ocrd.align.TokenAlignment;
 import de.lmu.cis.ocrd.ml.Token;
+import org.pmw.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -33,7 +34,7 @@ public class Tokenizer {
         newProject().eachPage((page)->{
             // gather aligned lines and sort them
             final ArrayList<ArrayList<OCRLine>> lineAlignments = new ArrayList<>();
-            LineAlignment lineAlignment = new LineAlignment(page, 2 + environment.getNumberOfOtherOCR());
+			LineAlignment_Fast lineAlignment = new LineAlignment_Fast(page, 2 + environment.getNumberOfOtherOCR());
             for (ArrayList<OCRLine> line : lineAlignment) {
                 line.sort(Comparator.comparingInt((OCRLine a) -> getOCREngineNumericValue(a.ocrEngine)));
                 lineAlignments.add(line);
@@ -50,13 +51,14 @@ public class Tokenizer {
                 final SimpleLine gt = (SimpleLine) line.get(1).line;
                 final ArrayList<SimpleLine> otherOCRs = new ArrayList<>();
 
-				// Logger.debug("ALIGNMENT MASTER: " + master.getNormalized());
+				Logger.debug("masterOCR:{}:{}: {}", master.getPageId(), master.getLineId(), master.getNormalized());
                 TokenAlignment tokenAlignment = new TokenAlignment(master.getNormalized());
-				// Logger.debug("ALIGNMENT GT: " + gt.getNormalized());
+				Logger.debug("GT:{}:{}: {}", gt.getPageId(), gt.getLineId(), gt.getNormalized());
                 tokenAlignment.add(gt.getNormalized());
                 for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
                     otherOCRs.add((SimpleLine)line.get(i+2).line);
-					// Logger.debug("ALIGNMENT OTHER: " + otherOCRs.get(i).getNormalized());
+					Logger.debug("otherOCR:{}:{}: {}",
+							otherOCRs.get(i).getPageId(), otherOCRs.get(i).getLineId(), otherOCRs.get(i).getNormalized());
                     tokenAlignment.add(otherOCRs.get(i).getNormalized());
                 }
                 eachTokenOnLineAlignment(tokenAlignment, master, otherOCRs, v);
