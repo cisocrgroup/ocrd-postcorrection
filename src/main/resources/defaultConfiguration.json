@@ -49,6 +49,10 @@
       {
         "type": "de.lmu.cis.ocrd.ml.features.ProfilerHighestVoteWeightFeature",
         "name": "HighestVoteWeight"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.LinePositionFeature",
+        "name": "LinePositionClass"
       }
     ]
   }
