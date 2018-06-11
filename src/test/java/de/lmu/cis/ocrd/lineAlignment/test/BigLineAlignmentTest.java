@@ -50,11 +50,11 @@ public class BigLineAlignmentTest {
     public void testFast() throws Exception {
 	final Set<String> got = getLineAlignments();
 	for (String gotStr : got) {
-	    System.out.println("GOT_STR: " + gotStr);
+		// System.out.println("GOT_STR: " + gotStr);
 	    assertThat(gold.contains(gotStr), is(true));
 	}
 	for (String goldStr : gold) {
-	    System.out.println("GOLD_STR: " + goldStr);
+		// System.out.println("GOLD_STR: " + goldStr);
 	    assertThat(got.contains(goldStr), is(true));
 	}
     }
