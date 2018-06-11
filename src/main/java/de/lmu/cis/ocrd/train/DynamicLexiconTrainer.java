@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.train;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
+import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
 import org.pmw.tinylog.Logger;
 import weka.core.Instances;
@@ -12,6 +13,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DynamicLexiconTrainer {
     private final Environment environment;
@@ -53,12 +55,15 @@ public class DynamicLexiconTrainer {
 			trainARFFWriter.writeHeader(n);
 			newTrainSetSplitter().eachToken((Token token, boolean isTrain) -> {
 				final String masterOCRWord = token.getMasterOCR().toString();
-				if (!profile.get(masterOCRWord).isPresent() || profile.get(masterOCRWord).get().Candidates.length == 0) {
+				final Optional<Candidates> candidates = profile.get(masterOCRWord);
+				if (!candidates.isPresent() || candidates.get().Candidates.length == 0) {
+					System.out.println("SKIPPING: " + masterOCRWord);
 					Logger.debug("skipping: {}", token.toJSON());
 					return;
 				}
 				// Logger.info("Profile[{}]: {}", masterOCRWord, profile.get(masterOCRWord).isPresent());
 				if (isTrain) {
+					System.out.println("TRAINING: " + masterOCRWord);
 					Logger.debug("training token: {}", token.toJSON());
 					trainARFFWriter.writeToken(token);
 					final FeatureSet.Vector v = fs.calculateFeatureVector(token, n);
