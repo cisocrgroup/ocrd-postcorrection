@@ -90,15 +90,16 @@ public class Tokenizer {
 
     private Project newProject() throws Exception {
         Project project = new Project();
-        project.put(MASTER_OCR, environment.openMasterOCR());
-        project.put(GT, environment.openGT());
+		project.put(MASTER_OCR, environment.openMasterOCR(), true);
+		project.put(GT, environment.openGT(), false);
         for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
-            project.put(OTHER_OCR_PREFIX + (i+1), environment.openOtherOCR(i));
+			project.put(OTHER_OCR_PREFIX + (i + 1), environment.openOtherOCR(i), false);
         }
+		// project.eachLine((line)-> System.out.println("LINE: " + line.line.getNormalized()));
         return project;
     }
 
-    private int getOCREngineNumericValue(String ocrEngine) {
+	private static int getOCREngineNumericValue(String ocrEngine) {
        if (ocrEngine.equals(MASTER_OCR)) {
            return 0;
        }
