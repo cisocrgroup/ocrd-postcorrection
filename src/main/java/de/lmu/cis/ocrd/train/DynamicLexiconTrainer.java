@@ -57,13 +57,11 @@ public class DynamicLexiconTrainer {
 				final String masterOCRWord = token.getMasterOCR().toString();
 				final Optional<Candidates> candidates = profile.get(masterOCRWord);
 				if (!candidates.isPresent() || candidates.get().Candidates.length == 0) {
-					System.out.println("SKIPPING: " + masterOCRWord);
 					Logger.debug("skipping: {}", token.toJSON());
 					return;
 				}
 				// Logger.info("Profile[{}]: {}", masterOCRWord, profile.get(masterOCRWord).isPresent());
 				if (isTrain) {
-					System.out.println("TRAINING: " + masterOCRWord);
 					Logger.debug("training token: {}", token.toJSON());
 					trainARFFWriter.writeToken(token);
 					final FeatureSet.Vector v = fs.calculateFeatureVector(token, n);
