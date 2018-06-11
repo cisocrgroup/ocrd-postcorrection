@@ -1,6 +1,5 @@
 package de.lmu.cis.ocrd.align.test;
 
-import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.TokenAlignment;
 import org.junit.Test;
 
@@ -87,6 +86,14 @@ public class TokenAlignmentTest {
 		final String a = "je nachdem sich die vorbildenden und die entscheidenden Perioden die Zeiten";
 		final String b = "je nachdem sich die dorbildenden und die entscheidenden Perioden sdie Zeiten";
 //		System.out.println(new Graph(a, b).getStartNode());
+		final TokenAlignment tokens = new TokenAlignment(a).add(b);
+		assertThat(tokens.size(), is(11));
+	}
+
+	@Test
+	public void testBug5() {
+		final String a = "che die schönste Blüthe der dramatischen Krone Spaniens sind Das Zeitalter";
+		final String b = "che die ſchöͤnſte Blüthe der dramatiſchen sKkrone Spaniens ſind Das Zeitalter";
 		final TokenAlignment tokens = new TokenAlignment(a).add(b);
 		assertThat(tokens.size(), is(11));
 	}
