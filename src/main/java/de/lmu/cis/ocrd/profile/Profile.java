@@ -74,7 +74,7 @@ public class Profile {
 
 	private final HashMap<String, Candidates> data;
 
-	private Profile(HashMap<String, Candidates> data) {
+	protected Profile(HashMap<String, Candidates> data) {
 		this.data = data;
 	}
 
