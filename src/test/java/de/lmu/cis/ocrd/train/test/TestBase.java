@@ -1,6 +1,5 @@
 package de.lmu.cis.ocrd.train.test;
 
-import com.google.gson.Gson;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.PosPattern;
@@ -56,8 +55,6 @@ class TestBase {
 			candidate.OCRPatterns = new PosPattern[0];
 			candidate.HistPatterns = new PosPattern[0];
 			candidates.Candidates = new Candidate[]{candidate};
-			System.out.println("key: " + key);
-			System.out.println(new Gson().toJson(candidates));
 			return Optional.of(candidates);
 		}
 	}
