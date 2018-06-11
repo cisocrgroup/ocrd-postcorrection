@@ -42,7 +42,7 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 
 		Iterator it3 = nodes_sorted.entrySet().iterator();
 
-		Logger.info("starting main loop ...");
+		Logger.debug("starting main loop ...");
 		HashSet<Integer> usedIDs = new HashSet<>();
 		main_loop: while (it3.hasNext()) {
 			Map.Entry pair = (Map.Entry) it3.next();
