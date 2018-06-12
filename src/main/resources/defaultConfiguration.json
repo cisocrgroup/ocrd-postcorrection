@@ -39,6 +39,14 @@
         "name": "MinCharTrigram"
       },
       {
+        "type": "de.lmu.cis.ocrd.ml.features.MaxOCRConfidenceFeature",
+        "name": "MaxOCRConfidence"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.MinOCRConfidenceFeature",
+        "name": "MinOCRConfidence"
+      },
+      {
         "type": "de.lmu.cis.ocrd.ml.features.SumOfMatchingAdditionalOCRsFeature",
         "name": "SumOfMatching"
       },
@@ -49,6 +57,14 @@
       {
         "type": "de.lmu.cis.ocrd.ml.features.ProfilerHighestVoteWeightFeature",
         "name": "HighestVoteWeight"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.ProfilerHistoricalPatternDistance",
+        "name": "HistoricalPatternDistance"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.ProfilerOCRPatternDistance",
+        "name": "OCRPatternDistance"
       },
       {
         "type": "de.lmu.cis.ocrd.ml.features.LinePositionFeature",
