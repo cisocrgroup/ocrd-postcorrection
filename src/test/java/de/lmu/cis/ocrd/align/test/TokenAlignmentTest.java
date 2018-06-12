@@ -114,4 +114,14 @@ public class TokenAlignmentTest extends de.lmu.cis.ocrd.test.Test {
 		assertThat(tokens.get(1).toString(), is("ahmunasm|a,h,m"));
 		assertThat(tokens.get(2).toString(), is("ürdig|u,n,g,s,w,ii,r,di,a,l"));
 	}
+
+	@Test
+	public void testBug7() {
+		final String a = "thig mit dem Rücken ihm zugekehrt Und wahrlich es ist nicht gut daß es";
+		final String b = "tbig mit dem Mcken i zulgefebrt Und wahrlich es iſt nicht guut daß es";
+		final TokenAlignment tokens = new TokenAlignment(a).add(b);
+		assertThat(tokens.size(), is(14));
+		assertThat(tokens.get(12).toString(), is("daß|daß"));
+		assertThat(tokens.get(13).toString(), is("es|es"));
+	}
 }

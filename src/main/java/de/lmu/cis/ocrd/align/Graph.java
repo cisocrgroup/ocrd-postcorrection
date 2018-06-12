@@ -60,7 +60,6 @@ public class Graph {
 			final Node curn = new Node(curp.label);
 			final Gap g1 = makeGap(prevp.epos1, curp.spos1, s1, curn);
 			final Gap g2 = makeGap(prevp.epos2, curp.spos2, s2, curn);
-			// Logger.debug("s1: '{}'\nINFO: s2: '{}'\nINFO: pl: '{}'\nINFO: g1: '{}'\nINFO: g2: '{}'\nINFO: cl: '{}'", s1, s2, prevn.getLabel(), g1.getLabel(), g2.getLabel(), curn.getLabel());
 			Logger.debug("previous: {}", prevp);
 			Logger.debug("current:  {}", curp);
 			Logger.debug("gap1: {}", g1.getLabel());
@@ -69,6 +68,15 @@ public class Graph {
 			prevn.add(g2);
 			prevp = curp;
 			prevn = curn;
+		}
+		// check if last node is end node with $
+		final int n = prevn.getLabel().length();
+		if (n == 0 || prevn.getLabel().charAt(n - 1) != '$') {
+			final Node end = new Node("$");
+			final Gap g1 = makeGap(prevp.epos1, s1.length() - 1, s1, end);
+			final Gap g2 = makeGap(prevp.epos1, s2.length() - 1, s2, end);
+			prevn.add(g1);
+			prevn.add(g2);
 		}
 	}
 
