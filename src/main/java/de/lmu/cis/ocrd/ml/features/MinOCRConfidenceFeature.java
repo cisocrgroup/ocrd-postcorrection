@@ -6,15 +6,13 @@ import de.lmu.cis.ocrd.json.JSONUtil;
 import de.lmu.cis.ocrd.ml.Token;
 
 public class MinOCRConfidenceFeature extends NamedDoubleFeature {
-	private final int ocrIndex;
 
 	public MinOCRConfidenceFeature(JsonObject o, ArgumentFactory ignored) {
-		this(JSONUtil.mustGetNameOrType(o), JSONUtil.mustGet(o, "ocrIndex").getAsInt());
+		this(JSONUtil.mustGetNameOrType(o));
 	}
 
-	public MinOCRConfidenceFeature(String name, int ocrIndex) {
+	private MinOCRConfidenceFeature(String name) {
 		super(name);
-		this.ocrIndex = ocrIndex;
 	}
 
 	@Override
@@ -32,6 +30,6 @@ public class MinOCRConfidenceFeature extends NamedDoubleFeature {
 
 	@Override
 	public boolean handlesOCR(int i, int n) {
-		return handlesExactlyOCR(ocrIndex, i, n);
+		return handlesAnyOCR(i, n);
 	}
 }
