@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Optional;
 
 public class Word implements Serializable {
+	private static final int SMALL_WORD = 3;
     private final SimpleLine line;
     private final int s, e;
 
@@ -47,4 +48,8 @@ public class Word implements Serializable {
     public String toString() {
         return line.getNormalized().substring(s, e);
     }
+
+	public boolean isShort() {
+		return getSize() <= SMALL_WORD;
+	}
 }

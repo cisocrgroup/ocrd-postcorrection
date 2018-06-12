@@ -94,6 +94,9 @@ public class DynamicLexiconTrainer {
 			w.writeHeader(n);
 			newTrainSetSplitter().eachToken((Token token, boolean isTrain) -> {
 				Logger.debug("token: {}, isTrain: {}", token, isTrain);
+				if (token.getMasterOCR().isShort()) {
+					Logger.debug("SKIPPING (small)");
+				}
 				w.add(token, isTrain);
 				if (!isTrain) {
 					tokens.add(token);
@@ -196,7 +199,7 @@ public class DynamicLexiconTrainer {
 		final AbstractClassifier logistic = openClassifier(n);
 		final Evaluation evaluation = new Evaluation(structure);
 		evaluation.evaluateModel(logistic, test);
-		System.out.println(evaluation.toSummaryString("\nResults\n=================\n", false));
+		System.out.println(evaluation.toSummaryString("\n Results\n=========\n", true));
 		// final Path modelFile = environment.fullPath(environment.getDynamicLexiconModel(n));
 	}
 
