@@ -1,14 +1,18 @@
 package de.lmu.cis.ocrd.align.test;
 
 import de.lmu.cis.ocrd.align.TokenAlignment;
+import org.junit.Before;
 import org.junit.Test;
-import org.pmw.tinylog.Configurator;
-import org.pmw.tinylog.Level;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class TokenAlignmentTest {
+public class TokenAlignmentTest extends de.lmu.cis.ocrd.test.Test {
+	@Before
+	public void init() {
+		enableDebugging();
+	}
+
 	@Test
 	public void test2alignments() {
 		final String a = "abc def";
@@ -102,8 +106,6 @@ public class TokenAlignmentTest {
 
 	@Test
 	public void testBug6() {
-		Configurator.currentConfig().level(Level.DEBUG).activate();
-		Configurator.currentConfig().formatPattern("{message}").activate();
 		final String a = "Nach ahmunasm ürdig";
 		final String b = "Na ch a h m u n g s w ii r di a l";
 		final TokenAlignment tokens = new TokenAlignment(a).add(b);
