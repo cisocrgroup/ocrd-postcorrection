@@ -71,9 +71,9 @@ public class DynamicLexiconTrainerTest extends TestBase {
 	@Test
 	public void checkTestFileContent() throws Exception {
 		trainer.prepare();
-		assertThat(getNumberOfTestTokens(environment.fullPath(environment.getDynamicLexiconTestFile(1))), is(432));
-		assertThat(getNumberOfTestTokens(environment.fullPath(environment.getDynamicLexiconTestFile(2))), is(432));
-		assertThat(getNumberOfTestTokens(environment.fullPath(environment.getDynamicLexiconTestFile(3))), is(432));
+		assertThat(getNumberOfTestTokens(environment.fullPath(environment.getDynamicLexiconTestTokensFile(1))), is(432));
+		assertThat(getNumberOfTestTokens(environment.fullPath(environment.getDynamicLexiconTestTokensFile(2))), is(432));
+		assertThat(getNumberOfTestTokens(environment.fullPath(environment.getDynamicLexiconTestTokensFile(3))), is(432));
 	}
 
 	@SuppressWarnings("unchecked")

@@ -21,14 +21,14 @@ public class FeaturesTest {
 
 	@Test
 	public void testMinOCRConfidenceFeature() {
-		final Feature feature = new MinOCRConfidenceFeature("name", 0);
+		final Feature feature = new MinOCRConfidenceFeature("name");
 		assertThat(feature.calculate(t1, 0, 1), is(0.0));
 		assertThat(feature.calculate(t2, 0, 1), is(0.4));
 	}
 
 	@Test
 	public void testMaxOCRConfidenceFeature() {
-		final Feature feature = new MaxOCRConfidenceFeature("name", 0);
+		final Feature feature = new MaxOCRConfidenceFeature("name");
 		assertThat(feature.calculate(t1, 0, 1), is(0.2));
 		assertThat(feature.calculate(t2, 0, 1), is(0.8));
 	}

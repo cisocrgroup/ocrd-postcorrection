@@ -11,7 +11,7 @@ public class MaxOCRConfidenceFeature extends NamedDoubleFeature {
 		this(JSONUtil.mustGetNameOrType(o));
 	}
 
-	private MaxOCRConfidenceFeature(String name) {
+	public MaxOCRConfidenceFeature(String name) {
 		super(name);
 	}
 

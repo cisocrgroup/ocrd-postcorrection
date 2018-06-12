@@ -11,7 +11,7 @@ public class MinOCRConfidenceFeature extends NamedDoubleFeature {
 		this(JSONUtil.mustGetNameOrType(o));
 	}
 
-	private MinOCRConfidenceFeature(String name) {
+	public MinOCRConfidenceFeature(String name) {
 		super(name);
 	}
 

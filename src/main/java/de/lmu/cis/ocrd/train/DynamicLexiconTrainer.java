@@ -199,8 +199,13 @@ public class DynamicLexiconTrainer {
 		final AbstractClassifier logistic = openClassifier(n);
 		final Evaluation evaluation = new Evaluation(structure);
 		evaluation.evaluateModel(logistic, test);
-		System.out.println(evaluation.toSummaryString("\n Results\n=========\n", true));
-		// final Path modelFile = environment.fullPath(environment.getDynamicLexiconModel(n));
+		final Path evaluationFile = environment.fullPath(environment.getDynamicLexiconEvaluationFile(n));
+		try (final Writer w = new BufferedWriter(new FileWriter(evaluationFile.toString()))) {
+			final String summary = evaluation.toSummaryString(String.format("\n Results (%d)\n=============\n", n), true);
+			w.write(summary);
+			w.write('\n');
+			System.out.println(summary);
+		}
 	}
 
 	private static void printFormatted(Writer w, String fmt, Object... args) throws IOException {
