@@ -3,19 +3,26 @@ package de.lmu.cis.ocrd.train;
 import de.lmu.cis.ocrd.ml.Prediction;
 import de.lmu.cis.ocrd.ml.Token;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class ErrorCounts {
+	private enum ErrorType {TRUE_POSITIVE, FALSE_POSITIVE, TRUE_NEGATIVE, FALSE_NEGATIVE}
+
+	private Map<ErrorType, List<Token>> counts = null;
+	private HashSet<String> types = null;
+
+	ErrorCounts(boolean typeBased) {
+		if (typeBased) {
+			this.types = new HashSet<>();
+		}
+	}
+
+	ErrorCounts() {
+		this(false);
+	}
 	int getTotalCount() {
 		return getTruePositiveCount() + getTrueNegativeCount() + getFalsePositiveCount() + getFalseNegativeCount();
 	}
-
-	private enum ErrorType {TRUE_POSITIVE, FALSE_POSITIVE, TRUE_NEGATIVE, FALSE_NEGATIVE}
-
-	private Map<ErrorType, List<Token>> counts;
 
 	ErrorCounts add(Token token, Prediction prediction, Object gt) {
 		if (counts == null) {
@@ -24,6 +31,12 @@ class ErrorCounts {
 			counts.put(ErrorType.TRUE_NEGATIVE, new ArrayList<>());
 			counts.put(ErrorType.FALSE_POSITIVE, new ArrayList<>());
 			counts.put(ErrorType.FALSE_NEGATIVE, new ArrayList<>());
+		}
+		if (types != null) {
+			if (types.contains(token.getMasterOCR().toString())) {
+				return this;
+			}
+			types.add(token.getMasterOCR().toString());
 		}
 		counts.get(getErrorType(prediction, gt)).add(token);
 		return this;
@@ -52,6 +65,17 @@ class ErrorCounts {
 
 	double getRecall() {
 		return calculateRate(getTruePositiveCount(), getFalseNegativeCount());
+	}
+
+	double getF1() {
+		return getFMeasure(1.0);
+	}
+
+	private double getFMeasure(double beta) {
+		final double b = Math.pow(beta, 2);
+		final double p = getPrecision();
+		final double r = getRecall();
+		return (1 + b) * ((p * r) / ((p * b) + r));
 	}
 
 	private static double calculateRate(int a, int b) {

@@ -116,6 +116,7 @@ public class DynamicLexiconTrainer {
         final List<Token> testTokens = openTestFile(n);
 		final Path evaluationFile = environment.fullPath(environment.getDynamicLexiconEvaluationFile(n));
 		final ErrorCounts errorCounts = new ErrorCounts();
+		final ErrorCounts typeErrorCounts = new ErrorCounts(true);
 		final FeatureSet fs = newFeatureSet();
 		try (PrintWriter out = new PrintWriter(new FileOutputStream(evaluationFile.toFile()))) {
 			for (Token token : testTokens) {
@@ -126,6 +127,7 @@ public class DynamicLexiconTrainer {
 				final Prediction prediction = classifier.predict(featureVector);
 				printFormatted(out, "prediction: %s", prediction.toJSON());
 				errorCounts.add(token, prediction, featureVector.get(featureVector.size() - 1));
+				typeErrorCounts.add(token, prediction, featureVector.get(featureVector.size() - 1));
 			}
 			for (Token token : errorCounts.getTruePositives()) {
 				printFormatted(out, "correctly used for extension: %s", token.toJSON());
@@ -141,6 +143,17 @@ public class DynamicLexiconTrainer {
 			printFormatted(out, "Number of incorrectly used extensions:   %d", errorCounts.getFalsePositiveCount());
 			printFormatted(out, "Number of incorrectly unused extensions: %d", errorCounts.getFalseNegativeCount());
 			printFormatted(out, "Total number of tokens:                  %d", errorCounts.getTotalCount());
+			printFormatted(out, "Precision:                               %f", errorCounts.getPrecision());
+			printFormatted(out, "Recall:                                  %f", errorCounts.getRecall());
+			printFormatted(out, "F1:                                      %f", errorCounts.getF1());
+			printFormatted(out, "[types] Number of correctly used extensions:     %d", typeErrorCounts.getTruePositiveCount());
+			printFormatted(out, "[types] Number of correctly unused extensions:   %d", typeErrorCounts.getTrueNegativeCount());
+			printFormatted(out, "[types] Number of incorrectly used extensions:   %d", typeErrorCounts.getFalsePositiveCount());
+			printFormatted(out, "[types] Number of incorrectly unused extensions: %d", typeErrorCounts.getFalseNegativeCount());
+			printFormatted(out, "[types] Total number of types:                   %d", typeErrorCounts.getTotalCount());
+			printFormatted(out, "[types] Precision:                               %f", typeErrorCounts.getPrecision());
+			printFormatted(out, "[types] Recall:                                  %f", typeErrorCounts.getRecall());
+			printFormatted(out, "[types] F1:                                      %f", typeErrorCounts.getF1());
 			out.flush();
         }
     }
