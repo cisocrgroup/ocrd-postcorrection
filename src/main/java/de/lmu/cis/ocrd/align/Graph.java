@@ -46,16 +46,17 @@ public class Graph {
 			start = new Node(s1);
 			return;
 		}
-		// System.out.println("s1: " + s1);
-        // System.out.println("s2: " + s2);
-        // for (AlignmentPair p : ps) {
-        //     System.out.println("ALIGNMENT PAIR: " + p);
-        // }
+		Logger.debug("s1: {}", s1);
+		Logger.debug("s2: {}", s2);
 		start = new Node(ps.get(0).label);
 		Node prevn = start;
 		AlignmentPair prevp = ps.get(0);
 		for (int i = 1; i < ps.size(); i++) {
-			final AlignmentPair curp = handleOverlap(prevp, ps.get(i));
+			final AlignmentPair curp = ps.get(i);
+			if (isOverlap(prevp, curp)) {
+				Logger.debug("skipping {} {}", prevp, curp);
+				continue;
+			}
 			final Node curn = new Node(curp.label);
 			final Gap g1 = makeGap(prevp.epos1, curp.spos1, s1, curn);
 			final Gap g2 = makeGap(prevp.epos2, curp.spos2, s2, curn);
@@ -69,23 +70,15 @@ public class Graph {
 			prevp = curp;
 			prevn = curn;
 		}
-		// System.out.println("s1: " + s1);
-		// System.out.println("s2: " + s2);
-		// for (AlignmentPair p : ps) {
-		// 	System.out.println("ALIGNMENT PAIR: " + p);
-		// }
-		// System.out.println("START: " + start.toString());
+	}
+
+	private static boolean isOverlap(AlignmentPair previous, AlignmentPair current) {
+		return previous.epos1 > current.spos1 || previous.epos2 > current.spos2;
 	}
 
 	private AlignmentPair handleOverlap(AlignmentPair previous, AlignmentPair current) {
 		final String s1 = alignment.getString(0);
 		final String s2 = alignment.getString(1);
-//		Logger.debug("previous.epos1: {}, previous.epos2: {}, previous.label: '{}'", previous.epos1, previous.epos2, previous.label);
-//		Logger.debug("current.spos1: {}, current.spos2: {}, current.label: '{}'", current.spos1, current.spos2, current.label);
-//		Logger.debug("s1: '{}'\nINFO: s2: '{}'", s1, s2);
-//		Logger.debug("sub1: '{}'\nINFO: sub2: '{}'", s1.substring(previous.epos1), s2.substring(previous.epos2));
-//		Logger.debug("previous: {}", previous);
-//		Logger.debug("current:  {}", current);
 		if (previous.epos1 > current.spos1) {
 			String label = current.label.substring(previous.epos1 - current.spos1);
 			return new AlignmentPair(label, current.epos1, current.epos2);
@@ -97,7 +90,7 @@ public class Graph {
 		return current;
 	}
 
-	private Gap makeGap(int s, int e, String str, Node node) {
+	private static Gap makeGap(int s, int e, String str, Node node) {
 		// Logger.debug("getGapLabel(" + s + ", " + e + ", " + str + ")");
 		// s += 1;
 		// e += 1;
