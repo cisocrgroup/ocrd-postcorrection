@@ -54,6 +54,7 @@ public class DynamicLexiconTrainer {
 					.withDebugToken(environment.openConfiguration().getDynamicLexiconTrainig().isDebugTrainingTokens());
 			trainARFFWriter.writeHeader(n);
 			newTrainSetSplitter().eachToken((Token token, boolean isTrain) -> {
+				Logger.debug("token: {}, isTrain: {}", token, isTrain);
 				final String masterOCRWord = token.getMasterOCR().toString();
 				final Optional<Candidates> candidates = profile.get(masterOCRWord);
 				if (!candidates.isPresent() || candidates.get().Candidates.length == 0) {

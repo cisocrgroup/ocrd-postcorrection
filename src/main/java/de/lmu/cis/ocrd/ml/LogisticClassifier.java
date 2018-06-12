@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.ml;
 
 import weka.classifiers.AbstractClassifier;
-import weka.classifiers.functions.Logistic;
+import weka.classifiers.functions.SimpleLogistic;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -15,7 +15,8 @@ public class LogisticClassifier implements Classifier {
 	private final Map<Integer, Instance> instances = new HashMap<>();
 
 	private LogisticClassifier(Instances structure) {
-		this.classifier = new Logistic();
+		//this.classifier = new Logistic();
+		this.classifier = new SimpleLogistic();
 		this.structure = structure;
 	}
 

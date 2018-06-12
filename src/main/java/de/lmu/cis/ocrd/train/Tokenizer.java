@@ -52,13 +52,16 @@ public class Tokenizer {
                 final ArrayList<SimpleLine> otherOCRs = new ArrayList<>();
 
 				Logger.debug("masterOCR:{}:{}: {}", master.getPageId(), master.getLineId(), master.getNormalized());
-                TokenAlignment tokenAlignment = new TokenAlignment(master.getNormalized());
 				Logger.debug("GT:{}:{}: {}", gt.getPageId(), gt.getLineId(), gt.getNormalized());
+				for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
+					Logger.debug("otherOCR:{}:{}: {}",
+							line.get(i + 2).line.getPageId(), line.get(i + 2).line.getLineId(), line.get(i + 2).line.getNormalized());
+				}
+
+				TokenAlignment tokenAlignment = new TokenAlignment(master.getNormalized());
                 tokenAlignment.add(gt.getNormalized());
                 for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
                     otherOCRs.add((SimpleLine)line.get(i+2).line);
-					Logger.debug("otherOCR:{}:{}: {}",
-							otherOCRs.get(i).getPageId(), otherOCRs.get(i).getLineId(), otherOCRs.get(i).getNormalized());
                     tokenAlignment.add(otherOCRs.get(i).getNormalized());
                 }
                 eachTokenOnLineAlignment(tokenAlignment, master, otherOCRs, v);
@@ -71,21 +74,27 @@ public class Tokenizer {
         final ArrayList<Integer> otherOffsets = new ArrayList<>();
         int tokenID = 0;
         for (TokenAlignment.Token token : tokenAlignment) {
+			Logger.debug("Aligned token: {}", token);
             Optional<Word> masterToken = master.getWord(offset, token.getMaster());
-            assert masterToken.isPresent();
+			if (!masterToken.isPresent()) {
+				continue;
+			}
             offset += token.getMaster().length();
             for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
                 otherOffsets.add(0);
             }
             final Token theTrainingToken = new Token(masterToken.get(), ++tokenID).withGT(token.getAlignment(0));
             for (int i = 0; i < environment.getNumberOfOtherOCR(); i++) {
-                final Optional<Word> theWord = otherOCRs.get(i).getWord(otherOffsets.get(i), token.getAlignment(i+1));
-                assert(theWord.isPresent());
+				Optional<Word> theWord = otherOCRs.get(i).getWord(otherOffsets.get(i), token.getAlignment(i + 1));
+				if (!theWord.isPresent()) {
+					theWord = Optional.of(Word.empty(master));
+				}
+				Logger.debug("theWord: {}", theWord);
                 theTrainingToken.addOCR(theWord.get());
                 otherOffsets.set(i, otherOffsets.get(i) + theWord.get().toString().length());
             }
             v.visit(theTrainingToken);
-        }
+		}
     }
 
     private Project newProject() throws Exception {

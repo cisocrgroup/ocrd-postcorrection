@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.align;
 
+import org.pmw.tinylog.Logger;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -78,7 +80,10 @@ public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 	}
 
 	public TokenAlignment add(String str) {
-		final Tokenizer t = new Graph(master, str).getTokenizer();
+		final Graph graph = new Graph(master, str);
+		Logger.debug("Alignment: {}", graph.getStartNode().toString());
+		final Tokenizer t = graph.getTokenizer();
+
 		Counter i = new Counter(-1); // really, java?
 		t.eachPair((a, b, anew, bnew) -> {
 		    // System.out.printf("a: %s, b: %s, anew: %b, bnew: %b\n", a, b, anew, bnew);
