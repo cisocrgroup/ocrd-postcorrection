@@ -30,7 +30,8 @@ public class Environment implements ArgumentFactory {
 	private static final String dLex = "dLex";
 	private static final String dLexFS = "features.ser";
 	private static final String trainingFile = "training.arff";
-	private static final String testFile = "tokens.ser";
+	private static final String testFile = "test.arff";
+	private static final String tokensFile = "testTokens.ser";
 	private static final String evaluationFile = "evaluation.txt";
 	private static final String model = "model.ser";
 	private static final String dataFile = "data.json";
@@ -294,6 +295,10 @@ public class Environment implements ArgumentFactory {
 
 	private Path getLocalProfileInputPath() {
 		return Paths.get(getResourcesDirectory().toString(), getMasterOCR().getFileName().toString() + ".profile.txt");
+	}
+
+	public Path getDynamicLexiconTestTokensFile(int n) {
+		return Paths.get(getDynamicLexiconTrainingDirectory(n).toString(), tokensFile);
 	}
 
 	public Path getDynamicLexiconTestFile(int n) {

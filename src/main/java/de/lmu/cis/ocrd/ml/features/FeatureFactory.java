@@ -24,6 +24,8 @@ public class FeatureFactory {
 				.register(MinOCRConfidenceFeature.class)
 				.register(MaxOCRConfidenceFeature.class)
                 .register(MinCharNGramsFeature.class)
+				.register(ProfilerHistoricalPatternsDistance.class)
+				.register(ProfilerOCRPatternsDistance.class)
 				.register(LinePositionFeature.class)
                 .register(MaxCharNGramsFeature.class);
     }
