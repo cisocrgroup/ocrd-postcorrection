@@ -27,6 +27,7 @@ public class FeatureFactory {
 				.register(ProfilerHistoricalPatternsDistance.class)
 				.register(ProfilerOCRPatternsDistance.class)
 				.register(LinePositionFeature.class)
+				.register(LineOverlapWithMasterOCRFeature.class)
                 .register(MaxCharNGramsFeature.class);
     }
 
