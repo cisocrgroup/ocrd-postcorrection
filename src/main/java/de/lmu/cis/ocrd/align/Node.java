@@ -59,6 +59,25 @@ public class Node implements Label {
 	    return builder.toString();
     }
 
+    public double calculateOverlap() {
+		// ignore # and $ for *both* strings
+		double divident = -4.0;
+		double divisor = -4.0;
+		Node node = this;
+		while (true) {
+			divident += 2 * node.label.length();
+			divisor += 2 * node.label.length();
+			if (node.next(0) == null) {
+				break;
+			}
+			divisor += node.next(0).getLabel().length();
+			divisor += node.next(1).getLabel().length();
+			node = node.next(0).next(0);
+		}
+		System.out.println("divident: " + divident + " divisor: " + divisor);
+		return divident / divisor;
+	}
+
 	String toDot() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("digraph g { // dotcode\n");

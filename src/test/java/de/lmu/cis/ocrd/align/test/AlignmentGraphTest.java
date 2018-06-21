@@ -43,4 +43,32 @@ public class AlignmentGraphTest {
 		assertThat(makeString(g, 0), is('#' + a + '$'));
 		assertThat(makeString(g, 1), is('#' + b + '$'));
 	}
+
+	@Test
+	public void testCalculateOverlapNoOverlap() {
+		final String a = "abcdef";
+		final String b = "ghijkl";
+		final Graph g = new Graph(a, b);
+		final double res = g.getStartNode().calculateOverlap();
+		assertThat(res, is(0.0));
+	}
+
+	@Test
+	public void testCalculateOverlapTheSame() {
+		final String a = "abcdef";
+		final String b = "abcdef";
+		final Graph g = new Graph(a, b);
+		final double res = g.getStartNode().calculateOverlap();
+		assertThat(res, is(1.0));
+	}
+
+	@Test
+	public void testCalculateOverlap() {
+		final String a = "abgef";
+		final String b = "abcdef";
+		final Graph g = new Graph(a, b);
+		final double res = g.getStartNode().calculateOverlap();
+		assertThat(res, is(8.0/11.0));
+
+	}
 }
