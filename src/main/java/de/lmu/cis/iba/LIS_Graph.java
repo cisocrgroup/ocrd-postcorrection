@@ -10,12 +10,13 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
+
 public class LIS_Graph {
 
 	public LIS_Node root;
 	private Online_CDAWG_sym scdawg = null;
 
-	HashMap<String, LIS_Node> all_nodes = new HashMap<String, LIS_Node>();
+	HashMap<Integer, LIS_Node> all_nodes = new HashMap<Integer, LIS_Node>();
 	ArrayList<LCS_Triple> lcs_triples = new ArrayList<LCS_Triple>();
 
 	public LIS_Graph(Online_CDAWG_sym scdawg) {
@@ -32,20 +33,13 @@ public class LIS_Graph {
 	 		LCS_Algorithm lcs = new LCS_Algorithm(this.scdawg);
 	 		
 	 		ArrayList<LCS_Triple> lcs_triples = new ArrayList<LCS_Triple>();
-	 		HashMap<Node, Node> node_ancestors = new HashMap<Node, Node>();
 
-	 		ArrayList[] greedy_cover =  lcs.build_greedy_cover(nodes_in_s1, nodes_endpos_s2, lcs_triples, node_ancestors);
+	 		ArrayList[] greedy_cover =  lcs.build_greedy_cover(nodes_in_s1, nodes_endpos_s2, lcs_triples);
 	 		lcs.print_greedy_cover(greedy_cover, lcs_triples);
 	 		
 	 		this.lcs_triples = lcs_triples;
 	 		
-	 		Iterator it = node_ancestors.entrySet().iterator();
-	 		while (it.hasNext()) {
-	 			Map.Entry pair = (Map.Entry) it.next();
-	 			System.out.println("Knoten: " + scdawg.get_node_label((Node) pair.getKey()) + " vorgänger "
-	 					+ scdawg.get_node_label((Node) pair.getValue()));
-	 		}
-
+	 	
 	 		// calculate lis
 
 
@@ -58,120 +52,84 @@ public class LIS_Graph {
 	 		 
 	 		 
 	  		for (int x = 0; x < greedy_cover[i_count - 1].size(); x++) {
-	  		  Node last_cover_node = lcs_triples.get((int) greedy_cover[i_count - 1].get(x)).node;
-		    	  LIS_Node lis_start_node = new LIS_Node(scdawg.get_node_label(last_cover_node),0,(int) greedy_cover[i_count - 1].get(x));
-
-			   int lis_start_node_epos_s2 = lcs_triples.get((int) greedy_cover[i_count - 1].get(x)).endpos_s2;   
+		    	   LIS_Node lis_start_node = this.addNode((int) greedy_cover[i_count - 1].get(x));
+		    	   int lis_start_node_epos_s2 = lcs_triples.get((int) greedy_cover[i_count - 1].get(x)).endpos_s2;   
 	        	   this.addTransition(this.root, lis_start_node, lis_start_node_epos_s2);
-	        	 
-	 		 determineLis(greedy_cover, lcs_triples, node_ancestors, this , lis_start_node, i_count - 1);
+	 		   determineLis(greedy_cover, lcs_triples, i_count - 1);
 	  		}
 	 	}
 	
 
 	
-	public void determineLis(ArrayList[] greedy_cover, ArrayList<LCS_Triple> lcs_triples,
-			HashMap<Node, Node> node_ancestors, LIS_Graph lis_graph, LIS_Node lis_node, int i) {
+	public void determineLis(ArrayList[] greedy_cover, ArrayList<LCS_Triple> lcs_triples, int i) {
 
 		for (int x = 0; x < greedy_cover[i].size(); x++) {
 
-			Node child_node = lcs_triples.get((int) greedy_cover[i].get(x)).node;
-
+			LIS_Node lis_child = this.all_nodes.get((int) greedy_cover[i].get(x));
+			if(lis_child==null) continue;
+			
 			int child_node_epos_s2 = lcs_triples.get((int) greedy_cover[i].get(x)).endpos_s2;
-
 			
-		
-			
-			
-			
-			int next_column = 0;
-			Node ancestor = null;
+			int ancestor_idx = lcs_triples.get((int) greedy_cover[i].get(x)).idx_ancestor;
 			//
 			// System.out.println("Knoten: " + scdawg.get_node_label(child_node) + "
 			// vorgänger "
 			// + scdawg.get_node_label(node_ancestors.get(child_node)));
 			
 
-			ancestor = node_ancestors.get(child_node);
-			if (ancestor == null) {
+			if (ancestor_idx == -1) {
 				break;
 			}
 			
+	
 			
-			LIS_Node lis_child = null;
-			if (lis_node.children.containsKey(child_node_epos_s2)) {
-				lis_child = lis_node.children.get(child_node_epos_s2);
-			} else {
-				lis_child = new LIS_Node(scdawg.get_node_label(child_node), i,
-						(int) greedy_cover[i].get(x));
-			}
-		
+			System.out.println(i);
+			System.out.println(lis_child.label);
 
-			if (lis_graph.all_nodes.containsKey(lis_child.label)) {
-				lis_child = lis_graph.all_nodes.get(lis_child.label);
-			}
-			
+			for (int k = greedy_cover[i - 1].indexOf(ancestor_idx); k >= 0; k--) {
+			    
 
-			// wir müssen i berechenen = Spalte im cover in der k' vorkommt.
-
-			Node ancestor_node = null;
-			int child_node_epos_s2_ancestor = -1;
-
-			for (LCS_Triple t : lcs_triples) {
-				if (t.node.equals(ancestor)) {
-					next_column = t.column_number;
-					child_node_epos_s2_ancestor = t.endpos_s2;
-
-				}
-			}
-
-			for (int k = 0; k < greedy_cover[i - 1].size(); k++) {
-
-				Node child_node_2 = lcs_triples.get((int) greedy_cover[i - 1].get(k)).node;
 				int child_node_2_epos_s2 = lcs_triples.get((int) greedy_cover[i - 1].get(k)).endpos_s2;
-
-				if (child_node_2_epos_s2 <= child_node_epos_s2) {
-
-					LIS_Node lis_child_2 = null;
-					if (lis_node.children.containsKey(child_node_2_epos_s2)) {
-						lis_child_2 = lis_node.children.get(child_node_2_epos_s2);
-					} else {
-						lis_child_2 = new LIS_Node(scdawg.get_node_label(child_node_2), i - 1,
-								(int) greedy_cover[i - 1].get(k));
-					}
-						
 				
+				// FÜR ÜBERLAPP STARTPOS DES ursprünglichen??
+				
+				if (child_node_2_epos_s2 <= child_node_epos_s2) {
+				    	
+				        LIS_Node lis_child_2 = null;
+				    
+				    	if(this.all_nodes.containsKey((int) greedy_cover[i - 1].get(k))){
+				    	    lis_child_2 = this.all_nodes.get((int) greedy_cover[i - 1].get(k));
+				    	}
+				    	else {
+					  lis_child_2 = this.addNode((int) greedy_cover[i - 1].get(k));
 
-					if (lis_graph.all_nodes.containsKey(lis_child_2.label)) {
-						lis_child_2 = lis_graph.all_nodes.get(lis_child_2.label);
-					}
-					
+				    	}
 
-			
-					
-					if(lis_node.label.equals(" th")&&lis_child_2.label.equals("ir")) {
-						System.out.println("HIERR");
-						 System.out.println("i Knoten "+scdawg.get_node_label(child_node)+" i - 1 Knoten: " + scdawg.get_node_label(child_node_2)+" child_node_2_epos_s2 "+child_node_2_epos_s2
-								 +" "+ child_node_epos_s2 );
-									
-									System.out.println(lis_child_2.label+" ::: "+scdawg.get_node_label(child_node_2));
-
-
-					}
-					lis_graph.addTransition(lis_child, lis_child_2, child_node_2_epos_s2);
-					determineLis(greedy_cover, lcs_triples, node_ancestors, lis_graph, lis_child_2, next_column);
+				
+					this.addTransition(lis_child, lis_child_2, child_node_2_epos_s2);
 
 				}
 			}
+			
+
 
 		}
 		
+		if(i>0) determineLis(greedy_cover, lcs_triples, i-1);
 
+
+	}
+	
+	public LIS_Node addNode(int lcs_idx){
+        	Node cover_node = lcs_triples.get(lcs_idx).node;
+	    	LIS_Node n = new LIS_Node(scdawg.get_node_label(cover_node),0,lcs_idx);
+
+		all_nodes.put(lcs_idx, n);
+		return n;
 	}
 
 	public void addTransition(LIS_Node parent, LIS_Node child, int epos) {
 		parent.children.put(epos, child);
-		all_nodes.put(child.label, child);
 	}
 	
 	public ArrayList<LCS_Triple> get_alignment_greedy(){
@@ -348,8 +306,8 @@ public class LIS_Graph {
 
 		Util.writeFile(filename, result);
 
-		String[] cmd = { "/usr/bin/dot -Tsvg lis.dot -o " + outputfile + "_.svg" };
-//		String[] cmd = { "cmd.exe", "/c", "dot -Tsvg lis.dot -o " + outputfile + "_.svg" };
+//		String[] cmd = { "/usr/bin/dot -Tsvg lis.dot -o " + outputfile + "_.svg" };
+		String[] cmd = { "cmd.exe", "/c", "dot -Tsvg lis.dot -o " + outputfile + "_.svg" };
 
 		try {
 

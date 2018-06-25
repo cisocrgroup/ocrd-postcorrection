@@ -3,6 +3,7 @@ package de.lmu.cis.iba;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 public class LCS_Algorithm {
 	
 	  private Online_CDAWG_sym scdawg = null;
@@ -13,7 +14,7 @@ public class LCS_Algorithm {
 	  }
 
 	  public ArrayList[] build_greedy_cover(Node[] nodes_in_s1, HashMap<Node, ArrayList> nodes_endpos_s2,
-			    ArrayList<LCS_Triple> lcs_triples, HashMap<Node, Node> node_ancestors) {
+			    ArrayList<LCS_Triple> lcs_triples) {
 
 			// build greedy cover
 
@@ -67,15 +68,15 @@ public class LCS_Algorithm {
 
 
 					greedy_cover[0].add(lcs_index);
-					lcs_triples.get(lcs_index).column_number = 0;
-					
-					node_ancestors.put(nodes_in_s1[i], null);
+					lcs_triples.get(lcs_index).idx_ancestor = -1;
 					
 					first_node_found = true;
 				    }
 
 				    else {
-
+					
+					
+					
 					for (int k = 0; k < greedy_cover.length; k++) { // alle
 											// cover
 											// listen
@@ -84,9 +85,7 @@ public class LCS_Algorithm {
 					    if (greedy_cover[k].size() == 0) {
 						greedy_cover[k].add(lcs_index);
 						lcs_triples.get(lcs_index).column_number = k;
-						
-						node_ancestors.put(nodes_in_s1[i], lcs_triples
-							    .get((int) greedy_cover[k-1].get(greedy_cover[k-1].size() - 1)).node);
+						lcs_triples.get(lcs_index).idx_ancestor = (int) greedy_cover[k-1].get(greedy_cover[k-1].size() - 1);
 						
 						break;
 					    }
@@ -101,9 +100,8 @@ public class LCS_Algorithm {
 															     // hinzufügen
 						greedy_cover[k].add(lcs_index);
 						lcs_triples.get(lcs_index).column_number = k;
-						
-						node_ancestors.put(nodes_in_s1[i], lcs_triples
-							    .get((int) greedy_cover[k-1].get(greedy_cover[k-1].size() - 1)).node);
+						lcs_triples.get(lcs_index).idx_ancestor = (int) greedy_cover[k-1].get(greedy_cover[k-1].size() - 1);
+
 
 						break;
 					    }
@@ -128,8 +126,8 @@ public class LCS_Algorithm {
 		    public ArrayList<LCS_Triple> calculate_LCS(Node[] nodes_in_s1, HashMap<Node, ArrayList> nodes_endpos_s2) {
 
 			ArrayList<LCS_Triple> lcs_triples = new ArrayList<LCS_Triple>();
-			HashMap<Node, Node> node_ancestors = new HashMap<Node, Node>();
-			ArrayList[] greedy_cover = build_greedy_cover(nodes_in_s1, nodes_endpos_s2, lcs_triples, node_ancestors);
+			
+			ArrayList[] greedy_cover = build_greedy_cover(nodes_in_s1, nodes_endpos_s2, lcs_triples);
 			 this.print_greedy_cover(greedy_cover, lcs_triples);
 			// calculate lis
 
