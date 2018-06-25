@@ -143,8 +143,8 @@ public class Common_SCDAWG_Functions {
 					}
 				}
 			}
-			if (sinkshit.size() == 2 && (endpos_s1.size() == 1 && endpos_s2.size() == 1)) {
-				// if (sinkshit.size() == 2 && (endpos_s1.size() > 0 && endpos_s2.size() > 0)) {
+//			if (sinkshit.size() == 2 && (endpos_s1.size() == 1 && endpos_s2.size() == 1)) {
+			if (sinkshit.size() == 2 && (endpos_s1.size() > 0 && endpos_s2.size() > 0)) {
 				result.add(new Endpos_Pair(node, endpos_s1, endpos_s2));
 				continue mainloop;
 			}
