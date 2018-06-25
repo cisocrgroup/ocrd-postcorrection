@@ -111,8 +111,8 @@ public class TokenAlignmentTest extends de.lmu.cis.ocrd.test.Test {
 		final TokenAlignment tokens = new TokenAlignment(a).add(b);
 		assertThat(tokens.size(), is(3));
 		assertThat(tokens.get(0).toString(), is("Nach|Na,ch"));
-		assertThat(tokens.get(1).toString(), is("ahmunasm|a,h,m"));
-		assertThat(tokens.get(2).toString(), is("ürdig|u,n,g,s,w,ii,r,di,a,l"));
+		assertThat(tokens.get(1).toString(), is("ahmunasm|a"));
+		assertThat(tokens.get(2).toString(), is("ürdig|h,m,u,n,g,s,w,ii,r,di,a,l"));
 	}
 
 	@Test
