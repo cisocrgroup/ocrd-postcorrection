@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#set -x
+
+watch="target/ocrd-0.1-jar-with-dependencies.jar"
+wait_secs=20
+
+function block_for_change {
+		inotifywait -r -e modify,move,create,delete $watch
+		sleep $wait_secs; # sleep and wait for the build process to finish
+}
+
+java -jar target/ocrd-0.1-jar-with-dependencies.jar &
+pid=$!
+echo "STARTED $pid"
+while block_for_change; do
+		echo "KILLING $pid"
+		kill $pid || exit 1
+		wait $pid
+		java -jar target/ocrd-0.1-jar-with-dependencies.jar &
+		pid=$!
+		echo "STARTED $pid"
+done

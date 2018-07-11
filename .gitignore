@@ -1,0 +1,13 @@
+/target/classes/
+/target/test-classes/
+
+.project
+.dir-locals.el
+.classpath
+.settings/
+.idea
+doc
+
+src/webapp/assets/
+src/webapp/index.html
+/target/

@@ -1,0 +1,1406 @@
+{
+  "Vnheilfolles": {
+    "OCR": "Vnheilfolles",
+    "Candidates": [
+      {
+        "Suggestion": "Unheilvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": null,
+        "OCRPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 0.777747
+      },
+      {
+        "Suggestion": "Vnheilvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 1,
+        "Weight": 0.11111
+      },
+      {
+        "Suggestion": "Vnheilvolleꝛ",
+        "Modern": "unheilvoller",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "r",
+            "Right": "ꝛ",
+            "Pos": 11
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "ꝛ",
+            "Right": "s",
+            "Pos": 11
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.55549e-05
+      },
+      {
+        "Suggestion": "Ûnheilvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "û",
+            "Pos": 0
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "û",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.11099e-06
+      },
+      {
+        "Suggestion": "Ünheilvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "ü",
+            "Pos": 0
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "ü",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.11092e-06
+      },
+      {
+        "Suggestion": "Vnheilpholles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "v",
+            "Right": "ph",
+            "Pos": 6
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "ph",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.53966e-07
+      },
+      {
+        "Suggestion": "Vnheilvollem",
+        "Modern": "unheilvollem",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "m",
+            "Right": "s",
+            "Pos": 11
+          }
+        ],
+        "Distance": 2,
+        "Weight": 8.46548e-08
+      },
+      {
+        "Suggestion": "Vnheilvôlles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "o",
+            "Right": "ô",
+            "Pos": 7
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "ô",
+            "Right": "o",
+            "Pos": 7
+          }
+        ],
+        "Distance": 2,
+        "Weight": 8.46523e-13
+      },
+      {
+        "Suggestion": "Vnheilvölles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "o",
+            "Right": "ö",
+            "Pos": 7
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "ö",
+            "Right": "o",
+            "Pos": 7
+          }
+        ],
+        "Distance": 2,
+        "Weight": 8.46523e-13
+      },
+      {
+        "Suggestion": "Vnhejlvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "i",
+            "Right": "j",
+            "Pos": 4
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "j",
+            "Right": "i",
+            "Pos": 4
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 8.46509e-13
+      },
+      {
+        "Suggestion": "Vnheylvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "i",
+            "Right": "y",
+            "Pos": 4
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "y",
+            "Right": "i",
+            "Pos": 4
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 8.46509e-13
+      },
+      {
+        "Suggestion": "Vnheîlvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "i",
+            "Right": "î",
+            "Pos": 4
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "î",
+            "Right": "i",
+            "Pos": 4
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 8.46509e-13
+      },
+      {
+        "Suggestion": "Vnheilvolläs",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "ä",
+            "Pos": 10
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "ä",
+            "Right": "e",
+            "Pos": 10
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.5082e-13
+      },
+      {
+        "Suggestion": "Vnhêilvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "ê",
+            "Pos": 3
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "ê",
+            "Right": "e",
+            "Pos": 3
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.5082e-13
+      },
+      {
+        "Suggestion": "Vnhäilvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "ä",
+            "Pos": 3
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "ä",
+            "Right": "e",
+            "Pos": 3
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.5082e-13
+      },
+      {
+        "Suggestion": "Vnheilvollês",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "ê",
+            "Pos": 10
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "ê",
+            "Right": "e",
+            "Pos": 10
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.5082e-13
+      },
+      {
+        "Suggestion": "Vnheilvolleſ",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "s",
+            "Right": "ſ",
+            "Pos": 11
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "ſ",
+            "Right": "s",
+            "Pos": 11
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.37428e-13
+      },
+      {
+        "Suggestion": "Vnheilvolleß",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "s",
+            "Right": "ß",
+            "Pos": 11
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "ß",
+            "Right": "s",
+            "Pos": 11
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.37428e-13
+      },
+      {
+        "Suggestion": "Vnheilvollez",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "s",
+            "Right": "z",
+            "Pos": 11
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "z",
+            "Right": "s",
+            "Pos": 11
+          }
+        ],
+        "Distance": 2,
+        "Weight": 6.87128e-14
+      },
+      {
+        "Suggestion": "Vnnheilvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vnn",
+            "Pos": 0
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "n",
+            "Right": "",
+            "Pos": 2
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 7
+          }
+        ],
+        "Distance": 2,
+        "Weight": 8.8879e-21
+      },
+      {
+        "Suggestion": "Vnheilvoolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "o",
+            "Right": "oo",
+            "Pos": 7
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "o",
+            "Right": "",
+            "Pos": 8
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.88119e-22
+      },
+      {
+        "Suggestion": "Vnheilvollles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "l",
+            "Right": "ll",
+            "Pos": 8
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "l",
+            "Right": "",
+            "Pos": 8
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.78378e-22
+      },
+      {
+        "Suggestion": "Vnheillvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "l",
+            "Right": "ll",
+            "Pos": 5
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "l",
+            "Right": "",
+            "Pos": 6
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 7
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.78378e-22
+      },
+      {
+        "Suggestion": "Vnheilvolle",
+        "Modern": "unheilvolle",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "",
+            "Right": "s",
+            "Pos": 11
+          }
+        ],
+        "Distance": 2,
+        "Weight": 8.46565e-23
+      },
+      {
+        "Suggestion": "Vnheilvoles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "ll",
+            "Right": "l",
+            "Pos": 8
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "",
+            "Right": "l",
+            "Pos": 8
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.01586e-26
+      },
+      {
+        "Suggestion": "Vnheeilvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "ee",
+            "Pos": 3
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "e",
+            "Right": "",
+            "Pos": 3
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 7
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.50821e-27
+      },
+      {
+        "Suggestion": "Vnheilvollees",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "ee",
+            "Pos": 10
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "e",
+            "Right": "",
+            "Pos": 11
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.50821e-27
+      },
+      {
+        "Suggestion": "Vnheilvohlles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "o",
+            "Right": "oh",
+            "Pos": 7
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "h",
+            "Right": "",
+            "Pos": 8
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.69307e-27
+      },
+      {
+        "Suggestion": "Vnheielvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "i",
+            "Right": "ie",
+            "Pos": 4
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "e",
+            "Right": "",
+            "Pos": 5
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 7
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.69302e-27
+      },
+      {
+        "Suggestion": "Vnheilvolless",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "s",
+            "Right": "ss",
+            "Pos": 11
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "s",
+            "Right": "",
+            "Pos": 11
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.09943e-27
+      },
+      {
+        "Suggestion": "Vnheilvollehs",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "eh",
+            "Pos": 10
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "h",
+            "Right": "",
+            "Pos": 11
+          }
+        ],
+        "Distance": 2,
+        "Weight": 3.7623e-28
+      },
+      {
+        "Suggestion": "Vnhehilvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "eh",
+            "Pos": 3
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "h",
+            "Right": "",
+            "Pos": 4
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 7
+          }
+        ],
+        "Distance": 2,
+        "Weight": 3.7623e-28
+      },
+      {
+        "Suggestion": "Vnheilvollaes",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "ae",
+            "Pos": 10
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "a",
+            "Right": "",
+            "Pos": 10
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.50821e-28
+      },
+      {
+        "Suggestion": "Vnhaeilvolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "ae",
+            "Pos": 3
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "a",
+            "Right": "",
+            "Pos": 3
+          },
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 7
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.50821e-28
+      },
+      {
+        "Suggestion": "Vnheilvollesz",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "s",
+            "Right": "sz",
+            "Pos": 11
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "z",
+            "Right": "",
+            "Pos": 12
+          }
+        ],
+        "Distance": 2,
+        "Weight": 1.37428e-28
+      },
+      {
+        "Suggestion": "Vnheiluôlles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "v",
+            "Right": "u",
+            "Pos": 6
+          },
+          {
+            "Left": "o",
+            "Right": "ô",
+            "Pos": 7
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "uô",
+            "Right": "o",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 3.17464e-36
+      },
+      {
+        "Suggestion": "Vnheiluölles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "v",
+            "Right": "u",
+            "Pos": 6
+          },
+          {
+            "Left": "o",
+            "Right": "ö",
+            "Pos": 7
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "uö",
+            "Right": "o",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 3.17464e-36
+      },
+      {
+        "Suggestion": "Vnheilvolläes",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "ä",
+            "Pos": 10
+          },
+          {
+            "Left": "s$",
+            "Right": "es$",
+            "Pos": 11
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "ä",
+            "Right": "",
+            "Pos": 10
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.4819e-39
+      },
+      {
+        "Suggestion": "Vnheilvollêes",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "e",
+            "Right": "ê",
+            "Pos": 10
+          },
+          {
+            "Left": "s$",
+            "Right": "es$",
+            "Pos": 11
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "v",
+            "Right": "f",
+            "Pos": 6
+          },
+          {
+            "Left": "ê",
+            "Right": "",
+            "Pos": 10
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.4819e-39
+      },
+      {
+        "Suggestion": "Vnheiluoolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "u",
+            "Right": "v",
+            "Pos": 0
+          },
+          {
+            "Left": "v",
+            "Right": "u",
+            "Pos": 6
+          },
+          {
+            "Left": "o",
+            "Right": "oo",
+            "Pos": 7
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "uo",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 8.40779e-44
+      },
+      {
+        "Suggestion": "Vnheilluolles",
+        "Modern": "unheilvolles",
+        "Dict": "dict_modern_hypothetic_errors",
+        "HistPatterns": [
+          {
+            "Left": "un",
+            "Right": "vn",
+            "Pos": 0
+          },
+          {
+            "Left": "l",
+            "Right": "ll",
+            "Pos": 5
+          },
+          {
+            "Left": "v",
+            "Right": "u",
+            "Pos": 6
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "lu",
+            "Right": "f",
+            "Pos": 6
+          }
+        ],
+        "Distance": 2,
+        "Weight": 4.2039e-44
+      }
+    ]
+  },
+  "Waſſer": {
+    "OCR": "Waſſer",
+    "Candidates": [
+      {
+        "Suggestion": "Waser",
+        "Modern": "wasser",
+        "Dict": "dict_guikorpus_errors",
+        "HistPatterns": [
+          {
+            "Left": "ss",
+            "Right": "s",
+            "Pos": 2
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "s",
+            "Right": "ſſ",
+            "Pos": 2
+          }
+        ],
+        "Distance": 2,
+        "Weight": 0.499883
+      },
+      {
+        "Suggestion": "Warer",
+        "Modern": "wahrer",
+        "Dict": "dict_guikorpus_errors",
+        "HistPatterns": [
+          {
+            "Left": "ah",
+            "Right": "a",
+            "Pos": 1
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "r",
+            "Right": "ſſ",
+            "Pos": 2
+          }
+        ],
+        "Distance": 2,
+        "Weight": 0.499837
+      },
+      {
+        "Suggestion": "Wakker",
+        "Modern": "wagger",
+        "Dict": "dict_guikorpus_errors",
+        "HistPatterns": [
+          {
+            "Left": "g",
+            "Right": "k",
+            "Pos": 2
+          },
+          {
+            "Left": "g",
+            "Right": "k",
+            "Pos": 3
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "k",
+            "Right": "ſ",
+            "Pos": 2
+          },
+          {
+            "Left": "k",
+            "Right": "ſ",
+            "Pos": 3
+          }
+        ],
+        "Distance": 2,
+        "Weight": 0.000210126
+      },
+      {
+        "Suggestion": "Waͤger",
+        "Modern": "wäger",
+        "Dict": "dict_guikorpus_errors",
+        "HistPatterns": [
+          {
+            "Left": "ä",
+            "Right": "a◌ͤ",
+            "Pos": 1
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "◌ͤ",
+            "Right": "ſ",
+            "Pos": 2
+          },
+          {
+            "Left": "g",
+            "Right": "ſ",
+            "Pos": 3
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.63442e-05
+      },
+      {
+        "Suggestion": "Waher",
+        "Modern": "waer",
+        "Dict": "dict_guikorpus_errors",
+        "HistPatterns": [
+          {
+            "Left": "a",
+            "Right": "ah",
+            "Pos": 1
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "h",
+            "Right": "ſſ",
+            "Pos": 2
+          }
+        ],
+        "Distance": 2,
+        "Weight": 2.86077e-06
+      },
+      {
+        "Suggestion": "Waiser",
+        "Modern": "weiser",
+        "Dict": "dict_guikorpus_errors",
+        "HistPatterns": [
+          {
+            "Left": "ei",
+            "Right": "ai",
+            "Pos": 1
+          }
+        ],
+        "OCRPatterns": [
+          {
+            "Left": "is",
+            "Right": "ſ",
+            "Pos": 2
+          },
+          {
+            "Left": "",
+            "Right": "ſ",
+            "Pos": 4
+          }
+        ],
+        "Distance": 2,
+        "Weight": 6.09889e-10
+      }
+    ]
+  },
+  "empty": {
+    "OCR": "empty",
+    "Candidates": []
+  },
+  "null": {
+    "OCR": "null",
+    "Candidates": null
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "profiler": {
+    "arguments": [
+      "arg1",
+      "arg2"
+    ],
+    "executable": "/test/profiler/executable",
+    "languageDirectory": "/test/profiler/language/directory",
+    "language": "/test/profiler/language"
+  },
+  "languageModel": {
+    "characterTrigrams": "src/test/resources/nGrams.csv"
+  },
+  "dynamicLexiconTraining": {
+    "copyTrainingFiles": false,
+    "debugTrainingTokens": true,
+    "testEvaluationFraction": 2,
+    "features": [
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature",
+        "name": "TokenLengthClass",
+        "short": 3,
+        "medium": 8,
+        "long": 13
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.TokenCaseClassFeature",
+        "name": "TokenCaseClass"
+      },
+      {
+        "type": "de.lmu.cis.ocrd.ml.features.UnigramFeature",
+        "name": "UnigramOCRRelativeFrequency"
+      }
+    ]
+  }
+}
