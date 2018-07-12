@@ -90,7 +90,7 @@ public class LCS_Algorithm {
 						break;
 					    }
 
-					    else if (dec_elem < lcs_triples
+					    else if (dec_elem <= lcs_triples
 						    .get((int) greedy_cover[k].get(greedy_cover[k].size() - 1)).endpos_s2) { // wenn
 															     // kleiner
 															     // als
