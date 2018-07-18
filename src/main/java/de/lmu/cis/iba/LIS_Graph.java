@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-
 public class LIS_Graph {
 
 	public LIS_Node root;
@@ -30,99 +29,87 @@ public class LIS_Graph {
 
 	public void build_LCS_graph(Node[] nodes_in_s1, HashMap<Node, ArrayList> nodes_endpos_s2) {
 
-	 		LCS_Algorithm lcs = new LCS_Algorithm(this.scdawg);
-	 		
-	 		ArrayList<LCS_Triple> lcs_triples = new ArrayList<LCS_Triple>();
+		LCS_Algorithm lcs = new LCS_Algorithm(this.scdawg);
 
-	 		ArrayList[] greedy_cover =  lcs.build_greedy_cover(nodes_in_s1, nodes_endpos_s2, lcs_triples);
-	 		lcs.print_greedy_cover(greedy_cover, lcs_triples);
-	 		
-	 		this.lcs_triples = lcs_triples;
-	 		
-	 	
-	 		// calculate lis
+		ArrayList<LCS_Triple> lcs_triples = new ArrayList<LCS_Triple>();
 
+		ArrayList[] greedy_cover = lcs.build_greedy_cover(nodes_in_s1, nodes_endpos_s2, lcs_triples);
+		lcs.print_greedy_cover(greedy_cover, lcs_triples);
 
-	 		 int i_count = 0;
-	 		 for (int i = 0; i < greedy_cover.length; i++) {
-	 		 if (greedy_cover[i].size() > 0)
-	 		 i_count++;
-	 		 }
-	 		 System.out.println("----------------------------------------");
-	 		 
-	 		 
-	  		for (int x = 0; x < greedy_cover[i_count - 1].size(); x++) {
-		    	   LIS_Node lis_start_node = this.addNode((int) greedy_cover[i_count - 1].get(x));
-		    	   int lis_start_node_epos_s2 = lcs_triples.get((int) greedy_cover[i_count - 1].get(x)).endpos_s2;   
-	        	   this.addTransition(this.root, lis_start_node, lis_start_node_epos_s2);
-	 		   determineLis(greedy_cover, lcs_triples, i_count - 1);
-	  		}
-	 	}
-	
+		this.lcs_triples = lcs_triples;
 
-	
+		// calculate lis
+
+		int i_count = 0;
+		for (int i = 0; i < greedy_cover.length; i++) {
+			if (greedy_cover[i].size() > 0)
+				i_count++;
+		}
+		// System.out.println("----------------------------------------");
+
+		for (int x = 0; x < greedy_cover[i_count - 1].size(); x++) {
+			LIS_Node lis_start_node = this.addNode((int) greedy_cover[i_count - 1].get(x));
+			int lis_start_node_epos_s2 = lcs_triples.get((int) greedy_cover[i_count - 1].get(x)).endpos_s2;
+			this.addTransition(this.root, lis_start_node, lis_start_node_epos_s2);
+			determineLis(greedy_cover, lcs_triples, i_count - 1);
+		}
+	}
+
 	public void determineLis(ArrayList[] greedy_cover, ArrayList<LCS_Triple> lcs_triples, int i) {
 
 		for (int x = 0; x < greedy_cover[i].size(); x++) {
 
 			LIS_Node lis_child = this.all_nodes.get((int) greedy_cover[i].get(x));
-			if(lis_child==null) continue;
-			
+			if (lis_child == null)
+				continue;
+
 			int child_node_epos_s2 = lcs_triples.get((int) greedy_cover[i].get(x)).endpos_s2;
-			
+
 			int ancestor_idx = lcs_triples.get((int) greedy_cover[i].get(x)).idx_ancestor;
 			//
 			// System.out.println("Knoten: " + scdawg.get_node_label(child_node) + "
 			// vorgänger "
 			// + scdawg.get_node_label(node_ancestors.get(child_node)));
-			
 
 			if (ancestor_idx == -1) {
 				break;
 			}
-			
-	
-			
-			System.out.println(i);
-			System.out.println(lis_child.label);
+
+			// System.out.println(i);
+			// System.out.println(lis_child.label);
 
 			for (int k = greedy_cover[i - 1].indexOf(ancestor_idx); k >= 0; k--) {
-			    
 
 				int child_node_2_epos_s2 = lcs_triples.get((int) greedy_cover[i - 1].get(k)).endpos_s2;
-				
+
 				// FÜR ÜBERLAPP STARTPOS DES ursprünglichen??
-				
+
 				if (child_node_2_epos_s2 <= child_node_epos_s2) {
-				    	
-				        LIS_Node lis_child_2 = null;
-				    
-				    	if(this.all_nodes.containsKey((int) greedy_cover[i - 1].get(k))){
-				    	    lis_child_2 = this.all_nodes.get((int) greedy_cover[i - 1].get(k));
-				    	}
-				    	else {
-					  lis_child_2 = this.addNode((int) greedy_cover[i - 1].get(k));
 
-				    	}
+					LIS_Node lis_child_2 = null;
 
-				
+					if (this.all_nodes.containsKey((int) greedy_cover[i - 1].get(k))) {
+						lis_child_2 = this.all_nodes.get((int) greedy_cover[i - 1].get(k));
+					} else {
+						lis_child_2 = this.addNode((int) greedy_cover[i - 1].get(k));
+
+					}
+
 					this.addTransition(lis_child, lis_child_2, child_node_2_epos_s2);
 
 				}
 			}
-			
-
 
 		}
-		
-		if(i>0) determineLis(greedy_cover, lcs_triples, i-1);
 
+		if (i > 0)
+			determineLis(greedy_cover, lcs_triples, i - 1);
 
 	}
-	
-	public LIS_Node addNode(int lcs_idx){
-        	Node cover_node = lcs_triples.get(lcs_idx).node;
-	    	LIS_Node n = new LIS_Node(scdawg.get_node_label(cover_node),0,lcs_idx);
+
+	public LIS_Node addNode(int lcs_idx) {
+		Node cover_node = lcs_triples.get(lcs_idx).node;
+		LIS_Node n = new LIS_Node(scdawg.get_node_label(cover_node), 0, lcs_idx);
 
 		all_nodes.put(lcs_idx, n);
 		return n;
@@ -131,31 +118,31 @@ public class LIS_Graph {
 	public void addTransition(LIS_Node parent, LIS_Node child, int epos) {
 		parent.children.put(epos, child);
 	}
-	
-	public ArrayList<LCS_Triple> get_alignment_greedy(){
-		
+
+	public ArrayList<LCS_Triple> get_alignment_greedy() {
+
 		ArrayList<LCS_Triple> result = new ArrayList<LCS_Triple>();
-		
+
 		ArrayList<ArrayList<LCS_Triple>> all_longest_common_subsequences = this.serialize_all_LCS();
-		
+
 		int max_sum = 0;
 		ArrayList<LCS_Triple> arg_max = null;
-		
+
 		for (ArrayList<LCS_Triple> alignment : all_longest_common_subsequences) {
-		int sum = 0;
-	
+			int sum = 0;
+
 			for (LCS_Triple t : alignment) {
-				sum+= scdawg.get_node_length(t.node);
+				sum += scdawg.get_node_length(t.node);
 			}
-		if(sum>max_sum) {
-			max_sum = sum;
-			arg_max = alignment;
-		}
-			
+			if (sum > max_sum) {
+				max_sum = sum;
+				arg_max = alignment;
+			}
+
 		}
 		Collections.reverse(arg_max);
 		return arg_max;
-		
+
 	}
 
 	// *******************************************************************************
@@ -236,39 +223,38 @@ public class LIS_Graph {
 	}
 
 	public void printLCS() {
-		
+
 		ArrayList<ArrayList<LCS_Triple>> longest_common_subsequences = this.serialize_all_LCS();
-		
+
 		for (int u = 0; u < longest_common_subsequences.size(); u++) {
 			ArrayList<LCS_Triple> lis = longest_common_subsequences.get(u);
 			for (int i = 0; i < lis.size(); i++) {
 				int e1 = lis.get(i).endpos_s1;
 				int e2 = lis.get(i).endpos_s2;
 				String nodelabel = scdawg.get_node_label(lis.get(i).node);
-				System.out.printf("\"%s\":e1:\"%s\", e2:\"%s\"\n", nodelabel, e1, e2);
+				// System.out.printf("\"%s\":e1:\"%s\", e2:\"%s\"\n", nodelabel, e1, e2);
 			}
-			System.out.println("---------------------------------------");
+			// System.out.println("---------------------------------------");
 		}
 
 	}
 
 	public void printLCS(ArrayList<LCS_Triple> lis) {
-		
-			for (int i = 0; i < lis.size(); i++) {
-				int e1 = lis.get(i).endpos_s1;
-				int e2 = lis.get(i).endpos_s2;
-				String nodelabel = scdawg.get_node_label(lis.get(i).node);
-				System.out.printf("\"%s\":e1:\"%s\", e2:\"%s\"\n", nodelabel, e1, e2);
-			}
-			System.out.println("---------------------------------------");
-		
+
+		for (int i = 0; i < lis.size(); i++) {
+			int e1 = lis.get(i).endpos_s1;
+			int e2 = lis.get(i).endpos_s2;
+			String nodelabel = scdawg.get_node_label(lis.get(i).node);
+			// System.out.printf("\"%s\":e1:\"%s\", e2:\"%s\"\n", nodelabel, e1, e2);
+		}
+		// System.out.println("---------------------------------------");
 
 	}
-	
+
 	public void print_graph(String outputfile) {
 
 		long startTime = System.currentTimeMillis();
-		System.out.println(" ..printing Graph ");
+		// System.out.println(" ..printing Graph ");
 
 		String filename = "lis.dot";
 
@@ -331,7 +317,7 @@ public class LIS_Graph {
 		}
 
 		long duration = System.currentTimeMillis() - startTime;
-		System.out.println(" ... took " + duration + " milliseconds");
+		// System.out.println(" ... took " + duration + " milliseconds");
 
 	} // print_automaton()
 
@@ -343,6 +329,7 @@ public class LIS_Graph {
 		StringBuilder node_sstr = new StringBuilder();
 
 		this.eachNode_DFS(this.root, true, false, new Visitor() {
+			@Override
 			public void visit(LIS_Node node) {
 
 				node_sstr.append("\"" + node.label + "\"");
@@ -365,6 +352,7 @@ public class LIS_Graph {
 		StringBuilder edge_sstr = new StringBuilder();
 
 		this.eachNode_DFS(this.root, true, false, new Visitor() {
+			@Override
 			public void visit(LIS_Node node) {
 
 				Iterator it = node.children.entrySet().iterator();

@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-
 public abstract class IndexStructure {
 
 	public HashMap<String, Integer> utf8_sequence_map;
@@ -93,31 +92,31 @@ public abstract class IndexStructure {
 
 		if (print) {
 
-			System.out.println(" alphabet statistic ");
-			System.out.println(" --------- ");
+			// System.out.println(" alphabet statistic ");
+			// System.out.println(" --------- ");
 
 			utf8_sequence_count = Util.sortByValues(utf8_sequence_count, "DESC");
 
 			it = utf8_sequence_count.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry pair = (Map.Entry) it.next();
-				System.out.println(" " + pair.getKey() + " : 	" + pair.getValue());
+				// System.out.println(" " + pair.getKey() + " : " + pair.getValue());
 			}
 
-			System.out.println(" alphabet length " + utf8_sequence_map.size());
-			System.out.println(" --------- ");
+			// System.out.println(" alphabet length " + utf8_sequence_map.size());
+			// System.out.println(" --------- ");
 
 			// alphabet mapping
 
-			System.out.println(" alphabet mapping ");
-			System.out.println(" --------- ");
+			// System.out.println(" alphabet mapping ");
+			// System.out.println(" --------- ");
 
 			utf8_sequence_map = Util.sortByValues(utf8_sequence_map, "ASC");
 
 			it = utf8_sequence_map.entrySet().iterator();
 			while (it.hasNext()) {
 				Map.Entry pair = (Map.Entry) it.next();
-				System.out.println(" " + pair.getKey() + " :	 " + pair.getValue());
+				// System.out.println(" " + pair.getKey() + " : " + pair.getValue());
 			}
 		}
 

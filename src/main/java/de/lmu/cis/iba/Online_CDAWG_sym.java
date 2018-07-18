@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.pmw.tinylog.Logger;
 
-
 // import indexstructure.Neo4J_Handler;
 
 public class Online_CDAWG_sym extends IndexStructure {
@@ -19,7 +18,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 	public Node root, sink, suffixstate, old_suffixstate, split;
 
 	public ArrayList<Node> all_nodes;
-	public ArrayList<Node> sinks = new ArrayList();
+	public ArrayList<Node> sinks = new ArrayList<>();
 
 	int id_cnt;
 	int split_cnt = 0;
@@ -44,7 +43,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 
 		this.print = print;
 
-		all_nodes = new ArrayList();
+		all_nodes = new ArrayList<>();
 
 	} // Online_CDAWG()
 
@@ -94,10 +93,10 @@ public class Online_CDAWG_sym extends IndexStructure {
 
 			Node next = ap.active_node.children.get(ap.active_edge);
 
-			while(ap.active_length>0) {
-			    canonize(next,pos);
+			while (ap.active_length > 0) {
+				canonize(next, pos);
 			}
-			
+
 			sink.suffixLink = ap.active_node;
 			// Logger.debug(all_nodes.size());
 
@@ -512,8 +511,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 
 				}
 				if (print)
-					System.out
-							.println("APPPPP " + ap.active_node.id + " " + ap.active_edge + " al " + ap.active_length);
+					Logger.debug("APPPPP " + ap.active_node.id + " " + ap.active_edge + " al " + ap.active_length);
 				if (print)
 					Logger.debug(" pos: " + pos + " " + input_text.charAt(pos) + " (active_node: " + ap.active_node.id
 							+ " <" + this.get_node_label(ap.active_node) + "> active_edge: " + ap.active_edge + " ["
@@ -558,6 +556,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 	// get_node_label()
 	// *******************************************************************************
 
+	@Override
 	public String get_node_label(Node node) {
 
 		String result;
@@ -584,6 +583,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 	// get_node_length()
 	// *******************************************************************************
 
+	@Override
 	public int get_node_length(Node node) {
 
 		return node.pathlength;
@@ -594,6 +594,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 	// get_edge_label()
 	// *******************************************************************************
 
+	@Override
 	public String get_edge_label(int letter_idx, Node parent, Node node) {
 
 		String rep_parent = get_node_label(parent);
@@ -621,6 +622,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 	// get_edge_label_left()
 	// *******************************************************************************
 
+	@Override
 	public String get_edge_label_left(int letter_idx, Node parent, Node node) {
 
 		String rep_parent = new StringBuilder(get_node_label(parent)).toString();
@@ -651,6 +653,7 @@ public class Online_CDAWG_sym extends IndexStructure {
 	// get_edge_length()
 	// *******************************************************************************
 
+	@Override
 	public int get_edge_length(int letter_idx, Node parent, Node node) {
 
 		String rep_parent = get_node_label(parent);

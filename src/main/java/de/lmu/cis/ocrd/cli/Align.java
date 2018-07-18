@@ -1,0 +1,74 @@
+package de.lmu.cis.ocrd.cli;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Optional;
+import java.util.StringJoiner;
+
+import de.lmu.cis.ocrd.NormalizerTransducer;
+import de.lmu.cis.ocrd.align.Graph;
+import de.lmu.cis.ocrd.align.TokenAlignment;
+
+
+public class Align {
+	public static void main(String[] args) throws IOException {
+		final Optional<Integer> n = parseArg(args);
+		if (!n.isPresent()) {
+			throw new RuntimeException("missing integer argument");
+		}
+		if (n.get() <= 0) {
+			throw new RuntimeException("invalid integer argument: " + n.get());
+		}
+		align(n.get());
+	}
+
+	private static void align(int n) throws IOException {
+		String[] lines = new String[n];
+		while (readLines(System.in, lines)) {
+			alignLines(lines);
+		}
+	}
+
+	private static void alignLines(String[] lines) {
+		assert (lines.length > 0);
+		final String master = NormalizerTransducer.normalize(lines[0]);
+		final TokenAlignment tokenAlignment = new TokenAlignment(master);
+		for (int i = 1; i < lines.length; i++) {
+			final String other = NormalizerTransducer.normalize(lines[i]);
+			final Graph g = new Graph(master, other);
+			final String pairwise = g.getStartNode().toString();
+			assert (pairwise.length() > 1); // #...$
+			System.out.println(pairwise.replace('|', ':'));
+			tokenAlignment.add(other);
+		}
+		final StringJoiner sj = new StringJoiner(",");
+		for (TokenAlignment.Token t : tokenAlignment) {
+			sj.add(t.toString().replace('|', ':').replace(',', ' '));
+		}
+		System.out.println(sj.toString());
+	}
+
+	private static boolean readLines(InputStream in, String[] lines) throws IOException {
+		final BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		for (int i = 0; i < lines.length; i++) {
+			final String line = br.readLine();
+			if (line == null) {
+				if (i != 0) {
+					throw new IOException("premature EOF");
+				}
+				return false;
+			}
+			lines[i] = line;
+		}
+		return true;
+	}
+
+	private static Optional<Integer> parseArg(String[] args) {
+		if (args.length != 1) {
+			return Optional.empty();
+		}
+		return Optional.of(Integer.parseInt(args[0]));
+	}
+}
