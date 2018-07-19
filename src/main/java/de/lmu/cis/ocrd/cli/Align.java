@@ -1,15 +1,14 @@
 package de.lmu.cis.ocrd.cli;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Optional;
-import java.util.StringJoiner;
-
 import de.lmu.cis.ocrd.NormalizerTransducer;
 import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.TokenAlignment;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Optional;
+import java.util.StringJoiner;
 
 
 public class Align {
@@ -26,7 +25,8 @@ public class Align {
 
 	private static void align(int n) throws IOException {
 		String[] lines = new String[n];
-		while (readLines(System.in, lines)) {
+		final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		while (readLines(br, lines)) {
 			alignLines(lines);
 		}
 	}
@@ -50,17 +50,15 @@ public class Align {
 		System.out.println(sj.toString());
 	}
 
-	private static boolean readLines(InputStream in, String[] lines) throws IOException {
-		final BufferedReader br = new BufferedReader(new InputStreamReader(in));
+	private static boolean readLines(BufferedReader br, String[] lines) throws IOException {
 		for (int i = 0; i < lines.length; i++) {
-			final String line = br.readLine();
-			if (line == null) {
+			lines[i] = br.readLine();
+			if (lines[i] == null) {
 				if (i != 0) {
 					throw new IOException("premature EOF");
 				}
 				return false;
 			}
-			lines[i] = line;
 		}
 		return true;
 	}
