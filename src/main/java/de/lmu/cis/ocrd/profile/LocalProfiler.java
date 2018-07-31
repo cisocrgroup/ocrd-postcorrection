@@ -3,7 +3,6 @@ package de.lmu.cis.ocrd.profile;
 import de.lmu.cis.ocrd.Document;
 import org.pmw.tinylog.Logger;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class LocalProfiler implements Profiler {
-    private String exe, language, workdir, langdir;
+	private String exe, language, langdir;
     private String[] args;
 	private Document inputDocument;
 	private Path outputPath;
@@ -20,7 +19,6 @@ public class LocalProfiler implements Profiler {
 
 	public LocalProfiler() {
         this.exe = "profiler";
-        this.workdir = ".";
         this.langdir = "/data";
     }
 
@@ -29,10 +27,6 @@ public class LocalProfiler implements Profiler {
         return this;
     }
 
-    public LocalProfiler withWorkDirectory(String workdir) {
-        this.workdir = workdir;
-        return this;
-    }
     public LocalProfiler withLanguage(String language) {
         this.language = language;
         return this;
@@ -77,8 +71,6 @@ public class LocalProfiler implements Profiler {
 		ProcessBuilder builder = new ProcessBuilder();
 		final List<String> command = makeArgs();
 		builder.command(command);
-		// TODO: check if the work-dir really is needed
-		builder.directory(new File(this.workdir));
 		Logger.info("profiler command: " + String.join(" ", command));
 		return builder.start();
     }
