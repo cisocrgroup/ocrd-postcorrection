@@ -3,12 +3,18 @@ package de.lmu.cis.ocrd.cli;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.profile.LocalProfiler;
 import de.lmu.cis.ocrd.profile.Profiler;
+import org.pmw.tinylog.Configurator;
+import org.pmw.tinylog.writers.ConsoleWriter;
 
 import java.io.*;
 import java.util.Optional;
 
 public class Profile implements Closeable {
 	public static void main(String[] args) {
+		Configurator.
+				currentConfig().
+				writer(new ConsoleWriter(System.err)).
+				activate();
 		final Optional<LocalProfiler> profiler = parseArgs(args);
 		if (!profiler.isPresent()) {
 			throw new RuntimeException("invalid or missing arguments; expected: exe dir language");
