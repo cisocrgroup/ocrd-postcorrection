@@ -78,6 +78,6 @@ public class Profile implements Closeable {
 	}
 
 	private static void writeProfileToStdout(de.lmu.cis.ocrd.profile.Profile profile) {
-		System.out.print(new Gson().toJson(profile));
+		System.out.println(new Gson().toJson(profile));
 	}
 }
