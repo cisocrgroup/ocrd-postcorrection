@@ -1,12 +1,7 @@
 package de.lmu.cis.iba;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public abstract class IndexStructure {
 

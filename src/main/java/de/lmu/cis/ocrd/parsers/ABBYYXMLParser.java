@@ -9,6 +9,15 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 
 public class ABBYYXMLParser implements Parser {
+	private final org.w3c.dom.Document xml;
+	private final int pageid;
+	private SimpleDocument doc;
+
+	public ABBYYXMLParser(org.w3c.dom.Document xml, int pageid) {
+		this.xml = xml;
+		this.pageid = pageid;
+	}
+
 	private static String parseChar(Node charParam) throws Exception {
 		Node data = charParam.getFirstChild();
 		if (data == null) {
@@ -35,17 +44,6 @@ public class ABBYYXMLParser implements Parser {
 		return (double) 1 / (double) Integer.parseInt(c.getNodeValue());
 	}
 
-	private final org.w3c.dom.Document xml;
-
-	private final int pageid;
-
-	private SimpleDocument doc;
-
-	public ABBYYXMLParser(org.w3c.dom.Document xml, int pageid) {
-		this.xml = xml;
-		this.pageid = pageid;
-	}
-
 	@Override
 	public SimpleDocument parse() throws Exception {
 		NodeList lines = xml.getElementsByTagName("line");
@@ -68,10 +66,10 @@ public class ABBYYXMLParser implements Parser {
 		for (int i = 0; i < n; i++) {
 			String r = parseChar(charParams.item(i));
 			double c = parseConfidence(charParams.item(i));
-			r.codePoints().forEach((letter)->{
-			    str.appendCodePoint(letter);
-			    cs.add(c);
-            });
+			r.codePoints().forEach((letter) -> {
+				str.appendCodePoint(letter);
+				cs.add(c);
+			});
 		}
 		SimpleLine tmp = SimpleLine.normalized(str.toString(), cs).withLineID(lid).withPageID(pageid);
 		this.doc.add(this.pageid, tmp);

@@ -4,8 +4,8 @@ import com.google.gson.GsonBuilder;
 
 public class Prediction {
 	public final double value;
-	private final double[] confidences;
 	public final String label;
+	private final double[] confidences;
 
 	Prediction(double value, double[] confidences, String label) {
 		this.value = value;

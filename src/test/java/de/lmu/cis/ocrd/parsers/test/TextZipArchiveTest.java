@@ -6,7 +6,6 @@ import de.lmu.cis.ocrd.parsers.TextArchiveParser;
 import de.lmu.cis.ocrd.parsers.TextFileType;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class TextZipArchiveTest extends BaseDocumentTest {

@@ -8,11 +8,6 @@ import java.util.*;
 
 
 public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
-	private static class pair {
-		public HashSet<Integer> ids;
-		public Node node;
-	}
-
 	public LineAlignment_Fast(Document doc, int nlines) throws Exception {
 		super();
 
@@ -37,14 +32,15 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 
 		HashMap<Node, HashSet<Integer>> nodes_with_n_occs = scdawg_functions.get_n_string_occurences(nlines, ocrlines);
 
-		HashMap<Node,HashSet<Integer>> nodes_sorted = Util.sortByNodeLength(nodes_with_n_occs, "DESC",scdawg);
+		HashMap<Node, HashSet<Integer>> nodes_sorted = Util.sortByNodeLength(nodes_with_n_occs, "DESC", scdawg);
 		ArrayList<pair> nodes_sink_set = new ArrayList<>();
 
 		Iterator it3 = nodes_sorted.entrySet().iterator();
 
 		Logger.debug("starting main loop ...");
 		HashSet<Integer> usedIDs = new HashSet<>();
-		main_loop: while (it3.hasNext()) {
+		main_loop:
+		while (it3.hasNext()) {
 			Map.Entry pair = (Map.Entry) it3.next();
 
 			Node n = (Node) pair.getKey();
@@ -75,7 +71,8 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 		Logger.debug("done with main loop");
 		Logger.debug("starting sink loop");
 		// handle final nodes (special case if all ocrs are identical)
-		sinkloop: for (Node sink : scdawg.sinks) {
+		sinkloop:
+		for (Node sink : scdawg.sinks) {
 			if (sink.stringnumbers.size() == nlines) {
 				// it is impossilbe (?) that this node was used before
 				// Logger.debug("got sink with " + N + " sinks");
@@ -118,6 +115,11 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 			}
 			this.add(linetupel);
 		}
+	}
+
+	private static class pair {
+		public HashSet<Integer> ids;
+		public Node node;
 	}
 
 }

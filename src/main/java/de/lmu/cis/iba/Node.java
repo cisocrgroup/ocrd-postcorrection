@@ -1,10 +1,10 @@
 package de.lmu.cis.iba;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Node {
 

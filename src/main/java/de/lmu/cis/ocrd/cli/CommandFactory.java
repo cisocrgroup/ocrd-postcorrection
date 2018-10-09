@@ -13,12 +13,12 @@ public class CommandFactory {
 		if (!registry.containsKey(key)) {
 			return new InvalidCommand(key.toLowerCase());
 		}
-		return (Command)Class.forName(registry.get(key)).newInstance();
+		return (Command) Class.forName(registry.get(key)).newInstance();
 	}
 
 	// Puts the lower case getName() into the registry.
 	public <E extends Command> CommandFactory register(Class<E> command) throws Exception {
-	    registry.put(((Command)Class.forName(command.getName()).newInstance()).getName().toLowerCase(), command.getName());
+		registry.put(((Command) Class.forName(command.getName()).newInstance()).getName().toLowerCase(), command.getName());
 		return this;
 	}
 

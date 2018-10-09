@@ -6,11 +6,8 @@ import de.lmu.cis.ocrd.ml.Token;
 import java.util.*;
 
 class ErrorCounts {
-	private enum ErrorType {TRUE_POSITIVE, FALSE_POSITIVE, TRUE_NEGATIVE, FALSE_NEGATIVE}
-
 	private Map<ErrorType, List<Token>> counts = null;
 	private HashSet<String> types = null;
-
 	ErrorCounts(boolean typeBased) {
 		if (typeBased) {
 			this.types = new HashSet<>();
@@ -20,6 +17,35 @@ class ErrorCounts {
 	ErrorCounts() {
 		this(false);
 	}
+
+	private static double calculateRate(int a, int b) {
+		if (a + b == 0) {
+			return 1;
+		}
+		return (double) a / ((double) (a + b));
+	}
+
+	private static ErrorType getErrorType(Prediction prediction, Object gt) {
+		if (!(gt instanceof Boolean)) {
+			throw new RuntimeException("invalid ground truth: " + gt);
+		}
+		final Boolean want = (Boolean) gt;
+		final Boolean got = Boolean.valueOf(prediction.label);
+		if (want.equals(got)) {
+			if (want) {
+				return ErrorType.TRUE_POSITIVE;
+			} else {
+				return ErrorType.TRUE_NEGATIVE;
+			}
+		} else {
+			if (want) {
+				return ErrorType.FALSE_NEGATIVE;
+			} else {
+				return ErrorType.FALSE_POSITIVE;
+			}
+		}
+	}
+
 	int getTotalCount() {
 		return getTruePositiveCount() + getTrueNegativeCount() + getFalsePositiveCount() + getFalseNegativeCount();
 	}
@@ -41,7 +67,6 @@ class ErrorCounts {
 		counts.get(getErrorType(prediction, gt)).add(token);
 		return this;
 	}
-
 
 	int getTruePositiveCount() {
 		return getCount(ErrorType.TRUE_POSITIVE);
@@ -78,13 +103,6 @@ class ErrorCounts {
 		return (1 + b) * ((p * r) / ((p * b) + r));
 	}
 
-	private static double calculateRate(int a, int b) {
-		if (a + b == 0) {
-			return 1;
-		}
-		return (double) a / ((double) (a + b));
-	}
-
 	Iterable<Token> getTruePositives() {
 		return getIterable(ErrorType.TRUE_POSITIVE);
 	}
@@ -111,24 +129,5 @@ class ErrorCounts {
 		return counts.get(type).size();
 	}
 
-	private static ErrorType getErrorType(Prediction prediction, Object gt) {
-		if (!(gt instanceof Boolean)) {
-			throw new RuntimeException("invalid ground truth: " + gt);
-		}
-		final Boolean want = (Boolean) gt;
-		final Boolean got = Boolean.valueOf(prediction.label);
-		if (want.equals(got)) {
-			if (want) {
-				return ErrorType.TRUE_POSITIVE;
-			} else {
-				return ErrorType.TRUE_NEGATIVE;
-			}
-		} else {
-			if (want) {
-				return ErrorType.FALSE_NEGATIVE;
-			} else {
-				return ErrorType.FALSE_POSITIVE;
-			}
-		}
-	}
+	private enum ErrorType {TRUE_POSITIVE, FALSE_POSITIVE, TRUE_NEGATIVE, FALSE_NEGATIVE}
 }

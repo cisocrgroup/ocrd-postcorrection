@@ -7,14 +7,8 @@ import org.pmw.tinylog.Logger;
 import java.util.*;
 
 public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
-	private static class pair {
-		public HashSet<Integer> ids;
-		public Node node;
-	}
-
 	static ArrayList<Node> sinks = new ArrayList<Node>();
 	public ArrayList<String> stringset = new ArrayList<String>();
-
 	public LineAlignment(Document doc, int nlines) throws Exception {
 		super();
 
@@ -50,7 +44,8 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 
 		Logger.debug("starting main loop ...");
 		HashSet<Integer> usedIDs = new HashSet<Integer>();
-		main_loop: while (it3.hasNext()) {
+		main_loop:
+		while (it3.hasNext()) {
 			Map.Entry pair = (Map.Entry) it3.next();
 
 			Node n = (Node) pair.getKey();
@@ -76,7 +71,8 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 		Logger.debug("done with main loop");
 		Logger.debug("starting sink loop");
 		// handle final nodes (special case if all ocrs are identical)
-		sinkloop: for (Node sink : scdawg.sinks) {
+		sinkloop:
+		for (Node sink : scdawg.sinks) {
 			if (sink.stringnumbers.size() == nlines) {
 				// it is impossilbe (?) that this node was used before
 				// Logger.debug("got sink with " + N + " sinks");
@@ -128,6 +124,11 @@ public class LineAlignment extends ArrayList<ArrayList<OCRLine>> {
 			this.add(linetupel);
 			// Logger.debug();
 		}
+	}
+
+	private static class pair {
+		public HashSet<Integer> ids;
+		public Node node;
 	}
 
 }

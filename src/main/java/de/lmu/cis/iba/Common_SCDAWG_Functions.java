@@ -17,11 +17,79 @@ public class Common_SCDAWG_Functions {
 	}
 
 	/*********************************************************************************
+	 * find_n_transitions_to_sinks()
+	 *
+	 * Method searches for all nodes with occurences in n strings
+	 *
+	 * @param node:
+	 *            node from which search will be started
+	 **********************************************************************************/
+
+	public static HashSet<Integer> find_n_transitions_to_sinks(Node node, Online_CDAWG_sym scdawg,
+	                                                           HashSet<Integer> acc) {
+
+		Iterator it = node.children.entrySet().iterator();
+		HashSet<Integer> result = new HashSet<Integer>();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry) it.next();
+			Node child = (Node) pair.getValue();
+			for (int j = 0; j < scdawg.sinks.size(); j++) {
+				if (scdawg.sinks.get(j) == child) {
+					// if (!sinks.contains(scdawg.sinks.get(j))) {
+					for (int k = 0; k < scdawg.sinks.get(j).stringnumbers.size(); k++) {
+						acc.add(scdawg.sinks.get(j).stringnumbers.get(k));
+						// sinks.add(scdawg.sinks.get(j));
+					}
+					// }
+				}
+			}
+		}
+
+		Iterator it2 = node.children_left.entrySet().iterator();
+
+		while (it2.hasNext()) {
+
+			Map.Entry pair = (Map.Entry) it2.next();
+			Node child = (Node) pair.getValue();
+
+			for (int j = 0; j < scdawg.sinks.size(); j++) {
+				if (scdawg.sinks.get(j) == child) {
+					// if (!sinks.contains(scdawg.sinks.get(j))) {
+					for (int k = 0; k < scdawg.sinks.get(j).stringnumbers.size(); k++) {
+						acc.add(scdawg.sinks.get(j).stringnumbers.get(k));
+						// sinks.add(scdawg.sinks.get(j));
+					}
+					// }
+				}
+			}
+		}
+
+		// REC AUFRUF der Funktion mit den Kindern
+		Iterator it3 = node.children.entrySet().iterator();
+
+		while (it3.hasNext()) {
+
+			Map.Entry pair = (Map.Entry) it3.next();
+			Node child = (Node) pair.getValue();
+			find_n_transitions_to_sinks(child, scdawg, acc);
+		}
+
+		Iterator it4 = node.children_left.entrySet().iterator();
+
+		while (it4.hasNext()) {
+			Map.Entry pair = (Map.Entry) it4.next();
+			Node child = (Node) pair.getValue();
+			find_n_transitions_to_sinks(child, scdawg, acc);
+		}
+		return acc;
+	}
+
+	/*********************************************************************************
 	 * count_nodes()
-	 * 
+	 *
 	 * counts all paths for alle nodes in the SCDAWG left and right transitions from
 	 * one node are followed recursively
-	 * 
+	 *
 	 * @return
 	 **********************************************************************************/
 
@@ -76,7 +144,7 @@ public class Common_SCDAWG_Functions {
 
 	/*********************************************************************************
 	 * get_quasi_maximal_nodes_pairwise
-	 * 
+	 *
 	 * finds quasimaximal nodes für two strings simple quasi-max definition = direct
 	 * left + direct right edge to sink for start and end two left or two right
 	 * transitions
@@ -192,7 +260,7 @@ public class Common_SCDAWG_Functions {
 
 	/*********************************************************************************
 	 * get_distinct_quasimaximal_nodes()
-	 * 
+	 *
 	 * finds all quasimaximal Nodes with transitions to only one string quasimaximal
 	 * defined as either left or right transitions to exactly one string
 	 **********************************************************************************/
@@ -274,7 +342,7 @@ public class Common_SCDAWG_Functions {
 
 	/*********************************************************************************
 	 * childOf()
-	 * 
+	 *
 	 * Checks if one node is the direct child of another
 	 **********************************************************************************/
 
@@ -307,7 +375,7 @@ public class Common_SCDAWG_Functions {
 
 	/*********************************************************************************
 	 * get_string_occurences()
-	 * 
+	 *
 	 * Returns HashMap with nodes and a boolean value, whether the nodes occurs in
 	 * one or more strings
 	 **********************************************************************************/
@@ -381,7 +449,7 @@ public class Common_SCDAWG_Functions {
 
 	/*********************************************************************************
 	 * get_n_string_occurences()
-	 * 
+	 *
 	 * Returns HashMap with nodes and a HashSet value, whether the nodes occurs in
 	 * one or more strings
 	 **********************************************************************************/
@@ -478,9 +546,9 @@ public class Common_SCDAWG_Functions {
 
 	/*********************************************************************************
 	 * mark_children_of_single_occ_nodes()
-	 * 
+	 *
 	 * Marks children of marked_nodes (nodes only occuring) once
-	 * 
+	 *
 	 * @param marked_nodes:
 	 *            Result from mark_children_of_single_occ_nodes()
 	 **********************************************************************************/
@@ -556,7 +624,7 @@ public class Common_SCDAWG_Functions {
 
 	/*********************************************************************************
 	 * get_quasiminimal_nodes()
-	 * 
+	 *
 	 * Finds all quasiminimal nodes in an SCDAWG Quasiminimal defined as all nodes
 	 * with parent nodes occuring in more then one string while they only occur in
 	 * one string
@@ -607,9 +675,9 @@ public class Common_SCDAWG_Functions {
 
 	/*********************************************************************************
 	 * count_quasiminimal_nodes()
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 * @param marked_nodes:
 	 *            Result from get_string_occurences()
 	 **********************************************************************************/
@@ -671,10 +739,10 @@ public class Common_SCDAWG_Functions {
 
 	/*********************************************************************************
 	 * get_quasimaximal_nodes()
-	 * 
+	 *
 	 * Finds all quasimaximal nodes in an SCDAWG quasimaximal defined as longest
 	 * nodes occuring in (n) strings
-	 * 
+	 *
 	 * @param marked_nodes:
 	 *            Result from get_string_occurences()
 	 **********************************************************************************/
@@ -807,74 +875,6 @@ public class Common_SCDAWG_Functions {
 
 		return result;
 
-	}
-
-	/*********************************************************************************
-	 * find_n_transitions_to_sinks()
-	 * 
-	 * Method searches for all nodes with occurences in n strings
-	 * 
-	 * @param node:
-	 *            node from which search will be started
-	 **********************************************************************************/
-
-	public static HashSet<Integer> find_n_transitions_to_sinks(Node node, Online_CDAWG_sym scdawg,
-			HashSet<Integer> acc) {
-
-		Iterator it = node.children.entrySet().iterator();
-		HashSet<Integer> result = new HashSet<Integer>();
-		while (it.hasNext()) {
-			Map.Entry pair = (Map.Entry) it.next();
-			Node child = (Node) pair.getValue();
-			for (int j = 0; j < scdawg.sinks.size(); j++) {
-				if (scdawg.sinks.get(j) == child) {
-					// if (!sinks.contains(scdawg.sinks.get(j))) {
-					for (int k = 0; k < scdawg.sinks.get(j).stringnumbers.size(); k++) {
-						acc.add(scdawg.sinks.get(j).stringnumbers.get(k));
-						// sinks.add(scdawg.sinks.get(j));
-					}
-					// }
-				}
-			}
-		}
-
-		Iterator it2 = node.children_left.entrySet().iterator();
-
-		while (it2.hasNext()) {
-
-			Map.Entry pair = (Map.Entry) it2.next();
-			Node child = (Node) pair.getValue();
-
-			for (int j = 0; j < scdawg.sinks.size(); j++) {
-				if (scdawg.sinks.get(j) == child) {
-					// if (!sinks.contains(scdawg.sinks.get(j))) {
-					for (int k = 0; k < scdawg.sinks.get(j).stringnumbers.size(); k++) {
-						acc.add(scdawg.sinks.get(j).stringnumbers.get(k));
-						// sinks.add(scdawg.sinks.get(j));
-					}
-					// }
-				}
-			}
-		}
-
-		// REC AUFRUF der Funktion mit den Kindern
-		Iterator it3 = node.children.entrySet().iterator();
-
-		while (it3.hasNext()) {
-
-			Map.Entry pair = (Map.Entry) it3.next();
-			Node child = (Node) pair.getValue();
-			find_n_transitions_to_sinks(child, scdawg, acc);
-		}
-
-		Iterator it4 = node.children_left.entrySet().iterator();
-
-		while (it4.hasNext()) {
-			Map.Entry pair = (Map.Entry) it4.next();
-			Node child = (Node) pair.getValue();
-			find_n_transitions_to_sinks(child, scdawg, acc);
-		}
-		return acc;
 	}
 
 }

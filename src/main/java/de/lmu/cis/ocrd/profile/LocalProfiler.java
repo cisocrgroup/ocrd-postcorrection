@@ -12,35 +12,44 @@ import java.util.List;
 
 public class LocalProfiler implements Profiler {
 	private String exe, language, langdir;
-    private String[] args;
+	private String[] args;
 	private Document inputDocument;
 	private Path outputPath;
 	private Path inputPath;
 
 	public LocalProfiler() {
-        this.exe = "profiler";
-        this.langdir = "/data";
-    }
+		this.exe = "profiler";
+		this.langdir = "/data";
+	}
 
-    public LocalProfiler withExecutable(String exe) {
-        this.exe = exe;
-        return this;
-    }
+	private static String[] defaultArgs() {
+		return new String[]{
+				"--sourceFile",
+				"/dev/stdin",
+				"--sourceFormat",
+				"TXT",
+		};
+	}
 
-    public LocalProfiler withLanguage(String language) {
-        this.language = language;
-        return this;
-    }
+	public LocalProfiler withExecutable(String exe) {
+		this.exe = exe;
+		return this;
+	}
 
-    public LocalProfiler withLanguageDirectory(String langdir) {
-        this.langdir = langdir;
-        return this;
-    }
+	public LocalProfiler withLanguage(String language) {
+		this.language = language;
+		return this;
+	}
 
-    public LocalProfiler withArgs(String... args) {
-        this.args = args;
-        return this;
-    }
+	public LocalProfiler withLanguageDirectory(String langdir) {
+		this.langdir = langdir;
+		return this;
+	}
+
+	public LocalProfiler withArgs(String... args) {
+		this.args = args;
+		return this;
+	}
 
 	public LocalProfiler withInputPath(Path path) {
 		this.inputPath = path;
@@ -52,20 +61,20 @@ public class LocalProfiler implements Profiler {
 		return this;
 	}
 
-    @Override
-    public String toString() {
-        return String.join(" ", makeArgs());
-    }
+	@Override
+	public String toString() {
+		return String.join(" ", makeArgs());
+	}
 
-    @Override
-    public Profile profile() throws Exception {
+	@Override
+	public Profile profile() throws Exception {
 		Process profiler = startCommand();
-        final int exitStatus = profiler.waitFor();
-        if (exitStatus != 0) {
-            throw new Exception("profiler returned with exit value: " + exitStatus);
-        }
+		final int exitStatus = profiler.waitFor();
+		if (exitStatus != 0) {
+			throw new Exception("profiler returned with exit value: " + exitStatus);
+		}
 		return Profile.read(outputPath);
-    }
+	}
 
 	private Process startCommand() throws IOException {
 		ProcessBuilder builder = new ProcessBuilder();
@@ -73,14 +82,14 @@ public class LocalProfiler implements Profiler {
 		builder.command(command);
 		Logger.info("profiler command: " + String.join(" ", command));
 		return builder.start();
-    }
+	}
 
 	private List<String> makeArgs() {
-        List<String> res = new ArrayList<>();
-        res.add(exe);
-        res.addAll(Arrays.asList(defaultArgs()));
-        res.add("--config");
-        res.add(Paths.get(langdir, language + ".ini").toAbsolutePath().toString());
+		List<String> res = new ArrayList<>();
+		res.add(exe);
+		res.addAll(Arrays.asList(defaultArgs()));
+		res.add("--config");
+		res.add(Paths.get(langdir, language + ".ini").toAbsolutePath().toString());
 		res.add("--sourceFile");
 		res.add(inputPath.toString());
 		res.add("--jsonOutput");
@@ -88,15 +97,6 @@ public class LocalProfiler implements Profiler {
 		if (this.args != null) {
 			res.addAll(Arrays.asList(this.args));
 		}
-        return res;
-    }
-
-    private static String[] defaultArgs() {
-        return new String[]{
-                "--sourceFile",
-                "/dev/stdin",
-				"--sourceFormat",
-				"TXT",
-        };
-    }
+		return res;
+	}
 }

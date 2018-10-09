@@ -17,7 +17,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class BigLineAlignmentTest {
@@ -26,6 +25,21 @@ public class BigLineAlignmentTest {
 	private final String r3 = "src/test/resources/1841-DieGrenzboten-ocropus.zip";
 	private Project project;
 	private HashSet<String> gold;
+
+	private static String makeID(ArrayList<OCRLine> alignments) {
+		StringBuilder builder = new StringBuilder();
+		// not empty!
+		alignments.sort(Comparator.comparing(a -> a.ocrEngine));
+		for (OCRLine line : alignments) {
+			builder.append('|');
+			builder.append(line.pageSeq);
+			builder.append(':');
+			builder.append(line.line.getLineId());
+			builder.append(':');
+			builder.append(line.ocrEngine);
+		}
+		return builder.toString();
+	}
 
 	@Before
 	public void init() throws Exception {
@@ -67,20 +81,5 @@ public class BigLineAlignmentTest {
 			}
 		});
 		return set;
-	}
-
-	private static String makeID(ArrayList<OCRLine> alignments) {
-		StringBuilder builder = new StringBuilder();
-		// not empty!
-		alignments.sort(Comparator.comparing(a -> a.ocrEngine));
-		for (OCRLine line : alignments) {
-			builder.append('|');
-			builder.append(line.pageSeq);
-			builder.append(':');
-			builder.append(line.line.getLineId());
-			builder.append(':');
-			builder.append(line.ocrEngine);
-		}
-		return builder.toString();
 	}
 }

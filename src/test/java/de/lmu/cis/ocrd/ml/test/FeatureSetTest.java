@@ -6,29 +6,9 @@ import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class FeatureSetTest {
-	private class MockFeature extends NamedDoubleFeature {
-		private final double val;
-
-		MockFeature(double n) {
-			super("MockFeature");
-			this.val = n;
-		}
-
-		@Override
-		public boolean handlesOCR(int i, int n) {
-			return handlesOnlyMasterOCR(i, n);
-		}
-
-		@Override
-		protected double doCalculate(Token token, int ignored1, int ignored2) {
-			return val;
-		}
-	}
-
 	private FeatureSet features;
 
 	@Before
@@ -54,5 +34,24 @@ public class FeatureSetTest {
 	@Test
 	public void testSecondFeatureValue() {
 		assertThat(features.calculateFeatureVector(Token.create("a", 1), 1).get(1), is(3.0));
+	}
+
+	private class MockFeature extends NamedDoubleFeature {
+		private final double val;
+
+		MockFeature(double n) {
+			super("MockFeature");
+			this.val = n;
+		}
+
+		@Override
+		public boolean handlesOCR(int i, int n) {
+			return handlesOnlyMasterOCR(i, n);
+		}
+
+		@Override
+		protected double doCalculate(Token token, int ignored1, int ignored2) {
+			return val;
+		}
 	}
 }

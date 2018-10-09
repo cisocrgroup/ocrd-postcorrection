@@ -10,6 +10,19 @@ import java.io.*;
 import java.util.Optional;
 
 public class Profile implements Closeable {
+	private final Profiler profiler;
+	private final File inputFile, outputFile;
+
+	private Profile(LocalProfiler profiler) throws IOException {
+		this.inputFile = File.createTempFile("cis-profiler-in", ".txt");
+		this.inputFile.deleteOnExit();
+		this.outputFile = File.createTempFile("cis-profiler-out", ".json");
+		this.outputFile.deleteOnExit();
+		this.profiler = profiler.
+				withInputPath(inputFile.toPath()).
+				withOutputPath(outputFile.toPath());
+	}
+
 	public static void main(String[] args) {
 		Configurator.
 				currentConfig().
@@ -38,17 +51,8 @@ public class Profile implements Closeable {
 		);
 	}
 
-	private final Profiler profiler;
-	private final File inputFile, outputFile;
-
-	private Profile(LocalProfiler profiler) throws IOException {
-		this.inputFile = File.createTempFile("cis-profiler-in", ".txt");
-		this.inputFile.deleteOnExit();
-		this.outputFile = File.createTempFile("cis-profiler-out", ".json");
-		this.outputFile.deleteOnExit();
-		this.profiler = profiler.
-				withInputPath(inputFile.toPath()).
-				withOutputPath(outputFile.toPath());
+	private static void writeProfileToStdout(de.lmu.cis.ocrd.profile.Profile profile) {
+		System.out.println(new Gson().toJson(profile));
 	}
 
 	@Override
@@ -66,8 +70,8 @@ public class Profile implements Closeable {
 	private void writeStdinToFile() throws IOException {
 		try (BufferedWriter out = new BufferedWriter(
 				new FileWriter(inputFile));
-			 BufferedReader in = new BufferedReader(
-					 new InputStreamReader(System.in))
+		     BufferedReader in = new BufferedReader(
+				     new InputStreamReader(System.in))
 		) {
 			String line;
 			while ((line = in.readLine()) != null) {
@@ -75,9 +79,5 @@ public class Profile implements Closeable {
 				out.newLine();
 			}
 		}
-	}
-
-	private static void writeProfileToStdout(de.lmu.cis.ocrd.profile.Profile profile) {
-		System.out.println(new Gson().toJson(profile));
 	}
 }

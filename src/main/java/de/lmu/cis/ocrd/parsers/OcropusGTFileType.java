@@ -8,7 +8,7 @@ public class OcropusGTFileType implements OCRFileType {
 	public boolean check(Path path) {
 		final Matcher m = OcropusFileType.pattern.matcher(path.getParent().getFileName().toString());
 		if (m.matches()) {
-		    return path.toString().toLowerCase().endsWith(".gt.txt");
+			return path.toString().toLowerCase().endsWith(".gt.txt");
 		}
 		return false;
 	}

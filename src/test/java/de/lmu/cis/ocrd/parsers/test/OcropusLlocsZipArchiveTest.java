@@ -5,7 +5,6 @@ import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.parsers.OcropusArchiveLlocsParser;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class OcropusLlocsZipArchiveTest extends BaseDocumentTest {

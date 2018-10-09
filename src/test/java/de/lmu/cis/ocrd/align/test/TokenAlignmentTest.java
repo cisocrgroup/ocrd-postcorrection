@@ -4,7 +4,6 @@ import de.lmu.cis.ocrd.align.TokenAlignment;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class TokenAlignmentTest extends de.lmu.cis.ocrd.test.Test {
@@ -73,18 +72,18 @@ public class TokenAlignmentTest extends de.lmu.cis.ocrd.test.Test {
 
 	@Test
 	public void testBug3() {
-        TokenAlignment tokens;
+		TokenAlignment tokens;
 		final String a = "geſgenen eentraliſirten Volkes fragt die alten Städte Gent Briggr";
 		final String b = "gesogenen centralisirtenVollesz fragt die alten Städte Gent Brügge";
-        final String c = "gesogcnen centralisirten Volkes fragt die alten Städte Gent Brügge";
-        tokens = new TokenAlignment(a).add(b);
-        assertThat(tokens.size(), is (9));
-        tokens = new TokenAlignment(a).add(c);
+		final String c = "gesogcnen centralisirten Volkes fragt die alten Städte Gent Brügge";
+		tokens = new TokenAlignment(a).add(b);
 		assertThat(tokens.size(), is(9));
-        tokens = new TokenAlignment(a).add(b).add(c);
-        assertThat(tokens.size(), is(9));
-        tokens = new TokenAlignment(a).add(c).add(b);
-        assertThat(tokens.size(), is(9));
+		tokens = new TokenAlignment(a).add(c);
+		assertThat(tokens.size(), is(9));
+		tokens = new TokenAlignment(a).add(b).add(c);
+		assertThat(tokens.size(), is(9));
+		tokens = new TokenAlignment(a).add(c).add(b);
+		assertThat(tokens.size(), is(9));
 	}
 
 	@Test

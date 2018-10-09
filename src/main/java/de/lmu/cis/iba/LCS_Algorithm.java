@@ -1,4 +1,3 @@
-
 package de.lmu.cis.iba;
 
 import java.util.ArrayList;
@@ -6,15 +5,15 @@ import java.util.HashMap;
 
 public class LCS_Algorithm {
 
-	private Online_CDAWG_sym scdawg = null;
 	public ArrayList<ArrayList<LCS_Triple>> longest_common_subsequences = new ArrayList<ArrayList<LCS_Triple>>();
+	private Online_CDAWG_sym scdawg = null;
 
 	public LCS_Algorithm(Online_CDAWG_sym scdawg) {
 		this.scdawg = scdawg;
 	}
 
 	public ArrayList[] build_greedy_cover(Node[] nodes_in_s1, HashMap<Node, ArrayList> nodes_endpos_s2,
-			ArrayList<LCS_Triple> lcs_triples) {
+	                                      ArrayList<LCS_Triple> lcs_triples) {
 
 		// build greedy cover
 
@@ -52,25 +51,23 @@ public class LCS_Algorithm {
 					int lcs_index = lcs_triples.size() - 1;
 
 					if ((j == nodes_endpos_s2.get(nodes_in_s1[i]).size() - 1) & !first_node_found) { // erstes
-																										// element
-																										// immer
-																										// hinzufügen
-																										// // HIER
-																										// NUN DIE
-																										// INDIZES
-																										// ANSTATT
-																										// DER WERTE
-																										// ABER
-																										// IMMER MIT
-																										// TRIPEL
+						// element
+						// immer
+						// hinzufügen
+						// // HIER
+						// NUN DIE
+						// INDIZES
+						// ANSTATT
+						// DER WERTE
+						// ABER
+						// IMMER MIT
+						// TRIPEL
 
 						greedy_cover[0].add(lcs_index);
 						lcs_triples.get(lcs_index).idx_ancestor = -1;
 
 						first_node_found = true;
-					}
-
-					else {
+					} else {
 
 						for (int k = 0; k < greedy_cover.length; k++) { // alle
 							// cover
@@ -84,9 +81,7 @@ public class LCS_Algorithm {
 										.get(greedy_cover[k - 1].size() - 1);
 
 								break;
-							}
-
-							else if (dec_elem < lcs_triples
+							} else if (dec_elem < lcs_triples
 									.get((int) greedy_cover[k].get(greedy_cover[k].size() - 1)).endpos_s2) { // wenn
 								// kleiner
 								// als

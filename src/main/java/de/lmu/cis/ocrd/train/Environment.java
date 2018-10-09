@@ -38,8 +38,8 @@ public class Environment implements ArgumentFactory {
 	private static final String configurationFile = "configuration.json";
 
 	private final String path, name;
-	private Path gt, masterOCR;
 	private final List<Path> otherOCR = new ArrayList<>();
+	private Path gt, masterOCR;
 	private boolean copyTrainingFiles;
 	private boolean debugTokenAlignment;
 	private Configuration configuration;
@@ -54,6 +54,15 @@ public class Environment implements ArgumentFactory {
 		this.name = name;
 		setupDirectories();
 		setupTrainingDirectories(1);
+	}
+
+	private static void writeDocument(Document doc, Path out) throws Exception {
+		try (OutputStreamWriter w = new OutputStreamWriter(new FileOutputStream(out.toFile()))) {
+			doc.eachLine((line) -> {
+				w.write(line.line.getNormalized());
+				w.write('\n');
+			});
+		}
 	}
 
 	private void setupDirectories() throws IOException {
@@ -172,7 +181,6 @@ public class Environment implements ArgumentFactory {
 		return debugTokenAlignment;
 	}
 
-
 	public Environment withConfiguration(Configuration c) throws IOException {
 		try (OutputStream out = new FileOutputStream(fullPath(getConfigurationFile()).toFile())) {
 			IOUtils.write(c.toJSON(), out, Charset.forName("UTF-8"));
@@ -274,7 +282,7 @@ public class Environment implements ArgumentFactory {
 	public void zipTo(Path zip) throws IOException {
 		writeData();
 		try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip.toFile()))) {
-			eachFile((p)-> putZIPEntry(out, fullPath(p), p.toString()));
+			eachFile((p) -> putZIPEntry(out, fullPath(p), p.toString()));
 			out.finish();
 		}
 	}
@@ -313,10 +321,6 @@ public class Environment implements ArgumentFactory {
 		return Paths.get(getDynamicLexiconTrainingDirectory(i).toString(), evaluationFile);
 	}
 
-	private interface EachFileCallback {
-		void apply(Path path) throws IOException;
-	}
-
 	private void eachFile(EachFileCallback f) throws IOException {
 		final Data data = newData();
 		applyIfFileExists(f, Paths.get(data.configuration));
@@ -339,36 +343,6 @@ public class Environment implements ArgumentFactory {
 	private void applyIfFileExists(EachFileCallback f, Path path) throws IOException {
 		if (Files.exists(fullPath(path))) {
 			f.apply(path);
-		}
-	}
-
-	// Data class for the data of the training environment.
-	public static class Data {
-		public String gt;
-		public String masterOCR;
-		public String dynamicLexiconFeatureSet;
-		public String data;
-		String configuration;
-		public String[] otherOCR;
-		public String[] dynamicLexiconTrainingFiles;
-		public String[] dynamicLexiconEvaluationFiles;
-		public String[] dynamicLexiconTestFiles;
-		public String[] dynamicLexiconModelFiles;
-		public boolean copyTrainingFiles, debugTokenAlignment;
-
-		static Data fromJSON(Path path) throws IOException {
-			try (InputStream in = new FileInputStream(path.toFile())) {
-				return fromJSON(in);
-			}
-		}
-
-		private static Data fromJSON(InputStream in) throws IOException {
-			final String json = IOUtils.toString(in, Charsets.UTF_8);
-			return new Gson().fromJson(json, Data.class);
-		}
-
-		String toJSON() {
-			return new Gson().toJson(this);
 		}
 	}
 
@@ -440,12 +414,37 @@ public class Environment implements ArgumentFactory {
 		return freqMap;
 	}
 
-	private static void writeDocument(Document doc, Path out) throws Exception {
-		try (OutputStreamWriter w = new OutputStreamWriter(new FileOutputStream(out.toFile()))) {
-			doc.eachLine((line) -> {
-				w.write(line.line.getNormalized());
-				w.write('\n');
-			});
+	private interface EachFileCallback {
+		void apply(Path path) throws IOException;
+	}
+
+	// Data class for the data of the training environment.
+	public static class Data {
+		public String gt;
+		public String masterOCR;
+		public String dynamicLexiconFeatureSet;
+		public String data;
+		public String[] otherOCR;
+		public String[] dynamicLexiconTrainingFiles;
+		public String[] dynamicLexiconEvaluationFiles;
+		public String[] dynamicLexiconTestFiles;
+		public String[] dynamicLexiconModelFiles;
+		public boolean copyTrainingFiles, debugTokenAlignment;
+		String configuration;
+
+		static Data fromJSON(Path path) throws IOException {
+			try (InputStream in = new FileInputStream(path.toFile())) {
+				return fromJSON(in);
+			}
+		}
+
+		private static Data fromJSON(InputStream in) throws IOException {
+			final String json = IOUtils.toString(in, Charsets.UTF_8);
+			return new Gson().fromJson(json, Data.class);
+		}
+
+		String toJSON() {
+			return new Gson().toJson(this);
 		}
 	}
 }

@@ -8,17 +8,17 @@ public class NormalizerTransducer {
 	private int state;
 	private double prevConfidence;
 
-	public static String normalize(String str) {
-		final NormalizerTransducer t = new NormalizerTransducer(str.length());
-		str.codePoints().forEach((letter) -> t.delta(letter, 0));
-		return t.getNormalized();
-	}
-
 	public NormalizerTransducer(int n) {
 		this.prevConfidence = 0;
 		this.state = 0;
 		this.str = new StringBuilder(n);
 		this.cs = new ArrayList<>(n);
+	}
+
+	public static String normalize(String str) {
+		final NormalizerTransducer t = new NormalizerTransducer(str.length());
+		str.codePoints().forEach((letter) -> t.delta(letter, 0));
+		return t.getNormalized();
 	}
 
 	// state 0 -- alpha:alpha -> 1
@@ -31,37 +31,37 @@ public class NormalizerTransducer {
 		final boolean isAlpha = Unicode.isLetter(letter);
 
 		switch (state) {
-		case 0:
-			if (isAlpha) {
-				str.appendCodePoint(letter);
-				cs.add(confidence);
-				state = 1;
-			} else {
-				state = 0;
-			}
-			break;
-		case 1:
-			if (isAlpha) {
-				str.appendCodePoint(letter);
-				cs.add(confidence);
-				state = 1;
-			} else {
-				state = 2;
-			}
-			break;
-		case 2:
-			if (isAlpha) {
-				str.append(' ');
-				str.appendCodePoint(letter);
-				cs.add(prevConfidence);
-				cs.add(confidence);
-				state = 1;
-			} else {
-				state = 2;
-			}
-			break;
-		default:
-			throw new RuntimeException("normalizing: invalid state encountered: " + state);
+			case 0:
+				if (isAlpha) {
+					str.appendCodePoint(letter);
+					cs.add(confidence);
+					state = 1;
+				} else {
+					state = 0;
+				}
+				break;
+			case 1:
+				if (isAlpha) {
+					str.appendCodePoint(letter);
+					cs.add(confidence);
+					state = 1;
+				} else {
+					state = 2;
+				}
+				break;
+			case 2:
+				if (isAlpha) {
+					str.append(' ');
+					str.appendCodePoint(letter);
+					cs.add(prevConfidence);
+					cs.add(confidence);
+					state = 1;
+				} else {
+					state = 2;
+				}
+				break;
+			default:
+				throw new RuntimeException("normalizing: invalid state encountered: " + state);
 		}
 		prevConfidence = confidence;
 	}

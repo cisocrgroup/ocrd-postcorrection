@@ -21,6 +21,12 @@ public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
 		super(name);
 	}
 
+	private static int getIndex(int i, int n) {
+		assert (i > 0);
+		assert (i < n);
+		return i - 1;
+	}
+
 	@Override
 	public boolean handlesOCR(int i, int n) {
 		return handlesEveryOtherOCR(i, n);
@@ -50,11 +56,5 @@ public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
 		final Graph g = new Graph(otherOCRLine.getNormalized(), masterOCRLine.getNormalized());
 		nodes.set(j, g.getStartNode());
 		cache.set(j, otherOCRLine);
-	}
-
-	private static int getIndex(int i, int n) {
-		assert (i > 0);
-		assert (i < n);
-		return i - 1;
 	}
 }

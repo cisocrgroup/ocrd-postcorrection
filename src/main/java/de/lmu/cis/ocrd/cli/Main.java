@@ -8,10 +8,10 @@ public class Main {
 		try {
 			run(args);
 		} catch (ParseException e) {
-		    e.printStackTrace(System.err);
+			e.printStackTrace(System.err);
 			System.exit(2);
 		} catch (Exception e) {
-            e.printStackTrace(System.err);
+			e.printStackTrace(System.err);
 			System.exit(1);
 		}
 	}
@@ -22,7 +22,7 @@ public class Main {
 
 	// Parses command line arguments and execute command.
 	private static void run(String[] args) throws Exception {
-	    final CommandFactory commandFactory = makeCommandFactory();
+		final CommandFactory commandFactory = makeCommandFactory();
 		CommandLineArguments commandLineArguments = CommandLineArguments.fromCommandLine(args);
 		commandFactory.get(commandLineArguments.getCommand()).execute(commandLineArguments);
 	}

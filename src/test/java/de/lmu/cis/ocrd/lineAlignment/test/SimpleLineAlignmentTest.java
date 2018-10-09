@@ -1,4 +1,5 @@
 package de.lmu.cis.ocrd.lineAlignment.test;
+
 import de.lmu.cis.iba.LineAlignment;
 import de.lmu.cis.ocrd.OCRLine;
 import de.lmu.cis.ocrd.test.TestDocument;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class SimpleLineAlignmentTest {
@@ -148,7 +148,7 @@ public class SimpleLineAlignmentTest {
 	}
 
 	public int countCorrectAlignments(ArrayList<HashSet<Integer>> aligned_ids,
-			ArrayList<HashSet<Integer>> correct_ids) {
+	                                  ArrayList<HashSet<Integer>> correct_ids) {
 		int correctly_aligned = 0;
 
 		for (HashSet<Integer> correct_id_set : correct_ids) {

@@ -3,7 +3,6 @@ package de.lmu.cis.ocrd.align.test;
 import de.lmu.cis.ocrd.align.Graph;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 // TODO: merge with AlignmentGraphIteratorTest
@@ -68,7 +67,7 @@ public class AlignmentGraphTest {
 		final String b = "abcdef";
 		final Graph g = new Graph(a, b);
 		final double res = g.getStartNode().calculateOverlap();
-		assertThat(res, is(8.0/11.0));
+		assertThat(res, is(8.0 / 11.0));
 
 	}
 }

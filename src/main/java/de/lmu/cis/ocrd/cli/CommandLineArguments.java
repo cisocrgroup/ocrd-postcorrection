@@ -11,6 +11,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 
 public class CommandLineArguments {
+
 	private static final Option COMMAND = Option.builder("c").longOpt("command").desc("set CLI command (required)")
 			.hasArg().required().build();
 	private static final Option GROUPID = Option.builder("g").longOpt("group-id")
@@ -29,6 +30,9 @@ public class CommandLineArguments {
 			.desc("URL der Parameterdatei in JSON Format").hasArg().build();
 	private static final Option WORKDIR = Option.builder("w").longOpt("working-dir")
 			.desc("Arbeitsverzeichnis (required").hasArg().required().build();
+	private Configuration data;
+	private String groupID, logLevel, parameter, workdir, mets, output, command;
+	private String[] inputFilegrp, outputFilegrp, args;
 
 	private static CommandLineArguments defaultConfiguration() {
 		CommandLineArguments c = new CommandLineArguments();
@@ -102,12 +106,6 @@ public class CommandLineArguments {
 	private static String[] notNull(String[] strs) {
 		return strs == null ? new String[0] : strs;
 	}
-
-	private Configuration data;
-
-	private String groupID, logLevel, parameter, workdir, mets, output, command;
-
-	private String[] inputFilegrp, outputFilegrp, args;
 
 	public String[] getArgs() {
 		return notNull(args);

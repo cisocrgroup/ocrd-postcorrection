@@ -11,6 +11,14 @@ import java.util.stream.Stream;
 
 public class DirectoryArchive implements Archive {
 
+	private final Path dir;
+	private ArrayList<Entry> files;
+
+	public DirectoryArchive(String dir) throws IOException {
+		this.dir = Paths.get(dir);
+		this.files = readFiles(this.dir);
+	}
+
 	private static ArrayList<Entry> readFiles(Path dir) throws IOException {
 		ArrayList<Entry> entries = new ArrayList<Entry>();
 		try (Stream<Path> paths = Files.walk(dir)) {
@@ -19,15 +27,6 @@ public class DirectoryArchive implements Archive {
 			});
 		}
 		return entries;
-	}
-
-	private final Path dir;
-
-	private ArrayList<Entry> files;
-
-	public DirectoryArchive(String dir) throws IOException {
-		this.dir = Paths.get(dir);
-		this.files = readFiles(this.dir);
 	}
 
 	@Override

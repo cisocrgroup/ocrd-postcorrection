@@ -84,8 +84,8 @@ public class Align {
 			pair[1] += g1;
 			node = (Node) node.next(0).next(0);
 		}
-		pair[0] = pair[0].substring(1, pair[0].length()-1);
-		pair[1] = pair[1].substring(1, pair[1].length()-1);
+		pair[0] = pair[0].substring(1, pair[0].length() - 1);
+		pair[1] = pair[1].substring(1, pair[1].length() - 1);
 		return String.join(",", pair);
 	}
 

@@ -44,14 +44,14 @@ public class ZipArchive implements Archive {
 	@Override
 	public InputStream open(Entry entry) throws IOException {
 		if (!(entry instanceof ZipEntry)) {
-				throw new InvalidEntryException(entry);
+			throw new InvalidEntryException(entry);
 		}
 		return this.zip.getInputStream(((ZipEntry) entry).getUnderlying());
 	}
 
 	private void readEntries() {
 		this.entries = new ArrayList<Entry>();
-		for (Enumeration<? extends java.util.zip.ZipEntry> entries = this.zip.entries(); entries.hasMoreElements();) {
+		for (Enumeration<? extends java.util.zip.ZipEntry> entries = this.zip.entries(); entries.hasMoreElements(); ) {
 			java.util.zip.ZipEntry entry = entries.nextElement();
 			if (entry.isDirectory()) {
 				continue;

@@ -27,6 +27,23 @@ public class LogisticClassifier implements Classifier {
 		return classifier;
 	}
 
+	private static Instance setupInstance(Instance instance, FeatureSet.Vector features) throws Exception {
+		final int n = features.size() - 1; // last feature is GT
+		for (int i = 0; i < n; i++) {
+			final Object p = features.get(i);
+			if (p instanceof Double) {
+				instance.setValue(i, (double) p);
+			} else if (p instanceof String) {
+				instance.setValue(i, (String) p);
+			} else if (p instanceof Boolean) {
+				instance.setValue(i, (boolean) p ? "true" : "false");
+			} else {
+				throw new Exception("Invalid feature value of type: " + p.getClass());
+			}
+		}
+		return instance;
+	}
+
 	@Override
 	public Prediction predict(FeatureSet.Vector features) throws Exception {
 		final Instance instance = newInstance(features);
@@ -44,22 +61,5 @@ public class LogisticClassifier implements Classifier {
 		instance.setDataset(structure);
 		instances.put(n, instance);
 		return setupInstance(instances.get(n), features);
-	}
-
-	private static Instance setupInstance(Instance instance, FeatureSet.Vector features) throws Exception {
-		final int n = features.size() - 1; // last feature is GT
-		for (int i = 0; i < n; i++) {
-			final Object p = features.get(i);
-			if (p instanceof Double) {
-				instance.setValue(i, (double) p);
-			} else if (p instanceof String) {
-				instance.setValue(i, (String) p);
-			} else if (p instanceof Boolean) {
-				instance.setValue(i, (boolean) p ? "true" : "false");
-			} else {
-				throw new Exception("Invalid feature value of type: " + p.getClass());
-			}
-		}
-		return instance;
 	}
 }

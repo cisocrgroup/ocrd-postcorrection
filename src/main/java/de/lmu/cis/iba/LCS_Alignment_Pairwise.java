@@ -6,28 +6,9 @@ import java.util.HashMap;
 
 public class LCS_Alignment_Pairwise {
 
-	public static class AlignmentPair {
-		public final int epos1, epos2, spos1, spos2;
-		public final String label;
-
-		public AlignmentPair(String label, int epos1, int epos2) {
-			this.epos1 = epos1;
-			this.epos2 = epos2;
-			this.label = label;
-			spos1 = epos1 - this.label.length();
-			spos2 = epos2 - this.label.length();
-		}
-
-		@Override
-		public String toString() {
-			return String.format("{%s,%d,%d,%d,%d}", label, spos1, epos1, spos2, epos2);
-		}
-	}
-
+	public ArrayList<ArrayList<LCS_Triple>> longest_common_subsequences = new ArrayList<>();
 	ArrayList<LCS_Triple> pairs;
 	Online_CDAWG_sym scdawg;
-	public ArrayList<ArrayList<LCS_Triple>> longest_common_subsequences = new ArrayList<>();
-
 	Common_SCDAWG_Functions scdawg_functions;
 
 	public LCS_Alignment_Pairwise(String n1, String n2) {
@@ -98,6 +79,24 @@ public class LCS_Alignment_Pairwise {
 			res.add(new AlignmentPair(nodelabel, e1, e2));
 		}
 		return res;
+	}
+
+	public static class AlignmentPair {
+		public final int epos1, epos2, spos1, spos2;
+		public final String label;
+
+		public AlignmentPair(String label, int epos1, int epos2) {
+			this.epos1 = epos1;
+			this.epos2 = epos2;
+			this.label = label;
+			spos1 = epos1 - this.label.length();
+			spos2 = epos2 - this.label.length();
+		}
+
+		@Override
+		public String toString() {
+			return String.format("{%s,%d,%d,%d,%d}", label, spos1, epos1, spos2, epos2);
+		}
 	}
 
 }

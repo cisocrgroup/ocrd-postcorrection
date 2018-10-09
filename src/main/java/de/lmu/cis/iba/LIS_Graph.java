@@ -3,20 +3,14 @@ package de.lmu.cis.iba;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class LIS_Graph {
 
 	public LIS_Node root;
-	private Online_CDAWG_sym scdawg = null;
-
 	HashMap<Integer, LIS_Node> all_nodes = new HashMap<Integer, LIS_Node>();
 	ArrayList<LCS_Triple> lcs_triples = new ArrayList<LCS_Triple>();
+	private Online_CDAWG_sym scdawg = null;
 
 	public LIS_Graph(Online_CDAWG_sym scdawg) {
 		this.root = new LIS_Node("root", 0, -1);
@@ -293,7 +287,7 @@ public class LIS_Graph {
 		Util.writeFile(filename, result);
 
 //		String[] cmd = { "/usr/bin/dot -Tsvg lis.dot -o " + outputfile + "_.svg" };
-		String[] cmd = { "cmd.exe", "/c", "dot -Tsvg lis.dot -o " + outputfile + "_.svg" };
+		String[] cmd = {"cmd.exe", "/c", "dot -Tsvg lis.dot -o " + outputfile + "_.svg"};
 
 		try {
 
@@ -399,9 +393,7 @@ public class LIS_Graph {
 				if (all) {
 					visited.put(child.getValue(), true);
 					queue.add(child.getValue());
-				}
-
-				else if (!visited.containsKey(child.getValue())) {
+				} else if (!visited.containsKey(child.getValue())) {
 					visited.put(child.getValue(), true);
 
 					queue.add(child.getValue());
@@ -425,9 +417,7 @@ public class LIS_Graph {
 
 			if (all) {
 				DFSUtil(child.getValue(), rev, all, visited, v);
-			}
-
-			else if (!visited.containsKey(child.getValue())) {
+			} else if (!visited.containsKey(child.getValue())) {
 				DFSUtil(child.getValue(), rev, all, visited, v);
 			}
 		}

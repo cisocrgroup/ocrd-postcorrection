@@ -1,14 +1,13 @@
 package de.lmu.cis.ocrd.parsers.test;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
 
 import de.lmu.cis.ocrd.archive.Archive;
 import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.parsers.ALTOXMLFileType;
 import de.lmu.cis.ocrd.parsers.ALTOXMLParserFactory;
 import de.lmu.cis.ocrd.parsers.ArchiveParser;
+import org.junit.Test;
+
+import static org.junit.Assert.assertThat;
 
 public class ALTOZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/euler_rechenkunst01_1738.zip";

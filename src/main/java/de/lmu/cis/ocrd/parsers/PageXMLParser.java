@@ -21,7 +21,7 @@ public class PageXMLParser extends AbstractXPathParser {
 		}
 	}
 
-    PageXMLParser(Document xml, int pageID) {
+	PageXMLParser(Document xml, int pageID) {
 		super(xml, pageID);
 	}
 

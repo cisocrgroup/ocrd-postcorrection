@@ -1,11 +1,11 @@
 package de.lmu.cis.ocrd.parsers;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
 import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 public class ALTOXMLParser extends AbstractXPathParser {
 

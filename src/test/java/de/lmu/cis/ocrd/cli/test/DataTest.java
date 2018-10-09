@@ -8,24 +8,23 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class DataTest {
 	private CommandLineArguments commandLineArguments;
 
-    @Before
-    public void init() throws IOException, ParseException {
+	@Before
+	public void init() throws IOException, ParseException {
 		commandLineArguments = CommandLineArguments.fromCommandLine(
-                new String[]{
-                        "xxx", "-w", "w", "-O", "O", "-m", "M", "-I", "I", "-c", "c",
-                        "-p", "src/test/resources/testConfiguration.json",
-                }
-        );
-    }
+				new String[]{
+						"xxx", "-w", "w", "-O", "O", "-m", "M", "-I", "I", "-c", "c",
+						"-p", "src/test/resources/testConfiguration.json",
+				}
+		);
+	}
 
-    @Test
-    public void test() {
+	@Test
+	public void test() {
 		assertThat(commandLineArguments.getParameters().getProfiler().getExecutable(), is("/test/profiler/executable"));
 		assertThat(commandLineArguments.getParameters().getProfiler().getLanguageDirectory(), is("/test/profiler/language/directory"));
 		assertThat(commandLineArguments.getParameters().getProfiler().getLanguage(), is("/test/profiler/language"));
@@ -45,5 +44,5 @@ public class DataTest {
 		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.TokenCaseClassFeature"));
 		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[2], "name").getAsString(), is("UnigramOCRRelativeFrequency"));
 		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[2], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.UnigramFeature"));
-    }
+	}
 }

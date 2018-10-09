@@ -8,28 +8,28 @@ import de.lmu.cis.ocrd.ml.Token;
 
 public class MaxCharNGramsFeature extends NamedCharacterNGramFeature {
 	public MaxCharNGramsFeature(JsonObject o, ArgumentFactory factory) throws Exception {
-        this(JSONUtil.mustGetNameOrType(o), factory.getCharacterTrigrams());
-    }
+		this(JSONUtil.mustGetNameOrType(o), factory.getCharacterTrigrams());
+	}
 
-    public MaxCharNGramsFeature(String name, FreqMap ngrams) {
-        super(name, ngrams);
-    }
+	public MaxCharNGramsFeature(String name, FreqMap ngrams) {
+		super(name, ngrams);
+	}
 
-    @Override
-    public boolean handlesOCR(int i, int n) {
-        return handlesAnyOCR(i, n);
-    }
+	@Override
+	public boolean handlesOCR(int i, int n) {
+		return handlesAnyOCR(i, n);
+	}
 
-    @Override
-    public Object calculate(Token token, int i, int n) {
-        double max = Double.MIN_VALUE;
-        final Word word = i == 0 ? token.getMasterOCR() : token.getOtherOCRAt(i - 1);
-        for (String trigram : splitIntoCharacterNGrams(word.toString(), 3)) {
-            final double val = getNgrams().getRelative(trigram);
-            if (val > max) {
-                max = val;
-            }
-        }
-        return max;
-    }
+	@Override
+	public Object calculate(Token token, int i, int n) {
+		double max = Double.MIN_VALUE;
+		final Word word = i == 0 ? token.getMasterOCR() : token.getOtherOCRAt(i - 1);
+		for (String trigram : splitIntoCharacterNGrams(word.toString(), 3)) {
+			final double val = getNgrams().getRelative(trigram);
+			if (val > max) {
+				max = val;
+			}
+		}
+		return max;
+	}
 }
