@@ -7,7 +7,7 @@ import de.lmu.cis.ocrd.parsers.TextFileType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class TextZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/1841-DieGrenzboten-gt.zip";
 

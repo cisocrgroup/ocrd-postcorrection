@@ -6,7 +6,7 @@ import de.lmu.cis.ocrd.SimpleDocument;
 import org.junit.Test;
 
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class BaseDocumentTest {
 	private Document doc;
 	private Line line;

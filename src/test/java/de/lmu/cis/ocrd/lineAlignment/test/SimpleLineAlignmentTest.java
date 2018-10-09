@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class SimpleLineAlignmentTest {
 	@Test
 	public void testSimple() throws Exception {

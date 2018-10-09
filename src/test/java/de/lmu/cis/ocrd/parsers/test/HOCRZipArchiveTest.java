@@ -8,7 +8,7 @@ import de.lmu.cis.ocrd.parsers.HOCRParserFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class HOCRZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/1841-DieGrenzboten-tesseract.zip";
 

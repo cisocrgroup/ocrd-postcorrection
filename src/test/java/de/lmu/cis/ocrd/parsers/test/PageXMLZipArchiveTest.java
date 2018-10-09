@@ -8,6 +8,7 @@ import de.lmu.cis.ocrd.parsers.PageXMLParserFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class PageXMLZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/euler_rechenkunst01_1738.zip";

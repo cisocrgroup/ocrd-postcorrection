@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class EnvironmentTest extends TestBase {
 

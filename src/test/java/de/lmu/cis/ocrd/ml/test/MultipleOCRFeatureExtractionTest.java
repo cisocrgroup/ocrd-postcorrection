@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class MultipleOCRFeatureExtractionTest {
 	private final String gt = "First second third alongtoken anotherevenlongertoken the";

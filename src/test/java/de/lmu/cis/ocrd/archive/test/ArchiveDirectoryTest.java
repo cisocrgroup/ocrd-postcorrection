@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class ArchiveDirectoryTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/test-dir";
 	private Archive dir;

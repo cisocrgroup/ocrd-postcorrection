@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class DynamicLexiconTrainerTest extends TestBase {
 	private Environment environment;

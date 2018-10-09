@@ -7,8 +7,8 @@ import de.lmu.cis.ocrd.parsers.ALTOXMLParserFactory;
 import de.lmu.cis.ocrd.parsers.ArchiveParser;
 import org.junit.Test;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
 public class ALTOZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/euler_rechenkunst01_1738.zip";
 

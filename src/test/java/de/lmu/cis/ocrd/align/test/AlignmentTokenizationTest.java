@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class AlignmentTokenizationTest {
 	private static ArrayList<Pair> align(String a, String b) {

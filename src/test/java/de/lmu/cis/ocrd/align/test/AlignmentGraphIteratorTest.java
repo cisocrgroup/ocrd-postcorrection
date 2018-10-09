@@ -5,7 +5,7 @@ import de.lmu.cis.ocrd.align.LabelIterator;
 import org.junit.Test;
 
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class AlignmentGraphIteratorTest {
 
 	private static String makeString(Graph g, int id) {

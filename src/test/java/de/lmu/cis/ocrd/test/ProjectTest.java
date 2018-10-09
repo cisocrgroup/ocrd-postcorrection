@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class ProjectTest {
 	private Project project;

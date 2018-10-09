@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class ABBYYZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/1841-DieGrenzboten-abbyy.zip";

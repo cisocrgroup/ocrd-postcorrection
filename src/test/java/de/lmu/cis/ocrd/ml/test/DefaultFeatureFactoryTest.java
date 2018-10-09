@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class DefaultFeatureFactoryTest {
 	private static Optional<Feature> makeFeature(String json) throws Exception {
 		final FeatureFactory featureFactory = FeatureFactory.getDefault()

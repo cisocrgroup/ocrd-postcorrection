@@ -4,6 +4,7 @@ import de.lmu.cis.ocrd.align.Graph;
 import org.junit.Test;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 // TODO: merge with AlignmentGraphIteratorTest
 public class AlignmentGraphTest {

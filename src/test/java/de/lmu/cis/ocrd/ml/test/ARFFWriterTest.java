@@ -14,6 +14,7 @@ import java.io.StringWriter;
 import java.nio.charset.Charset;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class ARFFWriterTest {
 	private Instances is;

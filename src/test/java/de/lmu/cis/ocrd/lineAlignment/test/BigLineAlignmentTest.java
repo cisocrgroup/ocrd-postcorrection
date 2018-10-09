@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class BigLineAlignmentTest {
 	private final String r1 = "src/test/resources/1841-DieGrenzboten-abbyy.zip";

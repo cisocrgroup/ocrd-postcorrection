@@ -12,7 +12,7 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class FeatureFactoryTest {
 	private FeatureFactory featureFactory;
 

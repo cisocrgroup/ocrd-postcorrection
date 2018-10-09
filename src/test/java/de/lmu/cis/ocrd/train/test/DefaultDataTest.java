@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class DefaultDataTest {
 	private Configuration data;

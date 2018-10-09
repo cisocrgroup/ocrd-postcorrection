@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class ReadProfileFromJSONTest {
 	private static final String resource = "src/test/resources/profile-test.json";
 	private Profile profile;

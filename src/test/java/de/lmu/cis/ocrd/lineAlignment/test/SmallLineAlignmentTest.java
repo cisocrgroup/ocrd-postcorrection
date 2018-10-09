@@ -17,7 +17,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class SmallLineAlignmentTest {
 	private final String r1 = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";
 	private final String r2 = "src/test/resources/1841-DieGrenzboten-tesseract-small.zip";
