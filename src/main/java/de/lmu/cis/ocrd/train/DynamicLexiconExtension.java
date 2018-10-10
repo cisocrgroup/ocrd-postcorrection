@@ -1,7 +1,8 @@
 package de.lmu.cis.ocrd.train;
 
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.Option;
+
 
 import de.lmu.cis.ocrd.cli.CommandLineArguments;
 
@@ -62,6 +63,7 @@ class DynamicLexiconExtension {
 			.addOption(FEATURES);
 	}
 
+	@SuppressWarnings("unused")
 	private void run(String[] args) {
 		CommandLineParser parser = new DefaultParser();
 		CommandLine line = parser.parse(options(), args);
