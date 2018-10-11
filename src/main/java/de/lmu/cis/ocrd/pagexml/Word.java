@@ -21,7 +21,7 @@ public class Word extends TextRegion {
 
 	private static List<Glyph> getGlyphNodes(Node node) throws XPathExpressionException {
 		ArrayList<Glyph> glyphList = new ArrayList<>();
-		for (Node n : Util.getNodes(node, "./Glyph")) {
+		for (Node n : XPathHelper.getNodes(node, "./Glyph")) {
 			glyphList.add(new Glyph(n));
 		}
 		return glyphList;

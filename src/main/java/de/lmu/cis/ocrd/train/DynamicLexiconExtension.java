@@ -1,14 +1,10 @@
 package de.lmu.cis.ocrd.train;
 
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.Option;
-
-
-import de.lmu.cis.ocrd.cli.CommandLineArguments;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 
 class DynamicLexiconExtension {
 	private final static Option PROFILE = Option

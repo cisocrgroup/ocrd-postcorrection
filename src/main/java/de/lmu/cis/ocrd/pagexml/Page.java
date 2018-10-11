@@ -33,7 +33,7 @@ public class Page {
 
 	private static List<Line> getLineNodes(Document doc) throws XPathExpressionException {
 		ArrayList<Line> nodeList = new ArrayList<>();
-		for (Node node : Util.getNodes(doc, "/PcGts/Page/TextRegion/TextLine")) {
+		for (Node node : XPathHelper.getNodes(doc, "/PcGts/Page/TextRegion/TextLine")) {
 			nodeList.add(new Line(node));
 		}
 		return nodeList;

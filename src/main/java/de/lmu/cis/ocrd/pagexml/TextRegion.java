@@ -24,7 +24,7 @@ public class TextRegion {
 
 	public List<String> getUnicode() throws XPathExpressionException {
 		List<String> stringList = new ArrayList<>();
-		for (Node n : Util.getNodes(this.node, "./TextEquiv/Unicode")) {
+		for (Node n : XPathHelper.getNodes(this.node, "./TextEquiv/Unicode")) {
 			stringList.add(n.getFirstChild().getTextContent());
 		}
 		return stringList;

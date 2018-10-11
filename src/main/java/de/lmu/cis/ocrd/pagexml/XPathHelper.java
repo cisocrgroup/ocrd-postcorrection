@@ -12,7 +12,7 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-class Util {
+class XPathHelper {
 	private static final XPath xpath = XPathFactory.newInstance().newXPath();
 
 	public static XPathExpression compile(String expr) throws XPathExpressionException {

@@ -21,7 +21,7 @@ public class Line extends TextRegion {
 
 	private static List<Word> getWordNodes(Node node) throws XPathExpressionException {
 		ArrayList<Word> wordList = new ArrayList<>();
-		for (Node n : Util.getNodes(node, "./Word")) {
+		for (Node n : XPathHelper.getNodes(node, "./Word")) {
 			wordList.add(new Word(n));
 		}
 		return wordList;
