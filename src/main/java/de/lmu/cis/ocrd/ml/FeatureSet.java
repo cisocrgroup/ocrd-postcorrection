@@ -1,12 +1,14 @@
 package de.lmu.cis.ocrd.ml;
 
-import com.google.gson.Gson;
-import de.lmu.cis.ocrd.ml.features.Feature;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import com.google.gson.Gson;
+
+import de.lmu.cis.ocrd.ml.features.Feature;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
 
 public class FeatureSet implements Iterable<Feature>, Serializable {
 
@@ -21,7 +23,7 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 		return this;
 	}
 
-	public Vector calculateFeatureVector(Token token, int n) {
+	public Vector calculateFeatureVector(OCRToken token, int n) {
 		Vector vec = new Vector(this.size());
 		for (Feature feature : this.features) {
 			for (int i = 0; i < n; i++) {

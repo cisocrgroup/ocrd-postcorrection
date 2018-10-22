@@ -1,29 +1,29 @@
 package de.lmu.cis.ocrd.ml.test;
 
-import de.lmu.cis.ocrd.ml.ARFFWriter;
-import de.lmu.cis.ocrd.ml.FeatureSet;
-import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
-import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import de.lmu.cis.ocrd.ml.ARFFWriter;
+import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.ml.Token;
+import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
 
 public class ARFFWriterTest {
 	private Instances is;
 
 	@Before
 	public void init() throws Exception {
-		FeatureSet fs = new FeatureSet()
-				.add(new MockFeature("a", 1))
-				.add(new MockFeature("b", 2));
+		FeatureSet fs = new FeatureSet().add(new MockFeature("a", 1)).add(new MockFeature("b", 2));
 		StringWriter str = new StringWriter();
 		ARFFWriter arff = ARFFWriter.fromFeatureSet(fs).withRelation("test").withWriter(str);
 		arff.writeHeader(1);
@@ -46,7 +46,7 @@ public class ARFFWriterTest {
 
 	@Test
 	public void testValues() {
-		double[][] want = new double[][]{{1.0, 2.0, 3.0}, {2.0, 4.0, 6.0}};
+		double[][] want = new double[][] { { 1.0, 2.0, 3.0 }, { 2.0, 4.0, 6.0 } };
 		for (int i = 0; i < want.length; i++) {
 			assertThat(is.attributeToDoubleArray(i).length, is(want[i].length));
 			for (int j = 0; j < want[i].length; j++) {
@@ -64,7 +64,7 @@ public class ARFFWriterTest {
 		}
 
 		@Override
-		protected double doCalculate(Token token, int ignored1, int ignored2) {
+		protected double doCalculate(OCRToken token, int ignored1, int ignored2) {
 			return token.getMasterOCR().toString().length() * n;
 		}
 

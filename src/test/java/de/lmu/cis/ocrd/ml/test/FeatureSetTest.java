@@ -1,13 +1,16 @@
 package de.lmu.cis.ocrd.ml.test;
 
-import de.lmu.cis.ocrd.ml.FeatureSet;
-import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
+import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.ml.Token;
+import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
+
 public class FeatureSetTest {
 	private FeatureSet features;
 
@@ -50,7 +53,7 @@ public class FeatureSetTest {
 		}
 
 		@Override
-		protected double doCalculate(Token token, int ignored1, int ignored2) {
+		protected double doCalculate(OCRToken token, int ignored1, int ignored2) {
 			return val;
 		}
 	}

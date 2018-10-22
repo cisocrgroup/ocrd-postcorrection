@@ -1,16 +1,18 @@
 package de.lmu.cis.ocrd.ml;
 
-import com.google.gson.Gson;
-import de.lmu.cis.ocrd.SimpleLine;
-import de.lmu.cis.ocrd.Word;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.google.gson.Gson;
+
+import de.lmu.cis.ocrd.SimpleLine;
+import de.lmu.cis.ocrd.Word;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
+
 // TODO: Merge with Alignment.Token
-public class Token implements Serializable {
+public class Token implements Serializable, OCRToken {
 	private final Word masterOCR;
 	private final int id;
 
@@ -41,6 +43,7 @@ public class Token implements Serializable {
 		return this;
 	}
 
+	@Override
 	public Optional<String> getGT() {
 		return Optional.ofNullable(gt);
 	}
@@ -52,6 +55,7 @@ public class Token implements Serializable {
 		return gt.equals(masterOCR.toString());
 	}
 
+	@Override
 	public Word getMasterOCR() {
 		return this.masterOCR;
 	}
@@ -72,7 +76,8 @@ public class Token implements Serializable {
 		return otherOCR.size();
 	}
 
-	public Word getOtherOCRAt(int i) {
+	@Override
+	public Word getOtherOCR(int i) {
 		return otherOCR.get(i);
 	}
 
@@ -114,7 +119,7 @@ public class Token implements Serializable {
 			ocr = new String[1 + token.getNumberOfOtherOCRs()];
 			ocr[0] = token.getMasterOCR().toString();
 			for (int i = 0; i < token.getNumberOfOtherOCRs(); i++) {
-				ocr[i + 1] = token.getOtherOCRAt(i).toString();
+				ocr[i + 1] = token.getOtherOCR(i).toString();
 			}
 		}
 	}
