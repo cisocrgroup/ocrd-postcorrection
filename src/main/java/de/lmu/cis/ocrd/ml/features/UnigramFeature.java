@@ -1,12 +1,12 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.FreqMap;
-import de.lmu.cis.ocrd.ml.Token;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.JsonObject;
+
+import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.ml.FreqMap;
 
 public class UnigramFeature extends NamedDoubleFeature {
 	private final List<FreqMap> unigrams;
@@ -30,8 +30,9 @@ public class UnigramFeature extends NamedDoubleFeature {
 	}
 
 	@Override
-	public double doCalculate(Token token, int i, int n) {
-		// System.out.println("doCalculate(" + token + "," + i + "," + n + "): " + unigrams.size());
+	public double doCalculate(OCRToken token, int i, int n) {
+		// System.out.println("doCalculate(" + token + "," + i + "," + n + "): " +
+		// unigrams.size());
 		return unigrams.get(i).getRelative(getWord(token, i, n).toString());
 	}
 }

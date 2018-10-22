@@ -1,13 +1,13 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import java.util.ArrayList;
+
 import com.google.gson.JsonObject;
+
 import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.Node;
 import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.Token;
-
-import java.util.ArrayList;
 
 public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
 	private final ArrayList<SimpleLine> cache = new ArrayList<>();
@@ -33,14 +33,14 @@ public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
 	}
 
 	@Override
-	public double doCalculate(Token token, int i, int n) {
+	public double doCalculate(OCRToken token, int i, int n) {
 		assert (this.handlesOCR(i, n));
 		update(token, i, n);
 		final int j = getIndex(i, n);
 		return nodes.get(j).calculateOverlap();
 	}
 
-	private void update(Token token, int i, int n) {
+	private void update(OCRToken token, int i, int n) {
 		while (cache.size() != n - 2) {
 			cache.add(null);
 		}

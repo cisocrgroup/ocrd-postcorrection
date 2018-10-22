@@ -1,10 +1,10 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
+
 import de.lmu.cis.ocrd.Word;
 import de.lmu.cis.ocrd.json.JSONUtil;
 import de.lmu.cis.ocrd.ml.FreqMap;
-import de.lmu.cis.ocrd.ml.Token;
 
 public class MinCharNGramsFeature extends NamedCharacterNGramFeature {
 	public MinCharNGramsFeature(JsonObject o, ArgumentFactory factory) throws Exception {
@@ -21,9 +21,9 @@ public class MinCharNGramsFeature extends NamedCharacterNGramFeature {
 	}
 
 	@Override
-	public Object calculate(Token token, int i, int n) {
+	public Object calculate(OCRToken token, int i, int n) {
 		double min = Double.MAX_VALUE;
-		final Word word = i == 0 ? token.getMasterOCR() : token.getOtherOCRAt(i - 1);
+		final Word word = getWord(token, i, n);
 		for (String trigram : splitIntoCharacterNGrams(word.toString(), 3)) {
 			final double val = getNgrams().getRelative(trigram);
 			if (val < min) {

@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.Word;
-import de.lmu.cis.ocrd.ml.Token;
 
 abstract class BaseFeatureImplementation implements Feature {
 	protected static boolean handlesOnlyMasterOCR(int i, int ignored) {
@@ -24,12 +23,12 @@ abstract class BaseFeatureImplementation implements Feature {
 		return true;
 	}
 
-	final Word getWord(Token token, int i, int n) {
+	final Word getWord(OCRToken token, int i, int n) {
 		assert (i >= 0);
 		assert (handlesOCR(i, n));
 		if (i == 0) { // master OCR
 			return token.getMasterOCR();
 		}
-		return token.getOtherOCRAt(i - 1);
+		return token.getOtherOCR(i - 1);
 	}
 }

@@ -1,11 +1,11 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import java.util.Arrays;
+
 import com.google.gson.JsonObject;
+
 import de.lmu.cis.ocrd.Word;
 import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.Token;
-
-import java.util.Arrays;
 
 public class LinePositionFeature extends NamedStringSetFeature {
 	private static final String FIRST = "first-in-line";
@@ -17,7 +17,7 @@ public class LinePositionFeature extends NamedStringSetFeature {
 	}
 
 	LinePositionFeature(String name) {
-		super(name, Arrays.asList(new String[]{FIRST, MIDDLE, LAST}));
+		super(name, Arrays.asList(new String[] { FIRST, MIDDLE, LAST }));
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class LinePositionFeature extends NamedStringSetFeature {
 	}
 
 	@Override
-	public Object calculate(Token token, int i, int n) {
+	public Object calculate(OCRToken token, int i, int n) {
 		final Word word = getWord(token, i, n);
 		if (word.isFirstInLine()) {
 			return FIRST;

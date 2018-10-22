@@ -1,11 +1,11 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.Token;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.JsonObject;
+
+import de.lmu.cis.ocrd.json.JSONUtil;
 
 public class TokenLengthClassFeature extends NamedStringSetFeature {
 	private final static String SHORT = "short-token";
@@ -25,10 +25,8 @@ public class TokenLengthClassFeature extends NamedStringSetFeature {
 	private final int shrt, medium, lng;
 
 	public TokenLengthClassFeature(JsonObject o, ArgumentFactory args) {
-		this(JSONUtil.mustGetNameOrType(o),
-				JSONUtil.mustGet(o, "short").getAsInt(),
-				JSONUtil.mustGet(o, "medium").getAsInt(),
-				JSONUtil.mustGet(o, "long").getAsInt());
+		this(JSONUtil.mustGetNameOrType(o), JSONUtil.mustGet(o, "short").getAsInt(),
+				JSONUtil.mustGet(o, "medium").getAsInt(), JSONUtil.mustGet(o, "long").getAsInt());
 	}
 
 	public TokenLengthClassFeature(String name, int shrt, int medium, int lng) {
@@ -44,7 +42,7 @@ public class TokenLengthClassFeature extends NamedStringSetFeature {
 	}
 
 	@Override
-	public Object calculate(Token token, int i, int n) {
+	public Object calculate(OCRToken token, int i, int n) {
 		final int tokenLength = token.getMasterOCR().toString().length();
 		if (tokenLength <= shrt) {
 			return SHORT;

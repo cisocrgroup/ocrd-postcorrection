@@ -1,12 +1,12 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
+
 import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
-
-import java.util.Optional;
 
 public class ProfilerOCRPatternsDistance extends NamedDoubleFeature {
 	private final Profile profile;
@@ -21,7 +21,7 @@ public class ProfilerOCRPatternsDistance extends NamedDoubleFeature {
 	}
 
 	@Override
-	protected double doCalculate(Token token, int i, int n) {
+	protected double doCalculate(OCRToken token, int i, int n) {
 		final Optional<Candidates> candidates = profile.get(token.getMasterOCR().toString());
 		if (!candidates.isPresent()) {
 			return -1;

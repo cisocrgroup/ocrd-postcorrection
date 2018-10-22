@@ -1,11 +1,11 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.Token;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.JsonObject;
+
+import de.lmu.cis.ocrd.json.JSONUtil;
 
 public class TokenCaseClassFeature extends NamedStringSetFeature {
 	private static final String LOWER = "all-lower-case";
@@ -35,7 +35,7 @@ public class TokenCaseClassFeature extends NamedStringSetFeature {
 	}
 
 	@Override
-	public Object calculate(Token token, int i, int n) {
+	public Object calculate(OCRToken token, int i, int n) {
 		boolean allLowerCase = true;
 		boolean allUpperCase = true;
 		boolean firstUpperCase = false;
