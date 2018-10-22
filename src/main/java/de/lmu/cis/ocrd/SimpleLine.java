@@ -9,10 +9,6 @@ public class SimpleLine implements Line, Serializable {
 	private String line;
 	private ArrayList<Double> cs;
 
-	private static String normalize(String line) {
-		return line.replaceAll("[^\\p{L}\\p{Nd}]+", " ").trim();
-	}
-
 	public static SimpleLine normalized(String ocr, double c) {
 		NormalizerTransducer t = new NormalizerTransducer(ocr.length());
 		ocr.codePoints().forEach((letter) -> t.delta(letter, c));

@@ -8,7 +8,7 @@ public interface ArgumentFactory {
 
 	FreqMap getOtherOCRUnigrams(int i) throws Exception;
 
-	int getNumberOfOtherOCRs();
+	int getNumberOfOtherOCRs() throws Exception;
 
 	FreqMap getCharacterTrigrams() throws Exception;
 

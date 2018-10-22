@@ -9,20 +9,20 @@ import org.w3c.dom.Node;
 
 public class Line extends TextRegion {
 	private final List<Word> words;
-	
+
 	public Line(Node node) throws XPathExpressionException {
 		super(node);
-		this.words = getWordNodes(node);
+		this.words = getWordNodes(node, this);
 	}
 
 	public List<Word> getWords() {
 		return words;
 	}
 
-	private static List<Word> getWordNodes(Node node) throws XPathExpressionException {
+	private static List<Word> getWordNodes(Node node, Line parent) throws XPathExpressionException {
 		ArrayList<Word> wordList = new ArrayList<>();
 		for (Node n : XPathHelper.getNodes(node, "./Word")) {
-			wordList.add(new Word(n));
+			wordList.add(new Word(n, parent));
 		}
 		return wordList;
 	}

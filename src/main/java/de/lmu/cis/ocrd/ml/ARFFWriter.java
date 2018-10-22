@@ -1,19 +1,19 @@
 package de.lmu.cis.ocrd.ml;
 
-import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.NamedBooleanFeature;
-import de.lmu.cis.ocrd.ml.features.NamedStringSetFeature;
-
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.lmu.cis.ocrd.ml.features.Feature;
+import de.lmu.cis.ocrd.ml.features.NamedBooleanFeature;
+import de.lmu.cis.ocrd.ml.features.NamedStringSetFeature;
+
 // ARFFWriter writes feature vectors into WEKAs ARFF (Attribute-Relation-File-Format).
 // After all features have been added to this writer using `addFeature()`,
 // make sure to write the header using `writeHeader()`, before writing any feature vectors.
-public class ARFFWriter {
+public class ARFFWriter implements AutoCloseable {
 	private String relation;
 	private PrintWriter writer;
 	private ArrayList<Feature> features = new ArrayList<>();
@@ -48,7 +48,8 @@ public class ARFFWriter {
 	}
 
 	public void writeHeader(int n) {
-		writer.printf("%% Created by de.lmu.cis.ocrd.ml.ARFFWriter at %s\n", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+		writer.printf("%% Created by de.lmu.cis.ocrd.ml.ARFFWriter at %s\n",
+				new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 		writer.printf("@RELATION\t%s\n", relation);
 		for (Feature feature : features) {
 			for (int i = 0; i < n; i++) {
@@ -94,5 +95,11 @@ public class ARFFWriter {
 			first = false;
 		}
 		return builder.append('}').toString();
+	}
+
+	@Override
+	public void close() throws Exception {
+		writer.flush();
+		writer.close();
 	}
 }

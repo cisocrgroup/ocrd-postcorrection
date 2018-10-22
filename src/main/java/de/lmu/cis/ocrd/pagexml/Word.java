@@ -9,14 +9,20 @@ import org.w3c.dom.Node;
 
 public class Word extends TextRegion {
 	private final List<Glyph> glyphs;
-	
-	public Word(Node node) throws XPathExpressionException {
+	private final Line parent;
+
+	public Word(Node node, Line parent) throws XPathExpressionException {
 		super(node);
+		this.parent = parent;
 		this.glyphs = getGlyphNodes(node);
 	}
 
 	public List<Glyph> getGlyphs() {
 		return glyphs;
+	}
+
+	public Line getParentLine() {
+		return parent;
 	}
 
 	private static List<Glyph> getGlyphNodes(Node node) throws XPathExpressionException {
