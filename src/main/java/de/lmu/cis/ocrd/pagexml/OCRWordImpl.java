@@ -1,15 +1,15 @@
-package de.lmu.cis.ocrd.train.step;
+package de.lmu.cis.ocrd.pagexml;
 
 import java.util.Optional;
 
 import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.ml.features.OCRWord;
 
-public class PageXMLOCRWord implements OCRWord {
+public class OCRWordImpl implements OCRWord {
 	private final String word;
 	private final String line;
 
-	public PageXMLOCRWord(String word, String line) {
+	public OCRWordImpl(String word, String line) {
 		this.word = word;
 		this.line = line;
 	}
