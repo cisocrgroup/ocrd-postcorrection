@@ -9,6 +9,7 @@ import java.util.Date;
 import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.NamedBooleanFeature;
 import de.lmu.cis.ocrd.ml.features.NamedStringSetFeature;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
 
 // ARFFWriter writes feature vectors into WEKAs ARFF (Attribute-Relation-File-Format).
 // After all features have been added to this writer using `addFeature()`,
@@ -68,11 +69,11 @@ public class ARFFWriter implements AutoCloseable {
 		writer.println("@DATA");
 	}
 
-	public void writeToken(Token token) {
+	public void writeToken(OCRToken token) {
 		if (!debugToken) {
 			return;
 		}
-		writer.printf("%% %s\n", token.toJSON());
+		writer.printf("%% %s\n", token.toString());
 	}
 
 	public void writeFeatureVector(FeatureSet.Vector features) {

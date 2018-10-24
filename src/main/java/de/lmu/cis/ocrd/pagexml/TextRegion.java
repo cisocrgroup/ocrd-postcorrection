@@ -7,6 +7,8 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.w3c.dom.Node;
 
+import de.lmu.cis.ocrd.NormalizerTransducer;
+
 public class TextRegion {
 	protected final Node node;
 
@@ -33,5 +35,13 @@ public class TextRegion {
 		} catch (XPathExpressionException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public List<String> getUnicodeNormalized() {
+		final List<String> unicode = this.getUnicode();
+		for (int i = 0; i < unicode.size(); i++) {
+			unicode.set(i, NormalizerTransducer.normalize(unicode.get(i)));
+		}
+		return unicode;
 	}
 }

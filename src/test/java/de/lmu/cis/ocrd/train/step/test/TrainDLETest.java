@@ -18,7 +18,7 @@ public class TrainDLETest {
 
 	@Before
 	public void init() throws IOException {
-		this.dir = Files.createTempDirectory("train-dle-test");
+		this.dir = Files.createTempDirectory("ocrd-cis-train-dle-test-");
 	}
 
 	@After
@@ -56,10 +56,22 @@ public class TrainDLETest {
 	@Test
 	public void testRun() throws Exception {
 		TrainDLE tdle = new TrainDLE(
-				new String[] { "OFF", "src/test/resources/dle-features.json",
+				new String[] { "DEBUG", "src/test/resources/dle-features.json",
 						"src/test/resources/profile-test.json",
 						"src/test/resources/nGrams.csv", dir.toString(),
 						"src/test/resources/page.xml" });
 		tdle.run();
+		// arffs
+		assertThat(tdle.getTrain(0).toFile().exists(), is(false));
+		assertThat(tdle.getTrain(1).toFile().exists(), is(true));
+		assertThat(tdle.getTrain(2).toFile().exists(), is(true));
+		assertThat(tdle.getTrain(3).toFile().exists(), is(true));
+		assertThat(tdle.getTrain(4).toFile().exists(), is(false));
+		// models
+		assertThat(tdle.getModel(0).toFile().exists(), is(false));
+		assertThat(tdle.getModel(1).toFile().exists(), is(true));
+		assertThat(tdle.getModel(2).toFile().exists(), is(true));
+		assertThat(tdle.getModel(3).toFile().exists(), is(true));
+		assertThat(tdle.getModel(4).toFile().exists(), is(false));
 	}
 }

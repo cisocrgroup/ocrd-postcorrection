@@ -1,37 +1,46 @@
 package de.lmu.cis.ocrd.pagexml;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import de.lmu.cis.ocrd.Word;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.features.OCRWord;
 
-class OCRTokenImpl implements OCRToken {
+public class OCRTokenImpl implements OCRToken {
 
-	private final de.lmu.cis.ocrd.pagexml.Word word;
+	private final List<OCRWordImpl> words;
 	private final boolean withGT;
 
-	public OCRTokenImpl(de.lmu.cis.ocrd.pagexml.Word word, boolean withGT) {
-		this.word = word;
+	public OCRTokenImpl(Word word, boolean withGT) {
 		this.withGT = withGT;
+		this.words = new ArrayList<>();
+		for (int i = 0; i < word.getUnicode().size(); i++) {
+			words.add(new OCRWordImpl(i, word));
+		}
 	}
 
 	@Override
-	public Word getMasterOCR() {
-		// TODO Auto-generated method stub
-		return null;
+	public OCRWord getMasterOCR() {
+		if (!withGT) {
+			return words.get(0);
+		}
+		return words.get(1);
 	}
 
 	@Override
-	public Word getOtherOCR(int i) {
-		// TODO Auto-generated method stub
-		return null;
+	public OCRWord getOtherOCR(int i) {
+		if (!withGT) {
+			return words.get(i + 1);
+		}
+		return words.get(i + 2);
 	}
 
 	@Override
-	public Optional<String> getGT()  {
-		if (!this.withGT) {
+	public Optional<String> getGT() {
+		if (!withGT) {
 			return Optional.empty();
 		}
-		return Optional.of(this.word.getUnicode().get(0));
+		return Optional.of(this.words.get(0).getWord());
 	}
 }
