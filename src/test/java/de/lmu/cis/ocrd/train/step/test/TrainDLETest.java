@@ -61,6 +61,8 @@ public class TrainDLETest {
 						"src/test/resources/nGrams.csv", dir.toString(),
 						"src/test/resources/page.xml" });
 		tdle.run();
+		// feature file
+		assertThat(tdle.getFeatures().toFile().exists(), is(true));
 		// arffs
 		assertThat(tdle.getTrain(0).toFile().exists(), is(false));
 		assertThat(tdle.getTrain(1).toFile().exists(), is(true));

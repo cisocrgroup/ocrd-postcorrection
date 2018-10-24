@@ -1,23 +1,18 @@
 package de.lmu.cis.ocrd.train.step;
 
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.pmw.tinylog.Logger;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.FeatureSet;
@@ -36,35 +31,31 @@ import weka.core.converters.ConverterUtils;
 
 // step: train dynamic lexicon extension.
 public class TrainDLE extends Base {
-	private final String featuresPath;
-
 	public TrainDLE(String[] args) throws Exception {
 		this(args[0], args[1], args[2], args[3], args[4],
 				Arrays.stream(args).skip(5).collect(Collectors.toList()));
 	}
 
 	public TrainDLE(String logLevel, String features, String profile,
-			String trigrams, String dir, List<String> files) {
+			String trigrams, String dir, List<String> files)
+			throws IOException {
 		super(true, logLevel, profile, trigrams, dir, files);
-		this.featuresPath = features;
+		FileUtils.copyFile(Paths.get(features).toFile(),
+				getFeatures().toFile());
 	}
 
 	public void run() throws Exception {
 		prepare();
+		train();
 	}
 
 	//
 	// Prepare the different arff files for the actual model training.
 	//
 	private void prepare() throws Exception {
-		JsonObject[] os;
-		try (InputStream is = new FileInputStream(
-				Paths.get(featuresPath).toFile())) {
-			final String json = IOUtils.toString(is, Charset.forName("UTF-8"));
-			os = new Gson().fromJson(json, JsonObject[].class);
-		}
 		final FeatureSet fs = FeatureFactory.getDefault()
-				.withArgumentFactory(getLM()).createFeatureSet(os)
+				.withArgumentFactory(getLM())
+				.createFeatureSet(getFeatures(this.getFeatures()))
 				.add(new DynamicLexiconGTFeature());
 		for (int i = 0; i < getLM().getNumberOfOtherOCRs() + 1; i++) {
 			prepare(fs, i);
@@ -78,7 +69,7 @@ public class TrainDLE extends Base {
 				new BufferedWriter(new FileWriter(tfile.toFile())))) {
 			w.withDebugToken(true);
 			w.withRelation("dle-train-" + (i + 1));
-			w.writeHeader(i + 1);
+			w.writeHeader(i+1);
 			for (Path file : getFiles()) {
 				Page page = Page.open(file);
 				prepare(w, fs, i, page);
@@ -93,7 +84,7 @@ public class TrainDLE extends Base {
 				Logger.debug("word({}): {} GT: {}", i + 1,
 						word.getUnicodeNormalized().get(i), t.getGT().get());
 				final FeatureSet.Vector values = fs.calculateFeatureVector(t,
-						i);
+						i + 1);
 				Logger.debug(values);
 				w.writeFeatureVector(values);
 			}
@@ -130,11 +121,15 @@ public class TrainDLE extends Base {
 	}
 
 	public Path getTrain(int n) {
-		return Paths.get(getDir().toString(), "dle_" + n + ".arff");
+		return Paths.get(getDir().toString(), "dle-train-" + n + ".arff");
 	}
 
 	public Path getModel(int n) {
-		return Paths.get(getDir().toString(), "dle_" + n + ".arff");
+		return Paths.get(getDir().toString(), "dle-model-" + n + ".ser");
+	}
+
+	public Path getFeatures() {
+		return Paths.get(getDir().toString(), "dle-features.json");
 	}
 
 	public static void main(String[] args) throws Exception {
