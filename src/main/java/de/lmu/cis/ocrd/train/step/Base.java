@@ -15,7 +15,8 @@ public class Base {
 	private final boolean withGT;
 	private final Path dir;
 
-	public Base(boolean withGT, String logLevel, String profile, String trigrams, String dir, List<String> files) {
+	public Base(boolean withGT, String logLevel, String profile,
+			String trigrams, String dir, List<String> files) {
 		this.lm = new LM(withGT, profile, trigrams, files);
 		this.withGT = withGT;
 		this.dir = Paths.get(dir);

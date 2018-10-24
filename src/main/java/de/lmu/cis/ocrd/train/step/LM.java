@@ -48,11 +48,11 @@ public class LM implements ArgumentFactory {
 
 	private void addToFreqMaps(Word word) throws Exception {
 		final List<String> alligned = word.getUnicode();
-		while (startIndex + alligned.size() != freqMaps.size()) {
+		while (alligned.size() - startIndex != freqMaps.size()) {
 			freqMaps.add(new FreqMap());
 		}
 		for (int i = startIndex; i < alligned.size(); i++) {
-			freqMaps.get(i).add(alligned.get(i));
+			freqMaps.get(i-startIndex).add(alligned.get(i));
 		}
 	}
 

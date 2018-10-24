@@ -30,26 +30,30 @@ public class TrainDLE extends Base {
 	private final String featuresPath;
 
 	public TrainDLE(String[] args) throws Exception {
-		this(args[0], args[1], args[2], args[3], args[4], Arrays.stream(args).skip(5).collect(Collectors.toList()));
+		this(args[0], args[1], args[2], args[3], args[4],
+				Arrays.stream(args).skip(5).collect(Collectors.toList()));
 	}
 
-	public TrainDLE(String logLevel, String features, String profile, String trigrams, String dir, List<String> files) {
+	public TrainDLE(String logLevel, String features, String profile,
+			String trigrams, String dir, List<String> files) {
 		super(true, logLevel, profile, trigrams, dir, files);
 		this.featuresPath = features;
 	}
 
 	public void run() throws Exception {
 		JsonObject[] os;
-		try (InputStream is = new FileInputStream(Paths.get(featuresPath).toFile())) {
+		try (InputStream is = new FileInputStream(
+				Paths.get(featuresPath).toFile())) {
 			final String json = IOUtils.toString(is, Charset.forName("UTF-8"));
 			os = new Gson().fromJson(json, JsonObject[].class);
 		}
-		final FeatureSet fs = FeatureFactory.getDefault().withArgumentFactory(getLM()).createFeatureSet(os)
+		final FeatureSet fs = FeatureFactory.getDefault()
+				.withArgumentFactory(getLM()).createFeatureSet(os)
 				.add(new DynamicLexiconGTFeature());
 		for (int i = 0; i < getLM().getNumberOfOtherOCRs() + 1; i++) {
-			Path tfile = Paths.get(getDir().toString(), "dle_" + (i + 1) + ".arff");
-			try (ARFFWriter w = ARFFWriter.fromFeatureSet(fs)
-					.withWriter(new BufferedWriter(new FileWriter(tfile.toFile())))) {
+			Path tfile = getTrainFile(i + 1);
+			try (ARFFWriter w = ARFFWriter.fromFeatureSet(fs).withWriter(
+					new BufferedWriter(new FileWriter(tfile.toFile())))) {
 				w.writeHeader(i + 1);
 				for (Path file : getFiles()) {
 					Page page = Page.open(file);
@@ -64,9 +68,14 @@ public class TrainDLE extends Base {
 		}
 	}
 
+	public Path getTrainFile(int n) {
+		return Paths.get(getDir().toString(), "dle_" + n + ".arff");
+	}
+
 	public static void main(String[] args) throws Exception {
 		if (args.length < 5) {
-			throw new Exception("Usage: logLevel features profile trigrams dir files...");
+			throw new Exception(
+					"Usage: logLevel features profile trigrams dir files...");
 		}
 		new TrainDLE(args).run();
 	}
