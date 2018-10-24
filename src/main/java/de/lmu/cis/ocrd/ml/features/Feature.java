@@ -12,11 +12,11 @@ public interface Feature extends Serializable {
 	// Returns whether the feature handles the current OCR round.
 	// Features that only handle the master OCR handlesOCR(i, n) returns true iff
 	// i=0.
+	//
 	// Features that handle additional OCRs handlesOCR(i, n) can return
 	// corresponding values.
 	// Any implementation must guarantee that calculate(token, i, n) is only called
-	// iff
-	// handlesOCR(i, n) = true.
+	// iff handlesOCR(i, n) = true.
 	boolean handlesOCR(int i, int n);
 
 	// Calculate the value of a feature.
