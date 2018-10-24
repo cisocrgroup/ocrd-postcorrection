@@ -34,12 +34,18 @@
           <Coords points="114,368 442,368 442,437 114,437"/>
           <TextEquiv>
             <Unicode>Berliniſche</Unicode>
+            <Unicode>Berliniſche</Unicode>
+            <Unicode>Berliniſche</Unicode>
+            <Unicode>Berliniſche</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="17.0" bold="true"/>
         </Word>
         <Word id="word_1478541234932_798" language="German" custom="readingOrder {index:1;} textStyle {offset:0; length:13;fontFamily:Arial; fontSize:17.0; bold:true;}">
           <Coords points="902,436 482,436 482,367 902,367"/>
           <TextEquiv>
+            <Unicode>Monatsſchrift</Unicode>
+            <Unicode>Monatsſchrift</Unicode>
+            <Unicode>Monatsſchrift</Unicode>
             <Unicode>Monatsſchrift</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="17.0" bold="true"/>
@@ -48,15 +54,24 @@
           <Coords points="918,436 902,436 902,367 918,367"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="17.0" bold="true"/>
         </Word>
         <TextEquiv>
           <Unicode>Berliniſche Monatsſchrift.</Unicode>
+          <Unicode>Berliniſche Monatsſchrift.</Unicode>
+          <Unicode>Berliniſche Monatsſchrift.</Unicode>
+          <Unicode>Berliniſche Monatsſchrift.</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="17.0" bold="true"/>
       </TextLine>
       <TextEquiv>
+        <Unicode>Berliniſche Monatsſchrift.</Unicode>
+        <Unicode>Berliniſche Monatsſchrift.</Unicode>
+        <Unicode>Berliniſche Monatsſchrift.</Unicode>
         <Unicode>Berliniſche Monatsſchrift.</Unicode>
       </TextEquiv>
     </TextRegion>
@@ -69,6 +84,9 @@
           <Coords points="599,529 572,529 460,527 409,519 409,488 460,485 518,483 541,483 599,487"/>
           <TextEquiv>
             <Unicode>1784</Unicode>
+            <Unicode>1784</Unicode>
+            <Unicode>1784</Unicode>
+            <Unicode>1784</Unicode>
           </TextEquiv>
           <TextStyle fontSize="12.0" bold="true" letterSpaced="true"/>
         </Word>
@@ -76,15 +94,24 @@
           <Coords points="600,529 599,529 599,487 600,488 614,507 614,520"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontSize="12.0" bold="true" letterSpaced="true"/>
         </Word>
         <TextEquiv>
           <Unicode>1784 .</Unicode>
+          <Unicode>1784 .</Unicode>
+          <Unicode>1784 .</Unicode>
+          <Unicode>1784 .</Unicode>
         </TextEquiv>
         <TextStyle bold="true" letterSpaced="true"/>
       </TextLine>
       <TextEquiv>
+        <Unicode>1784 .</Unicode>
+        <Unicode>1784 .</Unicode>
+        <Unicode>1784 .</Unicode>
         <Unicode>1784 .</Unicode>
       </TextEquiv>
     </TextRegion>
@@ -97,6 +124,9 @@
           <Coords points="252,571 417,571 417,620 252,620"/>
           <TextEquiv>
             <Unicode>Zwoͤlftes</Unicode>
+            <Unicode>Zwoͤlftes</Unicode>
+            <Unicode>Zwoͤlftes</Unicode>
+            <Unicode>Zwoͤlftes</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0"/>
         </Word>
@@ -104,25 +134,40 @@
           <Coords points="522,611 429,611 429,569 522,569"/>
           <TextEquiv>
             <Unicode>Stuͤk</Unicode>
+            <Unicode>Stuͤk</Unicode>
+            <Unicode>Stuͤk</Unicode>
+            <Unicode>Stuͤk</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0"/>
 		  <Glyph id="g1">
 			<TextEquiv>
+			  <Unicode>S</Unicode>
+			  <Unicode>S</Unicode>
+			  <Unicode>S</Unicode>
 			  <Unicode>S</Unicode>
 			</TextEquiv>
 		  </Glyph>
 		  <Glyph id="g2">
 			<TextEquiv>
 			  <Unicode>t</Unicode>
+			  <Unicode>t</Unicode>
+			  <Unicode>t</Unicode>
+			  <Unicode>t</Unicode>
 			</TextEquiv>
 		  </Glyph>
 		  <Glyph id="g3">
 			<TextEquiv>
 			  <Unicode>uͤ</Unicode>
+			  <Unicode>uͤ</Unicode>
+			  <Unicode>uͤ</Unicode>
+			  <Unicode>uͤ</Unicode>
 			</TextEquiv>
 		  </Glyph>
 		  <Glyph id="g4">
 			<TextEquiv>
+			  <Unicode>k</Unicode>
+			  <Unicode>k</Unicode>
+			  <Unicode>k</Unicode>
 			  <Unicode>k</Unicode>
 			</TextEquiv>
 		  </Glyph>
@@ -131,12 +176,18 @@
           <Coords points="535,611 522,611 522,569 535,569"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0"/>
         </Word>
         <Word id="word_1478541247872_804" language="German" custom="readingOrder {index:3;} textStyle {offset:0; length:8;fontFamily:Arial; fontSize:12.0;}">
           <Coords points="766,612 588,612 588,570 766,570"/>
           <TextEquiv>
+            <Unicode>December</Unicode>
+            <Unicode>December</Unicode>
+            <Unicode>December</Unicode>
             <Unicode>December</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0"/>
@@ -145,15 +196,24 @@
           <Coords points="778,612 766,612 766,570 778,570"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0"/>
         </Word>
         <TextEquiv>
           <Unicode>Zwoͤlftes Stuͤk . December .</Unicode>
+          <Unicode>Zwoͤlftes Stuͤk . December .</Unicode>
+          <Unicode>Zwoͤlftes Stuͤk . December .</Unicode>
+          <Unicode>Zwoͤlftes Stuͤk . December .</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="12.0"/>
       </TextLine>
       <TextEquiv>
+        <Unicode>Zwoͤlftes Stuͤk . December .</Unicode>
+        <Unicode>Zwoͤlftes Stuͤk . December .</Unicode>
+        <Unicode>Zwoͤlftes Stuͤk . December .</Unicode>
         <Unicode>Zwoͤlftes Stuͤk . December .</Unicode>
       </TextEquiv>
     </TextRegion>
@@ -166,6 +226,9 @@
           <Coords points="513,772 501,772 501,748 513,748"/>
           <TextEquiv>
             <Unicode>1</Unicode>
+            <Unicode>1</Unicode>
+            <Unicode>1</Unicode>
+            <Unicode>1</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="10.0"/>
         </Word>
@@ -173,15 +236,24 @@
           <Coords points="527,772 513,772 513,748 527,748"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
+            <Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="10.0"/>
         </Word>
         <TextEquiv>
           <Unicode>1.</Unicode>
+          <Unicode>1.</Unicode>
+          <Unicode>1.</Unicode>
+          <Unicode>1.</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="10.0"/>
       </TextLine>
       <TextEquiv>
+        <Unicode>1.</Unicode>
+        <Unicode>1.</Unicode>
+        <Unicode>1.</Unicode>
         <Unicode>1.</Unicode>
       </TextEquiv>
     </TextRegion>
@@ -194,12 +266,18 @@
           <Coords points="233,807 539,807 539,858 233,858"/>
           <TextEquiv>
             <Unicode>Beantwortung</Unicode>
+            <Unicode>Beantwortung</Unicode>
+            <Unicode>Beantwortung</Unicode>
+            <Unicode>Beantwortung</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0"/>
         </Word>
         <Word id="w_w1aab1b3b2b3b1ac27" language="German" custom="readingOrder {index:1;} textStyle {offset:0; length:3;fontFamily:Arial; fontSize:12.0;}">
           <Coords points="569,810 630,810 630,848 569,848"/>
           <TextEquiv>
+            <Unicode>der</Unicode>
+            <Unicode>der</Unicode>
+            <Unicode>der</Unicode>
             <Unicode>der</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0"/>
@@ -208,6 +286,9 @@
           <Coords points="778,859 654,859 654,806 778,806"/>
           <TextEquiv>
             <Unicode>Frage</Unicode>
+            <Unicode>Frage</Unicode>
+            <Unicode>Frage</Unicode>
+            <Unicode>Frage</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0"/>
         </Word>
@@ -215,10 +296,16 @@
           <Coords points="797,859 778,859 778,806 797,806"/>
           <TextEquiv>
             <Unicode>:</Unicode>
+            <Unicode>:</Unicode>
+            <Unicode>:</Unicode>
+            <Unicode>:</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0"/>
         </Word>
         <TextEquiv>
+          <Unicode>Beantwortung der Frage:</Unicode>
+          <Unicode>Beantwortung der Frage:</Unicode>
+          <Unicode>Beantwortung der Frage:</Unicode>
           <Unicode>Beantwortung der Frage:</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="12.0"/>
@@ -230,12 +317,18 @@
           <Coords points="177,888 316,888 316,934 177,934"/>
           <TextEquiv>
             <Unicode>Was</Unicode>
+            <Unicode>Was</Unicode>
+            <Unicode>Was</Unicode>
+            <Unicode>Was</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0" letterSpaced="true"/>
         </Word>
         <Word id="w_w1aab1b3b2b3b3ab9" language="German" custom="readingOrder {index:1;} textStyle {offset:0; length:3;fontFamily:Arial; fontSize:12.0; letterSpaced:true;}">
           <Coords points="362,890 418,890 418,941 362,941"/>
           <TextEquiv>
+            <Unicode>iſt</Unicode>
+            <Unicode>iſt</Unicode>
+            <Unicode>iſt</Unicode>
             <Unicode>iſt</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0" letterSpaced="true"/>
@@ -244,6 +337,9 @@
           <Coords points="832,939 465,939 465,887 832,887"/>
           <TextEquiv>
             <Unicode>Aufklaͤrung</Unicode>
+            <Unicode>Aufklaͤrung</Unicode>
+            <Unicode>Aufklaͤrung</Unicode>
+            <Unicode>Aufklaͤrung</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0" letterSpaced="true"/>
         </Word>
@@ -251,16 +347,28 @@
           <Coords points="860,939 832,939 832,887 860,887"/>
           <TextEquiv>
             <Unicode>?</Unicode>
+            <Unicode>?</Unicode>
+            <Unicode>?</Unicode>
+            <Unicode>?</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="12.0" letterSpaced="true"/>
         </Word>
         <TextEquiv>
+          <Unicode>Was iſt Aufklaͤrung?</Unicode>
+          <Unicode>Was iſt Aufklaͤrung?</Unicode>
+          <Unicode>Was iſt Aufklaͤrung?</Unicode>
           <Unicode>Was iſt Aufklaͤrung?</Unicode>
         </TextEquiv>
         <TextStyle letterSpaced="true"/>
       </TextLine>
       <TextEquiv>
         <Unicode>Beantwortung der Frage:
+		Was iſt Aufklaͤrung?</Unicode>
+		<Unicode>Beantwortung der Frage:
+		Was iſt Aufklaͤrung?</Unicode>
+		<Unicode>Beantwortung der Frage:
+		Was iſt Aufklaͤrung?</Unicode>
+		<Unicode>Beantwortung der Frage:
 		Was iſt Aufklaͤrung?</Unicode>
       </TextEquiv>
     </TextRegion>
@@ -273,6 +381,9 @@
           <Coords points="296,1018 278,1018 278,981 296,981"/>
           <TextEquiv>
             <Unicode>(</Unicode>
+			<Unicode>(</Unicode>
+			<Unicode>(</Unicode>
+			<Unicode>(</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -280,6 +391,9 @@
           <Coords points="327,1018 296,1018 296,981 327,981"/>
           <TextEquiv>
             <Unicode>S</Unicode>
+			<Unicode>S</Unicode>
+			<Unicode>S</Unicode>
+			<Unicode>S</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -287,6 +401,9 @@
           <Coords points="338,1018 327,1018 327,981 338,981"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -294,6 +411,9 @@
           <Coords points="480,1012 353,1012 353,981 480,981"/>
           <TextEquiv>
             <Unicode>Decemb</Unicode>
+			<Unicode>Decemb</Unicode>
+			<Unicode>Decemb</Unicode>
+			<Unicode>Decemb</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -301,6 +421,9 @@
           <Coords points="489,1012 480,1012 480,981 489,981"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -308,6 +431,9 @@
           <Coords points="578,1017 505,1017 505,987 578,987"/>
           <TextEquiv>
             <Unicode>1783</Unicode>
+			<Unicode>1783</Unicode>
+			<Unicode>1783</Unicode>
+			<Unicode>1783</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -315,6 +441,9 @@
           <Coords points="586,1017 578,1017 578,987 586,987"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -322,6 +451,9 @@
           <Coords points="644,1011 608,1011 608,979 644,979"/>
           <TextEquiv>
             <Unicode>S</Unicode>
+			<Unicode>S</Unicode>
+			<Unicode>S</Unicode>
+			<Unicode>S</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -329,6 +461,9 @@
           <Coords points="652,1011 644,1011 644,979 652,979"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -336,6 +471,9 @@
           <Coords points="700,1017 664,1017 664,989 706,980 724,979 724,1016"/>
           <TextEquiv>
             <Unicode>516</Unicode>
+			<Unicode>516</Unicode>
+			<Unicode>516</Unicode>
+			<Unicode>516</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -343,6 +481,9 @@
           <Coords points="724,1016 724,979 725,979 735,979 735,1016"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -350,15 +491,24 @@
           <Coords points="735,1016 735,979 750,979 750,1016"/>
           <TextEquiv>
             <Unicode>)</Unicode>
+			<Unicode>)</Unicode>
+			<Unicode>)</Unicode>
+			<Unicode>)</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>(S. Decemb. 1783. S. 516.)</Unicode>
+		  <Unicode>(S. Decemb. 1783. S. 516.)</Unicode>
+		  <Unicode>(S. Decemb. 1783. S. 516.)</Unicode>
+		  <Unicode>(S. Decemb. 1783. S. 516.)</Unicode>
         </TextEquiv>
       </TextLine>
       <TextEquiv>
         <Unicode>(S. Decemb. 1783. S. 516.)</Unicode>
+		<Unicode>(S. Decemb. 1783. S. 516.)</Unicode>
+		<Unicode>(S. Decemb. 1783. S. 516.)</Unicode>
+		<Unicode>(S. Decemb. 1783. S. 516.)</Unicode>
       </TextEquiv>
     </TextRegion>
     <TextRegion type="drop-capital" id="region_1474985170674_163" custom="readingOrder {index:6;} structure {type:drop-capital;}">
@@ -369,14 +519,23 @@
           <Coords points="112,1056 164,1056 164,1114 112,1114"/>
           <TextEquiv>
             <Unicode>A</Unicode>
+			<Unicode>A</Unicode>
+			<Unicode>A</Unicode>
+			<Unicode>A</Unicode>
           </TextEquiv>
         </Word>
         <TextEquiv>
           <Unicode>A</Unicode>
+		  <Unicode>A</Unicode>
+		  <Unicode>A</Unicode>
+		  <Unicode>A</Unicode>
         </TextEquiv>
       </TextLine>
       <TextEquiv>
         <Unicode>A</Unicode>
+		<Unicode>A</Unicode>
+		<Unicode>A</Unicode>
+		<Unicode>A</Unicode>
       </TextEquiv>
     </TextRegion>
     <TextRegion type="paragraph" id="r_2_4" custom="readingOrder {index:7;}">
@@ -388,6 +547,9 @@
           <Coords points="166,1057 393,1057 393,1124 166,1124"/>
           <TextEquiv>
             <Unicode>ufklaͤrung</Unicode>
+			<Unicode>ufklaͤrung</Unicode>
+			<Unicode>ufklaͤrung</Unicode>
+			<Unicode>ufklaͤrung</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5" letterSpaced="true"/>
         </Word>
@@ -395,6 +557,9 @@
           <Coords points="414,1086 451,1086 451,1121 414,1121"/>
           <TextEquiv>
             <Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -402,6 +567,9 @@
           <Coords points="473,1088 527,1088 527,1116 473,1116"/>
           <TextEquiv>
             <Unicode>der</Unicode>
+			<Unicode>der</Unicode>
+			<Unicode>der</Unicode>
+			<Unicode>der</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -409,6 +577,9 @@
           <Coords points="552,1086 713,1086 713,1123 552,1123"/>
           <TextEquiv>
             <Unicode>Ausgang</Unicode>
+			<Unicode>Ausgang</Unicode>
+			<Unicode>Ausgang</Unicode>
+			<Unicode>Ausgang</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -416,6 +587,9 @@
           <Coords points="740,1086 795,1086 795,1115 740,1115"/>
           <TextEquiv>
             <Unicode>des</Unicode>
+			<Unicode>des</Unicode>
+			<Unicode>des</Unicode>
+			<Unicode>des</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -423,6 +597,9 @@
           <Coords points="906,1116 818,1116 818,1085 906,1085"/>
           <TextEquiv>
             <Unicode>Men</Unicode>
+			<Unicode>Men</Unicode>
+			<Unicode>Men</Unicode>
+			<Unicode>Men</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -430,11 +607,17 @@
           <Coords points="917,1116 906,1116 906,1085 917,1085"/>
           <TextEquiv>
             <Unicode>-</Unicode>
+			<Unicode>-</Unicode>
+			<Unicode>-</Unicode>
+			<Unicode>-</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>ufklaͤrung iſt der Ausgang des Men-</Unicode>
+		  <Unicode>ufklaͤrung iſt der Ausgang des Men-</Unicode>
+		  <Unicode>ufklaͤrung iſt der Ausgang des Men-</Unicode>
+		  <Unicode>ufklaͤrung iſt der Ausgang des Men-</Unicode>
         </TextEquiv>
       </TextLine>
       <TextLine id="tl_9" primaryLanguage="German" custom="readingOrder {index:1;} textStyle {offset:0; length:45;fontFamily:Arial; fontSize:7.5;}">
@@ -444,6 +627,9 @@
           <Coords points="114,1133 204,1133 204,1170 114,1170"/>
           <TextEquiv>
             <Unicode>ſchen</Unicode>
+			<Unicode>ſchen</Unicode>
+			<Unicode>ſchen</Unicode>
+			<Unicode>ſchen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -451,6 +637,9 @@
           <Coords points="218,1142 281,1142 281,1163 218,1163"/>
           <TextEquiv>
             <Unicode>aus</Unicode>
+			<Unicode>aus</Unicode>
+			<Unicode>aus</Unicode>
+			<Unicode>aus</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -458,6 +647,9 @@
           <Coords points="297,1132 393,1132 393,1169 297,1169"/>
           <TextEquiv>
             <Unicode>ſeiner</Unicode>
+			<Unicode>ſeiner</Unicode>
+			<Unicode>ſeiner</Unicode>
+			<Unicode>ſeiner</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -465,6 +657,9 @@
           <Coords points="415,1133 503,1133 503,1169 415,1169"/>
           <TextEquiv>
             <Unicode>ſelbſt</Unicode>
+			<Unicode>ſelbſt</Unicode>
+			<Unicode>ſelbſt</Unicode>
+			<Unicode>ſelbſt</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -472,6 +667,9 @@
           <Coords points="520,1133 755,1133 755,1169 520,1169"/>
           <TextEquiv>
             <Unicode>verſchuldeten</Unicode>
+			<Unicode>verſchuldeten</Unicode>
+			<Unicode>verſchuldeten</Unicode>
+			<Unicode>verſchuldeten</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -479,6 +677,9 @@
           <Coords points="911,1162 774,1162 774,1130 911,1130"/>
           <TextEquiv>
             <Unicode>Unmuͤn</Unicode>
+			<Unicode>Unmuͤn</Unicode>
+			<Unicode>Unmuͤn</Unicode>
+			<Unicode>Unmuͤn</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -486,11 +687,17 @@
           <Coords points="922,1162 911,1162 911,1130 922,1130"/>
           <TextEquiv>
             <Unicode>-</Unicode>
+			<Unicode>-</Unicode>
+			<Unicode>-</Unicode>
+			<Unicode>-</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>ſchen aus ſeiner ſelbſt verſchuldeten Unmuͤn-</Unicode>
+		  <Unicode>ſchen aus ſeiner ſelbſt verſchuldeten Unmuͤn-</Unicode>
+		  <Unicode>ſchen aus ſeiner ſelbſt verſchuldeten Unmuͤn-</Unicode>
+		  <Unicode>ſchen aus ſeiner ſelbſt verſchuldeten Unmuͤn-</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
@@ -501,6 +708,9 @@
           <Coords points="229,1217 113,1217 113,1180 229,1180"/>
           <TextEquiv>
             <Unicode>digkeit</Unicode>
+			<Unicode>digkeit</Unicode>
+			<Unicode>digkeit</Unicode>
+			<Unicode>digkeit</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -508,6 +718,9 @@
           <Coords points="239,1217 229,1217 229,1180 239,1180"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -515,6 +728,9 @@
           <Coords points="286,1177 540,1177 540,1217 286,1217"/>
           <TextEquiv>
             <Unicode>Unmuͤndigkeit</Unicode>
+			<Unicode>Unmuͤndigkeit</Unicode>
+			<Unicode>Unmuͤndigkeit</Unicode>
+			<Unicode>Unmuͤndigkeit</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -522,6 +738,9 @@
           <Coords points="572,1181 604,1181 604,1215 572,1215"/>
           <TextEquiv>
             <Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -529,6 +748,9 @@
           <Coords points="635,1183 684,1183 684,1209 635,1209"/>
           <TextEquiv>
             <Unicode>das</Unicode>
+			<Unicode>das</Unicode>
+			<Unicode>das</Unicode>
+			<Unicode>das</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -536,6 +758,9 @@
           <Coords points="909,1216 715,1216 715,1179 909,1179"/>
           <TextEquiv>
             <Unicode>Unvermoͤgen</Unicode>
+			<Unicode>Unvermoͤgen</Unicode>
+			<Unicode>Unvermoͤgen</Unicode>
+			<Unicode>Unvermoͤgen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -543,11 +768,17 @@
           <Coords points="920,1216 909,1216 909,1179 920,1179"/>
           <TextEquiv>
             <Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>digkeit. Unmuͤndigkeit iſt das Unvermoͤgen,</Unicode>
+		  <Unicode>digkeit. Unmuͤndigkeit iſt das Unvermoͤgen,</Unicode>
+		  <Unicode>digkeit. Unmuͤndigkeit iſt das Unvermoͤgen,</Unicode>
+		  <Unicode>digkeit. Unmuͤndigkeit iſt das Unvermoͤgen,</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
@@ -558,6 +789,9 @@
           <Coords points="115,1226 163,1226 163,1262 115,1262"/>
           <TextEquiv>
             <Unicode>ſich</Unicode>
+			<Unicode>ſich</Unicode>
+			<Unicode>ſich</Unicode>
+			<Unicode>ſich</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -565,6 +799,9 @@
           <Coords points="180,1226 266,1226 266,1260 180,1260"/>
           <TextEquiv>
             <Unicode>ſeines</Unicode>
+			<Unicode>ſeines</Unicode>
+			<Unicode>ſeines</Unicode>
+			<Unicode>ſeines</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -572,6 +809,9 @@
           <Coords points="281,1226 451,1226 451,1262 281,1262"/>
           <TextEquiv>
             <Unicode>Verstandes</Unicode>
+			<Unicode>Verstandes</Unicode>
+			<Unicode>Verstandes</Unicode>
+			<Unicode>Verstandes</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -579,6 +819,9 @@
           <Coords points="472,1229 542,1229 542,1260 472,1260"/>
           <TextEquiv>
             <Unicode>ohne</Unicode>
+			<Unicode>ohne</Unicode>
+			<Unicode>ohne</Unicode>
+			<Unicode>ohne</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -586,6 +829,9 @@
           <Coords points="563,1226 675,1226 675,1264 563,1264"/>
           <TextEquiv>
             <Unicode>Leitung</Unicode>
+			<Unicode>Leitung</Unicode>
+			<Unicode>Leitung</Unicode>
+			<Unicode>Leitung</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -593,6 +839,9 @@
           <Coords points="704,1227 778,1227 778,1255 704,1255"/>
           <TextEquiv>
             <Unicode>eines</Unicode>
+			<Unicode>eines</Unicode>
+			<Unicode>eines</Unicode>
+			<Unicode>eines</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -600,11 +849,17 @@
           <Coords points="798,1228 920,1228 920,1255 798,1255"/>
           <TextEquiv>
             <Unicode>anderen</Unicode>
+			<Unicode>anderen</Unicode>
+			<Unicode>anderen</Unicode>
+			<Unicode>anderen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>ſich ſeines Verstandes ohne Leitung eines anderen</Unicode>
+		  <Unicode>ſich ſeines Verstandes ohne Leitung eines anderen</Unicode>
+		  <Unicode>ſich ſeines Verstandes ohne Leitung eines anderen</Unicode>
+		  <Unicode>ſich ſeines Verstandes ohne Leitung eines anderen</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
@@ -615,6 +870,9 @@
           <Coords points="111,1279 146,1279 146,1309 111,1309"/>
           <TextEquiv>
             <Unicode>zu</Unicode>
+			<Unicode>zu</Unicode>
+			<Unicode>zu</Unicode>
+			<Unicode>zu</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -622,6 +880,9 @@
           <Coords points="290,1302 161,1302 161,1273 290,1273"/>
           <TextEquiv>
             <Unicode>bedienen</Unicode>
+			<Unicode>bedienen</Unicode>
+			<Unicode>bedienen</Unicode>
+			<Unicode>bedienen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -629,6 +890,9 @@
           <Coords points="299,1302 290,1302 290,1273 299,1273"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -636,6 +900,9 @@
           <Coords points="338,1272 648,1272 648,1310 338,1310"/>
           <TextEquiv>
             <Unicode>Selbſtverſchuldet</Unicode>
+			<Unicode>Selbſtverſchuldet</Unicode>
+			<Unicode>Selbſtverſchuldet</Unicode>
+			<Unicode>Selbſtverſchuldet</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -643,6 +910,9 @@
           <Coords points="662,1274 695,1274 695,1309 662,1309"/>
           <TextEquiv>
             <Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -650,6 +920,9 @@
           <Coords points="710,1271 777,1271 777,1306 710,1306"/>
           <TextEquiv>
             <Unicode>dieſe</Unicode>
+			<Unicode>dieſe</Unicode>
+			<Unicode>dieſe</Unicode>
+			<Unicode>dieſe</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -657,6 +930,9 @@
           <Coords points="911,1306 791,1306 791,1271 911,1271"/>
           <TextEquiv>
             <Unicode>Unmuͤn</Unicode>
+			<Unicode>Unmuͤn</Unicode>
+			<Unicode>Unmuͤn</Unicode>
+			<Unicode>Unmuͤn</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -664,11 +940,17 @@
           <Coords points="921,1306 911,1306 911,1271 921,1271"/>
           <TextEquiv>
             <Unicode>-</Unicode>
+			<Unicode>-</Unicode>
+			<Unicode>-</Unicode>
+			<Unicode>-</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>zu bedienen . Selbſtverſchuldet iſt dieſe Unmuͤn-</Unicode>
+		  <Unicode>zu bedienen . Selbſtverſchuldet iſt dieſe Unmuͤn-</Unicode>
+		  <Unicode>zu bedienen . Selbſtverſchuldet iſt dieſe Unmuͤn-</Unicode>
+		  <Unicode>zu bedienen . Selbſtverſchuldet iſt dieſe Unmuͤn-</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
@@ -679,6 +961,9 @@
           <Coords points="215,1354 115,1354 115,1319 215,1319"/>
           <TextEquiv>
             <Unicode>digkeit</Unicode>
+			<Unicode>digkeit</Unicode>
+			<Unicode>digkeit</Unicode>
+			<Unicode>digkeit</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -686,6 +971,9 @@
           <Coords points="227,1354 215,1354 215,1319 227,1319"/>
           <TextEquiv>
             <Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -693,6 +981,9 @@
           <Coords points="247,1327 332,1327 332,1349 247,1349"/>
           <TextEquiv>
             <Unicode>wenn</Unicode>
+			<Unicode>wenn</Unicode>
+			<Unicode>wenn</Unicode>
+			<Unicode>wenn</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -700,6 +991,9 @@
           <Coords points="351,1321 391,1321 391,1349 351,1349"/>
           <TextEquiv>
             <Unicode>die</Unicode>
+			<Unicode>die</Unicode>
+			<Unicode>die</Unicode>
+			<Unicode>die</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -707,6 +1001,9 @@
           <Coords points="406,1319 519,1319 519,1354 406,1354"/>
           <TextEquiv>
             <Unicode>Urſache</Unicode>
+			<Unicode>Urſache</Unicode>
+			<Unicode>Urſache</Unicode>
+			<Unicode>Urſache</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -714,6 +1011,9 @@
           <Coords points="533,1319 666,1319 666,1354 533,1354"/>
           <TextEquiv>
             <Unicode>derſelben</Unicode>
+			<Unicode>derſelben</Unicode>
+			<Unicode>derſelben</Unicode>
+			<Unicode>derſelben</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -721,6 +1021,9 @@
           <Coords points="684,1318 756,1318 756,1353 684,1353"/>
           <TextEquiv>
             <Unicode>nicht</Unicode>
+			<Unicode>nicht</Unicode>
+			<Unicode>nicht</Unicode>
+			<Unicode>nicht</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -728,6 +1031,9 @@
           <Coords points="770,1326 816,1326 816,1348 770,1348"/>
           <TextEquiv>
             <Unicode>am</Unicode>
+			<Unicode>am</Unicode>
+			<Unicode>am</Unicode>
+			<Unicode>am</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -735,6 +1041,9 @@
           <Coords points="912,1349 830,1349 830,1318 912,1318"/>
           <TextEquiv>
             <Unicode>Man</Unicode>
+			<Unicode>Man</Unicode>
+			<Unicode>Man</Unicode>
+			<Unicode>Man</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -742,11 +1051,17 @@
           <Coords points="923,1349 912,1349 912,1318 923,1318"/>
           <TextEquiv>
             <Unicode>-</Unicode>
+			<Unicode>-</Unicode>
+			<Unicode>-</Unicode>
+			<Unicode>-</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>digkeit, wenn die Urſache derſelben nicht am Man-</Unicode>
+		  <Unicode>digkeit, wenn die Urſache derſelben nicht am Man-</Unicode>
+		  <Unicode>digkeit, wenn die Urſache derſelben nicht am Man-</Unicode>
+		  <Unicode>digkeit, wenn die Urſache derſelben nicht am Man-</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
@@ -757,6 +1072,9 @@
           <Coords points="110,1365 153,1365 153,1401 110,1401"/>
           <TextEquiv>
             <Unicode>gel</Unicode>
+			<Unicode>gel</Unicode>
+			<Unicode>gel</Unicode>
+			<Unicode>gel</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -764,6 +1082,9 @@
           <Coords points="169,1367 217,1367 217,1394 169,1394"/>
           <TextEquiv>
             <Unicode>des</Unicode>
+			<Unicode>des</Unicode>
+			<Unicode>des</Unicode>
+			<Unicode>des</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -771,6 +1092,9 @@
           <Coords points="406,1401 233,1401 233,1364 406,1364"/>
           <TextEquiv>
             <Unicode>Verſtandes</Unicode>
+			<Unicode>Verſtandes</Unicode>
+			<Unicode>Verſtandes</Unicode>
+			<Unicode>Verſtandes</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -778,6 +1102,9 @@
           <Coords points="417,1401 406,1401 406,1364 417,1364"/>
           <TextEquiv>
             <Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -785,6 +1112,9 @@
           <Coords points="438,1367 551,1367 551,1399 438,1399"/>
           <TextEquiv>
             <Unicode>ſondern</Unicode>
+			<Unicode>ſondern</Unicode>
+			<Unicode>ſondern</Unicode>
+			<Unicode>ſondern</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -792,6 +1122,9 @@
           <Coords points="578,1369 624,1369 624,1395 578,1395"/>
           <TextEquiv>
             <Unicode>der</Unicode>
+			<Unicode>der</Unicode>
+			<Unicode>der</Unicode>
+			<Unicode>der</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -799,6 +1132,9 @@
           <Coords points="637,1365 851,1365 851,1402 637,1402"/>
           <TextEquiv>
             <Unicode>Entſchließung</Unicode>
+			<Unicode>Entſchließung</Unicode>
+			<Unicode>Entſchließung</Unicode>
+			<Unicode>Entſchließung</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -806,11 +1142,17 @@
           <Coords points="866,1366 921,1366 921,1395 866,1395"/>
           <TextEquiv>
             <Unicode>und</Unicode>
+			<Unicode>und</Unicode>
+			<Unicode>und</Unicode>
+			<Unicode>und</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>gel des Verſtandes, ſondern der Entſchließung und</Unicode>
+		  <Unicode>gel des Verſtandes, ſondern der Entſchließung und</Unicode>
+		  <Unicode>gel des Verſtandes, ſondern der Entſchließung und</Unicode>
+		  <Unicode>gel des Verſtandes, ſondern der Entſchließung und</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
@@ -821,6 +1163,9 @@
           <Coords points="113,1412 162,1412 162,1440 113,1440"/>
           <TextEquiv>
             <Unicode>des</Unicode>
+			<Unicode>des</Unicode>
+			<Unicode>des</Unicode>
+			<Unicode>des</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -828,6 +1173,9 @@
           <Coords points="183,1411 308,1411 308,1448 183,1448"/>
           <TextEquiv>
             <Unicode>Muthes</Unicode>
+			<Unicode>Muthes</Unicode>
+			<Unicode>Muthes</Unicode>
+			<Unicode>Muthes</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -835,6 +1183,9 @@
           <Coords points="395,1449 331,1449 331,1415 395,1415"/>
           <TextEquiv>
             <Unicode>liegt</Unicode>
+			<Unicode>liegt</Unicode>
+			<Unicode>liegt</Unicode>
+			<Unicode>liegt</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -842,6 +1193,9 @@
           <Coords points="406,1449 395,1449 395,1415 406,1415"/>
           <TextEquiv>
             <Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -849,6 +1203,9 @@
           <Coords points="435,1413 482,1413 482,1449 435,1449"/>
           <TextEquiv>
             <Unicode>ſich</Unicode>
+			<Unicode>ſich</Unicode>
+			<Unicode>ſich</Unicode>
+			<Unicode>ſich</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -856,6 +1213,9 @@
           <Coords points="509,1414 593,1414 593,1449 509,1449"/>
           <TextEquiv>
             <Unicode>ſeiner</Unicode>
+			<Unicode>ſeiner</Unicode>
+			<Unicode>ſeiner</Unicode>
+			<Unicode>ſeiner</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -863,6 +1223,9 @@
           <Coords points="619,1411 688,1411 688,1447 619,1447"/>
           <TextEquiv>
             <Unicode>ohne</Unicode>
+			<Unicode>ohne</Unicode>
+			<Unicode>ohne</Unicode>
+			<Unicode>ohne</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -870,6 +1233,9 @@
           <Coords points="713,1410 826,1410 826,1449 713,1449"/>
           <TextEquiv>
             <Unicode>Leitung</Unicode>
+			<Unicode>Leitung</Unicode>
+			<Unicode>Leitung</Unicode>
+			<Unicode>Leitung</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -877,10 +1243,16 @@
           <Coords points="847,1413 922,1413 922,1441 847,1441"/>
           <TextEquiv>
             <Unicode>eines</Unicode>
+			<Unicode>eines</Unicode>
+			<Unicode>eines</Unicode>
+			<Unicode>eines</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
+          <Unicode>des Muthes liegt, ſich ſeiner ohne Leitung eines</Unicode>
+          <Unicode>des Muthes liegt, ſich ſeiner ohne Leitung eines</Unicode>
+          <Unicode>des Muthes liegt, ſich ſeiner ohne Leitung eines</Unicode>
           <Unicode>des Muthes liegt, ſich ſeiner ohne Leitung eines</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
@@ -892,6 +1264,9 @@
           <Coords points="113,1460 222,1460 222,1487 113,1487"/>
           <TextEquiv>
             <Unicode>andern</Unicode>
+			<Unicode>andern</Unicode>
+			<Unicode>andern</Unicode>
+			<Unicode>andern</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -899,6 +1274,9 @@
           <Coords points="250,1466 279,1466 279,1493 250,1493"/>
           <TextEquiv>
             <Unicode>zu</Unicode>
+			<Unicode>zu</Unicode>
+			<Unicode>zu</Unicode>
+			<Unicode>zu</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -906,6 +1284,9 @@
           <Coords points="434,1488 302,1488 302,1459 434,1459"/>
           <TextEquiv>
             <Unicode>bedienen</Unicode>
+			<Unicode>bedienen</Unicode>
+			<Unicode>bedienen</Unicode>
+			<Unicode>bedienen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -913,6 +1294,9 @@
           <Coords points="442,1488 434,1488 434,1459 442,1459"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -920,6 +1304,9 @@
           <Coords points="481,1460 576,1460 576,1493 481,1493"/>
           <TextEquiv>
             <Unicode>Sapere</Unicode>
+			<Unicode>Sapere</Unicode>
+			<Unicode>Sapere</Unicode>
+			<Unicode>Sapere</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.0"/>
         </Word>
@@ -927,6 +1314,9 @@
           <Coords points="665,1495 594,1495 594,1457 665,1457"/>
           <TextEquiv>
             <Unicode>aude</Unicode>
+			<Unicode>aude</Unicode>
+			<Unicode>aude</Unicode>
+			<Unicode>aude</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.0"/>
         </Word>
@@ -934,6 +1324,9 @@
           <Coords points="678,1495 665,1495 665,1457 678,1457"/>
           <TextEquiv>
             <Unicode>!</Unicode>
+			<Unicode>!</Unicode>
+			<Unicode>!</Unicode>
+			<Unicode>!</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.0"/>
         </Word>
@@ -941,6 +1334,9 @@
           <Coords points="719,1456 801,1456 801,1495 719,1495"/>
           <TextEquiv>
             <Unicode>Habe</Unicode>
+			<Unicode>Habe</Unicode>
+			<Unicode>Habe</Unicode>
+			<Unicode>Habe</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -948,11 +1344,17 @@
           <Coords points="827,1455 923,1455 923,1494 827,1494"/>
           <TextEquiv>
             <Unicode>Muth</Unicode>
+			<Unicode>Muth</Unicode>
+			<Unicode>Muth</Unicode>
+			<Unicode>Muth</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>andern zu bedienen. Sapere aude! Habe Muth</Unicode>
+		  <Unicode>andern zu bedienen. Sapere aude! Habe Muth</Unicode>
+		  <Unicode>andern zu bedienen. Sapere aude! Habe Muth</Unicode>
+		  <Unicode>andern zu bedienen. Sapere aude! Habe Muth</Unicode>
         </TextEquiv>
       </TextLine>
       <TextLine id="tl_17" primaryLanguage="German" custom="readingOrder {index:9;} textStyle {offset:0; length:51;fontFamily:Arial; fontSize:7.5;}">
@@ -962,6 +1364,9 @@
           <Coords points="112,1504 170,1504 170,1537 112,1537"/>
           <TextEquiv>
             <Unicode>dich</Unicode>
+			<Unicode>dich</Unicode>
+			<Unicode>dich</Unicode>
+			<Unicode>dich</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -969,6 +1374,9 @@
           <Coords points="188,1506 280,1506 280,1533 188,1533"/>
           <TextEquiv>
             <Unicode>deines</Unicode>
+			<Unicode>deines</Unicode>
+			<Unicode>deines</Unicode>
+			<Unicode>deines</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -976,6 +1384,9 @@
           <Coords points="296,1506 421,1506 421,1542 296,1542"/>
           <TextEquiv>
             <Unicode>eigenen</Unicode>
+			<Unicode>eigenen</Unicode>
+			<Unicode>eigenen</Unicode>
+			<Unicode>eigenen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -983,6 +1394,9 @@
           <Coords points="436,1505 608,1505 608,1542 436,1542"/>
           <TextEquiv>
             <Unicode>Verſtandes</Unicode>
+			<Unicode>Verſtandes</Unicode>
+			<Unicode>Verſtandes</Unicode>
+			<Unicode>Verſtandes</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -990,6 +1404,9 @@
           <Coords points="623,1514 653,1514 653,1542 623,1542"/>
           <TextEquiv>
             <Unicode>zu</Unicode>
+			<Unicode>zu</Unicode>
+			<Unicode>zu</Unicode>
+			<Unicode>zu</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -997,6 +1414,9 @@
           <Coords points="801,1535 669,1535 669,1506 801,1506"/>
           <TextEquiv>
             <Unicode>bedienen</Unicode>
+			<Unicode>bedienen</Unicode>
+			<Unicode>bedienen</Unicode>
+			<Unicode>bedienen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1004,6 +1424,9 @@
           <Coords points="814,1535 801,1535 801,1506 814,1506"/>
           <TextEquiv>
             <Unicode>!</Unicode>
+			<Unicode>!</Unicode>
+			<Unicode>!</Unicode>
+			<Unicode>!</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1011,6 +1434,9 @@
           <Coords points="834,1504 868,1504 868,1541 834,1541"/>
           <TextEquiv>
             <Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
+			<Unicode>iſt</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1018,6 +1444,9 @@
           <Coords points="912,1534 884,1534 884,1504 912,1504"/>
           <TextEquiv>
             <Unicode>al</Unicode>
+			<Unicode>al</Unicode>
+			<Unicode>al</Unicode>
+			<Unicode>al</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1025,11 +1454,17 @@
           <Coords points="925,1534 912,1534 912,1504 925,1504"/>
           <TextEquiv>
             <Unicode>-</Unicode>
+			<Unicode>-</Unicode>
+			<Unicode>-</Unicode>
+			<Unicode>-</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>dich deines eigenen Verſtandes zu bedienen! iſt al-</Unicode>
+		  <Unicode>dich deines eigenen Verſtandes zu bedienen! iſt al-</Unicode>
+		  <Unicode>dich deines eigenen Verſtandes zu bedienen! iſt al-</Unicode>
+		  <Unicode>dich deines eigenen Verſtandes zu bedienen! iſt al-</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
@@ -1040,6 +1475,9 @@
           <Coords points="111,1549 140,1549 140,1586 111,1586"/>
           <TextEquiv>
             <Unicode>ſo</Unicode>
+			<Unicode>ſo</Unicode>
+			<Unicode>ſo</Unicode>
+			<Unicode>ſo</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1047,6 +1485,9 @@
           <Coords points="155,1553 201,1553 201,1580 155,1580"/>
           <TextEquiv>
             <Unicode>der</Unicode>
+			<Unicode>der</Unicode>
+			<Unicode>der</Unicode>
+			<Unicode>der</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1054,6 +1495,9 @@
           <Coords points="216,1551 394,1551 394,1587 216,1587"/>
           <TextEquiv>
             <Unicode>Wahlſpruch</Unicode>
+			<Unicode>Wahlſpruch</Unicode>
+			<Unicode>Wahlſpruch</Unicode>
+			<Unicode>Wahlſpruch</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1061,6 +1505,9 @@
           <Coords points="406,1555 453,1555 453,1581 406,1581"/>
           <TextEquiv>
             <Unicode>der</Unicode>
+			<Unicode>der</Unicode>
+			<Unicode>der</Unicode>
+			<Unicode>der</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1068,6 +1515,9 @@
           <Coords points="645,1589 468,1589 468,1552 645,1552"/>
           <TextEquiv>
             <Unicode>Aufklaͤrung</Unicode>
+			<Unicode>Aufklaͤrung</Unicode>
+			<Unicode>Aufklaͤrung</Unicode>
+			<Unicode>Aufklaͤrung</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1075,16 +1525,55 @@
           <Coords points="654,1589 645,1589 645,1552 654,1552"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>ſo der Wahlſpruch der Aufklaͤrung.</Unicode>
+		  <Unicode>ſo der Wahlſpruch der Aufklaͤrung.</Unicode>
+		  <Unicode>ſo der Wahlſpruch der Aufklaͤrung.</Unicode>
+		  <Unicode>ſo der Wahlſpruch der Aufklaͤrung.</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
       <TextEquiv>
         <Unicode>ufklaͤrung iſt der Ausgang des Men-
+		ſchen aus ſeiner ſelbſt verſchuldeten Unmuͤn-
+		digkeit. Unmuͤndigkeit iſt das Unvermoͤgen,
+		ſich ſeines Verstandes ohne Leitung eines anderen
+		zu bedienen . Selbſtverſchuldet iſt dieſe Unmuͤn-
+		digkeit, wenn die Urſache derſelben nicht am Man-
+		gel des Verſtandes, ſondern der Entſchließung und
+		des Muthes liegt, ſich ſeiner ohne Leitung eines
+		andern zu bedienen. Sapere aude! Habe Muth
+		dich deines eigenen Verſtandes zu bedienen! iſt al-
+		ſo der Wahlſpruch der Aufklaͤrung.</Unicode>
+		<Unicode>ufklaͤrung iſt der Ausgang des Men-
+		ſchen aus ſeiner ſelbſt verſchuldeten Unmuͤn-
+		digkeit. Unmuͤndigkeit iſt das Unvermoͤgen,
+		ſich ſeines Verstandes ohne Leitung eines anderen
+		zu bedienen . Selbſtverſchuldet iſt dieſe Unmuͤn-
+		digkeit, wenn die Urſache derſelben nicht am Man-
+		gel des Verſtandes, ſondern der Entſchließung und
+		des Muthes liegt, ſich ſeiner ohne Leitung eines
+		andern zu bedienen. Sapere aude! Habe Muth
+		dich deines eigenen Verſtandes zu bedienen! iſt al-
+		ſo der Wahlſpruch der Aufklaͤrung.</Unicode>
+		<Unicode>ufklaͤrung iſt der Ausgang des Men-
+		ſchen aus ſeiner ſelbſt verſchuldeten Unmuͤn-
+		digkeit. Unmuͤndigkeit iſt das Unvermoͤgen,
+		ſich ſeines Verstandes ohne Leitung eines anderen
+		zu bedienen . Selbſtverſchuldet iſt dieſe Unmuͤn-
+		digkeit, wenn die Urſache derſelben nicht am Man-
+		gel des Verſtandes, ſondern der Entſchließung und
+		des Muthes liegt, ſich ſeiner ohne Leitung eines
+		andern zu bedienen. Sapere aude! Habe Muth
+		dich deines eigenen Verſtandes zu bedienen! iſt al-
+		ſo der Wahlſpruch der Aufklaͤrung.</Unicode>
+		<Unicode>ufklaͤrung iſt der Ausgang des Men-
 		ſchen aus ſeiner ſelbſt verſchuldeten Unmuͤn-
 		digkeit. Unmuͤndigkeit iſt das Unvermoͤgen,
 		ſich ſeines Verstandes ohne Leitung eines anderen
@@ -1106,6 +1595,9 @@
           <Coords points="171,1605 302,1605 302,1641 171,1641"/>
           <TextEquiv>
             <Unicode>Faulheit</Unicode>
+			<Unicode>Faulheit</Unicode>
+			<Unicode>Faulheit</Unicode>
+			<Unicode>Faulheit</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1113,6 +1605,9 @@
           <Coords points="317,1611 371,1611 371,1636 317,1636"/>
           <TextEquiv>
             <Unicode>und</Unicode>
+			<Unicode>und</Unicode>
+			<Unicode>und</Unicode>
+			<Unicode>und</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1120,6 +1615,9 @@
           <Coords points="382,1607 505,1607 505,1644 382,1644"/>
           <TextEquiv>
             <Unicode>Feigheit</Unicode>
+			<Unicode>Feigheit</Unicode>
+			<Unicode>Feigheit</Unicode>
+			<Unicode>Feigheit</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1127,6 +1625,9 @@
           <Coords points="518,1609 575,1609 575,1644 518,1644"/>
           <TextEquiv>
             <Unicode>ſind</Unicode>
+			<Unicode>ſind</Unicode>
+			<Unicode>ſind</Unicode>
+			<Unicode>ſind</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1134,6 +1635,9 @@
           <Coords points="594,1609 635,1609 635,1637 594,1637"/>
           <TextEquiv>
             <Unicode>die</Unicode>
+			<Unicode>die</Unicode>
+			<Unicode>die</Unicode>
+			<Unicode>die</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1141,6 +1645,9 @@
           <Coords points="778,1643 644,1643 644,1606 778,1606"/>
           <TextEquiv>
             <Unicode>Ursachen</Unicode>
+			<Unicode>Ursachen</Unicode>
+			<Unicode>Ursachen</Unicode>
+			<Unicode>Ursachen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1148,6 +1655,9 @@
           <Coords points="789,1643 778,1643 778,1606 789,1606"/>
           <TextEquiv>
             <Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1155,11 +1665,17 @@
           <Coords points="810,1612 920,1612 920,1636 810,1636"/>
           <TextEquiv>
             <Unicode>warum</Unicode>
+			<Unicode>warum</Unicode>
+			<Unicode>warum</Unicode>
+			<Unicode>warum</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>Faulheit und Feigheit ſind die Ursachen, warum</Unicode>
+		  <Unicode>Faulheit und Feigheit ſind die Ursachen, warum</Unicode>
+		  <Unicode>Faulheit und Feigheit ſind die Ursachen, warum</Unicode>
+		  <Unicode>Faulheit und Feigheit ſind die Ursachen, warum</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
@@ -1170,6 +1686,9 @@
           <Coords points="109,1651 158,1651 158,1681 109,1681"/>
           <TextEquiv>
             <Unicode>ein</Unicode>
+			<Unicode>ein</Unicode>
+			<Unicode>ein</Unicode>
+			<Unicode>ein</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1177,6 +1696,9 @@
           <Coords points="171,1652 198,1652 198,1685 171,1685"/>
           <TextEquiv>
             <Unicode>ſo</Unicode>
+			<Unicode>ſo</Unicode>
+			<Unicode>ſo</Unicode>
+			<Unicode>ſo</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1184,6 +1706,9 @@
           <Coords points="216,1653 314,1653 314,1689 216,1689"/>
           <TextEquiv>
             <Unicode>großer</Unicode>
+			<Unicode>großer</Unicode>
+			<Unicode>großer</Unicode>
+			<Unicode>großer</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1191,6 +1716,9 @@
           <Coords points="330,1653 410,1653 410,1688 330,1688"/>
           <TextEquiv>
             <Unicode>Theil</Unicode>
+			<Unicode>Theil</Unicode>
+			<Unicode>Theil</Unicode>
+			<Unicode>Theil</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1198,6 +1726,9 @@
           <Coords points="426,1657 473,1657 473,1682 426,1682"/>
           <TextEquiv>
             <Unicode>der</Unicode>
+			<Unicode>der</Unicode>
+			<Unicode>der</Unicode>
+			<Unicode>der</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1205,6 +1736,9 @@
           <Coords points="641,1689 485,1689 485,1654 641,1654"/>
           <TextEquiv>
             <Unicode>Menſchen</Unicode>
+			<Unicode>Menſchen</Unicode>
+			<Unicode>Menſchen</Unicode>
+			<Unicode>Menſchen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1212,6 +1746,9 @@
           <Coords points="655,1689 641,1689 641,1654 655,1654"/>
           <TextEquiv>
             <Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
+			<Unicode>,</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1219,6 +1756,9 @@
           <Coords points="676,1654 805,1654 805,1688 676,1688"/>
           <TextEquiv>
             <Unicode>nachdem</Unicode>
+			<Unicode>nachdem</Unicode>
+			<Unicode>nachdem</Unicode>
+			<Unicode>nachdem</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1226,6 +1766,9 @@
           <Coords points="827,1654 861,1654 861,1689 827,1689"/>
           <TextEquiv>
             <Unicode>ſie</Unicode>
+			<Unicode>ſie</Unicode>
+			<Unicode>ſie</Unicode>
+			<Unicode>ſie</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1233,11 +1776,17 @@
           <Coords points="880,1653 924,1653 924,1682 880,1682"/>
           <TextEquiv>
             <Unicode>die</Unicode>
+			<Unicode>die</Unicode>
+			<Unicode>die</Unicode>
+			<Unicode>die</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>ein ſo großer Theil der Menſchen , nachdem ſie die</Unicode>
+		  <Unicode>ein ſo großer Theil der Menſchen , nachdem ſie die</Unicode>
+		  <Unicode>ein ſo großer Theil der Menſchen , nachdem ſie die</Unicode>
+		  <Unicode>ein ſo großer Theil der Menſchen , nachdem ſie die</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
@@ -1248,6 +1797,9 @@
           <Coords points="114,1695 217,1695 217,1728 114,1728"/>
           <TextEquiv>
             <Unicode>Natur</Unicode>
+			<Unicode>Natur</Unicode>
+			<Unicode>Natur</Unicode>
+			<Unicode>Natur</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1255,6 +1807,9 @@
           <Coords points="235,1698 323,1698 323,1735 235,1735"/>
           <TextEquiv>
             <Unicode>laͤngſt</Unicode>
+			<Unicode>laͤngſt</Unicode>
+			<Unicode>laͤngſt</Unicode>
+			<Unicode>laͤngſt</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1262,6 +1817,9 @@
           <Coords points="343,1708 398,1708 398,1729 343,1729"/>
           <TextEquiv>
             <Unicode>von</Unicode>
+			<Unicode>von</Unicode>
+			<Unicode>von</Unicode>
+			<Unicode>von</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1269,6 +1827,9 @@
           <Coords points="422,1699 539,1699 539,1734 422,1734"/>
           <TextEquiv>
             <Unicode>fremder</Unicode>
+			<Unicode>fremder</Unicode>
+			<Unicode>fremder</Unicode>
+			<Unicode>fremder</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1276,6 +1837,9 @@
           <Coords points="554,1702 666,1702 666,1739 554,1739"/>
           <TextEquiv>
             <Unicode>Leitung</Unicode>
+			<Unicode>Leitung</Unicode>
+			<Unicode>Leitung</Unicode>
+			<Unicode>Leitung</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1283,6 +1847,9 @@
           <Coords points="686,1701 737,1701 737,1738 686,1738"/>
           <TextEquiv>
             <Unicode>frei</Unicode>
+			<Unicode>frei</Unicode>
+			<Unicode>frei</Unicode>
+			<Unicode>frei</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1290,16 +1857,31 @@
           <Coords points="765,1699 922,1699 922,1737 765,1737"/>
           <TextEquiv>
             <Unicode>geſprochen</Unicode>
+			<Unicode>geſprochen</Unicode>
+			<Unicode>geſprochen</Unicode>
+			<Unicode>geſprochen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>Natur laͤngſt von fremder Leitung frei geſprochen</Unicode>
+		  <Unicode>Natur laͤngſt von fremder Leitung frei geſprochen</Unicode>
+		  <Unicode>Natur laͤngſt von fremder Leitung frei geſprochen</Unicode>
+		  <Unicode>Natur laͤngſt von fremder Leitung frei geſprochen</Unicode>
         </TextEquiv>
         <TextStyle fontFamily="Arial" fontSize="7.5"/>
       </TextLine>
       <TextEquiv>
         <Unicode>Faulheit und Feigheit ſind die Ursachen, warum
+		ein ſo großer Theil der Menſchen , nachdem ſie die
+		Natur laͤngſt von fremder Leitung frei geſprochen</Unicode>
+		<Unicode>Faulheit und Feigheit ſind die Ursachen, warum
+		ein ſo großer Theil der Menſchen , nachdem ſie die
+		Natur laͤngſt von fremder Leitung frei geſprochen</Unicode>
+		<Unicode>Faulheit und Feigheit ſind die Ursachen, warum
+		ein ſo großer Theil der Menſchen , nachdem ſie die
+		Natur laͤngſt von fremder Leitung frei geſprochen</Unicode>
+		<Unicode>Faulheit und Feigheit ſind die Ursachen, warum
 		ein ſo großer Theil der Menſchen , nachdem ſie die
 		Natur laͤngſt von fremder Leitung frei geſprochen</Unicode>
       </TextEquiv>
@@ -1313,6 +1895,9 @@
           <Coords points="180,1772 147,1772 147,1749 147,1743 180,1743"/>
           <TextEquiv>
             <Unicode>B</Unicode>
+			<Unicode>B</Unicode>
+			<Unicode>B</Unicode>
+			<Unicode>B</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1320,6 +1905,9 @@
           <Coords points="187,1772 180,1772 180,1743 187,1743"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1327,6 +1915,9 @@
           <Coords points="386,1780 197,1780 197,1749 197,1745 386,1745"/>
           <TextEquiv>
             <Unicode>Monatsſchr</Unicode>
+			<Unicode>Monatsſchr</Unicode>
+			<Unicode>Monatsſchr</Unicode>
+			<Unicode>Monatsſchr</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1334,6 +1925,9 @@
           <Coords points="395,1780 386,1780 386,1745 395,1745"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1341,6 +1935,9 @@
           <Coords points="447,1776 411,1776 411,1749 411,1747 447,1747"/>
           <TextEquiv>
             <Unicode>IV</Unicode>
+			<Unicode>IV</Unicode>
+			<Unicode>IV</Unicode>
+			<Unicode>IV</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1348,6 +1945,9 @@
           <Coords points="456,1776 447,1776 447,1747 456,1747"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1355,6 +1955,9 @@
           <Coords points="494,1776 463,1776 463,1749 463,1746 494,1746"/>
           <TextEquiv>
             <Unicode>B</Unicode>
+			<Unicode>B</Unicode>
+			<Unicode>B</Unicode>
+			<Unicode>B</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1362,6 +1965,9 @@
           <Coords points="502,1776 494,1776 494,1746 502,1746"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1369,6 +1975,9 @@
           <Coords points="534,1775 518,1774 518,1749 534,1749"/>
           <TextEquiv>
             <Unicode>6</Unicode>
+			<Unicode>6</Unicode>
+			<Unicode>6</Unicode>
+			<Unicode>6</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="8.0"/>
         </Word>
@@ -1376,6 +1985,9 @@
           <Coords points="542,1776 535,1776 534,1775 534,1749 542,1767"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="8.0"/>
         </Word>
@@ -1383,6 +1995,9 @@
           <Coords points="599,1776 555,1776 555,1749 555,1747 599,1747"/>
           <TextEquiv>
             <Unicode>St</Unicode>
+			<Unicode>St</Unicode>
+			<Unicode>St</Unicode>
+			<Unicode>St</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1390,6 +2005,9 @@
           <Coords points="608,1776 599,1776 599,1747 608,1747"/>
           <TextEquiv>
             <Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
+			<Unicode>.</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1397,6 +2015,9 @@
           <Coords points="723,1785 692,1785 692,1743 723,1743"/>
           <TextEquiv>
             <Unicode>H</Unicode>
+			<Unicode>H</Unicode>
+			<Unicode>H</Unicode>
+			<Unicode>H</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
@@ -1404,15 +2025,24 @@
           <Coords points="751,1784 734,1784 734,1743 751,1743"/>
           <TextEquiv>
             <Unicode>h</Unicode>
+			<Unicode>h</Unicode>
+			<Unicode>h</Unicode>
+			<Unicode>h</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>B. Monatsſchr. IV. B. 6. St. H h</Unicode>
+		  <Unicode>B. Monatsſchr. IV. B. 6. St. H h</Unicode>
+		  <Unicode>B. Monatsſchr. IV. B. 6. St. H h</Unicode>
+		  <Unicode>B. Monatsſchr. IV. B. 6. St. H h</Unicode>
         </TextEquiv>
       </TextLine>
       <TextEquiv>
         <Unicode>B. Monatsſchr. IV. B. 6. St. H h</Unicode>
+		<Unicode>B. Monatsſchr. IV. B. 6. St. H h</Unicode>
+		<Unicode>B. Monatsſchr. IV. B. 6. St. H h</Unicode>
+		<Unicode>B. Monatsſchr. IV. B. 6. St. H h</Unicode>
       </TextEquiv>
     </TextRegion>
     <TextRegion type="catch-word" id="TextRegion_1478541568662_879" custom="readingOrder {index:10;} structure {type:catch-word;}">
@@ -1424,15 +2054,24 @@
           <Coords points="860,1748 923,1748 923,1778 860,1778 860,1749"/>
           <TextEquiv>
             <Unicode>(na-</Unicode>
+			<Unicode>(na-</Unicode>
+			<Unicode>(na-</Unicode>
+			<Unicode>(na-</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <TextEquiv>
           <Unicode>(na-</Unicode>
+		  <Unicode>(na-</Unicode>
+		  <Unicode>(na-</Unicode>
+		  <Unicode>(na-</Unicode>
         </TextEquiv>
       </TextLine>
       <TextEquiv>
         <Unicode>(na-</Unicode>
+		<Unicode>(na-</Unicode>
+		<Unicode>(na-</Unicode>
+		<Unicode>(na-</Unicode>
       </TextEquiv>
     </TextRegion>
     <SeparatorRegion id="r_3" custom="readingOrder {index:11;}">
