@@ -44,6 +44,12 @@ public class MultipleOCRFeatureExtractionTest {
 		}
 	}
 
+	/**
+	 *
+	 *
+	 *
+	 * @throws Exception
+	 */
 	@Before
 	public void init() throws Exception {
 		final FreqMap ngrams = CharacterNGrams.fromCSV("src/test/resources/nGrams.csv");
@@ -87,9 +93,9 @@ public class MultipleOCRFeatureExtractionTest {
 				int offset3 = 0;
 				int tokenID = 0;
 				for (TokenAlignment.Token token : tokenAlignment) {
-					final Optional<Word> masterWord = master.getWord(offset, token.getMaster());
-					final Optional<Word> add1Word = add1Line.getWord(offset2, token.getAlignment(1));
-					final Optional<Word> add2Word = add2Line.getWord(offset3, token.getAlignment(2));
+					final Optional<de.lmu.cis.ocrd.Word> masterWord = master.getWord(offset, token.getMaster());
+					final Optional<de.lmu.cis.ocrd.Word> add1Word = add1Line.getWord(offset2, token.getAlignment(1));
+					final Optional<de.lmu.cis.ocrd.Word> add2Word = add2Line.getWord(offset3, token.getAlignment(2));
 					assertThat(masterWord.isPresent(), is(true));
 					offset += masterWord.get().toString().length();
 					assertThat(add1Word.isPresent(), is(true));

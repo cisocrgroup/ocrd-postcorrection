@@ -10,10 +10,11 @@ import de.lmu.cis.ocrd.align.Node;
 import de.lmu.cis.ocrd.json.JSONUtil;
 
 public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
-	private final ArrayList<SimpleLine> cache = new ArrayList<>();
+	private final ArrayList<String> cache = new ArrayList<>();
 	private final ArrayList<Node> nodes = new ArrayList<>();
 
-	public LineOverlapWithMasterOCRFeature(JsonObject o, ArgumentFactory ignore) {
+	public LineOverlapWithMasterOCRFeature(JsonObject o,
+			ArgumentFactory ignore) {
 		this(JSONUtil.mustGetNameOrType(o));
 	}
 
@@ -47,13 +48,13 @@ public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
 		while (nodes.size() != n - 2) {
 			nodes.add(null);
 		}
-		final SimpleLine otherOCRLine = getWord(token, i, n).getLine();
+		final String otherOCRLine = getWord(token, i, n).getLineNormalized();
 		final int j = getIndex(i, n);
 		if (cache.get(j) == otherOCRLine) {
 			return;
 		}
-		final SimpleLine masterOCRLine = token.getMasterOCR().getLine();
-		final Graph g = new Graph(otherOCRLine.getNormalized(), masterOCRLine.getNormalized());
+		final String masterOCRLine = token.getMasterOCR().getLineNormalized();
+		final Graph g = new Graph(otherOCRLine, masterOCRLine);
 		nodes.set(j, g.getStartNode());
 		cache.set(j, otherOCRLine);
 	}

@@ -2,8 +2,6 @@ package de.lmu.cis.ocrd.ml.features;
 
 import java.util.Optional;
 
-import de.lmu.cis.ocrd.Word;
-
 public interface OCRToken {
 	public Word getMasterOCR();
 

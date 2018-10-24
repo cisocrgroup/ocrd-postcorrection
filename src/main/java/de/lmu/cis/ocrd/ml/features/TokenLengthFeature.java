@@ -15,7 +15,7 @@ public class TokenLengthFeature extends NamedDoubleFeature {
 
 	@Override
 	protected double doCalculate(OCRToken token, int i, int n) {
-		return getWord(token, i, n).toString().length();
+		return getWord(token, i, n).getString().length();
 	}
 
 	@Override

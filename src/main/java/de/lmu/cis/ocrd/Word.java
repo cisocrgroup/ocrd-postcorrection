@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd;
 import java.io.Serializable;
 import java.util.Optional;
 
-public class Word implements Serializable {
+public class Word implements Serializable, de.lmu.cis.ocrd.ml.features.Word {
 	private static final int SMALL_WORD = 3;
 	private final SimpleLine line;
 	private final int s, e;
@@ -51,5 +51,15 @@ public class Word implements Serializable {
 
 	public boolean isShort() {
 		return getSize() <= SMALL_WORD;
+	}
+
+	@Override
+	public String getString() {
+		return toString();
+	}
+
+	@Override
+	public String getLineNormalized() {
+		return getLine().getNormalized();
 	}
 }

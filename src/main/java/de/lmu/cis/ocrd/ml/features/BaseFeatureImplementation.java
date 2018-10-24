@@ -1,7 +1,5 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import de.lmu.cis.ocrd.Word;
-
 abstract class BaseFeatureImplementation implements Feature {
 	protected static boolean handlesOnlyMasterOCR(int i, int ignored) {
 		return i == 0;
