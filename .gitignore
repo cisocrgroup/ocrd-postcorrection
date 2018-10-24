@@ -11,3 +11,5 @@ doc
 src/webapp/assets/
 src/webapp/index.html
 /target/
+
+workbench.xmi
