@@ -16,7 +16,7 @@ public class MaxOCRConfidenceFeature extends NamedDoubleFeature {
 
 	@Override
 	protected double doCalculate(OCRToken token, int i, int n) {
-		final Word word = getWord(token, i, n);
+		final OCRWord word = getWord(token, i, n);
 		double max = 0;
 		for (int j = 0; j < word.getString().length(); j++) {
 			final double confidence = word.getConfidenceAt(j);

@@ -21,7 +21,7 @@ abstract class BaseFeatureImplementation implements Feature {
 		return true;
 	}
 
-	final Word getWord(OCRToken token, int i, int n) {
+	final OCRWord getWord(OCRToken token, int i, int n) {
 		assert (i >= 0);
 		assert (handlesOCR(i, n));
 		if (i == 0) { // master OCR

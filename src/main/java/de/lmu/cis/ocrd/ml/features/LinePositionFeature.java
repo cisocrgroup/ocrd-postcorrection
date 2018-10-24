@@ -26,7 +26,7 @@ public class LinePositionFeature extends NamedStringSetFeature {
 
 	@Override
 	public Object calculate(OCRToken token, int i, int n) {
-		final Word word = getWord(token, i, n);
+		final OCRWord word = getWord(token, i, n);
 		if (word.isFirstInLine()) {
 			return FIRST;
 		}

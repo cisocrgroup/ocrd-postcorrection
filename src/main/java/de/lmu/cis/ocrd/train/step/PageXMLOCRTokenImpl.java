@@ -5,12 +5,12 @@ import java.util.Optional;
 import de.lmu.cis.ocrd.Word;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 
-class Token implements OCRToken {
+class PageXMLOCRTokenImpl implements OCRToken {
 
 	private final de.lmu.cis.ocrd.pagexml.Word word;
 	private final boolean withGT;
 
-	public Token(de.lmu.cis.ocrd.pagexml.Word word, boolean withGT) {
+	public PageXMLOCRTokenImpl(de.lmu.cis.ocrd.pagexml.Word word, boolean withGT) {
 		this.word = word;
 		this.withGT = withGT;
 	}

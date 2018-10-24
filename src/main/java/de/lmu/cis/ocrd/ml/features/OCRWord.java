@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.ml.features;
 
-public interface Word {
+public interface OCRWord {
 	String getString();
 	String getLineNormalized();
 	double getConfidenceAt(int i);

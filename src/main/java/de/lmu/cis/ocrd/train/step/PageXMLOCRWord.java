@@ -3,12 +3,13 @@ package de.lmu.cis.ocrd.train.step;
 import java.util.Optional;
 
 import de.lmu.cis.ocrd.SimpleLine;
+import de.lmu.cis.ocrd.ml.features.OCRWord;
 
-public class Word implements de.lmu.cis.ocrd.ml.features.Word {
+public class PageXMLOCRWord implements OCRWord {
 	private final String word;
 	private final String line;
 
-	public Word(String word, String line) {
+	public PageXMLOCRWord(String word, String line) {
 		this.word = word;
 		this.line = line;
 	}

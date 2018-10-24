@@ -22,7 +22,7 @@ public class MaxCharNGramsFeature extends NamedCharacterNGramFeature {
 	@Override
 	public Object calculate(OCRToken token, int i, int n) {
 		double max = Double.MIN_VALUE;
-		final Word word = getWord(token, i, n);
+		final OCRWord word = getWord(token, i, n);
 		for (String trigram : splitIntoCharacterNGrams(word.toString(), 3)) {
 			final double val = getNgrams().getRelative(trigram);
 			if (val > max) {
