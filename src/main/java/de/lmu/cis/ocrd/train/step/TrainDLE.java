@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
+import org.pmw.tinylog.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -25,20 +26,16 @@ import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Word;
 
 // step: train dynamic lexicon extension.
-public class TrainDLE {
-	private final LM lm;
-	private final String featuresPath, dir;
-	private final List<String> files;
+public class TrainDLE extends Base {
+	private final String featuresPath;
 
 	public TrainDLE(String[] args) throws Exception {
-		this(args[0], args[1], args[2], args[3], Arrays.stream(args).skip(4).collect(Collectors.toList()));
+		this(args[0], args[1], args[2], args[3], args[4], Arrays.stream(args).skip(5).collect(Collectors.toList()));
 	}
 
-	public TrainDLE(String features, String profile, String trigrams, String dir, List<String> files) {
+	public TrainDLE(String logLevel, String features, String profile, String trigrams, String dir, List<String> files) {
+		super(true, logLevel, profile, trigrams, dir, files);
 		this.featuresPath = features;
-		this.dir = dir;
-		this.files = files;
-		this.lm = new LM(true, profile, trigrams, files);
 	}
 
 	public void run() throws Exception {
@@ -47,29 +44,29 @@ public class TrainDLE {
 			final String json = IOUtils.toString(is, Charset.forName("UTF-8"));
 			os = new Gson().fromJson(json, JsonObject[].class);
 		}
-		final FeatureSet fs = FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(os)
+		final FeatureSet fs = FeatureFactory.getDefault().withArgumentFactory(getLM()).createFeatureSet(os)
 				.add(new DynamicLexiconGTFeature());
-		for (int i = 0; i < lm.getNumberOfOtherOCRs() + 1; i++) {
-			Path tfile = Paths.get(dir, "dle_" + (i + 1) + ".arff");
+		for (int i = 0; i < getLM().getNumberOfOtherOCRs() + 1; i++) {
+			Path tfile = Paths.get(getDir().toString(), "dle_" + (i + 1) + ".arff");
 			try (ARFFWriter w = ARFFWriter.fromFeatureSet(fs)
 					.withWriter(new BufferedWriter(new FileWriter(tfile.toFile())))) {
 				w.writeHeader(i + 1);
-				for (String file : files) {
-					Page page = Page.open(Paths.get(file));
+				for (Path file : getFiles()) {
+					Page page = Page.open(file);
 					for (Line line : page.getLines()) {
 						for (Word word : line.getWords()) {
-
+							Logger.info("word: {}", word.getUnicode().get(0));
+							Logger.debug("word: {}", word.getUnicode().get(0));
 						}
 					}
 				}
 			}
 		}
-
 	}
 
 	public static void main(String[] args) throws Exception {
-		if (args.length < 4) {
-			throw new Exception("Usage: features profile trigrams dir files...");
+		if (args.length < 5) {
+			throw new Exception("Usage: logLevel features profile trigrams dir files...");
 		}
 		new TrainDLE(args).run();
 	}
