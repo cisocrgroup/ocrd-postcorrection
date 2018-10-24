@@ -18,7 +18,7 @@ public class MinOCRConfidenceFeature extends NamedDoubleFeature {
 	protected double doCalculate(OCRToken token, int i, int n) {
 		final OCRWord word = getWord(token, i, n);
 		double min = Double.MAX_VALUE;
-		for (int j = 0; j < word.getString().length(); j++) {
+		for (int j = 0; j < word.getWord().length(); j++) {
 			final double confidence = word.getConfidenceAt(j);
 			if (confidence < min) {
 				min = confidence;

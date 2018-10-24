@@ -35,12 +35,12 @@ public class PageXMLOCRWord implements OCRWord {
 	}
 
 	@Override
-	public String getString() {
+	public String getWord() {
 		return word;
 	}
 
 	@Override
 	public String toString() {
-		return getString();
+		return getWord();
 	}
 }

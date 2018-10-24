@@ -56,7 +56,7 @@ public class Word implements Serializable, OCRWord {
 	}
 
 	@Override
-	public String getString() {
+	public String getWord() {
 		return toString();
 	}
 
