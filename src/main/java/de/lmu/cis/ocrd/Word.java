@@ -3,7 +3,9 @@ package de.lmu.cis.ocrd;
 import java.io.Serializable;
 import java.util.Optional;
 
-public class Word implements Serializable, de.lmu.cis.ocrd.ml.features.OCRWord {
+import de.lmu.cis.ocrd.ml.features.OCRWord;
+
+public class Word implements Serializable, OCRWord {
 	private static final int SMALL_WORD = 3;
 	private final SimpleLine line;
 	private final int s, e;
