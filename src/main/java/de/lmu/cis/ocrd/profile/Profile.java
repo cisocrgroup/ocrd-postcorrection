@@ -47,12 +47,12 @@ public class Profile {
 		Type map = new TypeToken<HashMap<String, Candidates>>() {
 		}.getType();
 		HashMap<String, Candidates> data = gson.fromJson(json, map);
-		return new Profile(toLowerCase(data))
-				.removeEmptyCandidates()
+		return new Profile(toLowerCase(data)).removeEmptyCandidates()
 				.sortCandidatesByVoteWeight();
 	}
 
-	private static HashMap<String, Candidates> toLowerCase(HashMap<String, Candidates> map) {
+	private static HashMap<String, Candidates> toLowerCase(
+			HashMap<String, Candidates> map) {
 		HashMap<String, Candidates> newMap = new HashMap<>();
 		for (Map.Entry<String, Candidates> entry : map.entrySet()) {
 			String lower = entry.getKey().toLowerCase();
@@ -63,13 +63,15 @@ public class Profile {
 	}
 
 	private Profile removeEmptyCandidates() {
-		data.entrySet().removeIf((e) -> e.getValue().Candidates == null || e.getValue().Candidates.length == 0);
+		data.entrySet().removeIf((e) -> e.getValue().Candidates == null
+				|| e.getValue().Candidates.length == 0);
 		return this;
 	}
 
 	private Profile sortCandidatesByVoteWeight() {
 		for (Map.Entry<String, Candidates> e : data.entrySet()) {
-			Arrays.sort(e.getValue().Candidates, (Candidate a, Candidate b) -> (int) (b.Weight - a.Weight));
+			Arrays.sort(e.getValue().Candidates,
+					(Candidate a, Candidate b) -> (int) (b.Weight - a.Weight));
 		}
 		return this;
 	}

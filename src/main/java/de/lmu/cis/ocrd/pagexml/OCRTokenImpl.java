@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.ml.features.OCRWord;
+import de.lmu.cis.ocrd.profile.Candidate;
 
 public class OCRTokenImpl implements OCRToken {
 
@@ -42,5 +43,10 @@ public class OCRTokenImpl implements OCRToken {
 			return Optional.empty();
 		}
 		return Optional.of(this.words.get(0).getWord());
+	}
+
+	@Override
+	public Optional<Candidate> getProfilerCandidate() {
+		return Optional.empty();
 	}
 }

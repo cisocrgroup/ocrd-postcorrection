@@ -7,7 +7,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Configurator;
@@ -19,20 +21,17 @@ import com.google.gson.JsonObject;
 
 public class Base {
 	private final LM lm;
-	private final List<Path> files;
 	private final boolean withGT;
-	private final Path dir;
+	private final ModelDir mdir;
+	private final TmpDir tdir;
+	private final Config config;
 
-	public Base(boolean withGT, String logLevel, String profile,
-			String trigrams, String dir, List<String> files)
-			throws IOException {
-		this.lm = new LM(withGT, profile, trigrams, files);
-		this.withGT = withGT;
-		this.dir = Paths.get(dir);
-		this.files = new ArrayList<Path>();
-		for (String file : files) {
-			this.files.add(Paths.get(file));
-		}
+	public Base(boolean withGT, String logLevel, ModelDir mdir, TmpDir tdir, Config config) {
+		this.lm = new LM(withGT, config.trigrams, config.trainingFiles);
+		this.withGT = false;
+		this.mdir = mdir;
+		this.tdir = tdir;
+		this.config = config;
 		setupLogger(logLevel.toUpperCase());
 	}
 
@@ -49,20 +48,28 @@ public class Base {
 		return lm;
 	}
 
-	public List<Path> getFiles() {
-		return files;
+	public Config getConfig() {
+		return config;
 	}
 
 	public boolean isWithGT() {
 		return withGT;
 	}
 
-	public Path getDir() {
-		return dir;
+	public ModelDir getModelDir() {
+		return mdir;
+	}
+
+	public TmpDir getTmpDir() {
+		return tdir;
 	}
 
 	private void setupLogger(String logLevel) {
 		Configurator.currentConfig().level(Level.valueOf(logLevel)).activate();
 		Logger.debug("current log level: {}", Logger.getLevel());
+	}
+
+	public static List<String> toList(String[] args, int skip) {
+		return Arrays.stream(args).skip(skip).collect(Collectors.toList());
 	}
 }

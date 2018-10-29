@@ -15,15 +15,14 @@ import de.lmu.cis.ocrd.profile.Profile;
 // step: Language Model
 public class LM implements ArgumentFactory {
 	private final int startIndex;
-	private final String profilePath, trigramsPath;
+	private final String trigramsPath;
 	private final List<String> files;
 	private List<FreqMap> freqMaps;
 	private FreqMap trigrams;
 	private Profile profile;
 
-	LM(boolean gt, String profile, String trigrams, List<String> files) {
+	LM(boolean gt, String trigrams, List<String> files) {
 		this.startIndex = gt ? 1 : 0;
-		this.profilePath = profile;
 		this.trigramsPath = trigrams;
 		this.files = files;
 		this.freqMaps = null;
@@ -63,13 +62,6 @@ public class LM implements ArgumentFactory {
 		trigrams = CharacterNGrams.fromCSV(trigramsPath);
 	}
 
-	private void loadProfileIfNotPresent() throws Exception {
-		if (profile != null) {
-			return;
-		}
-		profile = Profile.fromJSON(profilePath);
-	}
-
 	@Override
 	public FreqMap getMasterOCRUnigrams() throws Exception {
 		loadFreqMapsIfNotPresent();
@@ -94,9 +86,12 @@ public class LM implements ArgumentFactory {
 		return trigrams;
 	}
 
+	public void setProfile(Profile profile) {
+		this.profile = profile;
+	}
+
 	@Override
 	public Profile getProfile() throws Exception {
-		loadProfileIfNotPresent();
 		return profile;
 	}
 }

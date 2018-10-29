@@ -3,15 +3,11 @@ package de.lmu.cis.ocrd.train.step;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-import org.apache.commons.io.FileUtils;
 import org.pmw.tinylog.Logger;
 
 import de.lmu.cis.ocrd.ml.ARFFWriter;
@@ -21,8 +17,12 @@ import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.pagexml.Line;
 import de.lmu.cis.ocrd.pagexml.OCRTokenImpl;
+import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
 import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Word;
+import de.lmu.cis.ocrd.profile.Candidate;
+import de.lmu.cis.ocrd.profile.Candidates;
+import de.lmu.cis.ocrd.profile.LocalProfiler;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.functions.SimpleLogistic;
@@ -31,83 +31,162 @@ import weka.core.converters.ConverterUtils;
 
 // step: train dynamic lexicon extension.
 public class TrainDLE extends Base {
-	public TrainDLE(String[] args) throws Exception {
-		this(args[0], args[1], args[2], args[3], args[4],
-				Arrays.stream(args).skip(5).collect(Collectors.toList()));
-	}
-
-	public TrainDLE(String logLevel, String features, String profile,
-			String trigrams, String dir, List<String> files)
-			throws IOException {
-		super(true, logLevel, profile, trigrams, dir, files);
-		FileUtils.copyFile(Paths.get(features).toFile(),
-				getFeatures().toFile());
+	public TrainDLE(String logLevel, ModelDir mdir, TmpDir tdir,
+			Config config) {
+		super(true, logLevel, mdir, tdir, config);
 	}
 
 	public void run() throws Exception {
-		prepare();
-		train();
+		dleProfile();
+		dlePrepare();
+		dleTrain();
+		rrPrepare();
+	}
+
+	private void dleProfile() throws Exception {
+		Logger.info("DLE: profiling");
+		Path profilerIn = getTmpDir().getDLEProfilerInput();
+		getTmpDir().putProfilerInputFile(true, getConfig().trainingFiles,
+				profilerIn);
+		LocalProfiler lp = new LocalProfiler()
+				.withExecutable(getConfig().profiler)
+				.withLanguageDirectory(getConfig().profilerLanguageDir)
+				.withLanguage(getConfig().profilerLanguage)
+				.withInputPath(profilerIn)
+				.withOutputPath(getTmpDir().getDLEProfile())
+				.withArgs("--types");
+		getLM().setProfile(lp.profile());
+		Logger.debug("DLE: profiling done");
 	}
 
 	//
-	// Prepare the different arff files for the actual model training.
+	// Prepare the different arff files for the actual dle model training.
 	//
-	private void prepare() throws Exception {
+	private void dlePrepare() throws Exception {
+		getModelDir().putDLEFeatures(Paths.get(getConfig().dleFeatures));
 		final FeatureSet fs = FeatureFactory.getDefault()
 				.withArgumentFactory(getLM())
-				.createFeatureSet(getFeatures(this.getFeatures()))
+				.createFeatureSet(getFeatures(getModelDir().getDLEFeatures()))
 				.add(new DynamicLexiconGTFeature());
 		for (int i = 0; i < getLM().getNumberOfOtherOCRs() + 1; i++) {
-			prepare(fs, i);
+			dlePrepare(fs, i);
 		}
 	}
 
-	private void prepare(FeatureSet fs, int i) throws Exception {
-		Path tfile = getTrain(i + 1);
-		Logger.info("preparing for {} OCR(s) to {}", i, tfile.toString());
+	private void dlePrepare(FeatureSet fs, int i) throws Exception {
+		Path tfile = getModelDir().getDLETraining(i + 1);
+		Logger.info("DLE: preparing for {} OCR(s) to {}", i + 1,
+				tfile.toString());
 		try (ARFFWriter w = ARFFWriter.fromFeatureSet(fs).withWriter(
 				new BufferedWriter(new FileWriter(tfile.toFile())))) {
 			w.withDebugToken(true);
 			w.withRelation("dle-train-" + (i + 1));
-			w.writeHeader(i+1);
-			for (Path file : getFiles()) {
-				Page page = Page.open(file);
-				prepare(w, fs, i, page);
+			w.writeHeader(i + 1);
+			for (String file : getConfig().trainingFiles) {
+				Page page = Page.open(Paths.get(file));
+				dlePrepare(w, fs, i, page);
 			}
 		}
 	}
 
-	private void prepare(ARFFWriter w, FeatureSet fs, int i, Page page) {
-		for (Line line : page.getLines()) {
-			for (Word word : line.getWords()) {
-				final OCRToken t = new OCRTokenImpl(word, true);
-				Logger.debug("word({}): {} GT: {}", i + 1,
-						word.getUnicodeNormalized().get(i), t.getGT().get());
-				final FeatureSet.Vector values = fs.calculateFeatureVector(t,
-						i + 1);
-				Logger.debug(values);
-				w.writeFeatureVector(values);
-			}
-		}
+	private void dlePrepare(ARFFWriter w, FeatureSet fs, int i, Page page)
+			throws Exception {
+		eachLongWord(page, (word, mOCR) -> {
+			final OCRToken t = new OCRTokenImpl(word, true);
+			Logger.debug("word({}): {} GT: {}", i + 1,
+					word.getUnicodeNormalized().get(i), t.getGT().get());
+			final FeatureSet.Vector values = fs.calculateFeatureVector(t,
+					i + 1);
+			Logger.debug(values);
+			w.writeFeatureVector(values);
+		});
 	}
 
 	//
 	// Train the actual models.
 	//
-	private void train() throws Exception {
+	private void dleTrain() throws Exception {
 		for (int i = 0; i < getLM().getNumberOfOtherOCRs() + 1; i++) {
-			train(i);
+			Path tfile = getModelDir().getDLETraining(i + 1);
+			Path mfile = getModelDir().getDLEModel(i + 1);
+			Logger.info("DLE: training for {} OCR(s) from {} to {}", i,
+					tfile.toString(), mfile.toString());
+			train(tfile, mfile);
 		}
 	}
 
-	private void train(int i) throws Exception {
-		final Path mfile = getModel(i + 1);
-		final Path tfile = getTrain(i + 1);
-		Logger.info("training for {} OCR(s) from {} to {}", i, tfile.toString(),
-				mfile.toString());
+	//
+	// Prepare the different arff files for the actual rr model training.
+	//
+	private void rrPrepare() throws Exception {
+		getModelDir().putRRFeatures(Paths.get(getConfig().dleFeatures));
+		final FeatureSet fs = FeatureFactory.getDefault()
+				.withArgumentFactory(getLM())
+				.createFeatureSet(getFeatures(getModelDir().getDLEFeatures()))
+				.add(new DynamicLexiconGTFeature());
+		for (int i = 0; i < getLM().getNumberOfOtherOCRs() + 1; i++) {
+			rrPrepare(fs, i);
+		}
+	}
+
+	private void rrPrepare(FeatureSet fs, int i) throws Exception {
+		Path tfile = getModelDir().getRRTraining(i + 1);
+		Logger.info("RR: preparing for {} OCR(s) to {}", i + 1,
+				tfile.toString());
+		try (ARFFWriter w = ARFFWriter.fromFeatureSet(fs).withWriter(
+				new BufferedWriter(new FileWriter(tfile.toFile())))) {
+			w.withDebugToken(true);
+			w.withRelation("rr-train-" + (i + 1));
+			w.writeHeader(i + 1);
+			for (String file : getConfig().trainingFiles) {
+				Page page = Page.open(Paths.get(file));
+				rrPrepare(w, fs, i, page);
+			}
+		}
+	}
+
+	private void rrPrepare(ARFFWriter w, FeatureSet fs, int i, Page page)
+			throws Exception {
+		eachLongWord(page, (word, mOCR) -> {
+			Optional<Candidates> cs = getLM().getProfile().get(mOCR);
+			if (!cs.isPresent()) {
+				return;
+			}
+			Logger.debug("word({}): {} GT: {}", i + 1,
+					word.getUnicodeNormalized().get(i),
+					word.getUnicodeNormalized().get(0));
+			for (Candidate c : cs.get().Candidates) {
+				final OCRToken t = new OCRTokenWithCandidateImpl(word, true, c);
+				final FeatureSet.Vector values = fs.calculateFeatureVector(t,
+						i + 1);
+				Logger.debug(values);
+				w.writeFeatureVector(values);
+			}
+		});
+	}
+
+	interface WordOperation {
+		void apply(Word word, String mOCR) throws Exception;
+	}
+
+	private static void eachLongWord(Page page, WordOperation f)
+			throws Exception {
+		for (Line line : page.getLines()) {
+			for (Word word : line.getWords()) {
+				String mOCR = word.getUnicodeNormalized().get(1);
+				if (mOCR.length() > 3) {
+					f.apply(word, mOCR);
+				}
+			}
+		}
+	}
+
+	private void train(Path tfile, Path mfile) throws Exception {
+		Logger.debug("training {} from {}", mfile.toString(), tfile.toString());
 		final ConverterUtils.DataSource ds = new ConverterUtils.DataSource(
 				tfile.toString());
 		final Instances train = ds.getDataSet();
+		// gt is last class
 		train.setClassIndex(train.numAttributes() - 1);
 		final Instances structure = ds.getStructure();
 		structure.setClassIndex(structure.numAttributes() - 1);
@@ -120,23 +199,4 @@ public class TrainDLE extends Base {
 		}
 	}
 
-	public Path getTrain(int n) {
-		return Paths.get(getDir().toString(), "dle-train-" + n + ".arff");
-	}
-
-	public Path getModel(int n) {
-		return Paths.get(getDir().toString(), "dle-model-" + n + ".ser");
-	}
-
-	public Path getFeatures() {
-		return Paths.get(getDir().toString(), "dle-features.json");
-	}
-
-	public static void main(String[] args) throws Exception {
-		if (args.length < 5) {
-			throw new Exception(
-					"Usage: logLevel features profile trigrams dir files...");
-		}
-		new TrainDLE(args).run();
-	}
 }
