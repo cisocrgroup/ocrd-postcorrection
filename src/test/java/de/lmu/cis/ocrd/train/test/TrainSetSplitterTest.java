@@ -18,7 +18,6 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class TrainSetSplitterTest extends TestBase {
 	private Environment environment;
-	private Tokenizer tokenizer;
 
 	@Before
 	public void init() throws IOException {
@@ -28,7 +27,6 @@ public class TrainSetSplitterTest extends TestBase {
 				.withGT(resources + "/1841-DieGrenzboten-gt-small.zip")
 				.withMasterOCR(resources + "/1841-DieGrenzboten-abbyy-small.zip")
 				.addOtherOCR(resources + "/1841-DieGrenzboten-tesseract-small.zip");
-		tokenizer = new Tokenizer(environment);
 	}
 
 	@Test

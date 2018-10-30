@@ -47,6 +47,7 @@ public class Project implements Document {
 
 	private static class Entry {
 		final Document document;
+		@SuppressWarnings("unused")
 		final boolean isMasterOCR;
 
 		Entry(Document document, boolean isMasterOCR) {

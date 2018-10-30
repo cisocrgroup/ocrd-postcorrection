@@ -39,6 +39,8 @@ public class FeatureFactoryTest {
 	}
 
 	public static class TestFeature extends TokenLengthClassFeature {
+		private static final long serialVersionUID = 3240781744100370146L;
+
 		public TestFeature(JsonObject o, ArgumentFactory args) {
 			super(o, args);
 		}

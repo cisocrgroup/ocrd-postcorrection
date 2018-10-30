@@ -64,6 +64,7 @@ public class ARFFWriterTest {
 	}
 
 	private class MockFeature extends NamedDoubleFeature {
+		private static final long serialVersionUID = 6638213785538921732L;
 		private final double n;
 
 		MockFeature(String name, double n) {

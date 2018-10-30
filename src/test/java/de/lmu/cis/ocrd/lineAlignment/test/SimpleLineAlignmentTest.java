@@ -66,7 +66,7 @@ public class SimpleLineAlignmentTest {
 
 		ArrayList<HashSet<Integer>> aligned_ids = new ArrayList<HashSet<Integer>>();
 		for (ArrayList<OCRLine> aligned_lines : la) {
-			HashSet<Integer> aligned_id_set = new HashSet();
+			HashSet<Integer> aligned_id_set = new HashSet<>();
 			for (OCRLine line : aligned_lines) {
 				aligned_id_set.add(line.line.getLineId());
 

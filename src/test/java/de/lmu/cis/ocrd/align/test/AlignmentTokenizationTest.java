@@ -72,7 +72,6 @@ public class AlignmentTokenizationTest {
 	}
 
 	private static class Pair {
-		@SuppressWarnings("unused")
 		String first, second;
 	}
 

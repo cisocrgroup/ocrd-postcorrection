@@ -40,6 +40,7 @@ public class FeatureSetTest {
 	}
 
 	private class MockFeature extends NamedDoubleFeature {
+		private static final long serialVersionUID = 5125584753315601766L;
 		private final double val;
 
 		MockFeature(double n) {

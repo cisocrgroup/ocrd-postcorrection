@@ -1,18 +1,7 @@
 package de.lmu.cis.ocrd.ml.test;
 
-import de.lmu.cis.iba.LineAlignment;
-import de.lmu.cis.ocrd.*;
-import de.lmu.cis.ocrd.align.Graph;
-import de.lmu.cis.ocrd.align.TokenAlignment;
-import de.lmu.cis.ocrd.ml.*;
-import de.lmu.cis.ocrd.ml.features.*;
-import de.lmu.cis.ocrd.parsers.StringParser;
-import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import weka.core.Instances;
-import weka.core.converters.ArffLoader;
-import weka.core.converters.ConverterUtils;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -21,8 +10,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
+import org.junit.Test;
+
+import de.lmu.cis.iba.LineAlignment;
+import de.lmu.cis.ocrd.Document;
+import de.lmu.cis.ocrd.OCRLine;
+import de.lmu.cis.ocrd.Project;
+import de.lmu.cis.ocrd.SimpleLine;
+import de.lmu.cis.ocrd.align.TokenAlignment;
+import de.lmu.cis.ocrd.ml.ARFFWriter;
+import de.lmu.cis.ocrd.ml.CharacterNGrams;
+import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.ml.FreqMap;
+import de.lmu.cis.ocrd.ml.Token;
+import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
+import de.lmu.cis.ocrd.ml.features.MaxCharNGramsFeature;
+import de.lmu.cis.ocrd.ml.features.MinCharNGramsFeature;
+import de.lmu.cis.ocrd.ml.features.SumOfMatchingAdditionalOCRsFeature;
+import de.lmu.cis.ocrd.ml.features.TokenCaseClassFeature;
+import de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature;
+import de.lmu.cis.ocrd.parsers.StringParser;
+
+import weka.core.Instances;
+import weka.core.converters.ArffLoader;
+import weka.core.converters.ConverterUtils;
 
 public class MultipleOCRFeatureExtractionTest {
 	private final String gt = "First second third alongtoken anotherevenlongertoken the";
@@ -35,10 +48,12 @@ public class MultipleOCRFeatureExtractionTest {
 	private static void check(Instances got, Instances want) {
 		assertThat(got.numAttributes(), is(want.numAttributes()));
 		for (int i = 0; i < want.numAttributes(); i++) {
-			assertThat(got.attributeToDoubleArray(i).length, is(want.attributeToDoubleArray(i).length));
+			assertThat(got.attributeToDoubleArray(i).length,
+					is(want.attributeToDoubleArray(i).length));
 			for (int j = 0; j < want.attributeToDoubleArray(i).length; j++) {
 //                System.out.print(got.attributeToDoubleArray(i)[j] + " ");
-				assertThat(got.attributeToDoubleArray(i)[j], is(want.attributeToDoubleArray(i)[j]));
+				assertThat(got.attributeToDoubleArray(i)[j],
+						is(want.attributeToDoubleArray(i)[j]));
 			}
 //            System.out.println();
 		}
@@ -52,7 +67,8 @@ public class MultipleOCRFeatureExtractionTest {
 	 */
 	@Before
 	public void init() throws Exception {
-		final FreqMap ngrams = CharacterNGrams.fromCSV("src/test/resources/nGrams.csv");
+		final FreqMap ngrams = CharacterNGrams
+				.fromCSV("src/test/resources/nGrams.csv");
 		fs = new FeatureSet()
 				.add(new TokenLengthClassFeature("TokenLength", 3, 8, 13))
 				.add(new TokenCaseClassFeature("TokenCase"))
@@ -61,11 +77,13 @@ public class MultipleOCRFeatureExtractionTest {
 				.add(new MinCharNGramsFeature("MinCharNGramFeature", ngrams))
 				.add(new DynamicLexiconGTFeature());
 		final Document gtDoc = new StringParser(0, gt).parse().withPath("GT");
-		final Document mOCRDoc = new StringParser(0, mOCR).parse().withPath("master OCR");
-		final Document aOCR1Doc = new StringParser(0, aOCR1).parse().withPath("additional OCR 1");
-		final Document aOCR2Doc = new StringParser(0, aOCR2).parse().withPath("additional OCR 2");
-		final Project project = new Project()
-				.put("master OCR", mOCRDoc, true)
+		final Document mOCRDoc = new StringParser(0, mOCR).parse()
+				.withPath("master OCR");
+		final Document aOCR1Doc = new StringParser(0, aOCR1).parse()
+				.withPath("additional OCR 1");
+		final Document aOCR2Doc = new StringParser(0, aOCR2).parse()
+				.withPath("additional OCR 2");
+		final Project project = new Project().put("master OCR", mOCRDoc, true)
 				.put("GT", gtDoc, false)
 				.put("additional OCR 1", aOCR1Doc, false)
 				.put("additional OCR 2", aOCR2Doc, false);
@@ -82,27 +100,33 @@ public class MultipleOCRFeatureExtractionTest {
 				final SimpleLine gtLine = (SimpleLine) lines.get(1).line;
 				final SimpleLine add1Line = (SimpleLine) lines.get(2).line;
 				final SimpleLine add2Line = (SimpleLine) lines.get(3).line;
-				Graph g = new Graph(master.getNormalized(), add2Line.getNormalized());
+				// Graph g = new Graph(master.getNormalized(),
+				// add2Line.getNormalized());
 //                System.out.println("xxx" + g.getStartNode().toString());
-				TokenAlignment tokenAlignment = new TokenAlignment(master.getNormalized())
-						.add(gtLine.getNormalized())
-						.add(add1Line.getNormalized())
-						.add(add2Line.getNormalized());
+				TokenAlignment tokenAlignment = new TokenAlignment(
+						master.getNormalized()).add(gtLine.getNormalized())
+								.add(add1Line.getNormalized())
+								.add(add2Line.getNormalized());
 				int offset = 0;
 				int offset2 = 0;
 				int offset3 = 0;
 				int tokenID = 0;
 				for (TokenAlignment.Token token : tokenAlignment) {
-					final Optional<de.lmu.cis.ocrd.Word> masterWord = master.getWord(offset, token.getMaster());
-					final Optional<de.lmu.cis.ocrd.Word> add1Word = add1Line.getWord(offset2, token.getAlignment(1));
-					final Optional<de.lmu.cis.ocrd.Word> add2Word = add2Line.getWord(offset3, token.getAlignment(2));
+					final Optional<de.lmu.cis.ocrd.Word> masterWord = master
+							.getWord(offset, token.getMaster());
+					final Optional<de.lmu.cis.ocrd.Word> add1Word = add1Line
+							.getWord(offset2, token.getAlignment(1));
+					final Optional<de.lmu.cis.ocrd.Word> add2Word = add2Line
+							.getWord(offset3, token.getAlignment(2));
 					assertThat(masterWord.isPresent(), is(true));
 					offset += masterWord.get().toString().length();
 					assertThat(add1Word.isPresent(), is(true));
 					offset2 += add1Word.get().toString().length();
 					assertThat(add2Word.isPresent(), is(true));
 					offset3 += add2Word.get().toString().length();
-					tokens.add(new Token(masterWord.get(), ++tokenID).withGT(token.getAlignment(0)).addOCR(add1Word.get()).addOCR(add2Word.get()));
+					tokens.add(new Token(masterWord.get(), ++tokenID)
+							.withGT(token.getAlignment(0))
+							.addOCR(add1Word.get()).addOCR(add2Word.get()));
 				}
 			}
 		});
@@ -124,11 +148,11 @@ public class MultipleOCRFeatureExtractionTest {
 	}
 
 	private void runTest(int n, String arffFile) throws Exception {
-		//final OutputStreamWriter w = new OutputStreamWriter(System.out); // to update test files
+		// final OutputStreamWriter w = new OutputStreamWriter(System.out); //
+		// to update test files
 		final StringWriter w = new StringWriter();
 		final ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
-				.withDebugToken(true)
-				.withRelation("TestWithOnlyMasterOCR")
+				.withDebugToken(true).withRelation("TestWithOnlyMasterOCR")
 				.withWriter(w);
 		arff.writeHeader(n);
 		for (Token token : tokens) {
@@ -138,10 +162,13 @@ public class MultipleOCRFeatureExtractionTest {
 			arff.writeFeatureVector(fs.calculateFeatureVector(token, n));
 		}
 		w.flush();
-		final Instances got = new ConverterUtils.DataSource(IOUtils.toInputStream(w.toString(), Charset.defaultCharset())).getDataSet();
+		final Instances got = new ConverterUtils.DataSource(
+				IOUtils.toInputStream(w.toString(), Charset.defaultCharset()))
+						.getDataSet();
 		ArffLoader loader = new ArffLoader();
 		loader.setFile(new File(arffFile));
-		final Instances want = new ConverterUtils.DataSource(loader).getDataSet();
+		final Instances want = new ConverterUtils.DataSource(loader)
+				.getDataSet();
 		check(got, want);
 	}
 }
