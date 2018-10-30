@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 
 public class SimpleLine implements Line, Serializable {
-
+	private static final long serialVersionUID = 2106620055695263322L;
 	private int lineID, pageID;
 	private String line;
 	private ArrayList<Double> cs;

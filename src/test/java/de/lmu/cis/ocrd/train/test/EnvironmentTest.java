@@ -4,6 +4,7 @@ import de.lmu.cis.ocrd.archive.Entry;
 import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.train.Configuration;
 import de.lmu.cis.ocrd.train.Environment;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -142,6 +143,7 @@ public class EnvironmentTest extends TestBase {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	@Test
 	public void testZIPContent() throws Exception {
 		final String abbyy = "src/test/resources/1841-DieGrenzboten-abbyy-small.zip";

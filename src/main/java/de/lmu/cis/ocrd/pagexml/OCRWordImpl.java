@@ -1,13 +1,11 @@
 package de.lmu.cis.ocrd.pagexml;
 
 import java.util.List;
-import java.util.Optional;
 
-import de.lmu.cis.ocrd.NormalizerTransducer;
-import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.ml.features.OCRWord;
 
 public class OCRWordImpl implements OCRWord {
+	@SuppressWarnings("unused")
 	private final Word word;
 	private final int i;
 	private final List<String> words;

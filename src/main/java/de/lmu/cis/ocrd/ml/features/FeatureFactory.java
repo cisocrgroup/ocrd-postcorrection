@@ -14,8 +14,7 @@ public class FeatureFactory {
 	private ArgumentFactory args;
 
 	public static FeatureFactory getDefault() {
-		return new FeatureFactory()
-				.register(UnigramFeature.class)
+		return new FeatureFactory().register(UnigramFeature.class)
 				.register(TokenLengthClassFeature.class)
 				.register(TokenLengthFeature.class)
 				.register(SumOfMatchingAdditionalOCRsFeature.class)
@@ -36,14 +35,17 @@ public class FeatureFactory {
 		return this;
 	}
 
-	public Optional<Feature> create(JsonObject o) throws ClassNotFoundException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+	public Optional<Feature> create(JsonObject o) throws ClassNotFoundException,
+			IllegalAccessException, NoSuchMethodException,
+			InvocationTargetException, InstantiationException {
 		final String type = JSONUtil.mustGet(o, "type").getAsString();
 		if (!features.contains(type)) {
 			return Optional.empty();
 		}
 		final Class<?> clazz = Class.forName(type);
-		final Class<?>[] parameters = new Class[]{JsonObject.class, ArgumentFactory.class};
-		final Constructor c = clazz.getConstructor(parameters);
+		final Class<?>[] parameters = new Class[] { JsonObject.class,
+				ArgumentFactory.class };
+		final Constructor<?> c = clazz.getConstructor(parameters);
 		return Optional.of((Feature) c.newInstance(o, args));
 	}
 
@@ -57,7 +59,8 @@ public class FeatureFactory {
 		for (JsonObject o : os) {
 			Optional<Feature> feature = create(o);
 			if (!feature.isPresent()) {
-				throw new Exception("cannot create feature from: " + o.toString());
+				throw new Exception(
+						"cannot create feature from: " + o.toString());
 			}
 			fs.add(feature.get());
 		}

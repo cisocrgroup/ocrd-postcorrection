@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.json.JSONUtil;
 
 public class LinePositionFeature extends NamedStringSetFeature {
+	private static final long serialVersionUID = 1264328009088677748L;
 	private static final String FIRST = "first-in-line";
 	private static final String MIDDLE = "in-line";
 	private static final String LAST = "last-in-line";

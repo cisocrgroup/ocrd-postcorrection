@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.json.JSONUtil;
 
 public class TokenLengthClassFeature extends NamedStringSetFeature {
+	private static final long serialVersionUID = -1000888404407897300L;
 	private final static String SHORT = "short-token";
 	private final static String MEDIUM = "medium-token";
 	private final static String LONG = "long-token";

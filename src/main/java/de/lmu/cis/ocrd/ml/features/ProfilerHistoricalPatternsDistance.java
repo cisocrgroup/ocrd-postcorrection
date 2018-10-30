@@ -9,6 +9,7 @@ import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
 
 public class ProfilerHistoricalPatternsDistance extends NamedDoubleFeature {
+	private static final long serialVersionUID = 2105792591421872162L;
 	private final Profile profile;
 
 	public ProfilerHistoricalPatternsDistance(JsonObject o, ArgumentFactory args) throws Exception {

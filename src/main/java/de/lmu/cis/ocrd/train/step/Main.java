@@ -6,11 +6,13 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		if (args.length < 1 ){
-			throw new Exception("usage: [train|eval|recognize] args...")
+			throw new Exception("usage: [skel|train|eval|recognize] args...");
 		}
 		switch (args[0]) {
 		case "train":
 			train(args);
+		// case "skel":
+		// 	skel(args);
 		default:
 			throw new Exception("invalid command: " + args[0]);
 		}

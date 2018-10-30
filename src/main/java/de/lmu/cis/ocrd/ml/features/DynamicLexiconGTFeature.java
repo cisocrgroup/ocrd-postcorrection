@@ -1,11 +1,10 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import org.pmw.tinylog.Logger;
-
 // DynamicLexiconGTFeature is a feature that simply checks if the master OCR of any given token
 // equals its ground-truth. This feature should be used to simply add GT-data to
 // the training and evaluation steps.
 public class DynamicLexiconGTFeature extends NamedBooleanFeature {
+	private static final long serialVersionUID = 1L;
 	private static final int SHORT = 3; // setting of the profiler
 
 	public DynamicLexiconGTFeature() {

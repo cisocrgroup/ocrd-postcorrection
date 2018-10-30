@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract class NamedCharacterNGramFeature extends NamedFeature {
+	private static final long serialVersionUID = -8497838051734162573L;
 	private final FreqMap ngrams;
 
 	NamedCharacterNGramFeature(String name, FreqMap ngrams) {

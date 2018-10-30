@@ -9,6 +9,7 @@ import de.lmu.cis.ocrd.json.JSONUtil;
 import de.lmu.cis.ocrd.ml.FreqMap;
 
 public class UnigramFeature extends NamedDoubleFeature {
+	private static final long serialVersionUID = 1507211972850104646L;
 	private final List<FreqMap> unigrams;
 
 	public UnigramFeature(JsonObject o, ArgumentFactory args) throws Exception {

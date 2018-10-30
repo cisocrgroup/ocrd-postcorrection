@@ -3,13 +3,12 @@ package de.lmu.cis.ocrd.train.step;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Line;
+import de.lmu.cis.ocrd.pagexml.Page;
 
 public class TmpDir {
 	private final Path dir;

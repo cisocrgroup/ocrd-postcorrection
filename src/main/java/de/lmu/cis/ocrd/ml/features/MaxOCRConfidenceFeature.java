@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.json.JSONUtil;
 
 public class MaxOCRConfidenceFeature extends NamedDoubleFeature {
+	private static final long serialVersionUID = 1424827046143811274L;
 
 	public MaxOCRConfidenceFeature(JsonObject o, ArgumentFactory ignored) {
 		this(JSONUtil.mustGetNameOrType(o));

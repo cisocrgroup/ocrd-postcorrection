@@ -1,6 +1,8 @@
 package de.lmu.cis.ocrd.ml.features;
 
 abstract class BaseFeatureImplementation implements Feature {
+	private static final long serialVersionUID = 1L;
+
 	protected static boolean handlesOnlyMasterOCR(int i, int ignored) {
 		return i == 0;
 	}

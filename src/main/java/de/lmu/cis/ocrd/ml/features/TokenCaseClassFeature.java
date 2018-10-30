@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.json.JSONUtil;
 
 public class TokenCaseClassFeature extends NamedStringSetFeature {
+	private static final long serialVersionUID = 6185953194478613291L;
 	private static final String LOWER = "all-lower-case";
 	private static final String UPPER = "all-upper-case";
 	private static final String TITLE = "title-case";

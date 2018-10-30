@@ -11,7 +11,7 @@ import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 
 public class FeatureSet implements Iterable<Feature>, Serializable {
-
+	private static final long serialVersionUID = -4802453739549010404L;
 	private final List<Feature> features = new ArrayList<>();
 
 	public Feature get(int i) {
@@ -46,6 +46,8 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 	}
 
 	public static class Vector extends ArrayList<Object> {
+		private static final long serialVersionUID = 4013744915440870424L;
+
 		Vector(int n) {
 			super(n);
 		}

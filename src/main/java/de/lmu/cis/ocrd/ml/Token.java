@@ -10,9 +10,11 @@ import com.google.gson.Gson;
 import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.Word;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.profile.Candidate;
 
 // TODO: Merge with Alignment.Token
 public class Token implements Serializable, OCRToken {
+	private static final long serialVersionUID = -5699834740435847251L;
 	private final Word masterOCR;
 	private final int id;
 
@@ -122,5 +124,10 @@ public class Token implements Serializable, OCRToken {
 				ocr[i + 1] = token.getOtherOCR(i).toString();
 			}
 		}
+	}
+
+	@Override
+	public Optional<Candidate> getProfilerCandidate() {
+		return Optional.empty();
 	}
 }

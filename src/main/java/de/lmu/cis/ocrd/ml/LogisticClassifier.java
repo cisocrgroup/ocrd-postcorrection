@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LogisticClassifier implements Classifier {
+	private static final long serialVersionUID = -5403801469028720384L;
 	private final AbstractClassifier classifier;
 	private final Instances structure;
 	private final Map<Integer, Instance> instances = new HashMap<>();

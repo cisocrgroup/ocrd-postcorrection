@@ -23,15 +23,22 @@ public class ARFFWriterTest {
 
 	@Before
 	public void init() throws Exception {
-		FeatureSet fs = new FeatureSet().add(new MockFeature("a", 1)).add(new MockFeature("b", 2));
+		FeatureSet fs = new FeatureSet().add(new MockFeature("a", 1))
+				.add(new MockFeature("b", 2));
 		StringWriter str = new StringWriter();
-		ARFFWriter arff = ARFFWriter.fromFeatureSet(fs).withRelation("test").withWriter(str);
+		ARFFWriter arff = ARFFWriter.fromFeatureSet(fs).withRelation("test")
+				.withWriter(str);
 		arff.writeHeader(1);
-		arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("a", 1), 1));
-		arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("aa", 2), 1));
-		arff.writeFeatureVector(fs.calculateFeatureVector(Token.create("aaa", 3), 1));
+		arff.writeFeatureVector(
+				fs.calculateFeatureVector(Token.create("a", 1), 1));
+		arff.writeFeatureVector(
+				fs.calculateFeatureVector(Token.create("aa", 2), 1));
+		arff.writeFeatureVector(
+				fs.calculateFeatureVector(Token.create("aaa", 3), 1));
 		// System.out.println(str.toString());
-		this.is = new DataSource(IOUtils.toInputStream(str.toString(), Charset.defaultCharset())).getDataSet();
+		this.is = new DataSource(
+				IOUtils.toInputStream(str.toString(), Charset.defaultCharset()))
+						.getDataSet();
 	}
 
 	@Test
@@ -46,7 +53,8 @@ public class ARFFWriterTest {
 
 	@Test
 	public void testValues() {
-		double[][] want = new double[][] { { 1.0, 2.0, 3.0 }, { 2.0, 4.0, 6.0 } };
+		double[][] want = new double[][] { { 1.0, 2.0, 3.0 },
+				{ 2.0, 4.0, 6.0 } };
 		for (int i = 0; i < want.length; i++) {
 			assertThat(is.attributeToDoubleArray(i).length, is(want[i].length));
 			for (int j = 0; j < want[i].length; j++) {
@@ -64,7 +72,8 @@ public class ARFFWriterTest {
 		}
 
 		@Override
-		protected double doCalculate(OCRToken token, int ignored1, int ignored2) {
+		protected double doCalculate(OCRToken token, int ignored1,
+				int ignored2) {
 			return token.getMasterOCR().toString().length() * n;
 		}
 

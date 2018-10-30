@@ -24,12 +24,19 @@ public class FileTypes {
 			Logger.debug("{} is a directory", path);
 			return guess(ArchiveType.DIR, path);
 		}
-		throw new Exception("cannot automatically determine type of file: " + path);
+		throw new Exception(
+				"cannot automatically determine type of file: " + path);
 	}
 
-	public static Type guess(ArchiveType archiveType, String path) throws Exception {
+	public static Type guess(ArchiveType archiveType, String path)
+			throws Exception {
 		try (final Archive ar = newArchive(archiveType, path)) {
-			final TreeMap<OCRType, Integer> counts = new TreeMap<>(); // use ordered map to break ties
+			final TreeMap<OCRType, Integer> counts = new TreeMap<>(); // use
+																		// ordered
+																		// map
+																		// to
+																		// break
+																		// ties
 			final Map<OCRType, OCRFileType> types = newOCRTypeMap();
 			for (Entry entry : ar) {
 				updateCounts(counts, types, entry);
@@ -42,13 +49,15 @@ public class FileTypes {
 		return openDocument(guess(path), path);
 	}
 
-	public static Document openDocument(Type type, String path) throws Exception {
+	public static Document openDocument(Type type, String path)
+			throws Exception {
 		try (final Archive ar = newArchive(type.getArchiveType(), path)) {
 			return newArchiveParser(type, ar).parse();
 		}
 	}
 
-	private static Type guess(ArchiveType archiveType, TreeMap<OCRType, Integer> counts) throws Exception {
+	private static Type guess(ArchiveType archiveType,
+			TreeMap<OCRType, Integer> counts) throws Exception {
 		int max = -1;
 		OCRType argMax = OCRType.PAGE_XML;
 		for (Map.Entry<OCRType, Integer> entry : counts.entrySet()) {
@@ -59,15 +68,18 @@ public class FileTypes {
 			}
 		}
 		if (max <= 0) {
-			throw new Exception("cannot determine type of archive: no usable files");
+			throw new Exception(
+					"cannot determine type of archive: no usable files");
 		}
 		return new Type(archiveType, argMax);
 	}
 
-	private static void updateCounts(Map<OCRType, Integer> counts, Map<OCRType, OCRFileType> types, Entry entry) {
+	private static void updateCounts(Map<OCRType, Integer> counts,
+			Map<OCRType, OCRFileType> types, Entry entry) {
 		for (Map.Entry<OCRType, OCRFileType> type : types.entrySet()) {
 			if (type.getValue().check(entry.getName())) {
-				Logger.debug("found file {} of type {}", entry.getName(), type.getKey());
+				Logger.debug("found file {} of type {}", entry.getName(),
+						type.getKey());
 				if (!counts.containsKey(type.getKey())) {
 					counts.put(type.getKey(), 0);
 				}
@@ -85,75 +97,82 @@ public class FileTypes {
 		return map;
 	}
 
-	public static Parser newArchiveParser(Type type, Archive ar) throws Exception {
+	public static Parser newArchiveParser(Type type, Archive ar)
+			throws Exception {
 		switch (type.getOCRType()) {
-			case OCROPUS_LLOCS:
-				return new OcropusArchiveLlocsParser(ar);
-			case OCROPUS:
-				return new OcropusArchiveParser(ar);
-			case OCROPUS_GT:
-				return new OcropusArchiveGTParser(ar);
-			case TEXT:
-				return new TextArchiveParser(ar, new TextFileType());
+		case OCROPUS_LLOCS:
+			return new OcropusArchiveLlocsParser(ar);
+		case OCROPUS:
+			return new OcropusArchiveParser(ar);
+		case OCROPUS_GT:
+			return new OcropusArchiveGTParser(ar);
+		case TEXT:
+			return new TextArchiveParser(ar, new TextFileType());
+		default:
+			final OCRType ocrType = type.getOCRType();
+			return new ArchiveParser(newXMLParserFactory(ocrType),
+					newXMLFileType(ocrType), ar);
 		}
-		final OCRType ocrType = type.getOCRType();
-		return new ArchiveParser(newXMLParserFactory(ocrType), newXMLFileType(ocrType), ar);
 	}
 
-	public static XMLParserFactory newXMLParserFactory(OCRType ocrType) throws Exception {
+	public static XMLParserFactory newXMLParserFactory(OCRType ocrType)
+			throws Exception {
 		switch (ocrType) {
-			case PAGE_XML:
-				return new PageXMLParserFactory();
-			case ALTO_XML:
-				return new ALTOXMLParserFactory();
-			case ABBYY_XML:
-				return new ABBYYXMLParserFactory();
-			case HOCR:
-				return new HOCRParserFactory();
+		case PAGE_XML:
+			return new PageXMLParserFactory();
+		case ALTO_XML:
+			return new ALTOXMLParserFactory();
+		case ABBYY_XML:
+			return new ABBYYXMLParserFactory();
+		case HOCR:
+			return new HOCRParserFactory();
+		default:
+			throw new Exception("invalid OCR type: " + ocrType);
 		}
-		throw new Exception("invalid OCR type: " + ocrType);
 	}
 
 	public static OCRFileType newXMLFileType(OCRType ocrType) {
 		switch (ocrType) {
-			case PAGE_XML:
-				return new PageXMLFileType();
-			case ALTO_XML:
-				return new ALTOXMLFileType();
-			case ABBYY_XML:
-				return new ABBYYXMLFileType();
-			case OCROPUS_LLOCS:
-				return new OcropusLlocsFileType();
-			case OCROPUS_GT:
-				return new OcropusGTFileType();
-			case OCROPUS:
-				return new OcropusFileType();
-			case HOCR:
-				return new HOCRFileType();
-			case TEXT:
-				return new TextFileType();
+		case PAGE_XML:
+			return new PageXMLFileType();
+		case ALTO_XML:
+			return new ALTOXMLFileType();
+		case ABBYY_XML:
+			return new ABBYYXMLFileType();
+		case OCROPUS_LLOCS:
+			return new OcropusLlocsFileType();
+		case OCROPUS_GT:
+			return new OcropusGTFileType();
+		case OCROPUS:
+			return new OcropusFileType();
+		case HOCR:
+			return new HOCRFileType();
+		case TEXT:
+			return new TextFileType();
 		}
 		throw new RuntimeException("non-exhaustive switch");
 	}
 
-	public static Archive newArchive(ArchiveType archiveType, String path) throws IOException {
+	public static Archive newArchive(ArchiveType archiveType, String path)
+			throws IOException {
 		switch (archiveType) {
-			case ZIP:
-				return new ZipArchive(path);
-			case DIR:
-				return new DirectoryArchive(path);
+		case ZIP:
+			return new ZipArchive(path);
+		case DIR:
+			return new DirectoryArchive(path);
 		}
 		throw new RuntimeException("non-exhaustive switch");
 	}
 
 	public enum ArchiveType {
-		ZIP, DIR //, FILE, METS
+		ZIP, DIR // , FILE, METS
 	}
 
 	// order of types is used to breaks ties:
 	// PAGE_XML is preferred, then ALTO_XML ...
 	public enum OCRType {
-		PAGE_XML, ALTO_XML, ABBYY_XML, OCROPUS_LLOCS, OCROPUS_GT, OCROPUS, HOCR, TEXT,
+		PAGE_XML, ALTO_XML, ABBYY_XML, OCROPUS_LLOCS, OCROPUS_GT, OCROPUS, HOCR,
+		TEXT,
 	}
 
 	public static class Type {

@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.json.JSONUtil;
 
 public class TokenLengthFeature extends NamedDoubleFeature {
+	private static final long serialVersionUID = 6518045049131388557L;
+
 	public TokenLengthFeature(JsonObject o, ArgumentFactory args) {
 		this(JSONUtil.mustGetNameOrType(o));
 	}

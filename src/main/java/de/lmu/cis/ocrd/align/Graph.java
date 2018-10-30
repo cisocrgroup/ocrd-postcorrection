@@ -93,18 +93,4 @@ public class Graph {
 			prevn.add(g2);
 		}
 	}
-
-	private AlignmentPair handleOverlap(AlignmentPair previous, AlignmentPair current) {
-		final String s1 = alignment.getString(0);
-		final String s2 = alignment.getString(1);
-		if (previous.epos1 > current.spos1) {
-			String label = current.label.substring(previous.epos1 - current.spos1);
-			return new AlignmentPair(label, current.epos1, current.epos2);
-		}
-		if (previous.epos2 > current.spos2) {
-			String label = current.label.substring(previous.epos2 - current.spos2);
-			return new AlignmentPair(label, current.epos1, current.epos2);
-		}
-		return current;
-	}
 }

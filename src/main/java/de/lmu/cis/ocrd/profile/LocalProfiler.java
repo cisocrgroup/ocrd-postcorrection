@@ -1,8 +1,5 @@
 package de.lmu.cis.ocrd.profile;
 
-import de.lmu.cis.ocrd.Document;
-import org.pmw.tinylog.Logger;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,10 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.pmw.tinylog.Logger;
+
 public class LocalProfiler implements Profiler {
 	private String exe, language, langdir;
 	private String[] args;
-	private Document inputDocument;
 	private Path outputPath;
 	private Path inputPath;
 

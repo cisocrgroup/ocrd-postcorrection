@@ -9,6 +9,7 @@ import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
 
 public class ProfilerOCRPatternsDistance extends NamedDoubleFeature {
+	private static final long serialVersionUID = -8093738603831136066L;
 	private final Profile profile;
 
 	public ProfilerOCRPatternsDistance(JsonObject o, ArgumentFactory args) throws Exception {

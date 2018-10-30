@@ -6,6 +6,8 @@ import de.lmu.cis.ocrd.json.JSONUtil;
 import de.lmu.cis.ocrd.ml.FreqMap;
 
 public class MinCharNGramsFeature extends NamedCharacterNGramFeature {
+	private static final long serialVersionUID = 1L;
+
 	public MinCharNGramsFeature(JsonObject o, ArgumentFactory factory) throws Exception {
 		this(JSONUtil.mustGetNameOrType(o), factory.getCharacterTrigrams());
 	}

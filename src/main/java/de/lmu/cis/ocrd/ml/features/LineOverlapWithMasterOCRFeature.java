@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import com.google.gson.JsonObject;
 
-import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.Node;
 import de.lmu.cis.ocrd.json.JSONUtil;
 
 public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
+	private static final long serialVersionUID = 1L;
 	private final ArrayList<String> cache = new ArrayList<>();
 	private final ArrayList<Node> nodes = new ArrayList<>();
 

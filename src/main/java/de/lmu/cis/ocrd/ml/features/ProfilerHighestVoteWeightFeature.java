@@ -9,6 +9,7 @@ import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
 
 public class ProfilerHighestVoteWeightFeature extends NamedDoubleFeature {
+	private static final long serialVersionUID = -4415553562125497094L;
 	private final Profile profile;
 
 	public ProfilerHighestVoteWeightFeature(JsonObject o, ArgumentFactory args) throws Exception {
