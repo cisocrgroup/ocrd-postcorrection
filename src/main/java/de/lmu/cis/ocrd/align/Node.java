@@ -74,7 +74,7 @@ public class Node implements Label {
 			divisor += node.next(1).getLabel().length();
 			node = node.next(0).next(0);
 		}
-		System.out.println("divident: " + divident + " divisor: " + divisor);
+		// System.out.println("divident: " + divident + " divisor: " + divisor);
 		return divident / divisor;
 	}
 
