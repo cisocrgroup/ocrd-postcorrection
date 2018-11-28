@@ -1,24 +1,25 @@
 package de.lmu.cis.ocrd.cli;
 
-import de.lmu.cis.ocrd.NormalizerTransducer;
-import de.lmu.cis.ocrd.align.Graph;
-import de.lmu.cis.ocrd.align.Node;
-import de.lmu.cis.ocrd.align.TokenAlignment;
-
-import java.util.List;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.StringJoiner;
+
+import com.google.gson.Gson;
+
+import de.lmu.cis.ocrd.align.Graph;
+import de.lmu.cis.ocrd.align.Node;
+import de.lmu.cis.ocrd.align.TokenAlignment;
 
 
 public class Align {
 	public static class Data {
 		public Data() {
-			this.pairwise = new List<>();
-			this.tokens = new List<>();
-			this.lines = new List<>();
+			this.pairwise = new ArrayList<>();
+			this.tokens = new ArrayList<>();
+			this.lines = new ArrayList<>();
 		}
 		public List<List<String>> tokens;
 		public List<String[]> pairwise;
@@ -39,7 +40,7 @@ public class Align {
 	private static void align(int n) throws IOException {
 		String[] lines = new String[n];
 		final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		final List<Data> data = new List<>();
+		final List<Data> data = new ArrayList<>();
 		while (readLines(br, lines)) {
 			data.add(alignLines(lines));
 		}
@@ -59,20 +60,20 @@ public class Align {
 			final Graph g = new Graph(master, other);
 			final String[] pairwise = getPairwise(g.getStartNode());
 			data.pairwise.add(pairwise);
-			assert (pairwise.length() > 1); // #...$
+			assert (pairwise.length > 1); // #...$
 			tokenAlignment.add(other);
 		}
 
 		//final StringJoiner sj = new StringJoiner(",");
 		for (TokenAlignment.Token t : tokenAlignment) {
-			List<String> tokens = new List<>();
+			List<String> tokens = new ArrayList<>();
 			tokens.add(t.getMaster());
 			for (int i = 1; i < lines.length; i++) {
 				String pre = "";
 				String token = "";
-				for (String t : tokenAlignment.getAlignment(i-1)) {
-					token += pre + t;
-					pre = ' ';
+				for (String tt : t.getAlignment(i-1)) {
+					token += pre + tt;
+					pre = " ";
 				}
 				tokens.add(token);
 			}

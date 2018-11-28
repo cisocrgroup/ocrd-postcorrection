@@ -18,8 +18,7 @@ public class LocalProfilerBuilder implements ProfilerBuilder {
 	@Override
 	public Profiler build() {
 		return new LocalProfiler().withExecutable(config.profiler)
-				.withLanguageDirectory(config.profilerLanguageDir)
-				.withLanguage(config.profilerLanguage).withOutputPath(output)
-				.withArgs("--types");
+			.withLanguageDirectory(config.profilerLanguageDir)
+			.withLanguage(config.profilerLanguage);
 	}
 }

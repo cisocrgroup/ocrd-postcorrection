@@ -3,6 +3,8 @@ package de.lmu.cis.ocrd.cli;
 import de.lmu.cis.ocrd.profile.Profile;
 import de.lmu.cis.ocrd.profile.Profiler;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
@@ -14,13 +16,13 @@ public class AsyncProfiler implements Profiler {
 	}
 
 	private static Future<Profile> startToProfile(Profiler profiler) {
-		FutureTask<Profile> future = new FutureTask<>(profiler::profile);
+		FutureTask<Profile> future = new FutureTask<Profile>(null);
 		future.run();
 		return future;
 	}
 
 	@Override
-	public Profile profile() throws Exception {
+	public Profile profile(Path path) throws Exception {
 		return profile.get();
 	}
 }

@@ -18,9 +18,7 @@ public class Profile implements Closeable {
 		this.inputFile.deleteOnExit();
 		this.outputFile = File.createTempFile("cis-profiler-out", ".json");
 		this.outputFile.deleteOnExit();
-		this.profiler = profiler.
-				withInputPath(inputFile.toPath()).
-				withOutputPath(outputFile.toPath());
+		this.profiler = profiler;
 	}
 
 	public static void main(String[] args) {
