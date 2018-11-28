@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.google.gson.Gson;
 
+import de.lmu.cis.ocrd.NormalizerTransducer;
 import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.Node;
 import de.lmu.cis.ocrd.align.TokenAlignment;
@@ -21,9 +22,18 @@ public class Align {
 			this.tokens = new ArrayList<>();
 			this.lines = new ArrayList<>();
 		}
-		public List<List<String>> tokens;
+		public List<Token> tokens;
 		public List<String[]> pairwise;
 		public List<String> lines;
+	}
+
+	public static class Token {
+		public Token(String master) {
+			this.master = master;
+			this.alignments = new ArrayList<>();
+		}
+		public String master;
+		public List<List<String>> alignments;
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -50,37 +60,26 @@ public class Align {
 	private static Data alignLines(String[] lines) {
 		assert (lines.length > 0);
 		Data data = new Data();
-		for (int i = 0; i < lines.length; i++) {
-			data.lines.add(lines[i]);
-		}
-		final String master = lines[0];//NormalizerTransducer.normalize(lines[0]);
+		final String master = NormalizerTransducer.normalize(lines[0]);
+		data.lines.add(master);
 		final TokenAlignment tokenAlignment = new TokenAlignment(master);
 		for (int i = 1; i < lines.length; i++) {
-			final String other = lines[i];//NormalizerTransducer.normalize(lines[i]);
+			final String other = NormalizerTransducer.normalize(lines[i]);
 			final Graph g = new Graph(master, other);
 			final String[] pairwise = getPairwise(g.getStartNode());
+			data.lines.add(other);
 			data.pairwise.add(pairwise);
 			assert (pairwise.length > 1); // #...$
 			tokenAlignment.add(other);
 		}
 
-		//final StringJoiner sj = new StringJoiner(",");
 		for (TokenAlignment.Token t : tokenAlignment) {
-			List<String> tokens = new ArrayList<>();
-			tokens.add(t.getMaster());
+			Token token = new Token(t.getMaster());
 			for (int i = 1; i < lines.length; i++) {
-				String pre = "";
-				String token = "";
-				for (String tt : t.getAlignment(i-1)) {
-					token += pre + tt;
-					pre = " ";
-				}
-				tokens.add(token);
+				token.alignments.add(t.getAlignment(i-1));
 			}
-			data.tokens.add(tokens);
-			// sj.add(t.toString().replace('|', ':').replace(',', ' '));
+			data.tokens.add(token);
 		}
-		// System.out.println(sj.toString());
 		return data;
 	}
 
