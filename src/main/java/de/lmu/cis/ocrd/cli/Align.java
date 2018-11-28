@@ -5,6 +5,7 @@ import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.Node;
 import de.lmu.cis.ocrd.align.TokenAlignment;
 
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +14,17 @@ import java.util.StringJoiner;
 
 
 public class Align {
+	public static class Data {
+		public Data() {
+			this.pairwise = new List<>();
+			this.tokens = new List<>();
+			this.lines = new List<>();
+		}
+		public List<List<String>> tokens;
+		public List<String[]> pairwise;
+		public List<String> lines;
+	}
+
 	public static void main(String[] args) throws IOException {
 		final Optional<Integer> n = parseArg(args);
 		if (!n.isPresent()) {
@@ -27,28 +39,48 @@ public class Align {
 	private static void align(int n) throws IOException {
 		String[] lines = new String[n];
 		final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		final List<Data> data = new List<>();
 		while (readLines(br, lines)) {
-			alignLines(lines);
+			data.add(alignLines(lines));
 		}
+		System.out.println(new Gson().toJson(data));
 	}
 
-	private static void alignLines(String[] lines) {
+	private static Data alignLines(String[] lines) {
 		assert (lines.length > 0);
-		final String master = NormalizerTransducer.normalize(lines[0]);
+		Data data = new Data();
+		for (int i = 0; i < lines.length; i++) {
+			data.lines.add(lines[i]);
+		}
+		final String master = lines[0];//NormalizerTransducer.normalize(lines[0]);
 		final TokenAlignment tokenAlignment = new TokenAlignment(master);
 		for (int i = 1; i < lines.length; i++) {
-			final String other = NormalizerTransducer.normalize(lines[i]);
+			final String other = lines[i];//NormalizerTransducer.normalize(lines[i]);
 			final Graph g = new Graph(master, other);
-			final String pairwise = getPairwise(g.getStartNode());
+			final String[] pairwise = getPairwise(g.getStartNode());
+			data.pairwise.add(pairwise);
 			assert (pairwise.length() > 1); // #...$
-			System.out.println(pairwise.replace('|', ':'));
 			tokenAlignment.add(other);
 		}
-		final StringJoiner sj = new StringJoiner(",");
+
+		//final StringJoiner sj = new StringJoiner(",");
 		for (TokenAlignment.Token t : tokenAlignment) {
-			sj.add(t.toString().replace('|', ':').replace(',', ' '));
+			List<String> tokens = new List<>();
+			tokens.add(t.getMaster());
+			for (int i = 1; i < lines.length; i++) {
+				String pre = "";
+				String token = "";
+				for (String t : tokenAlignment.getAlignment(i-1)) {
+					token += pre + t;
+					pre = ' ';
+				}
+				tokens.add(token);
+			}
+			data.tokens.add(tokens);
+			// sj.add(t.toString().replace('|', ':').replace(',', ' '));
 		}
-		System.out.println(sj.toString());
+		// System.out.println(sj.toString());
+		return data;
 	}
 
 	private static boolean readLines(BufferedReader br, String[] lines) throws IOException {
@@ -64,7 +96,7 @@ public class Align {
 		return true;
 	}
 
-	private static String getPairwise(Node node) {
+	private static String[] getPairwise(Node node) {
 		final String[] pair = {"", ""};
 		while (true) {
 			pair[0] += node.getLabel();
@@ -86,7 +118,7 @@ public class Align {
 		}
 		pair[0] = pair[0].substring(1, pair[0].length() - 1);
 		pair[1] = pair[1].substring(1, pair[1].length() - 1);
-		return String.join(",", pair);
+		return pair;
 	}
 
 	private static Optional<Integer> parseArg(String[] args) {

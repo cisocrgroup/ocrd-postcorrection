@@ -1,18 +1,25 @@
 package de.lmu.cis.ocrd.profile;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import org.apache.commons.io.IOUtils;
-
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import org.apache.commons.io.IOUtils;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class Profile {
 	private final HashMap<String, Candidates> data;
@@ -26,15 +33,14 @@ public class Profile {
 		return new Profile(new HashMap<>());
 	}
 
-	public static Profile read(InputStream is) throws IOException {
-		StringWriter out = new StringWriter();
-		IOUtils.copy(is, out, Charset.forName("UTF-8"));
-		return fromJSON(out.toString());
+	public static Profile read(Reader r) throws IOException {
+		return fromJSON(IOUtils.toString(r));
 	}
 
 	public static Profile read(Path path) throws IOException {
-		try (InputStream is = new FileInputStream(path.toFile())) {
-			return read(is);
+		try (BufferedReader r = new BufferedReader(
+				new InputStreamReader(new FileInputStream(path.toFile())))) {
+			return read(r);
 		}
 	}
 

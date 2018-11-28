@@ -63,7 +63,7 @@ public class Profile implements Closeable {
 
 	private void run() throws Exception {
 		writeStdinToFile();
-		final de.lmu.cis.ocrd.profile.Profile profile = profiler.profile();
+		final de.lmu.cis.ocrd.profile.Profile profile = profiler.profile(inputFile.toPath());
 		writeProfileToStdout(profile);
 	}
 

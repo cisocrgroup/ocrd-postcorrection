@@ -5,14 +5,8 @@ import java.nio.file.Path;
 
 // Simple Profiler that reads a profiler from a given json profile file.
 public class FileProfiler implements Profiler {
-	private final Profile profile;
-
-	public FileProfiler(Path path) throws IOException {
-		profile = Profile.read(path);
-	}
-
 	@Override
-	public Profile profile() {
-		return profile;
+	public Profile profile(Path path) throws IOException {
+		return Profile.read(path);
 	}
 }

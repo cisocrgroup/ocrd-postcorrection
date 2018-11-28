@@ -1,6 +1,9 @@
 package de.lmu.cis.ocrd.profile;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -21,12 +24,8 @@ public class LocalProfiler implements Profiler {
 	}
 
 	private static String[] defaultArgs() {
-		return new String[]{
-				"--sourceFile",
-				"/dev/stdin",
-				"--sourceFormat",
-				"TXT",
-		};
+		return new String[] { "--sourceFile", "/dev/stdin", "--sourceFormat",
+				"TXT", };
 	}
 
 	public LocalProfiler withExecutable(String exe) {
@@ -49,49 +48,45 @@ public class LocalProfiler implements Profiler {
 		return this;
 	}
 
-	public LocalProfiler withInputPath(Path path) {
-		this.inputPath = path;
-		return this;
-	}
-
-	public LocalProfiler withOutputPath(Path path) {
-		this.outputPath = path;
-		return this;
-	}
-
 	@Override
 	public String toString() {
-		return String.join(" ", makeArgs());
+		return String.join(" ", makeArgs(Paths.get("/path/to/input-file")));
 	}
 
 	@Override
-	public Profile profile() throws Exception {
-		Process profiler = startCommand();
-		final int exitStatus = profiler.waitFor();
-		if (exitStatus != 0) {
-			throw new Exception("profiler returned with exit value: " + exitStatus);
+	public Profile profile(Path path) throws Exception {
+		Process profiler = startCommand(path);
+		try (Reader r = new BufferedReader(
+				new InputStreamReader(profiler.getInputStream()))) {
+			Profile profile = Profile.read(r);
+			final int exitStatus = profiler.waitFor();
+			if (exitStatus != 0) {
+				throw new Exception(
+						"profiler returned with exit value: " + exitStatus);
+			}
+			return profile;
 		}
-		return Profile.read(outputPath);
 	}
 
-	private Process startCommand() throws IOException {
+	private Process startCommand(Path path) throws IOException {
 		ProcessBuilder builder = new ProcessBuilder();
-		final List<String> command = makeArgs();
+		final List<String> command = makeArgs(path);
 		builder.command(command);
 		Logger.info("profiler command: " + String.join(" ", command));
 		return builder.start();
 	}
 
-	private List<String> makeArgs() {
+	private List<String> makeArgs(Path path) {
 		List<String> res = new ArrayList<>();
 		res.add(exe);
 		res.addAll(Arrays.asList(defaultArgs()));
 		res.add("--config");
-		res.add(Paths.get(langdir, language + ".ini").toAbsolutePath().toString());
+		res.add(Paths.get(langdir, language + ".ini").toAbsolutePath()
+				.toString());
 		res.add("--sourceFile");
-		res.add(inputPath.toString());
+		res.add(path.toString());
 		res.add("--jsonOutput");
-		res.add(outputPath.toString());
+		res.add("/dev/stdout");
 		if (this.args != null) {
 			res.addAll(Arrays.asList(this.args));
 		}

@@ -22,7 +22,8 @@ import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Word;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
-import de.lmu.cis.ocrd.profile.LocalProfiler;
+import de.lmu.cis.ocrd.profile.Profile;
+import de.lmu.cis.ocrd.profile.ProfilerBuilder;
 
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.functions.SimpleLogistic;
@@ -31,9 +32,17 @@ import weka.core.converters.ConverterUtils;
 
 // step: train dynamic lexicon extension.
 public class TrainDLE extends Base {
+	private ProfilerBuilder profilerBuilder;
+
 	public TrainDLE(String logLevel, ModelDir mdir, TmpDir tdir,
 			Config config) {
 		super(true, logLevel, mdir, tdir, config);
+		profilerBuilder = new LocalProfilerBuilder(config,
+				getTmpDir().getDLEProfile());
+	}
+
+	public void setProfilerBuilder(ProfilerBuilder builder) {
+		this.profilerBuilder = builder;
 	}
 
 	public void run() throws Exception {
@@ -48,14 +57,8 @@ public class TrainDLE extends Base {
 		Path profilerIn = getTmpDir().getDLEProfilerInput();
 		getTmpDir().putProfilerInputFile(true, getConfig().trainingFiles,
 				profilerIn);
-		LocalProfiler lp = new LocalProfiler()
-				.withExecutable(getConfig().profiler)
-				.withLanguageDirectory(getConfig().profilerLanguageDir)
-				.withLanguage(getConfig().profilerLanguage)
-				.withInputPath(profilerIn)
-				.withOutputPath(getTmpDir().getDLEProfile())
-				.withArgs("--types");
-		getLM().setProfile(lp.profile());
+		Profile profile = profilerBuilder.build().profile(profilerIn);
+		getLM().setProfile(profile);
 		Logger.debug("DLE: profiling done");
 	}
 
