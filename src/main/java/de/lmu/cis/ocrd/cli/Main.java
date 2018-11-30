@@ -17,7 +17,7 @@ public class Main {
 	}
 
 	private static CommandFactory makeCommandFactory() throws Exception {
-		return new CommandFactory().register(TrainCommand.class);
+		return new CommandFactory().register(TrainCommand.class).register(AlignCommand.class);
 	}
 
 	// Parses command line arguments and execute command.
