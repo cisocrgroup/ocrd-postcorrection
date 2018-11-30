@@ -11,25 +11,34 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.StringJoiner;
 
 
 public class AlignCommand implements Command {
     public static class Data {
-        public Data() {
-            this.pairwise = new ArrayList<>();
-            this.tokens = new ArrayList<>();
-            this.lines = new ArrayList<>();
+        public Data(String masterLine) {
+            this.words = new ArrayList<>();
+            this.line = new Line(masterLine);
         }
 
-        public List<Token> tokens;
-        public List<String[]> pairwise;
-        public List<String> lines;
+        public List<Word> words;
+        public Line line;
     }
 
-    public static class Token {
-        public Token(String master) {
+    public static class Line {
+        public Line(String master) {
+            this.master = master;
+            this.pairwise = new ArrayList<>();
+            this.alignments = new ArrayList<>();
+        }
+
+        public String master;
+        public List<String> alignments;
+        public List<String[]> pairwise;
+    }
+
+    public static class Word {
+        public Word(String master) {
             this.master = master;
             this.alignments = new ArrayList<>();
             this.pairwise = new ArrayList<>();
@@ -38,22 +47,6 @@ public class AlignCommand implements Command {
         public String master;
         public List<List<String>> alignments;
         public List<String[]> pairwise;
-
-        public void calculatePairwise() {
-            for (List<String> strs : alignments) {
-                String other = join(strs);
-                Graph g = new Graph(master, other);
-                pairwise.add(getPairwise(g.getStartNode()));
-            }
-        }
-
-        private static String join(List<String> strs) {
-            StringJoiner sj = new StringJoiner(" ");
-            for (String str : strs) {
-                sj.add(str);
-            }
-            return sj.toString();
-        }
     }
 
     public static class Parameter {
@@ -74,17 +67,6 @@ public class AlignCommand implements Command {
         return "align";
     }
 
-    public static void main(String[] args) throws IOException {
-        final Optional<Integer> n = parseArg(args);
-        if (!n.isPresent()) {
-            throw new RuntimeException("missing integer argument");
-        }
-        if (n.get() <= 0) {
-            throw new RuntimeException("invalid integer argument: " + n.get());
-        }
-        align(n.get());
-    }
-
     private static void align(int n) throws IOException {
         String[] lines = new String[n];
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -97,27 +79,27 @@ public class AlignCommand implements Command {
 
     private static Data alignLines(String[] lines) {
         assert (lines.length > 0);
-        Data data = new Data();
         final String master = NormalizerTransducer.normalize(lines[0]);
-        data.lines.add(master);
+        Data data = new Data(master);
         final TokenAlignment tokenAlignment = new TokenAlignment(master);
         for (int i = 1; i < lines.length; i++) {
             final String other = NormalizerTransducer.normalize(lines[i]);
             final Graph g = new Graph(master, other);
             final String[] pairwise = getPairwise(g.getStartNode());
-            data.lines.add(other);
-            data.pairwise.add(pairwise);
+            data.line.alignments.add(other);
+            data.line.pairwise.add(pairwise);
             assert (pairwise.length > 1); // #...$
             tokenAlignment.add(other);
         }
 
         for (TokenAlignment.Token t : tokenAlignment) {
-            Token token = new Token(t.getMaster());
+            Word word = new Word(t.getMaster());
             for (int i = 1; i < lines.length; i++) {
-                token.alignments.add(t.getAlignment(i - 1));
+                List<String> strs = t.getAlignment(i-1);
+                word.alignments.add(strs);
+                word.pairwise.add(getPairwise(new Graph(word.master, join(strs)).getStartNode()));
             }
-            token.calculatePairwise();
-            data.tokens.add(token);
+            data.words.add(word);
         }
         return data;
     }
@@ -160,10 +142,11 @@ public class AlignCommand implements Command {
         return pair;
     }
 
-    private static Optional<Integer> parseArg(String[] args) {
-        if (args.length != 1) {
-            return Optional.empty();
+    private static String join(List<String> strs) {
+        StringJoiner sj = new StringJoiner(" ");
+        for (String str : strs) {
+            sj.add(str);
         }
-        return Optional.of(Integer.parseInt(args[0]));
+        return sj.toString();
     }
 }
