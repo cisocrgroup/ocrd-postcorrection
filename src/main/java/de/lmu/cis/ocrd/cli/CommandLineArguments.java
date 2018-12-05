@@ -170,7 +170,7 @@ public class CommandLineArguments {
         } else if (isSet(parameter)) {
             return getParameterX(typeOfT);
         }
-        throw new Exception("no parameter defined");
+        throw new Exception("missing command line options: -D or -p");
     }
 
     private static boolean isSet(String str) {
