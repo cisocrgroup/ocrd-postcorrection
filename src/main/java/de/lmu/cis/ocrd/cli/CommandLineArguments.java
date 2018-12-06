@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
+import org.pmw.tinylog.writers.ConsoleWriter;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -198,7 +199,10 @@ public class CommandLineArguments {
     }
 
     private void setupLogger() {
-        Configurator.currentConfig().level(Level.valueOf(getLogLevel())).activate();
+        Configurator.currentConfig()
+                    .writer(new ConsoleWriter(System.err))
+                    .level(Level.valueOf(getLogLevel()))
+                    .activate();
         Logger.debug("current log level: {}", Logger.getLevel());
     }
 }
