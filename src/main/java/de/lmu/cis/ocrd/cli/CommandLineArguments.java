@@ -167,8 +167,10 @@ public class CommandLineArguments {
 
     public <T> T mustGetParameter(java.lang.reflect.Type typeOfT) throws Exception {
         if (isSet(define)) {
+	        Logger.debug("define: {}", define);
             return getDefine(typeOfT);
         } else if (isSet(parameter)) {
+	        Logger.debug("parameter: {}", parameter);
             return getParameterX(typeOfT);
         }
         throw new Exception("missing command line options: -D or -p");
