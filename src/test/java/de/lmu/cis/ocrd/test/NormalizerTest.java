@@ -1,30 +1,30 @@
 package de.lmu.cis.ocrd.test;
 
-import de.lmu.cis.ocrd.NormalizerTransducer;
+import de.lmu.cis.ocrd.Normalizer;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class NormalizerTransducerTest {
+public class NormalizerTest {
 	@Test
 	public void testLeadingWhitespace() {
 		final String want = "string with leading white space";
-		final String got = NormalizerTransducer.normalize("  " + want);
+		final String got = Normalizer.normalize("  " + want);
 		assertThat(got, is(want));
 	}
 
 	@Test
 	public void testSubsequentWhitespace() {
 		final String want = "string with subsequent white space";
-		final String got = NormalizerTransducer.normalize(want + "  ");
+		final String got = Normalizer.normalize(want + "  ");
 		assertThat(got, is(want));
 	}
 
 	@Test
 	public void testNormalizeAllWhitespace() {
 		final String want = "string with normalized white space";
-		final String got = NormalizerTransducer.normalize(
+		final String got = Normalizer.normalize(
 				"  string  with  normalized     \t\t\n white space \n \t \n"
 		);
 		assertThat(got, is(want));
@@ -33,7 +33,7 @@ public class NormalizerTransducerTest {
 	@Test
 	public void testNormalizePunctuation() {
 		final String want = "string with punctuation and white space";
-		final String got = NormalizerTransducer.normalize(
+		final String got = Normalizer.normalize(
 				"  string,  with  punctuation and white-space."
 		);
 		assertThat(got, is(want));
@@ -42,7 +42,7 @@ public class NormalizerTransducerTest {
 	@Test
 	public void testNormalizeWithRoundR() {
 		final String want = "Grammatice Salutem et ingenuos laboꝛes";
-		final String got = NormalizerTransducer.normalize(
+		final String got = Normalizer.normalize(
 				"Grammatice. Salutem. et ingenuos laboꝛes."
 		);
 		assertThat(got, is(want));
@@ -51,7 +51,7 @@ public class NormalizerTransducerTest {
 	@Test
 	public void testWithCombiningCharacter() {
 		final String want = "foo̰bar";
-		final String got = NormalizerTransducer.normalize(want);
+		final String got = Normalizer.normalize(want);
 		assertThat(got, is(want));
 	}
 }

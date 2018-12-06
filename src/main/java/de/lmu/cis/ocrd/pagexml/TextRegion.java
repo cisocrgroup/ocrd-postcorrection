@@ -1,13 +1,11 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.xpath.XPathExpressionException;
-
+import de.lmu.cis.ocrd.Normalizer;
 import org.w3c.dom.Node;
 
-import de.lmu.cis.ocrd.NormalizerTransducer;
+import javax.xml.xpath.XPathExpressionException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TextRegion {
 	protected final Node node;
@@ -40,7 +38,7 @@ public class TextRegion {
 	public List<String> getUnicodeNormalized() {
 		final List<String> unicode = this.getUnicode();
 		for (int i = 0; i < unicode.size(); i++) {
-			unicode.set(i, NormalizerTransducer.normalize(unicode.get(i)));
+			unicode.set(i, Normalizer.normalize(unicode.get(i)));
 		}
 		return unicode;
 	}

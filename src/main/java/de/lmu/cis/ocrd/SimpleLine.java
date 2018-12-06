@@ -10,7 +10,7 @@ public class SimpleLine implements Line, Serializable {
 	private ArrayList<Double> cs;
 
 	public static SimpleLine normalized(String ocr, double c) {
-		NormalizerTransducer t = new NormalizerTransducer(ocr.length());
+		Normalizer t = new Normalizer(ocr.length());
 		ocr.codePoints().forEach((letter) -> t.delta(letter, c));
 		SimpleLine line = new SimpleLine();
 		line.line = t.getNormalized();
@@ -23,7 +23,7 @@ public class SimpleLine implements Line, Serializable {
 	}
 
 	public static SimpleLine normalized(String ocr, List<Double> cs) {
-		NormalizerTransducer t = new NormalizerTransducer(ocr.length());
+		Normalizer t = new Normalizer(ocr.length());
 		Iterator<Double> it = cs.iterator();
 		ocr.codePoints().forEach((letter) -> {
 			if (!it.hasNext()) {

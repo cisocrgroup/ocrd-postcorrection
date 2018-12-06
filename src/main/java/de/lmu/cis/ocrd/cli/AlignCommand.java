@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.cli;
 
 import com.google.gson.Gson;
-import de.lmu.cis.ocrd.NormalizerTransducer;
+import de.lmu.cis.ocrd.Normalizer;
 import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.Node;
 import de.lmu.cis.ocrd.align.TokenAlignment;
@@ -83,12 +83,12 @@ public class AlignCommand implements Command {
         for (String line : lines) {
         	Logger.debug("line: {}", line);
         }
-        final String master = NormalizerTransducer.normalize(lines[0]);
+        final String master = Normalizer.normalize(lines[0]);
 	    Logger.debug("master: {}", master);
         Data data = new Data(master);
         final TokenAlignment tokenAlignment = new TokenAlignment(master);
         for (int i = 1; i < lines.length; i++) {
-            final String other = NormalizerTransducer.normalize(lines[i]);
+            final String other = Normalizer.normalize(lines[i]);
 	        Logger.debug("other: {}", other);
             final Graph g = new Graph(master, other);
             final String[] pairwise = getPairwise(g.getStartNode());

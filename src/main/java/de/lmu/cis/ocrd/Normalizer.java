@@ -2,13 +2,13 @@ package de.lmu.cis.ocrd;
 
 import java.util.ArrayList;
 
-public class NormalizerTransducer {
+public class Normalizer {
 	private final StringBuilder str;
 	private final ArrayList<Double> cs;
 	private int state;
 	private double prevConfidence;
 
-	public NormalizerTransducer(int n) {
+	public Normalizer(int n) {
 		this.prevConfidence = 0;
 		this.state = 0;
 		this.str = new StringBuilder(n);
@@ -16,7 +16,7 @@ public class NormalizerTransducer {
 	}
 
 	public static String normalize(String str) {
-		final NormalizerTransducer t = new NormalizerTransducer(str.length());
+		final Normalizer t = new Normalizer(str.length());
 		str.codePoints().forEach((letter) -> t.delta(letter, 0));
 		return t.getNormalized();
 	}
