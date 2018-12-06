@@ -159,9 +159,10 @@ public class CommandLineArguments {
         return new Gson().fromJson(notNull(define), typeOfT);
     }
 
-    public <T> T getParameterX(java.lang.reflect.Type typeOfT) throws FileNotFoundException {
-        Reader is = new FileReader(notNull(parameter));
-        return new Gson().fromJson(is, typeOfT);
+    public <T> T getParameterX(java.lang.reflect.Type typeOfT) throws IOException {
+        try(Reader is = new FileReader(notNull(parameter))) {
+            return new Gson().fromJson(is, typeOfT);
+        }
     }
 
     public <T> T mustGetParameter(java.lang.reflect.Type typeOfT) throws Exception {
