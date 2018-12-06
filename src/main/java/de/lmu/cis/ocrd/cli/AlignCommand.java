@@ -5,6 +5,7 @@ import de.lmu.cis.ocrd.NormalizerTransducer;
 import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.Node;
 import de.lmu.cis.ocrd.align.TokenAlignment;
+import org.pmw.tinylog.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -79,11 +80,16 @@ public class AlignCommand implements Command {
 
     private static Data alignLines(String[] lines) {
         assert (lines.length > 0);
+        for (String line : lines) {
+        	Logger.debug("line: {}", line);
+        }
         final String master = NormalizerTransducer.normalize(lines[0]);
+	    Logger.debug("master: {}", master);
         Data data = new Data(master);
         final TokenAlignment tokenAlignment = new TokenAlignment(master);
         for (int i = 1; i < lines.length; i++) {
             final String other = NormalizerTransducer.normalize(lines[i]);
+	        Logger.debug("other: {}", other);
             final Graph g = new Graph(master, other);
             final String[] pairwise = getPairwise(g.getStartNode());
             data.line.alignments.add(other);
