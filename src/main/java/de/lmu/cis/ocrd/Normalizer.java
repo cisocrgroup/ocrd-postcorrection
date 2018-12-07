@@ -160,6 +160,12 @@ public class Normalizer {
 	}
 
 	private static int getSigma(int c) {
+		switch (c) {
+			case '$':
+				return '_';
+			case '#':
+				return '_';
+		}
 		return Unicode.isSpace(c) ? '_' : Unicode.isLetter(c) ? 'a' : '.';
 	}
 
