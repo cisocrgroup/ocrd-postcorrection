@@ -6,6 +6,10 @@ import org.apache.commons.cli.ParseException;
 public class Main {
 	public static void main(String[] args) {
 		try {
+			System.setProperty("file.encoding","UTF-8");
+//			System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, "UTF-8"));
+//			System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err), false, "UTF-8"));
+//			System.setIn(new BufferedReader(new FileInputStream(FileDescriptor.in, "UTF-8"));
 			run(args);
 		} catch (ParseException e) {
 			e.printStackTrace(System.err);

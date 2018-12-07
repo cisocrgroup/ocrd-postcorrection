@@ -7,15 +7,13 @@ import de.lmu.cis.ocrd.align.Node;
 import de.lmu.cis.ocrd.align.TokenAlignment;
 import org.pmw.tinylog.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
 
-public class AlignCommand implements Command {
+public class AlignCommand extends AbstractIOCommand {
     public static class Data {
         public Data(String masterLine) {
             this.words = new ArrayList<>();
@@ -31,11 +29,13 @@ public class AlignCommand implements Command {
             this.master = master;
             this.pairwise = new ArrayList<>();
             this.alignments = new ArrayList<>();
+            this.raw = new ArrayList<>();
         }
 
         public String master;
         public List<String> alignments;
-        public List<String[]> pairwise;
+	    public List<String[]> pairwise;
+	    public List<String> raw;
     }
 
     public static class Word {
@@ -54,6 +54,10 @@ public class AlignCommand implements Command {
         public int n;
     }
 
+    public AlignCommand() {
+        super();
+    }
+
     @Override
     public void execute(CommandLineArguments args) throws Exception {
         final Parameter p = args.mustGetParameter(Parameter.class);
@@ -68,29 +72,32 @@ public class AlignCommand implements Command {
         return "align";
     }
 
-    private static void align(int n) throws IOException {
+    private void align(int n) throws IOException {
         String[] lines = new String[n];
-        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        final List<Data> data = new ArrayList<>();
-        while (readLines(br, lines)) {
-            data.add(alignLines(lines));
+	    final List<Data> data = new ArrayList<>();
+	    // read input
+        while (readLines(lines)) {
+        	data.add(alignLines(lines));
         }
-        System.out.println(new Gson().toJson(data));
+        println(new Gson().toJson(data));
+        flush();
     }
 
     private static Data alignLines(String[] lines) {
         assert (lines.length > 0);
         for (String line : lines) {
-        	Logger.debug("line: {}", line);
+        	Logger.info("line: {}", line);
         }
         final String master = Normalizer.normalize(lines[0]);
-	    Logger.debug("master: {}", master);
+	    Logger.info("master: {}", master);
         Data data = new Data(master);
         final TokenAlignment tokenAlignment = new TokenAlignment(master);
         for (int i = 1; i < lines.length; i++) {
             final String other = Normalizer.normalize(lines[i]);
-	        Logger.debug("other: {}", other);
+	        Logger.info("other: {}", other);
             final Graph g = new Graph(master, other);
+            Logger.info("raw: {}", g.getStartNode().toString());
+            data.line.raw.add(g.getStartNode().toString());
             final String[] pairwise = getPairwise(g.getStartNode());
             data.line.alignments.add(other);
             data.line.pairwise.add(pairwise);
@@ -110,9 +117,9 @@ public class AlignCommand implements Command {
         return data;
     }
 
-    private static boolean readLines(BufferedReader br, String[] lines) throws IOException {
+    private boolean readLines(String[] lines) throws IOException {
         for (int i = 0; i < lines.length; i++) {
-            lines[i] = br.readLine();
+        	lines[i] = readLine();
             if (lines[i] == null) {
                 if (i != 0) {
                     throw new IOException("premature EOF");

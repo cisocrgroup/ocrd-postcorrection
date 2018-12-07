@@ -16,4 +16,8 @@ public class Unicode {
 				return false;
 		}
 	}
+
+	public static boolean isSpace(int c) {
+		return Character.isSpaceChar(c);
+	}
 }

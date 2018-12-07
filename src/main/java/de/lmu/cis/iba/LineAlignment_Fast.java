@@ -37,7 +37,7 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 
 		Iterator it3 = nodes_sorted.entrySet().iterator();
 
-		Logger.debug("starting main loop ...");
+		// Logger.debug("starting main loop ...");
 		HashSet<Integer> usedIDs = new HashSet<>();
 		main_loop:
 		while (it3.hasNext()) {
@@ -100,18 +100,18 @@ public class LineAlignment_Fast extends ArrayList<ArrayList<OCRLine>> {
 				nodes_sink_set.add(p);
 			}
 		}
-		Logger.debug("done with sink loop");
+		// Logger.debug("done with sink loop");
 
 		for (pair p : nodes_sink_set) {
-			Logger.debug(scdawg.get_node_label(p.node));
-			Logger.debug(p.ids);
+			// Logger.debug(scdawg.get_node_label(p.node));
+			// Logger.debug(p.ids);
 			ArrayList<OCRLine> linetupel = new ArrayList<>();
 			for (Integer id : p.ids) {
 				int idx = id;
 
 				linetupel.add(ocrlines.get(idx));
 
-				Logger.debug("- " + stringset.get(idx));
+				// Logger.debug("- " + stringset.get(idx));
 			}
 			this.add(linetupel);
 		}
