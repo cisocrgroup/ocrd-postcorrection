@@ -1,20 +1,19 @@
 package de.lmu.cis.ocrd.train.step.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import de.lmu.cis.ocrd.train.step.Config;
+import de.lmu.cis.ocrd.train.step.ModelDir;
+import de.lmu.cis.ocrd.train.step.TmpDir;
+import de.lmu.cis.ocrd.train.step.TrainDLE;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import de.lmu.cis.ocrd.train.step.Config;
-import de.lmu.cis.ocrd.train.step.ModelDir;
-import de.lmu.cis.ocrd.train.step.TmpDir;
-import de.lmu.cis.ocrd.train.step.TrainDLE;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class TrainDLETest {
 	private ModelDir mdir;
@@ -49,38 +48,5 @@ public class TrainDLETest {
 	public void testNumberOfOtherOCR() throws Exception {
 		TrainDLE tdle = new TrainDLE("INFO", mdir, tdir, config);
 		assertThat(tdle.getLM().getNumberOfOtherOCRs(), is(2));
-	}
-
-	@Test
-	public void testRun() throws Exception {
-		TrainDLE tdle = new TrainDLE("INFO", mdir, tdir, config);
-		tdle.run();
-		ModelDir mdir = tdle.getModelDir();
-		// feature file
-		assertThat(mdir.getDLEFeatures().toFile().exists(), is(true));
-		// dle arffs
-		assertThat(mdir.getDLETraining(0).toFile().exists(), is(false));
-		assertThat(mdir.getDLETraining(1).toFile().exists(), is(true));
-		assertThat(mdir.getDLETraining(2).toFile().exists(), is(true));
-		assertThat(mdir.getDLETraining(3).toFile().exists(), is(true));
-		assertThat(mdir.getDLETraining(4).toFile().exists(), is(false));
-		// rr arffs
-		assertThat(mdir.getRRTraining(0).toFile().exists(), is(false));
-		assertThat(mdir.getRRTraining(1).toFile().exists(), is(true));
-		assertThat(mdir.getRRTraining(2).toFile().exists(), is(true));
-		assertThat(mdir.getRRTraining(3).toFile().exists(), is(true));
-		assertThat(mdir.getRRTraining(4).toFile().exists(), is(false));
-		// dle models
-		assertThat(mdir.getDLEModel(0).toFile().exists(), is(false));
-		assertThat(mdir.getDLEModel(1).toFile().exists(), is(true));
-		assertThat(mdir.getDLEModel(2).toFile().exists(), is(true));
-		assertThat(mdir.getDLEModel(3).toFile().exists(), is(true));
-		assertThat(mdir.getDLEModel(4).toFile().exists(), is(false));
-		// rr models
-		// assertThat(mdir.getRRModel(0).toFile().exists(), is(false));
-		// assertThat(mdir.getRRModel(1).toFile().exists(), is(true));
-		// assertThat(mdir.getRRModel(2).toFile().exists(), is(true));
-		// assertThat(mdir.getRRModel(3).toFile().exists(), is(true));
-		// assertThat(mdir.getRRModel(4).toFile().exists(), is(false));
 	}
 }
