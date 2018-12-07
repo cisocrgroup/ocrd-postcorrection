@@ -28,7 +28,7 @@ public class Normalizer {
 	// state 2 -- alpha:<SP>alpha -> 1
 	// state 2 -- !alpha:epsilon -> 2
 	public void delta(int letter, double confidence) {
-		final boolean isAlpha = Unicode.isLetter(letter);
+		final boolean isAlpha = isLetter(letter);
 
 		switch (state) {
 			case 0:
@@ -64,6 +64,15 @@ public class Normalizer {
 				throw new RuntimeException("normalizing: invalid state encountered: " + state);
 		}
 		prevConfidence = confidence;
+	}
+
+	private static boolean isLetter(int c) {
+		switch (c) {
+			case 0x2e17: // DOUBLE OBLIQUE HYPHEN aka '⸗'
+				return true;
+			default:
+				return Unicode.isLetter(c);
+		}
 	}
 
 	public String getNormalized() {

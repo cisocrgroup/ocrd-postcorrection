@@ -54,4 +54,11 @@ public class NormalizerTest {
 		final String got = Normalizer.normalize(want);
 		assertThat(got, is(want));
 	}
+
+	@Test
+	public void testWithHistoricalCharacter1() {
+		final String want = "Mfs zeſ⸗o fc⸗⸗oe";
+		final String got = Normalizer.normalize(want);
+		assertThat(got, is(want));
+	}
 }
