@@ -32,7 +32,7 @@ public class NormalizerTest {
 
 	@Test
 	public void testNormalizePunctuation() {
-		final String want = "string with punctuation and white space";
+		final String want = "string with punctuation and white-space";
 		final String got = Normalizer.normalize(
 				"  string,  with  punctuation and white-space."
 		);
