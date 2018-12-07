@@ -61,4 +61,12 @@ public class NormalizerTest {
 		final String got = Normalizer.normalize(want);
 		assertThat(got, is(want));
 	}
+
+	@Test
+	public void testWithSpecialChars() {
+		final String want = "String with special characters";
+		final String got = Normalizer.normalize(
+				"#String with special characters $ # $");
+		assertThat(got, is(want));
+	}
 }
