@@ -1,23 +1,17 @@
 package de.lmu.cis.ocrd.profile;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.apache.commons.io.IOUtils;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import org.apache.commons.io.IOUtils;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import java.util.*;
 
 public class Profile {
 	private final HashMap<String, Candidates> data;
@@ -31,25 +25,28 @@ public class Profile {
 		return new Profile(new HashMap<>());
 	}
 
-	public static Profile read(Reader r) throws IOException {
+	public static Profile read(Reader r) throws Exception {
 		return fromJSON(IOUtils.toString(r));
 	}
 
-	public static Profile read(Path path) throws IOException {
+	public static Profile read(Path path) throws Exception {
 		try (BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile())))) {
 			return read(r);
 		}
 	}
 
-	public static Profile read(String path) throws IOException {
+	public static Profile read(String path) throws Exception {
 		return read(Paths.get(path));
 	}
 
-	public static Profile fromJSON(String json) {
+	public static Profile fromJSON(String json) throws Exception {
 		Gson gson = new Gson();
 		Type map = new TypeToken<HashMap<String, Candidates>>() {
 		}.getType();
 		HashMap<String, Candidates> data = gson.fromJson(json, map);
+		if (data == null) {
+			throw new Exception("cannot parse profile from json");
+		}
 		return new Profile(toLowerCase(data)).removeEmptyCandidates().sortCandidatesByVoteWeight();
 	}
 

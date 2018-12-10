@@ -64,6 +64,9 @@ public class LocalProfiler implements Profiler {
 				throw new Exception(
 						"profiler returned with exit value: " + exitStatus);
 			}
+			if (profile == null) {
+				throw new Exception("profiler did not return a valid profile");
+			}
 			return profile;
 		}
 	}

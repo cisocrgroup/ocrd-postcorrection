@@ -15,7 +15,7 @@ public class ReadProfileFromJSONTest {
 	private Profile profile;
 
 	@Before
-	public void init() throws IOException {
+	public void init() throws Exception {
 		this.profile = Profile.read(resource);
 	}
 
@@ -94,7 +94,7 @@ public class ReadProfileFromJSONTest {
 	}
 
 	@Test
-	public void testToJSON() {
+	public void testToJSON() throws Exception {
 		final String json = profile.toJSON();
 		final Profile other = Profile.fromJSON(json);
 		profile = other;
