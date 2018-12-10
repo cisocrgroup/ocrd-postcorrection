@@ -11,7 +11,7 @@ public class ProfilerCommand implements Command {
 	public void execute(CommandLineArguments config) throws Exception {
 		final Parameter parameter = config.mustGetParameter(Parameter.class);
 		try (final Profile profile =
-				     new Profile(getLocalProfiler(parameter))) {
+				     new Profile(makeLocalProfiler(parameter))) {
 			profile.run();
 		}
 	}
@@ -21,7 +21,7 @@ public class ProfilerCommand implements Command {
 		return "profile";
 	}
 
-	private static LocalProfiler getLocalProfiler(Parameter parameter) {
+	private static LocalProfiler makeLocalProfiler(Parameter parameter) {
 		return new LocalProfiler()
 				.withExecutable(parameter.executable)
 				.withLanguageDirectory(parameter.backend)
