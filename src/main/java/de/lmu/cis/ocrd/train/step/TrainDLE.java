@@ -1,34 +1,25 @@
 package de.lmu.cis.ocrd.train.step;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.ObjectOutputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
-
-import org.pmw.tinylog.Logger;
-
 import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
-import de.lmu.cis.ocrd.pagexml.Line;
-import de.lmu.cis.ocrd.pagexml.OCRTokenImpl;
-import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
-import de.lmu.cis.ocrd.pagexml.Page;
-import de.lmu.cis.ocrd.pagexml.Word;
+import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
 import de.lmu.cis.ocrd.profile.ProfilerBuilder;
-
+import org.pmw.tinylog.Logger;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.functions.SimpleLogistic;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
+
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 // step: train dynamic lexicon extension.
 public class TrainDLE extends Base {
@@ -57,7 +48,8 @@ public class TrainDLE extends Base {
 		Path profilerIn = getTmpDir().getDLEProfilerInput();
 		getTmpDir().putProfilerInputFile(true, getConfig().trainingFiles,
 				profilerIn);
-		Profile profile = profilerBuilder.build().profile(profilerIn);
+		Profile profile =
+				profilerBuilder.build().profile(new FileReader(profilerIn.toFile()));
 		getLM().setProfile(profile);
 		Logger.debug("DLE: profiling done");
 	}

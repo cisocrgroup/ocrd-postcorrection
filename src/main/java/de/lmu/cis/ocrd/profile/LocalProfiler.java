@@ -1,22 +1,17 @@
 package de.lmu.cis.ocrd.profile;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.file.Path;
+import org.apache.commons.io.IOUtils;
+import org.pmw.tinylog.Logger;
+
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.pmw.tinylog.Logger;
-
 public class LocalProfiler implements Profiler {
 	private String exe, language, langdir;
 	private String[] args;
-	private Path outputPath;
-	private Path inputPath;
 
 	public LocalProfiler() {
 		this.exe = "profiler";
@@ -50,15 +45,21 @@ public class LocalProfiler implements Profiler {
 
 	@Override
 	public String toString() {
-		return String.join(" ", makeArgs(Paths.get("/path/to/input-file")));
+		return String.join(" ", makeArgs());
 	}
 
 	@Override
-	public Profile profile(Path path) throws Exception {
-		Process profiler = startCommand(path);
-		try (Reader r = new BufferedReader(
-				new InputStreamReader(profiler.getInputStream()))) {
-			Profile profile = Profile.read(r);
+	public Profile profile(Reader r) throws Exception {
+		Process profiler = startCommand();
+		try (Reader stdout = new BufferedReader(
+				new InputStreamReader(profiler.getInputStream()));
+			BufferedReader stderr = new BufferedReader(
+				new InputStreamReader(profiler.getErrorStream()));
+			Writer stdin = new BufferedWriter(
+					new OutputStreamWriter(profiler.getOutputStream()))) {
+			new Thread(logStderr(stderr)).run();
+			new Thread(writeStdin(r, stdin)).run();
+			final Profile profile = Profile.read(stdout);
 			final int exitStatus = profiler.waitFor();
 			if (exitStatus != 0) {
 				throw new Exception(
@@ -71,15 +72,38 @@ public class LocalProfiler implements Profiler {
 		}
 	}
 
-	private Process startCommand(Path path) throws IOException {
+	private Runnable logStderr(BufferedReader stderr) {
+		return () -> {
+			try {
+				String line;
+				while ((line = stderr.readLine()) != null) {
+					Logger.debug(line);
+				}
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		};
+	}
+
+	private Runnable writeStdin(Reader in, Writer stdin) {
+		return () -> {
+			try {
+				IOUtils.copy(in, stdin);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		};
+	}
+
+	private Process startCommand() throws IOException {
 		ProcessBuilder builder = new ProcessBuilder();
-		final List<String> command = makeArgs(path);
+		final List<String> command = makeArgs();
 		builder.command(command);
 		Logger.info("profiler command: " + String.join(" ", command));
 		return builder.start();
 	}
 
-	private List<String> makeArgs(Path path) {
+	private List<String> makeArgs() {
 		List<String> res = new ArrayList<>();
 		res.add(exe);
 		res.addAll(Arrays.asList(defaultArgs()));
@@ -87,7 +111,7 @@ public class LocalProfiler implements Profiler {
 		res.add(Paths.get(langdir, language + ".ini").toAbsolutePath()
 				.toString());
 		res.add("--sourceFile");
-		res.add(path.toString());
+		res.add("/dev/stdin");
 		res.add("--jsonOutput");
 		res.add("/dev/stdout");
 		if (this.args != null) {

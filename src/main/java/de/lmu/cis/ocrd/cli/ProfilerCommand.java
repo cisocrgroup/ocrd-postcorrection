@@ -1,8 +1,11 @@
 package de.lmu.cis.ocrd.cli;
 
+import com.google.gson.Gson;
 import de.lmu.cis.ocrd.profile.LocalProfiler;
+import de.lmu.cis.ocrd.profile.Profile;
+import de.lmu.cis.ocrd.profile.Profiler;
 
-public class ProfilerCommand implements Command {
+public class ProfilerCommand extends AbstractIOCommand {
 	public static class Parameter {
 		public String executable, backend, language;
 	}
@@ -10,10 +13,10 @@ public class ProfilerCommand implements Command {
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
 		final Parameter parameter = config.mustGetParameter(Parameter.class);
-		try (final Profile profile =
-				     new Profile(makeLocalProfiler(parameter))) {
-			profile.run();
-		}
+		final Profile profile =
+				makeLocalProfiler(parameter).profile(getStdin());
+		println(new Gson().toJson(profile));
+		flush();
 	}
 
 	@Override
@@ -21,7 +24,7 @@ public class ProfilerCommand implements Command {
 		return "profile";
 	}
 
-	private static LocalProfiler makeLocalProfiler(Parameter parameter) {
+	private Profiler makeLocalProfiler(Parameter parameter) {
 		return new LocalProfiler()
 				.withExecutable(parameter.executable)
 				.withLanguageDirectory(parameter.backend)

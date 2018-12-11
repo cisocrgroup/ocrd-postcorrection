@@ -364,7 +364,7 @@ public class Environment implements ArgumentFactory {
 	private Profile loadProfile() throws Exception {
 		final Path outputPath = fullPath(getLocalProfileOutputPath());
 		if (Files.exists(outputPath)) {
-			return new FileProfiler().profile(outputPath);
+			return new FileProfiler().profile(new FileReader(outputPath.toFile()));
 		}
 		final Path inputPath = fullPath(getLocalProfileInputPath());
 		writeDocument(openMasterOCR(), inputPath);
@@ -373,7 +373,7 @@ public class Environment implements ArgumentFactory {
 				.withLanguageDirectory(openConfiguration().getProfiler().getLanguageDirectory())
 				.withExecutable(openConfiguration().getProfiler().getExecutable())
 				.withArgs(openConfiguration().getProfiler().getArguments())
-				.profile(outputPath);
+				.profile(new FileReader(outputPath.toFile()));
 		try (OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(outputPath.toFile()))) {
 			out.write(profile.toJSON());
 		}

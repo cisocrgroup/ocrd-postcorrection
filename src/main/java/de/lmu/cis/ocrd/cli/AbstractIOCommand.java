@@ -14,15 +14,23 @@ abstract class AbstractIOCommand implements Command {
 				System.in, Charset.forName("UTF-8")));
 	}
 
+	protected Reader getStdin() {
+		return stdin;
+	}
+
+	protected Writer getStdout() {
+		return stdout;
+	}
+
 	protected void println(String str) throws IOException {
-		stdout.write(str + "\n");
+		getStdout().write(str + "\n");
 	}
 	protected void flush() throws IOException {
-		stdout.flush();
+		getStdout().flush();
 	}
 
 	protected String readLine() throws IOException {
-		return stdin.readLine();
+		return ((BufferedReader)getStdin()).readLine();
 	}
 
 }
