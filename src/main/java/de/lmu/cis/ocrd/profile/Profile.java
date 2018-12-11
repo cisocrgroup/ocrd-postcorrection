@@ -4,11 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -27,6 +25,10 @@ public class Profile {
 
 	public static Profile read(Reader r) throws Exception {
 		return fromJSON(IOUtils.toString(r));
+	}
+
+	public static Profile read(InputStream is) throws Exception {
+		return fromJSON(IOUtils.toString(is, Charset.forName("UTF-8")));
 	}
 
 	public static Profile read(Path path) throws Exception {

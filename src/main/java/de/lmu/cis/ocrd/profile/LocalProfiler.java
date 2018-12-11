@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Logger;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,20 +52,25 @@ public class LocalProfiler implements Profiler {
 	@Override
 	public Profile profile(Reader r) throws Exception {
 		Process profiler = startCommand();
-		try (Reader stdout = new BufferedReader(
-				new InputStreamReader(profiler.getInputStream()));
-			BufferedReader stderr = new BufferedReader(
+		try (InputStream stdout = profiler.getInputStream();
+		     // we do not care about stderr's encoding
+		     BufferedReader stderr = new BufferedReader(
 				new InputStreamReader(profiler.getErrorStream()));
-			Writer stdin = new BufferedWriter(
-					new OutputStreamWriter(profiler.getOutputStream()))) {
-			new Thread(logStderr(stderr)).run();
-			new Thread(writeStdin(r, stdin)).run();
+		     Writer stdin = new BufferedWriter(
+					new OutputStreamWriter(profiler.getOutputStream(),
+							Charset.forName("UTF-8")))) {
+			Thread t1 = new Thread(logStderr(stderr));
+			Thread t2 = new Thread(writeStdin(r, stdin));
+			t1.start();
+			t2.start();
 			final Profile profile = Profile.read(stdout);
 			final int exitStatus = profiler.waitFor();
 			if (exitStatus != 0) {
 				throw new Exception(
 						"profiler returned with exit value: " + exitStatus);
 			}
+			t1.join();
+			t2.join();
 			if (profile == null) {
 				throw new Exception("profiler did not return a valid profile");
 			}
@@ -88,7 +94,9 @@ public class LocalProfiler implements Profiler {
 	private Runnable writeStdin(Reader in, Writer stdin) {
 		return () -> {
 			try {
-				IOUtils.copy(in, stdin);
+				String input = IOUtils.toString(in);
+				IOUtils.write(input, stdin);
+				stdin.close();
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
