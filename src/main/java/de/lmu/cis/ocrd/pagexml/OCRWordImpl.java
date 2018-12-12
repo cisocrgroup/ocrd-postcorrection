@@ -1,8 +1,8 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import java.util.List;
-
 import de.lmu.cis.ocrd.ml.features.OCRWord;
+
+import java.util.List;
 
 public class OCRWordImpl implements OCRWord {
 	@SuppressWarnings("unused")
@@ -35,8 +35,7 @@ public class OCRWordImpl implements OCRWord {
 
 	@Override
 	public double getConfidenceAt(int i) {
-		// TODO: not implemented
-		return 0;
+		return word.getTextEquivs().get(this.i).getConfidence();
 	}
 
 	@Override

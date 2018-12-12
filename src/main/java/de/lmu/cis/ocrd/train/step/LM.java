@@ -1,9 +1,5 @@
 package de.lmu.cis.ocrd.train.step;
 
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
 import de.lmu.cis.ocrd.ml.CharacterNGrams;
 import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
@@ -11,6 +7,10 @@ import de.lmu.cis.ocrd.pagexml.Line;
 import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Word;
 import de.lmu.cis.ocrd.profile.Profile;
+
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 // step: Language Model
 public class LM implements ArgumentFactory {
@@ -90,7 +90,6 @@ public class LM implements ArgumentFactory {
 		this.profile = profile;
 	}
 
-	@Override
 	public Profile getProfile() throws Exception {
 		return profile;
 	}

@@ -346,14 +346,6 @@ public class Environment implements ArgumentFactory {
 		}
 	}
 
-	@Override
-	public Profile getProfile() throws Exception {
-		if (profile == null) {
-			profile = loadProfile();
-		}
-		return profile;
-	}
-
 	/**
 	 *
 	 *

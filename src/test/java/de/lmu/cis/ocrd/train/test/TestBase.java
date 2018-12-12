@@ -32,11 +32,6 @@ class TestBase {
 		MockEnvironment(String base, String name) throws IOException {
 			super(base, name);
 		}
-
-		@Override
-		public Profile getProfile() {
-			return new MockProfile();
-		}
 	}
 
 	private static class MockProfile extends Profile {

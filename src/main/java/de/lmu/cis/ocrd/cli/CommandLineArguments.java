@@ -177,6 +177,21 @@ public class CommandLineArguments {
         throw new Exception("missing command line options: -D or -p");
     }
 
+    public String mustGetMETSFile() throws Exception {
+    	if (!isSet(mets)) {
+    		throw new Exception("missing command line options: -m or --mets");
+	    }
+	    return mets;
+    }
+
+    public String[] mustGetInputFileGrp() throws Exception {
+    	if (inputFilegrp == null || inputFilegrp.length == 0) {
+    		throw new Exception("missing command line options -I or " +
+				    "--input-file-grp");
+	    }
+	    return inputFilegrp;
+    }
+
     private static boolean isSet(String str) {
         return str != null && !"".equals(str);
     }
@@ -205,4 +220,5 @@ public class CommandLineArguments {
                     .activate();
         Logger.debug("current log level: {}", Logger.getLevel());
     }
+
 }

@@ -1,14 +1,14 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import java.util.Optional;
-
 import de.lmu.cis.ocrd.profile.Candidate;
+
+import java.util.Optional;
 
 public class OCRTokenWithCandidateImpl extends OCRTokenImpl {
 	private final Candidate candidate;
 
 	public OCRTokenWithCandidateImpl(Word word, boolean withGT, Candidate c) {
-		super(word, withGT);
+		super(word, 0);
 		this.candidate = c;
 	}
 

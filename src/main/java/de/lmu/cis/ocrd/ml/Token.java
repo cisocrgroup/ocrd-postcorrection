@@ -1,16 +1,15 @@
 package de.lmu.cis.ocrd.ml;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import com.google.gson.Gson;
-
 import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.Word;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.profile.Candidate;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 // TODO: Merge with Alignment.Token
 public class Token implements Serializable, OCRToken {
@@ -98,6 +97,11 @@ public class Token implements Serializable, OCRToken {
 			str.append(gt);
 		}
 		return str.toString();
+	}
+
+	@Override
+	public List<Candidate> getAllProfilerCandidates() {
+		return new ArrayList<>();
 	}
 
 	public boolean hasGT() {

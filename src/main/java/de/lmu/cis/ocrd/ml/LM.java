@@ -5,7 +5,6 @@ import de.lmu.cis.ocrd.pagexml.Line;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Word;
-import de.lmu.cis.ocrd.profile.Profile;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -88,10 +87,5 @@ public class LM implements ArgumentFactory {
 	public FreqMap getCharacterTrigrams() throws Exception {
 		loadTrigramsIfNotPresent();
 		return trigramFreqMap;
-	}
-
-	@Override
-	public Profile getProfile() throws Exception {
-		throw new Exception("LM.getProfile(): not implemented");
 	}
 }

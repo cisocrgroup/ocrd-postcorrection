@@ -87,7 +87,7 @@ public class TrainDLE extends Base {
 	private void dlePrepare(ARFFWriter w, FeatureSet fs, int i, Page page)
 			throws Exception {
 		eachLongWord(page, (word, mOCR) -> {
-			final OCRToken t = new OCRTokenImpl(word, true);
+			final OCRToken t = new OCRTokenImpl(word, 0);
 			Logger.debug("word({}): {} GT: {}", i + 1,
 					word.getUnicodeNormalized().get(i), t.getGT().get());
 			final FeatureSet.Vector values = fs.calculateFeatureVector(t,
