@@ -76,7 +76,7 @@ public class TrainCommand implements Command {
 				.add(new DynamicLexiconGTFeature());
 		for (int i = 0; i < lm.getNumberOfOtherOCRs(); i++) {
 			prepareDLE(files, fs, i, lm.getNumberOfOtherOCRs());
-			trainDLE(i, lm.getNumberOfOtherOCRs());
+			trainDLE(i, lm.getNumberOfOtherOCRs() + 1);
 		}
 	}
 
@@ -99,7 +99,7 @@ public class TrainCommand implements Command {
 	private void prepareDLE(ARFFWriter w, FeatureSet fs, Page page, int i,
 	                        int n) throws Exception {
 		eachLongWord(page, (word, mOCR)-> {
-			final OCRToken t = new OCRTokenImpl(word, n + 1);
+			final OCRToken t = new OCRTokenImpl(word, n);
 			Logger.debug("adding {} | GT: {}", t.getMasterOCR().toString(),
 					t.getGT().get());
 			final FeatureSet.Vector vals = fs.calculateFeatureVector(t, i+1);
@@ -109,7 +109,7 @@ public class TrainCommand implements Command {
 	}
 
 	private void trainDLE(int i, int n) throws Exception {
-		Logger.info("trainDLE({} {}", i, n);
+		Logger.info("trainDLE({} {})", i, n);
 		final Path src = tagPath(parameter.dleTraining.training, i);
 		final Path dest = tagPath(parameter.dleTraining.model, i);
 		train(src, dest);

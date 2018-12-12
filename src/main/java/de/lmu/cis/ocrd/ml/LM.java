@@ -47,7 +47,7 @@ public class LM implements ArgumentFactory {
 	}
 
 	private void addToFreqMaps(Word word, int n) {
-		Logger.info("addToFreqMaps({}, {})", word.toString(), n);
+		Logger.debug("addToFreqMaps({}, {})", word.toString(), n);
 		final List<String> aligned = word.getUnicodeNormalized();
 		if (gt) {
 			n -= 1;
@@ -55,10 +55,10 @@ public class LM implements ArgumentFactory {
 		while (freqMaps.size() <= n) {
 			freqMaps.add(new FreqMap());
 		}
-		Logger.info("freqMaps.size(): {}", freqMaps.size());
-		Logger.info("aligned.size(): {}", aligned.size());
+		Logger.debug("freqMaps.size(): {}", freqMaps.size());
+		Logger.debug("aligned.size(): {}", aligned.size());
 		for (int i = 0; i < n && i < aligned.size(); i++) {
-			Logger.info("i: {}", i);
+			Logger.debug("i: {}", i);
 			freqMaps.get(i).add(aligned.get(i));
 		}
 	}
