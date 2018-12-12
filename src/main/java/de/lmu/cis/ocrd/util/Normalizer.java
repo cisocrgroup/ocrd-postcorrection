@@ -1,4 +1,6 @@
-package de.lmu.cis.ocrd;
+package de.lmu.cis.ocrd.util;
+
+import de.lmu.cis.ocrd.Unicode;
 
 import java.util.ArrayList;
 

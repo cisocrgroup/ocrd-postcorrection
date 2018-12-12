@@ -2,13 +2,13 @@ package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
 
-import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.util.JSON;
 
 public class SumOfMatchingAdditionalOCRsFeature extends NamedDoubleFeature {
 	private static final long serialVersionUID = 2004996085911141867L;
 
 	public SumOfMatchingAdditionalOCRsFeature(JsonObject o, ArgumentFactory factory) {
-		this(JSONUtil.mustGetNameOrType(o));
+		this(JSON.mustGetNameOrType(o));
 	}
 
 	public SumOfMatchingAdditionalOCRsFeature(String name) {

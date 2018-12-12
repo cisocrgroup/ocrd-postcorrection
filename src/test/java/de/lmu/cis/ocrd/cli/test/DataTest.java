@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.cli.test;
 
 import de.lmu.cis.ocrd.cli.CommandLineArguments;
-import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.util.JSON;
 import org.apache.commons.cli.ParseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,14 +36,14 @@ public class DataTest {
 		assertThat(commandLineArguments.getParameters().getDynamicLexiconTrainig().isDebugTrainingTokens(), is(true));
 		assertThat(commandLineArguments.getParameters().getDynamicLexiconTrainig().isCopyTrainingFiles(), is(false));
 		assertThat(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures().length, is(3));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "name").getAsString(), is("TokenLengthClass"));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature"));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "short").getAsInt(), is(3));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "medium").getAsInt(), is(8));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "long").getAsInt(), is(13));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "name").getAsString(), is("TokenCaseClass"));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.TokenCaseClassFeature"));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[2], "name").getAsString(), is("UnigramOCRRelativeFrequency"));
-		assertThat(JSONUtil.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[2], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.UnigramFeature"));
+		assertThat(JSON.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "name").getAsString(), is("TokenLengthClass"));
+		assertThat(JSON.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature"));
+		assertThat(JSON.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "short").getAsInt(), is(3));
+		assertThat(JSON.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "medium").getAsInt(), is(8));
+		assertThat(JSON.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[0], "long").getAsInt(), is(13));
+		assertThat(JSON.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "name").getAsString(), is("TokenCaseClass"));
+		assertThat(JSON.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[1], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.TokenCaseClassFeature"));
+		assertThat(JSON.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[2], "name").getAsString(), is("UnigramOCRRelativeFrequency"));
+		assertThat(JSON.mustGet(commandLineArguments.getParameters().getDynamicLexiconTrainig().getFeatures()[2], "type").getAsString(), is("de.lmu.cis.ocrd.ml.features.UnigramFeature"));
 	}
 }

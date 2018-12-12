@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.cli;
 
 import com.google.gson.Gson;
-import de.lmu.cis.ocrd.Normalizer;
+import de.lmu.cis.ocrd.util.Normalizer;
 import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.Node;
 import de.lmu.cis.ocrd.align.TokenAlignment;

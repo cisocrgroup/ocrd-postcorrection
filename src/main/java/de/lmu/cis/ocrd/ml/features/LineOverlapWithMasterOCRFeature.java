@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 
 import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.Node;
-import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.util.JSON;
 
 public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
 	private static final long serialVersionUID = 1L;
@@ -15,7 +15,7 @@ public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
 
 	public LineOverlapWithMasterOCRFeature(JsonObject o,
 			ArgumentFactory ignore) {
-		this(JSONUtil.mustGetNameOrType(o));
+		this(JSON.mustGetNameOrType(o));
 	}
 
 	public LineOverlapWithMasterOCRFeature(String name) {

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 
-import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.util.JSON;
 import de.lmu.cis.ocrd.ml.FreqMap;
 
 public class UnigramFeature extends NamedDoubleFeature {
@@ -13,7 +13,7 @@ public class UnigramFeature extends NamedDoubleFeature {
 	private final List<FreqMap> unigrams;
 
 	public UnigramFeature(JsonObject o, ArgumentFactory args) throws Exception {
-		this(args, JSONUtil.mustGetNameOrType(o));
+		this(args, JSON.mustGetNameOrType(o));
 	}
 
 	private UnigramFeature(ArgumentFactory factory, String name) throws Exception {

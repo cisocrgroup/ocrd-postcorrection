@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import de.lmu.cis.ocrd.Normalizer;
+import de.lmu.cis.ocrd.util.Normalizer;
 import org.w3c.dom.Node;
 
 import javax.xml.xpath.XPathExpressionException;

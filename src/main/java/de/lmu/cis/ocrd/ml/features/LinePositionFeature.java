@@ -1,10 +1,9 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import java.util.Arrays;
-
 import com.google.gson.JsonObject;
+import de.lmu.cis.ocrd.util.JSON;
 
-import de.lmu.cis.ocrd.json.JSONUtil;
+import java.util.Arrays;
 
 public class LinePositionFeature extends NamedStringSetFeature {
 	private static final long serialVersionUID = 1264328009088677748L;
@@ -13,7 +12,7 @@ public class LinePositionFeature extends NamedStringSetFeature {
 	private static final String LAST = "last-in-line";
 
 	public LinePositionFeature(JsonObject o, ArgumentFactory args) {
-		this(JSONUtil.mustGetNameOrType(o));
+		this(JSON.mustGetNameOrType(o));
 	}
 
 	LinePositionFeature(String name) {

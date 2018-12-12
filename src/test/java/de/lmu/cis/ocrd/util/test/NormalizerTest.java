@@ -1,6 +1,6 @@
-package de.lmu.cis.ocrd.test;
+package de.lmu.cis.ocrd.util.test;
 
-import de.lmu.cis.ocrd.Normalizer;
+import de.lmu.cis.ocrd.util.Normalizer;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

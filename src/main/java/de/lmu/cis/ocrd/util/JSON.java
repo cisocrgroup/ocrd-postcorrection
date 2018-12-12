@@ -1,9 +1,9 @@
-package de.lmu.cis.ocrd.json;
+package de.lmu.cis.ocrd.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class JSONUtil {
+public class JSON {
 	public static JsonElement mustGet(JsonObject o, String key) {
 		final JsonElement val = o.get(key);
 		if (val == null) {

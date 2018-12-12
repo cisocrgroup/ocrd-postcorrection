@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 
-import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.util.JSON;
 
 public class TokenLengthClassFeature extends NamedStringSetFeature {
 	private static final long serialVersionUID = -1000888404407897300L;
@@ -26,8 +26,8 @@ public class TokenLengthClassFeature extends NamedStringSetFeature {
 	private final int shrt, medium, lng;
 
 	public TokenLengthClassFeature(JsonObject o, ArgumentFactory args) {
-		this(JSONUtil.mustGetNameOrType(o), JSONUtil.mustGet(o, "short").getAsInt(),
-				JSONUtil.mustGet(o, "medium").getAsInt(), JSONUtil.mustGet(o, "long").getAsInt());
+		this(JSON.mustGetNameOrType(o), JSON.mustGet(o, "short").getAsInt(),
+				JSON.mustGet(o, "medium").getAsInt(), JSON.mustGet(o, "long").getAsInt());
 	}
 
 	public TokenLengthClassFeature(String name, int shrt, int medium, int lng) {

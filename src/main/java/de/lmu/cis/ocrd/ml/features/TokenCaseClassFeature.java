@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.gson.JsonObject;
 
-import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.util.JSON;
 
 public class TokenCaseClassFeature extends NamedStringSetFeature {
 	private static final long serialVersionUID = 6185953194478613291L;
@@ -23,7 +23,7 @@ public class TokenCaseClassFeature extends NamedStringSetFeature {
 	}
 
 	public TokenCaseClassFeature(JsonObject o, ArgumentFactory args) {
-		this(JSONUtil.mustGetNameOrType(o));
+		this(JSON.mustGetNameOrType(o));
 	}
 
 	public TokenCaseClassFeature(String name) {

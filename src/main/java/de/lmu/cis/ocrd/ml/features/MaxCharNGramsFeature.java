@@ -2,14 +2,14 @@ package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
 
-import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.util.JSON;
 import de.lmu.cis.ocrd.ml.FreqMap;
 
 public class MaxCharNGramsFeature extends NamedCharacterNGramFeature {
 	private static final long serialVersionUID = 1L;
 
 	public MaxCharNGramsFeature(JsonObject o, ArgumentFactory factory) throws Exception {
-		this(JSONUtil.mustGetNameOrType(o), factory.getCharacterTrigrams());
+		this(JSON.mustGetNameOrType(o), factory.getCharacterTrigrams());
 	}
 
 	public MaxCharNGramsFeature(String name, FreqMap ngrams) {

@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.util.JSON;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 
 import java.lang.reflect.Constructor;
@@ -38,7 +38,7 @@ public class FeatureFactory {
 	public Optional<Feature> create(JsonObject o) throws ClassNotFoundException,
 			IllegalAccessException, NoSuchMethodException,
 			InvocationTargetException, InstantiationException {
-		final String type = JSONUtil.mustGet(o, "type").getAsString();
+		final String type = JSON.mustGet(o, "type").getAsString();
 		if (!features.contains(type)) {
 			return Optional.empty();
 		}

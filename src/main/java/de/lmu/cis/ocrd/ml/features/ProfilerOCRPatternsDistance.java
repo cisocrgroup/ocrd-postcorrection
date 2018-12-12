@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.google.gson.JsonObject;
 
-import de.lmu.cis.ocrd.json.JSONUtil;
+import de.lmu.cis.ocrd.util.JSON;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
 
@@ -13,7 +13,7 @@ public class ProfilerOCRPatternsDistance extends NamedDoubleFeature {
 	private final Profile profile;
 
 	public ProfilerOCRPatternsDistance(JsonObject o, ArgumentFactory args) throws Exception {
-		this(JSONUtil.mustGetNameOrType(o), args.getProfile());
+		this(JSON.mustGetNameOrType(o), args.getProfile());
 	}
 
 	private ProfilerOCRPatternsDistance(String name, Profile profile) {

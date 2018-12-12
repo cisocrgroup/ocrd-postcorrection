@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd;
 
+import de.lmu.cis.ocrd.util.Normalizer;
+
 import java.io.Serializable;
 import java.util.*;
 
