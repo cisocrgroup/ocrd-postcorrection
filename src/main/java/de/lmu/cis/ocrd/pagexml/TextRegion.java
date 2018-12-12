@@ -22,6 +22,18 @@ public class TextRegion {
 		return this.node.getAttributes().getNamedItem(name).getTextContent();
 	}
 
+	public List<TextEquiv> getTextEquivs() {
+		try {
+			final List<TextEquiv> tes = new ArrayList<>();
+			for (Node n : XPathHelper.getNodes(this.node, "./TextEquiv")) {
+				tes.add(new TextEquiv(n));
+			}
+			return tes;
+		} catch (XPathExpressionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public List<String> getUnicode() {
 		try {
 			List<String> stringList = new ArrayList<>();
