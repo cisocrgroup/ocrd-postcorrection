@@ -5,6 +5,7 @@ import de.lmu.cis.ocrd.pagexml.Line;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Word;
+import org.pmw.tinylog.Logger;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -45,15 +46,19 @@ public class LM implements ArgumentFactory {
 		}
 	}
 
-	private void addToFreqMaps(Word word, int n) throws Exception {
-		final List<String> aligned = word.getUnicode();
+	private void addToFreqMaps(Word word, int n) {
+		Logger.info("addToFreqMaps({}, {})", word.toString(), n);
+		final List<String> aligned = word.getUnicodeNormalized();
 		if (gt) {
 			n -= 1;
 		}
 		while (freqMaps.size() <= n) {
 			freqMaps.add(new FreqMap());
 		}
-		for (int i = 0; i < n; i++) {
+		Logger.info("freqMaps.size(): {}", freqMaps.size());
+		Logger.info("aligned.size(): {}", aligned.size());
+		for (int i = 0; i < n && i < aligned.size(); i++) {
+			Logger.info("i: {}", i);
 			freqMaps.get(i).add(aligned.get(i));
 		}
 	}

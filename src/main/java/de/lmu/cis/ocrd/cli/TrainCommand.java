@@ -25,16 +25,16 @@ import java.util.List;
 public class TrainCommand implements Command {
 
 	public static class TrainingResource {
-		public Path model, training, features;
+		public String model = "", training = "", features = "";
 	}
 
 	public static class DLETrainingResource extends TrainingResource {
-		public Path dynamicLexicon;
+		public String dynamicLexicon = "";
 	}
 
 	public static class Parameter {
 		DLETrainingResource dleTraining;
-		Path trigrams;
+		String trigrams = "";
 	}
 
 	private String[] ifgs; // input file groups
@@ -60,7 +60,7 @@ public class TrainCommand implements Command {
 	private void prepareDLE() throws Exception {
 		Logger.info("prepareDLE");
 		final JsonObject[] features =
-				getFeatures(parameter.dleTraining.features);
+				getFeatures(Paths.get(parameter.dleTraining.features));
 		for (String ifg : ifgs) {
 			prepareDLE(ifg, features);
 		}
@@ -69,7 +69,7 @@ public class TrainCommand implements Command {
 	private void prepareDLE(String ifg, JsonObject[] features) throws Exception {
 		Logger.info("prepareDLE({})", ifg);
 		final List<METS.File> files = mets.findFileGrpFiles(ifg);
-		final LM lm = new LM(true, parameter.trigrams, files);
+		final LM lm = new LM(true, Paths.get(parameter.trigrams), files);
 		final FeatureSet fs = FeatureFactory.getDefault()
 				.withArgumentFactory(lm)
 				.createFeatureSet(features)
@@ -131,9 +131,8 @@ public class TrainCommand implements Command {
 		}
 	}
 
-	private static Path tagPath(Path path, int n) {
-		final String tmp = path.toString();
-		return Paths.get(tmp.replaceFirst("(\\..*?)$", "_" + n + "$1"));
+	private static Path tagPath(String path, int n) {
+		return Paths.get(path.replaceFirst("(\\..*?)$", "_" + n + "$1"));
 	}
 
 	private static JsonObject[] getFeatures(Path features) throws Exception {
