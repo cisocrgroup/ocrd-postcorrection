@@ -1,11 +1,11 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.w3c.dom.Node;
 
 import javax.xml.xpath.XPathExpressionException;
-
-import org.w3c.dom.Node;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
 
 public class Word extends TextRegion {
 	private final List<Glyph> glyphs;
@@ -31,5 +31,21 @@ public class Word extends TextRegion {
 			glyphList.add(new Glyph(n));
 		}
 		return glyphList;
+	}
+
+	@Override
+	public String toString() {
+		StringJoiner sj = new StringJoiner("|");
+		final int max = 5;
+		int i = 0;
+		for (String str : getUnicodeNormalized()) {
+			sj.add(str);
+			i++;
+			if (i >= max) {
+				sj.add("...");
+				break;
+			}
+		}
+		return sj.toString();
 	}
 }
