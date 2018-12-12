@@ -14,8 +14,8 @@ public class TextEquiv {
 		return Integer.parseInt(XPathHelper.getAttribute(node, "index"));
 	}
 
-	public float getConfidence() {
-		return Float.parseFloat(XPathHelper.getAttribute(node, "conf"));
+	public double getConfidence() {
+		return Double.parseDouble(XPathHelper.getAttribute(node, "conf"));
 	}
 
 	public String getDataType() {

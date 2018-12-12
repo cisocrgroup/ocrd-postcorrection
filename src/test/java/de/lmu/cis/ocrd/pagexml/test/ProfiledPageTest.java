@@ -33,7 +33,8 @@ public class ProfiledPageTest {
 
 	@Test
 	public void testGetConfidence() {
-		assertThat(firstWord().get(0).getConfidence(), is(Float.parseFloat("0.866034939912189")));
+		assertThat(firstWord().get(0).getConfidence(), is(Double.parseDouble(
+				"0.866034939912189")));
 	}
 
 	@Test
