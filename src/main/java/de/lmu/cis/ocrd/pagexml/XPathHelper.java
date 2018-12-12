@@ -27,6 +27,14 @@ class XPathHelper {
 		return getNodes(node, compile(expr));
 	}
 
+	public static Node getNode(Node node, String expr) throws XPathExpressionException {
+		return getNode(node, compile(expr));
+	}
+
+	public static Node getNode(Node node, XPathExpression expr) throws XPathExpressionException {
+		return (Node)expr.evaluate(node, XPathConstants.NODE);
+	}
+
 	public static String getAttribute(Node node, String key) {
 		final Node val = node.getAttributes().getNamedItem(key);
 		if (val == null) {
