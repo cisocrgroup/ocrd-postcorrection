@@ -55,10 +55,7 @@ public class LM implements ArgumentFactory {
 		while (freqMaps.size() <= n) {
 			freqMaps.add(new FreqMap());
 		}
-		Logger.debug("freqMaps.size(): {}", freqMaps.size());
-		Logger.debug("aligned.size(): {}", aligned.size());
 		for (int i = 0; i < n && i < aligned.size(); i++) {
-			Logger.debug("i: {}", i);
 			freqMaps.get(i).add(aligned.get(i));
 		}
 	}

@@ -109,7 +109,7 @@ public class TrainCommand implements Command {
 	}
 
 	private void trainDLE(int i, int n) throws Exception {
-		Logger.info("trainDLE({} {})", i, n);
+		Logger.info("trainDLE({}, {})", i, n);
 		final Path src = tagPath(parameter.dleTraining.training, i);
 		final Path dest = tagPath(parameter.dleTraining.model, i);
 		train(src, dest);
