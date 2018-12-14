@@ -1,11 +1,10 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.util.JSON;
 import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.util.JSON;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -14,7 +13,8 @@ public class FeatureFactory {
 	private ArgumentFactory args;
 
 	public static FeatureFactory getDefault() {
-		return new FeatureFactory().register(UnigramFeature.class)
+		return new FeatureFactory()
+				.register(UnigramFeature.class)
 				.register(TokenLengthClassFeature.class)
 				.register(TokenLengthFeature.class)
 				.register(SumOfMatchingAdditionalOCRsFeature.class)
@@ -35,9 +35,7 @@ public class FeatureFactory {
 		return this;
 	}
 
-	public Optional<Feature> create(JsonObject o) throws ClassNotFoundException,
-			IllegalAccessException, NoSuchMethodException,
-			InvocationTargetException, InstantiationException {
+	public Optional<Feature> create(JsonObject o) throws Exception {
 		final String type = JSON.mustGet(o, "type").getAsString();
 		if (!features.contains(type)) {
 			return Optional.empty();

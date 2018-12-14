@@ -13,13 +13,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class DefaultDataTest {
 	private Configuration data;
@@ -34,7 +33,7 @@ public class DefaultDataTest {
 	}
 
 	@Test
-	public void testCreateTokenLengthFeature() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+	public void testCreateTokenLengthFeature() throws Exception {
 		final Optional<Feature> feature = FeatureFactory.getDefault().create(data.getDynamicLexiconTrainig().getFeatures()[0]);
 		assertThat(feature.isPresent(), is(true));
 		assertThat(feature.get() instanceof TokenLengthClassFeature, is(true));
