@@ -151,7 +151,8 @@ public class TrainDLE extends Base {
 					word.getUnicodeNormalized().get(i),
 					word.getUnicodeNormalized().get(0));
 			for (Candidate c : cs.get().Candidates) {
-				final OCRToken t = new OCRTokenWithCandidateImpl(word, true, c);
+				// i+1 is WRONG: it must be n
+				final OCRToken t = new OCRTokenWithCandidateImpl(word, i+1, c);
 				final FeatureSet.Vector values = fs.calculateFeatureVector(t,
 						i + 1);
 				Logger.debug(values);
