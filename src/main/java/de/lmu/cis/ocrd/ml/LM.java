@@ -15,14 +15,13 @@ import java.util.List;
 public class LM implements ArgumentFactory {
 	private final boolean gt;
 	private final Path trigrams;
-	private final List<METS.File> files;
+	private List<METS.File> files;
 	private List<FreqMap> freqMaps;
 	private FreqMap trigramFreqMap;
 
-	public LM(boolean gt, Path trigrams, List<METS.File> files) {
+	public LM(boolean gt, Path trigrams) {
 		this.gt = gt;
 		this.trigrams = trigrams;
-		this.files = files;
 		this.freqMaps = null;
 		this.trigramFreqMap = null;
 	}
@@ -34,6 +33,7 @@ public class LM implements ArgumentFactory {
 		freqMaps = new ArrayList<>();
 		int n = 0;
 		for (METS.File file : this.files) {
+			Logger.info("reading unigrams: {}", file.getFLocat());
 			final Page page = Page.parse(file.open());
 			for (final Line line : page.getLines()) {
 				if (n == 0) {
@@ -65,6 +65,11 @@ public class LM implements ArgumentFactory {
 			return;
 		}
 		trigramFreqMap = CharacterNGrams.fromCSV(trigrams.toString());
+	}
+
+	public void setFiles(List<METS.File> files) {
+		this.files = files;
+		this.freqMaps = null;
 	}
 
 	@Override
