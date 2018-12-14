@@ -1,15 +1,15 @@
 package de.lmu.cis.ocrd.ml;
 
+import de.lmu.cis.ocrd.ml.features.Feature;
+import de.lmu.cis.ocrd.ml.features.NamedBooleanFeature;
+import de.lmu.cis.ocrd.ml.features.NamedStringSetFeature;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
+
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
-import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.NamedBooleanFeature;
-import de.lmu.cis.ocrd.ml.features.NamedStringSetFeature;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
 
 // ARFFWriter writes feature vectors into WEKAs ARFF (Attribute-Relation-File-Format).
 // After all features have been added to this writer using `addFeature()`,
@@ -48,7 +48,7 @@ public class ARFFWriter implements AutoCloseable {
 		return this;
 	}
 
-	public void writeHeader(int n) {
+	public ARFFWriter writeHeader(int n) {
 		writer.printf("%% Created by de.lmu.cis.ocrd.ml.ARFFWriter at %s\n",
 				new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 		writer.printf("@RELATION\t%s\n", relation);
@@ -67,6 +67,7 @@ public class ARFFWriter implements AutoCloseable {
 			}
 		}
 		writer.println("@DATA");
+		return this;
 	}
 
 	public void writeToken(OCRToken token) {
