@@ -83,7 +83,7 @@ public class TrainCommand implements Command {
 	private void prepareDLE(List<METS.File> files, FeatureSet fs, int i,
 	                        int n) throws Exception {
 		Logger.info("prepareDLE({}, {})", i, n);
-		final Path dest = tagPath(parameter.dleTraining.training, i);
+		final Path dest = tagPath(parameter.dleTraining.training, i+1);
 		try (final ARFFWriter w =
 				     ARFFWriter.fromFeatureSet(fs).withWriter(
 				     		new BufferedWriter(new FileWriter(dest.toFile())))) {
@@ -100,7 +100,7 @@ public class TrainCommand implements Command {
 	                        int n) throws Exception {
 		eachLongWord(page, (word, mOCR)-> {
 			final OCRToken t = new OCRTokenImpl(word, n);
-			Logger.debug("adding {} | GT: {}", t.getMasterOCR().toString(),
+			Logger.debug("adding {} (GT: {})", t.getMasterOCR().toString(),
 					t.getGT().get());
 			final FeatureSet.Vector vals = fs.calculateFeatureVector(t, i+1);
 			Logger.debug(vals);
@@ -110,8 +110,8 @@ public class TrainCommand implements Command {
 
 	private void trainDLE(int i, int n) throws Exception {
 		Logger.info("trainDLE({}, {})", i, n);
-		final Path src = tagPath(parameter.dleTraining.training, i);
-		final Path dest = tagPath(parameter.dleTraining.model, i);
+		final Path src = tagPath(parameter.dleTraining.training, i+1);
+		final Path dest = tagPath(parameter.dleTraining.model, i+1);
 		train(src, dest);
 	}
 
