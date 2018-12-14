@@ -7,8 +7,8 @@ import java.util.Optional;
 public class OCRTokenWithCandidateImpl extends OCRTokenImpl {
 	private final Candidate candidate;
 
-	public OCRTokenWithCandidateImpl(Word word, boolean withGT, Candidate c) {
-		super(word, 0);
+	public OCRTokenWithCandidateImpl(Word word, int gtindex, Candidate c) {
+		super(word, gtindex);
 		this.candidate = c;
 	}
 
