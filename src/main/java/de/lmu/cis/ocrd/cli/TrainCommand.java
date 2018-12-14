@@ -33,13 +33,18 @@ public class TrainCommand implements Command {
 	}
 
 	public static class Parameter {
-		DLETrainingResource dleTraining;
-		String trigrams = "";
+		public DLETrainingResource dleTraining;
+		public TrainingResource rrTraining;
+		public String trigrams = "";
+		public int nOCR;
 	}
 
 	private String[] ifgs; // input file groups
 	private METS mets; // mets file
 	private Parameter parameter;
+	private LM lm;
+	private FeatureSet dleFS, rrFS;
+	private ARFFWriter dlew, rrw;
 	private boolean debug;
 
 	@Override
@@ -53,68 +58,60 @@ public class TrainCommand implements Command {
 		this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		this.parameter = config.mustGetParameter(Parameter.class);
 		this.debug = "DEBUG".equals(config.getLogLevel());
-
-		prepareDLE();
-	}
-
-	private void prepareDLE() throws Exception {
-		Logger.info("prepareDLE");
-		final JsonObject[] features =
-				getFeatures(Paths.get(parameter.dleTraining.features));
-		for (String ifg : ifgs) {
-			prepareDLE(ifg, features);
-		}
-	}
-
-	private void prepareDLE(String ifg, JsonObject[] features) throws Exception {
-		Logger.info("prepareDLE({})", ifg);
-		final List<METS.File> files = mets.findFileGrpFiles(ifg);
-		final LM lm = new LM(true, Paths.get(parameter.trigrams), files);
-		final FeatureSet fs = FeatureFactory.getDefault()
+		this.lm = new LM(true, Paths.get(parameter.trigrams));
+		this.dleFS = FeatureFactory
+				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(features)
+				.createFeatureSet(getFeatures(parameter.dleTraining.features))
 				.add(new DynamicLexiconGTFeature());
-		for (int i = 0; i < lm.getNumberOfOtherOCRs(); i++) {
-			prepareDLE(files, fs, i, lm.getNumberOfOtherOCRs());
-			trainDLE(i, lm.getNumberOfOtherOCRs() + 1);
-		}
-	}
 
-	private void prepareDLE(List<METS.File> files, FeatureSet fs, int i,
-	                        int n) throws Exception {
-		Logger.info("prepareDLE({}, {})", i, n);
-		final Path dest = tagPath(parameter.dleTraining.training, i+1);
-		try (final ARFFWriter w =
-				     ARFFWriter.fromFeatureSet(fs).withWriter(
-				     		new BufferedWriter(new FileWriter(dest.toFile())))) {
-			w.withDebugToken(debug);
-			w.withRelation("dle-train-" + (i+1));
-			w.writeHeader(i+1);
-			for (METS.File file : files) {
-				prepareDLE(w, fs, Page.parse(file.open()), i, n);
+		for (int i = 0; i < parameter.nOCR; i++) {
+			final Path dleTrain = tagPath(parameter.dleTraining.training,
+					i+1);
+			final Path dleModel = tagPath(parameter.dleTraining.model, i+1);
+			dlew = ARFFWriter
+					.fromFeatureSet(dleFS)
+					.withWriter(getWriter(dleTrain))
+					.withDebugToken(debug)
+					.withRelation("dle-train-" + (i+1))
+					.writeHeader(i+1);
+			for (String ifg : ifgs) {
+				Logger.info("input file group: {}", ifg);
+				final List<METS.File> files = mets.findFileGrpFiles(ifg);
+				prepare(files, i, parameter.nOCR);
 			}
+			dlew.close();
+			train(dleTrain, dleModel);
 		}
 	}
 
-	private void prepareDLE(ARFFWriter w, FeatureSet fs, Page page, int i,
-	                        int n) throws Exception {
+	private void prepare(List<METS.File> files, int i, int n) throws Exception {
+		Logger.info("prepare({}, {})", i, n);
+		lm.setFiles(files);
+		prepareDLE(files, i, n);
+	}
+
+	private void prepareDLE(List<METS.File> files, int i, int n) throws Exception {
+		Logger.info("prepareDLE({}, {})", i, n);
+		for (METS.File file : files) {
+			prepareDLE(Page.parse(file.open()), i, n);
+		}
+	}
+
+	private void prepareDLE(Page page, int i, int n) throws Exception {
 		eachLongWord(page, (word, mOCR)-> {
 			final OCRToken t = new OCRTokenImpl(word, n);
 			Logger.debug("adding {} (GT: {})", t.getMasterOCR().toString(),
 					t.getGT().get());
-			final FeatureSet.Vector vals = fs.calculateFeatureVector(t, i+1);
+			final FeatureSet.Vector vals = dleFS.calculateFeatureVector(t, i+1);
 			Logger.debug(vals);
-			w.writeFeatureVector(vals);
+			dlew.writeFeatureVector(vals);
 		});
 	}
 
-	private void trainDLE(int i, int n) throws Exception {
-		Logger.info("trainDLE({}, {})", i, n);
-		final Path src = tagPath(parameter.dleTraining.training, i+1);
-		final Path dest = tagPath(parameter.dleTraining.model, i+1);
-		train(src, dest);
-	}
+	private void prepareRR() throws Exception {
 
+	}
 
 	interface WordOperation {
 		void apply(Word word, String mOCR) throws Exception;
@@ -135,15 +132,6 @@ public class TrainCommand implements Command {
 		return Paths.get(path.replaceFirst("(\\..*?)$", "_" + n + "$1"));
 	}
 
-	private static JsonObject[] getFeatures(Path features) throws Exception {
-		JsonObject[] os;
-		try (InputStream is = new FileInputStream(features.toFile())) {
-			final String json = IOUtils.toString(is, Charset.forName("UTF-8"));
-			os = new Gson().fromJson(json, JsonObject[].class);
-		}
-		return os;
-	}
-
 	private static void train(Path src, Path dest) throws Exception {
 		Logger.debug("training {} from {}", dest.toString(), src.toString());
 		final ConverterUtils.DataSource ds = new ConverterUtils.DataSource(
@@ -160,5 +148,19 @@ public class TrainCommand implements Command {
 			out.writeObject(sl);
 			out.flush();
 		}
+	}
+
+	private static JsonObject[] getFeatures(String features) throws Exception {
+		final Path path = Paths.get(features);
+		JsonObject[] os;
+		try (InputStream is = new FileInputStream(path.toFile())) {
+			final String json = IOUtils.toString(is, Charset.forName("UTF-8"));
+			os = new Gson().fromJson(json, JsonObject[].class);
+		}
+		return os;
+	}
+
+	private static Writer getWriter(Path path) throws Exception {
+		return new BufferedWriter(new FileWriter(path.toFile()));
 	}
 }
