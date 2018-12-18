@@ -5,10 +5,9 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.LM;
-import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
-import de.lmu.cis.ocrd.ml.features.FeatureFactory;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.*;
+import de.lmu.cis.ocrd.profile.Candidate;
 import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Logger;
 import weka.classifiers.AbstractClassifier;
@@ -34,7 +33,7 @@ public class TrainCommand implements Command {
 
 	public static class Parameter {
 		public DLETrainingResource dleTraining;
-		public TrainingResource rrTraining;
+		public TrainingResource rrTraining, dmTraining;
 		public String trigrams = "";
 		public int nOCR;
 	}
@@ -43,8 +42,8 @@ public class TrainCommand implements Command {
 	private METS mets; // mets file
 	private Parameter parameter;
 	private LM lm;
-	private FeatureSet dleFS, rrFS;
-	private ARFFWriter dlew, rrw;
+	private FeatureSet dleFS, rrFS, dmFS;
+	private ARFFWriter dlew, rrw, dmw;
 	private boolean debug;
 
 	@Override
@@ -64,8 +63,19 @@ public class TrainCommand implements Command {
 				.withArgumentFactory(lm)
 				.createFeatureSet(getFeatures(parameter.dleTraining.features))
 				.add(new DynamicLexiconGTFeature());
+		this.rrFS = FeatureFactory
+				.getDefault()
+				.withArgumentFactory(lm)
+				.createFeatureSet(getFeatures(parameter.rrTraining.features))
+				.add(new ReRankingGTFeature());
+		this.dmFS = FeatureFactory
+				.getDefault()
+				.withArgumentFactory(lm)
+				.createFeatureSet(getFeatures(parameter.dmTraining.features))
+				.add(new DecisionMakerGTFeature());
 
 		for (int i = 0; i < parameter.nOCR; i++) {
+			// DLE
 			final Path dleTrain = tagPath(parameter.dleTraining.training,
 					i+1);
 			final Path dleModel = tagPath(parameter.dleTraining.model, i+1);
@@ -75,13 +85,36 @@ public class TrainCommand implements Command {
 					.withDebugToken(debug)
 					.withRelation("dle-train-" + (i+1))
 					.writeHeader(i+1);
+			// RR
+			final Path rrTrain = tagPath(parameter.rrTraining.training, i+1);
+			final Path rrModel = tagPath(parameter.rrTraining.model, i+1);
+			rrw = ARFFWriter
+					.fromFeatureSet(rrFS)
+					.withWriter(getWriter(rrTrain))
+					.withDebugToken(debug)
+					.withRelation("rr-train-" + (i+1))
+					.writeHeader(i+1);
+			// DM
+			final Path dmTrain = tagPath(parameter.dmTraining.training, i+1);
+			final Path dmModel = tagPath(parameter.dmTraining.model, i+1);
+			rrw = ARFFWriter
+					.fromFeatureSet(dmFS)
+					.withWriter(getWriter(rrTrain))
+					.withDebugToken(debug)
+					.withRelation("dm-train-" + (i+1))
+					.writeHeader(i+1);
 			for (String ifg : ifgs) {
 				Logger.info("input file group: {}", ifg);
 				final List<METS.File> files = mets.findFileGrpFiles(ifg);
 				prepare(files, i, parameter.nOCR);
 			}
+			// Train models
 			dlew.close();
+			rrw.close();
+			dmw.close();
 			train(dleTrain, dleModel);
+			train(rrTrain, rrModel);
+			train(dmTrain, dmModel);
 		}
 	}
 
@@ -89,6 +122,7 @@ public class TrainCommand implements Command {
 		Logger.info("prepare({}, {})", i, n);
 		lm.setFiles(files);
 		prepareDLE(files, i, n);
+		prepareRR(files, i, n);
 	}
 
 	private void prepareDLE(List<METS.File> files, int i, int n) throws Exception {
@@ -109,8 +143,28 @@ public class TrainCommand implements Command {
 		});
 	}
 
-	private void prepareRR() throws Exception {
+	private void prepareRR(List<METS.File> files, int i, int n) throws Exception {
+		for (METS.File file : files) {
+			prepareRR(Page.parse(file.open()), i, n);
+		}
+	}
 
+	private void prepareRR(Page page, int i, int n) throws Exception {
+		eachLongWord(page, (word, mOCR)->{
+			OCRTokenImpl t = new OCRTokenImpl(word, n);
+			for (Candidate c : t.getAllProfilerCandidates()) {
+				OCRTokenWithCandidateImpl tc =
+						new OCRTokenWithCandidateImpl(word, n, c);
+				Logger.debug("adding {} (Candidate: {}, GT: {})",
+						tc.getMasterOCR().toString(),
+						c.Suggestion,
+						tc.getGT().toString());
+				final FeatureSet.Vector vals =
+						rrFS.calculateFeatureVector(tc, i+1);
+				Logger.debug(vals);
+				rrw.writeFeatureVector(vals);
+			}
+		});
 	}
 
 	interface WordOperation {
