@@ -5,8 +5,12 @@ import de.lmu.cis.ocrd.profile.Candidate;
 import java.util.Optional;
 
 public class ReRankingGTFeature extends NamedBooleanFeature {
+	public ReRankingGTFeature(String name) {
+		super(name);
+	}
+
 	public ReRankingGTFeature() {
-		super("ReRankingGT");
+		this("ReRankingGT");
 	}
 
 	@Override
@@ -22,5 +26,4 @@ public class ReRankingGTFeature extends NamedBooleanFeature {
 		}
 		return token.getGT().get().equals(cand.get().Suggestion);
 	}
-
 }
