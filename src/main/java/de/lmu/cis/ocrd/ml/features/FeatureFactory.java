@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.util.JSON;
 
 import java.lang.reflect.Constructor;

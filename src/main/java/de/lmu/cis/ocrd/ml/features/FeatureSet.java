@@ -1,14 +1,12 @@
-package de.lmu.cis.ocrd.ml;
+package de.lmu.cis.ocrd.ml.features;
+
+import com.google.gson.Gson;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import com.google.gson.Gson;
-
-import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
 
 public class FeatureSet implements Iterable<Feature>, Serializable {
 	private static final long serialVersionUID = -4802453739549010404L;
@@ -41,6 +39,7 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 	}
 
 	@Override
+	@NotNull
 	public Iterator<Feature> iterator() {
 		return this.features.iterator();
 	}

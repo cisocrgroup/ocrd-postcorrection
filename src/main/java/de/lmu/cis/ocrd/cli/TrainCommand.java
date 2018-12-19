@@ -3,8 +3,8 @@ package de.lmu.cis.ocrd.cli;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.ARFFWriter;
-import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.LM;
+import de.lmu.cis.ocrd.ml.LogisticClassifier;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
@@ -23,19 +23,19 @@ import java.util.List;
 
 public class TrainCommand implements Command {
 
-	public static class TrainingResource {
-		public String model = "", training = "", features = "";
+	static class TrainingResource {
+		String model = "", training = "", features = "";
 	}
 
-	public static class DLETrainingResource extends TrainingResource {
+	static class DLETrainingResource extends TrainingResource {
 		public String dynamicLexicon = "";
 	}
 
-	public static class Parameter {
-		public DLETrainingResource dleTraining;
-		public TrainingResource rrTraining, dmTraining;
-		public String trigrams = "";
-		public int nOCR;
+	static class Parameter {
+		DLETrainingResource dleTraining;
+		TrainingResource rrTraining, dmTraining;
+		String trigrams = "";
+		int nOCR;
 	}
 
 	private String[] ifgs; // input file groups
@@ -68,12 +68,7 @@ public class TrainCommand implements Command {
 				.withArgumentFactory(lm)
 				.createFeatureSet(getFeatures(parameter.rrTraining.features))
 				.add(new ReRankingGTFeature());
-		this.dmFS = FeatureFactory
-				.getDefault()
-				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(parameter.dmTraining.features))
-				.add(new DecisionMakerGTFeature());
-
+		// DM needs to be created separately (see below)
 		for (int i = 0; i < parameter.nOCR; i++) {
 			// DLE
 			final Path dleTrain = tagPath(parameter.dleTraining.training,
@@ -95,9 +90,15 @@ public class TrainCommand implements Command {
 					.withRelation("rr-train-" + (i+1))
 					.writeHeader(i+1);
 			// DM
+			dmFS = FeatureFactory
+					.getDefault()
+					.withArgumentFactory(lm)
+					.createFeatureSet(getFeatures(parameter.dmTraining.features))
+					.add(getDMConfidenceFeature(rrModel, rrTrain, rrFS))
+					.add(new DecisionMakerGTFeature());
 			final Path dmTrain = tagPath(parameter.dmTraining.training, i+1);
 			final Path dmModel = tagPath(parameter.dmTraining.model, i+1);
-			rrw = ARFFWriter
+			dmw = ARFFWriter
 					.fromFeatureSet(dmFS)
 					.withWriter(getWriter(rrTrain))
 					.withDebugToken(debug)
@@ -123,6 +124,7 @@ public class TrainCommand implements Command {
 		lm.setFiles(files);
 		prepareDLE(files, i, n);
 		prepareRR(files, i, n);
+		prepareDM(files, i, n);
 	}
 
 	private void prepareDLE(List<METS.File> files, int i, int n) throws Exception {
@@ -135,15 +137,17 @@ public class TrainCommand implements Command {
 	private void prepareDLE(Page page, int i, int n) throws Exception {
 		eachLongWord(page, (word, mOCR)-> {
 			final OCRToken t = new OCRTokenImpl(word, n);
-			Logger.debug("adding {} (GT: {})", t.getMasterOCR().toString(),
+			Logger.debug("prepareDLE: adding {} (GT: {})",
+					t.getMasterOCR().toString(),
 					t.getGT().get());
-			final FeatureSet.Vector vals = dleFS.calculateFeatureVector(t, i+1);
-			Logger.debug(vals);
-			dlew.writeFeatureVector(vals);
+			final FeatureSet.Vector values = dleFS.calculateFeatureVector(t, i+1);
+			Logger.debug(values);
+			dlew.writeFeatureVector(values);
 		});
 	}
 
 	private void prepareRR(List<METS.File> files, int i, int n) throws Exception {
+		Logger.info("prepareRR({}, {})", i, n);
 		for (METS.File file : files) {
 			prepareRR(Page.parse(file.open()), i, n);
 		}
@@ -155,14 +159,39 @@ public class TrainCommand implements Command {
 			for (Candidate c : t.getAllProfilerCandidates()) {
 				OCRTokenWithCandidateImpl tc =
 						new OCRTokenWithCandidateImpl(word, n, c);
-				Logger.debug("adding {} (Candidate: {}, GT: {})",
+				Logger.debug("prepareRR: adding {} (Candidate: {}, GT: {})",
 						tc.getMasterOCR().toString(),
 						c.Suggestion,
 						tc.getGT().toString());
-				final FeatureSet.Vector vals =
+				final FeatureSet.Vector values =
 						rrFS.calculateFeatureVector(tc, i+1);
-				Logger.debug(vals);
-				rrw.writeFeatureVector(vals);
+				Logger.debug(values);
+				rrw.writeFeatureVector(values);
+			}
+		});
+	}
+
+	private void prepareDM(List<METS.File> files, int i, int n) throws Exception {
+		Logger.info("prepareDM({}, {})", i, n);
+		for (METS.File file : files) {
+			prepareDM(Page.parse(file.open()), i, n);
+		}
+	}
+
+	private void prepareDM(Page page, int i, int n) throws Exception {
+		eachLongWord(page, (word, mOCR)->{
+			OCRTokenImpl t = new OCRTokenImpl(word, n);
+			for (Candidate c : t.getAllProfilerCandidates()) {
+				OCRTokenWithCandidateImpl tc =
+						new OCRTokenWithCandidateImpl(word, n, c);
+				Logger.debug("prepareDM: adding {} (Candidate: {}, GT: {})",
+						tc.getMasterOCR().toString(),
+						c.Suggestion,
+						tc.getGT().toString());
+				final FeatureSet.Vector values =
+						dmFS.calculateFeatureVector(tc, i+1);
+				Logger.debug(values);
+				dmw.writeFeatureVector(values);
 			}
 		});
 	}
@@ -202,6 +231,20 @@ public class TrainCommand implements Command {
 			out.writeObject(sl);
 			out.flush();
 		}
+	}
+
+	private static Feature getDMConfidenceFeature(Path model,
+	                                              Path dataSet,
+	                                              FeatureSet fs) throws Exception {
+		final ConverterUtils.DataSource ds =
+				new ConverterUtils.DataSource(dataSet.toString());
+		AbstractClassifier c;
+		try (ObjectInputStream ois =
+				     new ObjectInputStream(new FileInputStream(model.toFile()))) {
+			c = (AbstractClassifier) ois.readObject();
+		}
+		BinaryPredictor p = new LogisticClassifier(ds.getStructure(), c);
+		return new DecisionMakerConfidenceFeature("rr-confidence", p, fs);
 	}
 
 	private static JsonObject[] getFeatures(String features) throws Exception {

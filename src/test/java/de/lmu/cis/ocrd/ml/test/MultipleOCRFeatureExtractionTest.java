@@ -1,19 +1,5 @@
 package de.lmu.cis.ocrd.ml.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.io.File;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-
 import de.lmu.cis.iba.LineAlignment;
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.OCRLine;
@@ -22,20 +8,26 @@ import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.align.TokenAlignment;
 import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.CharacterNGrams;
-import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.FreqMap;
 import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
-import de.lmu.cis.ocrd.ml.features.MaxCharNGramsFeature;
-import de.lmu.cis.ocrd.ml.features.MinCharNGramsFeature;
-import de.lmu.cis.ocrd.ml.features.SumOfMatchingAdditionalOCRsFeature;
-import de.lmu.cis.ocrd.ml.features.TokenCaseClassFeature;
-import de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature;
+import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.parsers.StringParser;
-
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
+import org.junit.Test;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.ConverterUtils;
+
+import java.io.File;
+import java.io.StringWriter;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class MultipleOCRFeatureExtractionTest {
 	private final String gt = "First second third alongtoken anotherevenlongertoken the";
@@ -59,12 +51,6 @@ public class MultipleOCRFeatureExtractionTest {
 		}
 	}
 
-	/**
-	 *
-	 *
-	 *
-	 * @throws Exception
-	 */
 	@Before
 	public void init() throws Exception {
 		final FreqMap ngrams = CharacterNGrams

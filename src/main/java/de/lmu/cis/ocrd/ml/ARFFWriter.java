@@ -1,9 +1,6 @@
 package de.lmu.cis.ocrd.ml;
 
-import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.NamedBooleanFeature;
-import de.lmu.cis.ocrd.ml.features.NamedStringSetFeature;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.features.*;
 
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -100,7 +97,7 @@ public class ARFFWriter implements AutoCloseable {
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		writer.flush();
 		writer.close();
 	}

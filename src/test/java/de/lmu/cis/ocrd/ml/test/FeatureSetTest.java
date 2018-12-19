@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
 import de.lmu.cis.ocrd.ml.features.OCRToken;

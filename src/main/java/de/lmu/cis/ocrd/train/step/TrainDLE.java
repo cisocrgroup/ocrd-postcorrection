@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.train.step;
 
 import de.lmu.cis.ocrd.ml.ARFFWriter;
-import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
@@ -36,7 +36,7 @@ public class TrainDLE extends Base {
 		this.profilerBuilder = builder;
 	}
 
-	public void run() throws Exception {
+	void run() throws Exception {
 		dleProfile();
 		dlePrepare();
 		dleTrain();

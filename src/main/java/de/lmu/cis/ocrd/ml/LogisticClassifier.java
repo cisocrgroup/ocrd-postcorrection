@@ -1,34 +1,45 @@
 package de.lmu.cis.ocrd.ml;
 
+import de.lmu.cis.ocrd.ml.features.BinaryPredictor;
+import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import weka.classifiers.AbstractClassifier;
-import weka.classifiers.functions.SimpleLogistic;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class LogisticClassifier implements Classifier {
+public class LogisticClassifier implements Classifier, BinaryPredictor {
 	private static final long serialVersionUID = -5403801469028720384L;
 	private final AbstractClassifier classifier;
 	private final Instances structure;
 	private final Map<Integer, Instance> instances = new HashMap<>();
 
-	private LogisticClassifier(Instances structure) {
+	public LogisticClassifier(
+			Instances structure,
+			AbstractClassifier classifier) {
 		//this.classifier = new Logistic();
-		this.classifier = new SimpleLogistic();
+		this.classifier = classifier;
 		this.structure = structure;
 	}
 
-	public static LogisticClassifier train(Instances train, Instances structure) throws Exception {
-		LogisticClassifier classifier = new LogisticClassifier(structure);
-		classifier.classifier.buildClassifier(train);
-		classifier.structure.setClassIndex(train.classIndex());
-		return classifier;
+	@Override
+	public Prediction classify(FeatureSet.Vector features) throws Exception {
+		return predict(features);
 	}
 
-	private static Instance setupInstance(Instance instance, FeatureSet.Vector features) throws Exception {
+	@Override
+	public Prediction predict(List<Object> features) throws Exception {
+		final Instance instance = newInstance(features);
+		final double res = classifier.classifyInstance(instance);
+		final double[] xy = classifier.distributionForInstance(instance);
+		return new Prediction(res, xy, instance.classAttribute().value((int) res));
+	}
+
+	private static Instance setupInstance(Instance instance,
+	                                      List<Object> features) throws Exception {
 		final int n = features.size() - 1; // last feature is GT
 		for (int i = 0; i < n; i++) {
 			final Object p = features.get(i);
@@ -45,15 +56,7 @@ public class LogisticClassifier implements Classifier {
 		return instance;
 	}
 
-	@Override
-	public Prediction predict(FeatureSet.Vector features) throws Exception {
-		final Instance instance = newInstance(features);
-		final double res = classifier.classifyInstance(instance);
-		final double[] xy = classifier.distributionForInstance(instance);
-		return new Prediction(res, xy, instance.classAttribute().value((int) res));
-	}
-
-	private Instance newInstance(FeatureSet.Vector features) throws Exception {
+	private Instance newInstance(List<Object> features) throws Exception {
 		final int n = features.size() - 1; // last feature is GT
 		if (instances.containsKey(n)) {
 			return setupInstance(instances.get(n), features);

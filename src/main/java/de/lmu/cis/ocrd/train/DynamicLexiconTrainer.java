@@ -1,28 +1,20 @@
 package de.lmu.cis.ocrd.train;
 
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Writer;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.pmw.tinylog.Logger;
-
-import de.lmu.cis.ocrd.ml.FeatureSet;
 import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
+import de.lmu.cis.ocrd.ml.features.FeatureSet;
+import org.pmw.tinylog.Logger;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.SimpleLogistic;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
+
+import java.io.*;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DynamicLexiconTrainer {
 	private final Environment environment;

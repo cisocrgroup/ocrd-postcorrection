@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.train;
 
 import de.lmu.cis.ocrd.ml.ARFFWriter;
-import de.lmu.cis.ocrd.ml.FeatureSet;
+import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import de.lmu.cis.ocrd.ml.Token;
 import org.pmw.tinylog.Logger;
 

@@ -1,22 +1,21 @@
 package de.lmu.cis.ocrd.ml.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import de.lmu.cis.ocrd.ml.ARFFWriter;
+import de.lmu.cis.ocrd.ml.Token;
+import de.lmu.cis.ocrd.ml.features.FeatureSet;
+import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
+import org.junit.Test;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils.DataSource;
 
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-
-import de.lmu.cis.ocrd.ml.ARFFWriter;
-import de.lmu.cis.ocrd.ml.FeatureSet;
-import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
-import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ARFFWriterTest {
 	private Instances is;
