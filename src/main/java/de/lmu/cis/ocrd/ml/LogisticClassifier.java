@@ -3,21 +3,38 @@ package de.lmu.cis.ocrd.ml;
 import de.lmu.cis.ocrd.ml.features.BinaryPredictor;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import weka.classifiers.AbstractClassifier;
+import weka.classifiers.functions.SimpleLogistic;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.converters.ConverterUtils;
 
+import java.io.Serializable;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LogisticClassifier implements Classifier, BinaryPredictor {
+public class LogisticClassifier implements Classifier, BinaryPredictor, Serializable {
 	private static final long serialVersionUID = -5403801469028720384L;
 	private final AbstractClassifier classifier;
 	private final Instances structure;
 	private final Map<Integer, Instance> instances = new HashMap<>();
 
-	public LogisticClassifier(
+	public static LogisticClassifier train(Path path) throws Exception {
+		final ConverterUtils.DataSource ds =
+				new ConverterUtils.DataSource(path.toString());
+		final Instances train = ds.getDataSet();
+		// gt is last class
+		train.setClassIndex(train.numAttributes() - 1);
+		final Instances structure = ds.getStructure();
+		structure.setClassIndex(structure.numAttributes() - 1);
+		final AbstractClassifier sl = new SimpleLogistic();
+		sl.buildClassifier(train);
+		return new LogisticClassifier(ds.getStructure(), sl);
+	}
+
+	private LogisticClassifier(
 			Instances structure,
 			AbstractClassifier classifier) {
 		//this.classifier = new Logistic();

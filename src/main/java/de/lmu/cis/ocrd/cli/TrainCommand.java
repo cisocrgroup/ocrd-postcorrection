@@ -10,9 +10,6 @@ import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
 import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Logger;
-import weka.classifiers.AbstractClassifier;
-import weka.classifiers.functions.SimpleLogistic;
-import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
 import java.io.*;
@@ -139,7 +136,7 @@ public class TrainCommand implements Command {
 			final OCRToken t = new OCRTokenImpl(word, n);
 			Logger.debug("prepareDLE: adding {} (GT: {})",
 					t.getMasterOCR().toString(),
-					t.getGT().get());
+					t.getGT().isPresent() ? t.getGT().get() : "-- missing --");
 			final FeatureSet.Vector values = dleFS.calculateFeatureVector(t, i+1);
 			Logger.debug(values);
 			dlew.writeFeatureVector(values);
@@ -217,20 +214,26 @@ public class TrainCommand implements Command {
 
 	private static void train(Path src, Path dest) throws Exception {
 		Logger.debug("training {} from {}", dest.toString(), src.toString());
-		final ConverterUtils.DataSource ds = new ConverterUtils.DataSource(
-				src.toString());
-		final Instances train = ds.getDataSet();
-		// gt is last class
-		train.setClassIndex(train.numAttributes() - 1);
-		final Instances structure = ds.getStructure();
-		structure.setClassIndex(structure.numAttributes() - 1);
-		final AbstractClassifier sl = new SimpleLogistic();
-		sl.buildClassifier(train);
-		try (ObjectOutputStream out = new ObjectOutputStream(
-				new FileOutputStream(dest.toFile()))) {
-			out.writeObject(sl);
-			out.flush();
+		LogisticClassifier classifier = LogisticClassifier.train(src);
+		try (ObjectOutputStream oos =
+				     new ObjectOutputStream(new FileOutputStream(dest.toFile()))) {
+			oos.writeObject(classifier);
+			oos.flush();
 		}
+		// final ConverterUtils.DataSource ds = new ConverterUtils.DataSource(
+		// 		src.toString());
+		// final Instances train = ds.getDataSet();
+		// // gt is last class
+		// train.setClassIndex(train.numAttributes() - 1);
+		// final Instances structure = ds.getStructure();
+		// structure.setClassIndex(structure.numAttributes() - 1);
+		// final AbstractClassifier sl = new SimpleLogistic();
+		// sl.buildClassifier(train);
+		// try (ObjectOutputStream out = new ObjectOutputStream(
+		// 		new FileOutputStream(dest.toFile()))) {
+		// 	out.writeObject(sl);
+		// 	out.flush();
+		// }
 	}
 
 	private static Feature getDMConfidenceFeature(Path model,
@@ -238,13 +241,13 @@ public class TrainCommand implements Command {
 	                                              FeatureSet fs) throws Exception {
 		final ConverterUtils.DataSource ds =
 				new ConverterUtils.DataSource(dataSet.toString());
-		AbstractClassifier c;
+		LogisticClassifier c;
 		try (ObjectInputStream ois =
 				     new ObjectInputStream(new FileInputStream(model.toFile()))) {
-			c = (AbstractClassifier) ois.readObject();
+			c = (LogisticClassifier) ois.readObject();
 		}
-		BinaryPredictor p = new LogisticClassifier(ds.getStructure(), c);
-		return new DecisionMakerConfidenceFeature("rr-confidence", p, fs);
+		// BinaryPredictor p = new LogisticClassifier(ds.getStructure(), c);
+		return new DecisionMakerConfidenceFeature("rr-confidence", c, fs);
 	}
 
 	private static JsonObject[] getFeatures(String features) throws Exception {
