@@ -1,14 +1,14 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.Word;
-import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.Token;
+
+import de.lmu.cis.ocrd.util.JSON;
 
 public class MaxOCRConfidenceFeature extends NamedDoubleFeature {
+	private static final long serialVersionUID = 1424827046143811274L;
 
 	public MaxOCRConfidenceFeature(JsonObject o, ArgumentFactory ignored) {
-		this(JSONUtil.mustGetNameOrType(o));
+		this(JSON.mustGetNameOrType(o));
 	}
 
 	public MaxOCRConfidenceFeature(String name) {
@@ -16,10 +16,10 @@ public class MaxOCRConfidenceFeature extends NamedDoubleFeature {
 	}
 
 	@Override
-	protected double doCalculate(Token token, int i, int n) {
-		final Word word = getWord(token, i, n);
+	protected double doCalculate(OCRToken token, int i, int n) {
+		final OCRWord word = getWord(token, i, n);
 		double max = 0;
-		for (int j = 0; j < word.getSize(); j++) {
+		for (int j = 0; j < word.getWord().length(); j++) {
 			final double confidence = word.getConfidenceAt(j);
 			if (confidence > max) {
 				max = confidence;

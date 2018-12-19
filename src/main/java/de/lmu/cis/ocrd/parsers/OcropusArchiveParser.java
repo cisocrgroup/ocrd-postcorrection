@@ -14,9 +14,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public class OcropusArchiveParser implements Parser {
-    protected Line readLine(InputStream is, int pageID, int lineID) throws Exception {
-        final String ocr = IOUtils.toString(is, Charset.forName("UTF-8"));
-		return SimpleLine.normalized(ocr, 0).withPageID(pageID).withLineID(lineID);
+	private final OCRFileType ocrFileType;
+	private final Archive ar;
+
+	public OcropusArchiveParser(Archive ar) {
+		this(ar, new OcropusFileType());
+	}
+	OcropusArchiveParser(Archive ar, OCRFileType filetype) {
+		this.ocrFileType = filetype;
+		this.ar = ar;
 	}
 
 	private static void sort(List<Entry> lines) {
@@ -30,17 +36,10 @@ public class OcropusArchiveParser implements Parser {
 		});
 	}
 
-	private final OCRFileType ocrFileType;
-	private final Archive ar;
-
-	public OcropusArchiveParser(Archive ar) {
-	    this(ar, new OcropusFileType());
+	protected Line readLine(InputStream is, int pageID, int lineID) throws Exception {
+		final String ocr = IOUtils.toString(is, Charset.forName("UTF-8"));
+		return SimpleLine.normalized(ocr, 0).withPageID(pageID).withLineID(lineID);
 	}
-
-	OcropusArchiveParser(Archive ar, OCRFileType filetype) {
-	    this.ocrFileType = filetype;
-	    this.ar = ar;
-    }
 
 	@Override
 	public SimpleDocument parse() throws Exception {
@@ -63,8 +62,8 @@ public class OcropusArchiveParser implements Parser {
 			}
 			final int lid = lineIDs.get(pageID) + 1;
 			try (InputStream is = ar.open(entry)) {
-			    doc.add(pageID, readLine(is, pageID, lid));
-            }
+				doc.add(pageID, readLine(is, pageID, lid));
+			}
 			lineIDs.put(pageID, lid);
 		}
 		ar.close();

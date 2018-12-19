@@ -1,9 +1,10 @@
 package de.lmu.cis.ocrd.test;
+
 import de.lmu.cis.ocrd.FileTypes;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class GuessFileTypeTest {
 
@@ -48,12 +49,12 @@ public class GuessFileTypeTest {
 	}
 
 	@Test
-    public void testText() throws Exception {
-        final String resource = "src/test/resources/1841-DieGrenzboten-gt.zip";
-        final FileTypes.Type type = FileTypes.guess(resource);
-        assertThat(type.getArchiveType(), is(FileTypes.ArchiveType.ZIP));
-        assertThat(type.getOCRType(), is(FileTypes.OCRType.TEXT));
-    }
+	public void testText() throws Exception {
+		final String resource = "src/test/resources/1841-DieGrenzboten-gt.zip";
+		final FileTypes.Type type = FileTypes.guess(resource);
+		assertThat(type.getArchiveType(), is(FileTypes.ArchiveType.ZIP));
+		assertThat(type.getOCRType(), is(FileTypes.OCRType.TEXT));
+	}
 
 
 	@Test

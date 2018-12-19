@@ -4,8 +4,8 @@ import de.lmu.cis.ocrd.ml.FreqMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class FreqMapTest {
 	private FreqMap freqs;
@@ -21,13 +21,13 @@ public class FreqMapTest {
 		freqs.add("C");
 	}
 
-    @Test
-    public void testLowerCases() {
-        assertThat(freqs.getAbsolute("a"), is(3));
-        assertThat(freqs.getAbsolute("b"), is(2));
-        assertThat(freqs.getAbsolute("c"), is(1));
-        assertThat(freqs.getAbsolute("d"), is(0));
-    }
+	@Test
+	public void testLowerCases() {
+		assertThat(freqs.getAbsolute("a"), is(3));
+		assertThat(freqs.getAbsolute("b"), is(2));
+		assertThat(freqs.getAbsolute("c"), is(1));
+		assertThat(freqs.getAbsolute("d"), is(0));
+	}
 
 	@Test
 	public void test0() {

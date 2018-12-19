@@ -4,14 +4,13 @@ import de.lmu.cis.ocrd.align.Graph;
 import de.lmu.cis.ocrd.align.LabelIterator;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class AlignmentGraphIteratorTest {
 
 	private static String makeString(Graph g, int id) {
 		StringBuilder builder = new StringBuilder();
-		for (LabelIterator it = g.iterator(id); it.hasNext();) {
+		for (LabelIterator it = g.iterator(id); it.hasNext(); ) {
 			builder.append(it.next().getChar());
 		}
 		return builder.toString();

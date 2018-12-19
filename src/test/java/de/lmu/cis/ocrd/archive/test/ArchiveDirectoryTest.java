@@ -1,21 +1,20 @@
 package de.lmu.cis.ocrd.archive.test;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-
-import org.apache.commons.io.IOUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import de.lmu.cis.ocrd.archive.Archive;
 import de.lmu.cis.ocrd.archive.DirectoryArchive;
 import de.lmu.cis.ocrd.archive.Entry;
 import de.lmu.cis.ocrd.parsers.test.BaseDocumentTest;
+import org.apache.commons.io.IOUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 public class ArchiveDirectoryTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/test-dir";
 	private Archive dir;

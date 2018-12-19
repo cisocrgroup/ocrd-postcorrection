@@ -1,14 +1,14 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.Word;
-import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.Token;
+
+import de.lmu.cis.ocrd.util.JSON;
 
 public class MinOCRConfidenceFeature extends NamedDoubleFeature {
+	private static final long serialVersionUID = 5126850213064117487L;
 
 	public MinOCRConfidenceFeature(JsonObject o, ArgumentFactory ignored) {
-		this(JSONUtil.mustGetNameOrType(o));
+		this(JSON.mustGetNameOrType(o));
 	}
 
 	public MinOCRConfidenceFeature(String name) {
@@ -16,10 +16,10 @@ public class MinOCRConfidenceFeature extends NamedDoubleFeature {
 	}
 
 	@Override
-	protected double doCalculate(Token token, int i, int n) {
-		final Word word = getWord(token, i, n);
+	protected double doCalculate(OCRToken token, int i, int n) {
+		final OCRWord word = getWord(token, i, n);
 		double min = Double.MAX_VALUE;
-		for (int j = 0; j < word.getSize(); j++) {
+		for (int j = 0; j < word.getWord().length(); j++) {
 			final double confidence = word.getConfidenceAt(j);
 			if (confidence < min) {
 				min = confidence;

@@ -1,12 +1,9 @@
 package de.lmu.cis.ocrd;
 
 public class OCRLine implements Comparable<OCRLine> {
-	public String ocrEngine;
-
 	public final Line line;
-
 	public final int pageSeq;
-
+	public String ocrEngine;
 	public boolean isMasterOCR;
 
 	public OCRLine(String ocrEngine, Line line, int pageSeq, boolean isMasterOCR) {

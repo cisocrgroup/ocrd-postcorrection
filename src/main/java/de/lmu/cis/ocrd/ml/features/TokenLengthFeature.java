@@ -1,12 +1,14 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.Token;
+
+import de.lmu.cis.ocrd.util.JSON;
 
 public class TokenLengthFeature extends NamedDoubleFeature {
+	private static final long serialVersionUID = 6518045049131388557L;
+
 	public TokenLengthFeature(JsonObject o, ArgumentFactory args) {
-		this(JSONUtil.mustGetNameOrType(o));
+		this(JSON.mustGetNameOrType(o));
 	}
 
 	protected TokenLengthFeature(String name) {
@@ -14,8 +16,8 @@ public class TokenLengthFeature extends NamedDoubleFeature {
 	}
 
 	@Override
-	protected double doCalculate(Token token, int i, int n) {
-		return (double) getWord(token, i, n).toString().length();
+	protected double doCalculate(OCRToken token, int i, int n) {
+		return getWord(token, i, n).getWord().length();
 	}
 
 	@Override

@@ -1,10 +1,6 @@
 package de.lmu.cis.ocrd.align;
 
 public class Traverser {
-	public interface Visitor {
-		public void visit(Label label);
-	}
-
 	private final Node node;
 
 	public Traverser(Graph g) {
@@ -17,5 +13,9 @@ public class Traverser {
 			v.visit(label);
 			label = label.next(id);
 		}
+	}
+
+	public interface Visitor {
+		public void visit(Label label);
 	}
 }

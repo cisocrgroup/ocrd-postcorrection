@@ -10,8 +10,8 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class ABBYYZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/1841-DieGrenzboten-abbyy.zip";
@@ -34,16 +34,16 @@ public class ABBYYZipArchiveTest extends BaseDocumentTest {
 	}
 
 	@Test
-    public void testUniqueLineIDs() throws Exception {
-	    final HashMap<Integer, HashSet<Integer>> ids = new HashMap<>();
-	    getDocument().eachLine((line)->{
-	        final int pageID = line.line.getPageId();
-            final int lineID = line.line.getLineId();
-            if (!ids.containsKey(pageID)) {
-                ids.put(pageID, new HashSet<>());
-            }
-            assertThat(ids.get(pageID).contains(lineID), is(false));
-            ids.get(pageID).add(lineID);
-        });
-    }
+	public void testUniqueLineIDs() throws Exception {
+		final HashMap<Integer, HashSet<Integer>> ids = new HashMap<>();
+		getDocument().eachLine((line) -> {
+			final int pageID = line.line.getPageId();
+			final int lineID = line.line.getLineId();
+			if (!ids.containsKey(pageID)) {
+				ids.put(pageID, new HashSet<>());
+			}
+			assertThat(ids.get(pageID).contains(lineID), is(false));
+			ids.get(pageID).add(lineID);
+		});
+	}
 }

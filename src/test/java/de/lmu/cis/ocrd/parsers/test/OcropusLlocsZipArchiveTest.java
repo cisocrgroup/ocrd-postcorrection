@@ -5,9 +5,8 @@ import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.parsers.OcropusArchiveLlocsParser;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class OcropusLlocsZipArchiveTest extends BaseDocumentTest {
 
 	private static final String resource = "src/test/resources/1841-DieGrenzboten-ocropus.zip";

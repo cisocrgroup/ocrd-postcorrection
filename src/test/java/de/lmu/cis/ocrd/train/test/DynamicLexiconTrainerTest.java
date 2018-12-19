@@ -16,56 +16,63 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class DynamicLexiconTrainerTest extends TestBase {
-    private Environment environment;
-    private DynamicLexiconTrainer trainer;
+	private Environment environment;
+	private DynamicLexiconTrainer trainer;
 
-    @Before
-    public void init() throws IOException {
+	@SuppressWarnings("unchecked")
+	private static int getNumberOfTestTokens(Path path) throws IOException, ClassNotFoundException {
+		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path.toFile()))) {
+			return ((ArrayList<Token>) in.readObject()).size();
+		}
+	}
+
+	@Before
+	public void init() throws IOException {
 		this.environment = newEnvironment()
-                .withCopyTrainingFiles(true)
-                .withGT("src/test/resources/1841-DieGrenzboten-gt-small.zip")
-                .withMasterOCR("src/test/resources/1841-DieGrenzboten-tesseract-small.zip")
-                .addOtherOCR("src/test/resources/1841-DieGrenzboten-abbyy-small.zip")
-                .addOtherOCR("src/test/resources/1841-DieGrenzboten-ocropus-small.zip")
+				.withCopyTrainingFiles(true)
+				.withGT("src/test/resources/1841-DieGrenzboten-gt-small.zip")
+				.withMasterOCR("src/test/resources/1841-DieGrenzboten-tesseract-small.zip")
+				.addOtherOCR("src/test/resources/1841-DieGrenzboten-abbyy-small.zip")
+				.addOtherOCR("src/test/resources/1841-DieGrenzboten-ocropus-small.zip")
 				.withConfiguration(Configuration.fromJSON(Paths.get("src", "test", "resources", "testConfiguration.json")))
-                .withDebugTokenAlignment(true);
+				.withDebugTokenAlignment(true);
 		trainer = new DynamicLexiconTrainer(environment);
-    }
+	}
 
 	@Test
 	public void testEnvironment() {
 		assertThat(environment.getNumberOfOtherOCR(), is(2));
 	}
 
-    @Test
-    public void testPrepare() throws Exception {
-        trainer.prepare();
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(1))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(2))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(3))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(1))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(2))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(3))), is(true));
-    }
+	@Test
+	public void testPrepare() throws Exception {
+		trainer.prepare();
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(1))), is(true));
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(2))), is(true));
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTrainingFile(3))), is(true));
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(1))), is(true));
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(2))), is(true));
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconTestFile(3))), is(true));
+	}
 
-    @Test
-    public void testTrain() throws Exception {
-        trainer.prepare().train();
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(1))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(2))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(3))), is(true));
-    }
+	@Test
+	public void testTrain() throws Exception {
+		trainer.prepare().train();
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(1))), is(true));
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(2))), is(true));
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconModel(3))), is(true));
+	}
 
-    @Test
-    public void testEvaluation() throws Exception {
-        trainer.prepare().train().evaluate();
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(1))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(2))), is(true));
-        assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(3))), is(true));
+	@Test
+	public void testEvaluation() throws Exception {
+		trainer.prepare().train().evaluate();
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(1))), is(true));
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(2))), is(true));
+		assertThat(Files.exists(environment.fullPath(environment.getDynamicLexiconEvaluationFile(3))), is(true));
 	}
 
 	@Test
@@ -76,17 +83,10 @@ public class DynamicLexiconTrainerTest extends TestBase {
 		assertThat(getNumberOfTestTokens(environment.fullPath(environment.getDynamicLexiconTestTokensFile(3))), is(432));
 	}
 
-	@SuppressWarnings("unchecked")
-	private static int getNumberOfTestTokens(Path path) throws IOException, ClassNotFoundException {
-		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path.toFile()))) {
-			return ((ArrayList<Token>) in.readObject()).size();
-		}
-	}
-
-    @After
-    public void deInit() throws Exception {
+	@After
+	public void deInit() throws Exception {
 		if (this.environment != null) {
 			this.environment.remove();
 		}
-    }
+	}
 }

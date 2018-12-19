@@ -1,4 +1,5 @@
 package de.lmu.cis.ocrd.lineAlignment.test;
+
 import de.lmu.cis.iba.LineAlignment;
 import de.lmu.cis.ocrd.OCRLine;
 import de.lmu.cis.ocrd.test.TestDocument;
@@ -8,9 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
+import static org.hamcrest.CoreMatchers.is;
 public class SimpleLineAlignmentTest {
 	@Test
 	public void testSimple() throws Exception {
@@ -31,7 +31,7 @@ public class SimpleLineAlignmentTest {
 
 		ArrayList<HashSet<Integer>> aligned_ids = new ArrayList<HashSet<Integer>>();
 		for (ArrayList<OCRLine> aligned_lines : la) {
-			HashSet<Integer> aligned_id_set = new HashSet();
+			HashSet<Integer> aligned_id_set = new HashSet<>();
 			for (OCRLine line : aligned_lines) {
 				aligned_id_set.add(line.line.getLineId());
 
@@ -66,7 +66,7 @@ public class SimpleLineAlignmentTest {
 
 		ArrayList<HashSet<Integer>> aligned_ids = new ArrayList<HashSet<Integer>>();
 		for (ArrayList<OCRLine> aligned_lines : la) {
-			HashSet<Integer> aligned_id_set = new HashSet();
+			HashSet<Integer> aligned_id_set = new HashSet<>();
 			for (OCRLine line : aligned_lines) {
 				aligned_id_set.add(line.line.getLineId());
 
@@ -119,7 +119,7 @@ public class SimpleLineAlignmentTest {
 
 		ArrayList<HashSet<Integer>> aligned_ids = new ArrayList<HashSet<Integer>>();
 		for (ArrayList<OCRLine> aligned_lines : la) {
-			HashSet<Integer> aligned_id_set = new HashSet();
+			HashSet<Integer> aligned_id_set = new HashSet<>();
 			for (OCRLine line : aligned_lines) {
 				aligned_id_set.add(line.line.getLineId());
 
@@ -148,7 +148,7 @@ public class SimpleLineAlignmentTest {
 	}
 
 	public int countCorrectAlignments(ArrayList<HashSet<Integer>> aligned_ids,
-			ArrayList<HashSet<Integer>> correct_ids) {
+	                                  ArrayList<HashSet<Integer>> correct_ids) {
 		int correctly_aligned = 0;
 
 		for (HashSet<Integer> correct_id_set : correct_ids) {

@@ -6,9 +6,9 @@ import java.util.TreeMap;
 
 public class SimpleDocument implements Document {
 
+	private final TreeMap<Integer, ArrayList<Line>> lines = new TreeMap<>();
 	private String path, ocrEngine;
 	private boolean isMasterOCR;
-	private final TreeMap<Integer, ArrayList<Line>> lines = new TreeMap<>();
 
 	public void add(int pageID, Line line) {
 		if (!this.lines.containsKey(pageID)) {

@@ -1,36 +1,30 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.profile.Candidates;
-import de.lmu.cis.ocrd.profile.Profile;
+import de.lmu.cis.ocrd.profile.Candidate;
+import de.lmu.cis.ocrd.util.JSON;
 
-import java.util.Optional;
+import java.util.List;
 
 public class ProfilerHistoricalPatternsDistance extends NamedDoubleFeature {
-	private final Profile profile;
+	private static final long serialVersionUID = 2105792591421872162L;
 
 	public ProfilerHistoricalPatternsDistance(JsonObject o, ArgumentFactory args) throws Exception {
-		this(JSONUtil.mustGetNameOrType(o), args.getProfile());
+		this(JSON.mustGetNameOrType(o));
 	}
 
-	private ProfilerHistoricalPatternsDistance(String name, Profile profile) {
+	private ProfilerHistoricalPatternsDistance(String name) {
 		super(name);
-		this.profile = profile;
 	}
 
 	@Override
-	protected double doCalculate(Token token, int i, int n) {
-		final Optional<Candidates> candidates = profile.get(token.getMasterOCR().toString());
-		if (!candidates.isPresent()) {
+	protected double doCalculate(OCRToken token, int i, int n) {
+		final List<Candidate> cs = token.getAllProfilerCandidates();
+		if (cs.isEmpty()) {
 			return -1;
 		}
-		if (candidates.get().Candidates.length == 0) {
-			return -1;
-		}
-		return candidates.get().Candidates[0].HistPatterns == null ?
-				0 : candidates.get().Candidates[0].HistPatterns.length;
+		return cs.get(0).HistPatterns == null ? 0 :
+				cs.get(0).HistPatterns.length;
 	}
 
 	@Override

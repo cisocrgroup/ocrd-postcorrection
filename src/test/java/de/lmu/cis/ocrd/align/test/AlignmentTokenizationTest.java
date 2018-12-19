@@ -6,15 +6,10 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class AlignmentTokenizationTest {
-	private static class Pair {
-		@SuppressWarnings("unused")
-		String first, second;
-	}
-
 	private static ArrayList<Pair> align(String a, String b) {
 		final Graph g = new Graph(a, b);
 		final Tokenizer t = g.getTokenizer();
@@ -74,6 +69,10 @@ public class AlignmentTokenizationTest {
 		final String a = "schwärmt Der Name Belgien aber so uralt das Wort auch ist";
 		final String b = "ſchw rmt Der Name Belgien aber ſo uralt das Wort auch iſt";
 		assertThat(align(b, a).size(), is(12));
+	}
+
+	private static class Pair {
+		String first, second;
 	}
 
 }

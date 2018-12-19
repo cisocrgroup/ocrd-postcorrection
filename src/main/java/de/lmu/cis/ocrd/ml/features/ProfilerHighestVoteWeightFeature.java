@@ -1,33 +1,30 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.json.JSONUtil;
-import de.lmu.cis.ocrd.ml.Token;
-import de.lmu.cis.ocrd.profile.Candidates;
-import de.lmu.cis.ocrd.profile.Profile;
+import de.lmu.cis.ocrd.profile.Candidate;
+import de.lmu.cis.ocrd.util.JSON;
 
-import java.util.Optional;
+import java.util.List;
 
 public class ProfilerHighestVoteWeightFeature extends NamedDoubleFeature {
-    private final Profile profile;
+	private static final long serialVersionUID = -4415553562125497094L;
 
-    public ProfilerHighestVoteWeightFeature(JsonObject o, ArgumentFactory args) throws Exception {
-        this(JSONUtil.mustGetNameOrType(o), args);
-    }
+	public ProfilerHighestVoteWeightFeature(JsonObject o, ArgumentFactory args) throws Exception {
+		this(JSON.mustGetNameOrType(o));
+	}
 
-    private ProfilerHighestVoteWeightFeature(String name, ArgumentFactory args) throws Exception {
-        super(name);
-        this.profile = args.getProfile();
-    }
+	private ProfilerHighestVoteWeightFeature(String name) throws Exception {
+		super(name);
+	}
 
-    @Override
-    public boolean handlesOCR(int i, int n) {
-        return handlesOnlyMasterOCR(i, n);
-    }
+	@Override
+	public boolean handlesOCR(int i, int n) {
+		return handlesOnlyMasterOCR(i, n);
+	}
 
-    @Override
-    protected double doCalculate(Token token, int i, int n) {
-        final Optional<Candidates> candidates = profile.get(getWord(token, i, n).toString());
-        return candidates.map(candidates1 -> candidates1.Candidates[0].Weight).orElse(0.0);
-    }
+	@Override
+	protected double doCalculate(OCRToken token, int i, int n) {
+		final List<Candidate> cs  = token.getAllProfilerCandidates();
+		return cs.size() > 0 ? cs.get(0).Weight : 0.0;
+	}
 }

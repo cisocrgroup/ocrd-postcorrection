@@ -1,13 +1,12 @@
 package de.lmu.cis.ocrd.parsers;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.w3c.dom.Node;
 
 import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Node;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HOCRParser extends AbstractXPathParser {
 
@@ -16,6 +15,7 @@ public class HOCRParser extends AbstractXPathParser {
 	private static final XPathExpression linesXPath;
 
 	private static final XPathExpression wordsXPath;
+
 	static {
 		try {
 			linesXPath = XPathFactory.newInstance().newXPath().compile("//span[@class=\"ocr_line\"]");
@@ -23,6 +23,10 @@ public class HOCRParser extends AbstractXPathParser {
 		} catch (XPathException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public HOCRParser(org.w3c.dom.Document xml, int pageID) {
+		super(xml, pageID);
 	}
 
 	private static double getConfidence(Node word) {
@@ -37,10 +41,6 @@ public class HOCRParser extends AbstractXPathParser {
 			return 0;
 		}
 		return (double) 1 / Integer.parseInt(m.group(1));
-	}
-
-	public HOCRParser(org.w3c.dom.Document xml, int pageID) {
-		super(xml, pageID);
 	}
 
 	@Override

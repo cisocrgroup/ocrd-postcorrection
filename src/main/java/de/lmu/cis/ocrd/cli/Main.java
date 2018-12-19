@@ -6,23 +6,30 @@ import org.apache.commons.cli.ParseException;
 public class Main {
 	public static void main(String[] args) {
 		try {
+			System.setProperty("file.encoding","UTF-8");
+//			System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, "UTF-8"));
+//			System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err), false, "UTF-8"));
+//			System.setIn(new BufferedReader(new FileInputStream(FileDescriptor.in, "UTF-8"));
 			run(args);
 		} catch (ParseException e) {
-		    e.printStackTrace(System.err);
+			e.printStackTrace(System.err);
 			System.exit(2);
 		} catch (Exception e) {
-            e.printStackTrace(System.err);
+			e.printStackTrace(System.err);
 			System.exit(1);
 		}
 	}
 
 	private static CommandFactory makeCommandFactory() throws Exception {
-		return new CommandFactory().register(TrainCommand.class);
+		return new CommandFactory()
+				.register(ProfilerCommand.class)
+				.register(TrainCommand.class)
+				.register(AlignCommand.class);
 	}
 
 	// Parses command line arguments and execute command.
 	private static void run(String[] args) throws Exception {
-	    final CommandFactory commandFactory = makeCommandFactory();
+		final CommandFactory commandFactory = makeCommandFactory();
 		CommandLineArguments commandLineArguments = CommandLineArguments.fromCommandLine(args);
 		commandFactory.get(commandLineArguments.getCommand()).execute(commandLineArguments);
 	}

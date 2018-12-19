@@ -1,15 +1,14 @@
 package de.lmu.cis.ocrd.parsers.test;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
 
 import de.lmu.cis.ocrd.archive.Archive;
 import de.lmu.cis.ocrd.archive.ZipArchive;
 import de.lmu.cis.ocrd.parsers.ArchiveParser;
 import de.lmu.cis.ocrd.parsers.HOCRFileType;
 import de.lmu.cis.ocrd.parsers.HOCRParserFactory;
+import org.junit.Test;
 
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 public class HOCRZipArchiveTest extends BaseDocumentTest {
 	private static final String resource = "src/test/resources/1841-DieGrenzboten-tesseract.zip";
 

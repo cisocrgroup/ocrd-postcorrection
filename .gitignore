@@ -7,7 +7,11 @@
 .settings/
 .idea
 doc
+out
 
+src/main/java/META-INF
 src/webapp/assets/
 src/webapp/index.html
 /target/
+
+workbench.xmi

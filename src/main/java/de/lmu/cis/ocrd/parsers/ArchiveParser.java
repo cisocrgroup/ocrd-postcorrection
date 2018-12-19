@@ -15,6 +15,15 @@ import java.util.regex.Pattern;
 public class ArchiveParser implements Parser {
 
 	private final static Pattern num = Pattern.compile(".*?(\\p{Digit}+)\\..*?");
+	private final XMLParserFactory factory;
+	private final OCRFileType fileType;
+	private final Archive archive;
+
+	public ArchiveParser(XMLParserFactory f, OCRFileType t, Archive archive) {
+		this.factory = f;
+		this.fileType = t;
+		this.archive = archive;
+	}
 
 	private static int getPageID(Path path) throws Exception {
 		Matcher m = num.matcher(path.getFileName().toString());
@@ -22,17 +31,6 @@ public class ArchiveParser implements Parser {
 			throw new Exception("cannot extract pageid from file name: " + path.toString());
 		}
 		return Integer.parseInt(m.group(1));
-	}
-
-	private final XMLParserFactory factory;
-	private final OCRFileType fileType;
-
-	private final Archive archive;
-
-	public ArchiveParser(XMLParserFactory f, OCRFileType t, Archive archive) {
-		this.factory = f;
-		this.fileType = t;
-		this.archive = archive;
 	}
 
 	private ArrayList<Entry> gatherEntries() {

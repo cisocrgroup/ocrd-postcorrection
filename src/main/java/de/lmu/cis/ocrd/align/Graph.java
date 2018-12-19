@@ -18,6 +18,20 @@ public class Graph {
 		build(alignment.getAligmentPairs());
 	}
 
+	private static boolean isOverlap(AlignmentPair previous, AlignmentPair current) {
+		return previous.epos1 > current.spos1 || previous.epos2 > current.spos2;
+	}
+
+	private static Gap makeGap(int s, int e, String str, Node node) {
+		// Logger.debug("getGapLabel(" + s + ", " + e + ", " + str + ")");
+		// s += 1;
+		// e += 1;
+		if (s > e) {
+			s = e;
+		}
+		return new Gap(s, e, str, node);
+	}
+
 	public Node getStartNode() {
 		return start;
 	}
@@ -78,33 +92,5 @@ public class Graph {
 			prevn.add(g1);
 			prevn.add(g2);
 		}
-	}
-
-	private static boolean isOverlap(AlignmentPair previous, AlignmentPair current) {
-		return previous.epos1 > current.spos1 || previous.epos2 > current.spos2;
-	}
-
-	private AlignmentPair handleOverlap(AlignmentPair previous, AlignmentPair current) {
-		final String s1 = alignment.getString(0);
-		final String s2 = alignment.getString(1);
-		if (previous.epos1 > current.spos1) {
-			String label = current.label.substring(previous.epos1 - current.spos1);
-			return new AlignmentPair(label, current.epos1, current.epos2);
-		}
-		if (previous.epos2 > current.spos2) {
-			String label = current.label.substring(previous.epos2 - current.spos2);
-			return new AlignmentPair(label, current.epos1, current.epos2);
-		}
-		return current;
-	}
-
-	private static Gap makeGap(int s, int e, String str, Node node) {
-		// Logger.debug("getGapLabel(" + s + ", " + e + ", " + str + ")");
-		// s += 1;
-		// e += 1;
-		if (s > e) {
-			s = e;
-		}
-		return new Gap(s, e, str, node);
 	}
 }

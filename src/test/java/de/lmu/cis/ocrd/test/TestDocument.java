@@ -1,8 +1,9 @@
 package de.lmu.cis.ocrd.test;
-import java.util.ArrayList;
 
 import de.lmu.cis.ocrd.Document;
 import de.lmu.cis.ocrd.OCRLine;
+
+import java.util.ArrayList;
 
 public class TestDocument implements Document {
 
