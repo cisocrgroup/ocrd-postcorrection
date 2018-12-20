@@ -10,7 +10,6 @@ import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
 import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Logger;
-import weka.core.converters.ConverterUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -18,26 +17,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class TrainCommand implements Command {
-
-	static class TrainingResource {
-		String model = "", training = "", features = "";
-	}
-
-	static class DLETrainingResource extends TrainingResource {
-		public String dynamicLexicon = "";
-	}
-
-	static class Parameter {
-		DLETrainingResource dleTraining;
-		TrainingResource rrTraining, dmTraining;
-		String trigrams = "";
-		int nOCR;
-	}
+public class TrainCommand extends AbstractMLCommand {
 
 	private String[] ifgs; // input file groups
 	private METS mets; // mets file
-	private Parameter parameter;
+	private AbstractMLCommand.Parameter parameter;
 	private LM lm;
 	private FeatureSet dleFS, rrFS, dmFS;
 	private ARFFWriter dlew, rrw, dmw;
@@ -50,9 +34,9 @@ public class TrainCommand implements Command {
 
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
+		this.parameter = getParameter(config);
 		this.ifgs = config.mustGetInputFileGrp();
 		this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
-		this.parameter = config.mustGetParameter(Parameter.class);
 		this.debug = "DEBUG".equals(config.getLogLevel());
 		this.lm = new LM(true, Paths.get(parameter.trigrams));
 		this.dleFS = FeatureFactory
@@ -91,7 +75,7 @@ public class TrainCommand implements Command {
 					.getDefault()
 					.withArgumentFactory(lm)
 					.createFeatureSet(getFeatures(parameter.dmTraining.features))
-					.add(getDMConfidenceFeature(rrModel, rrTrain, rrFS))
+					.add(getDMConfidenceFeature(rrModel, rrFS))
 					.add(new DecisionMakerGTFeature());
 			final Path dmTrain = tagPath(parameter.dmTraining.training, i+1);
 			final Path dmModel = tagPath(parameter.dmTraining.model, i+1);
@@ -215,11 +199,7 @@ public class TrainCommand implements Command {
 	private static void train(Path src, Path dest) throws Exception {
 		Logger.debug("training {} from {}", dest.toString(), src.toString());
 		LogisticClassifier classifier = LogisticClassifier.train(src);
-		try (ObjectOutputStream oos =
-				     new ObjectOutputStream(new FileOutputStream(dest.toFile()))) {
-			oos.writeObject(classifier);
-			oos.flush();
-		}
+		classifier.save(dest);
 		// final ConverterUtils.DataSource ds = new ConverterUtils.DataSource(
 		// 		src.toString());
 		// final Instances train = ds.getDataSet();
@@ -237,16 +217,8 @@ public class TrainCommand implements Command {
 	}
 
 	private static Feature getDMConfidenceFeature(Path model,
-	                                              Path dataSet,
 	                                              FeatureSet fs) throws Exception {
-		final ConverterUtils.DataSource ds =
-				new ConverterUtils.DataSource(dataSet.toString());
-		LogisticClassifier c;
-		try (ObjectInputStream ois =
-				     new ObjectInputStream(new FileInputStream(model.toFile()))) {
-			c = (LogisticClassifier) ois.readObject();
-		}
-		// BinaryPredictor p = new LogisticClassifier(ds.getStructure(), c);
+		final LogisticClassifier c = LogisticClassifier.load(model);
 		return new DecisionMakerConfidenceFeature("rr-confidence", c, fs);
 	}
 

@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.BinaryPredictor;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
+import org.pmw.tinylog.Logger;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.functions.SimpleLogistic;
 import weka.core.DenseInstance;
@@ -9,7 +10,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
-import java.io.Serializable;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 	private final Map<Integer, Instance> instances = new HashMap<>();
 
 	public static LogisticClassifier train(Path path) throws Exception {
+		Logger.debug("training logistic classifier from file {}", path);
 		final ConverterUtils.DataSource ds =
 				new ConverterUtils.DataSource(path.toString());
 		final Instances train = ds.getDataSet();
@@ -34,10 +36,16 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		return new LogisticClassifier(ds.getStructure(), sl);
 	}
 
-	private LogisticClassifier(
-			Instances structure,
-			AbstractClassifier classifier) {
-		//this.classifier = new Logistic();
+	public static LogisticClassifier load(Path path) throws Exception {
+		Logger.debug("loading logistic classifier from file {}", path);
+		try (ObjectInputStream ois =
+				     new ObjectInputStream(new FileInputStream(path.toFile()))) {
+			return (LogisticClassifier) ois.readObject();
+		}
+	}
+
+	private LogisticClassifier(Instances structure,
+	                           AbstractClassifier classifier) {
 		this.classifier = classifier;
 		this.structure = structure;
 	}
@@ -53,6 +61,16 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		final double res = classifier.classifyInstance(instance);
 		final double[] xy = classifier.distributionForInstance(instance);
 		return new Prediction(res, xy, instance.classAttribute().value((int) res));
+	}
+
+	public void save(Path path) throws Exception {
+		Logger.debug("saving logistic classifier to {}", path);
+		try (ObjectOutputStream oot =
+				     new ObjectOutputStream(new FileOutputStream(path.toFile()))) {
+			oot.writeObject(this);
+			oot.flush();
+			// close is redundant
+		}
 	}
 
 	private static Instance setupInstance(Instance instance,
