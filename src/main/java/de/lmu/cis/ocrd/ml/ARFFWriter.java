@@ -15,10 +15,15 @@ public class ARFFWriter implements AutoCloseable {
 	private String relation;
 	private PrintWriter writer;
 	private ArrayList<Feature> features = new ArrayList<>();
+	private final FeatureSet fs;
 	private boolean debugToken;
 
+	private ARFFWriter(FeatureSet fs) {
+		this.fs = fs;
+	}
+
 	public static ARFFWriter fromFeatureSet(FeatureSet fs) {
-		ARFFWriter arff = new ARFFWriter();
+		ARFFWriter arff = new ARFFWriter(fs);
 		for (Feature f : fs) {
 			arff.addFeature(f);
 		}
@@ -67,11 +72,16 @@ public class ARFFWriter implements AutoCloseable {
 		return this;
 	}
 
-	public void writeToken(OCRToken token) {
+	public void debugToken(OCRToken token) {
 		if (!debugToken) {
 			return;
 		}
 		writer.printf("%% %s\n", token.toString());
+	}
+
+	public void writeToken(OCRToken token, int n) {
+		debugToken(token);
+		writeFeatureVector(fs.calculateFeatureVector(token, n));
 	}
 
 	public void writeFeatureVector(FeatureSet.Vector features) {
