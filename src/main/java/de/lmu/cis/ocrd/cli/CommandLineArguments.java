@@ -184,7 +184,7 @@ public class CommandLineArguments {
 	    return mets;
     }
 
-    public String[] mustGetInputFileGrp() throws Exception {
+    public String[] mustGetInputFileGroups() throws Exception {
     	if (inputFilegrp == null || inputFilegrp.length == 0) {
     		throw new Exception("missing command line options -I or " +
 				    "--input-file-grp");

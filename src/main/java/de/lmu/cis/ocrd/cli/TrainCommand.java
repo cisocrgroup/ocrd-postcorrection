@@ -1,18 +1,20 @@
 package de.lmu.cis.ocrd.cli;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.LM;
 import de.lmu.cis.ocrd.ml.LogisticClassifier;
 import de.lmu.cis.ocrd.ml.features.*;
-import de.lmu.cis.ocrd.pagexml.*;
+import de.lmu.cis.ocrd.pagexml.METS;
+import de.lmu.cis.ocrd.pagexml.OCRTokenImpl;
+import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
+import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.profile.Candidate;
-import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Logger;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -35,7 +37,7 @@ public class TrainCommand extends AbstractMLCommand {
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
 		this.parameter = getParameter(config);
-		this.ifgs = config.mustGetInputFileGrp();
+		this.ifgs = config.mustGetInputFileGroups();
 		this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		this.debug = "DEBUG".equals(config.getLogLevel());
 		this.lm = new LM(true, Paths.get(parameter.trigrams));
@@ -111,7 +113,9 @@ public class TrainCommand extends AbstractMLCommand {
 	private void prepareDLE(List<METS.File> files, int i, int n) throws Exception {
 		Logger.info("prepareDLE({}, {})", i, n);
 		for (METS.File file : files) {
-			prepareDLE(Page.parse(file.open()), i, n);
+			try (InputStream is = file.open()) {
+				prepareDLE(Page.parse(is), i, n);
+			}
 		}
 	}
 
@@ -130,7 +134,9 @@ public class TrainCommand extends AbstractMLCommand {
 	private void prepareRR(List<METS.File> files, int i, int n) throws Exception {
 		Logger.info("prepareRR({}, {})", i, n);
 		for (METS.File file : files) {
-			prepareRR(Page.parse(file.open()), i, n);
+			try (InputStream is = file.open()) {
+				prepareRR(Page.parse(is), i, n);
+			}
 		}
 	}
 
@@ -155,7 +161,9 @@ public class TrainCommand extends AbstractMLCommand {
 	private void prepareDM(List<METS.File> files, int i, int n) throws Exception {
 		Logger.info("prepareDM({}, {})", i, n);
 		for (METS.File file : files) {
-			prepareDM(Page.parse(file.open()), i, n);
+			try (InputStream is = file.open()) {
+				prepareDM(Page.parse(is), i, n);
+			}
 		}
 	}
 
@@ -177,25 +185,6 @@ public class TrainCommand extends AbstractMLCommand {
 		});
 	}
 
-	interface WordOperation {
-		void apply(Word word, String mOCR) throws Exception;
-	}
-
-	private static void eachLongWord(Page page, WordOperation f) throws Exception {
-		for (Line line : page.getLines()) {
-			for (Word word : line.getWords()) {
-				String mOCR = word.getUnicodeNormalized().get(0);
-				if (mOCR.length() > 3) {
-					f.apply(word, mOCR);
-				}
-			}
-		}
-	}
-
-	private static Path tagPath(String path, int n) {
-		return Paths.get(path.replaceFirst("(\\..*?)$", "_" + n + "$1"));
-	}
-
 	private static void train(Path src, Path dest) throws Exception {
 		Logger.debug("training {} from {}", dest.toString(), src.toString());
 		LogisticClassifier classifier = LogisticClassifier.train(src);
@@ -214,22 +203,6 @@ public class TrainCommand extends AbstractMLCommand {
 		// 	out.writeObject(sl);
 		// 	out.flush();
 		// }
-	}
-
-	private static Feature getDMConfidenceFeature(Path model,
-	                                              FeatureSet fs) throws Exception {
-		final LogisticClassifier c = LogisticClassifier.load(model);
-		return new DecisionMakerConfidenceFeature("rr-confidence", c, fs);
-	}
-
-	private static JsonObject[] getFeatures(String features) throws Exception {
-		final Path path = Paths.get(features);
-		JsonObject[] os;
-		try (InputStream is = new FileInputStream(path.toFile())) {
-			final String json = IOUtils.toString(is, Charset.forName("UTF-8"));
-			os = new Gson().fromJson(json, JsonObject[].class);
-		}
-		return os;
 	}
 
 	private static Writer getWriter(Path path) throws Exception {
