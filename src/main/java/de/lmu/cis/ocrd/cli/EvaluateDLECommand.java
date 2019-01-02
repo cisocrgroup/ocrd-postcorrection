@@ -20,9 +20,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class EvaluateDLECommand extends AbstractMLCommand {
-	private METS mets;
 	private AbstractMLCommand.Parameter parameter;
-	private LM lm;
 	private FeatureSet fs;
 	private boolean debug;
 
@@ -33,9 +31,9 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
-		mets = METS.open(Paths.get(config.mustGetMETSFile()));
+		final METS mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		parameter = getParameter(config);
-		lm = new LM(true, Paths.get(parameter.trigrams));
+		final LM lm = new LM(true, Paths.get(parameter.trigrams));
 		debug = "debug".equals(config.getLogLevel().toLowerCase());
 		fs = FeatureFactory
 				.getDefault()
