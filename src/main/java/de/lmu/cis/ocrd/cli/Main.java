@@ -26,6 +26,7 @@ public class Main {
 				.register(TrainCommand.class)
 				.register(EvalCommand.class)
 				.register(EvaluateDLECommand.class)
+				.register(EvaluateRestCommand.class)
 				.register(AlignCommand.class);
 	}
 
