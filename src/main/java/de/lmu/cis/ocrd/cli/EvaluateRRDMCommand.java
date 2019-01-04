@@ -19,7 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class EvaluateRestCommand extends AbstractMLCommand {
+public class EvaluateRRDMCommand extends AbstractMLCommand {
 
 	private AbstractMLCommand.Parameter parameter;
 	private FeatureSet rrFS, dmFS;
@@ -27,7 +27,7 @@ public class EvaluateRestCommand extends AbstractMLCommand {
 
 	@Override
 	public String getName() {
-		return "evaluate-rest";
+		return "evaluate-rrdm";
 	}
 
 	@Override
