@@ -1,11 +1,10 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import com.google.gson.JsonObject;
+import de.lmu.cis.ocrd.util.JSON;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gson.JsonObject;
-
-import de.lmu.cis.ocrd.util.JSON;
 
 public class TokenCaseClassFeature extends NamedStringSetFeature {
 	private static final long serialVersionUID = 6185953194478613291L;
@@ -37,11 +36,15 @@ public class TokenCaseClassFeature extends NamedStringSetFeature {
 
 	@Override
 	public Object calculate(OCRToken token, int i, int n) {
+		return getCaseClass(getWord(token, i, n).toString());
+	}
+
+	protected String getCaseClass(String str) {
 		boolean allLowerCase = true;
 		boolean allUpperCase = true;
 		boolean firstUpperCase = false;
 		boolean first = true;
-		for (int c : getWord(token, i, n).toString().codePoints().toArray()) {
+		for (int c : str.codePoints().toArray()) {
 			final int type = Character.getType(c);
 			if (type == Character.UPPERCASE_LETTER) {
 				firstUpperCase = first;

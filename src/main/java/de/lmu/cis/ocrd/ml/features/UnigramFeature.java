@@ -12,7 +12,7 @@ public class UnigramFeature extends NamedDoubleFeature {
 		this(args, JSON.mustGetNameOrType(o));
 	}
 
-	private UnigramFeature(ArgumentFactory factory, String name) throws Exception {
+	protected UnigramFeature(ArgumentFactory factory, String name) throws Exception {
 		super(name);
 		this.args = factory;
 	}
@@ -29,7 +29,7 @@ public class UnigramFeature extends NamedDoubleFeature {
 		return getUnigrams(i).getRelative(getWord(token, i, n).toString());
 	}
 
-	private FreqMap getUnigrams(int i) {
+	protected FreqMap getUnigrams(int i) {
 		try {
 			if (i == 0) {
 				return this.args.getMasterOCRUnigrams();

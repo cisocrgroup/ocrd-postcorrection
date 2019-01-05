@@ -1,5 +1,9 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import de.lmu.cis.ocrd.profile.Candidate;
+
+import java.util.Optional;
+
 abstract class BaseFeatureImplementation implements Feature {
 	private static final long serialVersionUID = 1L;
 
@@ -30,5 +34,13 @@ abstract class BaseFeatureImplementation implements Feature {
 			return token.getMasterOCR();
 		}
 		return token.getOtherOCR(i - 1);
+	}
+
+	protected Candidate mustGetCandidate(OCRToken token) {
+		final Optional<Candidate> candidate = token.getProfilerCandidate();
+		if (!candidate.isPresent()) {
+			throw new RuntimeException("missing profiler candidate");
+		}
+		return candidate.get();
 	}
 }

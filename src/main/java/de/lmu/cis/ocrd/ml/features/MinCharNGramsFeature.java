@@ -23,13 +23,14 @@ public class MinCharNGramsFeature extends NamedCharacterNGramFeature {
 
 	@Override
 	public Object calculate(OCRToken token, int i, int n) {
+		return getMinCharNGram(getWord(token, i, n).toString());
+	}
+
+	protected double getMinCharNGram(String str) {
 		double min = Double.MAX_VALUE;
-		final OCRWord word = getWord(token, i, n);
-		for (String trigram : splitIntoCharacterNGrams(word.toString(), 3)) {
+		for (String trigram : splitIntoCharacterNGrams(str, 3)) {
 			final double val = getNgrams().getRelative(trigram);
-			if (val < min) {
-				min = val;
-			}
+			min = Double.min(min, val);
 		}
 		return min;
 	}

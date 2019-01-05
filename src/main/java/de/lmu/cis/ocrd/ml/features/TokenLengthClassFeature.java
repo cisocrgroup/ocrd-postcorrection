@@ -1,11 +1,10 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import com.google.gson.JsonObject;
+import de.lmu.cis.ocrd.util.JSON;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gson.JsonObject;
-
-import de.lmu.cis.ocrd.util.JSON;
 
 public class TokenLengthClassFeature extends NamedStringSetFeature {
 	private static final long serialVersionUID = -1000888404407897300L;
@@ -45,6 +44,10 @@ public class TokenLengthClassFeature extends NamedStringSetFeature {
 	@Override
 	public Object calculate(OCRToken token, int i, int n) {
 		final int tokenLength = token.getMasterOCR().getWord().length();
+		return getLengthClass(tokenLength);
+	}
+
+	protected String getLengthClass(int tokenLength) {
 		if (tokenLength <= shrt) {
 			return SHORT;
 		}
