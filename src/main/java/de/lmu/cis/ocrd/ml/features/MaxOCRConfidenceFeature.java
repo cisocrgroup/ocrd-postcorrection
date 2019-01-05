@@ -28,6 +28,6 @@ public class MaxOCRConfidenceFeature extends NamedDoubleFeature {
 
 	@Override
 	public boolean handlesOCR(int i, int n) {
-		return handlesOnlyMasterOCR(i, n);
+		return handlesAnyOCR(i, n);
 	}
 }

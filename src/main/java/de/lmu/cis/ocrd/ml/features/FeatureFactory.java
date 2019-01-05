@@ -24,8 +24,10 @@ public class FeatureFactory {
 				.register(MinCharNGramsFeature.class)
 				.register(ProfilerHistoricalPatternsDistance.class)
 				.register(ProfilerOCRPatternsDistance.class)
+				.register(ProfilerHighestVoteWeightFeature.class)
 				.register(LinePositionFeature.class)
 				.register(LineOverlapWithMasterOCRFeature.class)
+				.register(OCRWordConfidenceFeature.class)
 				.register(MaxCharNGramsFeature.class);
 	}
 
@@ -43,7 +45,7 @@ public class FeatureFactory {
 		final Class<?>[] parameters = new Class[] { JsonObject.class,
 				ArgumentFactory.class };
 		final Constructor<?> c = clazz.getConstructor(parameters);
-		return Optional.of((Feature) c.newInstance(o, args));
+		return Optional.ofNullable((Feature) c.newInstance(o, args));
 	}
 
 	public <F extends Feature> FeatureFactory register(Class<F> feature) {
