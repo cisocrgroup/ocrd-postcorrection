@@ -21,9 +21,7 @@ public class MinOCRConfidenceFeature extends NamedDoubleFeature {
 		double min = Double.MAX_VALUE;
 		for (int j = 0; j < word.getWord().length(); j++) {
 			final double confidence = word.getCharacterConfidenceAt(j);
-			if (confidence < min) {
-				min = confidence;
-			}
+			min = Double.min(min, confidence);
 		}
 		return min;
 	}

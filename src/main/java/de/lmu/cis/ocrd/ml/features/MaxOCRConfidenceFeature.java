@@ -21,9 +21,7 @@ public class MaxOCRConfidenceFeature extends NamedDoubleFeature {
 		double max = 0;
 		for (int j = 0; j < word.getWord().length(); j++) {
 			final double confidence = word.getCharacterConfidenceAt(j);
-			if (confidence > max) {
-				max = confidence;
-			}
+			max = Double.max(max, confidence);
 		}
 		return max;
 	}
