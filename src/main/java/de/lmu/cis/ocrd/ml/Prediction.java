@@ -3,6 +3,8 @@ package de.lmu.cis.ocrd.ml;
 import com.google.gson.GsonBuilder;
 import de.lmu.cis.ocrd.ml.features.BinaryPrediction;
 
+import java.util.Arrays;
+
 public class Prediction implements BinaryPrediction {
 	private final int value;
 	public final String label;
@@ -24,6 +26,12 @@ public class Prediction implements BinaryPrediction {
 	public double getConfidence() {
 		assert(value < confidences.length);
 		return confidences[value];
+	}
+
+	@Override
+	public String toString() {
+		return String.format("[%s] %s %d", Arrays.toString(confidences),
+				label, value);
 	}
 
 	public String toJSON() {

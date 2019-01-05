@@ -41,7 +41,9 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		Logger.debug("loading logistic classifier from file {}", path);
 		try (ObjectInputStream ois =
 				     new ObjectInputStream(new FileInputStream(path.toFile()))) {
-			return (LogisticClassifier) ois.readObject();
+			final LogisticClassifier c =  (LogisticClassifier) ois.readObject();
+			c.structure.setClassIndex(c.structure.numAttributes() - 1);
+			return c;
 		}
 	}
 
@@ -72,7 +74,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		return predict(instance);
 	}
 
-	public Prediction predict(Instance instance) throws Exception {
+	private Prediction predict(Instance instance) throws Exception {
 		final double res = classifier.classifyInstance(instance);
 		final double[] xy = classifier.distributionForInstance(instance);
 		return new Prediction(res, xy,
