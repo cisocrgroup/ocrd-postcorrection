@@ -1,6 +1,8 @@
 package de.lmu.cis.ocrd.cli.test;
 
 import de.lmu.cis.ocrd.cli.*;
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,10 +29,10 @@ public class TrainCommandTest {
 		new File(tmp).mkdirs();
 	}
 
-	// @After
-	// public void deinit() throws Exception {
-	// 	FileUtils.deleteDirectory(new File(tmp));
-	// }
+	@After
+	public void deinit() throws Exception {
+		FileUtils.deleteDirectory(new File(tmp));
+	}
 
 	@Test
 	public void test() throws Exception {
@@ -51,7 +53,7 @@ public class TrainCommandTest {
 		Command cmd = new TrainCommand();
 		cmd.execute(cla);
 		// 3 runs (dle, rr, dm), 2 files for each run with 2 OCRs
-		assertThat(countFilesInDir(tmp), is(3*2*2));
+		assertThat(countFilesInDir(tmp), is(12));
 	}
 
 	private void evalDLE() throws Exception {
@@ -66,7 +68,7 @@ public class TrainCommandTest {
 		Command cmd = new EvaluateDLECommand();
 		cmd.execute(cla);
 		// existing files (see above) + 2 lexicon, 2 eval and 2 result files
-		assertThat(countFilesInDir(tmp), is(3*2*2 + (2+2+2)));
+		assertThat(countFilesInDir(tmp), is(18));
 	}
 
 	private static int countFilesInDir(String dir) throws IOException {
