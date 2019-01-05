@@ -1,9 +1,9 @@
 package de.lmu.cis.ocrd;
 
+import de.lmu.cis.ocrd.ml.features.OCRWord;
+
 import java.io.Serializable;
 import java.util.Optional;
-
-import de.lmu.cis.ocrd.ml.features.OCRWord;
 
 public class Word implements Serializable, OCRWord {
 	private static final long serialVersionUID = 2254894331400744361L;
@@ -45,6 +45,17 @@ public class Word implements Serializable, OCRWord {
 
 	public double getCharacterConfidenceAt(int i) {
 		return line.getConfidenceAt(s + i);
+	}
+
+	@Override
+	public double getConfidence() {
+		double min = Double.MAX_VALUE;
+		double max = Double.MIN_VALUE;
+		for (int i = 0; i < getSize(); i++) {
+			min = Double.min(min, getCharacterConfidenceAt(i));
+			max = Double.max(max, getCharacterConfidenceAt(i));
+		}
+		return (min + max) / 2.0;
 	}
 
 	@Override
