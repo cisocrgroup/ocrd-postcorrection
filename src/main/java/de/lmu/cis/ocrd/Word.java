@@ -43,7 +43,7 @@ public class Word implements Serializable, OCRWord {
 		return e - s;
 	}
 
-	public double getConfidenceAt(int i) {
+	public double getCharacterConfidenceAt(int i) {
 		return line.getConfidenceAt(s + i);
 	}
 

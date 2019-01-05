@@ -34,7 +34,12 @@ public class OCRWordImpl implements OCRWord {
 	}
 
 	@Override
-	public double getConfidenceAt(int i) {
+	public double getConfidence() {
+		return word.getTextEquivs().get(this.i).getConfidence();
+	}
+
+	@Override
+	public double getCharacterConfidenceAt(int i) {
 		return word.getTextEquivs().get(this.i).getConfidence();
 	}
 

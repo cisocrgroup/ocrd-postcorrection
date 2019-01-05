@@ -20,7 +20,7 @@ public class MaxOCRConfidenceFeature extends NamedDoubleFeature {
 		final OCRWord word = getWord(token, i, n);
 		double max = 0;
 		for (int j = 0; j < word.getWord().length(); j++) {
-			final double confidence = word.getConfidenceAt(j);
+			final double confidence = word.getCharacterConfidenceAt(j);
 			if (confidence > max) {
 				max = confidence;
 			}

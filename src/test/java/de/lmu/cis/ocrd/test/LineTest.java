@@ -62,8 +62,8 @@ public class LineTest {
 	public void testGetWordConfidences() {
 		SimpleLine line = SimpleLine.normalized("first second third", 0.8);
 		assertThat(line.getWord("first").isPresent(), is(true));
-		assertThat(line.getWord("first").get().getConfidenceAt(0), is(0.8));
-		assertThat(line.getWord("first").get().getConfidenceAt(1), is(0.8));
+		assertThat(line.getWord("first").get().getCharacterConfidenceAt(0), is(0.8));
+		assertThat(line.getWord("first").get().getCharacterConfidenceAt(1), is(0.8));
 	}
 
 	@Test
@@ -71,8 +71,8 @@ public class LineTest {
 		Double[] cs = new Double[]{0.1, 0.1, 0.0, 0.2, 0.2};
 		SimpleLine line = SimpleLine.normalized("aa aa", new ArrayList<>(Arrays.asList(cs)));
 		assertThat(line.getWord(0, "aa").isPresent(), is(true));
-		assertThat(line.getWord(0, "aa").get().getConfidenceAt(0), is(0.1));
+		assertThat(line.getWord(0, "aa").get().getCharacterConfidenceAt(0), is(0.1));
 		assertThat(line.getWord(2, "aa").isPresent(), is(true));
-		assertThat(line.getWord(2, "aa").get().getConfidenceAt(0), is(0.2));
+		assertThat(line.getWord(2, "aa").get().getCharacterConfidenceAt(0), is(0.2));
 	}
 }
