@@ -1,11 +1,7 @@
 package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
-import de.lmu.cis.ocrd.pagexml.Line;
-import de.lmu.cis.ocrd.pagexml.METS;
-import de.lmu.cis.ocrd.pagexml.Page;
-import de.lmu.cis.ocrd.pagexml.Word;
-import org.pmw.tinylog.Logger;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -15,7 +11,7 @@ import java.util.List;
 public class LM implements ArgumentFactory {
 	private final boolean gt;
 	private final Path trigrams;
-	private List<METS.File> files;
+	private List<OCRToken> tokens;
 	private List<FreqMap> freqMaps;
 	private FreqMap trigramFreqMap;
 
@@ -26,37 +22,21 @@ public class LM implements ArgumentFactory {
 		this.trigramFreqMap = null;
 	}
 
-	private void loadFreqMapsIfNotPresent() throws Exception {
+	private void loadFreqMapsIfNotPresent() {
 		if (freqMaps != null) {
 			return;
 		}
 		freqMaps = new ArrayList<>();
-		int n = 0;
-		for (METS.File file : this.files) {
-			Logger.info("reading unigrams: {}", file.getFLocat());
-			final Page page = Page.parse(file.open());
-			for (final Line line : page.getLines()) {
-				if (n == 0) {
-					n = line.getTextEquivs().size();
-				}
-				for (final Word word : line.getWords()) {
-					addToFreqMaps(word, n);
-				}
+		if (tokens.size() > 0) {
+			for (int i = 0; i < tokens.get(0).getNOCR(); i++) {
+				freqMaps.add(new FreqMap());
 			}
 		}
-	}
-
-	private void addToFreqMaps(Word word, int n) {
-		Logger.debug("addToFreqMaps({}, {})", word.toString(), n);
-		final List<String> aligned = word.getUnicodeNormalized();
-		if (gt) {
-			n -= 1;
-		}
-		while (freqMaps.size() <= n) {
-			freqMaps.add(new FreqMap());
-		}
-		for (int i = 0; i < n && i < aligned.size(); i++) {
-			freqMaps.get(i).add(aligned.get(i));
+		for (OCRToken token : tokens) {
+			freqMaps.get(0).add(token.getMasterOCR().getWord());
+			for (int i = 1; i < token.getNOCR(); i++) {
+				freqMaps.get(1).add(token.getOtherOCR(i - 1).getWord());
+			}
 		}
 	}
 
@@ -67,25 +47,25 @@ public class LM implements ArgumentFactory {
 		trigramFreqMap = CharacterNGrams.fromCSV(trigrams.toString());
 	}
 
-	public void setFiles(List<METS.File> files) {
-		this.files = files;
+	public void setTokens(List<OCRToken> tokens) {
+		this.tokens = tokens;
 		this.freqMaps = null;
 	}
 
 	@Override
-	public FreqMap getMasterOCRUnigrams() throws Exception {
+	public FreqMap getMasterOCRUnigrams() {
 		loadFreqMapsIfNotPresent();
 		return freqMaps.get(0);
 	}
 
 	@Override
-	public FreqMap getOtherOCRUnigrams(int i) throws Exception {
+	public FreqMap getOtherOCRUnigrams(int i) {
 		loadFreqMapsIfNotPresent();
 		return freqMaps.get(i + 1);
 	}
 
 	@Override
-	public int getNumberOfOtherOCRs() throws Exception {
+	public int getNumberOfOtherOCRs() {
 		loadFreqMapsIfNotPresent();
 		return freqMaps.size() - 1;
 	}

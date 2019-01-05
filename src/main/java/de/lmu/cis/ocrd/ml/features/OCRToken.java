@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OCRToken {
+	int getNOCR();
 	OCRWord getMasterOCR();
 	OCRWord getOtherOCR(int i);
 	Optional<String> getGT();

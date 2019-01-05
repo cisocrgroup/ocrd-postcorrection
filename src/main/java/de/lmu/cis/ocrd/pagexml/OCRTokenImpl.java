@@ -26,6 +26,11 @@ public class OCRTokenImpl implements OCRToken {
 	}
 
 	@Override
+	public int getNOCR() {
+		return gtindex;
+	}
+
+	@Override
 	public OCRWord getMasterOCR() {
 		return words.get(0);
 	}

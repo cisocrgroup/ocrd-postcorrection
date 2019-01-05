@@ -6,9 +6,8 @@ import de.lmu.cis.ocrd.ml.LogisticClassifier;
 import de.lmu.cis.ocrd.ml.features.DecisionMakerConfidenceFeature;
 import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
-import de.lmu.cis.ocrd.pagexml.Line;
-import de.lmu.cis.ocrd.pagexml.Page;
-import de.lmu.cis.ocrd.pagexml.Word;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.pagexml.*;
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileInputStream;
@@ -16,6 +15,8 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 abstract class AbstractMLCommand extends AbstractIOCommand {
 
@@ -34,8 +35,14 @@ abstract class AbstractMLCommand extends AbstractIOCommand {
 		int nOCR;
 	}
 
-	protected static Parameter getParameter(CommandLineArguments args) throws Exception {
-		return args.mustGetParameter(Parameter.class);
+	private Parameter parameter;
+
+	protected Parameter getParameter() {
+		return parameter;
+	}
+
+	protected void setParameter(CommandLineArguments args) throws Exception {
+		parameter = args.mustGetParameter(Parameter.class);
 	}
 
 	protected static JsonObject[] getFeatures(String features) throws Exception {
@@ -71,5 +78,18 @@ abstract class AbstractMLCommand extends AbstractIOCommand {
 				}
 			}
 		}
+	}
+
+	protected List<OCRToken> readTokens(List<METS.File> files) throws Exception {
+		List<OCRToken> tokens = new ArrayList<>();
+		for (METS.File file : files) {
+			try (InputStream is = file.open()) {
+				Page page = Page.parse(is);
+				eachLongWord(page, (word, mOCR)->{
+					tokens.add(new OCRTokenImpl(word, parameter.nOCR));
+				});
+			}
+		}
+		return tokens;
 	}
 }

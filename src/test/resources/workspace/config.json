@@ -1,0 +1,20 @@
+{
+	"dleTraining": {
+		"features": "src/test/resources/dle-features.json",
+		"model": "src/test/resources/workspace/dump/dle-model.bin",
+		"training": "src/test/resources/workspace/dump/dle-training.arff",
+		"dynamicLexicon": "src/test/resources/workspace/dump/dle.txt"
+	},
+	"rrTraining": {
+		"features": "src/test/resources/rr-features.json",
+		"model": "src/test/resources/workspace/dump/rr-model.bin",
+		"training": "src/test/resources/workspace/dump/rr-training.arff"
+	},
+	"dmTraining": {
+		"features": "src/test/resources/dm-features.json",
+		"model": "src/test/resources/workspace/dump/dec-model.bin",
+		"training": "src/test/resources/workspace/dump/dec-training.arff"
+	},
+	"nOCR": 2,
+	"trigrams": "src/test/resources/nGrams.csv"
+}

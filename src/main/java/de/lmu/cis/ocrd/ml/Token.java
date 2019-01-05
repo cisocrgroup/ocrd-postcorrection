@@ -57,6 +57,11 @@ public class Token implements Serializable, OCRToken {
 	}
 
 	@Override
+	public int getNOCR() {
+		return otherOCR.size() + 1;
+	}
+
+	@Override
 	public Word getMasterOCR() {
 		return this.masterOCR;
 	}

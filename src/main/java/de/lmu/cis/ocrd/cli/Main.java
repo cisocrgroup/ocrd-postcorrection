@@ -24,7 +24,6 @@ public class Main {
 		return new CommandFactory()
 				.register(ProfilerCommand.class)
 				.register(TrainCommand.class)
-				.register(EvalCommand.class)
 				.register(EvaluateDLECommand.class)
 				.register(EvaluateRRDMCommand.class)
 				.register(AlignCommand.class);

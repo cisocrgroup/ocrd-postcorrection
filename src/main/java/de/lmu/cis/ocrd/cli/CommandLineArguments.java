@@ -1,16 +1,15 @@
 package de.lmu.cis.ocrd.cli;
 
 import com.google.gson.Gson;
-import de.lmu.cis.ocrd.train.Configuration;
 import org.apache.commons.cli.*;
-import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 import org.pmw.tinylog.writers.ConsoleWriter;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 
 public class CommandLineArguments {
 
@@ -34,7 +33,6 @@ public class CommandLineArguments {
             .desc("Arbeitsverzeichnis").hasArg().build();
     private static final Option DEFINE = Option.builder("D").longOpt("define").hasArgs().
             desc("set values using inline json").build();
-    private Configuration data;
     private String groupID, logLevel, parameter, workdir, mets, output, command, define;
     private String[] inputFilegrp, outputFilegrp, args;
 
@@ -78,7 +76,6 @@ public class CommandLineArguments {
         }
         c.args = line.getArgs();
         c.setupLogger();
-        c.setupJSON();
         return c;
     }
 
@@ -151,11 +148,6 @@ public class CommandLineArguments {
         return notNull(parameter);
     }
 
-    public Configuration getParameters() {
-        assert (data != null);
-        return data;
-    }
-
     public <T> T getDefine(java.lang.reflect.Type typeOfT) {
         return new Gson().fromJson(notNull(define), typeOfT);
     }
@@ -198,19 +190,6 @@ public class CommandLineArguments {
 
     String getWorkDir() {
         return notNull(workdir);
-    }
-
-    private void setupJSON() throws IOException {
-        data = Configuration.getDefault();
-        if (parameter == null) {
-            return;
-        }
-        Logger.debug("reading data {}", parameter);
-        try (InputStream is = new FileInputStream(new File(parameter))) {
-            StringWriter out = new StringWriter();
-            IOUtils.copy(is, out, Charset.forName("UTF-8"));
-            data = Configuration.fromJSON(out.toString());
-        }
     }
 
     private void setupLogger() {
