@@ -3,17 +3,23 @@
 		"features": "src/test/resources/dle-features.json",
 		"model": "src/test/resources/workspace/dump/dle-model.bin",
 		"training": "src/test/resources/workspace/dump/dle-training.arff",
-		"dynamicLexicon": "src/test/resources/workspace/dump/dle.txt"
+		"dynamicLexicon": "src/test/resources/workspace/dump/dle.txt",
+		"evaluation": "src/test/resources/workspace/dump/dle-eval.arff",
+		"result": "src/test/resources/workspace/dump/dle-eval.txt"
 	},
 	"rrTraining": {
 		"features": "src/test/resources/rr-features.json",
 		"model": "src/test/resources/workspace/dump/rr-model.bin",
-		"training": "src/test/resources/workspace/dump/rr-training.arff"
+		"training": "src/test/resources/workspace/dump/rr-training.arff",
+		"evaluation": "src/test/resources/workspace/dump/rr-eval.arff",
+		"result": "src/test/resources/workspace/dump/rr-eval.txt"
 	},
 	"dmTraining": {
 		"features": "src/test/resources/dm-features.json",
-		"model": "src/test/resources/workspace/dump/dec-model.bin",
-		"training": "src/test/resources/workspace/dump/dec-training.arff"
+		"model": "src/test/resources/workspace/dump/dm-model.bin",
+		"training": "src/test/resources/workspace/dump/dm-training.arff",
+		"evaluation": "src/test/resources/workspace/dump/dm-eval.arff",
+		"result": "src/test/resources/workspace/dump/dm-eval.txt"
 	},
 	"nOCR": 2,
 	"trigrams": "src/test/resources/nGrams.csv"

@@ -4,14 +4,14 @@ import com.google.gson.JsonObject;
 
 import de.lmu.cis.ocrd.util.JSON;
 
-public class MaxOCRConfidenceFeature extends NamedDoubleFeature {
+public class MaxOCRCharacterConfidenceFeature extends NamedDoubleFeature {
 	private static final long serialVersionUID = 1424827046143811274L;
 
-	public MaxOCRConfidenceFeature(JsonObject o, ArgumentFactory ignored) {
+	public MaxOCRCharacterConfidenceFeature(JsonObject o, ArgumentFactory ignored) {
 		this(JSON.mustGetNameOrType(o));
 	}
 
-	public MaxOCRConfidenceFeature(String name) {
+	public MaxOCRCharacterConfidenceFeature(String name) {
 		super(name);
 	}
 

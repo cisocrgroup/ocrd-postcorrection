@@ -18,17 +18,18 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract class AbstractMLCommand extends AbstractIOCommand {
+public abstract class AbstractMLCommand extends AbstractIOCommand {
 
 	static class TrainingResource {
-		String evaluation = "", model = "", training = "", features = "";
+		String evaluation = "", model = "", training = "", features = "",
+				result = "";
 	}
 
 	static class DLETrainingResource extends TrainingResource {
 		public String dynamicLexicon = "";
 	}
 
-	static class Parameter {
+	public static class Parameter {
 		DLETrainingResource dleTraining;
 		TrainingResource rrTraining, dmTraining;
 		String trigrams = "";

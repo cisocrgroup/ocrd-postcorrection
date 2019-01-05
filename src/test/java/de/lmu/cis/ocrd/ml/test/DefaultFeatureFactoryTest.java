@@ -18,20 +18,20 @@ public class DefaultFeatureFactoryTest {
 
 	@Test
 	public void testMinOCRConfidenceFeature() throws Exception {
-		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.MinOCRConfidenceFeature\",\"name\":\"MinOCRConfidence\",\"ocrIndex\":0}";
+		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.MinOCRCharacterConfidenceFeature\",\"name\":\"MinOCRConfidence\",\"ocrIndex\":0}";
 		final Optional<Feature> feature = makeFeature(json);
 		assertThat(feature.isPresent(), is(true));
 		assertThat(feature.get().getName(), is("MinOCRConfidence"));
-		assertThat(feature.get() instanceof MinOCRConfidenceFeature, is(true));
+		assertThat(feature.get() instanceof MinOCRCharacterConfidenceFeature, is(true));
 	}
 
 	@Test
 	public void testMaxOCRConfidenceFeature() throws Exception {
-		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.MaxOCRConfidenceFeature\",\"name\":\"MaxOCRConfidence\",\"ocrIndex\":0}";
+		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.MaxOCRCharacterConfidenceFeature\",\"name\":\"MaxOCRConfidence\",\"ocrIndex\":0}";
 		final Optional<Feature> feature = makeFeature(json);
 		assertThat(feature.isPresent(), is(true));
 		assertThat(feature.get().getName(), is("MaxOCRConfidence"));
-		assertThat(feature.get() instanceof MaxOCRConfidenceFeature, is(true));
+		assertThat(feature.get() instanceof MaxOCRCharacterConfidenceFeature, is(true));
 	}
 
 	@Test

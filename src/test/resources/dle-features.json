@@ -23,8 +23,12 @@
 		"name": "MinCharTrigram"
 	},
 	{
-		"type": "de.lmu.cis.ocrd.ml.features.MinOCRConfidenceFeature",
+		"type": "de.lmu.cis.ocrd.ml.features.MinOCRCharacterConfidenceFeature",
 		"name": "MinOCRConfidence"
+	},
+	{
+		"type": "de.lmu.cis.ocrd.ml.features.MaxOCRCharacterConfidenceFeature",
+		"name": "MaxOCRConfidence"
 	},
 	{
 		"type": "de.lmu.cis.ocrd.ml.features.SumOfMatchingAdditionalOCRsFeature",

@@ -6,11 +6,14 @@ import de.lmu.cis.ocrd.ml.LogisticClassifier;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
+import org.apache.commons.io.FileUtils;
 import org.pmw.tinylog.Logger;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -65,7 +68,8 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				});
 			}
 			evaluate(getParameter().rrTraining.evaluation,
-					getParameter().rrTraining.model, i);
+					getParameter().rrTraining.model,
+					getParameter().rrTraining.result, i);
 		}
 	}
 
@@ -83,11 +87,12 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				});
 			}
 			evaluate(getParameter().dmTraining.evaluation,
-					getParameter().dmTraining.model, i);
+					getParameter().dmTraining.model,
+					getParameter().dmTraining.result, i);
 		}
 	}
 
-	private void evaluate(String eval, String model, int i) throws Exception {
+	private void evaluate(String eval, String model, String res, int i) throws Exception {
 		final Path evalPath = tagPath(eval, i+1);
 		final LogisticClassifier c = LogisticClassifier.load(tagPath(model,
 				i+1));
@@ -95,7 +100,8 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 						":\n=============\n"
 					, i + 1);
 		final String data = c.evaluate(title, evalPath);
-		println(data);
+		FileUtils.writeStringToFile(new File(res), data,
+				Charset.forName("UTF-8"));
 	}
 
 	private Writer openTagged(String path, int i) throws Exception {

@@ -42,7 +42,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		try (ObjectInputStream ois =
 				     new ObjectInputStream(new FileInputStream(path.toFile()))) {
 			final LogisticClassifier c =  (LogisticClassifier) ois.readObject();
-			c.structure.setClassIndex(c.structure.numAttributes() - 1);
+			c.structure.setClassIndex(c.structure.numAttributes()-1);
 			return c;
 		}
 	}
@@ -58,6 +58,10 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		final ConverterUtils.DataSource ds =
 				new ConverterUtils.DataSource(path.toString());
 		final Instances toEvaluate = ds.getDataSet();
+		toEvaluate.setClassIndex(toEvaluate.numAttributes() - 1);
+		Logger.debug("self numAttributes: {}", this.structure.numAttributes());
+		Logger.debug("toEvaluate numAttributes: {}",
+				toEvaluate.numAttributes());
 		final Evaluation evaluation = new Evaluation(structure);
 		evaluation.evaluateModel(classifier, toEvaluate);
 		return evaluation.toSummaryString(title, true);

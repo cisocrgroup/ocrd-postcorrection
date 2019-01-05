@@ -9,6 +9,7 @@ import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.pagexml.METS;
+import org.apache.commons.io.FileUtils;
 import org.pmw.tinylog.Logger;
 
 import java.io.*;
@@ -34,6 +35,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 		debug = "debug".equals(config.getLogLevel().toLowerCase());
 		fs = FeatureFactory
 				.getDefault()
+				.withArgumentFactory(lm)
 				.createFeatureSet(getFeatures(getParameter().dleTraining.features))
 				.add(new DynamicLexiconGTFeature());
 		for (String ifg : config.mustGetInputFileGroups()) {
@@ -85,13 +87,15 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 
 	private void evaluate(int i) throws Exception {
 		final Path evalPath = tagPath(getParameter().dleTraining.evaluation, i + 1);
+		final Path res = tagPath(getParameter().dleTraining.result, i + 1);
 		final LogisticClassifier c =
 				LogisticClassifier.load(tagPath(getParameter().dleTraining.model,
 						i + 1));
 		final String title = String.format("\nResults (%d):\n=============\n"
 				, i + 1);
 		final String data = c.evaluate(title, evalPath);
-		println(data);
+		FileUtils.writeStringToFile(res.toFile(), data,
+				Charset.forName("UTF-8"));
 	}
 
 	private Writer openTagged(String path, int i) throws Exception {
