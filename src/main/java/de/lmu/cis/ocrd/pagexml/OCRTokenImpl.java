@@ -61,6 +61,11 @@ public class OCRTokenImpl implements OCRToken {
 		return this.candidates;
 	}
 
+	@Override
+	public String toString() {
+		return word.toString();
+	}
+
 	private List<Candidate> calculateAllCandidates() {
 		List<Candidate> cs = new ArrayList<>();
 		for (TextEquiv te : word.getTextEquivs()) {
