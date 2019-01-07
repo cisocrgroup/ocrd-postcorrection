@@ -24,9 +24,10 @@ public class SumOfMatchingAdditionalOCRsFeature extends NamedDoubleFeature {
 	public double doCalculate(OCRToken token, int i, int n) {
 		assert (this.handlesOCR(i, n));
 		double sum = 0;
-		// i=0 is mater OCR
+		// i=0 is master OCR
+		final String mOCR = token.getMasterOCR().toString();
 		for (int j = 1; j < n; j++) {
-			if (token.getMasterOCR().toString().equals(token.getOtherOCR(j - 1).toString())) {
+			if (mOCR.equals(token.getOtherOCR(j - 1).toString())) {
 				sum += 1;
 			}
 		}
