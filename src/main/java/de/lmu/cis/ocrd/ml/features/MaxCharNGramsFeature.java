@@ -27,10 +27,13 @@ public class MaxCharNGramsFeature extends NamedCharacterNGramFeature {
 	}
 
 	protected double getMaxCharNGram(String str) {
-		double max = Double.MIN_VALUE;
-		for (String trigram : splitIntoCharacterNGrams(str, 3)) {
-			final double val = getNgrams().getRelative(trigram);
-			max = Double.max(max, val);
+		final double[] values = getNgrams().getRelativeNGrams(str, 3);
+		if (values == null || values.length == 0) {
+			return 0;
+		}
+		double max = values[0];
+		for (int i = 1; i < values.length; i++) {
+			max = Double.max(max, values[i]);
 		}
 		return max;
 	}

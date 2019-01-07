@@ -1,9 +1,8 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
-
-import de.lmu.cis.ocrd.util.JSON;
 import de.lmu.cis.ocrd.ml.FreqMap;
+import de.lmu.cis.ocrd.util.JSON;
 
 public class MinCharNGramsFeature extends NamedCharacterNGramFeature {
 	private static final long serialVersionUID = 1L;
@@ -27,10 +26,13 @@ public class MinCharNGramsFeature extends NamedCharacterNGramFeature {
 	}
 
 	protected double getMinCharNGram(String str) {
-		double min = Double.MAX_VALUE;
-		for (String trigram : splitIntoCharacterNGrams(str, 3)) {
-			final double val = getNgrams().getRelative(trigram);
-			min = Double.min(min, val);
+		final double[] values = getNgrams().getRelativeNGrams(str, 3);
+		if (values == null || values.length == 0) {
+			return 0;
+		}
+		double min = values[0];
+		for (int i = 1; i < values.length; i++) {
+			min = Double.min(min, values[i]);
 		}
 		return min;
 	}
