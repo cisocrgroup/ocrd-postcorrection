@@ -1,7 +1,5 @@
 package de.lmu.cis.ocrd.ml;
 
-import org.pmw.tinylog.Logger;
-
 import java.util.HashMap;
 
 public class FreqMap {
@@ -48,7 +46,6 @@ public class FreqMap {
 		str = '$' + str + '$';
 		final int[] codepoints = str.codePoints().toArray();
 		final int max = codepoints.length - n;
-		Logger.info("len = {}, n = {}, max = {}", codepoints.length, n, max);
 		double[] res = new double[max+1];
 		for (int i = 0; i <= max; i++) {
 			final String ngram = new String(codepoints, i, n);
