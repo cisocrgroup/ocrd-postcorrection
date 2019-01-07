@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.ml.features;
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -63,6 +64,18 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 				first = false;
 			}
 			return builder.toString();
+		}
+
+		public void writeCSVLine(PrintWriter w) {
+			boolean first = true;
+			for (Object feature : this) {
+				if (!first) {
+					w.print(',');
+				}
+				w.print(feature);
+				first = false;
+			}
+			w.println();
 		}
 
 		public String toJSON() {
