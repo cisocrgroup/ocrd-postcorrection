@@ -11,6 +11,8 @@ public class OCRWordImpl implements OCRWord {
 	private final List<String> words;
 	private final String line;
 
+	// TODO: improve implementation: OCRWordImpl should not calculate the
+	// list of words.
 	public OCRWordImpl(int i, Word word) {
 		this.word = word;
 		this.words = word.getUnicodeNormalized();
