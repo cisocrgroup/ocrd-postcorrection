@@ -42,7 +42,7 @@ public class OCRTokenWithCandidateImpl implements OCRToken {
 	}
 
 	@Override
-	public List<Candidate> getAllProfilerCandidates() {
-		return token.getAllProfilerCandidates();
+	public List<Candidate> getAllProfilerCandidates(int max) {
+		return token.getAllProfilerCandidates(max);
 	}
 }

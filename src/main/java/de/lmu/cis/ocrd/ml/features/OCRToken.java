@@ -11,5 +11,5 @@ public interface OCRToken {
 	OCRWord getOtherOCR(int i);
 	Optional<String> getGT();
 	Optional<Candidate> getProfilerCandidate();
-	List<Candidate> getAllProfilerCandidates();
+	List<Candidate> getAllProfilerCandidates(int max);
 }

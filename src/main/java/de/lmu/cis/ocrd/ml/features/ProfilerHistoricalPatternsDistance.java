@@ -19,7 +19,7 @@ public class ProfilerHistoricalPatternsDistance extends NamedDoubleFeature {
 
 	@Override
 	protected double doCalculate(OCRToken token, int i, int n) {
-		final List<Candidate> cs = token.getAllProfilerCandidates();
+		final List<Candidate> cs = token.getAllProfilerCandidates(1);
 		if (cs.isEmpty()) {
 			return -1;
 		}

@@ -54,9 +54,9 @@ public class OCRTokenImpl implements OCRToken {
 	}
 
 	@Override
-	public List<Candidate> getAllProfilerCandidates() {
+	public List<Candidate> getAllProfilerCandidates(int max) {
 		if (this.candidates == null) {
-			this.candidates = calculateAllCandidates();
+			this.candidates = calculateAllCandidates(max);
 		}
 		return this.candidates;
 	}
@@ -66,7 +66,7 @@ public class OCRTokenImpl implements OCRToken {
 		return word.toString();
 	}
 
-	private List<Candidate> calculateAllCandidates() {
+	private List<Candidate> calculateAllCandidates(int max) {
 		List<Candidate> cs = new ArrayList<>();
 		for (TextEquiv te : word.getTextEquivs()) {
 			if (!te.getDataType().contains("profiler-candidate")) {
@@ -74,6 +74,9 @@ public class OCRTokenImpl implements OCRToken {
 			}
 			cs.add(new Gson().fromJson(te.getDataTypeDetails(),
 					Candidate.class));
+			if (cs.size() == max) {
+				return cs;
+			}
 		}
 		return cs;
 	}

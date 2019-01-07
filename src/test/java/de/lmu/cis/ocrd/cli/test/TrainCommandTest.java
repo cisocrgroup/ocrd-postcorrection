@@ -38,6 +38,7 @@ public class TrainCommandTest {
 	public void test() throws Exception {
 		train();
 		evalDLE();
+		evalRRDM();
 	}
 
 	private void train() throws Exception {
@@ -49,7 +50,6 @@ public class TrainCommandTest {
 				"--log-level", logLevel,
 		};
 		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-
 		Command cmd = new TrainCommand();
 		cmd.execute(cla);
 		// 3 runs (dle, rr, dm), 2 files for each run with 2 OCRs
@@ -71,8 +71,22 @@ public class TrainCommandTest {
 		assertThat(countFilesInDir(tmp), is(18));
 	}
 
+	private void evalRRDM() throws Exception {
+		String[] args = {
+				"-c", "eval-rrdm",
+				"--mets", mets,
+				"--parameter", parameter,
+				"-I", inputFileGroupEval,
+				"--log-level", logLevel,
+		};
+		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
+		Command cmd = new EvaluateRRDMCommand();
+		cmd.execute(cla);
+		// existing files (see above) + 4 eval and 4 result files
+		assertThat(countFilesInDir(tmp), is(26));
+	}
+
 	private static int countFilesInDir(String dir) throws IOException {
 		return (int) Files.walk(Paths.get(dir)).count() - 1; // do not count dir
 	}
-
 }

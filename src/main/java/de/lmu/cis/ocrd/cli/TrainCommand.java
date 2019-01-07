@@ -6,6 +6,7 @@ import de.lmu.cis.ocrd.ml.LogisticClassifier;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
+import de.lmu.cis.ocrd.profile.Candidate;
 import org.pmw.tinylog.Logger;
 
 import java.io.BufferedWriter;
@@ -124,10 +125,11 @@ public class TrainCommand extends AbstractMLCommand {
 	}
 
 	private void prepareRR(List<OCRToken> tokens, int i) throws Exception {
+		final int max = getParameter().maxCandidates;
 		tokens.forEach((token)->{
-			Logger.debug("adding {} candidates",
-					token.getAllProfilerCandidates().size());
-			token.getAllProfilerCandidates().forEach((c)->{
+			final List<Candidate> cs = token.getAllProfilerCandidates(max);
+			Logger.debug("adding {} candidates", cs.size());
+			cs.forEach((c)->{
 				OCRTokenWithCandidateImpl tc =
 						new OCRTokenWithCandidateImpl(token, c);
 				// Logger.debug("prepareRR: adding {} (Candidate: {}, GT: {})",
@@ -143,10 +145,11 @@ public class TrainCommand extends AbstractMLCommand {
 	}
 
 	private void prepareDM(List<OCRToken> tokens, int i) throws Exception {
+		final int max = getParameter().maxCandidates;
 		tokens.forEach((token)->{
-			Logger.debug("adding {} candidates",
-					token.getAllProfilerCandidates().size());
-			token.getAllProfilerCandidates().forEach((c)->{
+			final List<Candidate> cs = token.getAllProfilerCandidates(max);
+			Logger.debug("adding {} candidates", cs.size());
+			cs.forEach((c)->{
 				OCRTokenWithCandidateImpl tc =
 						new OCRTokenWithCandidateImpl(token, c);
 				// Logger.debug("prepareDM: adding {} (Candidate: {}, GT: {})",

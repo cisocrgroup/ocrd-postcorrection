@@ -6,11 +6,11 @@ import de.lmu.cis.ocrd.ml.LogisticClassifier;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
+import de.lmu.cis.ocrd.profile.Candidate;
 import org.apache.commons.io.FileUtils;
 import org.pmw.tinylog.Logger;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -21,6 +21,7 @@ import java.util.List;
 public class EvaluateRRDMCommand extends AbstractMLCommand {
 
 	private FeatureSet rrFS, dmFS;
+	private LM lm;
 	private boolean debug;
 
 	@Override
@@ -32,15 +33,12 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 	public void execute(CommandLineArguments config) throws Exception {
 		setParameter(config);
 		debug = "debug".equals(config.getLogLevel().toLowerCase());
+		lm = new LM(true, Paths.get(getParameter().trigrams));
 		rrFS = FeatureFactory
 				.getDefault()
+				.withArgumentFactory(lm)
 				.createFeatureSet(getFeatures(getParameter().rrTraining.features))
 				.add(new ReRankingGTFeature());
-		dmFS = FeatureFactory
-				.getDefault()
-				.createFeatureSet(getFeatures(getParameter().dmTraining.features))
-				.add(new DecisionMakerGTFeature());
-		final LM lm = new LM(true, Paths.get(getParameter().trigrams));
 		final METS mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		for (String ifg : config.mustGetInputFileGroups()) {
 			Logger.debug("input file group: {}", ifg);
@@ -56,6 +54,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 
 	private void evaluateRR(List<OCRToken> tokens, int i) throws Exception {
 		Logger.debug("evaluateRR({})", i);
+		final int max = getParameter().maxCandidates;
 		try (ARFFWriter w = ARFFWriter
 				.fromFeatureSet(rrFS)
 		        .withRelation("evaluate-rr")
@@ -63,44 +62,58 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				.withWriter(openTagged(getParameter().rrTraining.evaluation, i+1))
 				.writeHeader(i+1)) {
 			for (OCRToken token: tokens) {
-				token.getAllProfilerCandidates().forEach((c)->{
+				final List<Candidate> cs = token.getAllProfilerCandidates(max);
+				Logger.debug("adding {} candidates (rr)", cs.size());
+				cs.forEach((c)->{
 					w.writeToken(new OCRTokenWithCandidateImpl(token, c), i+1);
 				});
 			}
-			evaluate(getParameter().rrTraining.evaluation,
-					getParameter().rrTraining.model,
-					getParameter().rrTraining.result, i);
 		}
+		evaluate(getParameter().rrTraining.evaluation,
+				getParameter().rrTraining.model,
+				getParameter().rrTraining.result, i);
 	}
 
 	private void evaluateDM(List<OCRToken> tokens, int i) throws Exception {
 		Logger.debug("evaluateDM({})", i);
+		final Path rrModel = tagPath(getParameter().rrTraining.model, i+1);
+		final int max = getParameter().maxCandidates;
+		dmFS = FeatureFactory
+				.getDefault()
+				.withArgumentFactory(lm)
+				.createFeatureSet(getFeatures(getParameter().dmTraining.features))
+				.add(getDMConfidenceFeature(rrModel, rrFS))
+				.add(new DecisionMakerGTFeature());
 		try (ARFFWriter w = ARFFWriter
-				.fromFeatureSet(rrFS)
+				.fromFeatureSet(dmFS)
 				.withRelation("evaluate-dm")
 				.withDebugToken(debug)
 				.withWriter(openTagged(getParameter().dmTraining.evaluation, i+1))
 				.writeHeader(i+1)) {
 			for (OCRToken token: tokens) {
-				token.getAllProfilerCandidates().forEach((c) -> {
+				final List<Candidate> cs = token.getAllProfilerCandidates(max);
+				Logger.debug("adding {} candidates (rr)", cs.size());
+				cs.forEach((c)->{
 					w.writeToken(new OCRTokenWithCandidateImpl(token, c), i + 1);
 				});
 			}
-			evaluate(getParameter().dmTraining.evaluation,
-					getParameter().dmTraining.model,
-					getParameter().dmTraining.result, i);
 		}
+		evaluate(getParameter().dmTraining.evaluation,
+				getParameter().dmTraining.model,
+				getParameter().dmTraining.result, i);
 	}
 
 	private void evaluate(String eval, String model, String res, int i) throws Exception {
 		final Path evalPath = tagPath(eval, i+1);
-		final LogisticClassifier c = LogisticClassifier.load(tagPath(model,
-				i+1));
+		final Path modelPath = tagPath(model, i+1);
+		final Path resultPath = tagPath(res, i+1);
+		Logger.debug("evaluating {} ({}) {}", evalPath, modelPath, resultPath);
+		final LogisticClassifier c = LogisticClassifier.load(modelPath);
 		final String title = String.format("\nResults (%d)" +
 						":\n=============\n"
 					, i + 1);
 		final String data = c.evaluate(title, evalPath);
-		FileUtils.writeStringToFile(new File(res), data,
+		FileUtils.writeStringToFile(resultPath.toFile(), data,
 				Charset.forName("UTF-8"));
 	}
 

@@ -34,6 +34,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		TrainingResource rrTraining, dmTraining;
 		String trigrams = "";
 		int nOCR;
+		int maxCandidates;
 	}
 
 	private Parameter parameter;

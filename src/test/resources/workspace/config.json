@@ -22,5 +22,6 @@
 		"result": "src/test/resources/workspace/dump/dm-eval.txt"
 	},
 	"nOCR": 2,
-	"trigrams": "src/test/resources/nGrams.csv"
+	"trigrams": "src/test/resources/nGrams.csv",
+	"maxCandidates": 5
 }
