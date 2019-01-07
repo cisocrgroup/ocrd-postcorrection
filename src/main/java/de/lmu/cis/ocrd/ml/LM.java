@@ -44,7 +44,9 @@ public class LM implements ArgumentFactory {
 		if (trigramFreqMap != null) {
 			return;
 		}
-		trigramFreqMap = CharacterNGrams.fromCSV(trigrams.toString());
+		// use a caching map
+		final FreqMap map = new CachingFreqMap();
+		trigramFreqMap = CharacterNGrams.addFromCSV(trigrams.toString(), map);
 	}
 
 	public void setTokens(List<OCRToken> tokens) {
