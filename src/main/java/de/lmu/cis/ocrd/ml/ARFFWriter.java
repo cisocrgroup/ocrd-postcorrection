@@ -85,7 +85,7 @@ public class ARFFWriter implements AutoCloseable {
 	}
 
 	public void writeFeatureVector(FeatureSet.Vector features) {
-		writer.println(features);
+		features.writeCSVLine(writer);
 	}
 
 	private String getAttributeOfNamedBooleanFeature(NamedBooleanFeature feature) {
