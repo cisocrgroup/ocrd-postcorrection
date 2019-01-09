@@ -17,7 +17,7 @@ public class MatchingOCRTokensFeature extends NamedDoubleFeature {
 
 	@Override
 	public boolean handlesOCR(int i, int n) {
-		return handlesOnlyMasterOCR(i, n);
+		return handlesOnlyLastOtherOCR(i, n);
 	}
 
 	@Override

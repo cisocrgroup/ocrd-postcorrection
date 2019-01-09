@@ -43,11 +43,11 @@ public class MultipleOCRFeatureExtractionTest {
 			assertThat(got.attributeToDoubleArray(i).length,
 					is(want.attributeToDoubleArray(i).length));
 			for (int j = 0; j < want.attributeToDoubleArray(i).length; j++) {
-//                System.out.print(got.attributeToDoubleArray(i)[j] + " ");
+                // System.out.print(got.attributeToDoubleArray(i)[j] + " ");
 				assertThat(got.attributeToDoubleArray(i)[j],
-						is(want.attributeToDoubleArray(i)[j]));
+				 		is(want.attributeToDoubleArray(i)[j]));
 			}
-//            System.out.println();
+            // System.out.println();
 		}
 	}
 
@@ -137,17 +137,18 @@ public class MultipleOCRFeatureExtractionTest {
 		// final OutputStreamWriter w = new OutputStreamWriter(System.out); //
 		// to update test files
 		final StringWriter w = new StringWriter();
-		final ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
+		try (ARFFWriter arff = ARFFWriter.fromFeatureSet(fs)
 				.withDebugToken(true).withRelation("TestWithOnlyMasterOCR")
-				.withWriter(w);
-		arff.writeHeader(n);
-		for (Token token : tokens) {
-			assertThat(token.getNumberOfOtherOCRs(), is(2));
-			assertThat(token.hasGT(), is(true));
-			arff.debugToken(token);
-			arff.writeFeatureVector(fs.calculateFeatureVector(token, n));
+				.withWriter(w)) {
+			arff.writeHeader(n);
+			for (Token token : tokens) {
+				assertThat(token.getNumberOfOtherOCRs(), is(2));
+				assertThat(token.hasGT(), is(true));
+				arff.debugToken(token);
+				arff.writeFeatureVector(fs.calculateFeatureVector(token, n));
+			}
+			w.flush();
 		}
-		w.flush();
 		final Instances got = new ConverterUtils.DataSource(
 				IOUtils.toInputStream(w.toString(), Charset.defaultCharset()))
 						.getDataSet();

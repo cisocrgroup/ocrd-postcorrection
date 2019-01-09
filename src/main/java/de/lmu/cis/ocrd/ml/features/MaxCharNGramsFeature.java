@@ -1,9 +1,8 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
-
-import de.lmu.cis.ocrd.util.JSON;
 import de.lmu.cis.ocrd.ml.FreqMap;
+import de.lmu.cis.ocrd.util.JSON;
 
 public class MaxCharNGramsFeature extends NamedCharacterNGramFeature {
 	private static final long serialVersionUID = 1L;

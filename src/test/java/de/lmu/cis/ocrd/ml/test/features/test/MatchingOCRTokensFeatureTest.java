@@ -18,19 +18,19 @@ public class MatchingOCRTokensFeatureTest extends FeaturesTestBase {
 	}
 	@Test
 	public void testFeatureHandlesOnlyMasterOCR() {
-		assertThat(f.handlesOCR(0, 2), is(true));
-		assertThat(f.handlesOCR(1, 2), is(false));
+		assertThat(f.handlesOCR(0, 2), is(false));
+		assertThat(f.handlesOCR(1, 2), is(true));
 	}
 
 	@Test
 	public void testFeatureCountsMatchingOCRTokens() {
 		final OCRToken t = getToken(1);
-		assertThat(f.calculate(t, 0, 2), is(1.0));
+		assertThat(f.calculate(t, 1, 2), is(1.0));
 	}
 
 	@Test
 	public void testFeatureCountsMatchingOCRTokensNoMatch() {
 		final OCRToken t = getToken(2);
-		assertThat(f.calculate(t, 0, 2), is(0.0));
+		assertThat(f.calculate(t, 1, 2), is(0.0));
 	}
 }

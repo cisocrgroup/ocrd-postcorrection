@@ -31,8 +31,8 @@
 		"name": "MaxOCRConfidence"
 	},
 	{
-		"type": "de.lmu.cis.ocrd.ml.features.SumOfMatchingAdditionalOCRsFeature",
-		"name": "SumOfMatching"
+		"type": "de.lmu.cis.ocrd.ml.features.MatchingOCRTokensFeature",
+		"name": "MatchingOCRTokens"
 	},
 	{
 		"type": "de.lmu.cis.ocrd.ml.features.UnigramFeature",
