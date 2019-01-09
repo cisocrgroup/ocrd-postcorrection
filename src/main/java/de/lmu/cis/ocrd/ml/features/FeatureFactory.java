@@ -36,6 +36,7 @@ public class FeatureFactory {
 				.register(HighestRankedCandidateHistoricalPatternsDistanceFeature.class)
 				.register(HighestRankedCandidateOCRPatternsDistanceFeature.class)
 				.register(HighestRankedCandidateMatchesOCRFeature.class)
+				.register(HighestRankedCandidateDistanceToNextFeature.class)
 				.register(LinePositionFeature.class)
 				.register(LineOverlapWithMasterOCRFeature.class)
 				.register(OCRWordConfidenceFeature.class)
@@ -56,7 +57,7 @@ public class FeatureFactory {
 		final Class<?>[] parameters = new Class[] { JsonObject.class,
 				ArgumentFactory.class };
 		final Constructor<?> c = clazz.getConstructor(parameters);
-		return Optional.ofNullable((Feature) c.newInstance(o, args));
+		return Optional.of((Feature) c.newInstance(o, args));
 	}
 
 	public <F extends Feature> FeatureFactory register(Class<F> feature) {
