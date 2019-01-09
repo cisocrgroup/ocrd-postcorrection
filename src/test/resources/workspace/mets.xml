@@ -22,15 +22,15 @@
   <mets:fileSec>
     <mets:fileGrp USE="OCR-D-PROFILED">
       <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="aventinus_grammatica_1515-aventinus_grammatica_1515_0006">
-        <mets:FLocat xlink:href="file:///run/media/flo/a57ed1c0-7fc5-41b1-a6e5-0d43b3ae6a40/data/devel/work/ocrd/src/test/resources/workspace/OCR-D-PROFILED/aventinus_grammatica_1515-aventinus_grammatica_1515_0006.xml"/>
+        <mets:FLocat xlink:href="src/test/resources/workspace/OCR-D-PROFILED/aventinus_grammatica_1515-aventinus_grammatica_1515_0006.xml"/>
       </mets:file>
       <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="aventinus_grammatica_1515-aventinus_grammatica_1515_0007">
-        <mets:FLocat xlink:href="file:///run/media/flo/a57ed1c0-7fc5-41b1-a6e5-0d43b3ae6a40/data/devel/work/ocrd/src/test/resources/workspace/OCR-D-PROFILED/aventinus_grammatica_1515-aventinus_grammatica_1515_0007.xml"/>
+        <mets:FLocat xlink:href="src/test/resources/workspace/OCR-D-PROFILED/aventinus_grammatica_1515-aventinus_grammatica_1515_0007.xml"/>
       </mets:file>
     </mets:fileGrp>
   <mets:fileGrp USE="OCR-D-EVAL">
       <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="aventinus_grammatica_1515-aventinus_grammatica_1515_0008">
-        <mets:FLocat xlink:href="file:///run/media/flo/a57ed1c0-7fc5-41b1-a6e5-0d43b3ae6a40/data/devel/work/ocrd/src/test/resources/workspace/OCR-D-EVAL/aventinus_grammatica_1515-aventinus_grammatica_1515_0008.xml"/>
+        <mets:FLocat xlink:href="src/test/resources/workspace/OCR-D-EVAL/aventinus_grammatica_1515-aventinus_grammatica_1515_0008.xml"/>
       </mets:file>
   </mets:fileGrp>
   </mets:fileSec>
