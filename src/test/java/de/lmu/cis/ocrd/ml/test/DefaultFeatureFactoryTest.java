@@ -54,10 +54,10 @@ public class DefaultFeatureFactoryTest {
 
 	@Test
 	public void testHighestProfilerVoteWeightFeature() throws Exception {
-		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.ProfilerHighestVoteWeightFeature\",\"name\":\"ProfilerHighestVoteWeight\"}";
+		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.HighestRankedCandidateVoteWeightFeature\",\"name\":\"ProfilerHighestVoteWeight\"}";
 		final Optional<Feature> feature = makeFeature(json);
 		assertThat(feature.isPresent(), is(true));
 		assertThat(feature.get().getName(), is("ProfilerHighestVoteWeight"));
-		assertThat(feature.get() instanceof ProfilerHighestVoteWeightFeature, is(true));
+		assertThat(feature.get() instanceof HighestRankedCandidateVoteWeightFeature, is(true));
 	}
 }
