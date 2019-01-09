@@ -58,7 +58,7 @@ public class MultipleOCRFeatureExtractionTest {
 		fs = new FeatureSet()
 				.add(new TokenLengthClassFeature("TokenLength", 3, 8, 13))
 				.add(new TokenCaseClassFeature("TokenCase"))
-				.add(new SumOfMatchingAdditionalOCRsFeature("SumOfMatches"))
+				.add(new MatchingOCRTokensFeature("SumOfMatches"))
 				.add(new MaxCharNGramsFeature("MaxCharNGramFeature", ngrams))
 				.add(new MinCharNGramsFeature("MinCharNGramFeature", ngrams))
 				.add(new DynamicLexiconGTFeature());

@@ -14,20 +14,43 @@ public class OCRTokenImpl implements OCRToken {
 	private final Word word;
 	private final List<OCRWordImpl> words;
 	private List<Candidate> candidates;
-	private final int gtindex;
+	private final int gtIndex;
 
-	public OCRTokenImpl(Word word, int gtindex) {
-		this.gtindex = gtindex;
-		this.words = new ArrayList<>();
+	public OCRTokenImpl(Word word, int gtIndex) throws Exception {
+		this.gtIndex = gtIndex;
 		this.word = word;
-		for (int i = 0; i <= gtindex; i++) {
-			words.add(new OCRWordImpl(i, word));
+		this.words = getWords(word, gtIndex);
+	}
+
+	private static List<OCRWordImpl> getWords(Word word, int gtIndex) throws Exception {
+		List<OCRWordImpl> words = new ArrayList<>();
+		final List<TextEquiv> tes = word.getTextEquivs();
+		if (tes.isEmpty()) {
+			throw new Exception("empty word");
 		}
+		final List<Double> mConfs = new ArrayList<>();
+		for (Glyph g : word.getGlyphs()) {
+			final List<TextEquiv> gtes = g.getTextEquivs();
+			if (gtes == null || gtes.isEmpty()) {
+				mConfs.add(0.0);
+			} else {
+				mConfs.add(gtes.get(0).getConfidence());
+			}
+		}
+		final List<String> normLines =
+				word.getParentLine().getUnicodeNormalized();
+		for (int i = 0; i <= gtIndex && i < tes.size() && i < normLines.size(); i++) {
+			words.add(new OCRWordImpl(tes.get(i), normLines.get(i), mConfs));
+		}
+		while (words.size() < gtIndex) {
+			words.add(new OCRWordImpl(tes.get(0), normLines.get(0), mConfs));
+		}
+		return words;
 	}
 
 	@Override
 	public int getNOCR() {
-		return gtindex;
+		return gtIndex;
 	}
 
 	@Override
@@ -42,10 +65,10 @@ public class OCRTokenImpl implements OCRToken {
 
 	@Override
 	public Optional<String> getGT() {
-		if (gtindex <= 0) {
+		if (gtIndex <= 0) {
 			return Optional.empty();
 		}
-		return Optional.of(words.get(gtindex).getWord());
+		return Optional.of(words.get(gtIndex).getWord());
 	}
 
 	@Override
@@ -74,6 +97,7 @@ public class OCRTokenImpl implements OCRToken {
 			}
 			cs.add(new Gson().fromJson(te.getDataTypeDetails(),
 					Candidate.class));
+			cs.get(cs.size()-1).Suggestion = te.getUnicodeNormalized();
 			if (cs.size() == max) {
 				return cs;
 			}
