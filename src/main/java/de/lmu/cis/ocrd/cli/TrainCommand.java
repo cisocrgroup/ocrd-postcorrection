@@ -100,9 +100,8 @@ public class TrainCommand extends AbstractMLCommand {
 	}
 
 	private void prepareRR(List<OCRToken> tokens, int i) {
-		final int max = getParameter().maxCandidates;
 		tokens.forEach((token)->{
-			final List<Candidate> cs = token.getAllProfilerCandidates(max);
+			final List<Candidate> cs = token.getAllProfilerCandidates();
 			Logger.debug("adding {} candidates", cs.size());
 			cs.forEach((c)->{
 				OCRTokenWithCandidateImpl tc =
@@ -120,9 +119,8 @@ public class TrainCommand extends AbstractMLCommand {
 	}
 
 	private void prepareDM(List<OCRToken> tokens, int i) {
-		final int max = getParameter().maxCandidates;
 		tokens.forEach((token)->{
-			final List<Candidate> cs = token.getAllProfilerCandidates(max);
+			final List<Candidate> cs = token.getAllProfilerCandidates();
 			Logger.debug("adding {} candidates", cs.size());
 			cs.forEach((c)->{
 				OCRTokenWithCandidateImpl tc =

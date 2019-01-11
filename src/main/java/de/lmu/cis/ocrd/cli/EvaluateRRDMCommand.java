@@ -54,7 +54,6 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 
 	private void evaluateRR(List<OCRToken> tokens, int i) throws Exception {
 		Logger.debug("evaluateRR({})", i);
-		final int max = getParameter().maxCandidates;
 		try (ARFFWriter w = ARFFWriter
 				.fromFeatureSet(rrFS)
 		        .withRelation("evaluate-rr")
@@ -62,7 +61,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				.withWriter(openTagged(getParameter().rrTraining.evaluation, i+1))
 				.writeHeader(i+1)) {
 			for (OCRToken token: tokens) {
-				final List<Candidate> cs = token.getAllProfilerCandidates(max);
+				final List<Candidate> cs = token.getAllProfilerCandidates();
 				Logger.debug("adding {} candidates (rr)", cs.size());
 				cs.forEach((c)->{
 					w.writeToken(new OCRTokenWithCandidateImpl(token, c), i+1);
@@ -77,7 +76,6 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 	private void evaluateDM(List<OCRToken> tokens, int i) throws Exception {
 		Logger.debug("evaluateDM({})", i);
 		final Path rrModel = tagPath(getParameter().rrTraining.model, i+1);
-		final int max = getParameter().maxCandidates;
 		dmFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
@@ -91,7 +89,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				.withWriter(openTagged(getParameter().dmTraining.evaluation, i+1))
 				.writeHeader(i+1)) {
 			for (OCRToken token: tokens) {
-				final List<Candidate> cs = token.getAllProfilerCandidates(max);
+				final List<Candidate> cs = token.getAllProfilerCandidates();
 				Logger.debug("adding {} candidates (rr)", cs.size());
 				cs.forEach((c)->{
 					w.writeToken(new OCRTokenWithCandidateImpl(token, c), i + 1);

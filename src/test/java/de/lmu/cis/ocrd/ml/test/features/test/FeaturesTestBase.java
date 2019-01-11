@@ -27,7 +27,7 @@ class FeaturesTestBase {
 		tokens = new ArrayList<>();
 		for (Line line : Page.open(pagexml).getLines()) {
 			for (Word word : line.getWords()) {
-				tokens.add(new OCRTokenImpl(word, 2));
+				tokens.add(new OCRTokenImpl(word, 2, 10));
 				if (tokens.size() == 10) {
 					return;
 				}
@@ -41,7 +41,7 @@ class FeaturesTestBase {
 
 	protected OCRToken getCandidateToken(int i, int j) {
 		final OCRToken t = getToken(i);
-		final List<Candidate> cs = t.getAllProfilerCandidates(j+1);
+		final List<Candidate> cs = t.getAllProfilerCandidates();
 		return new OCRTokenWithCandidateImpl(t, cs.get(j));
 	}
 }

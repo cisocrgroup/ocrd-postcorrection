@@ -88,7 +88,8 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 			try (InputStream is = file.open()) {
 				Page page = Page.parse(is);
 				eachLongWord(page, (word, mOCR)->{
-					tokens.add(new OCRTokenImpl(word, parameter.nOCR));
+					tokens.add(new OCRTokenImpl(word, parameter.nOCR,
+							parameter.maxCandidates));
 				});
 			}
 		}

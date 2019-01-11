@@ -19,7 +19,7 @@ public class HighestRankedCandidateMatchesOCRFeature extends NamedBooleanFeature
 
 	@Override
 	protected boolean doCalculate(OCRToken token, int i, int n) {
-		final List<Candidate> cs = token.getAllProfilerCandidates(1);
+		final List<Candidate> cs = token.getAllProfilerCandidates();
 		if (cs.isEmpty()) {
 			return false;
 		}

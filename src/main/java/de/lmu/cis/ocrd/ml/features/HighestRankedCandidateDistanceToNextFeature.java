@@ -19,7 +19,7 @@ public class HighestRankedCandidateDistanceToNextFeature extends NamedDoubleFeat
 
 	@Override
 	protected double doCalculate(OCRToken token, int i, int n) {
-		final List<Candidate> cs = token.getAllProfilerCandidates(2);
+		final List<Candidate> cs = token.getAllProfilerCandidates();
 		if (cs.size() < 1) {
 			return 1.0;
 		}

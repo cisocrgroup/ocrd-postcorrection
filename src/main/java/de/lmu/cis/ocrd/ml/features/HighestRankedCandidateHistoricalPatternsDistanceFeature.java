@@ -19,7 +19,7 @@ public class HighestRankedCandidateHistoricalPatternsDistanceFeature extends Nam
 
 	@Override
 	protected double doCalculate(OCRToken token, int i, int n) {
-		final List<Candidate> cs = token.getAllProfilerCandidates(1);
+		final List<Candidate> cs = token.getAllProfilerCandidates();
 		if (cs.isEmpty()) {
 			return 0;
 		}

@@ -15,9 +15,11 @@ public class OCRTokenImpl implements OCRToken {
 	private final List<OCRWordImpl> words;
 	private List<Candidate> candidates;
 	private final int gtIndex;
+	private final int maxCandidates;
 
-	public OCRTokenImpl(Word word, int gtIndex) throws Exception {
+	public OCRTokenImpl(Word word, int gtIndex, int maxCandidates) throws Exception {
 		this.gtIndex = gtIndex;
+		this.maxCandidates = maxCandidates;
 		this.word = word;
 		this.words = getWords(word, gtIndex);
 	}
@@ -77,9 +79,9 @@ public class OCRTokenImpl implements OCRToken {
 	}
 
 	@Override
-	public List<Candidate> getAllProfilerCandidates(int max) {
+	public List<Candidate> getAllProfilerCandidates() {
 		if (this.candidates == null) {
-			this.candidates = calculateAllCandidates(max);
+			this.candidates = calculateAllCandidates();
 		}
 		return this.candidates;
 	}
@@ -89,7 +91,7 @@ public class OCRTokenImpl implements OCRToken {
 		return word.toString();
 	}
 
-	private List<Candidate> calculateAllCandidates(int max) {
+	private List<Candidate> calculateAllCandidates() {
 		List<Candidate> cs = new ArrayList<>();
 		for (TextEquiv te : word.getTextEquivs()) {
 			if (!te.getDataType().contains("profiler-candidate")) {
@@ -98,7 +100,7 @@ public class OCRTokenImpl implements OCRToken {
 			cs.add(new Gson().fromJson(te.getDataTypeDetails(),
 					Candidate.class));
 			cs.get(cs.size()-1).Suggestion = te.getUnicodeNormalized();
-			if (cs.size() == max) {
+			if (cs.size() == maxCandidates) {
 				return cs;
 			}
 		}

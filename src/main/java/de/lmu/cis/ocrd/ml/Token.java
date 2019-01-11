@@ -105,7 +105,7 @@ public class Token implements Serializable, OCRToken {
 	}
 
 	@Override
-	public List<Candidate> getAllProfilerCandidates(int max) {
+	public List<Candidate> getAllProfilerCandidates() {
 		return new ArrayList<>();
 	}
 
