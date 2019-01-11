@@ -78,7 +78,8 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		return predict(instance);
 	}
 
-	private Prediction predict(Instance instance) throws Exception {
+	@Override
+	public Prediction predict(Instance instance) throws Exception {
 		final double res = classifier.classifyInstance(instance);
 		final double[] xy = classifier.distributionForInstance(instance);
 		return new Prediction(res, xy,

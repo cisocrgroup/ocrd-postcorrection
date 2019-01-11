@@ -48,7 +48,7 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 	public static class Vector extends ArrayList<Object> {
 		private static final long serialVersionUID = 4013744915440870424L;
 
-		Vector(int n) {
+		public Vector(int n) {
 			super(n);
 		}
 

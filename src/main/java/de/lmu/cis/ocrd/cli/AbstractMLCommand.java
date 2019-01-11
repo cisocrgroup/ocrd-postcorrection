@@ -2,13 +2,11 @@ package de.lmu.cis.ocrd.cli;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.ml.LogisticClassifier;
-import de.lmu.cis.ocrd.ml.features.DecisionMakerConfidenceFeature;
-import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.FeatureSet;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.*;
+import de.lmu.cis.ocrd.profile.Candidate;
 import org.apache.commons.io.IOUtils;
+import weka.core.Instance;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -16,7 +14,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractMLCommand extends AbstractIOCommand {
 
@@ -57,11 +57,49 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		return os;
 	}
 
-	protected static Feature getDMConfidenceFeature(Path model,
-	                                                FeatureSet fs) throws Exception {
-		final LogisticClassifier c = LogisticClassifier.load(model);
-		return new DecisionMakerConfidenceFeature("rr-confidence", c, fs);
+	protected FeatureSet makeDMFeatureSet(List<Double> cs) {
+		final FeatureSet fs = new FeatureSet();
+		for (int i = 0; i < parameter.maxCandidates; i++) {
+			fs.add(new DecisionMakerConfidenceFeature(
+					"rr-confidence", cs, i));
+		}
+		fs.add(DecisionMakerGTFeature.create(parameter.maxCandidates));
+		return fs;
 	}
+
+	protected Optional<FeatureSet.Vector> calculateDMFeatureVector(
+			OCRToken token,
+			FeatureSet fs,
+			List<Double> confidences,
+			BinaryPredictor p,
+			Iterator<Instance> is,
+			int i
+	) throws Exception {
+		final List<Candidate> candidates = token.getAllProfilerCandidates();
+		if (candidates.isEmpty()) {
+			return Optional.empty();
+		}
+		for (int j = 0; j < getParameter().maxCandidates; j++) {
+			confidences.set(j, 0.0);
+		}
+		int j = 0;
+		for (Candidate candidate : token.getAllProfilerCandidates()) {
+			if (!is.hasNext()) {
+				throw new Exception("instances and tokens out of sync");
+			}
+			final Instance instance = is.next();
+			final BinaryPrediction prediction = p.predict(instance);
+			final double confidence = prediction.getPrediction() ?
+					prediction.getConfidence() :
+					-prediction.getConfidence();
+			confidences.set(j, confidence);
+			j++;
+		}
+		final FeatureSet.Vector values =
+				fs.calculateFeatureVector(token, i+1);
+		return Optional.of(values);
+	}
+
 
 	protected static Path tagPath(String path, int n) {
 		return Paths.get(path.replaceFirst("(\\..*?)$", "_" + n + "$1"));

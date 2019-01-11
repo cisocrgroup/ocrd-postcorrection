@@ -8,13 +8,19 @@ import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
 import de.lmu.cis.ocrd.profile.Candidate;
 import org.pmw.tinylog.Logger;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public class TrainCommand extends AbstractMLCommand {
 
@@ -23,6 +29,7 @@ public class TrainCommand extends AbstractMLCommand {
 	private LM lm;
 	private FeatureSet dleFS, rrFS, dmFS;
 	private ARFFWriter dlew, rrw, dmw;
+	private List<Double> rrConfidences;
 	private boolean debug;
 
 	@Override
@@ -138,16 +145,23 @@ public class TrainCommand extends AbstractMLCommand {
 	}
 
 	private void trainDM() throws Exception {
+		rrConfidences = new ArrayList(getParameter().maxCandidates);
+		for (int i = 0; i < getParameter().maxCandidates; i++) {
+			rrConfidences.add(0.0);
+		}
 		for (int i = 0; i < getParameter().nOCR; i++) {
 			final Path dmTrain = tagPath(getParameter().dmTraining.training, i+1);
 			final Path dmModel = tagPath(getParameter().dmTraining.model, i+1);
 			final Path rrModel = tagPath(getParameter().rrTraining.model, i+1);
-			dmFS = FeatureFactory
-					.getDefault()
-					.withArgumentFactory(lm)
-					.createFeatureSet(getFeatures(getParameter().dmTraining.features))
-					.add(getDMConfidenceFeature(rrModel, rrFS))
-					.add(new DecisionMakerGTFeature());
+			final Path rrTrain = tagPath(getParameter().rrTraining.training,
+					i+1);
+			final LogisticClassifier c = LogisticClassifier.load(rrModel);
+			final Instances instances =
+					new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
+			instances.setClassIndex(instances.numAttributes() - 1);
+			final Iterator<Instance> is = instances.iterator();
+
+			dmFS = makeDMFeatureSet(rrConfidences);
 			dmw = ARFFWriter
 					.fromFeatureSet(dmFS)
 					.withWriter(getWriter(dmTrain))
@@ -158,10 +172,24 @@ public class TrainCommand extends AbstractMLCommand {
 				Logger.info("input file group (dm): {}", ifg);
 				final List<OCRToken> tokens =
 						readTokens(mets.findFileGrpFiles(ifg));
+				trainDM(tokens, is, c, i);
 				prepareDM(tokens, i);
 			}
 			dmw.close();
 			train(dmTrain, dmModel);
+		}
+	}
+
+	private void trainDM(List<OCRToken> tokens, Iterator<Instance> is,
+	                     LogisticClassifier c, int i) throws Exception {
+		for (OCRToken token: tokens) {
+			Optional<FeatureSet.Vector> values =
+					calculateDMFeatureVector(
+							token, dmFS, rrConfidences, c, is, i);
+			if (!values.isPresent()) {
+				continue;
+			}
+			dmw.writeFeatureVector(values.get());
 		}
 	}
 

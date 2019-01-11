@@ -1,27 +1,20 @@
 package de.lmu.cis.ocrd.ml.features;
 
-public class DecisionMakerConfidenceFeature extends NamedDoubleFeature {
-	private final BinaryPredictor predictor;
-	private final FeatureSet fs;
+import java.util.List;
 
-	public DecisionMakerConfidenceFeature(String name,
-	                                      BinaryPredictor predictor,
-	                                      FeatureSet fs) {
-		super(name);
-		this.predictor = predictor;
-		this.fs = fs;
+public class DecisionMakerConfidenceFeature extends NamedDoubleFeature {
+	private final List<Double> confidences;
+	private final int i;
+
+	public DecisionMakerConfidenceFeature(String name, List<Double> cs, int i) {
+		super(String.format("%s_%d", name, i));
+		confidences = cs;
+		this.i = i;
 	}
 
 	@Override
 	protected double doCalculate(OCRToken token, int i, int n) {
-		try {
-			final FeatureSet.Vector values = fs.calculateFeatureVector(token, n);
-			final BinaryPrediction p = predictor.predict(values);
-			final double confidence = p.getConfidence();
-			return p.getPrediction() ? confidence : -confidence;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return confidences.get(this.i);
 	}
 
 	@Override
