@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.ml.ARFFWriter;
+import de.lmu.cis.ocrd.ml.DMEvaluator;
 import de.lmu.cis.ocrd.ml.LM;
 import de.lmu.cis.ocrd.ml.LogisticClassifier;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
@@ -16,9 +17,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -85,8 +84,8 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 
 	private void evaluateDM(List<OCRToken> tokens, int i) throws Exception {
 		Logger.debug("evaluateDM({})", i);
-		final Path rrModel = tagPath(getParameter().rrTraining.model, i+1);
-		final Path rrTrain = tagPath(getParameter().rrTraining.evaluation, i+1);
+		final Path rrModel = tagPath(getParameter().rrTraining.model, i + 1);
+		final Path rrTrain = tagPath(getParameter().rrTraining.evaluation, i + 1);
 		final LogisticClassifier c = LogisticClassifier.load(rrModel);
 		final Instances instances =
 				new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
@@ -101,9 +100,9 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				.fromFeatureSet(dmFS)
 				.withRelation("evaluate-dm")
 				.withDebugToken(debug)
-				.withWriter(openTagged(getParameter().dmTraining.evaluation, i+1))
-				.writeHeader(i+1)) {
-			for (OCRToken token: tokens) {
+				.withWriter(openTagged(getParameter().dmTraining.evaluation, i + 1))
+				.writeHeader(i + 1)) {
+			for (OCRToken token : tokens) {
 				Optional<FeatureSet.Vector> values =
 						calculateDMFeatureVector(
 								token, dmFS, rrConfidences, c, is, i);
@@ -113,9 +112,24 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				w.writeFeatureVector(values.get());
 			}
 		}
-		evaluate(getParameter().dmTraining.evaluation,
-				getParameter().dmTraining.model,
-				getParameter().dmTraining.result, i);
+		writeDMEvaluation(tokens, i);
+	}
+
+	private void writeDMEvaluation(List<OCRToken> tokens, int i) throws Exception {
+		final Path evalPath = tagPath(getParameter().dmTraining.evaluation,
+				i+1);
+		final Path resultPath = tagPath(getParameter().dmTraining.result, i+1);
+		final Path modelPath = tagPath(getParameter().dmTraining.model, i+1);
+		final Instances instances =
+				new ConverterUtils.DataSource(evalPath.toString()).getDataSet();
+		instances.setClassIndex(instances.numAttributes()-1);
+		final LogisticClassifier classifier =
+				LogisticClassifier.load(modelPath);
+
+		try (Writer w = new OutputStreamWriter(new FileOutputStream(
+				resultPath.toFile()), Charset.forName("UTF-8"))) {
+			new DMEvaluator(w, classifier, instances, tokens, i).evaluate();
+		}
 	}
 
 	private void evaluate(String eval, String model, String res, int i) throws Exception {

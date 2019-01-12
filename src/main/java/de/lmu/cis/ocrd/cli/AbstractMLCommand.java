@@ -6,6 +6,7 @@ import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
 import org.apache.commons.io.IOUtils;
+import org.pmw.tinylog.Logger;
 import weka.core.Instance;
 
 import java.io.FileInputStream;
@@ -92,6 +93,8 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 			final double confidence = prediction.getPrediction() ?
 					prediction.getConfidence() :
 					-prediction.getConfidence();
+			Logger.debug("Prediction for dm training: {}", prediction);
+			Logger.debug("confidence: {}", confidence);
 			confidences.set(j, confidence);
 			j++;
 		}

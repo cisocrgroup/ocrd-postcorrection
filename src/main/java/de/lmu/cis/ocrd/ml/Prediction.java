@@ -28,6 +28,10 @@ public class Prediction implements BinaryPrediction {
 		return confidences[value];
 	}
 
+	public double getValue() {
+		return (double) value;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("%s[%d]: %s ", Arrays.toString(confidences),

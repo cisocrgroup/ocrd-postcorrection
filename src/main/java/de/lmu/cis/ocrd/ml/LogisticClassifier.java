@@ -53,18 +53,21 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		this.structure = structure;
 	}
 
-	public String evaluate(String title, Path path) throws Exception {
-		Logger.debug("evaluating {}", path);
-		final ConverterUtils.DataSource ds =
-				new ConverterUtils.DataSource(path.toString());
-		final Instances toEvaluate = ds.getDataSet();
-		toEvaluate.setClassIndex(toEvaluate.numAttributes() - 1);
+	public String evaluate(String title, Instances instances) throws Exception {
 		Logger.debug("self numAttributes: {}", this.structure.numAttributes());
 		Logger.debug("toEvaluate numAttributes: {}",
-				toEvaluate.numAttributes());
+				instances.numAttributes());
 		final Evaluation evaluation = new Evaluation(structure);
-		evaluation.evaluateModel(classifier, toEvaluate);
+		evaluation.evaluateModel(classifier, instances);
 		return evaluation.toSummaryString(title, true);
+	}
+
+	public String evaluate(String title, Path path) throws Exception {
+		Logger.debug("evaluating {}", path);
+		final Instances instances =
+				new ConverterUtils.DataSource(path.toString()).getDataSet();
+		instances.setClassIndex(instances.numAttributes()-1);
+		return evaluate(title, instances);
 	}
 
 	@Override

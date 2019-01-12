@@ -36,7 +36,7 @@ public class Word extends TextRegion {
 	@Override
 	public String toString() {
 		StringJoiner sj = new StringJoiner("|");
-		final int max = 5;
+		final int max = 9; // 3 OCRs + 1 GT + 5 Candidates
 		int i = 0;
 		for (String str : getUnicodeNormalized()) {
 			sj.add(str);
