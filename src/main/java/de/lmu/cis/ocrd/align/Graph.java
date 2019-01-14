@@ -2,7 +2,6 @@ package de.lmu.cis.ocrd.align;
 
 import de.lmu.cis.iba.LCS_Alignment_Pairwise;
 import de.lmu.cis.iba.LCS_Alignment_Pairwise.AlignmentPair;
-import org.pmw.tinylog.Logger;
 
 import java.util.ArrayList;
 
@@ -60,24 +59,24 @@ public class Graph {
 			start = new Node(s1);
 			return;
 		}
-		Logger.debug("s1: {}", s1);
-		Logger.debug("s2: {}", s2);
+		// Logger.debug("s1: {}", s1);
+		// Logger.debug("s2: {}", s2);
 		start = new Node(ps.get(0).label);
 		Node prevn = start;
 		AlignmentPair prevp = ps.get(0);
 		for (int i = 1; i < ps.size(); i++) {
 			final AlignmentPair curp = ps.get(i);
 			if (isOverlap(prevp, curp)) {
-				Logger.debug("skipping {} {}", prevp, curp);
+				// Logger.debug("skipping {} {}", prevp, curp);
 				continue;
 			}
 			final Node curn = new Node(curp.label);
 			final Gap g1 = makeGap(prevp.epos1, curp.spos1, s1, curn);
 			final Gap g2 = makeGap(prevp.epos2, curp.spos2, s2, curn);
-			Logger.debug("previous: {}", prevp);
-			Logger.debug("current:  {}", curp);
-			Logger.debug("gap1: {}", g1.getLabel());
-			Logger.debug("gap2: {}", g2.getLabel());
+			// Logger.debug("previous: {}", prevp);
+			// Logger.debug("current:  {}", curp);
+			// Logger.debug("gap1: {}", g1.getLabel());
+			// Logger.debug("gap2: {}", g2.getLabel());
 			prevn.add(g1);
 			prevn.add(g2);
 			prevp = curp;
