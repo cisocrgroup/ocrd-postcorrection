@@ -94,7 +94,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 		final LogisticClassifier c = LogisticClassifier.load(model);
 		final Instances instances =
 				new ConverterUtils.DataSource(evalPath.toString()).getDataSet();
-
+		instances.setClassIndex(instances.numAttributes()-1);
 		try (Writer w = new OutputStreamWriter(
 				new FileOutputStream(res.toFile()), Charset.forName("UTF-8"))) {
 			new DLEEvaluator(w, c, instances, i).evaluate();
