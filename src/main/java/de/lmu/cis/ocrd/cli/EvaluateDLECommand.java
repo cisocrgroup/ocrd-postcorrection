@@ -1,16 +1,14 @@
 package de.lmu.cis.ocrd.cli;
 
-import de.lmu.cis.ocrd.ml.ARFFWriter;
-import de.lmu.cis.ocrd.ml.LM;
-import de.lmu.cis.ocrd.ml.LogisticClassifier;
-import de.lmu.cis.ocrd.ml.Prediction;
+import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.pagexml.METS;
-import org.apache.commons.io.FileUtils;
 import org.pmw.tinylog.Logger;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -91,14 +89,16 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 	private void evaluate(int i) throws Exception {
 		final Path evalPath = tagPath(getParameter().dleTraining.evaluation, i + 1);
 		final Path res = tagPath(getParameter().dleTraining.result, i + 1);
-		final LogisticClassifier c =
-				LogisticClassifier.load(tagPath(getParameter().dleTraining.model,
-						i + 1));
-		final String title = String.format("\nResults (%d):\n=============\n"
-				, i + 1);
-		final String data = c.evaluate(title, evalPath);
-		FileUtils.writeStringToFile(res.toFile(), data,
-				Charset.forName("UTF-8"));
+		final Path model = tagPath(getParameter().dleTraining.model, i+1);
+
+		final LogisticClassifier c = LogisticClassifier.load(model);
+		final Instances instances =
+				new ConverterUtils.DataSource(evalPath.toString()).getDataSet();
+
+		try (Writer w = new OutputStreamWriter(
+				new FileOutputStream(res.toFile()), Charset.forName("UTF-8"))) {
+			new DLEEvaluator(w, c, instances, i).evaluate();
+		}
 	}
 
 	private Writer openTagged(String path, int i) throws Exception {
