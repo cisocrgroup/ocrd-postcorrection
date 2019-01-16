@@ -121,11 +121,9 @@ public class AlignCommand extends AbstractIOCommand {
         for (int i = 0; i < lines.length; i++) {
         	lines[i] = readLine();
             if (lines[i] == null) {
-                if (i != 0) {
-                    throw new IOException("premature EOF");
-                }
                 return false;
             }
+            Logger.info("read line: {}", lines[i]);
         }
         return true;
     }

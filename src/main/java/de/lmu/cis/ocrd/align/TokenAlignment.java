@@ -70,6 +70,9 @@ public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 		}
 
 		public List<String> getAlignment(int i) {
+			if (!(i < alignments.size())) {
+				return new ArrayList<>();
+			}
 			return alignments.get(i);
 		}
 
