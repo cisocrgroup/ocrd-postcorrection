@@ -54,15 +54,15 @@ public class METS {
 		}
 
 		public String getID() {
-			return XPathHelper.getAttribute(node, "ID");
+			return XPathHelper.getAttribute(node, "ID").orElse("");
 		}
 
 		public String getMIMEType() {
-			return XPathHelper.getAttribute(node, "MIMETYPE");
+			return XPathHelper.getAttribute(node, "MIMETYPE").orElse("");
 		}
 
 		public String getGroupID() {
-			return XPathHelper.getAttribute(node, "GROUPID");
+			return XPathHelper.getAttribute(node, "GROUPID").orElse("");
 		}
 
 		public String getFLocat() {
@@ -71,7 +71,7 @@ public class METS {
 				if (flocat == null) {
 					throw new RuntimeException("cannot find FLocat");
 				}
-				return XPathHelper.getAttribute(flocat, "xlink:href");
+				return XPathHelper.getAttribute(flocat, "xlink:href").orElse("");
 			} catch (XPathExpressionException e) {
 				throw new RuntimeException(e);
 			}

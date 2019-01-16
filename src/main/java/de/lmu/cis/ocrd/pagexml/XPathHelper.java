@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.xpath.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 class XPathHelper {
 	private static final XPath xpath = XPathFactory.newInstance().newXPath();
@@ -35,11 +36,11 @@ class XPathHelper {
 		return (Node)expr.evaluate(node, XPathConstants.NODE);
 	}
 
-	public static String getAttribute(Node node, String key) {
+	public static Optional<String> getAttribute(Node node, String key) {
 		final Node val = node.getAttributes().getNamedItem(key);
 		if (val == null) {
-			throw new RuntimeException("no attribute " + key + " for node " + node.getNodeName());
+			Optional.empty();
 		}
-		return val.getNodeValue();
+		return Optional.ofNullable(val.getNodeValue());
 	}
 }

@@ -13,19 +13,19 @@ public class TextEquiv {
 	}
 
 	public int getIndex() {
-		return Integer.parseInt(XPathHelper.getAttribute(node, "index"));
+		return Integer.parseInt(XPathHelper.getAttribute(node, "index").orElse("0"));
 	}
 
 	public double getConfidence() {
-		return Double.parseDouble(XPathHelper.getAttribute(node, "conf"));
+		return Double.parseDouble(XPathHelper.getAttribute(node, "conf").orElse("0.0"));
 	}
 
 	public String getDataType() {
-		return XPathHelper.getAttribute(node, "dataType");
+		return XPathHelper.getAttribute(node, "dataType").orElse("");
 	}
 
 	public String getDataTypeDetails() {
-		return XPathHelper.getAttribute(node, "dataTypeDetails");
+		return XPathHelper.getAttribute(node, "dataTypeDetails").orElse("");
 	}
 
 	public String getUnicode() {
