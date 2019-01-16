@@ -111,7 +111,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		void apply(Word word, String mOCR) throws Exception;
 	}
 
-	protected static void eachLongWord(Page page, WordOperation f) throws Exception {
+	private static void eachLongWord(Page page, WordOperation f) throws Exception {
 		for (Line line : page.getLines()) {
 			for (Word word : line.getWords()) {
 				String mOCR = word.getUnicodeNormalized().get(0);
@@ -124,12 +124,17 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 
 	protected List<OCRToken> readTokens(List<METS.File> files) throws Exception {
 		List<OCRToken> tokens = new ArrayList<>();
+		final int gtindex = parameter.nOCR;
 		for (METS.File file : files) {
 			try (InputStream is = file.open()) {
 				Page page = Page.parse(is);
 				eachLongWord(page, (word, mOCR)->{
-					tokens.add(new OCRTokenImpl(word, parameter.nOCR,
-							parameter.maxCandidates));
+					final List<TextEquiv> tes = word.getTextEquivs();
+					if (tes.size() > gtindex &&
+							tes.get(gtindex).getDataTypeDetails().contains("OCR-D-GT")) {
+						tokens.add(new OCRTokenImpl(word, parameter.nOCR,
+								parameter.maxCandidates));
+					}
 				});
 			}
 		}
