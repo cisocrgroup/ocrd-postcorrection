@@ -39,7 +39,7 @@ class XPathHelper {
 	public static Optional<String> getAttribute(Node node, String key) {
 		final Node val = node.getAttributes().getNamedItem(key);
 		if (val == null) {
-			Optional.empty();
+			return Optional.empty();
 		}
 		return Optional.ofNullable(val.getNodeValue());
 	}
