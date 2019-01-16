@@ -61,9 +61,11 @@ public class ARFFWriter implements AutoCloseable {
 				}
 				String attribute = String.format("%s_%d\tREAL", feature.getName(), i + 1);
 				if (feature instanceof NamedBooleanFeature) {
-					attribute = getAttributeOfNamedBooleanFeature((NamedBooleanFeature) feature);
+					attribute =
+							getAttributeOfNamedBooleanFeature((NamedBooleanFeature) feature, i+1);
 				} else if (feature instanceof NamedStringSetFeature) {
-					attribute = getAttributeOfNamedStringSetFeature((NamedStringSetFeature) feature);
+					attribute =
+							getAttributeOfNamedStringSetFeature((NamedStringSetFeature) feature, i+1);
 				}
 				writer.printf("@ATTRIBUTE\t%s\n", attribute);
 			}
@@ -88,12 +90,14 @@ public class ARFFWriter implements AutoCloseable {
 		features.writeCSVLine(writer);
 	}
 
-	private String getAttributeOfNamedBooleanFeature(NamedBooleanFeature feature) {
-		return String.format("%s\t{%s,%s}", feature.getName(), Boolean.toString(true), Boolean.toString(false));
+	private String getAttributeOfNamedBooleanFeature(NamedBooleanFeature feature, int i) {
+		return String.format("%s_%d\t{%s,%s}", feature.getName(), i+1,
+				Boolean.toString(true), Boolean.toString(false));
 	}
 
-	private String getAttributeOfNamedStringSetFeature(NamedStringSetFeature feature) {
-		StringBuilder builder = new StringBuilder(feature.getName());
+	private String getAttributeOfNamedStringSetFeature(NamedStringSetFeature feature, int i) {
+		StringBuilder builder = new StringBuilder(
+				String.format("%s_%d", feature.getName(), i+1));
 		builder.append("\t{");
 		boolean first = true;
 		for (String s : feature.getSet()) {
