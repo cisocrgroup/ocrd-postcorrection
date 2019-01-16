@@ -4,14 +4,14 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.profile.PosPattern;
 import de.lmu.cis.ocrd.util.JSON;
 
-public class CandidateHistoricalPatternsDistance extends NamedDoubleFeature {
+public class CandidateHistoricalPatternsDistanceFeature extends NamedDoubleFeature {
 	private static final long serialVersionUID = 2105792591421672162L;
 
-	public CandidateHistoricalPatternsDistance(JsonObject o, ArgumentFactory args) throws Exception {
+	public CandidateHistoricalPatternsDistanceFeature(JsonObject o, ArgumentFactory args) throws Exception {
 		this(JSON.mustGetNameOrType(o));
 	}
 
-	private CandidateHistoricalPatternsDistance(String name) {
+	private CandidateHistoricalPatternsDistanceFeature(String name) {
 		super(name);
 	}
 
