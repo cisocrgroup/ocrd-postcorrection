@@ -59,6 +59,9 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 				new FileOutputStream(dlePath.toFile()),
 				     Charset.forName("UTF-8"))) {
 			for (OCRToken token : tokens) {
+				if (token.getAllProfilerCandidates().isEmpty()) {
+					continue;
+				}
 				FeatureSet.Vector values = fs.calculateFeatureVector(token, i + 1);
 				final Prediction p = c.predict(values);
 				if (p.getPrediction()) {

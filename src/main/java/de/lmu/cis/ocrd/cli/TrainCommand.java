@@ -100,6 +100,9 @@ public class TrainCommand extends AbstractMLCommand {
 
 	private void prepareDLE(List<OCRToken> tokens, int i) {
 		tokens.forEach((token)->{
+			if (token.getAllProfilerCandidates().isEmpty()) {
+				return;
+			}
 			final FeatureSet.Vector values =
 					dleFS.calculateFeatureVector(token, i+1);
 			dlew.writeFeatureVector(values);
