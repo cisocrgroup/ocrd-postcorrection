@@ -39,7 +39,12 @@ public class TextRegion {
 			List<String> stringList = new ArrayList<>();
 			for (Node n : XPathHelper.getNodes(this.node,
 					"./TextEquiv/Unicode")) {
-				stringList.add(n.getFirstChild().getTextContent());
+				if (n != null && n.getFirstChild() != null) {
+					String c = n.getFirstChild().getTextContent();
+					if (c != null) {
+						stringList.add(c);
+					}
+				}
 			}
 			return stringList;
 		} catch (XPathExpressionException e) {
