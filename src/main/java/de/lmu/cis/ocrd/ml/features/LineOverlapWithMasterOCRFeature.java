@@ -1,17 +1,17 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import java.util.ArrayList;
-
 import com.google.gson.JsonObject;
-
 import de.lmu.cis.ocrd.align.Graph;
-import de.lmu.cis.ocrd.align.Node;
 import de.lmu.cis.ocrd.util.JSON;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
 	private static final long serialVersionUID = 1L;
-	private final ArrayList<String> cache = new ArrayList<>();
-	private final ArrayList<Node> nodes = new ArrayList<>();
+	private final List<String> cache = new ArrayList<>();
+	private final List<Double> values = new ArrayList<>();
 
 	public LineOverlapWithMasterOCRFeature(JsonObject o,
 			ArgumentFactory ignore) {
@@ -38,24 +38,24 @@ public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
 		assert (this.handlesOCR(i, n));
 		update(token, i, n);
 		final int j = getIndex(i, n);
-		return nodes.get(j).calculateOverlap();
+		return values.get(j);
 	}
 
 	private void update(OCRToken token, int i, int n) {
-		while (cache.size() != n - 2) {
+		while (cache.size() != n - 1) {
 			cache.add(null);
 		}
-		while (nodes.size() != n - 2) {
-			nodes.add(null);
+		while (values.size() != n -1) {
+			values.add(0.0);
 		}
 		final String otherOCRLine = getWord(token, i, n).getLineNormalized();
 		final int j = getIndex(i, n);
-		if (cache.get(j) == otherOCRLine) {
+		if (Objects.equals(cache.get(j), otherOCRLine)) {
 			return;
 		}
 		final String masterOCRLine = token.getMasterOCR().getLineNormalized();
 		final Graph g = new Graph(otherOCRLine, masterOCRLine);
-		nodes.set(j, g.getStartNode());
 		cache.set(j, otherOCRLine);
+		values.set(j, g.getStartNode().calculateOverlap());
 	}
 }
