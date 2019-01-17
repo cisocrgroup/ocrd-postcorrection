@@ -9,55 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class OCRTokenImpl implements OCRToken {
+public class EmptyToken implements OCRToken {
+	final OCRToken instance = new EmptyToken();
+	private List<OCRWord> words = new ArrayList<>();
 
-	private final Word word;
-	private final List<OCRWordImpl> words;
-	private List<Candidate> candidates;
-	private final int gtIndex;
-	private final int maxCandidates;
-
-	public OCRTokenImpl(Word word, int gtIndex, int maxCandidates) throws Exception {
-		this.gtIndex = gtIndex;
-		this.maxCandidates = maxCandidates;
-		this.word = word;
-		this.words = getWords(word, gtIndex);
-	}
-
-	private static List<OCRWordImpl> getWords(Word word, int gtIndex) throws Exception {
-		List<OCRWordImpl> words = new ArrayList<>();
-		final List<TextEquiv> tes = word.getTextEquivs();
-		if (tes.isEmpty()) {
-			throw new Exception("empty word");
-		}
-		final List<Double> mConfs = new ArrayList<>();
-		for (Glyph g : word.getGlyphs()) {
-			final List<TextEquiv> gtes = g.getTextEquivs();
-			if (gtes == null || gtes.isEmpty()) {
-				mConfs.add(0.0);
-			} else {
-				mConfs.add(gtes.get(0).getConfidence());
-			}
-		}
-		final List<String> normLines =
-				word.getParentLine().getUnicodeNormalized();
-		for (int i = 0; i <= gtIndex && i < tes.size() && i < normLines.size(); i++) {
-			words.add(new OCRWordImpl(tes.get(i), normLines.get(i), mConfs));
-		}
-		while (words.size() < gtIndex) {
-			words.add(new OCRWordImpl(tes.get(0), normLines.get(0), mConfs));
-		}
-		return words;
-	}
+	private EmptyToken() {}
 
 	@Override
 	public int getNOCR() {
-		return gtIndex;
+		return 0;
 	}
 
 	@Override
 	public OCRWord getMasterOCR() {
-		return words.get(0);
+		return null;
 	}
 
 	@Override

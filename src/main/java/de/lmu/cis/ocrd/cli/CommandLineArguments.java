@@ -79,8 +79,7 @@ public class CommandLineArguments {
         return c;
     }
 
-    public static CommandLineArguments fromCommandLine(String[] args)
-            throws ParseException, IOException {
+    public static CommandLineArguments fromCommandLine(String[] args) throws Exception {
         CommandLineParser parser = new DefaultParser();
         CommandLine line = parser.parse(createOptions(), args);
         return CommandLineArguments.fromCommandLine(line);

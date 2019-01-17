@@ -15,14 +15,14 @@ public class ARFFWriter implements AutoCloseable {
 	private String relation;
 	private PrintWriter writer;
 	private ArrayList<Feature> features = new ArrayList<>();
-	private final FeatureSet fs;
+	private de.lmu.cis.ocrd.ml.features.FeatureSet fs;
 	private boolean debugToken;
 
-	private ARFFWriter(FeatureSet fs) {
+	private ARFFWriter(de.lmu.cis.ocrd.ml.features.FeatureSet fs) {
 		this.fs = fs;
 	}
 
-	public static ARFFWriter fromFeatureSet(FeatureSet fs) {
+	public static ARFFWriter fromFeatureSet(de.lmu.cis.ocrd.ml.features.FeatureSet fs) {
 		ARFFWriter arff = new ARFFWriter(fs);
 		for (Feature f : fs) {
 			arff.addFeature(f);
@@ -86,7 +86,7 @@ public class ARFFWriter implements AutoCloseable {
 		writeFeatureVector(fs.calculateFeatureVector(token, n));
 	}
 
-	public void writeFeatureVector(FeatureSet.Vector features) {
+	public void writeFeatureVector(de.lmu.cis.ocrd.ml.features.FeatureSet.Vector features) {
 		features.writeCSVLine(writer);
 	}
 
