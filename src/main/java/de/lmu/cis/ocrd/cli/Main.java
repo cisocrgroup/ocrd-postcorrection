@@ -26,6 +26,7 @@ public class Main {
 				.register(TrainCommand.class)
 				.register(EvaluateDLECommand.class)
 				.register(EvaluateRRDMCommand.class)
+				.register(CheckCorpusCommand.class)
 				.register(AlignCommand.class);
 	}
 
