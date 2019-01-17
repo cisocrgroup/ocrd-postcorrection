@@ -124,16 +124,18 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 
 	protected List<OCRToken> readTokens(List<METS.File> files) throws Exception {
 		List<OCRToken> tokens = new ArrayList<>();
-		final int gtindex = parameter.nOCR;
+		final int gtIndex = parameter.nOCR;
 		for (METS.File file : files) {
 			try (InputStream is = file.open()) {
 				Page page = Page.parse(is);
 				eachLongWord(page, (word, mOCR)->{
 					final List<TextEquiv> tes = word.getTextEquivs();
-					if (tes.size() > gtindex &&
-							tes.get(gtindex).getDataTypeDetails().contains("OCR-D-GT")) {
-						tokens.add(new OCRTokenImpl(word, parameter.nOCR,
-								parameter.maxCandidates));
+					if (gtIndex < tes.size() &&
+							tes.get(gtIndex).getDataTypeDetails().contains("OCR-D-GT")) {
+						OCRTokenImpl t = new OCRTokenImpl(word, parameter.nOCR, parameter.maxCandidates);
+						if (t.getGT().isPresent()) {
+							tokens.add(t);
+						}
 					}
 				});
 			}

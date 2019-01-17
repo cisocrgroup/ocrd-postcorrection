@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.Gson;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -40,7 +39,6 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 	}
 
 	@Override
-	@NotNull
 	public Iterator<Feature> iterator() {
 		return this.features.iterator();
 	}

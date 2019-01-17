@@ -43,6 +43,7 @@ public class SchulteTest {
                     List<String> u = word.getUnicodeNormalized();
                     for (String x : u) {
                         i++;
+                        System.out.println("x: " + x);
                     }
                 }
             }
