@@ -30,18 +30,18 @@ public class CheckCorpusCommand implements Command{
 		if (files == null) {
 			throw new Exception("empty directory: " + dir.toString());
 		}
-		for (File file : files) {
-			if (file.isDirectory() && file.getName().startsWith(prefix)) {
-				Logger.info("checking directory: {}", file.toString());
-				check(file);
+		for (File dir : files) {
+			if (dir.isDirectory() && dir.getName().startsWith(prefix)) {
+				Logger.info("checking directory: {}", dir.toString());
+				check(dir);
 			}
 		}
 	}
 
-	private void check(File file) throws Exception {
-		File[] files = dir.toFile().listFiles();
+	private void check(File dir) throws Exception {
+		File[] files = dir.listFiles();
 		if (files == null) {
-			throw new Exception("empty directory: " + file.toString());
+			throw new Exception("empty directory: " + dir.toString());
 		}
 		for (File xml : files) {
 			Logger.info("checking file: {}", xml.toString());

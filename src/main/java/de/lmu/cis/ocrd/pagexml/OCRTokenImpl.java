@@ -57,12 +57,18 @@ public class OCRTokenImpl implements OCRToken {
 
 	@Override
 	public OCRWord getMasterOCR() {
-		return words.get(0);
+		if (0 < words.size()) {
+			return words.get(0);
+		}
+		return EmptyWord.instance;
 	}
 
 	@Override
 	public OCRWord getOtherOCR(int i) {
-		return words.get(i+1);
+		if (i+1 < words.size()) {
+			return words.get(i+1);
+		}
+		return EmptyWord.instance;
 	}
 
 	@Override
