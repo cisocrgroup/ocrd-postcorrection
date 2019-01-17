@@ -24,6 +24,9 @@ public class SchulteTest {
     public void init() throws Exception {
         pages = new ArrayList<>();
         File[] files = dir.toFile().listFiles();
+        if (files == null) {
+        	throw new Exception("missing dir: " + dir.toString());
+        }
         for (File file: files) {
             pages.add(Page.parse(new FileInputStream(file)));
         }
@@ -36,6 +39,8 @@ public class SchulteTest {
 
     @Test
     public void readAllTokens() {
+    	final String search = "azt|vazt|Laßt|abbt|ammt|ytzt|jezt|jtzt|amst|...";
+    	boolean found = false;
         int i = 0;
         for (Page page: pages) {
             for (Line line: page.getLines()) {
@@ -43,12 +48,15 @@ public class SchulteTest {
                     List<String> u = word.getUnicodeNormalized();
                     for (String x : u) {
                         i++;
-                        System.out.println("x: " + x);
+                    }
+                    if (word.toString().equals(search)) {
+                    	found = true;
                     }
                 }
             }
         }
         assertThat(i, is(9462));
+        assertThat(found, is(true));
     }
 
 }
