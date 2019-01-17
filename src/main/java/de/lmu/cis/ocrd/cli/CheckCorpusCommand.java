@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.cli;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
+import org.pmw.tinylog.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +32,7 @@ public class CheckCorpusCommand implements Command{
 		}
 		for (File file : files) {
 			if (file.isDirectory() && file.getName().startsWith(prefix)) {
+				Logger.info("checking directory: {}", file.toString());
 				check(file);
 			}
 		}
@@ -42,6 +44,7 @@ public class CheckCorpusCommand implements Command{
 			throw new Exception("empty directory: " + file.toString());
 		}
 		for (File xml : files) {
+			Logger.info("checking file: {}", xml.toString());
 			try (FileInputStream is = new FileInputStream(xml)) {
 				check(Page.parse(is));
 
