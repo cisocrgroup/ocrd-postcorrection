@@ -31,7 +31,7 @@ public class EmptyWord implements OCRWord {
 	}
 	@Override
 	public String getWord() {
-		return "";
+		return "**EMPTY-WORD**";
 	}
 
 	@Override
