@@ -31,6 +31,9 @@ public class TextEquiv {
 	public String getUnicode() {
 		try {
 			final Node n = XPathHelper.getNode(node, "./Unicode");
+			if (n == null || n.getFirstChild() == null || n.getFirstChild().getTextContent() == null) {
+				return "";
+			}
 			return n.getFirstChild().getTextContent();
 		} catch (XPathExpressionException e) {
 			throw new RuntimeException(e);
