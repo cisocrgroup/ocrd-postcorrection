@@ -34,11 +34,16 @@ public class TextRegion {
 		}
 	}
 
+	public TextEquiv appendNewTextEquiv() {
+	    final TextEquiv te = TextEquiv.create(node.getOwnerDocument());
+	    node.appendChild(te.getNode());
+	    return te;
+	}
+
 	public List<String> getUnicode() {
 		try {
 			List<String> stringList = new ArrayList<>();
-			for (Node n : XPathHelper.getNodes(this.node,
-					"./TextEquiv/Unicode")) {
+			for (Node n : XPathHelper.getNodes(this.node, "./TextEquiv/Unicode")) {
 				if (n != null && n.getFirstChild() != null) {
 					String c = n.getFirstChild().getTextContent();
 					if (c != null) {

@@ -14,6 +14,7 @@ import java.util.List;
 
 public class Page {
 	public static final String MIMEType = "application/vnd.prima.page+xml";
+	private final Document doc;
 
 	// Open a page from a page-XML file path.
 	public static Page open(Path path) throws Exception {
@@ -32,6 +33,7 @@ public class Page {
 	private final List<Line> lines;
 
 	public Page(Document doc) throws XPathExpressionException {
+		this.doc = doc;
 		this.lines = getLineNodes(doc);
 	}
 
