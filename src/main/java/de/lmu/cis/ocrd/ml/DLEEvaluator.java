@@ -28,7 +28,7 @@ public class DLEEvaluator {
 		for (Instance instance : instances) {
 			evaluate(instance);
 		}
-		writer.write(String.format("total number of tokens: %d", total));
+		writer.write(String.format("total number of tokens: %d\n", total));
 		writer.write(String.format("number of good extensions: %d\n", good));
 		writer.write(String.format("number of bad extensions: %d\n", bad));
 		writer.write(String.format("number of missed opportunities: %d\n",
