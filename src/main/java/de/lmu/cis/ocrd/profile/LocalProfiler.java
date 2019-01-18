@@ -52,7 +52,7 @@ public class LocalProfiler implements Profiler {
 	@Override
 	public Profile profile(Reader r) throws Exception {
 		Process profiler = startCommand();
-		try (InputStream stdout = profiler.getInputStream();
+		try (// InputStream stdout = profiler.getInputStream();
 		     // we do not care about stderr's encoding
 		     BufferedReader stderr = new BufferedReader(
 				new InputStreamReader(profiler.getErrorStream()));
@@ -63,7 +63,7 @@ public class LocalProfiler implements Profiler {
 			Thread t2 = new Thread(writeStdin(r, stdin));
 			t1.start();
 			t2.start();
-			final Profile profile = Profile.read(stdout);
+			//final Profile profile = Profile.read(stdout);
 			final int exitStatus = profiler.waitFor();
 			if (exitStatus != 0) {
 				throw new Exception(
@@ -71,10 +71,10 @@ public class LocalProfiler implements Profiler {
 			}
 			t1.join();
 			t2.join();
-			if (profile == null) {
-				throw new Exception("profiler did not return a valid profile");
-			}
-			return profile;
+//			if (profile == null) {
+//				throw new Exception("profiler did not return a valid profile");
+//			}
+			return null;
 		}
 	}
 
@@ -121,7 +121,8 @@ public class LocalProfiler implements Profiler {
 		res.add("--sourceFile");
 		res.add("/dev/stdin");
 		res.add("--jsonOutput");
-		res.add("/dev/stdout");
+		res.add("/tmp/profile.json");
+		// res.add("/dev/stdout");
 		if (this.args != null) {
 			res.addAll(Arrays.asList(this.args));
 		}
