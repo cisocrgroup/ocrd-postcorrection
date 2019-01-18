@@ -1,15 +1,12 @@
 package de.lmu.cis.ocrd.cli;
 
 import org.apache.commons.cli.ParseException;
+import org.pmw.tinylog.Logger;
 
 // java -cp target/ocrd-0.1-jar-with-dependencies.jar de.lmu.cis.ocrd.cli.Main -m x -w w -I w -O x -c align src/test/resources/1841-DieGrenzboten-abbyy.zip src/test/resources/1841-DieGrenzboten-ocropus.zip
 public class Main {
 	public static void main(String[] args) {
 		try {
-			System.setProperty("file.encoding","UTF-8");
-//			System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, "UTF-8"));
-//			System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err), false, "UTF-8"));
-//			System.setIn(new BufferedReader(new FileInputStream(FileDescriptor.in, "UTF-8"));
 			run(args);
 		} catch (ParseException e) {
 			e.printStackTrace(System.err);
