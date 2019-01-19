@@ -17,10 +17,7 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class TrainCommand extends AbstractMLCommand {
 
@@ -156,43 +153,44 @@ public class TrainCommand extends AbstractMLCommand {
 			final Path dmTrain = tagPath(getParameter().dmTraining.training, i+1);
 			final Path dmModel = tagPath(getParameter().dmTraining.model, i+1);
 			final Path rrModel = tagPath(getParameter().rrTraining.model, i+1);
-			final Path rrTrain = tagPath(getParameter().rrTraining.training,
-					i+1);
+			final Path rrTrain = tagPath(getParameter().rrTraining.training, i+1);
 			final LogisticClassifier c = LogisticClassifier.load(rrModel);
 			final Instances instances =
 					new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
 			instances.setClassIndex(instances.numAttributes() - 1);
 			final Iterator<Instance> is = instances.iterator();
 
-			dmFS = makeDMFeatureSet(rrConfidences);
+			dmFS = new FeatureSet()
+					.add(new DMBestRankFeature("dm-best-rank", null))
+					.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", null))
+					.add(new DecisionMakerGTFeature("dm-gt", null));
+			// arff writer only needs names and types of the features.
+			// the feature set is recalculated for each file group
 			dmw = ARFFWriter
 					.fromFeatureSet(dmFS)
 					.withWriter(getWriter(dmTrain))
 					.withDebugToken(debug)
 					.withRelation("dm-train-" + (i+1))
 					.writeHeader(i+1);
+
 			for (String ifg : ifgs) {
+				final List<OCRToken> tokens = readTokens(mets.findFileGrpFiles(ifg));
+				final Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
+
+				dmFS = new FeatureSet()
+						.add(new DMBestRankFeature("dm-best-rank", rankings))
+						.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
+						.add(new DecisionMakerGTFeature("dm-gt", rankings));
 				Logger.info("input file group (dm): {}", ifg);
-				final List<OCRToken> tokens =
-						readTokens(mets.findFileGrpFiles(ifg));
-				trainDM(tokens, is, c, i);
-				prepareDM(tokens, i);
+				for (OCRToken token: tokens) {
+					if (!rankings.containsKey(token)) {
+						continue;
+					}
+					dmw.writeFeatureVector(dmFS.calculateFeatureVector(token, i+1));
+				}
 			}
 			dmw.close();
 			train(dmTrain, dmModel);
-		}
-	}
-
-	private void trainDM(List<OCRToken> tokens, Iterator<Instance> is,
-	                     LogisticClassifier c, int i) throws Exception {
-		for (OCRToken token: tokens) {
-			Optional<FeatureSet.Vector> values =
-					calculateDMFeatureVector(
-							token, dmFS, rrConfidences, c, is, i);
-			if (!values.isPresent()) {
-				continue;
-			}
-			dmw.writeFeatureVector(values.get());
 		}
 	}
 

@@ -13,10 +13,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class AbstractMLCommand extends AbstractIOCommand {
 
@@ -57,49 +54,38 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		return os;
 	}
 
-	protected FeatureSet makeDMFeatureSet(List<Double> cs) {
-		final FeatureSet fs = new FeatureSet();
-		for (int i = 0; i < parameter.maxCandidates; i++) {
-			fs.add(new DecisionMakerConfidenceFeature(
-					"rr-confidence", cs, i));
-		}
-		fs.add(DecisionMakerGTFeature.create(parameter.maxCandidates));
-		return fs;
-	}
-
-	protected Optional<FeatureSet.Vector> calculateDMFeatureVector(
-			OCRToken token,
-			FeatureSet fs,
-			List<Double> confidences,
-			BinaryPredictor p,
-			Iterator<Instance> is,
-			int i
-	) throws Exception {
-		final List<Candidate> candidates = token.getAllProfilerCandidates();
-		if (candidates.isEmpty()) {
-			return Optional.empty();
-		}
-		for (int j = 0; j < getParameter().maxCandidates; j++) {
-			confidences.set(j, 0.0);
-		}
-		int j = 0;
-		for (Candidate candidate : token.getAllProfilerCandidates()) {
-			if (!is.hasNext()) {
-				throw new Exception("instances and tokens out of sync");
+	protected Map<OCRToken, List<Ranking>> calculateRankings(List<OCRToken> tokens, Iterator<Instance> is, BinaryPredictor c) throws Exception {
+		final Map<OCRToken, List<Ranking>> rankings = new HashMap<>();
+		for (OCRToken token : tokens) {
+			boolean first = true;
+			for (Candidate candidate : token.getAllProfilerCandidates()) {
+				if (!is.hasNext()) {
+					throw new Exception("instances and tokens out of sync");
+				}
+				if (first) {
+					rankings.put(token, new ArrayList<>());
+					first = false;
+				}
+				final Instance instance = is.next();
+				final BinaryPrediction p = c.predict(instance);
+				final double ranking = p.getPrediction() ?
+						p.getConfidence() : -p.getConfidence();
+				rankings.get(token).add(new Ranking(candidate, ranking));
 			}
-			final Instance instance = is.next();
-			final BinaryPrediction prediction = p.predict(instance);
-			final double confidence = prediction.getPrediction() ?
-					prediction.getConfidence() :
-					-prediction.getConfidence();
-			// Logger.debug("Prediction for dm training: {}", prediction);
-			// Logger.debug("confidence: {}", confidence);
-			confidences.set(j, confidence);
-			j++;
+			if (rankings.containsKey(token)) {
+				rankings.get(token).sort((lhs, rhs) -> {
+					if (lhs.ranking < rhs.ranking) {
+						return 1;
+					}
+					if (lhs.ranking > rhs.ranking) {
+						return -1;
+					}
+					return 0;
+				});
+
+			}
 		}
-		final FeatureSet.Vector values =
-				fs.calculateFeatureVector(token, i+1);
-		return Optional.of(values);
+		return rankings;
 	}
 
 

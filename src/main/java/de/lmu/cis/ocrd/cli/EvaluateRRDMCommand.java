@@ -4,10 +4,7 @@ import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.DMEvaluator;
 import de.lmu.cis.ocrd.ml.LM;
 import de.lmu.cis.ocrd.ml.LogisticClassifier;
-import de.lmu.cis.ocrd.ml.features.FeatureFactory;
-import de.lmu.cis.ocrd.ml.features.FeatureSet;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
-import de.lmu.cis.ocrd.ml.features.ReRankingGTFeature;
+import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
 import de.lmu.cis.ocrd.profile.Candidate;
@@ -21,10 +18,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class EvaluateRRDMCommand extends AbstractMLCommand {
 
@@ -91,11 +85,11 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
 		instances.setClassIndex(instances.numAttributes() - 1);
 		Iterator<Instance> is = instances.iterator();
-		rrConfidences = new ArrayList<>(getParameter().maxCandidates);
-		for (int j = 0; j < getParameter().maxCandidates; j++) {
-			rrConfidences.add(0.0);
-		}
-		dmFS = makeDMFeatureSet(rrConfidences);
+		Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
+		dmFS = new FeatureSet()
+				.add(new DMBestRankFeature("dm-best-rank", rankings))
+				.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
+				.add(new DecisionMakerGTFeature("dm-gt", rankings));
 		try (ARFFWriter w = ARFFWriter
 				.fromFeatureSet(dmFS)
 				.withRelation("evaluate-dm")
@@ -103,13 +97,11 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				.withWriter(openTagged(getParameter().dmTraining.evaluation, i + 1))
 				.writeHeader(i + 1)) {
 			for (OCRToken token : tokens) {
-				Optional<FeatureSet.Vector> values =
-						calculateDMFeatureVector(
-								token, dmFS, rrConfidences, c, is, i);
-				if (!values.isPresent()) {
+				if (!rankings.containsKey(token)) {
 					continue;
 				}
-				w.writeFeatureVector(values.get());
+				FeatureSet.Vector values = dmFS.calculateFeatureVector(token, i+1);
+				w.writeFeatureVector(values);
 			}
 		}
 		writeDMEvaluation(tokens, i);

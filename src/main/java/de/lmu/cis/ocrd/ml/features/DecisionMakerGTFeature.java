@@ -1,24 +1,13 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import de.lmu.cis.ocrd.profile.Candidate;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class DecisionMakerGTFeature extends NamedStringSetFeature {
-	public static DecisionMakerGTFeature create(int maxCandidates) {
-		List<String> classes = new ArrayList<>(maxCandidates + 1);
-		for (int i = 0; i <= maxCandidates; i++) {
-			classes.add(Integer.toString(i));
-		}
-		return new DecisionMakerGTFeature(maxCandidates, classes);
-	}
-
-	private final int maxCandidates;
-
-	private DecisionMakerGTFeature(int maxCandidates, List<String> classes) {
-		super("DecisionMakerGT", classes);
-		this.maxCandidates = maxCandidates;
+public class DecisionMakerGTFeature extends NamedBooleanFeature {
+	private Map<OCRToken, List<Ranking>> rankings;
+	public DecisionMakerGTFeature(String name, Map<OCRToken, List<Ranking>> rankings) {
+		super(name);
+		this.rankings = rankings;
 	}
 
 	@Override
@@ -27,19 +16,11 @@ public class DecisionMakerGTFeature extends NamedStringSetFeature {
 	}
 
 	@Override
-	public Object calculate(OCRToken token, int i, int n) {
-		return getSet().get(selectCandidate(token));
-	}
-
-	private int selectCandidate(OCRToken token) {
-		List<Candidate> candidates = token.getAllProfilerCandidates();
-		final String gt = token.getGT().orElseThrow(()->new RuntimeException(
-				"missing ground-truth"));
-		for (int i = 0; i < maxCandidates && i < candidates.size(); i++) {
-			if (gt.equals(candidates.get(i).Suggestion)) {
-				return i+1;
-			}
-		}
-		return 0;
+	boolean doCalculate(OCRToken token, int i, int n) {
+		assert(rankings.containsKey(token));
+		List<Ranking> rs = rankings.get(token);
+		assert(!rs.isEmpty());
+		final String gt = token.getGT().orElse("");
+		return gt.equals(rs.get(0).candidate.Suggestion);
 	}
 }
