@@ -23,27 +23,50 @@ public class METS {
 	}
 
 	private static final String fileGrpFmt = "/mets/fileSec/fileGrp[@USE='%s']";
+	private static final String fileGrpAll = "/mets/fileSec/fileGrp";
 	private static final String fileXPATH = "./file";
 	private static final String flocatXPATH = "./FLocat";
 
 	private final Document xml;
+	private final List<Node> fileGrps;
 
 	public METS(Document doc) {
 		this.xml = doc;
+		this.fileGrps = getFileGrps();
 	}
 
 	public List<File> findFileGrpFiles(String use) {
+		List<File> files = new ArrayList<>();
+		for (Node f: getFileGrps(use)) {
+			files.add(new File(f));
+		}
+		return files;
+	}
+
+	public FileGrp addFileGrp(String use) {
+		return new FileGrp(xml);
+	}
+
+	private List<Node> getFileGrps(String use) {
 		try {
-			final String xpath = String.format(fileGrpFmt, use);
-			List<File> files = new ArrayList<>();
-			for (Node fg : XPathHelper.getNodes(xml, xpath)) {
-				for (Node f : XPathHelper.getNodes(fg, fileXPATH)) {
-					files.add(new File(f));
-				}
-			}
-			return files;
+			return XPathHelper.getNodes(xml, String.format(fileGrpFmt, use));
 		} catch (XPathExpressionException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	private List<Node> getFileGrps() {
+		try {
+			return XPathHelper.getNodes(xml, fileGrpAll);
+		} catch (XPathExpressionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static class FileGrp {
+		private final Node node;
+		FileGrp(Node node) {
+			this.node = node;
 		}
 	}
 
