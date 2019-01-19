@@ -11,12 +11,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class LocalProfiler implements Profiler {
-	private String exe, language, langdir;
+	private String exe, language, languageDir;
 	private String[] args;
+	private final File profilerInputFile, profilerOutputFile;
 
-	public LocalProfiler() {
+	public LocalProfiler() throws Exception {
 		this.exe = "profiler";
-		this.langdir = "/data";
+		this.languageDir = "/data";
+		profilerInputFile = File.createTempFile("ocrd-cis-profiler-input-", ".txt");
+		profilerOutputFile = File.createTempFile("ocrd-cis-proilfer-output-", ".json");
 	}
 
 	private static String[] defaultArgs() {
@@ -35,7 +38,7 @@ public class LocalProfiler implements Profiler {
 	}
 
 	public LocalProfiler withLanguageDirectory(String langdir) {
-		this.langdir = langdir;
+		this.languageDir = langdir;
 		return this;
 	}
 
@@ -50,7 +53,8 @@ public class LocalProfiler implements Profiler {
 	}
 
 	@Override
-	public Profile profile(Reader r) throws Exception {
+	public void profile(Reader r) throws Exception {
+		writeProfilerInputFile(r);
 		Process profiler = startCommand();
 		try (// InputStream stdout = profiler.getInputStream();
 		     // we do not care about stderr's encoding
@@ -63,7 +67,6 @@ public class LocalProfiler implements Profiler {
 			Thread t2 = new Thread(writeStdin(r, stdin));
 			t1.start();
 			t2.start();
-			//final Profile profile = Profile.read(stdout);
 			final int exitStatus = profiler.waitFor();
 			if (exitStatus != 0) {
 				throw new Exception(
@@ -71,10 +74,25 @@ public class LocalProfiler implements Profiler {
 			}
 			t1.join();
 			t2.join();
-//			if (profile == null) {
-//				throw new Exception("profiler did not return a valid profile");
-//			}
-			return null;
+		}
+	}
+
+	@Override
+	public Profile getProfile() throws Exception {
+		return readProfilerOutputFile();
+	}
+
+	private void writeProfilerInputFile(Reader r) throws Exception {
+		final Charset utf8 = Charset.forName("UTF-8");
+		try (OutputStream os = new FileOutputStream(profilerInputFile)) {
+			IOUtils.copy(r, os, utf8);
+		}
+	}
+
+	private Profile readProfilerOutputFile() throws Exception {
+		final Charset utf8 = Charset.forName("UTF-8");
+		try (Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(profilerOutputFile), utf8))) {
+			return Profile.read(reader);
 		}
 	}
 
@@ -116,12 +134,12 @@ public class LocalProfiler implements Profiler {
 		res.add(exe);
 		res.addAll(Arrays.asList(defaultArgs()));
 		res.add("--config");
-		res.add(Paths.get(langdir, language + ".ini").toAbsolutePath()
+		res.add(Paths.get(languageDir, language + ".ini").toAbsolutePath()
 				.toString());
 		res.add("--sourceFile");
-		res.add("/dev/stdin");
+		res.add(profilerInputFile.toString());
 		res.add("--jsonOutput");
-		res.add("/tmp/profile.json");
+		res.add(profilerOutputFile.toString());
 		// res.add("/dev/stdout");
 		if (this.args != null) {
 			res.addAll(Arrays.asList(this.args));
