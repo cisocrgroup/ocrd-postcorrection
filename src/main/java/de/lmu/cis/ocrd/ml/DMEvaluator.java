@@ -20,6 +20,8 @@ public class DMEvaluator {
 	private int correctTokens,
 			correctTokensAfterCorrection,
 			falseCorrections,
+	        dontCareCorrections,
+	        dontCorrect,
 			totalTokens;
 	public DMEvaluator(Writer w, LogisticClassifier c, Instances is,
 	                   List<OCRToken> tokens, int i) {
@@ -32,6 +34,8 @@ public class DMEvaluator {
 		this.correctTokensAfterCorrection = 0;
 		this.falseCorrections = 0;
 		this.totalTokens = 0;
+		this.dontCareCorrections = 0;
+		this.dontCorrect = 0;
 	}
 
 	public void evaluate() throws Exception {
@@ -42,7 +46,7 @@ public class DMEvaluator {
 			}
 			evaluate(is.next(), instance);
 		}
-		writer.write(String.format("total number of tokens: %d", totalTokens));
+		writer.write(String.format("total number of tokens: %d\n", totalTokens));
 		writer.write(String.format(
 				"number of correct tokens (without corrections): %d\n",
 				correctTokens));
@@ -52,6 +56,12 @@ public class DMEvaluator {
 		writer.write(String.format(
 				"number of false corrections (disimprovements): %d\n",
 				falseCorrections));
+		writer.write(String.format(
+				"number of do not care corrections: %d\n",
+				dontCareCorrections));
+		writer.write(String.format(
+				"number of 'do not correct' decisions: %d\n",
+				dontCorrect));
 		final String title = String.format(
 				"===================\nResults (%d):\n", i+1);
 		final String data = classifier.evaluate(title, instances);
@@ -68,15 +78,26 @@ public class DMEvaluator {
 			masterOCRCorrect = true;
 			correctTokens++;
 		}
-		final String correction = getCorrection(token, p);
-		if (gt.equals(correction)) {
+		final Correction c = getCorrection(token, p);
+		if (gt.equals(c.correction)) {
 			correctTokensAfterCorrection++;
 		} else if (masterOCRCorrect) {
 			falseCorrections++;
 		}
+		if (!masterOCRCorrect && c.index != 0) {
+			dontCareCorrections++;
+		}
 	}
 
-	private String getCorrection(OCRToken token, Prediction p) {
+	private static class Correction {
+		final int index;
+		final String correction;
+		Correction(int index, String correction) {
+			this.index = index;
+			this.correction = correction;
+		}
+	}
+	private Correction getCorrection(OCRToken token, Prediction p) {
 		final int index = (int) p.getValue();
 		final List<Candidate> candidates = token.getAllProfilerCandidates();
 		// index = 0 means no correction; keep master ocr token
@@ -84,15 +105,16 @@ public class DMEvaluator {
 			final String correction = token.getMasterOCR().toString();
 			Logger.debug("token: {}, correction: {}, prediction: {}",
 					token, correction, p);
-			return correction;
+			dontCorrect++;
+			return new Correction(0, correction);
 		}
 		// index = 1 -> first candidate, ...
 		if (index <= candidates.size()) {
 			final String correction = candidates.get(index-1).Suggestion;
 			Logger.debug("token: {}, correction: {}, prediction: {}",
 					token, correction, p);
-			return correction;
+			return new Correction(index, correction);
 		}
-		return "**INVALID-TOKEN**";
+		return new Correction(0, "**INVALID-TOKEN**");
 	}
 }
