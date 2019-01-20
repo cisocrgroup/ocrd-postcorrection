@@ -88,7 +88,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		dmFS = new FeatureSet()
 				.add(new DMBestRankFeature("dm-best-rank", rankings))
 				.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
-				.add(new DecisionMakerGTFeature("dm-gt", rankings));
+				.add(new DMGTFeature("dm-gt", rankings));
 		dmEvaluator = new DMEvaluator(rankings, i);
 		try (ARFFWriter w = ARFFWriter
 				.fromFeatureSet(dmFS)

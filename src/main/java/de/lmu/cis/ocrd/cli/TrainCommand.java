@@ -163,7 +163,7 @@ public class TrainCommand extends AbstractMLCommand {
 			dmFS = new FeatureSet()
 					.add(new DMBestRankFeature("dm-best-rank", null))
 					.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", null))
-					.add(new DecisionMakerGTFeature("dm-gt", null));
+					.add(new DMGTFeature("dm-gt", null));
 			// arff writer only needs names and types of the features.
 			// the feature set is recalculated for each file group
 			dmw = ARFFWriter
@@ -180,7 +180,7 @@ public class TrainCommand extends AbstractMLCommand {
 				dmFS = new FeatureSet()
 						.add(new DMBestRankFeature("dm-best-rank", rankings))
 						.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
-						.add(new DecisionMakerGTFeature("dm-gt", rankings));
+						.add(new DMGTFeature("dm-gt", rankings));
 				Logger.info("input file group (dm): {}", ifg);
 				for (OCRToken token: tokens) {
 					if (!rankings.containsKey(token)) {

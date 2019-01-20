@@ -3,9 +3,9 @@ package de.lmu.cis.ocrd.ml.features;
 import java.util.List;
 import java.util.Map;
 
-public class DecisionMakerGTFeature extends NamedBooleanFeature {
+public class DMGTFeature extends NamedBooleanFeature {
 	private Map<OCRToken, List<Ranking>> rankings;
-	public DecisionMakerGTFeature(String name, Map<OCRToken, List<Ranking>> rankings) {
+	public DMGTFeature(String name, Map<OCRToken, List<Ranking>> rankings) {
 		super(name);
 		this.rankings = rankings;
 	}
