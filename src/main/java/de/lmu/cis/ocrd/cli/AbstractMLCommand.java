@@ -2,10 +2,14 @@ package de.lmu.cis.ocrd.cli;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.ml.features.*;
+import de.lmu.cis.ocrd.ml.features.BinaryPrediction;
+import de.lmu.cis.ocrd.ml.features.BinaryPredictor;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
 import org.apache.commons.io.IOUtils;
+import org.pmw.tinylog.Logger;
 import weka.core.Instance;
 
 import java.io.FileInputStream;
@@ -103,6 +107,8 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 				String mOCR = word.getUnicodeNormalized().get(0);
 				if (mOCR.length() > 3) {
 					f.apply(word, mOCR);
+				} else {
+					Logger.debug("word: {} too short", word);
 				}
 			}
 		}
@@ -115,10 +121,12 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 			try (InputStream is = file.open()) {
 				Page page = Page.parse(is);
 				eachLongWord(page, (word, mOCR)->{
+					Logger.debug("word: {}", word);
 					final List<TextEquiv> tes = word.getTextEquivs();
 					if (gtIndex < tes.size() &&
 							tes.get(gtIndex).getDataTypeDetails().contains("OCR-D-GT")) {
 						OCRTokenImpl t = new OCRTokenImpl(word, parameter.nOCR, parameter.maxCandidates);
+						Logger.debug("using token: {}", t.toString());
 						if (t.getGT().isPresent()) {
 							tokens.add(t);
 						}

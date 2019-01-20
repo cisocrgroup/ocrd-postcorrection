@@ -23,9 +23,8 @@ import java.util.*;
 public class EvaluateRRDMCommand extends AbstractMLCommand {
 
 	private FeatureSet rrFS, dmFS;
-	private LM lm;
-	private List<Double> rrConfidences;
 	private boolean debug;
+	private DMEvaluator dmEvaluator;
 
 	@Override
 	public String getName() {
@@ -36,7 +35,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 	public void execute(CommandLineArguments config) throws Exception {
 		setParameter(config);
 		debug = "debug".equals(config.getLogLevel().toLowerCase());
-		lm = new LM(true, Paths.get(getParameter().trigrams));
+		LM lm = new LM(true, Paths.get(getParameter().trigrams));
 		rrFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
@@ -56,7 +55,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 	}
 
 	private void evaluateRR(List<OCRToken> tokens, int i) throws Exception {
-		Logger.debug("evaluateRR({})", i);
+		Logger.debug("evaluateRR({})", i+1);
 		try (ARFFWriter w = ARFFWriter
 				.fromFeatureSet(rrFS)
 		        .withRelation("evaluate-rr")
@@ -65,7 +64,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				.writeHeader(i+1)) {
 			for (OCRToken token: tokens) {
 				final List<Candidate> cs = token.getAllProfilerCandidates();
-				Logger.debug("adding {} candidates (rr)", cs.size());
+				Logger.debug("adding {} candidates (rr/{})", cs.size(), i+1);
 				cs.forEach((c)->{
 					w.writeToken(new OCRTokenWithCandidateImpl(token, c), i+1);
 				});
@@ -77,7 +76,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 	}
 
 	private void evaluateDM(List<OCRToken> tokens, int i) throws Exception {
-		Logger.debug("evaluateDM({})", i);
+		Logger.debug("evaluateDM({})", i+1);
 		final Path rrModel = tagPath(getParameter().rrTraining.model, i + 1);
 		final Path rrTrain = tagPath(getParameter().rrTraining.evaluation, i + 1);
 		final LogisticClassifier c = LogisticClassifier.load(rrModel);
@@ -90,6 +89,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				.add(new DMBestRankFeature("dm-best-rank", rankings))
 				.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
 				.add(new DecisionMakerGTFeature("dm-gt", rankings));
+		dmEvaluator = new DMEvaluator(rankings, i);
 		try (ARFFWriter w = ARFFWriter
 				.fromFeatureSet(dmFS)
 				.withRelation("evaluate-dm")
@@ -97,6 +97,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				.withWriter(openTagged(getParameter().dmTraining.evaluation, i + 1))
 				.writeHeader(i + 1)) {
 			for (OCRToken token : tokens) {
+				dmEvaluator.addToken(token);
 				if (!rankings.containsKey(token)) {
 					continue;
 				}
@@ -108,8 +109,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 	}
 
 	private void writeDMEvaluation(List<OCRToken> tokens, int i) throws Exception {
-		final Path evalPath = tagPath(getParameter().dmTraining.evaluation,
-				i+1);
+		final Path evalPath = tagPath(getParameter().dmTraining.evaluation, i+1);
 		final Path resultPath = tagPath(getParameter().dmTraining.result, i+1);
 		final Path modelPath = tagPath(getParameter().dmTraining.model, i+1);
 		final Instances instances =
@@ -118,9 +118,14 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		final LogisticClassifier classifier =
 				LogisticClassifier.load(modelPath);
 
+		dmEvaluator.setTokens(tokens);
+		dmEvaluator.setClassifier(classifier);
+		dmEvaluator.setInstances(instances);
+
 		try (Writer w = new OutputStreamWriter(new FileOutputStream(
 				resultPath.toFile()), Charset.forName("UTF-8"))) {
-			new DMEvaluator(w, classifier, instances, tokens, i).evaluate();
+			dmEvaluator.setWriter(w);
+			dmEvaluator.evaluate();
 		}
 	}
 
@@ -130,9 +135,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		final Path resultPath = tagPath(res, i+1);
 		Logger.debug("evaluating {} ({}) {}", evalPath, modelPath, resultPath);
 		final LogisticClassifier c = LogisticClassifier.load(modelPath);
-		final String title = String.format("\nResults (%d)" +
-						":\n=============\n"
-					, i + 1);
+		final String title = String.format("\nResults (%d):\n=============\n", i+1);
 		final String data = c.evaluate(title, evalPath);
 		FileUtils.writeStringToFile(resultPath.toFile(), data,
 				Charset.forName("UTF-8"));
