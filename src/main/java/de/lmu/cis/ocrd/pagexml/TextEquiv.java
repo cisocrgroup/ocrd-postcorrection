@@ -2,10 +2,8 @@ package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.util.Normalizer;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-
-import javax.xml.xpath.XPathExpressionException;
+import org.w3c.dom.Node;
 
 public class TextEquiv {
 	private final Node node;
@@ -31,27 +29,23 @@ public class TextEquiv {
 	}
 
 	public String getUnicode() {
-		try {
-			final Node n = XPathHelper.getNode(node, "./Unicode");
-			if (n == null || n.getFirstChild() == null || n.getFirstChild().getTextContent() == null) {
-				return "";
-			}
-			return n.getFirstChild().getTextContent();
-		} catch (XPathExpressionException e) {
-			throw new RuntimeException(e);
+		final Node n = XPathHelper.getNode(node, "./Unicode");
+		if (n == null || n.getFirstChild() == null || n.getFirstChild().getTextContent() == null) {
+			return "";
 		}
+		return n.getFirstChild().getTextContent();
 	}
 
-	public String getUnicodeNormalized() {
+	String getUnicodeNormalized() {
 		return Normalizer.normalize(getUnicode());
 	}
 
 	public TextEquiv withIndex(int i) {
-        return setAttribute("index", new Integer(i).toString());
+        return setAttribute("index", Integer.toString(i));
     }
 
     public TextEquiv withConfidence(double confidence) {
-        return setAttribute("conf", new Double(confidence).toString());
+        return setAttribute("conf", Double.toString(confidence));
     }
 
     public TextEquiv withDataType(String dataType) {
@@ -74,9 +68,9 @@ public class TextEquiv {
 	}
 
 	private TextEquiv setAttribute(String key, String value) {
-        ((Element) node).setAttribute(key, value);
-        return this;
-    }
+		((Element) node).setAttribute(key, value);
+		return this;
+	}
 
     Node getNode() {
 	    return node;
