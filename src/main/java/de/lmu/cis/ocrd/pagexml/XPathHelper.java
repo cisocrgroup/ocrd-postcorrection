@@ -11,32 +11,44 @@ import java.util.Optional;
 class XPathHelper {
 	private static final XPath xpath = XPathFactory.newInstance().newXPath();
 
-	public static XPathExpression compile(String expr) throws XPathExpressionException {
-		return xpath.compile(expr);
-	}
-
-	public static List<Node> getNodes(Node node, XPathExpression expr) throws XPathExpressionException {
-		final NodeList ns = (NodeList)expr.evaluate(node, XPathConstants.NODESET);
-		ArrayList<Node> list = new ArrayList<>();
-		for (int i = 0; i < ns.getLength(); i++) {
-			list.add(ns.item(i));
+	private static XPathExpression compile(String expr) {
+		try {
+			return xpath.compile(expr);
+		} catch (XPathExpressionException e) {
+			throw new RuntimeException(e);
 		}
-		return list;
 	}
 
-	public static List<Node> getNodes(Node node, String expr) throws XPathExpressionException {
-		return getNodes(node, compile(expr));
+	private static List<Node> getNodes(Node node, XPathExpression expr) {
+		try {
+			final NodeList ns = (NodeList) expr.evaluate(node, XPathConstants.NODESET);
+			ArrayList<Node> list = new ArrayList<>();
+			for (int i = 0; i < ns.getLength(); i++) {
+				list.add(ns.item(i));
+			}
+			return list;
+		} catch (XPathExpressionException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	public static Node getNode(Node node, String expr) throws XPathExpressionException {
-		return getNode(node, compile(expr));
+	static List<Node> getNodes(Node node, String expr) {
+			return getNodes(node, compile(expr));
 	}
 
-	public static Node getNode(Node node, XPathExpression expr) throws XPathExpressionException {
-		return (Node)expr.evaluate(node, XPathConstants.NODE);
+	static Node getNode(Node node, String expr) {
+			return getNode(node, compile(expr));
 	}
 
-	public static Optional<String> getAttribute(Node node, String key) {
+	private static Node getNode(Node node, XPathExpression expr) {
+		try {
+			return (Node)expr.evaluate(node, XPathConstants.NODE);
+		} catch (XPathExpressionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	static Optional<String> getAttribute(Node node, String key) {
 		final Node val = node.getAttributes().getNamedItem(key);
 		if (val == null) {
 			return Optional.empty();
