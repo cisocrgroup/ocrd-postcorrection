@@ -176,11 +176,35 @@ public class CommandLineArguments {
     }
 
     public String[] mustGetInputFileGroups() throws Exception {
-    	if (inputFilegrp == null || inputFilegrp.length == 0) {
-    		throw new Exception("missing command line options -I or " +
-				    "--input-file-grp");
-	    }
-	    return inputFilegrp;
+        if (inputFilegrp == null || inputFilegrp.length == 0) {
+            throw new Exception("missing command line options -I or " +
+                    "--input-file-grp");
+        }
+        return inputFilegrp;
+    }
+
+    public String[] mustGetOutputFileGroups() throws Exception {
+        if (outputFilegrp== null || outputFilegrp.length == 0) {
+            throw new Exception("missing command line options -O or " +
+                    "--output-file-grp");
+        }
+        return outputFilegrp;
+    }
+
+    public String mustGetSingleInputFileGroup() throws Exception {
+        String[] inputFileGroups = mustGetInputFileGroups();
+        if (inputFileGroups.length != 1) {
+            throw new Exception("only one input file group allowed");
+        }
+        return inputFileGroups[0];
+    }
+
+    public String mustGetSingleOutputFileGroup() throws Exception {
+        String[] outputFileGroups = mustGetInputFileGroups();
+        if (outputFileGroups.length != 1) {
+            throw new Exception("only one output file group allowed");
+        }
+        return outputFileGroups[0];
     }
 
     private static boolean isSet(String str) {
