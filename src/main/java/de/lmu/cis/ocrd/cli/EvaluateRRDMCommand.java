@@ -97,7 +97,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				.withWriter(openTagged(getParameter().dmTraining.evaluation, i + 1))
 				.writeHeader(i + 1)) {
 			for (OCRToken token : tokens) {
-				dmEvaluator.addToken(token);
+				dmEvaluator.register(token);
 				if (!rankings.containsKey(token)) {
 					continue;
 				}

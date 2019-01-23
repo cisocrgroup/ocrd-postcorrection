@@ -100,7 +100,7 @@ public class DMEvaluator {
 		this.tokens = tokens;
 	}
 
-	public void addToken(OCRToken token) throws Exception {
+	public void register(OCRToken token) throws Exception {
 		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
 		// is token lexical?
 		if (token.getAllProfilerCandidates().isEmpty()) {
