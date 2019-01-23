@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.*;
 import org.apache.commons.lang.WordUtils;
+import org.pmw.tinylog.Logger;
 
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
@@ -16,16 +18,24 @@ public class ProfilerCommand extends AbstractIOCommand {
 		public List<String> args;
 	}
 
+	private Path workspace;
+	private Parameter parameter;
+	private String groupID;
+	private String ofg;
+
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
-		final Parameter parameter = config.mustGetParameter(Parameter.class);
+		parameter = config.mustGetParameter(Parameter.class);
 		final String ifg = config.mustGetSingleInputFileGroup();
-		final String ofg = config.mustGetSingleOutputFileGroup();
-		final METS mets = METS.open(Paths.get(config.mustGetMETSFile()));
+		ofg = config.mustGetSingleOutputFileGroup();
+		groupID = config.mustGetGroupID();
+		final Path metsPath = Paths.get(config.mustGetMETSFile());
+		workspace = metsPath.getParent();
+		final METS mets = METS.open(metsPath);
 		final List<METS.File> files = mets.findFileGrpFiles(ifg);
-		final Profile profile = makeProfiler(parameter, files).profile();
+		final Profile profile = makeProfiler(files).profile();
 		for (METS.File file: files) {
-			appendProfile(mets, file, profile, ofg);
+			appendProfile(mets, file, profile);
 		}
 	}
 
@@ -34,7 +44,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 		return "profile";
 	}
 
-	private static void appendProfile(METS mets, METS.File file, Profile profile, String ofg) throws Exception {
+	private void appendProfile(METS mets, METS.File file, Profile profile) throws Exception {
 		try (InputStream is = file.open()) {
 			Page page = Page.parse(is);
 			for (Line line: page.getLines()) {
@@ -42,7 +52,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 					appendProfile(word, profile);
 				}
 			}
-			addToWorkspace(mets, page, file, ofg);
+			addToWorkspace(mets, page, file);
 		}
 	}
 
@@ -78,15 +88,23 @@ public class ProfilerCommand extends AbstractIOCommand {
 		return suggestion.toLowerCase();
 	}
 
-	private static void addToWorkspace(METS mets, Page page, METS.File file, String ofg) {
-
+	private void addToWorkspace(METS mets, Page page, METS.File file) throws Exception {
+        final Path name = Paths.get(file.getFLocat()).getFileName();
+	    final Path destination = workspace.resolve(Paths.get(ofg).resolve(name));
+	    Logger.debug("writing profiled file to {}", destination.toString());
+        destination.getParent().toFile().mkdirs();
+        page.save(destination);
+        mets.addFileToFileGrp(ofg)
+                .withFLocat(destination.toAbsolutePath().toString())
+                .withGroupID(groupID)
+                .withMIMEType(Page.MIMEType);
 	}
 
-	private static Profiler makeProfiler(Parameter parameter, List<METS.File> files) throws Exception {
-		return new FileGrpProfiler(files, makeProfilerProcess(parameter));
+	private Profiler makeProfiler(List<METS.File> files) throws Exception {
+		return new FileGrpProfiler(files, makeProfilerProcess());
 	}
 
-	private static ProfilerProcess makeProfilerProcess(Parameter parameter) {
+	private ProfilerProcess makeProfilerProcess() {
 		return new LocalProfilerProcess(
 				parameter.executable,
 				Paths.get(parameter.backend, parameter.language+".ini")

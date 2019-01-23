@@ -207,6 +207,13 @@ public class CommandLineArguments {
         return outputFileGroups[0];
     }
 
+    public String mustGetGroupID() throws Exception {
+        if (groupID == null || groupID.isEmpty()) {
+            throw new Exception ("missing command line option -g or --group-id");
+        }
+        return groupID;
+    }
+
     private static boolean isSet(String str) {
         return str != null && !"".equals(str);
     }

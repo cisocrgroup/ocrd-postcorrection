@@ -5,6 +5,10 @@ import org.w3c.dom.Node;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -50,4 +54,17 @@ public class Page {
 		}
 		return nodeList;
 	}
+
+	public void save(Path path) throws Exception {
+		save(path.toFile());
+	}
+
+	public void save(java.io.File file) throws Exception {
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(doc);
+		StreamResult result = new StreamResult(file);
+		transformer.transform(source, result);
+	}
+
 }
