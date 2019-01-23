@@ -65,12 +65,12 @@ public class METS {
 	public File addFileToFileGrp(String use) {
 		Node fileGrp = XPathHelper.getNode(xml, String.format(fileGrpFmt, use));
 		if (fileGrp == null) {
-			fileGrp = xml.createElementNS("mets", "fileGrp");
+			fileGrp = xml.createElement("mets:fileGrp");
 			((Element) fileGrp).setAttribute("USE", use);
 			Node fileSec = XPathHelper.getNode(xml, METS.fileSec);
 			fileSec.appendChild(fileGrp);
 		}
-		Node file = xml.createElementNS("mets", "file");
+		Node file = xml.createElement("mets:file");
 		fileGrp.appendChild(file);
 		return new File(file);
 	}
@@ -94,7 +94,7 @@ public class METS {
 		}
 
 		public File withFLocat(String flocat) {
-			Element flocatNode = node.getOwnerDocument().createElementNS("mets", "FLocat");
+			Element flocatNode = node.getOwnerDocument().createElement("mets:FLocat");
 			flocatNode.setAttribute("xlink:href", flocat);
 			node.appendChild(flocatNode);
 			return this;
