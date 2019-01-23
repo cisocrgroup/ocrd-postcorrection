@@ -26,8 +26,9 @@ public class FileGrpProfiler extends AbstractProfiler {
                     for (Word word: line.getWords()) {
                         List<String> unicode = word.getUnicodeNormalized();
                         if (!unicode.isEmpty()) {
-                            // append master ocr
+                            // append master ocr (one token per line)
                             b.append(unicode.get(0));
+                            b.append('\n');
                         }
                     }
                 }
