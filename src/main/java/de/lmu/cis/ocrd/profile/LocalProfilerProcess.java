@@ -75,6 +75,8 @@ public class LocalProfilerProcess implements ProfilerProcess {
 		return () -> {
 			try {
 				IOUtils.copy(is, stdin, Charset.forName("UTF-8"));
+				stdin.flush();
+				stdin.close();
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
