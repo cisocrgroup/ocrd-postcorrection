@@ -7,10 +7,7 @@ import weka.core.Instances;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DMEvaluator {
 
@@ -29,6 +26,7 @@ public class DMEvaluator {
 	private final Map<OCRToken, List<Ranking>> rankings;
 	private final Map<OCRToken, Classification> classifications;
 	private final Map<Classification, YesNo> counts;
+	private final List<OCRToken> lexicalTokensList;
 	private Instances instances;
 	private LogisticClassifier classifier;
 	private Writer writer;
@@ -36,7 +34,6 @@ public class DMEvaluator {
 	private final int i;
 
 	private int nonLexicalTokens;
-	private int lexicalTokens;
 	private int correctNonLexicalTokens;
 	private int nonCorrectNonLexicalTokens;
 	private int profilerFirstRankTokens;
@@ -62,9 +59,9 @@ public class DMEvaluator {
 		for (Classification c : Classification.values()) {
 			counts.put(c, new YesNo());
 		}
+		lexicalTokensList = new ArrayList<>();
 		this.i = i;
 		nonLexicalTokens = 0;
-		lexicalTokens = 0;
 		correctNonLexicalTokens = 0;
 		nonCorrectNonLexicalTokens = 0;
 		profilerFirstRankTokens = 0;
@@ -104,7 +101,7 @@ public class DMEvaluator {
 		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
 		// is token lexical?
 		if (token.getAllProfilerCandidates().isEmpty()) {
-			lexicalTokens++;
+			lexicalTokensList.add(token);
 			if (gt.equals(token.getMasterOCR().toString())) {
 				classifications.put(token, Classification.LEXICAL_CORRECT);
 				lexicalCorrectTokens++;
@@ -173,13 +170,16 @@ public class DMEvaluator {
 			}
 			evaluate(token, instance);
 		}
-		printf("total\n");
+		for (OCRToken token: lexicalTokensList) {
+			printf("non-interpretable-token: %s\n", token.toString());
+		}
+		printf("\ntotal\n");
 		printf("=====\n");
-		printf("number of tokens: %d\n", lexicalTokens + nonLexicalTokens);
+		printf("number of tokens: %d\n", lexicalTokensList.size() + nonLexicalTokens);
 
 		printf("\nlexical tokens\n");
 		printf("==============\n");
-		printf("number of lexical tokens: %d\n", lexicalTokens);
+		printf("number of lexical tokens: %d\n", lexicalTokensList.size());
 		printf("number of correct lexical tokens: %d\n", lexicalCorrectTokens);
 		printf("number of not correct lexical tokens: %d\n", lexicalNotCorrectTokens);
 		printf("number of correct OCR tokens: %d\n", correctOCRTokensBefore);
