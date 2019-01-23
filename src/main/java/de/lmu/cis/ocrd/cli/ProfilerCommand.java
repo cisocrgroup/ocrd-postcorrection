@@ -18,23 +18,23 @@ public class ProfilerCommand extends AbstractIOCommand {
 		List<String> args;
 	}
 
-	private Path workspace;
+	private Workspace workspace;
 	private Parameter parameter;
 	private String ofg;
 
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
 		parameter = config.mustGetParameter(Parameter.class);
-		final String ifg = config.mustGetSingleInputFileGroup();
 		ofg = config.mustGetSingleOutputFileGroup();
-		final Path metsPath = Paths.get(config.mustGetMETSFile());
-		workspace = metsPath.getParent();
-		final METS mets = METS.open(metsPath);
-		final List<METS.File> files = mets.findFileGrpFiles(ifg);
+        workspace = new Workspace(Paths.get(config.mustGetMETSFile()));
+        final String ifg = config.mustGetSingleInputFileGroup();
+		final List<METS.File> files = workspace.getMETS().findFileGrpFiles(ifg);
 		final Profile profile = makeProfiler(files).profile();
 		for (METS.File file: files) {
-			appendProfile(mets, file, profile);
+			appendProfile(file, profile);
 		}
+		Logger.debug("writing mets file");
+		workspace.save();
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 		return "profile";
 	}
 
-	private void appendProfile(METS mets, METS.File file, Profile profile) throws Exception {
+	private void appendProfile(METS.File file, Profile profile) throws Exception {
 		try (InputStream is = file.open()) {
 			Page page = Page.parse(is);
 			for (Line line: page.getLines()) {
@@ -50,7 +50,8 @@ public class ProfilerCommand extends AbstractIOCommand {
 					appendProfile(word, profile);
 				}
 			}
-			addToWorkspace(mets, page, file);
+			final Path ofile = workspace.putPageXML(page, ofg, file.getFLocat());
+			Logger.debug("adding {} to workspace", ofile.toString());
 		}
 	}
 
@@ -84,36 +85,6 @@ public class ProfilerCommand extends AbstractIOCommand {
 			return WordUtils.capitalize(suggestion);
 		}
 		return suggestion.toLowerCase();
-	}
-
-	private void addToWorkspace(METS mets, Page page, METS.File file) throws Exception {
-        final Path name = getNewName(Paths.get(file.getFLocat()).getFileName());
-	    final Path destination = workspace.resolve(Paths.get(ofg).resolve(name));
-	    Logger.debug("writing profiled file to {}", destination.toString());
-        destination.getParent().toFile().mkdirs();
-        page.save(destination);
-        mets.addFileToFileGrp(ofg)
-                .withFLocat(destination.toAbsolutePath().toString())
-                .withID(getID(name))
-                .withMIMEType(Page.MIMEType);
-	}
-
-	private String getID(Path name) {
-		final String str = name.toString();
-		final int i = str.lastIndexOf('.');
-		if (i == -1) {
-			return str;
-		}
-		return str.substring(0, i);
-    }
-
-    private Path getNewName(Path oldName) {
-		final String str = oldName.toString();
-		final int i = str.lastIndexOf('-');
-		if (i == -1) {
-			return Paths.get(ofg + '-' + str);
-		}
-		return Paths.get(ofg + str.substring(i));
 	}
 
 	private Profiler makeProfiler(List<METS.File> files) {
