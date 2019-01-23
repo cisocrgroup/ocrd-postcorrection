@@ -32,8 +32,8 @@ public class ProfilerCommand extends AbstractIOCommand {
 		final METS mets = METS.open(metsPath);
 		final List<METS.File> files = mets.findFileGrpFiles(ifg);
 		final Profile profile = makeProfiler(files).profile();
-		for (int i = 0; i < files.size(); i++) {
-			appendProfile(mets, i, files.get(i), profile);
+		for (METS.File file: files) {
+			appendProfile(mets, file, profile);
 		}
 	}
 
@@ -42,7 +42,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 		return "profile";
 	}
 
-	private void appendProfile(METS mets, int i, METS.File file, Profile profile) throws Exception {
+	private void appendProfile(METS mets, METS.File file, Profile profile) throws Exception {
 		try (InputStream is = file.open()) {
 			Page page = Page.parse(is);
 			for (Line line: page.getLines()) {
@@ -50,7 +50,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 					appendProfile(word, profile);
 				}
 			}
-			addToWorkspace(mets, i, page, file);
+			addToWorkspace(mets, page, file);
 		}
 	}
 
@@ -86,21 +86,35 @@ public class ProfilerCommand extends AbstractIOCommand {
 		return suggestion.toLowerCase();
 	}
 
-	private void addToWorkspace(METS mets, int i, Page page, METS.File file) throws Exception {
-        final Path name = Paths.get(file.getFLocat()).getFileName();
+	private void addToWorkspace(METS mets, Page page, METS.File file) throws Exception {
+        final Path name = getNewName(Paths.get(file.getFLocat()).getFileName());
 	    final Path destination = workspace.resolve(Paths.get(ofg).resolve(name));
 	    Logger.debug("writing profiled file to {}", destination.toString());
         destination.getParent().toFile().mkdirs();
         page.save(destination);
         mets.addFileToFileGrp(ofg)
                 .withFLocat(destination.toAbsolutePath().toString())
-                .withID(getID(i))
+                .withID(getID(name))
                 .withMIMEType(Page.MIMEType);
 	}
 
-	private String getID(int i) {
-	    return ofg + String.format("_%04d", i+1);
+	private String getID(Path name) {
+		final String str = name.toString();
+		final int i = str.lastIndexOf('.');
+		if (i == -1) {
+			return str;
+		}
+		return str.substring(0, i);
     }
+
+    private Path getNewName(Path oldName) {
+		final String str = oldName.toString();
+		final int i = str.lastIndexOf('-');
+		if (i == -1) {
+			return Paths.get(ofg + '-' + str);
+		}
+		return Paths.get(ofg + str.substring(i));
+	}
 
 	private Profiler makeProfiler(List<METS.File> files) {
 		return new FileGrpProfiler(files, makeProfilerProcess());
