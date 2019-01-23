@@ -1,8 +1,8 @@
 package de.lmu.cis.ocrd.profile;
 
 import java.io.InputStream;
-import java.io.Reader;
+import java.io.OutputStream;
 
 public interface ProfilerProcess {
-    Reader profile(InputStream is) throws Exception;
+    void profile(InputStream is, OutputStream os) throws Exception;
 }
