@@ -30,7 +30,7 @@ public class TextRegion {
 	}
 
 	public TextEquiv appendNewTextEquiv() {
-	    final TextEquiv te = TextEquiv.create(node.getOwnerDocument());
+		final TextEquiv te = new TextEquiv(node.getOwnerDocument().createElement("TextEquiv"));
 	    node.appendChild(te.getNode());
 	    return te;
 	}

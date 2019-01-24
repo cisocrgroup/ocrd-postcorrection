@@ -8,7 +8,7 @@ import org.w3c.dom.Node;
 public class TextEquiv {
 	private final Node node;
 
-	public TextEquiv(Node node) {
+	TextEquiv(Node node) {
 		this.node = node;
 	}
 
@@ -56,15 +56,10 @@ public class TextEquiv {
 	    return setAttribute("dataTypeDetails", dataTypeDetails);
     }
 
-    public TextEquiv addUnicode(String unicode) {
-	    final Node u = node.getOwnerDocument().createTextNode(unicode);
-	    node.appendChild(u);
-	    return this;
-    }
-
-	public static TextEquiv create(Document document) {
-		final Node teNode = document.createElement("TextEquiv");
-		return new TextEquiv(teNode);
+	public TextEquiv addUnicode(String unicode) {
+		final Node u = node.getOwnerDocument().createTextNode(unicode);
+		node.appendChild(u);
+		return this;
 	}
 
 	private TextEquiv setAttribute(String key, String value) {
