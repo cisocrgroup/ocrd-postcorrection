@@ -202,6 +202,9 @@ public class TrainCommand extends AbstractMLCommand {
 
 
 	private static Writer getWriter(Path path) throws Exception {
+		if (path.getParent().toFile().mkdirs()) {
+			Logger.info("created directory {}", path.getParent().toString());
+		}
 		return new BufferedWriter(new FileWriter(path.toFile()));
 	}
 }

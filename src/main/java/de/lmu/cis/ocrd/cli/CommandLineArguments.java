@@ -42,7 +42,7 @@ public class CommandLineArguments {
         return c;
     }
 
-    private static CommandLineArguments fromCommandLine(CommandLine line) throws IOException {
+    private static CommandLineArguments fromCommandLine(CommandLine line) {
         CommandLineArguments c = defaultConfiguration();
         if (isSet(line, LOG_LEVEL)) {
             c.logLevel = getArg(line, LOG_LEVEL);
@@ -127,7 +127,7 @@ public class CommandLineArguments {
         return notNull(inputFilegrp);
     }
 
-    public String getLogLevel() {
+    String getLogLevel() {
         return notNull(logLevel);
     }
 
@@ -147,17 +147,17 @@ public class CommandLineArguments {
         return notNull(parameter);
     }
 
-    public <T> T getDefine(java.lang.reflect.Type typeOfT) {
+    private <T> T getDefine(java.lang.reflect.Type typeOfT) {
         return new Gson().fromJson(notNull(define), typeOfT);
     }
 
-    public <T> T getParameterX(java.lang.reflect.Type typeOfT) throws IOException {
+    private <T> T getParameterX(java.lang.reflect.Type typeOfT) throws IOException {
         try(Reader is = new FileReader(notNull(parameter))) {
             return new Gson().fromJson(is, typeOfT);
         }
     }
 
-    public <T> T mustGetParameter(java.lang.reflect.Type typeOfT) throws Exception {
+    <T> T mustGetParameter(java.lang.reflect.Type typeOfT) throws Exception {
         if (isSet(define)) {
 	        Logger.debug("define: {}", define);
             return getDefine(typeOfT);
@@ -168,19 +168,43 @@ public class CommandLineArguments {
         throw new Exception("missing command line options: -D or -p");
     }
 
-    public String mustGetMETSFile() throws Exception {
+    String mustGetMETSFile() throws Exception {
     	if (!isSet(mets)) {
     		throw new Exception("missing command line options: -m or --mets");
 	    }
 	    return mets;
     }
 
-    public String[] mustGetInputFileGroups() throws Exception {
-    	if (inputFilegrp == null || inputFilegrp.length == 0) {
-    		throw new Exception("missing command line options -I or " +
-				    "--input-file-grp");
-	    }
-	    return inputFilegrp;
+    String[] mustGetInputFileGroups() throws Exception {
+        if (inputFilegrp == null || inputFilegrp.length == 0) {
+            throw new Exception("missing command line options -I or " +
+                    "--input-file-grp");
+        }
+        return inputFilegrp;
+    }
+
+    private String[] mustGetOutputFileGroups() throws Exception {
+        if (outputFilegrp== null || outputFilegrp.length == 0) {
+            throw new Exception("missing command line options -O or " +
+                    "--output-file-grp");
+        }
+        return outputFilegrp;
+    }
+
+    String mustGetSingleInputFileGroup() throws Exception {
+        String[] inputFileGroups = mustGetInputFileGroups();
+        if (inputFileGroups.length != 1) {
+            throw new Exception("only one input file group allowed");
+        }
+        return inputFileGroups[0];
+    }
+
+    String mustGetSingleOutputFileGroup() throws Exception {
+        String[] outputFileGroups = mustGetOutputFileGroups();
+        if (outputFileGroups.length != 1) {
+            throw new Exception("only one output file group allowed");
+        }
+        return outputFileGroups[0];
     }
 
     private static boolean isSet(String str) {
