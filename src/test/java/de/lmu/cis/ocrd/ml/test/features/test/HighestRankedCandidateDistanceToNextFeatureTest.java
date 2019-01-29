@@ -25,11 +25,16 @@ public class HighestRankedCandidateDistanceToNextFeatureTest extends FeaturesTes
 
 	@Test
 	public void testReturnsWeightDistanceBetweenCandidates() {
-		assertThat(f.calculate(getToken(0), 0, 2), is(0.996182 - 0.000332476));
+		assertThat(f.calculate(getToken(0), 0, 2), is(1.0 - 2.01571e-10));
 	}
 
 	@Test
-	public void testReturnsOneIfNoCandidates() {
-		assertThat(f.calculate(getToken(1), 0, 2), is(1.0));
+	public void testReturnsWeightDistanceBetweenCandidates2() {
+		assertThat(f.calculate(getToken(1), 0, 2), is( 0.999972 - 2.77931e-05));
 	}
+//
+//	@Test
+//	public void testReturnsOneIfNoCandidates() {
+//		assertThat(f.calculate(getToken(1), 0, 2), is( 1.0));
+//	}
 }

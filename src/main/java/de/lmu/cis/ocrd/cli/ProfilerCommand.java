@@ -9,6 +9,7 @@ import org.pmw.tinylog.Logger;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,13 +88,19 @@ public class ProfilerCommand extends AbstractIOCommand {
 		return suggestion.toLowerCase();
 	}
 
-	private Profiler makeProfiler(List<METS.File> files) {
-		return new FileGrpProfiler(files, makeProfilerProcess());
+	private Profiler makeProfiler(List<METS.File> files) throws Exception {
+		List<Page> pages = new ArrayList<>(files.size());
+		for (METS.File file: files) {
+			try (InputStream is = file.open()) {
+				pages.add(Page.parse(is));
+			}
+		}
+		return new FileGrpProfiler(pages, makeProfilerProcess());
 	}
 
 	private ProfilerProcess makeProfilerProcess() {
 		return new LocalProfilerProcess(
-				parameter.executable,
+				Paths.get(parameter.executable),
 				Paths.get(parameter.backend, parameter.language+".ini")
 		);
 	}

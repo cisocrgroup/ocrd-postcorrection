@@ -11,11 +11,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class Profile {
-	private final HashMap<String, Candidates> data;
+public class Profile extends HashMap<String, Candidates> {
+	// private final HashMap<String, Candidates> data;
 
 	protected Profile(HashMap<String, Candidates> data) {
-		this.data = data;
+		super(data);
+		// this.data = data;
 	}
 
 	// for testing and mocking
@@ -63,44 +64,32 @@ public class Profile {
 	}
 
 	private Profile removeEmptyCandidates() {
-		data.entrySet().removeIf((e) -> e.getValue().Candidates == null || e.getValue().Candidates.length == 0);
+		this.entrySet().removeIf((e) -> e.getValue().Candidates == null || e.getValue().Candidates.length == 0);
 		return this;
 	}
 
 	private Profile sortCandidatesByVoteWeight() {
-		for (Map.Entry<String, Candidates> e : data.entrySet()) {
+		for (Map.Entry<String, Candidates> e : this.entrySet()) {
 			Arrays.sort(e.getValue().Candidates, (Candidate a, Candidate b) -> (int) (b.Weight - a.Weight));
 		}
 		return this;
 	}
 
 	public String toJSON() {
-		return new Gson().toJson(this.data);
+		return new Gson().toJson(this);
 	}
 
 	public boolean containsKey(String key) {
 		if (key == null) {
 			return false;
 		}
-		return this.data.containsKey(key.toLowerCase());
-	}
-
-	public Set<Map.Entry<String, Candidates>> entrySet() {
-		return this.data.entrySet();
+		return super.containsKey(key.toLowerCase());
 	}
 
 	public Optional<Candidates> get(String key) {
 		if (key == null) {
 			return Optional.empty();
 		}
-		return Optional.ofNullable(this.data.get(key.toLowerCase()));
-	}
-
-	public Set<String> keySet() {
-		return this.data.keySet();
-	}
-
-	public int size() {
-		return this.data.size();
+		return Optional.ofNullable(super.get(key.toLowerCase()));
 	}
 }

@@ -13,11 +13,11 @@ import java.util.List;
 
 public class LocalProfilerProcess implements ProfilerProcess {
 
-	private final String executable;
+	private final Path executable;
 	private final Path config;
 	private String[] args;
 
-	public LocalProfilerProcess(String executable, Path config) {
+	public LocalProfilerProcess(Path executable, Path config) {
 		this.executable = executable;
 		this.config = config;
 	}
@@ -103,7 +103,7 @@ public class LocalProfilerProcess implements ProfilerProcess {
 
 	private List<String> makeArgs() {
 		List<String> res = new ArrayList<>();
-		res.add(executable);
+		res.add(executable.toString());
 		res.add("--sourceFormat");
 		res.add("TXT");
 		res.add("--config");

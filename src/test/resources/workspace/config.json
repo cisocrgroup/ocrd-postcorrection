@@ -1,27 +1,33 @@
-{
-	"dleTraining": {
-		"features": "src/test/resources/dle-features.json",
-		"model": "src/test/resources/workspace/dump/dle-model.bin",
-		"training": "src/test/resources/workspace/dump/dle-training.arff",
-		"dynamicLexicon": "src/test/resources/workspace/dump/dle.txt",
-		"evaluation": "src/test/resources/workspace/dump/dle-eval.arff",
-		"result": "src/test/resources/workspace/dump/dle-eval.txt"
-	},
-	"rrTraining": {
-		"features": "src/test/resources/rr-features.json",
-		"model": "src/test/resources/workspace/dump/rr-model.bin",
-		"training": "src/test/resources/workspace/dump/rr-training.arff",
-		"evaluation": "src/test/resources/workspace/dump/rr-eval.arff",
-		"result": "src/test/resources/workspace/dump/rr-eval.txt"
-	},
-	"dmTraining": {
-		"features": "src/test/resources/dm-features.json",
-		"model": "src/test/resources/workspace/dump/dm-model.bin",
-		"training": "src/test/resources/workspace/dump/dm-training.arff",
-		"evaluation": "src/test/resources/workspace/dump/dm-eval.arff",
-		"result": "src/test/resources/workspace/dump/dm-eval.txt"
-	},
-	"nOCR": 2,
-	"trigrams": "src/test/resources/nGrams.csv",
-	"maxCandidates": 5
-}
+  {
+      "profiler": {
+          "type": "file",
+          "executable": "/mounts/Users/student/finkf/devel/work/Profiler/build/bin/profiler",
+          "config": "src/test/resources/workspace/profile.json.gz",
+          "*invalid*": "/mounts/data/proj/clarin/pws_backend/german.ini"
+      },
+      "dleTraining": {
+          "features": "src/test/resources/dle-features.json",
+          "model": "src/test/resources/workspace/dump/dle-model.bin",
+          "training": "src/test/resources/workspace/dump/dle-training.arff",
+          "dynamicLexicon": "src/test/resources/workspace/dump/dle.txt",
+          "evaluation": "src/test/resources/workspace/dump/dle-eval.arff",
+          "result": "src/test/resources/workspace/dump/dle-eval.txt"
+      },
+      "rrTraining": {
+          "features": "src/test/resources/rr-features.json",
+          "model": "src/test/resources/workspace/dump/rr-model.bin",
+          "training": "src/test/resources/workspace/dump/rr-training.arff",
+          "evaluation": "src/test/resources/workspace/dump/rr-eval.arff",
+          "result": "src/test/resources/workspace/dump/rr-eval.txt"
+      },
+      "dmTraining": {
+          "features": "src/test/resources/dm-features.json",
+          "model": "src/test/resources/workspace/dump/dm-model.bin",
+          "training": "src/test/resources/workspace/dump/dm-training.arff",
+          "evaluation": "src/test/resources/workspace/dump/dm-eval.arff",
+          "result": "src/test/resources/workspace/dump/dm-eval.txt"
+      },
+      "nOCR": 2,
+      "trigrams": "src/test/resources/nGrams.csv",
+      "maxCandidates": 5
+  }

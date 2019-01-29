@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.cli;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
+import de.lmu.cis.ocrd.profile.Profile;
 import org.pmw.tinylog.Logger;
 
 import java.io.File;
@@ -82,7 +83,7 @@ public class CheckCorpusCommand implements Command{
 		 	}
 		}
 		// TODO: use settings from parameter file
-		check(new OCRTokenImpl(word, 2, 5));
+		check(new OCRTokenImpl(word, 2, 5, Profile.empty()));
 	}
 
 	private void check(OCRToken token) throws Exception {

@@ -46,14 +46,14 @@ public class CandidateHistoricalPatternConfidenceTest extends FeaturesTestBase {
 
 	@Test
 	public void testMinReturnsMinHistoricalPatternConfidenceLongPattern() {
-		assertThat(min.calculate(getCandidateToken(4, 0), 0, 2),
-				is(0.990718913181631));
+		assertThat(min.calculate(getCandidateToken(3, 2), 0, 2),
+				is(0.864349247184784));//0.374776831732323));//0.990718913181631));
 	}
 
 	@Test
 	public void testMaxReturnsMaxHistoricalPatternConfidenceLongPattern() {
-		assertThat(max.calculate(getCandidateToken(4, 0), 0, 2),
-				is(0.996771903318927));
+		assertThat(max.calculate(getCandidateToken(3, 2), 0, 2),
+				is(0.864349247184784));
 	}
 
 	@Test
@@ -64,7 +64,6 @@ public class CandidateHistoricalPatternConfidenceTest extends FeaturesTestBase {
 
 	@Test
 	public void testMaxReturnsMaxHistoricalPatternConfidenceEmptyPattern() {
-		assertThat(max.calculate(getCandidateToken(3, 7), 0, 2),
-				is(0.86665140812043));
+		assertThat(max.calculate(getCandidateToken(3, 7), 0, 2), is(0.0));
 	}
 }

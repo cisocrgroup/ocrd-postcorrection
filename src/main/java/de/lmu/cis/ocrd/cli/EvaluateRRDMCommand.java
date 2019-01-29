@@ -44,8 +44,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		final METS mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		for (String ifg : config.mustGetInputFileGroups()) {
 			Logger.debug("input file group: {}", ifg);
-			final List<OCRToken> tokens =
-					readTokens(mets.findFileGrpFiles(ifg));
+			final List<OCRToken> tokens = readTokens(mets.findFileGrpFiles(ifg));
 			lm.setTokens(tokens);
 			for (int i = 0; i < getParameter().nOCR; i++) {
 				evaluateRR(tokens, i);

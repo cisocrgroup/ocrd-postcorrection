@@ -8,14 +8,16 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class TrainCommandTest {
-	private final String tmp = "src/test/resources/workspace/dump";
+	private final Path tmp = Paths.get("src/test/resources/workspace/dump");
 	private final String parameter = "src/test/resources/workspace/config.json";
 	private final String mets = "src/test/resources/workspace/mets.xml";
 	private final String inputFileGroupTrain = "OCR-D-PROFILED";
@@ -24,14 +26,23 @@ public class TrainCommandTest {
 
 	private AbstractMLCommand.Parameter config;
 
+
 	@Before
-	public void init() {
-		new File(tmp).mkdirs();
+	public void init() throws IOException {
+		try {
+			Files.createDirectory(tmp);
+		} catch (FileAlreadyExistsException e) {
+			// ignore
+		}
 	}
 
 	@After
-	public void deinit() throws Exception {
-		FileUtils.deleteDirectory(new File(tmp));
+	public void deinit() {
+		try {
+			FileUtils.deleteDirectory(tmp.toFile());
+		} catch (Exception e) {
+			// ignore
+		}
 	}
 
 	@Test
@@ -53,7 +64,7 @@ public class TrainCommandTest {
 		Command cmd = new TrainCommand();
 		cmd.execute(cla);
 		// 3 runs (dle, rr, dm), 2 files for each run with 2 OCRs
-		assertThat(countFilesInDir(tmp), is(12));
+		assertThat(countFilesInDir(tmp.toString()), is(12));
 	}
 
 	private void evalDLE() throws Exception {
@@ -68,7 +79,7 @@ public class TrainCommandTest {
 		Command cmd = new EvaluateDLECommand();
 		cmd.execute(cla);
 		// existing files (see above) + 2 lexicon, 2 eval and 2 result files
-		assertThat(countFilesInDir(tmp), is(18));
+		assertThat(countFilesInDir(tmp.toString()), is(18));
 	}
 
 	private void evalRRDM() throws Exception {
@@ -83,7 +94,7 @@ public class TrainCommandTest {
 		Command cmd = new EvaluateRRDMCommand();
 		cmd.execute(cla);
 		// existing files (see above) + 4 eval and 4 result files
-		assertThat(countFilesInDir(tmp), is(26));
+		assertThat(countFilesInDir(tmp.toString()), is(26));
 	}
 
 	private static int countFilesInDir(String dir) throws IOException {

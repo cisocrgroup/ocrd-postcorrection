@@ -6,30 +6,28 @@ import de.lmu.cis.ocrd.profile.ProfilerProcess;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileGrpProfiler extends AbstractProfiler {
-    private List<METS.File> files;
+    private final List<Page> pages;
 
-    public FileGrpProfiler(List<METS.File> files, ProfilerProcess profiler) {
+    public FileGrpProfiler(List<Page> pages, ProfilerProcess profiler) {
         super(profiler);
-        this.files = files;
+        this.pages = pages;
     }
 
     @Override
-    protected InputStream open() throws Exception {
+    protected InputStream open() {
         StringBuilder b = new StringBuilder();
-        for (METS.File file: files) {
-            try (InputStream is = file.open()) {
-                Page page = Page.parse(is);
-                for (Line line: page.getLines()) {
-                    for (Word word: line.getWords()) {
-                        List<String> unicode = word.getUnicodeNormalized();
-                        if (!unicode.isEmpty()) {
-                            // append master ocr (one token per line)
-                            b.append(unicode.get(0));
-                            b.append('\n');
-                        }
+        for (Page page: pages) {
+            for (Line line: page.getLines()) {
+                for (Word word: line.getWords()) {
+                    List<String> unicode = word.getUnicodeNormalized();
+                    if (!unicode.isEmpty()) {
+                        // append master ocr (one token per line)
+                        b.append(unicode.get(0));
+                        b.append('\n');
                     }
                 }
             }

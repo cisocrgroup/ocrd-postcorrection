@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.ml.features.OCRWord;
 import de.lmu.cis.ocrd.profile.Candidate;
+import de.lmu.cis.ocrd.profile.Candidates;
+import de.lmu.cis.ocrd.profile.Profile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +15,14 @@ public class OCRTokenImpl implements OCRToken {
 
 	private final Word word;
 	private final List<OCRWordImpl> words;
-	private List<Candidate> candidates;
+	private final List<Candidate> candidates;
 	private final int gtIndex;
-	private final int maxCandidates;
 
-	public OCRTokenImpl(Word word, int gtIndex, int maxCandidates) throws Exception {
+	public OCRTokenImpl(Word word, int gtIndex, int maxCandidates, Profile profile) throws Exception {
 		this.gtIndex = gtIndex;
-		this.maxCandidates = maxCandidates;
 		this.word = word;
 		this.words = getWords(word, gtIndex);
+		this.candidates = getCandidates(profile, maxCandidates);
 	}
 
 	private static List<OCRWordImpl> getWords(Word word, int gtIndex) throws Exception {
@@ -86,10 +87,6 @@ public class OCRTokenImpl implements OCRToken {
 
 	@Override
 	public List<Candidate> getAllProfilerCandidates() {
-		if (this.candidates == null) {
-			this.candidates = calculateAllCandidates();
-		}
-		assert(this.candidates.size() <= maxCandidates);
 		return this.candidates;
 	}
 
@@ -98,18 +95,17 @@ public class OCRTokenImpl implements OCRToken {
 		return word.toString();
 	}
 
-	private List<Candidate> calculateAllCandidates() {
+	private List<Candidate> getCandidates(Profile profile, int maxCandidates) {
 		List<Candidate> cs = new ArrayList<>();
-		for (TextEquiv te : word.getTextEquivs()) {
-			if (!te.getDataType().contains("profiler-candidate")) {
-				continue;
-			}
-			cs.add(new Gson().fromJson(te.getDataTypeDetails(),
-					Candidate.class));
-			cs.get(cs.size()-1).Suggestion = te.getUnicodeNormalized();
+		Optional<Candidates> candidates = profile.get(getMasterOCR().toString());
+		if (!candidates.isPresent()) {
+			return cs;
+		}
+		for (Candidate candidate : candidates.get().Candidates) {
 			if (cs.size() == maxCandidates) {
 				return cs;
 			}
+			cs.add(candidate);
 		}
 		return cs;
 	}

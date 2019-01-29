@@ -21,7 +21,7 @@ public class CandidateMinHistoricalPatternConfidenceFeature extends AbstractHist
 	public double doCalculate(OCRToken token, int i, int n) {
 		final OCRWord word = getWord(token, i, n);
 		final Candidate candidate = mustGetCandidate(token);
-		double min = Double.MAX_VALUE;
+		double min = 1;
 		for (PosPattern p: candidate.OCRPatterns) {
 			final double[] confidences = getPatternConfidence(word, p);
 			for (double confidence : confidences) {
