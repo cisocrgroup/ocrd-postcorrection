@@ -1,5 +1,6 @@
   {
       "profiler": {
+        "cacheDir": "src/test/resources/workspace/dump/profileCache",
           "type": "file",
           "executable": "/mounts/Users/student/finkf/devel/work/Profiler/build/bin/profiler",
           "config": "src/test/resources/workspace/profile.json.gz",

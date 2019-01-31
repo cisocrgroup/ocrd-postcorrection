@@ -74,8 +74,7 @@ public class TrainCommand extends AbstractMLCommand {
 					.writeHeader(i+1);
 			for (String ifg : ifgs) {
 				Logger.info("input file group (dle, rr): {}", ifg);
-				final List<OCRToken> tokens =
-						readTokens(mets.findFileGrpFiles(ifg));
+				final List<OCRToken> tokens = readTokens(mets, ifg, Optional.empty());
 				prepareDLEAndRR(tokens, i);
 			}
 			// Train models
@@ -174,7 +173,7 @@ public class TrainCommand extends AbstractMLCommand {
 					.writeHeader(i+1);
 
 			for (String ifg : ifgs) {
-				final List<OCRToken> tokens = readTokens(mets.findFileGrpFiles(ifg));
+				final List<OCRToken> tokens = readTokens(mets, ifg, Optional.empty());
 				final Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
 
 				dmFS = new FeatureSet()

@@ -15,6 +15,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 public class EvaluateDLECommand extends AbstractMLCommand {
 	private FeatureSet fs;
@@ -38,7 +39,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 				.add(new DynamicLexiconGTFeature());
 		for (String ifg : config.mustGetInputFileGroups()) {
 			Logger.debug("input file group: {}", ifg);
-			List<OCRToken> tokens = readTokens(mets.findFileGrpFiles(ifg));
+			List<OCRToken> tokens = readTokens(mets, ifg, Optional.empty());
 			lm.setTokens(tokens);
 			for (int i = 0; i < getParameter().nOCR; i++) {
 				evaluate(tokens, i);

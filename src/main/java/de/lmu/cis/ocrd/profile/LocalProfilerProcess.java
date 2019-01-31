@@ -10,16 +10,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class LocalProfilerProcess implements ProfilerProcess {
 
 	private final Path executable;
 	private final Path config;
+	private final Optional<Path> additionalLex;
 	private String[] args;
 
-	public LocalProfilerProcess(Path executable, Path config) {
+	public LocalProfilerProcess(Path executable, Path config, Optional<Path> additionalLex) {
 		this.executable = executable;
 		this.config = config;
+		this.additionalLex = additionalLex;
 	}
 
 	public LocalProfilerProcess withArgs(String... args) {
@@ -112,6 +115,11 @@ public class LocalProfilerProcess implements ProfilerProcess {
 		res.add("/dev/stdin");
 		res.add("--jsonOutput");
 		res.add("/dev/stdout");
+		if (this.additionalLex.isPresent()) {
+			res.add("additionalLex");
+			res.add(additionalLex.get().toString());
+		}
+		res.add("--types");
 		if (this.args != null) {
 			res.addAll(Arrays.asList(this.args));
 		}

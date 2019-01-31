@@ -101,7 +101,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 	private ProfilerProcess makeProfilerProcess() {
 		return new LocalProfilerProcess(
 				Paths.get(parameter.executable),
-				Paths.get(parameter.backend, parameter.language+".ini")
-		);
+				Paths.get(parameter.backend, parameter.language+".ini"),
+				Optional.empty());
 	}
 }

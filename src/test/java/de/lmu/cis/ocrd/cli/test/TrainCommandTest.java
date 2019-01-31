@@ -5,6 +5,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.pmw.tinylog.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -61,10 +63,19 @@ public class TrainCommandTest {
 				"--log-level", logLevel,
 		};
 		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-		Command cmd = new TrainCommand();
+		TrainCommand cmd = new TrainCommand();
 		cmd.execute(cla);
 		// 3 runs (dle, rr, dm), 2 files for each run with 2 OCRs
-		assertThat(countFilesInDir(tmp.toString()), is(12));
+		for (int i = 0; i < 2; i++) {
+			assertThat(exists(cmd.getParameter().dleTraining.model, i), is(true));
+			assertThat(exists(cmd.getParameter().dleTraining.training, i), is(true));
+			assertThat(exists(cmd.getParameter().rrTraining.model, i), is(true));
+			assertThat(exists(cmd.getParameter().rrTraining.training, i), is(true));
+			assertThat(exists(cmd.getParameter().dmTraining.model, i), is(true));
+			assertThat(exists(cmd.getParameter().dmTraining.training, i), is(true));
+		}
+		// one cached profile for the single input file group
+		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, Optional.empty()).toFile().exists(), is(true));
 	}
 
 	private void evalDLE() throws Exception {
@@ -76,10 +87,16 @@ public class TrainCommandTest {
 			"--log-level", logLevel,
 		};
 		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-		Command cmd = new EvaluateDLECommand();
+		EvaluateDLECommand cmd = new EvaluateDLECommand();
 		cmd.execute(cla);
 		// existing files (see above) + 2 lexicon, 2 eval and 2 result files
-		assertThat(countFilesInDir(tmp.toString()), is(18));
+		for (int i = 0; i < 2; i++) {
+			assertThat(exists(cmd.getParameter().dleTraining.evaluation, i), is(true));
+			assertThat(exists(cmd.getParameter().dleTraining.dynamicLexicon, i), is(true));
+			assertThat(exists(cmd.getParameter().dleTraining.result, i), is(true));
+		}
+		// one cached profile for the single input file group
+		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, Optional.empty()).toFile().exists(), is(true));
 	}
 
 	private void evalRRDM() throws Exception {
@@ -91,13 +108,22 @@ public class TrainCommandTest {
 				"--log-level", logLevel,
 		};
 		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-		Command cmd = new EvaluateRRDMCommand();
+		EvaluateRRDMCommand cmd = new EvaluateRRDMCommand();
 		cmd.execute(cla);
-		// existing files (see above) + 4 eval and 4 result files
-		assertThat(countFilesInDir(tmp.toString()), is(26));
+		// existing files (see above) + 4 eval and 4 result files (for each rr and dm training) and two profile cache files
+		for (int i = 0; i < 2; i++) {
+			assertThat(exists(cmd.getParameter().rrTraining.evaluation, i), is(true));
+			assertThat(exists(cmd.getParameter().rrTraining.result, i), is(true));
+			assertThat(exists(cmd.getParameter().dmTraining.evaluation, i), is(true));
+			assertThat(exists(cmd.getParameter().dmTraining.result, i), is(true));
+			final Path al = AbstractMLCommand.tagPath(cmd.getParameter().dleTraining.dynamicLexicon, i+1);
+			Logger.info("al: {}", al.toString());
+			Logger.info("pr: {}", cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)));
+			assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)).toFile().exists(), is(true));
+		}
 	}
 
-	private static int countFilesInDir(String dir) throws IOException {
-		return (int) Files.walk(Paths.get(dir)).count() - 1; // do not count dir
+	private static boolean exists(String path, int i) {
+		return AbstractMLCommand.tagPath(path, i+1).toFile().exists();
 	}
 }
