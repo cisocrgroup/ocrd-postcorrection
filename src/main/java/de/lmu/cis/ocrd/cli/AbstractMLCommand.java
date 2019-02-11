@@ -118,6 +118,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	}
 
 	List<OCRToken> readTokens(METS mets, String ifg, Optional<Path> additionalLex) throws Exception {
+		Logger.debug("read tokens ifg = {}, additional lex {}", ifg, additionalLex);
 		List<OCRToken> tokens = new ArrayList<>();
 		final int gtIndex = parameter.nOCR;
 		List<Page> pages = openPages(openFiles(mets, ifg));
@@ -160,11 +161,13 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 
 	private Profile openProfileMaybeCached(Path cached, List<Page> pages, Optional<Path> additionalLex) throws Exception {
 		if (cached.toFile().exists()) {
+			Logger.debug("opening cached profile: {}", cached.toString());
 			return new FileProfiler(cached).profile();
 		}
 		cached.getParent().toFile().mkdirs();
 		Profile profile = getProfiler(pages, additionalLex).profile();
 		Charset utf8 = Charset.forName("UTF-8");
+		Logger.debug("caching profile: {}", cached.toString());
 		try (Writer w = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(cached.toFile())), utf8))) {
 			w.write(profile.toJSON());
 			w.write('\n');
@@ -175,11 +178,13 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	private de.lmu.cis.ocrd.profile.Profiler getProfiler(List<Page> pages, Optional<Path> additionalLex) throws Exception {
 		switch (parameter.profiler.type) {
 			case "local":
+				Logger.debug("using a local profiler: {} {}", parameter.profiler.executable, parameter.profiler.config);
 				return new FileGrpProfiler(pages, new LocalProfilerProcess(
 						Paths.get(parameter.profiler.executable),
 						Paths.get(parameter.profiler.config),
 						additionalLex));
 			case "file":
+				Logger.debug("using a file profiler: {}", parameter.profiler.config);
 				return new FileProfiler(Paths.get(parameter.profiler.config));
 			case "url":
 				throw new Exception("Profiler type url: not implemented");
