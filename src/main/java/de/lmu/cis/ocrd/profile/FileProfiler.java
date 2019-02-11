@@ -31,6 +31,7 @@ public class FileProfiler implements Profiler {
 			case "application/json":
 				return new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile()), utf8));
 			case "application/gzip":
+			case "application/x-gzip":
 				return new BufferedReader(
 						new InputStreamReader(new GZIPInputStream(new FileInputStream(path.toFile())), utf8));
 			default:
