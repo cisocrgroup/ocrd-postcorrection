@@ -1,13 +1,14 @@
 package de.lmu.cis.ocrd.cli.test;
 
 import de.lmu.cis.ocrd.cli.*;
+import de.lmu.cis.ocrd.profile.FileProfiler;
+import de.lmu.cis.ocrd.profile.Profile;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.pmw.tinylog.Logger;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -16,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class TrainCommandTest {
@@ -97,6 +99,8 @@ public class TrainCommandTest {
 		}
 		// one cached profile for the single input file group
 		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, Optional.empty()).toFile().exists(), is(true));
+		Profile profile = new FileProfiler(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, Optional.empty())).profile();
+		assertThat(profile, notNullValue());
 	}
 
 	private void evalRRDM() throws Exception {
@@ -120,6 +124,8 @@ public class TrainCommandTest {
 			Logger.info("al: {}", al.toString());
 			Logger.info("pr: {}", cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)));
 			assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)).toFile().exists(), is(true));
+			Profile profile = new FileProfiler(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al))).profile();
+			assertThat(profile, notNullValue());
 		}
 	}
 
