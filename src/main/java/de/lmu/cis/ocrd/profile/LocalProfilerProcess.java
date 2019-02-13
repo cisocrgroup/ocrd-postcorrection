@@ -120,7 +120,7 @@ public class LocalProfilerProcess implements ProfilerProcess {
 			res.addAll(Arrays.asList(this.args));
 		}
 		if (this.additionalLex.isPresent()) {
-			res.add("additionalLex");
+			res.add("--additionalLex");
 			res.add(additionalLex.get().toString());
 		}
 		return res;
