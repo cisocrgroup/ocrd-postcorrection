@@ -97,7 +97,7 @@ public class OCRTokenImpl implements OCRToken {
 
 	private List<Candidate> getCandidates(Profile profile, int maxCandidates) {
 		List<Candidate> cs = new ArrayList<>();
-		Optional<Candidates> candidates = profile.get(getMasterOCR().toString());
+		Optional<Candidates> candidates = profile.get(getMasterOCR().toString().toLowerCase());
 		if (!candidates.isPresent()) {
 			return cs;
 		}
