@@ -2,11 +2,9 @@ package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.profile.AbstractProfiler;
 import de.lmu.cis.ocrd.profile.ProfilerProcess;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FileGrpProfiler extends AbstractProfiler {
