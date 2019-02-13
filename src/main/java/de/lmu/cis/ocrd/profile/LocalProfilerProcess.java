@@ -115,13 +115,13 @@ public class LocalProfilerProcess implements ProfilerProcess {
 		res.add("/dev/stdin");
 		res.add("--jsonOutput");
 		res.add("/dev/stdout");
-		if (this.additionalLex.isPresent()) {
-			res.add("additionalLex");
-			res.add(additionalLex.get().toString());
-		}
 		res.add("--types");
 		if (this.args != null) {
 			res.addAll(Arrays.asList(this.args));
+		}
+		if (this.additionalLex.isPresent()) {
+			res.add("additionalLex");
+			res.add(additionalLex.get().toString());
 		}
 		return res;
 	}
