@@ -105,4 +105,15 @@ public class ReadProfileFromJSONTest {
 		testNumberOfCandidatesForSecondTokenIgnoresCase();
 		testCandidatesAreSortedInDescendingOrderOfVoteWeights();
 	}
+
+	@Test
+	public void testJSONFromProfiler() throws Exception {
+		final Profile profile = Profile.read("src/test/resources/profile-test2.json");
+		for (String test: new String[]{"dicke", "marmor", "bodens"}) {
+			assertThat(profile.get(test).isPresent(), is(true));
+			assertThat(profile.get(test).get().OCR, is(test));
+			assertThat(profile.get(test).get().Candidates.length, is(1));
+			assertThat(profile.get(test).get().Candidates[0].Suggestion, is(test));
+		}
+	}
 }

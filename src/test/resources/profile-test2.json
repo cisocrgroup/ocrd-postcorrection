@@ -1,0 +1,38 @@
+{
+"dicke": {
+"OCR": "dicke",
+"Candidates": [
+{
+"Suggestion": "dicke",
+"Modern": "dicke",
+"Dict": "dict_modernexact",
+"HistPatterns": [],
+"OCRPatterns": [],
+"Distance": 0,
+"Weight": 1
+}]
+},"bodens": {
+"OCR": "bodens",
+"Candidates": [
+{
+"Suggestion": "bodens",
+"Modern": "bodens",
+"Dict": "dict_modernexact",
+"HistPatterns": [],
+"OCRPatterns": [],
+"Distance": 0,
+"Weight": 1
+}]
+},"marmor": {
+"OCR": "marmor",
+"Candidates": [
+{
+"Suggestion": "marmor",
+"Modern": "marmor",
+"Dict": "dict_modernexact",
+"HistPatterns": [],
+"OCRPatterns": [],
+"Distance": 0,
+"Weight": 1
+}]
+}}
