@@ -19,29 +19,29 @@ public class DMEvaluator {
 		NON_LEXICAL_NOT_CORRECT_HAVE_NOT_CANDIDATE,
 		NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK,
 		NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK,
-		LEXICAL_NOT_CORRECT,
-		LEXICAL_CORRECT,
+		NOT_INTERPRETABLE_NOT_CORRECT,
+		NOT_INTERPRETABLE_CORRECT,
 	}
 
 	private final Map<OCRToken, List<Ranking>> rankings;
 	private final Map<OCRToken, Classification> classifications;
 	private final Map<Classification, YesNo> counts;
-	private final List<OCRToken> lexicalTokensList;
+	private final List<OCRToken> notInterpretableTokenList;
 	private Instances instances;
 	private LogisticClassifier classifier;
 	private Writer writer;
 	private List<OCRToken> tokens;
 	private final int i;
 
-	private int nonLexicalTokens;
-	private int correctNonLexicalTokens;
-	private int nonCorrectNonLexicalTokens;
+	private int interpretableTokens;
+	private int interpretableCorrectTokens;
+	private int interpretableNotCorrectTokens;
 	private int profilerFirstRankTokens;
 	private int missingPlacement;
 	private int badPlacement;
 	private int goodPlacement;
-	private int lexicalNotCorrectTokens;
-	private int lexicalCorrectTokens;
+	private int notInterpretableNotCorrectTokens;
+	private int notInterpretableCorrectTokens;
 	private int doNotCare;
 	private int goodNos;
 	private int goodYes;
@@ -59,17 +59,17 @@ public class DMEvaluator {
 		for (Classification c : Classification.values()) {
 			counts.put(c, new YesNo());
 		}
-		lexicalTokensList = new ArrayList<>();
+		notInterpretableTokenList = new ArrayList<>();
 		this.i = i;
-		nonLexicalTokens = 0;
-		correctNonLexicalTokens = 0;
-		nonCorrectNonLexicalTokens = 0;
+		interpretableTokens = 0;
+		interpretableCorrectTokens = 0;
+		interpretableNotCorrectTokens = 0;
 		profilerFirstRankTokens = 0;
 		missingPlacement = 0;
 		badPlacement = 0;
 		goodPlacement = 0;
-		lexicalNotCorrectTokens = 0;
-		lexicalCorrectTokens = 0;
+		notInterpretableNotCorrectTokens = 0;
+		notInterpretableCorrectTokens = 0;
 		doNotCare = 0;
 		goodNos = 0;
 		goodYes = 0;
@@ -101,17 +101,17 @@ public class DMEvaluator {
 		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
 		// is token lexical?
 		if (token.getAllProfilerCandidates().isEmpty()) {
-			lexicalTokensList.add(token);
-			if (gt.equals(token.getMasterOCR().toString())) {
-				classifications.put(token, Classification.LEXICAL_CORRECT);
-				lexicalCorrectTokens++;
+			notInterpretableTokenList.add(token);
+			if (gt.equalsIgnoreCase(token.getMasterOCR().toString())) {
+				classifications.put(token, Classification.NOT_INTERPRETABLE_CORRECT);
+				notInterpretableCorrectTokens++;
 			} else {
-				lexicalNotCorrectTokens++;
-				classifications.put(token, Classification.LEXICAL_NOT_CORRECT);
+				notInterpretableNotCorrectTokens++;
+				classifications.put(token, Classification.NOT_INTERPRETABLE_NOT_CORRECT);
 			}
 			return;
 		}
-		nonLexicalTokens++;
+		interpretableTokens++;
 		// we only care about tokens that we are going to correct
 		// correct or incorrect lexical tokens cannot be corrected anyway
 		if (gt.equals(token.getMasterOCR().toString())) {
@@ -120,11 +120,11 @@ public class DMEvaluator {
 			badOCRTokensBefore++;
 		}
 		if (gt.equals(token.getMasterOCR().toString())) {
-			correctNonLexicalTokens++;
+			interpretableCorrectTokens++;
 			classifications.put(token, Classification.NON_LEXICAL_CORRECT);
 			return;
 		}
-		nonCorrectNonLexicalTokens++;
+		interpretableNotCorrectTokens++;
 		if (token.getAllProfilerCandidates().get(0).Suggestion.equals(gt)) {
 			profilerFirstRankTokens++;
 		}
@@ -170,26 +170,28 @@ public class DMEvaluator {
 			}
 			evaluate(token, instance);
 		}
-		for (OCRToken token: lexicalTokensList) {
-			printf("non-interpretable-token: %s\n", token.toString());
+		for (OCRToken token: notInterpretableTokenList) {
+			printf("not interpretable token: %s\n", token.toString());
 		}
 		printf("\ntotal\n");
 		printf("=====\n");
-		printf("number of tokens: %d\n", lexicalTokensList.size() + nonLexicalTokens);
-
-		printf("\nlexical tokens\n");
-		printf("==============\n");
-		printf("number of lexical tokens: %d\n", lexicalTokensList.size());
-		printf("number of correct lexical tokens: %d\n", lexicalCorrectTokens);
-		printf("number of not correct lexical tokens: %d\n", lexicalNotCorrectTokens);
+		printf("number of tokens: %d\n", notInterpretableTokenList.size() + interpretableTokens);
+		printf("number of not interpretable tokens: %d\n", notInterpretableTokenList.size());
+		printf("number of interpretable tokens: %d\n", interpretableTokens);
 		printf("number of correct OCR tokens: %d\n", correctOCRTokensBefore);
 		printf("number of incorrect OCR tokens: %d\n", badOCRTokensBefore);
 
-		printf("\nnot lexical tokens\n");
-		printf("==================\n");
-		printf("number of not lexical tokens: %d\n", nonLexicalTokens);
-		printf("number of correct not lexical tokens: %d\n", correctNonLexicalTokens);
-		printf("number of not correct not lexical tokens: %d\n", nonCorrectNonLexicalTokens);
+		printf("\nnot interpretable tokens\n");
+		printf("========================\n");
+		printf("number of not interpretable tokens: %d\n", notInterpretableTokenList.size());
+		printf("number of not interpretable correct tokens: %d\n", notInterpretableCorrectTokens);
+		printf("number of not interpretable not correct tokens: %d\n", notInterpretableNotCorrectTokens);
+
+		printf("\ninterpretable tokens\n");
+		printf("====================\n");
+		printf("number of interpretable tokens: %d\n", interpretableTokens);
+		printf("number of interpretable correct tokens: %d\n", interpretableCorrectTokens);
+		printf("number of interpretable not correct tokens: %d\n", interpretableNotCorrectTokens);
 
 		printf("\ndecisions on correct not lexical tokens\n");
 		printf("=======================================\n");
