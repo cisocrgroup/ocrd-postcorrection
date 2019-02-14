@@ -114,18 +114,18 @@ public class DMEvaluator {
 		interpretableTokens++;
 		// we only care about tokens that we are going to correct
 		// correct or incorrect lexical tokens cannot be corrected anyway
-		if (gt.equals(token.getMasterOCR().toString())) {
+		if (gt.equalsIgnoreCase(token.getMasterOCR().toString())) {
 			correctOCRTokensBefore++;
 		} else {
 			badOCRTokensBefore++;
 		}
-		if (gt.equals(token.getMasterOCR().toString())) {
+		if (gt.equalsIgnoreCase(token.getMasterOCR().toString())) {
 			interpretableCorrectTokens++;
 			classifications.put(token, Classification.NON_LEXICAL_CORRECT);
 			return;
 		}
 		interpretableNotCorrectTokens++;
-		if (token.getAllProfilerCandidates().get(0).Suggestion.equals(gt)) {
+		if (token.getAllProfilerCandidates().get(0).Suggestion.equalsIgnoreCase(gt)) {
 			profilerFirstRankTokens++;
 		}
 		int placement = getPlacement(token, gt);
