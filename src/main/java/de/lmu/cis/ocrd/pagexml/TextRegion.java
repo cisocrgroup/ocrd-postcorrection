@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.util.Normalizer;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
@@ -15,6 +16,11 @@ public class TextRegion {
 
 	public String getID() {
 		return getAttributeValue("id");
+	}
+
+	public TextRegion withID(String id) {
+		((Element)node).setAttribute("id", id);
+		return this;
 	}
 
 	private String getAttributeValue(String name) {

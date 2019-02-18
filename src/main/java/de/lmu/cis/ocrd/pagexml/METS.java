@@ -11,10 +11,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,7 +124,7 @@ public class METS {
 			return XPathHelper.getAttribute(flocat, "xlink:href").orElse("");
 		}
 
-		public InputStream open() throws Exception {
+		public InputStream openInputStream() throws Exception {
 			URL url;
 			try {
 				url = new URL(getFLocat());
