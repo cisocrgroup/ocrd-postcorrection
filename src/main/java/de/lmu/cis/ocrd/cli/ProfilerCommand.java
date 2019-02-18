@@ -44,7 +44,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 	}
 
 	private void appendProfile(METS.File file, Profile profile) throws Exception {
-		try (InputStream is = file.open()) {
+		try (InputStream is = file.openInputStream()) {
 			Page page = Page.parse(is);
 			for (Line line: page.getLines()) {
 				for (Word word: line.getWords()) {
@@ -91,7 +91,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 	private Profiler makeProfiler(List<METS.File> files) throws Exception {
 		List<Page> pages = new ArrayList<>(files.size());
 		for (METS.File file: files) {
-			try (InputStream is = file.open()) {
+			try (InputStream is = file.openInputStream()) {
 				pages.add(Page.parse(is));
 			}
 		}
