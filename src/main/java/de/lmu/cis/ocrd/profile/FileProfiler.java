@@ -1,8 +1,5 @@
 package de.lmu.cis.ocrd.profile;
 
-import sun.misc.IOUtils;
-import sun.nio.ch.IOUtil;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
