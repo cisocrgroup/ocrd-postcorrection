@@ -30,7 +30,7 @@ public class TokenizerTest {
         symbols.put("!", "left");
         symbols.put(")", "left");
         symbols.put("(", "right");
-        symbols.put("|", "none");
+        symbols.put("|", "center");
         tokenizer = new Tokenizer(symbols);
     }
 

@@ -21,7 +21,7 @@ public class Tokenizer {
                 case RIGHT:
                     right.add(symbol.getKey());
                     break;
-                case "none":
+                case "center":
                     alone.add(symbol.getKey());
                     break;
                 default:
