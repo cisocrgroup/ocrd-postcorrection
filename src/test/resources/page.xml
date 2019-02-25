@@ -1846,20 +1846,14 @@
         <Word id="w_w1aab1b3b2b9b5ac67" language="German" custom="readingOrder {index:5;} textStyle {offset:0; length:4;fontFamily:Arial; fontSize:7.5;}">
           <Coords points="686,1701 737,1701 737,1738 686,1738"/>
           <TextEquiv>
-            <Unicode>frei</Unicode>
-			<Unicode>frei</Unicode>
-			<Unicode>frei</Unicode>
-			<Unicode>frei</Unicode>
+            <Unicode>fr ei</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>
         <Word id="w_w1aab1b3b2b9b5ac77" language="German" custom="readingOrder {index:6;} textStyle {offset:0; length:10;fontFamily:Arial; fontSize:7.5;}">
           <Coords points="765,1699 922,1699 922,1737 765,1737"/>
           <TextEquiv>
-            <Unicode>geſprochen</Unicode>
-			<Unicode>geſprochen</Unicode>
-			<Unicode>geſprochen</Unicode>
-			<Unicode>geſprochen</Unicode>
+            <Unicode>geſpr.ochen</Unicode>
           </TextEquiv>
           <TextStyle fontFamily="Arial" fontSize="7.5"/>
         </Word>

@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.Unicode;
 import org.pmw.tinylog.Logger;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import javax.xml.xpath.XPathExpressionException;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class Word extends TextRegion {
-	private final List<Glyph> glyphs;
+	private List<Glyph> glyphs;
 	private final Line parent;
 
 	public Word(Node node, Line parent) throws XPathExpressionException {
@@ -77,16 +78,27 @@ public class Word extends TextRegion {
 		replaceSelfWith(tokens);
     }
 
-    private void replaceSelfWith(List<Node> tokens) throws XPathExpressionException {
+    private void replaceSelfWith(List<Node> tokens) throws Exception {
 		List<Word> newWords = new ArrayList<>(tokens.size());
 		for (int id = 0; id < tokens.size(); id++) {
-			final String newID = getID() + "_" + Integer.toString(id+1);
 			final Word newWord = new Word(tokens.get(id), parent);
+			// word id
+			final String newID = getID() + String.format("_%04d", id+1);
+			Logger.info("newID: {}", newID);
 			newWord.withID(newID);
+			Logger.info("new word id after update: {}", newWord.getID());
+			// word coordinates
+			List<Coordinates> glyphCoords = new ArrayList<>(newWord.glyphs.size());
+			for (Glyph glyph: newWord.glyphs) {
+				glyphCoords.add(glyph.getCoordinates());
+			}
+			newWord.withCoordinates(Coordinates.fromCoordinates(glyphCoords));
 			newWords.add(newWord);
+			Logger.info("added new word id: {}", newWords.get(newWords.size()-1).getID());
 		}
 		// insert new word node and remove this word node
 		for (Word newWord: newWords) {
+			Logger.info("reparenting new word '{}', id: {}", newWord.getUnicode().get(0), newWord.getID());
 			parent.node.insertBefore(newWord.node, this.node);
 		}
 		parent.node.removeChild(this.node); // remove self from line
@@ -105,14 +117,24 @@ public class Word extends TextRegion {
 	}
 
     private Node newTokenNode(String word, int begin, int end) throws XPathExpressionException {
-		Logger.debug("new word: {}", word);
+		Logger.info("newTokenNode({},{},{})", word, begin, end);
 		Word newWord = new Word(node.cloneNode(true), parent);
 		for (int i = 0; i < begin; i++) {
-			newWord.node.removeChild(glyphs.get(i).node);
+			newWord.node.removeChild(newWord.glyphs.get(i).node);
 		}
 		for (int i = end; i < glyphs.size(); i++) {
-			newWord.node.removeChild(glyphs.get(i).node);
+			newWord.node.removeChild(newWord.glyphs.get(i).node);
 		}
+		// fix text equivs
+		Node te = XPathHelper.getNode(newWord.node, "./TextEquiv");
+		for (Node u: XPathHelper.getNodes(te, "./Unicode")) {
+			te.removeChild(u);
+		}
+		Element u = te.getOwnerDocument().createElement("Unicode");
+		u.appendChild(u.getOwnerDocument().createTextNode(word));
+		te.appendChild(u);
+		newWord.node.appendChild(te);
+		Logger.info("new text equiv: {}", newWord.getUnicode().get(0));
 		return newWord.node;
 	}
 }

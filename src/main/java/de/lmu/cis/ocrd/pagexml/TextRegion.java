@@ -15,7 +15,7 @@ public class TextRegion {
 	}
 
 	public String getID() {
-		return getAttributeValue("id");
+		return ((Element)node).getAttribute("id");
 	}
 
 	public TextRegion withID(String id) {
@@ -23,8 +23,15 @@ public class TextRegion {
 		return this;
 	}
 
-	private String getAttributeValue(String name) {
-		return this.node.getAttributes().getNamedItem(name).getTextContent();
+	public Coordinates getCoordinates() throws Exception {
+		return Coordinates.fromString(
+				((Element)XPathHelper.getNode(node, "./Coords")).getAttribute("points")
+		);
+	}
+
+	public TextRegion withCoordinates(Coordinates coordinates) {
+		((Element)XPathHelper.getNode(node, "./Coords")).setAttribute("points", coordinates.toString());
+		return this;
 	}
 
 	public List<TextEquiv> getTextEquivs() {
