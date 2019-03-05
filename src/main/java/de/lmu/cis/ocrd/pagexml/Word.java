@@ -24,7 +24,7 @@ public class Word extends TextRegion {
 		return glyphs;
 	}
 
-	public Line getParentLine() {
+	Line getParentLine() {
 		return parent;
 	}
 
@@ -52,7 +52,8 @@ public class Word extends TextRegion {
 		return sj.toString();
 	}
 
-    public void split(String[] words) throws Exception {
+    void split(String[] words) throws Exception {
+		Logger.debug("tokens: {}", String.join(" ", words));
 		// do nothing if it is just one word
 		if (words == null || words.length <= 1) {
 			return;
@@ -84,9 +85,7 @@ public class Word extends TextRegion {
 			final Word newWord = new Word(tokens.get(id), parent);
 			// word id
 			final String newID = getID() + String.format("_%04d", id+1);
-			Logger.info("newID: {}", newID);
 			newWord.withID(newID);
-			Logger.info("new word id after update: {}", newWord.getID());
 			// word coordinates
 			List<Coordinates> glyphCoords = new ArrayList<>(newWord.glyphs.size());
 			for (Glyph glyph: newWord.glyphs) {
@@ -94,11 +93,9 @@ public class Word extends TextRegion {
 			}
 			newWord.withCoordinates(Coordinates.fromCoordinates(glyphCoords));
 			newWords.add(newWord);
-			Logger.info("added new word id: {}", newWords.get(newWords.size()-1).getID());
 		}
 		// insert new word node and remove this word node
 		for (Word newWord: newWords) {
-			Logger.info("reparenting new word '{}', id: {}", newWord.getUnicode().get(0), newWord.getID());
 			parent.node.insertBefore(newWord.node, this.node);
 		}
 		parent.node.removeChild(this.node); // remove self from line
@@ -108,16 +105,13 @@ public class Word extends TextRegion {
 			if (word != this) {
 				newLine.add(word);
 			} else {
-				for (Word newWord: newWords) {
-					newLine.add(newWord);
-				}
+				newLine.addAll(newWords);
 			}
 		}
 		parent.words = newLine;
 	}
 
     private Node newTokenNode(String word, int begin, int end) throws XPathExpressionException {
-		Logger.info("newTokenNode({},{},{})", word, begin, end);
 		Word newWord = new Word(node.cloneNode(true), parent);
 		for (int i = 0; i < begin; i++) {
 			newWord.node.removeChild(newWord.glyphs.get(i).node);
@@ -134,7 +128,6 @@ public class Word extends TextRegion {
 		u.appendChild(u.getOwnerDocument().createTextNode(word));
 		te.appendChild(u);
 		newWord.node.appendChild(te);
-		Logger.info("new text equiv: {}", newWord.getUnicode().get(0));
 		return newWord.node;
 	}
 }
