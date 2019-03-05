@@ -101,7 +101,7 @@ public class CheckCorpusCommand implements Command{
 		if (token.getMasterOCR() == null) {
 			throw new Exception("master ocr is null");
 		}
-		if (token.getOtherOCR(1) == null) {
+		if (token.getSlaveOCR(1) == null) {
 			throw new Exception("other ocr is null");
 		}
 	}

@@ -27,8 +27,8 @@ public class OCRTokenWithCandidateImpl implements OCRToken {
 	}
 
 	@Override
-	public OCRWord getOtherOCR(int i) {
-		return token.getOtherOCR(i);
+	public OCRWord getSlaveOCR(int i) {
+		return token.getSlaveOCR(i);
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public class MatchingOCRTokensFeature extends NamedDoubleFeature {
 		// i=0 is master OCR
 		final String mOCR = token.getMasterOCR().toString();
 		for (int j = 1; j < n; j++) {
-			if (mOCR.equals(token.getOtherOCR(j - 1).toString())) {
+			if (mOCR.equals(token.getSlaveOCR(j - 1).toString())) {
 				sum += 1;
 			}
 		}

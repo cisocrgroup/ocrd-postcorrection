@@ -26,7 +26,7 @@ public class EmptyToken implements OCRToken {
 	}
 
 	@Override
-	public OCRWord getOtherOCR(int i) {
+	public OCRWord getSlaveOCR(int i) {
 		return EmptyWord.instance;
 	}
 

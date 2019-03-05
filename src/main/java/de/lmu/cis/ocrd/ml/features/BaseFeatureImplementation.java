@@ -33,7 +33,7 @@ abstract class BaseFeatureImplementation implements Feature {
 		if (i == 0) { // master OCR
 			return token.getMasterOCR();
 		}
-		return token.getOtherOCR(i - 1);
+		return token.getSlaveOCR(i - 1);
 	}
 
 	protected Candidate mustGetCandidate(OCRToken token) {

@@ -34,7 +34,7 @@ public class LM implements ArgumentFactory {
 		for (OCRToken token : tokens) {
 			freqMaps.get(0).add(token.getMasterOCR().getWord());
 			for (int i = 1; i < token.getNOCR(); i++) {
-				freqMaps.get(1).add(token.getOtherOCR(i - 1).getWord());
+				freqMaps.get(1).add(token.getSlaveOCR(i - 1).getWord());
 			}
 		}
 	}
