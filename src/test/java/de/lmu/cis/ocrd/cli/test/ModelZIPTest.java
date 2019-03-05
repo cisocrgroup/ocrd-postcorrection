@@ -55,7 +55,8 @@ public class ModelZIPTest {
     @After
     public void close() throws IOException {
         model.close();
-        // tmpdir.toFile().delete();
+        //noinspection ResultOfMethodCallIgnored
+        tmpdir.toFile().delete();
     }
 
     private Path writeTmpFile(String x) throws IOException {
