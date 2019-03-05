@@ -63,7 +63,7 @@ public class METSTest {
 		List<METS.File> files = mets.findFileGrpFiles("OCR-D-TEST");
 		assertThat(files.size(), is(1));
 		assertThat(files.get(0).getMIMEType(), is(Page.MIMEType));
-		final Page page = Page.parse(files.get(0).open());
+		final Page page = Page.parse(files.get(0).openInputStream());
 		assertThat(page, notNullValue());
 	}
 

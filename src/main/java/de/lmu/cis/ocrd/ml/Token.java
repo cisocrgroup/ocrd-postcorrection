@@ -83,7 +83,7 @@ public class Token implements Serializable, OCRToken {
 	}
 
 	@Override
-	public Word getOtherOCR(int i) {
+	public Word getSlaveOCR(int i) {
 		return otherOCR.get(i);
 	}
 
@@ -130,7 +130,7 @@ public class Token implements Serializable, OCRToken {
 			ocr = new String[1 + token.getNumberOfOtherOCRs()];
 			ocr[0] = token.getMasterOCR().toString();
 			for (int i = 0; i < token.getNumberOfOtherOCRs(); i++) {
-				ocr[i + 1] = token.getOtherOCR(i).toString();
+				ocr[i + 1] = token.getSlaveOCR(i).toString();
 			}
 		}
 	}

@@ -88,12 +88,14 @@ public class AlignCommand extends AbstractIOCommand {
         for (String line : lines) {
         	Logger.info("line: {}", line);
         }
-        final String master = Normalizer.normalize(lines[0]);
+        // final String master = Normalizer.normalize(lines[0]);
+        final String master = lines[0];
 	    Logger.info("master: {}", master);
         Data data = new Data(master);
         final TokenAlignment tokenAlignment = new TokenAlignment(master);
         for (int i = 1; i < lines.length; i++) {
-            final String other = Normalizer.normalize(lines[i]);
+            // final String other = Normalizer.normalize(lines[i]);
+            final String other = lines[i];
 	        Logger.info("other: {}", other);
             final Graph g = new Graph(master, other);
             Logger.info("raw: {}", g.getStartNode().toString());
@@ -123,6 +125,9 @@ public class AlignCommand extends AbstractIOCommand {
             if (lines[i] == null) {
                 return false;
             }
+            lines[i] = lines[i].trim();
+            lines[i] = lines[i].replace('#', ' ');
+            lines[i] = lines[i].replace('$', ' ');
             Logger.info("read line: {}", lines[i]);
         }
         return true;

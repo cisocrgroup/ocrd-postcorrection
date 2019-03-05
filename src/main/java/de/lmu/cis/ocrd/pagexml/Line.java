@@ -8,7 +8,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Node;
 
 public class Line extends TextRegion {
-	private final List<Word> words;
+	List<Word> words;
 
 	public Line(Node node) throws XPathExpressionException {
 		super(node);

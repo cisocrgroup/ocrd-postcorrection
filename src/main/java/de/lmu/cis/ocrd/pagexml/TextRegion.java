@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.util.Normalizer;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
@@ -14,11 +15,23 @@ public class TextRegion {
 	}
 
 	public String getID() {
-		return getAttributeValue("id");
+		return ((Element)node).getAttribute("id");
 	}
 
-	private String getAttributeValue(String name) {
-		return this.node.getAttributes().getNamedItem(name).getTextContent();
+	public TextRegion withID(String id) {
+		((Element)node).setAttribute("id", id);
+		return this;
+	}
+
+	public Coordinates getCoordinates() throws Exception {
+		return Coordinates.fromString(
+				((Element)XPathHelper.getNode(node, "./Coords")).getAttribute("points")
+		);
+	}
+
+	public TextRegion withCoordinates(Coordinates coordinates) {
+		((Element)XPathHelper.getNode(node, "./Coords")).setAttribute("points", coordinates.toString());
+		return this;
 	}
 
 	public List<TextEquiv> getTextEquivs() {

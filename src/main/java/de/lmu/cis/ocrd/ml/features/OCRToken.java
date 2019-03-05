@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface OCRToken {
 	int getNOCR();
 	OCRWord getMasterOCR();
-	OCRWord getOtherOCR(int i);
+	OCRWord getSlaveOCR(int i);
 	Optional<String> getGT();
 	Optional<Candidate> getProfilerCandidate();
 	List<Candidate> getAllProfilerCandidates();

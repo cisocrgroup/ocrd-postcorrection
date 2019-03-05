@@ -147,7 +147,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	private List<Page> openPages(List<METS.File> files) throws Exception {
 		List<Page> pages = new ArrayList<>(files.size());
 		for (METS.File file: files) {
-			try (InputStream is = file.open()) {
+			try (InputStream is = file.openInputStream()) {
 				pages.add(Page.parse(is));
 			}
 		}

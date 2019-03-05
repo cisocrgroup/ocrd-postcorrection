@@ -65,7 +65,7 @@ public class OCRTokenImpl implements OCRToken {
 	}
 
 	@Override
-	public OCRWord getOtherOCR(int i) {
+	public OCRWord getSlaveOCR(int i) {
 		if (i+1 < words.size()) {
 			return words.get(i+1);
 		}

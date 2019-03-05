@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pc:PcGts xmlns:pc="http://schema.primaresearch.org/PAGE/gts/pagecontent/2017-07-15">
+    <pc:Metadata>
+        <pc:Creator>OCR-D</pc:Creator>
+        <pc:Created>2016-09-21T15:54:02.957000+02:00</pc:Created>
+        <pc:LastChange>2017-03-06T17:14:28.978000+01:00</pc:LastChange>
+        <pc:Comments>
+            Measurement unit: pixel
+            PrimaryLanguage: German
+            Language: GermanStandard
+            Language: EnglishUnitedStates
+            Producer: ABBYY FineReader Engine 11</pc:Comments>
+    </pc:Metadata>
+    <pc:Page imageFilename="file:///run/media/flo/a57ed1c0-7fc5-41b1-a6e5-0d43b3ae6a40/data/devel/work/cis-ocrd-py/.ws2/workspace/OCR-D-IMG-aventinus_grammatica_1515/aventinus_grammatica_1515_0008.tif" imageWidth="1756" imageHeight="2440" type="content">
+        <pc:PrintSpace>
+            <pc:Coords points="308,90 1625,90 1625,2048 308,2048"/>
+        </pc:PrintSpace>
+        <pc:ReadingOrder>
+            <pc:OrderedGroup id="ro_1488816869009" caption="Regions reading order">
+                <pc:RegionRefIndexed index="0" regionRef="r_1_1"/>
+            </pc:OrderedGroup>
+        </pc:ReadingOrder>
+        <pc:TextRegion id="r_1_1" custom="readingOrder {index:0;} structure {type:heading;}" type="heading">
+            <pc:Coords points="499,96 1376,96 1376,177 499,177"/>
+            <pc:TextLine id="tl_1" primaryLanguage="German" custom="readingOrder {index:0;} textStyle {offset:0; length:21;bold:true;}">
+                <pc:Coords points="500,97 1375,97 1375,176 500,176"/>
+                <pc:Baseline points="500,175 1375,175"/>
+                <pc:Word id="tl_1_word0000">
+                    <pc:Coords points="500,97 1435.2328358208956,97 1435.2328358208956,176 500,176"/>
+                    <pc:Glyph id="tl_1_word0000_glyph0000">
+                        <pc:Coords points="500,97 1435.2328358208956,97 1435.2328358208956,176 500,176"/>
+                        <pc:TextEquiv conf="0.95971036875818">
+                            <pc:Unicode>e</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:TextEquiv index="1" conf="0.95971036875818" dataType="ocrd-cis-word-alignment-master-ocr" dataTypeDetails="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/tl_1_word0000">
+                        <pc:Unicode>e</pc:Unicode>
+                    </pc:TextEquiv>
+                </pc:Word>
+                <pc:Word id="tl_1_word0001">
+                    <pc:Coords points="579.2537313432836,97 1668.2388059701493,97 1668.2388059701493,176 579.2537313432836,176"/>
+                    <pc:Glyph id="tl_1_word0001_glyph0000">
+                        <pc:Coords points="579.2537313432836,97 1482.7850746268657,97 1482.7850746268657,176 579.2537313432836,176"/>
+                        <pc:TextEquiv conf="0.887151612455657">
+                            <pc:Unicode>S</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0001">
+                        <pc:Coords points="607.7850746268657,97 1516.0716417910448,97 1516.0716417910448,176 607.7850746268657,176"/>
+                        <pc:TextEquiv conf="0.988960735007681">
+                            <pc:Unicode>e</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0002">
+                        <pc:Coords points="641.0716417910448,97 1527.1671641791045,97 1527.1671641791045,176 641.0716417910448,176"/>
+                        <pc:TextEquiv conf="0.983439054673924">
+                            <pc:Unicode>n</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0003">
+                        <pc:Coords points="652.1671641791045,97 1562.0388059701493,97 1562.0388059701493,176 652.1671641791045,176"/>
+                        <pc:TextEquiv conf="0.986837404216361">
+                            <pc:Unicode>e</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0004">
+                        <pc:Coords points="687.0388059701493,97 1573.134328358209,97 1573.134328358209,176 687.0388059701493,176"/>
+                        <pc:TextEquiv conf="0.888191474324733">
+                            <pc:Unicode>r</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0005">
+                        <pc:Coords points="687.0388059701493,97 1573.134328358209,97 1573.134328358209,176 687.0388059701493,176"/>
+                        <pc:TextEquiv conf="0.888191474324733">
+                            <pc:Unicode> </pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0006">
+                        <pc:Coords points="698.1343283582089,97 1596.910447761194,97 1596.910447761194,176 698.1343283582089,176"/>
+                        <pc:TextEquiv conf="0.998214726477522">
+                            <pc:Unicode>i</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0007">
+                        <pc:Coords points="721.9104477611941,97 1609.5910447761194,97 1609.5910447761194,176 721.9104477611941,176"/>
+                        <pc:TextEquiv conf="0.996036546649643">
+                            <pc:Unicode>b</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0008">
+                        <pc:Coords points="734.5910447761194,97 1646.0477611940298,97 1646.0477611940298,176 734.5910447761194,176"/>
+                        <pc:TextEquiv conf="0.957334136313711">
+                            <pc:Unicode>u</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0009">
+                        <pc:Coords points="771.0477611940298,97 1668.2388059701493,97 1668.2388059701493,176 771.0477611940298,176"/>
+                        <pc:TextEquiv conf="0.971737179577893">
+                            <pc:Unicode>s</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:TextEquiv index="1" conf="0.94268316946659" dataType="ocrd-cis-word-alignment-master-ocr" dataTypeDetails="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/tl_1_word0001">
+                        <pc:Unicode>Sener ibus</pc:Unicode>
+                    </pc:TextEquiv>
+                </pc:Word>
+                <pc:Word id="tl_1_word0002">
+                    <pc:Coords points="809.0895522388059,97 1906.0,97 1906.0,176 809.0895522388059,176"/>
+                    <pc:Glyph id="tl_1_word0002_glyph0000">
+                        <pc:Coords points="809.0895522388059,97 1703.110447761194,97 1703.110447761194,176 809.0895522388059,176"/>
+                        <pc:TextEquiv conf="0.983598845642047">
+                            <pc:Unicode>n</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0001">
+                        <pc:Coords points="828.1104477611941,97 1728.4716417910447,97 1728.4716417910447,176 828.1104477611941,176"/>
+                        <pc:TextEquiv conf="0.992682890027891">
+                            <pc:Unicode>o</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0002">
+                        <pc:Coords points="853.4716417910447,97 1753.8328358208955,97 1753.8328358208955,176 853.4716417910447,176"/>
+                        <pc:TextEquiv conf="0.987732221938337">
+                            <pc:Unicode>m</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0003">
+                        <pc:Coords points="853.4716417910447,97 1753.8328358208955,97 1753.8328358208955,176 853.4716417910447,176"/>
+                        <pc:TextEquiv conf="0.987732221938337">
+                            <pc:Unicode>/</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0004">
+                        <pc:Coords points="878.8328358208955,97 1791.8746268656716,97 1791.8746268656716,176 878.8328358208955,176"/>
+                        <pc:TextEquiv conf="0.998352444855713">
+                            <pc:Unicode>i</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0005">
+                        <pc:Coords points="916.8746268656716,97 1810.8955223880598,97 1810.8955223880598,176 916.8746268656716,176"/>
+                        <pc:TextEquiv conf="0.991395963683968">
+                            <pc:Unicode>n</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0006">
+                        <pc:Coords points="935.8955223880597,97 1845.7671641791044,97 1845.7671641791044,176 935.8955223880597,176"/>
+                        <pc:TextEquiv conf="0.993407122925728">
+                            <pc:Unicode>u</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0007">
+                        <pc:Coords points="970.7671641791045,97 1866.3731343283582,97 1866.3731343283582,176 970.7671641791045,176"/>
+                        <pc:TextEquiv conf="0.979147218517765">
+                            <pc:Unicode>m</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0008">
+                        <pc:Coords points="991.3731343283582,97 1906.0,97 1906.0,176 991.3731343283582,176"/>
+                        <pc:TextEquiv conf="0.994850964931609">
+                            <pc:Unicode>.</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:TextEquiv index="1" conf="0.988749831686739" dataType="ocrd-cis-word-alignment-master-ocr" dataTypeDetails="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/tl_1_word0002">
+                        <pc:Unicode>nom/inum.</pc:Unicode>
+                    </pc:TextEquiv>
+                </pc:Word>
+                <pc:TextEquiv conf="0.965716500576664" dataType="ocrd-cis-line-alignment-master-ocr" comments="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/tl_1">
+                    <pc:Unicode>e Sener ibus nom/inum.</pc:Unicode>
+                </pc:TextEquiv>
+                <pc:TextStyle bold="true"/>
+            </pc:TextLine>
+            <pc:TextEquiv>
+                <pc:Unicode>e Sener ibus nom/inum.</pc:Unicode>
+            </pc:TextEquiv>
+        </pc:TextRegion>
+    </pc:Page>
+</pc:PcGts>

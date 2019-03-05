@@ -256,7 +256,7 @@ public class DMEvaluator {
 		printf("number of false yes decisions: %d\n", badYes);
 		printf("number of true no decisions: %d\n", goodNos);
 		printf("number of false no decisions: %d\n", badNos);
-		printf("number of do not care yes decisions: %d\n", doNotCare);
+		printf("number of do not care yes decisions: %d\n", doNotCare - badYes);
 
 
 		final String title = String.format("===================\nResults (%d):\n", i+1);

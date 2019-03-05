@@ -24,6 +24,7 @@ public class Main {
 				.register(EvaluateDLECommand.class)
 				.register(EvaluateRRDMCommand.class)
 				.register(CheckCorpusCommand.class)
+				.register(TokenizerCommand.class)
 				.register(AlignCommand.class);
 	}
 
