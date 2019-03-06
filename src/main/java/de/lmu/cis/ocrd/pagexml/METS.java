@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.pagexml;
 
+import org.pmw.tinylog.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -10,10 +11,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -26,7 +24,7 @@ public class METS {
 	public static METS open(java.io.File file) throws Exception {
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder();
-		return new METS(builder.parse(file));
+		return new METS(file.getPath(), builder.parse(file));
 	}
 
 	public static METS open(Path path) throws Exception {
@@ -39,8 +37,10 @@ public class METS {
 	private static final String flocatXPATH = "./FLocat";
 
 	private final Document xml;
+	private final Path path;
 
-	public METS(Document doc) {
+	public METS(String path, Document doc) {
+		this.path = Paths.get(path);
 		this.xml = doc;
 	}
 
@@ -60,7 +60,7 @@ public class METS {
 		List<File> files = new ArrayList<>();
 		for (Node fg: XPathHelper.getNodes(xml, String.format(fileGrpFmt, use))) {
 			for (Node f : XPathHelper.getNodes(fg, file)) {
-				files.add(new File(f));
+				files.add(new File(path.getParent(), f));
 			}
 		}
 		return files;
@@ -76,12 +76,14 @@ public class METS {
 		}
 		Node file = xml.createElement("mets:file");
 		fileGrp.appendChild(file);
-		return new File(file);
+		return new File(path.getParent(), file);
 	}
 
 	public static class File {
 		private final Node node;
-		private File(Node node) {
+		private final Path workspace;
+		private File(Path workspace, Node node) {
+			this.workspace = workspace;
 			this.node = node;
 		}
 
@@ -126,15 +128,26 @@ public class METS {
 
 		public InputStream openInputStream() throws Exception {
 			URL url;
+			final String flocat = getFLocat();
+			Logger.info("flocat {}", flocat);
 			try {
-				url = new URL(getFLocat());
+				url = new URL(flocat);
 			} catch (MalformedURLException e) {
-				return new FileInputStream(getFLocat());
+				return openLocalPath(Paths.get(flocat));
 			}
 			if ("file".equals(url.getProtocol())) {
-				return new FileInputStream(url.getPath());
+				return openLocalPath(Paths.get(url.getPath()));
 			}
 			return url.openStream();
+		}
+
+		private InputStream openLocalPath(Path path) throws FileNotFoundException {
+			Logger.info("opening flocat {}", path.toString());
+			if (path.isAbsolute()) {
+				return new FileInputStream(path.toFile());
+			}
+			// relative paths are assumed to be relative to the mets file.
+			return new FileInputStream(Paths.get(workspace.toString(), path.toString()).toFile());
 		}
 
 		private File setAttribute(String key, String value) {

@@ -96,7 +96,7 @@
     </mets:fileGrp>
     <mets:fileGrp USE="OCR-D-TEST">
       <mets:file MIMETYPE="application/vnd.prima.page+xml" GROUPID="OCR-D-TEST" ID="OCR-D-TEST">
-        <mets:FLocat xlink:href="src/test/resources/page.xml"/>
+        <mets:FLocat xlink:href="page.xml"/>
       </mets:file>
     </mets:fileGrp>
   </mets:fileSec>
