@@ -12,20 +12,20 @@ public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 	private final String master;
 
 	public TokenAlignment(String master) {
-		this.master = master;
+		this.master = normalizeWhitespace(master);
 		for (String token : this.master.split("\\s+")) {
 			alignments.add(new Token(token));
 		}
 	}
 
 	public TokenAlignment add(String str) {
-		final Graph graph = new Graph(master, str);
+		final Graph graph = new Graph(master, normalizeWhitespace(str));
 		Logger.debug("Alignment: {}", graph.getStartNode().toString());
 		final Tokenizer t = graph.getTokenizer();
 
 		Counter i = new Counter(-1); // really, java?
 		t.eachPair((a, b, anew, bnew) -> {
-			// System.out.printf("a: %s, b: %s, anew: %b, bnew: %b\n", a, b, anew, bnew);
+			// System.out.printf("a: %s,\tb: %s,\tanew: %b,\tbnew: %b\n", a, b, anew, bnew);
 			if (anew) {
 				i.inc();
 				alignments.get(i.get()).addNewAlignment(b);
@@ -53,18 +53,18 @@ public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 		private final ArrayList<ArrayList<String>> alignments = new ArrayList<>();
 		private final String master;
 
-		public Token(String master) {
+		Token(String master) {
 			this.master = master;
 		}
 
-		public void addExistingAlignment(String b) {
+		void addExistingAlignment(String b) {
 			if (alignments.isEmpty()) {
 				throw new IndexOutOfBoundsException("no earlier alignment exists");
 			}
 			alignments.get(alignments.size() - 1).add(b);
 		}
 
-		public void addNewAlignment(String b) {
+		void addNewAlignment(String b) {
 			alignments.add(new ArrayList<>());
 			addExistingAlignment(b);
 		}
@@ -93,6 +93,10 @@ public class TokenAlignment implements Iterable<TokenAlignment.Token> {
 			}
 			return str.toString();
 		}
+	}
+
+	private static String normalizeWhitespace(String str) {
+		return str.replaceAll("\\s+", " ").trim();
 	}
 
 	// counter to handle i++ in a closure.

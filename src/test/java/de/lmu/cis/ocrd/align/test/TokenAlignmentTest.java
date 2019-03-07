@@ -123,4 +123,12 @@ public class TokenAlignmentTest extends de.lmu.cis.ocrd.test.Test {
 		assertThat(tokens.get(12).toString(), is("daß|daß"));
 		assertThat(tokens.get(13).toString(), is("es|es"));
 	}
+
+	@Test
+	public void testBug8() { // fist string contains two whitespace
+		final String a = "ſeer krefftig  vñ von wegirer vile";
+		final String b = "ſeer krefftig / vñ von wegẽ jrer vile";
+		final TokenAlignment tokens = new TokenAlignment(a).add(b);
+		assertThat(tokens.size(), is(6));
+	}
 }
