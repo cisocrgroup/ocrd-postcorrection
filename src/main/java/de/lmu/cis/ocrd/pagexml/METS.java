@@ -142,12 +142,14 @@ public class METS {
 		}
 
 		private InputStream openLocalPath(Path path) throws FileNotFoundException {
-			Logger.info("opening flocat {}", path.toString());
 			if (path.isAbsolute()) {
+				Logger.debug("opening absolute file path {}", path.toString());
 				return new FileInputStream(path.toFile());
 			}
 			// relative paths are assumed to be relative to the mets file.
-			return new FileInputStream(Paths.get(workspace.toString(), path.toString()).toFile());
+			final Path relative = Paths.get(workspace.toString(), path.toString());
+			Logger.debug("opening relative file path {}", relative.toString());
+			return new FileInputStream(relative.toFile());
 		}
 
 		private File setAttribute(String key, String value) {
