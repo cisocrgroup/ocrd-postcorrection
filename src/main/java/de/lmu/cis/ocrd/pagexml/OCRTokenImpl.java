@@ -17,11 +17,13 @@ public class OCRTokenImpl implements OCRToken {
 	private final List<OCRWordImpl> words;
 	private final List<Candidate> candidates;
 	private final int gtIndex;
+	private final Profile profile;
 
 	public OCRTokenImpl(Word word, int gtIndex, int maxCandidates, Profile profile) throws Exception {
 		this.gtIndex = gtIndex;
 		this.word = word;
 		this.words = getWords(word, gtIndex);
+		this.profile = profile;
 		this.candidates = getCandidates(profile, maxCandidates);
 	}
 
@@ -93,6 +95,24 @@ public class OCRTokenImpl implements OCRToken {
 	@Override
 	public String toString() {
 		return word.toString();
+	}
+
+	@Override
+	public boolean ocrIsCorrect() {
+		final String gt = getGT().orElseThrow(() -> new RuntimeException("missing ground-truth"));
+		return gt.equalsIgnoreCase(getMasterOCR().toString());
+	}
+
+	public List<Candidate> getAllProfilerCandidatesNoLimit() {
+		List<Candidate> cs = new ArrayList<>();
+		Optional<Candidates> candidates = profile.get(getMasterOCR().toString().toLowerCase());
+		if (!candidates.isPresent()) {
+			return cs;
+		}
+		for (Candidate candidate : candidates.get().Candidates) {
+			cs.add(candidate);
+		}
+		return cs;
 	}
 
 	private List<Candidate> getCandidates(Profile profile, int maxCandidates) {

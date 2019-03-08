@@ -45,4 +45,9 @@ public class OCRTokenWithCandidateImpl implements OCRToken {
 	public List<Candidate> getAllProfilerCandidates() {
 		return token.getAllProfilerCandidates();
 	}
+
+	@Override
+	public boolean ocrIsCorrect() {
+		return token.ocrIsCorrect();
+	}
 }

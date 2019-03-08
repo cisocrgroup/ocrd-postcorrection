@@ -109,6 +109,11 @@ public class Token implements Serializable, OCRToken {
 		return new ArrayList<>();
 	}
 
+	@Override
+	public boolean ocrIsCorrect() {
+		return false;
+	}
+
 	public boolean hasGT() {
 		return gt != null;
 	}

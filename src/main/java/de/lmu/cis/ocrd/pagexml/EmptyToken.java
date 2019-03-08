@@ -49,4 +49,7 @@ public class EmptyToken implements OCRToken {
 	public String toString() {
 		return "**EMPTY-TOKEN**";
 	}
+
+	@Override
+	public boolean ocrIsCorrect() {return false;}
 }
