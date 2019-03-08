@@ -14,13 +14,13 @@ public class DMEvaluator {
 
 
 	private enum Classification {
-		LEXICAL,
-		NON_LEXICAL_CORRECT,
-		NON_LEXICAL_NOT_CORRECT_HAVE_NOT_CANDIDATE,
-		NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK,
-		NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK,
-		NOT_INTERPRETABLE_NOT_CORRECT,
-		NOT_INTERPRETABLE_CORRECT,
+		UNINTERPRETABLE,
+		UNINTERPRETABLE_NOT_CORRECT,
+		UNINTERPRETABLE_CORRECT,
+		INTERPRETABLE_CORRECT,
+		INTERPRETABLE_NOT_CORRECT_HAVE_NO_CANDIDATE,
+		INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK,
+		INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK,
 	}
 
 	private final Map<OCRToken, List<Ranking>> rankings;
@@ -103,11 +103,11 @@ public class DMEvaluator {
 		if (token.getAllProfilerCandidates().isEmpty()) {
 			notInterpretableTokenList.add(token);
 			if (gt.equalsIgnoreCase(token.getMasterOCR().toString())) {
-				classifications.put(token, Classification.NOT_INTERPRETABLE_CORRECT);
+				classifications.put(token, Classification.UNINTERPRETABLE_CORRECT);
 				notInterpretableCorrectTokens++;
 			} else {
 				notInterpretableNotCorrectTokens++;
-				classifications.put(token, Classification.NOT_INTERPRETABLE_NOT_CORRECT);
+				classifications.put(token, Classification.UNINTERPRETABLE_NOT_CORRECT);
 			}
 			return;
 		}
@@ -121,7 +121,7 @@ public class DMEvaluator {
 		}
 		if (gt.equalsIgnoreCase(token.getMasterOCR().toString())) {
 			interpretableCorrectTokens++;
-			classifications.put(token, Classification.NON_LEXICAL_CORRECT);
+			classifications.put(token, Classification.INTERPRETABLE_CORRECT);
 			return;
 		}
 		interpretableNotCorrectTokens++;
@@ -131,13 +131,13 @@ public class DMEvaluator {
 		int placement = getPlacement(token, gt);
 		if (placement == -1) {
 			missingPlacement++;
-			classifications.put(token, Classification.NON_LEXICAL_NOT_CORRECT_HAVE_NOT_CANDIDATE);
+			classifications.put(token, Classification.INTERPRETABLE_NOT_CORRECT_HAVE_NO_CANDIDATE);
 		} else if (placement == 0) {
 			goodPlacement++;
-			classifications.put(token, Classification.NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK);
+			classifications.put(token, Classification.INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK);
 		} else {
 			badPlacement++;
-			classifications.put(token, Classification.NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK);
+			classifications.put(token, Classification.INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK);
 		}
 	}
 
@@ -176,16 +176,16 @@ public class DMEvaluator {
 		printf("\ntotal\n");
 		printf("=====\n");
 		printf("number of tokens: %d\n", notInterpretableTokenList.size() + interpretableTokens);
-		printf("number of not interpretable tokens: %d\n", notInterpretableTokenList.size());
+		printf("number of uninterpretable tokens: %d\n", notInterpretableTokenList.size());
 		printf("number of interpretable tokens: %d\n", interpretableTokens);
 		printf("number of correct OCR tokens: %d\n", correctOCRTokensBefore);
 		printf("number of incorrect OCR tokens: %d\n", badOCRTokensBefore);
 
-		printf("\nnot interpretable tokens\n");
-		printf("========================\n");
-		printf("number of not interpretable tokens: %d\n", notInterpretableTokenList.size());
-		printf("number of not interpretable correct tokens: %d\n", notInterpretableCorrectTokens);
-		printf("number of not interpretable not correct tokens: %d\n", notInterpretableNotCorrectTokens);
+		printf("\nuninterpretable tokens\n");
+		printf("======================\n");
+		printf("number of uninterpretable tokens: %d\n", notInterpretableTokenList.size());
+		printf("number of uninterpretable correct tokens: %d\n", notInterpretableCorrectTokens);
+		printf("number of uninterpretable not correct tokens: %d\n", notInterpretableNotCorrectTokens);
 
 		printf("\ninterpretable tokens\n");
 		printf("====================\n");
@@ -196,13 +196,13 @@ public class DMEvaluator {
 		printf("\ndecisions on correct interpretable tokens\n");
 		printf("=========================================\n");
 		printf("number of correct interpretable tokens true yes decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_CORRECT).goodYes);
+				counts.get(Classification.INTERPRETABLE_CORRECT).goodYes);
 		printf("number of correct not lexical tokens false yes decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_CORRECT).badYes);
+				counts.get(Classification.INTERPRETABLE_CORRECT).badYes);
 		printf("number of correct not lexical tokens true no decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_CORRECT).goodNos);
+				counts.get(Classification.INTERPRETABLE_CORRECT).goodNos);
 		printf("number of correct not lexical tokens false no decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_CORRECT).badNos);
+				counts.get(Classification.INTERPRETABLE_CORRECT).badNos);
 
 		printf("\nnot correct not lexical tokens\n");
 		printf("==============================\n");
@@ -216,35 +216,35 @@ public class DMEvaluator {
 		printf("\ndecisions on good placement tokens\n");
 		printf("==================================\n");
 		printf("number of good placement true yes decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK).goodYes);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK).goodYes);
 		printf("number of good placement false yes decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK).badYes);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK).badYes);
 		printf("number of good placement true no decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK).goodNos);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK).goodNos);
 		printf("number of good placement false no decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK).badNos);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_FIRST_RANK).badNos);
 
 		printf("\ndecisions on bad placement tokens\n");
 		printf("=================================\n");
 		printf("number of bad placement true yes decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK).goodYes);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK).goodYes);
 		printf("number of bad placement false yes decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK).badYes);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK).badYes);
 		printf("number of bad placement true no decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK).goodNos);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK).goodNos);
 		printf("number of bad placement false no decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK).badNos);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_CANDIDATE_ON_OTHER_RANK).badNos);
 
 		printf("\ndecisions on missing placement tokens\n");
 		printf("=====================================\n");
 		printf("number of missing placement true yes decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_NOT_CANDIDATE).goodYes);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_NO_CANDIDATE).goodYes);
 		printf("number of missing placement false yes decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_NOT_CANDIDATE).badYes);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_NO_CANDIDATE).badYes);
 		printf("number of missing placement true no decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_NOT_CANDIDATE).goodNos);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_NO_CANDIDATE).goodNos);
 		printf("number of missing placement false no decisions: %d\n",
-				counts.get(Classification.NON_LEXICAL_NOT_CORRECT_HAVE_NOT_CANDIDATE).badNos);
+				counts.get(Classification.INTERPRETABLE_NOT_CORRECT_HAVE_NO_CANDIDATE).badNos);
 
 		printf("\ncorrections\n");
 		printf("===========\n");
