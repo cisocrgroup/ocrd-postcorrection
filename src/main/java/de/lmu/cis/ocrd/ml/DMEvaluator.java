@@ -113,7 +113,7 @@ public class DMEvaluator {
 		}
 		interpretableTokens++;
 		// we only care about tokens that we are going to correct
-		// correct or incorrect lexical tokens cannot be corrected anyway
+		// correct or incorrect uninterpretable tokens cannot be corrected anyway
 		if (gt.equalsIgnoreCase(token.getMasterOCR().toString())) {
 			correctOCRTokensBefore++;
 		} else {
@@ -193,9 +193,9 @@ public class DMEvaluator {
 		printf("number of interpretable correct tokens: %d\n", interpretableCorrectTokens);
 		printf("number of interpretable not correct tokens: %d\n", interpretableNotCorrectTokens);
 
-		printf("\ndecisions on correct not lexical tokens\n");
-		printf("=======================================\n");
-		printf("number of correct not lexical tokens true yes decisions: %d\n",
+		printf("\ndecisions on correct interpretable tokens\n");
+		printf("=========================================\n");
+		printf("number of correct interpretable tokens true yes decisions: %d\n",
 				counts.get(Classification.NON_LEXICAL_CORRECT).goodYes);
 		printf("number of correct not lexical tokens false yes decisions: %d\n",
 				counts.get(Classification.NON_LEXICAL_CORRECT).badYes);
@@ -267,8 +267,8 @@ public class DMEvaluator {
 	private void evaluate(OCRToken token, Instance instance) throws Exception {
 		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
 		final boolean yes = classify(instance);
-		final boolean ocrCorrect = gt.equals(token.getMasterOCR().toString());
-		final boolean correctionCorrect = rankings.get(token).get(0).candidate.Suggestion.equals(gt);
+		final boolean ocrCorrect = gt.equalsIgnoreCase(token.getMasterOCR().toString());
+		final boolean correctionCorrect = rankings.get(token).get(0).candidate.Suggestion.equalsIgnoreCase(gt);
 		counts.get(classifications.get(token)).add(yes, correctionCorrect);
 
 		// we have an invalid ocr token and the correction is bad
