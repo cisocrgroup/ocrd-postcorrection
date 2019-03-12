@@ -65,9 +65,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 			for (OCRToken token: tokens) {
 				final List<Candidate> cs = token.getAllProfilerCandidates();
 				Logger.debug("adding {} candidates (rr/{})", cs.size(), i+1);
-				cs.forEach((c)->{
-					w.writeToken(new OCRTokenWithCandidateImpl(token, c), i+1);
-				});
+				cs.forEach((c)-> w.writeToken(new OCRTokenWithCandidateImpl(token, c), i+1));
 			}
 		}
 		evaluate(getParameter().rrTraining.evaluation,
