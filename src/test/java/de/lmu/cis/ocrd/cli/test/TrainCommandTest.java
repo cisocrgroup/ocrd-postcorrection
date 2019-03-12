@@ -121,8 +121,8 @@ public class TrainCommandTest {
 			assertThat(exists(cmd.getParameter().dmTraining.evaluation, i), is(true));
 			assertThat(exists(cmd.getParameter().dmTraining.result, i), is(true));
 			final Path al = AbstractMLCommand.tagPath(cmd.getParameter().dleTraining.dynamicLexicon, i+1);
-			Logger.info("al: {}", al.toString());
-			Logger.info("pr: {}", cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)));
+//			Logger.info("al: {}", al.toString());
+//			Logger.info("pr: {}", cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)));
 			assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)).toFile().exists(), is(true));
 			Profile profile = new FileProfiler(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al))).profile();
 			assertThat(profile, notNullValue());
