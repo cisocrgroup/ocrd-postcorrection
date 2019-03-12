@@ -8,6 +8,9 @@ import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.pagexml.METS;
+import de.lmu.cis.ocrd.profile.AdditionalLexicon;
+import de.lmu.cis.ocrd.profile.AdditionalLexiconSet;
+import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
@@ -37,22 +40,22 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         lm = new LM(false, Paths.get(getParameter().trigrams));
         final String ifg = config.mustGetSingleInputFileGroup();
         final String ofg = config.mustGetSingleOutputFileGroup();
-        final Set<String> alex = runDLE(ifg, parameter.nOCR);
+        final AdditionalLexicon alex = runDLE(ifg, parameter.nOCR);
     }
 
-    private Set<String> runDLE(String ifg, int nOCR) throws Exception {
-        final List<OCRToken> tokens = readTokens(mets, ifg, Optional.empty());
+    private AdditionalLexicon runDLE(String ifg, int nOCR) throws Exception {
+        final List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.openDLEFeatureSet());
         final LogisticClassifier c = LogisticClassifier.load(model.openDLEModel(nOCR));
-        Set<String> set = new HashSet<>();
+        AdditionalLexiconSet alex = new AdditionalLexiconSet();
         for (OCRToken token: tokens) {
            final FeatureSet.Vector values = fs.calculateFeatureVector(token, nOCR);
             if (c.predict(values).getPrediction()) {
-                set.add(token.getMasterOCR().toString());
+                alex.add(token.getMasterOCR().toString());
             }
         }
-        return set;
+        return alex;
     }
 
     private FeatureSet makeFeatureSet(InputStream is) throws Exception {

@@ -33,4 +33,9 @@ public class AdditionalFileLexicon implements AdditionalLexicon {
             return set;
         }
     }
+
+    @Override
+    public String toString() {
+        return path.getFileName().toString();
+    }
 }

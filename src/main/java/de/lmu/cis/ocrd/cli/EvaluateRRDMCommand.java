@@ -7,6 +7,7 @@ import de.lmu.cis.ocrd.ml.LogisticClassifier;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
+import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
 import de.lmu.cis.ocrd.profile.Candidate;
 import org.apache.commons.io.FileUtils;
 import org.pmw.tinylog.Logger;
@@ -45,8 +46,8 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		for (String ifg : config.mustGetInputFileGroups()) {
 			Logger.debug("input file group: {}", ifg);
 			for (int i = 0; i < getParameter().nOCR; i++) {
-				final Path le = tagPath(getParameter().dleTraining.dynamicLexicon, i+1);
-				final List<OCRToken> tokens = readTokens(mets, ifg, Optional.of(le));
+				final Path alex = tagPath(getParameter().dleTraining.dynamicLexicon, i+1);
+				final List<OCRToken> tokens = readTokens(mets, ifg, new AdditionalFileLexicon(alex));
 				lm.setTokens(tokens);
 				evaluateRR(tokens, i);
 				evaluateDM(tokens, i);

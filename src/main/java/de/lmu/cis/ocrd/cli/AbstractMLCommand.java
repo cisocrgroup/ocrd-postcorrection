@@ -23,10 +23,10 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	public static class Profiler {
 		String type = "", executable = "", config = "", cacheDir = "";
 
-		public Path getCacheFilePath(String ifg, Optional<Path> additionalLex) {
+		public Path getCacheFilePath(String ifg, AdditionalLexicon additionalLex) {
 			String suffix = ".json.gz";
-			if (additionalLex.isPresent()) {
-				suffix = "_" + additionalLex.get().getFileName().toString().replaceFirst("(\\..*?)$", suffix);
+			if (additionalLex.use()) {
+				suffix = "_" + additionalLex.toString() + suffix;
 			}
 			return Paths.get(cacheDir, ifg + suffix);
 		}
@@ -118,8 +118,8 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		}
 	}
 
-	List<OCRToken> readTokens(METS mets, String ifg, Optional<Path> additionalLex) throws Exception {
-		Logger.debug("read tokens ifg = {}, additional lex {}", ifg, additionalLex);
+	List<OCRToken> readTokens(METS mets, String ifg, AdditionalLexicon additionalLex) throws Exception {
+		Logger.debug("read tokens ifg = {}, additional lex {}", ifg, additionalLex.toString());
 		List<OCRToken> tokens = new ArrayList<>();
 		final int gtIndex = parameter.nOCR;
 		List<Page> pages = openPages(openFiles(mets, ifg));
@@ -155,17 +155,19 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		return pages;
 	}
 
-	private Profile openProfile(String ifg, List<Page> pages, Optional<Path> additionalLex) throws Exception {
+	private Profile openProfile(String ifg, List<Page> pages, AdditionalLexicon additionalLex) throws Exception {
 		Path cached = parameter.profiler.getCacheFilePath(ifg, additionalLex);
 		return openProfileMaybeCached(cached, pages, additionalLex);
 	}
 
-	private Profile openProfileMaybeCached(Path cached, List<Page> pages, Optional<Path> additionalLex) throws Exception {
+	private Profile openProfileMaybeCached(Path cached, List<Page> pages, AdditionalLexicon additionalLex) throws Exception {
 		if (cached.toFile().exists()) {
 			Logger.debug("opening cached profile: {}", cached.toString());
 			return new FileProfiler(cached).profile();
 		}
-		cached.getParent().toFile().mkdirs();
+		if (cached.getParent().toFile().mkdirs()) {
+			Logger.debug("created cache directory {}", cached.getParent().toString());
+		}
 		Profile profile = getProfiler(pages, additionalLex).profile();
 		Charset utf8 = Charset.forName("UTF-8");
 		Logger.debug("caching profile: {}", cached.toString());
@@ -176,7 +178,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		return profile;
 	}
 
-	private de.lmu.cis.ocrd.profile.Profiler getProfiler(List<Page> pages, Optional<Path> additionalLex) throws Exception {
+	private de.lmu.cis.ocrd.profile.Profiler getProfiler(List<Page> pages, AdditionalLexicon additionalLex) throws Exception {
 		switch (parameter.profiler.type) {
 			case "local":
 				Logger.debug("using a local profiler: {} {}", parameter.profiler.executable, parameter.profiler.config);

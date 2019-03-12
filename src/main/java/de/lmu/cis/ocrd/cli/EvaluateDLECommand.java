@@ -6,6 +6,7 @@ import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.pagexml.METS;
+import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import org.pmw.tinylog.Logger;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
@@ -39,7 +40,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 				.add(new DynamicLexiconGTFeature());
 		for (String ifg : config.mustGetInputFileGroups()) {
 			Logger.debug("input file group: {}", ifg);
-			List<OCRToken> tokens = readTokens(mets, ifg, Optional.empty());
+			List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
 			lm.setTokens(tokens);
 			for (int i = 0; i < getParameter().nOCR; i++) {
 				evaluate(tokens, i);
