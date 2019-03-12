@@ -1,7 +1,9 @@
 package de.lmu.cis.ocrd.cli.test;
 
 import de.lmu.cis.ocrd.cli.*;
+import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
 import de.lmu.cis.ocrd.profile.FileProfiler;
+import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -77,7 +79,7 @@ public class TrainCommandTest {
 			assertThat(exists(cmd.getParameter().dmTraining.training, i), is(true));
 		}
 		// one cached profile for the single input file group
-		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, Optional.empty()).toFile().exists(), is(true));
+		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, new NoAdditionalLexicon()).toFile().exists(), is(true));
 	}
 
 	private void evalDLE() throws Exception {
@@ -98,8 +100,8 @@ public class TrainCommandTest {
 			assertThat(exists(cmd.getParameter().dleTraining.result, i), is(true));
 		}
 		// one cached profile for the single input file group
-		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, Optional.empty()).toFile().exists(), is(true));
-		Profile profile = new FileProfiler(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, Optional.empty())).profile();
+		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, new NoAdditionalLexicon()).toFile().exists(), is(true));
+		Profile profile = new FileProfiler(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, new NoAdditionalLexicon())).profile();
 		assertThat(profile, notNullValue());
 	}
 
@@ -123,8 +125,8 @@ public class TrainCommandTest {
 			final Path al = AbstractMLCommand.tagPath(cmd.getParameter().dleTraining.dynamicLexicon, i+1);
 //			Logger.info("al: {}", al.toString());
 //			Logger.info("pr: {}", cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)));
-			assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)).toFile().exists(), is(true));
-			Profile profile = new FileProfiler(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al))).profile();
+			assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, new AdditionalFileLexicon(al)).toFile().exists(), is(true));
+			Profile profile = new FileProfiler(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, new AdditionalFileLexicon(al))).profile();
 			assertThat(profile, notNullValue());
 		}
 	}

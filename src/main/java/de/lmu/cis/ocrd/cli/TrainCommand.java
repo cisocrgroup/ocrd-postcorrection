@@ -7,6 +7,7 @@ import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
 import de.lmu.cis.ocrd.profile.Candidate;
+import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import org.pmw.tinylog.Logger;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -74,7 +75,7 @@ public class TrainCommand extends AbstractMLCommand {
 					.writeHeader(i+1);
 			for (String ifg : ifgs) {
 				Logger.info("input file group (dle, rr): {}", ifg);
-				final List<OCRToken> tokens = readTokens(mets, ifg, Optional.empty());
+				final List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
 				prepareDLEAndRR(tokens, i);
 			}
 			// Train models
@@ -173,7 +174,7 @@ public class TrainCommand extends AbstractMLCommand {
 					.writeHeader(i+1);
 
 			for (String ifg : ifgs) {
-				final List<OCRToken> tokens = readTokens(mets, ifg, Optional.empty());
+				final List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
 				final Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
 
 				dmFS = new FeatureSet()

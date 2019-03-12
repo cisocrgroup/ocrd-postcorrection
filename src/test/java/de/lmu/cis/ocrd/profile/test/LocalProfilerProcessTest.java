@@ -1,6 +1,8 @@
 package de.lmu.cis.ocrd.profile.test;
 
+import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
 import de.lmu.cis.ocrd.profile.LocalProfilerProcess;
+import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.ProfilerProcess;
 import org.junit.Test;
 
@@ -21,7 +23,7 @@ public class LocalProfilerProcessTest {
     private List<String> getDefault() {
         return Arrays.asList(
                 exe.toString(),
-                "--sourceFormat", "TXT",
+                "--sourceFormat", "EXT",
                 "--config",
                 config.toString(),
                 "--sourceFile",
@@ -34,17 +36,16 @@ public class LocalProfilerProcessTest {
 
     @Test
     public void testWithEmptyAdditionalLexicon() {
-        final ProfilerProcess p = new LocalProfilerProcess(exe, config, Optional.empty());
+        final ProfilerProcess p = new LocalProfilerProcess(exe, config, new NoAdditionalLexicon());
         final String want = String.join(" ", getDefault());
         assertThat(p.toString(), is(want));
     }
 
     @Test
     public void testWithAdditionalLexicon() {
-        final ProfilerProcess p = new LocalProfilerProcess(exe, config, Optional.of(Paths.get("addLex")));
+        final ProfilerProcess p = new LocalProfilerProcess(exe, config, new AdditionalFileLexicon(Paths.get("addLex")));
         final List<String> def = new ArrayList<>();
         def.addAll(getDefault());
-        def.addAll(Arrays.asList("--additionalLex", "addLex"));
         final String want = String.join(" ", def);
         assertThat(p.toString(), is(want));
     }
