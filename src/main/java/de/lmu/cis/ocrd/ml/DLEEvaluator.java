@@ -31,8 +31,7 @@ public class DLEEvaluator {
 		writer.write(String.format("total number of tokens: %d\n", total));
 		writer.write(String.format("number of good extensions: %d\n", good));
 		writer.write(String.format("number of bad extensions: %d\n", bad));
-		writer.write(String.format("number of missed opportunities: %d\n",
-				missed));
+		writer.write(String.format("number of missed opportunities: %d\n", missed));
 		final String title = String.format(
 				"===================\nResults (%d):\n", i+1);
 		final String data = classifier.evaluate(title, instances);
