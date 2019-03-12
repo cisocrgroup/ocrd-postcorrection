@@ -22,10 +22,10 @@ public class FileGrpProfiler extends AbstractProfiler {
             for (Line line: page.getLines()) {
                 for (Word word: line.getWords()) {
                     List<String> unicode = word.getUnicodeNormalized();
-                    if (!unicode.isEmpty()) {
+                    if (!unicode.isEmpty() && !unicode.get(0).isEmpty()) {
                         // append master ocr (one token per line)
                         b.append(unicode.get(0));
-                        b.append('\n');
+                        b.append(":\n");
                     }
                 }
             }
