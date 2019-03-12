@@ -45,6 +45,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		public TrainingResource rrTraining;
 		public TrainingResource dmTraining;
 		public Profiler profiler;
+		String model;
 		String trigrams = "";
 		int nOCR = 0;
 		int maxCandidates = 0;
