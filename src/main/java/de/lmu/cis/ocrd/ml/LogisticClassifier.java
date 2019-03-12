@@ -37,13 +37,18 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		return new LogisticClassifier(ds.getStructure(), sl);
 	}
 
-	public static LogisticClassifier load(Path path) throws Exception {
-		Logger.debug("loading logistic classifier from file {}", path);
-		try (ObjectInputStream ois =
-				     new ObjectInputStream(new FileInputStream(path.toFile()))) {
+	public static LogisticClassifier load(InputStream is) throws Exception {
+		try (ObjectInputStream ois = new ObjectInputStream(is)) {
 			final LogisticClassifier c =  (LogisticClassifier) ois.readObject();
 			c.structure.setClassIndex(c.structure.numAttributes()-1);
 			return c;
+		}
+	}
+
+	public static LogisticClassifier load(Path path) throws Exception {
+		Logger.debug("loading logistic classifier from file {}", path);
+		try (InputStream is = new FileInputStream(path.toFile())) {
+			return load(is);
 		}
 	}
 
