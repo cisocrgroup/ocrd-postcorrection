@@ -16,10 +16,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 public class PostCorrectionCommand extends AbstractMLCommand {
     private ModelZIP model;
