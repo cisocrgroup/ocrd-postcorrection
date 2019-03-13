@@ -32,7 +32,7 @@ public class DMEvaluator {
 	private Instances instances;
 	private LogisticClassifier classifier;
 	private Writer writer;
-	private List<OCRToken> tokens;
+	private final List<OCRToken> tokens;
 	private final int i;
 
 	private int interpretableTokens;
@@ -69,6 +69,7 @@ public class DMEvaluator {
 			counts.put(c, new YesNo());
 		}
 		notInterpretableTokenList = new ArrayList<>();
+		tokens = new ArrayList<>();
 		this.i = i;
 		interpretableTokens = 0;
 		interpretableCorrectTokens = 0;
@@ -109,11 +110,8 @@ public class DMEvaluator {
 		this.writer = writer;
 	}
 
-	public void setTokens(List<OCRToken> tokens) {
-		this.tokens = tokens;
-	}
-
 	public void register(OCRToken token) throws Exception {
+		tokens.add(token);
 		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
 		// is token lexical?
 		if (token.getAllProfilerCandidates().isEmpty()) {
@@ -292,15 +290,12 @@ public class DMEvaluator {
 	}
 
 	private void printTokenClassifications() {
-	    final List<Map.Entry<OCRToken, Classification>> entries = new ArrayList<>();
-	    entries.addAll(classifications.entrySet());
+        final List<Map.Entry<OCRToken, Classification>> entries = new ArrayList<>(classifications.entrySet());
 	    entries.sort(Comparator.comparing(Map.Entry::getValue));
 	    entries.forEach((entry)->{
             printf("%s: %s", entry.getValue().toString(), entry.getKey());
             if (entry.getValue() == Classification.INTERPRETABLE_OCR_ERROR_HAVE_NO_CANDIDATE) {
-                ((OCRTokenImpl) entry.getKey()).getAllProfilerCandidatesNoLimit().forEach((c) -> {
-                    printf(":%s", c.Suggestion);
-                });
+                ((OCRTokenImpl) entry.getKey()).getAllProfilerCandidatesNoLimit().forEach((c) -> printf(":%s", c.Suggestion));
             }
 			printf("\n");
         });

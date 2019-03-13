@@ -32,21 +32,36 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 		final METS mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		setParameter(config);
 		final LM lm = new LM(true, Paths.get(getParameter().trigrams));
-		debug = "debug".equals(config.getLogLevel().toLowerCase());
+		debug = "debug".equalsIgnoreCase(config.getLogLevel());
 		fs = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
 				.createFeatureSet(getFeatures(getParameter().dleTraining.features))
 				.add(new DynamicLexiconGTFeature());
-		for (String ifg : config.mustGetInputFileGroups()) {
-			Logger.debug("input file group: {}", ifg);
-			List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
-			lm.setTokens(tokens);
-			for (int i = 0; i < getParameter().nOCR; i++) {
-				evaluate(tokens, i);
-				writeDLE(tokens, i);
-			}
+		for (int i = 0; i < getParameter().nOCR; i++) {
+            try (ARFFWriter w = ARFFWriter
+                    .fromFeatureSet(fs)
+                    .withRelation("evaluate-dle")
+                    .withDebugToken(debug)
+                    .withWriter(openTagged(getParameter().dleTraining.evaluation, i+1))
+                    .writeHeader(i+1)) {
+                for (String ifg : config.mustGetInputFileGroups()) {
+                    Logger.debug("input file group: {}", ifg);
+                    List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
+                    lm.setTokens(tokens);
+                    writeTokens(w, tokens, i);
+                }
+            }
+            evaluate(i);
 		}
+		for (int i = 0; i < getParameter().nOCR; i++) {
+		    for (String ifg : config.mustGetInputFileGroups()) {
+                Logger.debug("input file group: {}", ifg);
+                List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
+                lm.setTokens(tokens);
+                writeDLE(tokens, i);
+            }
+        }
 	}
 
 	private void writeDLE(List<OCRToken> tokens, int i) throws Exception {
@@ -73,19 +88,11 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 		}
 	}
 
-	private void evaluate(List<OCRToken> tokens, int i) throws Exception {
+	private void writeTokens(ARFFWriter w, List<OCRToken> tokens, int i) {
 		Logger.debug("evaluate({})", i);
-		try (ARFFWriter w = ARFFWriter
-				.fromFeatureSet(fs)
-				.withRelation("evaluate-dle")
-				.withDebugToken(debug)
-				.withWriter(openTagged(getParameter().dleTraining.evaluation, i+1))
-				.writeHeader(i+1)) {
-			for (OCRToken token: tokens) {
-				w.writeToken(token, i+1);
-			}
-		}
-		evaluate(i);
+        for (OCRToken token: tokens) {
+            w.writeToken(token, i+1);
+        }
 	}
 
 	private void evaluate(int i) throws Exception {

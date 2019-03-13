@@ -24,6 +24,8 @@ import java.util.*;
 public class EvaluateRRDMCommand extends AbstractMLCommand {
 
 	private FeatureSet rrFS, dmFS;
+	private LM lm;
+	private METS mets;
 	private boolean debug;
 	private DMEvaluator dmEvaluator;
 
@@ -36,78 +38,88 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 	public void execute(CommandLineArguments config) throws Exception {
 		setParameter(config);
 		debug = "debug".equals(config.getLogLevel().toLowerCase());
-		LM lm = new LM(true, Paths.get(getParameter().trigrams));
+		lm = new LM(true, Paths.get(getParameter().trigrams));
 		rrFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
 				.createFeatureSet(getFeatures(getParameter().rrTraining.features))
 				.add(new ReRankingGTFeature());
-		final METS mets = METS.open(Paths.get(config.mustGetMETSFile()));
-		for (String ifg : config.mustGetInputFileGroups()) {
-			Logger.debug("input file group: {}", ifg);
-			for (int i = 0; i < getParameter().nOCR; i++) {
-				final Path alex = tagPath(getParameter().dleTraining.dynamicLexicon, i+1);
-				final List<OCRToken> tokens = readTokens(mets, ifg, new AdditionalFileLexicon(alex));
-				lm.setTokens(tokens);
-				evaluateRR(tokens, i);
-				evaluateDM(tokens, i);
-			}
-		}
+		mets = METS.open(Paths.get(config.mustGetMETSFile()));
+		for (int i = 0; i < getParameter().nOCR; i++) {
+		    evaluateRR(config.mustGetInputFileGroups(), i);
+            evaluateDM(config.mustGetInputFileGroups(), i);
+        }
 	}
 
-	private void evaluateRR(List<OCRToken> tokens, int i) throws Exception {
-		Logger.debug("evaluateRR({})", i+1);
-		try (ARFFWriter w = ARFFWriter
-				.fromFeatureSet(rrFS)
-		        .withRelation("evaluate-rr")
-				.withDebugToken(debug)
-				.withWriter(openTagged(getParameter().rrTraining.evaluation, i+1))
-				.writeHeader(i+1)) {
-			for (OCRToken token: tokens) {
-				final List<Candidate> cs = token.getAllProfilerCandidates();
-				Logger.debug("adding {} candidates (rr/{})", cs.size(), i+1);
-				cs.forEach((c)-> w.writeToken(new OCRTokenWithCandidateImpl(token, c), i+1));
-			}
-		}
-		evaluate(getParameter().rrTraining.evaluation,
-				getParameter().rrTraining.model,
-				getParameter().rrTraining.result, i);
-	}
+	private void evaluateRR(String[] ifgs, int i) throws Exception {
+        try (ARFFWriter w = ARFFWriter
+                .fromFeatureSet(rrFS)
+                .withRelation("evaluate-rr")
+                .withDebugToken(debug)
+                .withWriter(openTagged(getParameter().rrTraining.evaluation, i+1))
+                .writeHeader(i+1)) {
+            for (String ifg : ifgs) {
+                Integer tmp = i;
+                Logger.debug("input file group: {}", ifg);
+				final Path alex = tagPath(getParameter().dleTraining.dynamicLexicon, i + 1);
+                final List<OCRToken> tokens = readTokens(mets, ifg, new AdditionalFileLexicon(alex));
+                lm.setTokens(tokens);
+                tokens.forEach((token)->{
+                    final List<Candidate> cs = token.getAllProfilerCandidates();
+                    Logger.debug("adding {} candidates (rr/{})", cs.size(), tmp+1);
+                    cs.forEach((c)-> w.writeToken(new OCRTokenWithCandidateImpl(token, c), tmp+1));
+                });
+            }
+        }
+        evaluate(getParameter().rrTraining.evaluation,
+                getParameter().rrTraining.model,
+                getParameter().rrTraining.result, i);
+    }
 
-	private void evaluateDM(List<OCRToken> tokens, int i) throws Exception {
-		Logger.debug("evaluateDM({})", i+1);
-		final Path rrModel = tagPath(getParameter().rrTraining.model, i + 1);
-		final Path rrTrain = tagPath(getParameter().rrTraining.evaluation, i + 1);
-		final LogisticClassifier c = LogisticClassifier.load(rrModel);
-		final Instances instances =
-				new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
-		instances.setClassIndex(instances.numAttributes() - 1);
-		Iterator<Instance> is = instances.iterator();
-		Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
+    private void evaluateDM(String[] ifgs, int i) throws Exception {
 		dmFS = new FeatureSet()
-				.add(new DMBestRankFeature("dm-best-rank", rankings))
-				.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
-				.add(new DMGTFeature("dm-gt", rankings));
-		dmEvaluator = new DMEvaluator(rankings, i);
-		try (ARFFWriter w = ARFFWriter
-				.fromFeatureSet(dmFS)
-				.withRelation("evaluate-dm")
-				.withDebugToken(debug)
-				.withWriter(openTagged(getParameter().dmTraining.evaluation, i + 1))
-				.writeHeader(i + 1)) {
-			for (OCRToken token : tokens) {
-				dmEvaluator.register(token);
-				if (!rankings.containsKey(token)) {
-					continue;
+				.add(new DMBestRankFeature("dm-best-rank", null))
+				.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", null))
+				.add(new DMGTFeature("dm-gt", null));
+        try (ARFFWriter w = ARFFWriter
+                .fromFeatureSet(dmFS)
+                .withRelation("evaluate-dm")
+                .withDebugToken(debug)
+                .withWriter(openTagged(getParameter().dmTraining.evaluation, i+1))
+                .writeHeader(i+1)) {
+            Logger.debug("evaluateDM({})", i+1);
+			final Path rrTrain = tagPath(getParameter().rrTraining.evaluation, i + 1);
+			final Path rrModel = tagPath(getParameter().rrTraining.model, i + 1);
+			final LogisticClassifier c = LogisticClassifier.load(rrModel);
+			final Instances instances =
+					new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
+			instances.setClassIndex(instances.numAttributes() - 1);
+			Iterator<Instance> is = instances.iterator();
+            for (String ifg : ifgs) {
+                Logger.debug("input file group: {}", ifg);
+				final Path alex = tagPath(getParameter().dleTraining.dynamicLexicon, i + 1);
+                final List<OCRToken> tokens = readTokens(mets, ifg, new AdditionalFileLexicon(alex));
+                lm.setTokens(tokens);
+                Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
+				dmFS = new FeatureSet()
+						.add(new DMBestRankFeature("dm-best-rank", rankings))
+						.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
+						.add(new DMGTFeature("dm-gt", rankings));
+                dmEvaluator = new DMEvaluator(rankings, i);
+				for (OCRToken token : tokens) {
+					dmEvaluator.register(token);
+					if (!rankings.containsKey(token)) {
+						continue;
+					}
+					FeatureSet.Vector values = dmFS.calculateFeatureVector(token, i+1);
+					w.writeFeatureVector(values);
 				}
-				FeatureSet.Vector values = dmFS.calculateFeatureVector(token, i+1);
-				w.writeFeatureVector(values);
-			}
-		}
-		writeDMEvaluation(tokens, i);
-	}
+            }
+        }
+        writeDMEvaluation(i);
+    }
 
-	private void writeDMEvaluation(List<OCRToken> tokens, int i) throws Exception {
+	private void writeDMEvaluation(int i) throws Exception {
 		final Path evalPath = tagPath(getParameter().dmTraining.evaluation, i+1);
 		final Path resultPath = tagPath(getParameter().dmTraining.result, i+1);
 		final Path modelPath = tagPath(getParameter().dmTraining.model, i+1);
@@ -117,7 +129,6 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		final LogisticClassifier classifier =
 				LogisticClassifier.load(modelPath);
 
-		dmEvaluator.setTokens(tokens);
 		dmEvaluator.setClassifier(classifier);
 		dmEvaluator.setInstances(instances);
 
