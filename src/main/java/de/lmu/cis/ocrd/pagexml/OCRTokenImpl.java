@@ -1,6 +1,5 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.ml.features.OCRWord;
 import de.lmu.cis.ocrd.profile.Candidate;
@@ -101,6 +100,16 @@ public class OCRTokenImpl implements OCRToken {
 	public boolean ocrIsCorrect() {
 		final String gt = getGT().orElseThrow(() -> new RuntimeException("missing ground-truth"));
 		return gt.equalsIgnoreCase(getMasterOCR().toString());
+	}
+
+	@Override
+	public void correct(String correction, double confidence) {
+		word.appendNewTextEquiv()
+				.addUnicode(correction)
+				.withConfidence(confidence)
+				.withIndex(0)
+				.withDataType("OCR-D-CIS-POST-CORRECTION")
+				.withDataTypeDetails(word.toString());
 	}
 
 	public List<Candidate> getAllProfilerCandidatesNoLimit() {

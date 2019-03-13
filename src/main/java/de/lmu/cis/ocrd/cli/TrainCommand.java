@@ -86,6 +86,8 @@ public class TrainCommand extends AbstractMLCommand {
 		}
 		// dm must be trained after rr has been trained.
 		trainDM();
+		// write zipped model
+		writeModelZIP();
 	}
 
 	private void prepareDLEAndRR(List<OCRToken> tokens, int i) {
@@ -193,6 +195,19 @@ public class TrainCommand extends AbstractMLCommand {
 			train(dmTrain, dmModel);
 		}
 	}
+
+	private void writeModelZIP() throws Exception {
+		final ModelZIP model = new ModelZIP();
+		for (int i = 0; i < getParameter().nOCR; i++) {
+			model.addDLEModel(tagPath(getParameter().dleTraining.model, i+1), i);
+			model.addRRModel(tagPath(getParameter().rrTraining.model, i+1), i);
+			model.addDMModel(tagPath(getParameter().dmTraining.model, i+1), i);
+		}
+		model.setDLEFeatureSet(Paths.get(getParameter().dleTraining.features));
+		model.setRRFeatureSet(Paths.get(getParameter().rrTraining.features));
+		model.save(Paths.get(getParameter().model));
+	}
+
 
 	private static void train(Path src, Path dest) throws Exception {
 		Logger.debug("training {} from {}", dest.toString(), src.toString());

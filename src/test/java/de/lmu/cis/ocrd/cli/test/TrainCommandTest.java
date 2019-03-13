@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pmw.tinylog.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -29,6 +30,7 @@ public class TrainCommandTest {
 	private final String inputFileGroupTrain = "OCR-D-PROFILED";
 	private final String inputFileGroupEval = "OCR-D-EVAL";
 	private final String logLevel = "DEBUG";
+	private final String model = "src/test/resource/workspace/model.zip";
 
 	private AbstractMLCommand.Parameter config;
 
@@ -45,6 +47,7 @@ public class TrainCommandTest {
 	@After
 	public void deinit() {
 		try {
+			new File(model).delete();
 			FileUtils.deleteDirectory(tmp.toFile());
 		} catch (Exception e) {
 			// ignore
@@ -56,6 +59,7 @@ public class TrainCommandTest {
 		train();
 		evalDLE();
 		evalRRDM();
+		postCorrect();
 	}
 
 	private void train() throws Exception {
@@ -80,6 +84,7 @@ public class TrainCommandTest {
 		}
 		// one cached profile for the single input file group
 		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, new NoAdditionalLexicon()).toFile().exists(), is(true));
+		assertThat(new File(cmd.getParameter().model).exists(), is(true));
 	}
 
 	private void evalDLE() throws Exception {
@@ -129,6 +134,20 @@ public class TrainCommandTest {
 			Profile profile = new FileProfiler(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, new AdditionalFileLexicon(al))).profile();
 			assertThat(profile, notNullValue());
 		}
+	}
+
+	private void postCorrect() throws Exception {
+		String[] args = {
+				"-c", "post-correct",
+				"--mets", mets,
+				"--parameter", parameter,
+				"-I", inputFileGroupEval,
+				"-O", "unused-outputFileGroup",
+				"--log-level", logLevel,
+		};
+		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
+		PostCorrectionCommand cmd = new PostCorrectionCommand();
+		cmd.execute(cla);
 	}
 
 	private static boolean exists(String path, int i) {

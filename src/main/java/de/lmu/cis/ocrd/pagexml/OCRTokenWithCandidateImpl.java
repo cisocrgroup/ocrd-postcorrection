@@ -50,4 +50,9 @@ public class OCRTokenWithCandidateImpl implements OCRToken {
 	public boolean ocrIsCorrect() {
 		return token.ocrIsCorrect();
 	}
+
+	@Override
+	public void correct(String correction, double confidence) {
+		token.correct(correction, confidence);
+	}
 }

@@ -110,6 +110,11 @@ public class Token implements Serializable, OCRToken {
 	}
 
 	@Override
+	public void correct(String correction, double confidence) {
+		/* do nothing */
+	}
+
+	@Override
 	public boolean ocrIsCorrect() {
 		return false;
 	}

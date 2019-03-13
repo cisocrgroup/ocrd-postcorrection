@@ -44,8 +44,8 @@ public class TextRegion {
 
 	public TextEquiv appendNewTextEquiv() {
 		final TextEquiv te = new TextEquiv(node.getOwnerDocument().createElement("TextEquiv"));
-	    node.appendChild(te.getNode());
-	    return te;
+		node.appendChild(te.getNode());
+		return te;
 	}
 
 	public List<String> getUnicode() {

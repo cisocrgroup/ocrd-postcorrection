@@ -12,5 +12,6 @@ public interface OCRToken {
 	Optional<String> getGT();
 	Optional<Candidate> getProfilerCandidate();
 	List<Candidate> getAllProfilerCandidates();
+	void correct(String correction, double confidence);
 	boolean ocrIsCorrect();
 }

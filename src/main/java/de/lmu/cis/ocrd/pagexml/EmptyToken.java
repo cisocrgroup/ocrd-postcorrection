@@ -46,6 +46,11 @@ public class EmptyToken implements OCRToken {
 	}
 
 	@Override
+	public void correct(String correction, double confidence) {
+		/* do nothing */
+	}
+
+	@Override
 	public String toString() {
 		return "**EMPTY-TOKEN**";
 	}
