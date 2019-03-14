@@ -59,6 +59,17 @@ public class ReadProfileFromJSONTest {
 		assertThat(profile.containsKey("null"), is(false));
 	}
 
+
+	@Test
+	public void testProfileContainsWasser() {
+		assertThat(profile.containsKey("Wasser"), is(true));
+	}
+
+	@Test
+	public void testWasserIsLexiconEntry() throws Exception {
+		assertThat(profile.get("Wasser").orElseThrow(()->new Exception("missing entry")).Candidates[0].isLexiconEntry(), is(true));
+	}
+
 	@Test
 	public void testNumberOfCandidatesForFirstToken() {
 		assertThat(profile.get("Vnheilfolles").get().Candidates.length, is(41));
@@ -81,7 +92,7 @@ public class ReadProfileFromJSONTest {
 
 	@Test
 	public void testProfileContainsTwoTypes() {
-		assertThat(profile.size(), is(2));
+		assertThat(profile.size(), is(3));
 	}
 
 	@Test

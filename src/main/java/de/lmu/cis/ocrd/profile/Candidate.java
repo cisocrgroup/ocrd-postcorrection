@@ -6,7 +6,7 @@ public class Candidate {
 	public int Distance;
 	public double Weight;
 
-	public Candidate allToLowerCase() {
+	Candidate allToLowerCase() {
 		this.Suggestion = Suggestion.toLowerCase();
 		this.Modern = this.Modern.toLowerCase();
 		this.Dict = this.Dict.toLowerCase();
@@ -21,5 +21,11 @@ public class Candidate {
 			}
 		}
 		return this;
+	}
+
+	// returns true if the candidate is a lexicon entry,
+	// i.e. has no historical or ocr patterns.
+	public boolean isLexiconEntry() {
+		return Distance == 0 && (HistPatterns == null || HistPatterns.length == 0);
 	}
 }
