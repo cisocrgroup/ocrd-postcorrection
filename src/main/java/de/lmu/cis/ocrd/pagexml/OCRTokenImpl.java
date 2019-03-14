@@ -7,6 +7,7 @@ import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,6 +93,11 @@ public class OCRTokenImpl implements OCRToken {
 	}
 
 	@Override
+	public boolean isLexiconEntry() {
+		return !candidates.isEmpty() && candidates.get(0).isLexiconEntry();
+	}
+
+	@Override
 	public String toString() {
 		return word.toString();
 	}
@@ -118,9 +124,7 @@ public class OCRTokenImpl implements OCRToken {
 		if (!candidates.isPresent()) {
 			return cs;
 		}
-		for (Candidate candidate : candidates.get().Candidates) {
-			cs.add(candidate);
-		}
+		cs.addAll(Arrays.asList(candidates.get().Candidates));
 		return cs;
 	}
 

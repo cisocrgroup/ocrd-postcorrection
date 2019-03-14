@@ -47,6 +47,11 @@ public class OCRTokenWithCandidateImpl implements OCRToken {
 	}
 
 	@Override
+	public boolean isLexiconEntry() {
+		return candidate.isLexiconEntry();
+	}
+
+	@Override
 	public boolean ocrIsCorrect() {
 		return token.ocrIsCorrect();
 	}

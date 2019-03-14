@@ -46,6 +46,11 @@ public class EmptyToken implements OCRToken {
 	}
 
 	@Override
+	public boolean isLexiconEntry() {
+		return false;
+	}
+
+	@Override
 	public void correct(String correction, double confidence) {
 		/* do nothing */
 	}

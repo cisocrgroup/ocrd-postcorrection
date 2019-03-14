@@ -30,7 +30,7 @@ public class Token implements Serializable, OCRToken {
 		return new Token(Word.create(str), id);
 	}
 
-	public int getID() {
+	private int getID() {
 		return id;
 	}
 
@@ -107,6 +107,11 @@ public class Token implements Serializable, OCRToken {
 	@Override
 	public List<Candidate> getAllProfilerCandidates() {
 		return new ArrayList<>();
+	}
+
+	@Override
+	public boolean isLexiconEntry() {
+		return false;
 	}
 
 	@Override
