@@ -17,14 +17,14 @@ public class OCRTokenImpl implements OCRToken {
 	private final List<OCRWordImpl> words;
 	private final List<Candidate> candidates;
 	private final int gtIndex;
-	private final Profile profile;
+	private final int maxCandidates;
 
 	public OCRTokenImpl(Word word, int gtIndex, int maxCandidates, Profile profile) throws Exception {
 		this.gtIndex = gtIndex;
 		this.word = word;
 		this.words = getWords(word, gtIndex);
-		this.profile = profile;
-		this.candidates = getCandidates(profile, maxCandidates);
+		this.maxCandidates = maxCandidates;
+		this.candidates = getCandidates(profile);
 	}
 
 	private static List<OCRWordImpl> getWords(Word word, int gtIndex) throws Exception {
@@ -89,7 +89,7 @@ public class OCRTokenImpl implements OCRToken {
 
 	@Override
 	public List<Candidate> getAllProfilerCandidates() {
-		return this.candidates;
+		return this.candidates.subList(0, Integer.min(candidates.size(), maxCandidates));
 	}
 
 	@Override
@@ -119,27 +119,16 @@ public class OCRTokenImpl implements OCRToken {
 	}
 
 	public List<Candidate> getAllProfilerCandidatesNoLimit() {
+		return candidates;
+	}
+
+	private List<Candidate> getCandidates(Profile profile) {
 		List<Candidate> cs = new ArrayList<>();
 		Optional<Candidates> candidates = profile.get(getMasterOCR().toString().toLowerCase());
 		if (!candidates.isPresent()) {
 			return cs;
 		}
 		cs.addAll(Arrays.asList(candidates.get().Candidates));
-		return cs;
-	}
-
-	private List<Candidate> getCandidates(Profile profile, int maxCandidates) {
-		List<Candidate> cs = new ArrayList<>();
-		Optional<Candidates> candidates = profile.get(getMasterOCR().toString().toLowerCase());
-		if (!candidates.isPresent()) {
-			return cs;
-		}
-		for (Candidate candidate : candidates.get().Candidates) {
-			if (cs.size() == maxCandidates) {
-				return cs;
-			}
-			cs.add(candidate);
-		}
 		return cs;
 	}
 }
