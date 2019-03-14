@@ -13,4 +13,9 @@ public class AdditionalLexiconSet extends HashSet<String> implements AdditionalL
     public Set<String> entries() {
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "set_" + size();
+    }
 }
