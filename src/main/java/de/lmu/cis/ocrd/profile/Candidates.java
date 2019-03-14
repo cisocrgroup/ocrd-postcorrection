@@ -1,8 +1,10 @@
 package de.lmu.cis.ocrd.profile;
 
+import java.util.List;
+
 public class Candidates {
 	public String OCR = "";
-	public Candidate[] Candidates = new Candidate[0];
+	public List<Candidate> Candidates;// = new Candidate[0];
 
 	public Candidates toLowerCase() {
 		this.OCR = this.OCR.toLowerCase();

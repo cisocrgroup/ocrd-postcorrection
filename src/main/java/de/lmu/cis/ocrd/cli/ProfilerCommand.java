@@ -67,8 +67,8 @@ public class ProfilerCommand extends AbstractIOCommand {
 			return;
 		}
 		final int n = unicode.size();
-		for (int i = 0; i < candidates.get().Candidates.length; i++) {
-			final Candidate candidate = candidates.get().Candidates[i];
+		for (int i = 0; i < candidates.get().Candidates.size(); i++) {
+			final Candidate candidate = candidates.get().Candidates.get(i);
 			word.appendNewTextEquiv()
 					.withConfidence(candidate.Weight)
 					.withDataType(String.format("ocrd-cis-profiler-candidate-%d", i+1))

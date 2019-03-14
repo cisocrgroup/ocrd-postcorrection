@@ -64,13 +64,13 @@ public class Profile extends HashMap<String, Candidates> {
 	}
 
 	private Profile removeEmptyCandidates() {
-		this.entrySet().removeIf((e) -> e.getValue().Candidates == null || e.getValue().Candidates.length == 0);
+		this.entrySet().removeIf((e) -> e.getValue().Candidates == null || e.getValue().Candidates.size() == 0);
 		return this;
 	}
 
 	private Profile sortCandidatesByVoteWeight() {
 		for (Map.Entry<String, Candidates> e : this.entrySet()) {
-			Arrays.sort(e.getValue().Candidates, (Candidate a, Candidate b) -> (int) (b.Weight - a.Weight));
+			e.getValue().Candidates.sort((a, b)-> (int) (b.Weight - a.Weight));
 		}
 		return this;
 	}

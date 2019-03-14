@@ -67,27 +67,27 @@ public class ReadProfileFromJSONTest {
 
 	@Test
 	public void testWasserIsLexiconEntry() throws Exception {
-		assertThat(profile.get("Wasser").orElseThrow(()->new Exception("missing entry")).Candidates[0].isLexiconEntry(), is(true));
+		assertThat(profile.get("Wasser").orElseThrow(()->new Exception("missing entry")).Candidates.get(0).isLexiconEntry(), is(true));
 	}
 
 	@Test
 	public void testNumberOfCandidatesForFirstToken() {
-		assertThat(profile.get("Vnheilfolles").get().Candidates.length, is(41));
+		assertThat(profile.get("Vnheilfolles").get().Candidates.size(), is(41));
 	}
 
 	@Test
 	public void testNumberOfCandidatesForFirstTokenIgnoresCase() {
-		assertThat(profile.get("vnheilfolles").get().Candidates.length, is(41));
+		assertThat(profile.get("vnheilfolles").get().Candidates.size(), is(41));
 	}
 
 	@Test
 	public void testNumberOfCandidatesForSecondToken() {
-		assertThat(profile.get("Waſſer").get().Candidates.length, is(6));
+		assertThat(profile.get("Waſſer").get().Candidates.size(), is(6));
 	}
 
 	@Test
 	public void testNumberOfCandidatesForSecondTokenIgnoresCase() {
-		assertThat(profile.get("waſſer").get().Candidates.length, is(6));
+		assertThat(profile.get("waſſer").get().Candidates.size(), is(6));
 	}
 
 	@Test
@@ -123,8 +123,8 @@ public class ReadProfileFromJSONTest {
 		for (String test: new String[]{"dicke", "marmor", "bodens"}) {
 			assertThat(profile.get(test).isPresent(), is(true));
 			assertThat(profile.get(test).get().OCR, is(test));
-			assertThat(profile.get(test).get().Candidates.length, is(1));
-			assertThat(profile.get(test).get().Candidates[0].Suggestion, is(test));
+			assertThat(profile.get(test).get().Candidates.size(), is(1));
+			assertThat(profile.get(test).get().Candidates.get(0).Suggestion, is(test));
 		}
 	}
 }

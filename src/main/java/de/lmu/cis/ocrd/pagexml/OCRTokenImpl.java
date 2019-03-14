@@ -123,12 +123,10 @@ public class OCRTokenImpl implements OCRToken {
 	}
 
 	private List<Candidate> getCandidates(Profile profile) {
-		List<Candidate> cs = new ArrayList<>();
-		Optional<Candidates> candidates = profile.get(getMasterOCR().toString().toLowerCase());
+        final Optional<Candidates> candidates = profile.get(getMasterOCR().toString().toLowerCase());
 		if (!candidates.isPresent()) {
-			return cs;
+		    return new ArrayList<>();
 		}
-		cs.addAll(Arrays.asList(candidates.get().Candidates));
-		return cs;
+		return candidates.get().Candidates;
 	}
 }
