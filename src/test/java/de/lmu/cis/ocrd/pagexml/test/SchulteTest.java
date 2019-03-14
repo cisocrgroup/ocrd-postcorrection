@@ -39,7 +39,7 @@ public class SchulteTest {
 
     @Test
     public void readAllTokens() {
-    	final String search = "azt|vazt|Laßt|abbt|ammt|ytzt|jezt|jtzt|amst|...";
+    	final String search = "master:azt,slave:vazt,gt:Laßt,slave:abbt,slave:ammt,...";
     	boolean found = false;
         int i = 0;
         for (Page page: pages) {

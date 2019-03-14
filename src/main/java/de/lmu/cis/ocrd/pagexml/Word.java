@@ -38,16 +38,24 @@ public class Word extends TextRegion {
 
 	@Override
 	public String toString() {
-		StringJoiner sj = new StringJoiner("|");
-		final int max = 9; // 3 OCRs + 1 GT + 5 Candidates
+		StringJoiner sj = new StringJoiner(",");
+		final List<TextEquiv> tes = getTextEquivs();
+		final int max = 5; // just an arbitrary boundary
 		int i = 0;
-		for (String str : getUnicodeNormalized()) {
-			sj.add(str);
-			i++;
-			if (i >= max) {
+		for (TextEquiv te : tes) {
+			if (i++ >= max) {
 				sj.add("...");
 				break;
 			}
+			String prefix = "";
+			if (te.getDataType().contains("master-ocr")) {
+				prefix = "master:";
+			} else if (te.getDataTypeDetails().contains("-GT-")) {
+				prefix = "gt:";
+			} else {
+				prefix = "slave:";
+			}
+			sj.add(prefix + te.getUnicodeNormalized());
 		}
 		return sj.toString();
 	}
