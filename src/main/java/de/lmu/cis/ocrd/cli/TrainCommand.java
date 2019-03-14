@@ -127,27 +127,8 @@ public class TrainCommand extends AbstractMLCommand {
 		});
 	}
 
-	private void prepareDM(List<OCRToken> tokens, int i) {
-		tokens.forEach((token)->{
-			final List<Candidate> cs = token.getAllProfilerCandidates();
-			Logger.debug("adding {} candidates", cs.size());
-			cs.forEach((c)->{
-				OCRTokenWithCandidateImpl tc =
-						new OCRTokenWithCandidateImpl(token, c);
-				// Logger.debug("prepareDM: adding {} (Candidate: {}, GT: {})",
-				// 		tc.getMasterOCR().toString(),
-				// 		c.Suggestion,
-				// 		tc.getGT().toString());
-				final FeatureSet.Vector values =
-						dmFS.calculateFeatureVector(tc, i+1);
-				// Logger.debug(values);
-				dmw.writeFeatureVector(values);
-			});
-		});
-	}
-
 	private void trainDM() throws Exception {
-		rrConfidences = new ArrayList(getParameter().maxCandidates);
+		rrConfidences = new ArrayList<>(getParameter().maxCandidates);
 		for (int i = 0; i < getParameter().maxCandidates; i++) {
 			rrConfidences.add(0.0);
 		}
