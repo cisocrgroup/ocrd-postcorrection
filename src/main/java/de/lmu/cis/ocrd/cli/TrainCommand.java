@@ -98,14 +98,14 @@ public class TrainCommand extends AbstractMLCommand {
 	}
 
 	private void prepareDLE(List<OCRToken> tokens, int i) {
-		tokens.forEach((token)->{
-			if (token.getAllProfilerCandidates().isEmpty()) {
-				return;
+		for (OCRToken token : tokens) {
+			if (token.isLexiconEntry()) {
+				Logger.debug("skipping lexicon entry: {}", token.toString());
+				continue;
 			}
-			final FeatureSet.Vector values =
-					dleFS.calculateFeatureVector(token, i+1);
+			final FeatureSet.Vector values = dleFS.calculateFeatureVector(token, i+1);
 			dlew.writeFeatureVector(values);
-		});
+		}
 	}
 
 	private void prepareRR(List<OCRToken> tokens, int i) {

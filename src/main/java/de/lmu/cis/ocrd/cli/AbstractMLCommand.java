@@ -111,8 +111,6 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 				String mOCR = word.getUnicodeNormalized().get(0);
 				if (mOCR.length() > 3) {
 					f.apply(word, mOCR);
-				} else {
-					Logger.debug("word: {} too short", word);
 				}
 			}
 		}
@@ -126,12 +124,10 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		final Profile profile = openProfile(ifg, pages, additionalLex);
 		for (Page page: pages) {
 			eachLongWord(page, (word, mOCR)->{
-				Logger.debug("word: {}", word);
 				final List<TextEquiv> tes = word.getTextEquivs();
 				if (gtIndex < tes.size() &&
 						tes.get(gtIndex).getDataTypeDetails().contains("OCR-D-GT")) {
 					OCRTokenImpl t = new OCRTokenImpl(word, parameter.nOCR, parameter.maxCandidates, profile);
-					Logger.debug("using token: {}", t.toString());
 					if (t.getGT().isPresent()) {
 						tokens.add(t);
 					}

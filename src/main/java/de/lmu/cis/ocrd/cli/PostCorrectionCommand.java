@@ -13,6 +13,7 @@ import de.lmu.cis.ocrd.profile.AdditionalLexiconSet;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import org.apache.commons.io.IOUtils;
+import org.pmw.tinylog.Logger;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -92,7 +93,11 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final LogisticClassifier c = LogisticClassifier.load(model.openDLEModel(nOCR-1));
         AdditionalLexiconSet alex = new AdditionalLexiconSet();
         for (OCRToken token: tokens) {
-           final FeatureSet.Vector values = fs.calculateFeatureVector(token, nOCR-1);
+            if (token.isLexiconEntry()) {
+                Logger.debug("skipping lexicon entry: {}", token.toString());
+                continue;
+            }
+            final FeatureSet.Vector values = fs.calculateFeatureVector(token, nOCR-1);
             if (c.predict(values).getPrediction()) {
                 alex.add(token.getMasterOCR().toString());
             }
