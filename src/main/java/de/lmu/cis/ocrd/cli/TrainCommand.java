@@ -111,7 +111,7 @@ public class TrainCommand extends AbstractMLCommand {
 	private void prepareRR(List<OCRToken> tokens, int i) {
 		tokens.forEach((token)->{
 			final List<Candidate> cs = token.getAllProfilerCandidates();
-			Logger.debug("adding {} candidates", cs.size());
+			Logger.debug("token: '{}': adding {} candidates", token.toString(), cs.size());
 			cs.forEach((c)->{
 				OCRTokenWithCandidateImpl tc =
 						new OCRTokenWithCandidateImpl(token, c);
