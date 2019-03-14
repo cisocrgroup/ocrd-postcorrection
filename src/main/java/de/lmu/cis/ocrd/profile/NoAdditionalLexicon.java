@@ -12,4 +12,9 @@ public class NoAdditionalLexicon implements AdditionalLexicon {
     public Set<String> entries() throws Exception {
         throw new Exception("no entries for the additional lexicon");
     }
+
+    @Override
+    public String toString() {
+        return "no_dle";
+    }
 }
