@@ -124,7 +124,9 @@ public class TrainCommandTest {
 		// existing files (see above) + 4 eval and 4 result files (for each rr and dm training) and two profile cache files
 		for (int i = 0; i < 2; i++) {
 			assertThat(exists(cmd.getParameter().rrTraining.evaluation, i), is(true));
+			assertThat(exists(cmd.getParameter().rrTraining.evaluation.replace(".arff", "_no_dle.arff"), i), is(true));
 			assertThat(exists(cmd.getParameter().rrTraining.result, i), is(true));
+			assertThat(exists(cmd.getParameter().rrTraining.result.replace(".txt", "_no_dle.txt"), i), is(true));
 			assertThat(exists(cmd.getParameter().dmTraining.evaluation, i), is(true));
 			assertThat(exists(cmd.getParameter().dmTraining.result, i), is(true));
 			final Path al = AbstractMLCommand.tagPath(cmd.getParameter().dleTraining.dynamicLexicon, i+1);

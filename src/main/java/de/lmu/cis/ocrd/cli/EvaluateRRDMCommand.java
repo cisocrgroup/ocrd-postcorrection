@@ -8,7 +8,9 @@ import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
 import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
+import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Candidate;
+import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import org.apache.commons.io.FileUtils;
 import org.pmw.tinylog.Logger;
 import weka.core.Instance;
@@ -23,7 +25,7 @@ import java.util.*;
 
 public class EvaluateRRDMCommand extends AbstractMLCommand {
 
-	private FeatureSet rrFS, dmFS;
+	private FeatureSet rrFS;
 	private LM lm;
 	private METS mets;
 	private boolean debug;
@@ -46,23 +48,25 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				.add(new ReRankingGTFeature());
 		mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		for (int i = 0; i < getParameter().nOCR; i++) {
-		    evaluateRR(config.mustGetInputFileGroups(), i);
-            evaluateDM(config.mustGetInputFileGroups(), i);
+			evaluateRR(config.mustGetInputFileGroups(), i, true);
+			evaluateRR(config.mustGetInputFileGroups(), i, false);
+			evaluateDM(config.mustGetInputFileGroups(), i, true);
+			evaluateDM(config.mustGetInputFileGroups(), i, false);
         }
 	}
 
-	private void evaluateRR(String[] ifgs, int i) throws Exception {
+	private void evaluateRR(String[] ifgs, int i, boolean useAlex) throws Exception {
+		final String suffix = useAlex? "": "_no_dle";
         try (ARFFWriter w = ARFFWriter
                 .fromFeatureSet(rrFS)
                 .withRelation("evaluate-rr")
                 .withDebugToken(debug)
-                .withWriter(openTagged(getParameter().rrTraining.evaluation, i+1))
+                .withWriter(openTagged(getParameter().rrTraining.evaluation.replace(".arff", suffix + ".arff"), i+1))
                 .writeHeader(i+1)) {
             for (String ifg : ifgs) {
                 Integer tmp = i;
                 Logger.debug("input file group: {}", ifg);
-				final Path alex = tagPath(getParameter().dleTraining.dynamicLexicon, i + 1);
-                final List<OCRToken> tokens = readTokens(mets, ifg, new AdditionalFileLexicon(alex));
+				final List<OCRToken> tokens = readTokens(mets, ifg, getAlex(useAlex, i));
                 lm.setTokens(tokens);
                 tokens.forEach((token)->{
                     final List<Candidate> cs = token.getAllProfilerCandidates();
@@ -71,21 +75,23 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
                 });
             }
         }
-        evaluate(getParameter().rrTraining.evaluation,
+        evaluate(getParameter().rrTraining.evaluation.replace(".arff", suffix + ".arff"),
                 getParameter().rrTraining.model,
-                getParameter().rrTraining.result, i);
+                getParameter().rrTraining.result.replace(".txt", suffix + ".txt"),
+				i);
     }
 
-    private void evaluateDM(String[] ifgs, int i) throws Exception {
-		dmFS = new FeatureSet()
+    private void evaluateDM(String[] ifgs, int i, boolean useAlex) throws Exception {
+		FeatureSet dmFS = new FeatureSet()
 				.add(new DMBestRankFeature("dm-best-rank", null))
 				.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", null))
 				.add(new DMGTFeature("dm-gt", null));
+		final String suffix = useAlex? "" : "_no_dle";
         try (ARFFWriter w = ARFFWriter
                 .fromFeatureSet(dmFS)
                 .withRelation("evaluate-dm")
                 .withDebugToken(debug)
-                .withWriter(openTagged(getParameter().dmTraining.evaluation, i+1))
+                .withWriter(openTagged(getParameter().dmTraining.evaluation.replace(".arff", suffix + ".arff"), i+1))
                 .writeHeader(i+1)) {
             Logger.debug("evaluateDM({})", i+1);
 			final Path rrTrain = tagPath(getParameter().rrTraining.evaluation, i + 1);
@@ -97,8 +103,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 			Iterator<Instance> is = instances.iterator();
             for (String ifg : ifgs) {
                 Logger.debug("input file group: {}", ifg);
-				final Path alex = tagPath(getParameter().dleTraining.dynamicLexicon, i + 1);
-                final List<OCRToken> tokens = readTokens(mets, ifg, new AdditionalFileLexicon(alex));
+                final List<OCRToken> tokens = readTokens(mets, ifg, getAlex(useAlex, i));
                 lm.setTokens(tokens);
                 Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
 				dmFS = new FeatureSet()
@@ -116,19 +121,18 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				}
             }
         }
-        writeDMEvaluation(i);
+        writeDMEvaluation(i, useAlex);
     }
 
-	private void writeDMEvaluation(int i) throws Exception {
-		final Path evalPath = tagPath(getParameter().dmTraining.evaluation, i+1);
-		final Path resultPath = tagPath(getParameter().dmTraining.result, i+1);
+	private void writeDMEvaluation(int i, boolean useAlex) throws Exception {
+		final String suffix = useAlex? "" : "_no_dle";
+		final Path evalPath = tagPath(getParameter().dmTraining.evaluation.replace(".arff", suffix + ".arff"), i+1);
+		final Path resultPath = tagPath(getParameter().dmTraining.result.replace(".txt", suffix + ".txt"), i+1);
 		final Path modelPath = tagPath(getParameter().dmTraining.model, i+1);
-		final Instances instances =
-				new ConverterUtils.DataSource(evalPath.toString()).getDataSet();
-		instances.setClassIndex(instances.numAttributes()-1);
-		final LogisticClassifier classifier =
-				LogisticClassifier.load(modelPath);
 
+		final Instances instances = new ConverterUtils.DataSource(evalPath.toString()).getDataSet();
+		instances.setClassIndex(instances.numAttributes()-1);
+		final LogisticClassifier classifier = LogisticClassifier.load(modelPath);
 		dmEvaluator.setClassifier(classifier);
 		dmEvaluator.setInstances(instances);
 
@@ -147,8 +151,14 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		final LogisticClassifier c = LogisticClassifier.load(modelPath);
 		final String title = String.format("\nResults (%d):\n=============\n", i+1);
 		final String data = c.evaluate(title, evalPath);
-		FileUtils.writeStringToFile(resultPath.toFile(), data,
-				Charset.forName("UTF-8"));
+		FileUtils.writeStringToFile(resultPath.toFile(), data, Charset.forName("UTF-8"));
+	}
+
+	private AdditionalLexicon getAlex(boolean useAlex, int i) {
+		if (useAlex) {
+			return new AdditionalFileLexicon(tagPath(getParameter().dleTraining.dynamicLexicon, i + 1));
+		}
+		return new NoAdditionalLexicon();
 	}
 
 	private Writer openTagged(String path, int i) throws Exception {
