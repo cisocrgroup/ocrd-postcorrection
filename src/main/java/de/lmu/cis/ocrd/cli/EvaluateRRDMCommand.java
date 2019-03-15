@@ -94,7 +94,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
                 .withWriter(openTagged(getParameter().dmTraining.evaluation.replace(".arff", suffix + ".arff"), i+1))
                 .writeHeader(i+1)) {
             Logger.debug("evaluateDM({})", i+1);
-			final Path rrTrain = tagPath(getParameter().rrTraining.evaluation, i + 1);
+			final Path rrTrain = tagPath(getParameter().rrTraining.evaluation.replace(".arff", suffix + ".arff"), i + 1);
 			final Path rrModel = tagPath(getParameter().rrTraining.model, i + 1);
 			final LogisticClassifier c = LogisticClassifier.load(rrModel);
 			final Instances instances =
