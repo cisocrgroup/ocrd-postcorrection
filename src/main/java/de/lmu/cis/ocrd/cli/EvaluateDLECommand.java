@@ -16,7 +16,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 
 public class EvaluateDLECommand extends AbstractMLCommand {
 	private FeatureSet fs;
