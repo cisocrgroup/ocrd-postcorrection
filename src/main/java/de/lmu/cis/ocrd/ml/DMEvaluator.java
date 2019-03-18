@@ -23,6 +23,7 @@ public class DMEvaluator {
 		INTERPRETABLE_OCR_ERROR_HAVE_NO_CANDIDATE,
 		INTERPRETABLE_OCR_ERROR_HAVE_CANDIDATE_ON_FIRST_RANK,
 		INTERPRETABLE_OCR_ERROR_HAVE_CANDIDATE_ON_OTHER_RANK,
+		INTERPRETABLE_OCR_ERROR_TOKENIZATION,
 	}
 
 	private final Map<OCRToken, List<Ranking>> rankings;
@@ -60,6 +61,7 @@ public class DMEvaluator {
 	private int postCorrectionMissedOpportunities;
 	private int postCorrectionDisimprovements;
 	private int postCorrectionFalseFriends;
+	private int tokenization;
 
 	public DMEvaluator(Map<OCRToken, List<Ranking>> rankings, int i) {
 		this.rankings = rankings;
@@ -95,6 +97,7 @@ public class DMEvaluator {
 		postCorrectionMissingCandidate = 0;
 		postCorrectionMissedOpportunities = 0;
 		postCorrectionFalseFriends = 0;
+		tokenization = 0;
 
 	}
 
@@ -113,7 +116,7 @@ public class DMEvaluator {
 	public void register(OCRToken token) throws Exception {
 		tokens.add(token);
 		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
-		// is token lexical?
+		// is the token interpretable?
 		if (token.getAllProfilerCandidates().isEmpty()) {
 			notInterpretableTokenList.add(token);
 			if (token.ocrIsCorrect()) {
@@ -144,7 +147,10 @@ public class DMEvaluator {
 			profilerFirstRankTokens++;
 		}
 		int placement = getPlacement(token, gt);
-		if (placement == -1) {
+		if (gt.matches(".*\\s+.*")) {
+			classifications.put(token, Classification.INTERPRETABLE_OCR_ERROR_TOKENIZATION);
+			tokenization++;
+		} else if (placement == -1) {
 			missingPlacement++;
 			classifications.put(token, Classification.INTERPRETABLE_OCR_ERROR_HAVE_NO_CANDIDATE);
 		} else if (placement == 0) {
@@ -215,6 +221,7 @@ public class DMEvaluator {
 		printf("true correction not on rank 1: %d\n", postCorrectionBadRank);
 		printf("missing correction candidate: %d\n", postCorrectionMissingCandidate);
 		printf("false friends: %d\n", postCorrectionFalseFriends);
+		printf("tokenization errors: %d\n", tokenization);
 		printf("missed opportunities: %d\n", postCorrectionMissedOpportunities);
 
 
@@ -294,8 +301,11 @@ public class DMEvaluator {
 	    entries.sort(Comparator.comparing(Map.Entry::getValue));
 	    entries.forEach((entry)->{
             printf("%s: %s", entry.getValue().toString(), entry.getKey());
-            if (entry.getValue() == Classification.INTERPRETABLE_OCR_ERROR_HAVE_NO_CANDIDATE) {
-                ((OCRTokenImpl) entry.getKey()).getAllProfilerCandidatesNoLimit().forEach((c) -> printf(":%s", c.Suggestion));
+            if (entry.getValue() == Classification.INTERPRETABLE_OCR_ERROR_HAVE_NO_CANDIDATE ||
+					entry.getValue() == Classification.INTERPRETABLE_OCR_ERROR_HAVE_CANDIDATE_ON_OTHER_RANK) {
+                ((OCRTokenImpl) entry.getKey()).getAllProfilerCandidatesNoLimit().forEach((c) -> printf(
+                		",suggestion:%s;dict:%s;nHist:%d;nOCR:%d", c.Suggestion, c.Dict,
+						c.HistPatterns.length, c.OCRPatterns.length));
             }
 			printf("\n");
         });
@@ -375,14 +385,18 @@ public class DMEvaluator {
 			badNos = 0;
 		}
 		void add(boolean yes, boolean correctionCorrect) {
-			if (yes && correctionCorrect) {
-				this.goodYes++;
-			} else if (yes && !correctionCorrect) {
-				this.badYes++;
-			} else if (!yes && correctionCorrect) {
-				this.badNos++;
+			if (yes) {
+				if (correctionCorrect) {
+					this.goodYes++;
+				} else{
+					this.badYes++;
+				}
 			} else {
-				this.goodNos++;
+				if (correctionCorrect) {
+					badNos++;
+				} else {
+					goodNos++;
+				}
 			}
 		}
 	}
