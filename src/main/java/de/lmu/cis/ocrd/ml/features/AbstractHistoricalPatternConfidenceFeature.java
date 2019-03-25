@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.profile.PosPattern;
-import org.pmw.tinylog.Logger;
 
 abstract class AbstractHistoricalPatternConfidenceFeature extends NamedDoubleFeature {
 	AbstractHistoricalPatternConfidenceFeature(String name) {
@@ -20,9 +19,6 @@ abstract class AbstractHistoricalPatternConfidenceFeature extends NamedDoubleFea
 		final double[] values = new double[cps.length];
 		for (int i = 0; i < cps.length; i++) {
 			values[i] = word.getCharacterConfidenceAt(i + pos);
-		}
-		for (double x : values) {
-			Logger.info("x = {}", x);
 		}
 		return values.length == 0 ? new double[]{0.0} : values;
 	}
