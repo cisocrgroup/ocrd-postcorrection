@@ -169,7 +169,7 @@ public class DMEvaluator {
 		for (int i = 0; i < rs.size(); i++) {
 			assert(rs.get(i).ranking <= before);
 			before = rs.get(i).ranking;
-			if (gt.equals(rs.get(i).candidate.Suggestion)) {
+			if (gt.equalsIgnoreCase(rs.get(i).candidate.Suggestion)) {
 				return i;
 			}
 		}
