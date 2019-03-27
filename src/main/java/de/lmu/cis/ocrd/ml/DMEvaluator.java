@@ -62,6 +62,8 @@ public class DMEvaluator {
 	private int postCorrectionDisimprovements;
 	private int postCorrectionFalseFriends;
 	private int tokenization;
+	private int typeIerrors;
+	private int typeIIerrors;
 
 	public DMEvaluator(Map<OCRToken, List<Ranking>> rankings, int i) {
 		this.rankings = rankings;
@@ -98,7 +100,8 @@ public class DMEvaluator {
 		postCorrectionMissedOpportunities = 0;
 		postCorrectionFalseFriends = 0;
 		tokenization = 0;
-
+		typeIerrors = 0;
+		typeIIerrors = 0;
 	}
 
 	public void setInstances(Instances instances) {
@@ -142,6 +145,7 @@ public class DMEvaluator {
 			classifications.put(token, Classification.INTERPRETABLE_OCR_CORRECT);
 			return;
 		}
+		// ocr error (we want to correct something)
 		interpretableNotCorrectTokens++;
 		if (token.getAllProfilerCandidates().get(0).Suggestion.equalsIgnoreCase(gt)) {
 			profilerFirstRankTokens++;
@@ -153,12 +157,14 @@ public class DMEvaluator {
 		} else if (placement == -1) {
 			missingPlacement++;
 			classifications.put(token, Classification.INTERPRETABLE_OCR_ERROR_HAVE_NO_CANDIDATE);
+			updateErrorTypeCounts_I_II(token, gt); // update type i and type ii errors if no candidate in placements
 		} else if (placement == 0) {
 			goodPlacement++;
 			classifications.put(token, Classification.INTERPRETABLE_OCR_ERROR_HAVE_CANDIDATE_ON_FIRST_RANK);
 		} else {
 			badPlacement++;
 			classifications.put(token, Classification.INTERPRETABLE_OCR_ERROR_HAVE_CANDIDATE_ON_OTHER_RANK);
+			updateErrorTypeCounts_I_II(token, gt); // update type i and type ii errors if candidate in other placement
 		}
 	}
 
@@ -174,6 +180,24 @@ public class DMEvaluator {
 			}
 		}
 		return -1;
+	}
+
+	// look at all candidates and count type(i) and type(ii) errors
+	private void updateErrorTypeCounts_I_II(OCRToken token, String gt) {
+		if (token instanceof OCRTokenImpl) {
+			boolean found = false;
+			for (Candidate candidate : ((OCRTokenImpl)token).getAllProfilerCandidatesNoLimit()) {
+				if (gt.equalsIgnoreCase(candidate.Suggestion)) {
+					found = true;
+					break;
+				}
+			}
+			if (found) {
+				typeIIerrors++;
+			} else {
+				typeIerrors++;
+			}
+		}
 	}
 
 	public void evaluate() throws Exception {
@@ -212,6 +236,13 @@ public class DMEvaluator {
 		printf("number of interpretable ocr correct tokens: %d\n", interpretableCorrectTokens);
 		printf("number of interpretable ocr error tokens: %d\n", interpretableNotCorrectTokens);
 
+		printf("\nerror types\n");
+		printf("===========\n");
+		printf("type(i)   [no correction candidate]:       %d\n", typeIerrors);
+		printf("type(ii)  [good correction not on rank 1]: %d\n", typeIIerrors);
+		printf("type(iii) [missed opportunities]:          %d\n", postCorrectionMissedOpportunities);
+		printf("type(iv)  [disimprovements]:               %d\n", postCorrectionDisimprovements);
+
 		printf("\npost correction errors\n");
 		printf("======================\n");
 		printf("real improvements: %d\n", postCorrectionRealImprovements);
@@ -226,7 +257,7 @@ public class DMEvaluator {
 
 
 		printf("\ndecisions ocr correct interpretable tokens\n");
-		printf("=========================================\n");
+		printf("==========================================\n");
 		printf("number of ocr correct interpretable tokens true yes decisions: %d\n",
 				counts.get(Classification.INTERPRETABLE_OCR_CORRECT).goodYes);
 		printf("number of ocr correct not lexical tokens false yes decisions: %d\n",
