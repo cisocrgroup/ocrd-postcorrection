@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.Gson;
+import org.pmw.tinylog.Logger;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -28,7 +29,10 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 				if (!feature.handlesOCR(i, n)) {
 					continue;
 				}
-				vec.add(feature.calculate(token, i, n));
+				Logger.debug("feature {}", feature.getName());
+				final Object val = feature.calculate(token, i, n);
+				Logger.debug("value for feature {}: {}", feature.getName(), val.toString());
+				vec.add(val);
 			}
 		}
 		return vec;

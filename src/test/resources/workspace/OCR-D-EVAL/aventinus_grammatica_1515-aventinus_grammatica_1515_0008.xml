@@ -745,6 +745,48 @@
                         <pc:Unicode>generahles</pc:Unicode>
                     </pc:TextEquiv>
                 </pc:Word>
+                                <pc:Word id="line_1_7_word0003">
+                    <pc:Coords points="1052.2552380952382,854 3761.786666666667,854 3761.786666666667,950 1052.2552380952382,950"/>
+                    <pc:Glyph id="line_1_7_word0003_glyph0000">
+                        <pc:Coords points="1052.2552380952382,854 3691.76,854 3691.76,950 1052.2552380952382,950"/>
+                        <pc:TextEquiv conf="0.982073990882944">
+                            <pc:Unicode>f</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="line_1_7_word0003_glyph0001">
+                        <pc:Coords points="1064.76,854 3705.515238095238,854 3705.515238095238,950 1064.76,950"/>
+                        <pc:TextEquiv conf="0.975096851496818">
+                            <pc:Unicode>r</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="line_1_7_word0003_glyph0002">
+                        <pc:Coords points="1078.5152380952381,854 3718.02,854 3718.02,950 1078.5152380952381,950"/>
+                        <pc:TextEquiv conf="0.986553265899682">
+                            <pc:Unicode>a</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="line_1_7_word0003_glyph0003">
+                        <pc:Coords points="1091.02,854 3746.7809523809524,854 3746.7809523809524,950 1091.02,950"/>
+                        <pc:TextEquiv conf="0.994372359859513">
+                            <pc:Unicode>g</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="line_1_7_word0003_glyph0004">
+                        <pc:Coords points="1119.7809523809524,854 3761.786666666667,854 3761.786666666667,950 1119.7809523809524,950"/>
+                        <pc:TextEquiv conf="0.99646674532602">
+                            <pc:Unicode>t</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:TextEquiv index="1" conf="0.985781798411419" dataType="ocrd-cis-word-alignment-master-ocr" dataTypeDetails="OCR-D-OCROPY-1-eval-shuffle/line_1_7_word0003">
+                        <pc:Unicode>fragt</pc:Unicode>
+                    </pc:TextEquiv>
+                    <pc:TextEquiv index="2" conf="0.944733297801898" dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-OCROPY-2-eval-shuffle/line_1_7_word0003">
+                        <pc:Unicode>-</pc:Unicode>
+                    </pc:TextEquiv>
+                    <pc:TextEquiv index="3" conf="1." dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-GT-eval-shuffle/line_1_7_word_4">
+                        <pc:Unicode>—</pc:Unicode>
+                    </pc:TextEquiv>
+                </pc:Word>
                 <pc:Word id="tl_2_word0002">
                     <pc:Coords points="781.6666666666666,181 1691.103825136612,181 1691.103825136612,239 781.6666666666666,239"/>
                     <pc:Glyph id="tl_2_word0002_glyph0000">
@@ -766,13 +808,13 @@
                         </pc:TextEquiv>
                     </pc:Glyph>
                     <pc:TextEquiv index="1" conf="0.774461376573115" dataType="ocrd-cis-word-alignment-master-ocr" dataTypeDetails="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/tl_2_word0002">
-                        <pc:Unicode>gne</pc:Unicode>
+                        <pc:Unicode>fragt</pc:Unicode>
                     </pc:TextEquiv>
                     <pc:TextEquiv index="2" conf="0.855543588317669" dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/tl_2_word0002">
-                        <pc:Unicode>queer</pc:Unicode>
+                        <pc:Unicode>-</pc:Unicode>
                     </pc:TextEquiv>
                     <pc:TextEquiv index="3" conf="1." dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-GT-aventinus_grammatica_1515/w_w1aab1b1b2b3b1b1b1">
-                        <pc:Unicode>que</pc:Unicode>
+                        <pc:Unicode>—</pc:Unicode>
                     </pc:TextEquiv>
                     <pc:TextEquiv index="4" conf="0.605137" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "eine", "Modern": "eine", "Dict": "dict_modernhypotheticerror", "HistPatterns": [], "OCRPatterns": [{"Pos": 0, "Left": "ei", "Right": "g"}], "Distance": 2, "Weight": 0.605137}'>
                         <pc:Unicode>eine</pc:Unicode>
@@ -26249,10 +26291,10 @@ Superlatiuũ cui poteſt addi/ aller</pc:Unicode>
                         <pc:Unicode>Ha</pc:Unicode>
                     </pc:TextEquiv>
                     <pc:TextEquiv index="2" conf="0.383550075056925" dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/line_1481655329909_202_word0002">
-                        <pc:Unicode>ec</pc:Unicode>
+                        <pc:Unicode></pc:Unicode>
                     </pc:TextEquiv>
                     <pc:TextEquiv index="3" conf="1." dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-GT-aventinus_grammatica_1515/word_1481554322284_196">
-                        <pc:Unicode>Sctm̃</pc:Unicode>
+                        <pc:Unicode></pc:Unicode>
                     </pc:TextEquiv>
                     <pc:TextEquiv index="4" conf="0.183486" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "habe", "Modern": "habe", "Dict": "dict_modernhypotheticerror", "HistPatterns": [], "OCRPatterns": [{"Pos": 2, "Left": "b", "Right": ""}, {"Pos": 3, "Left": "e", "Right": ""}], "Distance": 2, "Weight": 0.183486}'>
                         <pc:Unicode>Habe</pc:Unicode>

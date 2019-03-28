@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import org.pmw.tinylog.Logger;
+
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,8 @@ public class DMGTFeature extends NamedBooleanFeature {
 		List<Ranking> rs = rankings.get(token);
 		assert(!rs.isEmpty());
 		final String gt = token.getGT().orElse("");
-		return gt.equals(rs.get(0).candidate.Suggestion);
+		final boolean result =  gt.equals(rs.get(0).candidate.Suggestion);
+		Logger.debug("{} result = {}", getName(), result);
+		return result;
 	}
 }

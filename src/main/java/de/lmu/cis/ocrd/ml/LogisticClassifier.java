@@ -5,10 +5,11 @@ import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import org.pmw.tinylog.Logger;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.functions.SimpleLogistic;
+import weka.classifiers.functions.Logistic;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.Optimization;
 import weka.core.converters.ConverterUtils;
 
 import java.io.*;
@@ -32,7 +33,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		train.setClassIndex(train.numAttributes() - 1);
 		final Instances structure = ds.getStructure();
 		structure.setClassIndex(structure.numAttributes() - 1);
-		final AbstractClassifier sl = new SimpleLogistic();
+		final AbstractClassifier sl = new Logistic();
 		sl.buildClassifier(train);
 		return new LogisticClassifier(ds.getStructure(), sl);
 	}

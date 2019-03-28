@@ -85,8 +85,13 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 				}
 				final Instance instance = is.next();
 				final BinaryPrediction p = c.predict(instance);
-				final double ranking = p.getPrediction() ?
-						p.getConfidence() : -p.getConfidence();
+				final double ranking = p.getPrediction() ? p.getConfidence() : -p.getConfidence();
+				if (Double.isNaN(ranking)) {
+					for (Ranking r : rankings.get(token)) {
+						Logger.debug("ranking {}: {}", r.candidate.Suggestion, r.ranking);
+					}
+					throw new Exception("prediction for " + token.toString() + " is NaN");
+				}
 				rankings.get(token).add(new Ranking(candidate, ranking));
 			}
 			if (rankings.containsKey(token)) {

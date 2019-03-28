@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import org.pmw.tinylog.Logger;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +21,9 @@ public class DMBestRankFeature extends NamedDoubleFeature {
         for (Ranking r : rs) {
             assert(r.ranking < before);
         }
-        return rs.get(0).ranking;
+        final double result =  rs.get(0).ranking;
+        Logger.debug("{} result = {}", getName(), result);
+        return result;
     }
 
     @Override

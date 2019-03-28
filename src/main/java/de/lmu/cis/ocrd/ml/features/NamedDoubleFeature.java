@@ -10,9 +10,9 @@ public abstract class NamedDoubleFeature extends NamedFeature {
 	@Override
 	public final Object calculate(OCRToken token, int i, int n) {
 		final Double res = doCalculate(token, i, n);
-//        if (res.isNaN() || res.isInfinite()) {
-//        	throw new RuntimeException("token: " + token.toJSON() + " (" + i + ") (" + n + ") isNAN() or isInfinite()");
-//		}
+        if (res.isNaN() || res.isInfinite()) {
+        	throw new RuntimeException("token: " + token.toString() + " (" + i + ") (" + n + ") isNAN() or isInfinite()");
+		}
 		return res;
 	}
 
