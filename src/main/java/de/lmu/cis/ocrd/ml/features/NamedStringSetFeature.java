@@ -11,6 +11,11 @@ public abstract class NamedStringSetFeature extends NamedFeature {
 		this.set = set;
 	}
 
+	@Override
+	public final String getClasses() {
+		return String.format("{%s}", String.join(",", set));
+	}
+
 	public final List<String> getSet() {
 		return set;
 	}

@@ -59,14 +59,7 @@ public class ARFFWriter implements AutoCloseable {
 				if (!feature.handlesOCR(i, n)) {
 					continue;
 				}
-				String attribute = String.format("%s_%d\tREAL", feature.getName(), i + 1);
-				if (feature instanceof NamedBooleanFeature) {
-					attribute =
-							getAttributeOfNamedBooleanFeature((NamedBooleanFeature) feature, i+1);
-				} else if (feature instanceof NamedStringSetFeature) {
-					attribute =
-							getAttributeOfNamedStringSetFeature((NamedStringSetFeature) feature, i+1);
-				}
+				final String attribute = String.format("%s_%d\t%s", feature.getName(), i+1, feature.getClasses());
 				writer.printf("@ATTRIBUTE\t%s\n", attribute);
 			}
 		}

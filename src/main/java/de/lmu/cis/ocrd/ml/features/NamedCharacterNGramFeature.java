@@ -14,6 +14,11 @@ abstract class NamedCharacterNGramFeature extends NamedFeature {
 		this.ngrams = ngrams;
 	}
 
+	@Override
+	public final String getClasses() {
+		return "REAL";
+	}
+
 	protected static List<String> splitIntoCharacterNGrams(String str, int n) {
 		ArrayList<String> splits = new ArrayList<>();
 		str = '$' + str + '$';

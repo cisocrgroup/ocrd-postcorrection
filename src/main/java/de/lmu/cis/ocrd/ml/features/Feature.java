@@ -9,6 +9,10 @@ public interface Feature extends Serializable {
 	// Returns the name of the feature.
 	String getName();
 
+	// Returns the classes of the given feature.  For real numbers it should return REAL,
+	// for other classes the array of the class labels e.g. {label-,label-b,...}
+	String getClasses();
+
 	// Returns whether the feature handles the current OCR round.
 	// Features that only handle the master OCR handlesOCR(i, n) returns true iff
 	// i=0.
