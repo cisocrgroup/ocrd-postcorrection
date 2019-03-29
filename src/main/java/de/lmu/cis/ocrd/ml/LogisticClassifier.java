@@ -59,7 +59,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		this.structure = structure;
 	}
 
-	public String evaluate(String title, Instances instances) throws Exception {
+	String evaluate(String title, Instances instances) throws Exception {
 		Logger.debug("self numAttributes: {}", this.structure.numAttributes());
 		Logger.debug("toEvaluate numAttributes: {}", instances.numAttributes());
 		final Evaluation evaluation = new Evaluation(structure);
@@ -90,8 +90,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 	public Prediction predict(Instance instance) throws Exception {
 		final double res = classifier.classifyInstance(instance);
 		final double[] xy = classifier.distributionForInstance(instance);
-		return new Prediction(res, xy,
-				instance.classAttribute().value((int) res));
+		return new Prediction(res, xy, instance.classAttribute().value((int) res));
 	}
 
 	public void save(Path path) throws Exception {
