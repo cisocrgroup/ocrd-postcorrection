@@ -79,18 +79,20 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 				if (!is.hasNext()) {
 					throw new Exception("instances and tokens out of sync");
 				}
+				final Instance instance = is.next();
+				Logger.debug("instance of {}: {}", token.toString(), instanceToString(instance));
+				final BinaryPrediction p = c.predict(instance);
+				Logger.debug("prediction for {}: {}", token.toString(), p.toString());
+				final double ranking = p.getPrediction() ? p.getConfidence() : -p.getConfidence();
+				Logger.debug("confidence for {}: {}", token.toString(), p.getPrediction());
+				Logger.debug("ranking for {}: {}", token.toString(), ranking);
+				if (Double.isNaN(ranking)) {
+					Logger.warn("ranking for {} is NaN; skipping", token.toString());
+					continue;
+				}
 				if (first) {
 					rankings.put(token, new ArrayList<>());
 					first = false;
-				}
-				final Instance instance = is.next();
-				final BinaryPrediction p = c.predict(instance);
-				final double ranking = p.getPrediction() ? p.getConfidence() : -p.getConfidence();
-				if (Double.isNaN(ranking)) {
-					for (Ranking r : rankings.get(token)) {
-						Logger.debug("ranking {}: {}", r.candidate.Suggestion, r.ranking);
-					}
-					throw new Exception("prediction for " + token.toString() + " is NaN");
 				}
 				rankings.get(token).add(new Ranking(candidate, ranking));
 			}
@@ -99,6 +101,14 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 			}
 		}
 		return rankings;
+	}
+
+	private static String instanceToString(Instance instance) {
+		StringJoiner sj = new StringJoiner(",");
+		for (int i = 0; i < instance.numAttributes(); i++) {
+			sj.add(Double.toString(instance.value(i)));
+		}
+		return "{" + sj.toString() + "}";
 	}
 
 
