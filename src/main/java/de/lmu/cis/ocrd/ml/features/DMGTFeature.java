@@ -3,6 +3,13 @@ package de.lmu.cis.ocrd.ml.features;
 import java.util.List;
 import java.util.Map;
 
+// Classifies OCR tokens into one of three different classes:
+// * true        if the best ranked correction candidate equals the ground truth
+//               token (the correction will improve or at least not harm the text accuracy)
+// * false       if the best ranked correction candidate is wrong and the original
+//               token was correct (the correction would disimprove the text accuracy)
+// * do-not-care if the ocr is not correct and the best ranked correction candidate is
+//               also wrong (the correction would not alter the text accuracy)
 public class DMGTFeature extends NamedFeature {
 	private final static String TRUE = Boolean.toString(true);
 	private final static String DO_NOT_CARE = "do-not-care";
