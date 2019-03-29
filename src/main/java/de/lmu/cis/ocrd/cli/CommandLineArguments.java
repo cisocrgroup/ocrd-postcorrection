@@ -217,9 +217,10 @@ public class CommandLineArguments {
 
     private void setupLogger() {
         Configurator.currentConfig()
-                    .writer(new ConsoleWriter(System.err))
-                    .level(Level.valueOf(getLogLevel()))
-                    .activate();
+                .writer(new ConsoleWriter(System.err))
+                .level(Level.valueOf(getLogLevel()))
+                .formatPattern("{date:HH:mm:ss.S} - {level} {message}")
+                .activate();
         Logger.debug("current log level: {}", Logger.getLevel());
     }
 
