@@ -61,8 +61,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 
 	public String evaluate(String title, Instances instances) throws Exception {
 		Logger.debug("self numAttributes: {}", this.structure.numAttributes());
-		Logger.debug("toEvaluate numAttributes: {}",
-				instances.numAttributes());
+		Logger.debug("toEvaluate numAttributes: {}", instances.numAttributes());
 		final Evaluation evaluation = new Evaluation(structure);
 		evaluation.evaluateModel(classifier, instances);
 		return evaluation.toSummaryString(title, true);
