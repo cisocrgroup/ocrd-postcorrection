@@ -10,7 +10,7 @@ public class CandidateUnigramFeature extends UnigramFeature {
 		this(args, JSON.mustGetNameOrType(o));
 	}
 
-	private CandidateUnigramFeature(ArgumentFactory factory, String name) throws Exception {
+	public CandidateUnigramFeature(ArgumentFactory factory, String name) throws Exception {
 		super(factory, name);
 	}
 

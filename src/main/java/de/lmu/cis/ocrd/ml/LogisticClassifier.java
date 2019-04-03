@@ -9,7 +9,6 @@ import weka.classifiers.functions.Logistic;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.Optimization;
 import weka.core.converters.ConverterUtils;
 
 import java.io.*;
@@ -34,6 +33,13 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		final Instances structure = ds.getStructure();
 		structure.setClassIndex(structure.numAttributes() - 1);
 		final AbstractClassifier sl = new Logistic();
+		//final AbstractClassifier sl = new SimpleLogistic();
+		sl.setDebug(true);
+//		for (int i = 0; i < train.numAttributes(); i++) {
+//			Logger.debug("train.attribute({}).numValues() = {}", i, train.attribute(i).numValues());
+//			Logger.debug("attribute: {}", train.attribute(i).toString());
+//			Logger.debug("attribute name: {}", train.attribute(i).name());
+//		}
 		sl.buildClassifier(train);
 		return new LogisticClassifier(ds.getStructure(), sl);
 	}
