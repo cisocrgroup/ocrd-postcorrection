@@ -27,7 +27,7 @@ public class CandidateMatchingOCRsFeature extends NamedDoubleFeature {
 			sum += 1;
 		}
 		for (int j = 0; j < token.getNOCR()-1; j++) {
-			if (token.getSlaveOCR(j).toString().equals(suggestion)) {
+			if (token.getSlaveOCR(j).toString().equalsIgnoreCase(suggestion)) {
 				sum += 1;
 			}
 		}

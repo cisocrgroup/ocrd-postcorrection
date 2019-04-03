@@ -17,7 +17,7 @@ public class CandidateMatchesOCRTokenFeature extends NamedBooleanFeature {
 
 	@Override
 	boolean doCalculate(OCRToken token, int i, int n) {
-		return getWord(token, i, n).toString().toLowerCase().equals(mustGetCandidate(token).Suggestion);
+		return getWord(token, i, n).toString().toLowerCase().equalsIgnoreCase(mustGetCandidate(token).Suggestion);
 	}
 
 	@Override
