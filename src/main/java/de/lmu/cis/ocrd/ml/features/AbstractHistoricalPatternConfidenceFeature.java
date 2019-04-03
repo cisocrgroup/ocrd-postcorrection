@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.profile.PosPattern;
 
-abstract class AbstractHistoricalPatternConfidenceFeature extends NamedDoubleFeature {
+abstract class AbstractHistoricalPatternConfidenceFeature extends AbstractConfidenceFeature {
 	AbstractHistoricalPatternConfidenceFeature(String name) {
 		super(name);
 	}

@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.ml.features;
 import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.util.JSON;
 
-public class CandidateVoteWeightFeature extends NamedDoubleFeature {
+public class CandidateVoteWeightFeature extends AbstractConfidenceFeature {
 	private static final long serialVersionUID = -4415553562125497094L;
 
 	public CandidateVoteWeightFeature(JsonObject o, ArgumentFactory args) throws Exception {
@@ -20,7 +20,7 @@ public class CandidateVoteWeightFeature extends NamedDoubleFeature {
 	}
 
 	@Override
-	protected double doCalculate(OCRToken token, int i, int n) {
+	protected double getConfidence(OCRToken token, int i, int n) {
 		return mustGetCandidate(token).Weight;
 	}
 }
