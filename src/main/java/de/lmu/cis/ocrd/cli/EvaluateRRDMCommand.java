@@ -116,8 +116,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 					if (!rankings.containsKey(token)) {
 						continue;
 					}
-					FeatureSet.Vector values = dmFS.calculateFeatureVector(token, i+1);
-					w.writeFeatureVector(values);
+					w.writeTokenWithFeatureSet(token, dmFS,i+1);
 				}
             }
         }

@@ -145,7 +145,7 @@ public class MultipleOCRFeatureExtractionTest {
 				assertThat(token.getNumberOfOtherOCRs(), is(2));
 				assertThat(token.hasGT(), is(true));
 				arff.debugToken(token);
-				arff.writeFeatureVector(fs.calculateFeatureVector(token, n));
+				arff.writeToken(token, n);
 			}
 			w.flush();
 		}

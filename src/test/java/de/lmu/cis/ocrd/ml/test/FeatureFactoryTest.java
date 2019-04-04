@@ -32,7 +32,7 @@ public class FeatureFactoryTest {
 
 	@Test
 	public void testWithInvalidName() throws Exception {
-		final String json = "{\"name\": \"test\", \"type\": \"invalid.package.InvalidFeature\", \"min\": 0, \"max\": 1}";
+		final String json = "{\"name\": \"test\", \"type\": \"invalid.package.InvalidFeature\", \"MIN\": 0, \"max\": 1}";
 		JsonObject o = new Gson().fromJson(json, JsonObject.class);
 		Optional<Feature> feature = featureFactory.create(o);
 		assertThat(feature.isPresent(), is(false));

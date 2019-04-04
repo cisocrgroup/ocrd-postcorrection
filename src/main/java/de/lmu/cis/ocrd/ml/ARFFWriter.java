@@ -81,12 +81,17 @@ public class ARFFWriter implements AutoCloseable {
 		writer.printf("%% %s\n", token.toString());
 	}
 
+	public void writeTokenWithFeatureSet(OCRToken token, FeatureSet fs, int n) {
+		debugToken(token);
+		writeFeatureVector(fs.calculateFeatureVector(token, n));
+	}
+
 	public void writeToken(OCRToken token, int n) {
 		debugToken(token);
 		writeFeatureVector(fs.calculateFeatureVector(token, n));
 	}
 
-	public void writeFeatureVector(de.lmu.cis.ocrd.ml.features.FeatureSet.Vector features) {
+	private void writeFeatureVector(de.lmu.cis.ocrd.ml.features.FeatureSet.Vector features) {
 		features.writeCSVLine(writer);
 	}
 

@@ -28,12 +28,9 @@ public class ARFFWriterTest {
 		ARFFWriter arff = ARFFWriter.fromFeatureSet(fs).withRelation("test")
 				.withWriter(str);
 		arff.writeHeader(1);
-		arff.writeFeatureVector(
-				fs.calculateFeatureVector(Token.create("a", 1), 1));
-		arff.writeFeatureVector(
-				fs.calculateFeatureVector(Token.create("aa", 2), 1));
-		arff.writeFeatureVector(
-				fs.calculateFeatureVector(Token.create("aaa", 3), 1));
+		arff.writeToken(Token.create("a", 1), 1);
+		arff.writeToken(Token.create("aa", 2), 1);
+		arff.writeToken(Token.create("aaa", 3), 1);
 		// System.out.println(str.toString());
 		this.is = new DataSource(
 				IOUtils.toInputStream(str.toString(), Charset.defaultCharset()))

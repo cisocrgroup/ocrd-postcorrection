@@ -103,8 +103,7 @@ public class TrainCommand extends AbstractMLCommand {
 				Logger.debug("skipping lexicon entry: {}", token.toString());
 				continue;
 			}
-			final FeatureSet.Vector values = dleFS.calculateFeatureVector(token, i+1);
-			dlew.writeFeatureVector(values);
+			dlew.writeToken(token, i+1);
 		}
 	}
 
@@ -122,7 +121,7 @@ public class TrainCommand extends AbstractMLCommand {
 				final FeatureSet.Vector values =
 						rrFS.calculateFeatureVector(tc, i+1);
 				// Logger.debug(values);
-				rrw.writeFeatureVector(values);
+				rrw.writeToken(tc, i+1);
 			});
 		});
 	}
@@ -169,7 +168,7 @@ public class TrainCommand extends AbstractMLCommand {
 					if (!rankings.containsKey(token)) {
 						continue;
 					}
-					dmw.writeFeatureVector(dmFS.calculateFeatureVector(token, i+1));
+					dmw.writeTokenWithFeatureSet(token,dmFS, i+1);
 				}
 			}
 			dmw.close();

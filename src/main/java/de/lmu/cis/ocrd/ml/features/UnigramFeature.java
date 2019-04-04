@@ -12,7 +12,7 @@ public class UnigramFeature extends NamedDoubleFeature {
 		this(args, JSON.mustGetNameOrType(o));
 	}
 
-	protected UnigramFeature(ArgumentFactory factory, String name) throws Exception {
+	public UnigramFeature(ArgumentFactory factory, String name) throws Exception {
 		super(name);
 		this.args = factory;
 	}
