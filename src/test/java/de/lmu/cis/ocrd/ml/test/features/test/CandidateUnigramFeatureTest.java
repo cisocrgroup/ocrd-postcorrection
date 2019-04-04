@@ -16,7 +16,7 @@ public class CandidateUnigramFeatureTest extends FeaturesTestBase {
 
 	@Before
 	public void initFeature() throws Exception {
-		lm.setTokens(tokens);
+		super.init();
 		f = new CandidateUnigramFeature(lm,"candidate-unigram-feature");
 	}
 	@Test
