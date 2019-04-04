@@ -5,7 +5,7 @@ import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import org.pmw.tinylog.Logger;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.functions.SimpleLogistic;
+import weka.classifiers.functions.Logistic;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -32,7 +32,14 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		train.setClassIndex(train.numAttributes() - 1);
 		final Instances structure = ds.getStructure();
 		structure.setClassIndex(structure.numAttributes() - 1);
-		final AbstractClassifier sl = new SimpleLogistic();
+		final AbstractClassifier sl = new Logistic();
+		//final AbstractClassifier sl = new SimpleLogistic();
+		sl.setDebug(true);
+//		for (int i = 0; i < train.numAttributes(); i++) {
+//			Logger.debug("train.attribute({}).numValues() = {}", i, train.attribute(i).numValues());
+//			Logger.debug("attribute: {}", train.attribute(i).toString());
+//			Logger.debug("attribute name: {}", train.attribute(i).name());
+//		}
 		sl.buildClassifier(train);
 		return new LogisticClassifier(ds.getStructure(), sl);
 	}
@@ -58,10 +65,9 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		this.structure = structure;
 	}
 
-	public String evaluate(String title, Instances instances) throws Exception {
+	String evaluate(String title, Instances instances) throws Exception {
 		Logger.debug("self numAttributes: {}", this.structure.numAttributes());
-		Logger.debug("toEvaluate numAttributes: {}",
-				instances.numAttributes());
+		Logger.debug("toEvaluate numAttributes: {}", instances.numAttributes());
 		final Evaluation evaluation = new Evaluation(structure);
 		evaluation.evaluateModel(classifier, instances);
 		return evaluation.toSummaryString(title, true);
@@ -90,8 +96,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 	public Prediction predict(Instance instance) throws Exception {
 		final double res = classifier.classifyInstance(instance);
 		final double[] xy = classifier.distributionForInstance(instance);
-		return new Prediction(res, xy,
-				instance.classAttribute().value((int) res));
+		return new Prediction(res, xy, instance.classAttribute().value((int) res));
 	}
 
 	public void save(Path path) throws Exception {

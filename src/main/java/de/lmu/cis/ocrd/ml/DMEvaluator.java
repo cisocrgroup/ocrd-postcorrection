@@ -120,7 +120,9 @@ public class DMEvaluator {
 		tokens.add(token);
 		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
 		// is the token interpretable?
-		if (token.getAllProfilerCandidates().isEmpty()) {
+		// it is not interpretable if the Profiler did not return any correction suggestion
+		// or if there are no rankings for the token because NaNs etc.
+		if (token.getAllProfilerCandidates().isEmpty() || rankings.get(token) == null) {
 			notInterpretableTokenList.add(token);
 			if (token.ocrIsCorrect()) {
 				classifications.put(token, Classification.UNINTERPRETABLE_OCR_CORRECT);

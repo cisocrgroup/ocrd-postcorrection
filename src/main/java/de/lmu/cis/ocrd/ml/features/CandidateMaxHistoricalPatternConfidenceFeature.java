@@ -18,7 +18,7 @@ public class CandidateMaxHistoricalPatternConfidenceFeature extends AbstractHist
 	}
 
 	@Override
-	public double doCalculate(OCRToken token, int i, int n) {
+	protected double getConfidence(OCRToken token, int i, int n) {
 		final OCRWord word = getWord(token, i, n);
 		final Candidate candidate = mustGetCandidate(token);
 		double max = 0;

@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.ml.test.features.test;
 
+import de.lmu.cis.ocrd.ml.features.AbstractConfidenceFeature;
 import de.lmu.cis.ocrd.ml.features.CandidateMaxHistoricalPatternConfidenceFeature;
 import de.lmu.cis.ocrd.ml.features.CandidateMinHistoricalPatternConfidenceFeature;
 import de.lmu.cis.ocrd.ml.features.Feature;
@@ -15,7 +16,7 @@ public class CandidateHistoricalPatternConfidenceTest extends FeaturesTestBase {
 	@Before
 	public void initFeatures() {
 		min = new CandidateMinHistoricalPatternConfidenceFeature(
-				"min-historical-pattern-confidence");
+				"MIN-historical-pattern-confidence");
 		max = new CandidateMaxHistoricalPatternConfidenceFeature(
 				"max-historical-pattern-confidence");
 	}
@@ -59,11 +60,11 @@ public class CandidateHistoricalPatternConfidenceTest extends FeaturesTestBase {
 	@Test
 	public void testMinReturnsMinHistoricalPatternConfidenceEmptyPattern() {
 		assertThat(min.calculate(getCandidateToken(3, 7), 0, 2),
-				is(0.0));
+				is(AbstractConfidenceFeature.MIN));
 	}
 
 	@Test
 	public void testMaxReturnsMaxHistoricalPatternConfidenceEmptyPattern() {
-		assertThat(max.calculate(getCandidateToken(3, 7), 0, 2), is(0.0));
+		assertThat(max.calculate(getCandidateToken(3, 7), 0, 2), is(AbstractConfidenceFeature.MIN));
 	}
 }

@@ -34,8 +34,7 @@ public class Prediction implements BinaryPrediction {
 
 	@Override
 	public String toString() {
-		return String.format("%s[%d]: %s ", Arrays.toString(confidences),
-				value, label);
+		return String.format("%s[%d]: %s ", Arrays.toString(confidences), value, label);
 	}
 
 	public String toJSON() {

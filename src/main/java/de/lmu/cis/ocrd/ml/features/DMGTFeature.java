@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import org.pmw.tinylog.Logger;
+
 import java.util.List;
 import java.util.Map;
 

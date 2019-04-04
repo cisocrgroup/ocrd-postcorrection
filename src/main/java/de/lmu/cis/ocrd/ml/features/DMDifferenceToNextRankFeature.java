@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import org.pmw.tinylog.Logger;
+
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +25,9 @@ public class DMDifferenceToNextRankFeature extends NamedDoubleFeature {
         if (rs.size() > 1) {
             second = rs.get(1).ranking;
         }
-        return rs.get(0).ranking - second;
+        final double result = rs.get(0).ranking - second;
+        Logger.debug("{} result = {}", getName(), result);
+        return result;
     }
 
     @Override

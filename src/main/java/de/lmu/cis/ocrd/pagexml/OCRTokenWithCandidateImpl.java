@@ -60,4 +60,10 @@ public class OCRTokenWithCandidateImpl implements OCRToken {
 	public void correct(String correction, double confidence) {
 		token.correct(correction, confidence);
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%s,suggestion:%s,hist:%d,ocr:%d", token.toString(), candidate.Suggestion,
+				candidate.HistPatterns.length, candidate.OCRPatterns.length);
+	}
 }

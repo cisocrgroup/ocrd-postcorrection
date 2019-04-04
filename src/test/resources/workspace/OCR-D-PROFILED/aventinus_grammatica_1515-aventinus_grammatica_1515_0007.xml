@@ -11953,7 +11953,7 @@ Subſtantiuũ/ cui non poteſt addi.</pc:Unicode>
 <!--                         </pc:TextEquiv> -->
 <!--                     </pc:Glyph> -->
 <!--                     <pc:TextEquiv index="1" conf="0.979097357438296" dataType="ocrd-cis-word-alignment-master-ocr" dataTypeDetails="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/line_1481651557539_84_word0000"> -->
-<!--                         <pc:Unicode>min</pc:Unicode> -->
+<!--                         <pc:Unicode>MIN</pc:Unicode> -->
 <!--                     </pc:TextEquiv> -->
 <!--                     <pc:TextEquiv index="2" conf="0.749539413906318" dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/line_1481651557539_84_word0000"> -->
 <!--                         <pc:Unicode>minüquattuor</pc:Unicode> -->
@@ -12027,8 +12027,8 @@ Subſtantiuũ/ cui non poteſt addi.</pc:Unicode>
 <!--                     <pc:TextEquiv index="25" conf="0.00354944" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "mick", "Modern": "mick", "Dict": "dict_modernhypotheticerror", "HistPatterns": [], "OCRPatterns": [{"Pos": 2, "Left": "ck", "Right": "n"}], "Distance": 2, "Weight": 0.00354944}'> -->
 <!--                         <pc:Unicode>mick</pc:Unicode> -->
 <!--                     </pc:TextEquiv> -->
-<!--                     <pc:TextEquiv index="26" conf="0.00354944" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "min.", "Modern": "min.", "Dict": "dict_modernhypotheticerror", "HistPatterns": [], "OCRPatterns": [{"Pos": 3, "Left": ".", "Right": ""}], "Distance": 1, "Weight": 0.00354944}'> -->
-<!--                         <pc:Unicode>min.</pc:Unicode> -->
+<!--                     <pc:TextEquiv index="26" conf="0.00354944" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "MIN.", "Modern": "MIN.", "Dict": "dict_modernhypotheticerror", "HistPatterns": [], "OCRPatterns": [{"Pos": 3, "Left": ".", "Right": ""}], "Distance": 1, "Weight": 0.00354944}'> -->
+<!--                         <pc:Unicode>MIN.</pc:Unicode> -->
 <!--                     </pc:TextEquiv> -->
 <!--                     <pc:TextEquiv index="27" conf="0.00354944" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "mips", "Modern": "mips", "Dict": "dict_modernhypotheticerror", "HistPatterns": [], "OCRPatterns": [{"Pos": 2, "Left": "ps", "Right": "n"}], "Distance": 2, "Weight": 0.00354944}'> -->
 <!--                         <pc:Unicode>mips</pc:Unicode> -->
@@ -12087,7 +12087,7 @@ Subſtantiuũ/ cui non poteſt addi.</pc:Unicode>
 <!--                     <pc:TextEquiv index="45" conf="0.00354944" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "milz", "Modern": "milz", "Dict": "dict_modernhypotheticerror", "HistPatterns": [], "OCRPatterns": [{"Pos": 2, "Left": "lz", "Right": "n"}], "Distance": 2, "Weight": 0.00354944}'> -->
 <!--                         <pc:Unicode>milz</pc:Unicode> -->
 <!--                     </pc:TextEquiv> -->
-<!--                     <pc:TextEquiv index="46" conf="0.00140384" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "min\u00ee", "Modern": "mini", "Dict": "dict_modernhypotheticerror", "HistPatterns": [{"Pos": 3, "Left": "i", "Right": "\u00ee"}], "OCRPatterns": [{"Pos": 3, "Left": "\u00ee", "Right": ""}], "Distance": 1, "Weight": 0.00140384}'> -->
+<!--                     <pc:TextEquiv index="46" conf="0.00140384" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "MIN\u00ee", "Modern": "mini", "Dict": "dict_modernhypotheticerror", "HistPatterns": [{"Pos": 3, "Left": "i", "Right": "\u00ee"}], "OCRPatterns": [{"Pos": 3, "Left": "\u00ee", "Right": ""}], "Distance": 1, "Weight": 0.00140384}'> -->
 <!--                         <pc:Unicode>minî</pc:Unicode> -->
 <!--                     </pc:TextEquiv> -->
 <!--                     <pc:TextEquiv index="47" conf="0.00140384" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "minj", "Modern": "mini", "Dict": "dict_modernhypotheticerror", "HistPatterns": [{"Pos": 3, "Left": "i", "Right": "j"}], "OCRPatterns": [{"Pos": 3, "Left": "j", "Right": ""}], "Distance": 1, "Weight": 0.00140384}'> -->
@@ -12114,13 +12114,13 @@ Subſtantiuũ/ cui non poteſt addi.</pc:Unicode>
 <!--                     <pc:TextEquiv index="54" conf="0.00000658438" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "minu", "Modern": "mini", "Dict": "dict_modernhypotheticerror", "HistPatterns": [{"Pos": 3, "Left": "i", "Right": "u"}], "OCRPatterns": [{"Pos": 3, "Left": "u", "Right": ""}], "Distance": 1, "Weight": 6.58438e-06}'> -->
 <!--                         <pc:Unicode>minu</pc:Unicode> -->
 <!--                     </pc:TextEquiv> -->
-<!--                     <pc:TextEquiv index="55" conf="0.00000635732" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "min\u00fc", "Modern": "mini", "Dict": "dict_modernhypotheticerror", "HistPatterns": [{"Pos": 3, "Left": "i", "Right": "\u00fc"}], "OCRPatterns": [{"Pos": 3, "Left": "\u00fc", "Right": ""}], "Distance": 1, "Weight": 6.35732e-06}'> -->
+<!--                     <pc:TextEquiv index="55" conf="0.00000635732" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "MIN\u00fc", "Modern": "mini", "Dict": "dict_modernhypotheticerror", "HistPatterns": [{"Pos": 3, "Left": "i", "Right": "\u00fc"}], "OCRPatterns": [{"Pos": 3, "Left": "\u00fc", "Right": ""}], "Distance": 1, "Weight": 6.35732e-06}'> -->
 <!--                         <pc:Unicode>minü</pc:Unicode> -->
 <!--                     </pc:TextEquiv> -->
 <!--                     <pc:TextEquiv index="56" conf="0.00000502753" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "minc", "Modern": "ming", "Dict": "dict_modernhypotheticerror", "HistPatterns": [{"Pos": 3, "Left": "g", "Right": "c"}], "OCRPatterns": [{"Pos": 3, "Left": "c", "Right": ""}], "Distance": 1, "Weight": 5.02753e-06}'> -->
 <!--                         <pc:Unicode>minc</pc:Unicode> -->
 <!--                     </pc:TextEquiv> -->
-<!--                     <pc:TextEquiv index="57" conf="0.00000465494" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "min\u00e4", "Modern": "mine", "Dict": "dict_modernhypotheticerror", "HistPatterns": [{"Pos": 3, "Left": "e", "Right": "\u00e4"}], "OCRPatterns": [{"Pos": 3, "Left": "\u00e4", "Right": ""}], "Distance": 1, "Weight": 4.65494e-06}'> -->
+<!--                     <pc:TextEquiv index="57" conf="0.00000465494" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "MIN\u00e4", "Modern": "mine", "Dict": "dict_modernhypotheticerror", "HistPatterns": [{"Pos": 3, "Left": "e", "Right": "\u00e4"}], "OCRPatterns": [{"Pos": 3, "Left": "\u00e4", "Right": ""}], "Distance": 1, "Weight": 4.65494e-06}'> -->
 <!--                         <pc:Unicode>minä</pc:Unicode> -->
 <!--                     </pc:TextEquiv> -->
 <!--                     <pc:TextEquiv index="58" conf="0.00000212966" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "sind", "Modern": "sind", "Dict": "dict_modernhypotheticerror", "HistPatterns": [], "OCRPatterns": [{"Pos": 0, "Left": "s", "Right": "m"}, {"Pos": 3, "Left": "d", "Right": ""}], "Distance": 2, "Weight": 2.12966e-06}'> -->
@@ -12353,7 +12353,7 @@ Subſtantiuũ/ cui non poteſt addi.</pc:Unicode>
 <!--                     </pc:TextEquiv> -->
 <!--                 </pc:Word> -->
 <!--                 <pc:TextEquiv conf="0.897767513918668" dataType="ocrd-cis-line-alignment-master-ocr" comments="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/line_1481651557539_84"> -->
-<!--                     <pc:Unicode>min qnattuo</pc:Unicode> -->
+<!--                     <pc:Unicode>MIN qnattuo</pc:Unicode> -->
 <!--                 </pc:TextEquiv> -->
 <!--                 <pc:TextEquiv conf="0.749539413906318" dataType="ocrd-cis-line-alignment" comments="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/line_1481651557539_84"> -->
 <!--                     <pc:Unicode>minüquattuor</pc:Unicode> -->

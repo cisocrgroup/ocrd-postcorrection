@@ -22,7 +22,7 @@ class FeaturesTestBase {
 					"-aventinus_grammatica_1515_0006.xml");
 	private static final Path trigrams = Paths.get("src/test/resources/nGrams.csv");
 	private static final Path profilePath = Paths.get("src/test/resources/workspace/profile.json.gz");
-	private List<OCRToken> tokens;
+	protected List<OCRToken> tokens;
 	protected LM lm;
 
 	@Before
@@ -35,6 +35,7 @@ class FeaturesTestBase {
 			for (Word word : line.getWords()) {
 				tokens.add(new OCRTokenImpl(word, 2, 10, profile));
 				if (tokens.size() == 10) {
+					lm.setTokens(tokens);
 					return;
 				}
 			}
