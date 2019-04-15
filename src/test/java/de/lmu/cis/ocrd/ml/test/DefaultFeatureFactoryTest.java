@@ -60,4 +60,18 @@ public class DefaultFeatureFactoryTest {
 		assertThat(feature.get().getName(), is("ProfilerHighestVoteWeight"));
 		assertThat(feature.get() instanceof HighestRankedCandidateVoteWeightFeature, is(true));
 	}
+
+	@Test
+	public void testDeactivateFeatureTrue() throws Exception {
+		final String json = "{\"deactivate\":true,\"type\":\"de.lmu.cis.ocrd.ml.features.MaxCharNGramsFeature\",\"name\":\"MaxCharNGrams\"}";
+		final Optional<Feature> feature = makeFeature(json);
+		assertThat(feature.isPresent(), is(false));
+	}
+
+	@Test
+	public void testDeactivateFeatureFalse() throws Exception {
+		final String json = "{\"deactivate\":false,\"type\":\"de.lmu.cis.ocrd.ml.features.MaxCharNGramsFeature\",\"name\":\"MaxCharNGrams\"}";
+		final Optional<Feature> feature = makeFeature(json);
+		assertThat(feature.isPresent(), is(true));
+	}
 }
