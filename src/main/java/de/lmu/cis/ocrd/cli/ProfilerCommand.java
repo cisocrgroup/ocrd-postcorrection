@@ -45,13 +45,13 @@ public class ProfilerCommand extends AbstractIOCommand {
 
 	private void appendProfile(METS.File file, Profile profile) throws Exception {
 		try (InputStream is = file.openInputStream()) {
-			Page page = Page.parse(is);
+			Page page = Page.parse(Paths.get(file.getFLocat()), is);
 			for (Line line: page.getLines()) {
 				for (Word word: line.getWords()) {
 					appendProfile(word, profile);
 				}
 			}
-			final Path ofile = workspace.putPageXML(page, ofg, file.getFLocat());
+			final Path ofile = workspace.putPageXML(page, ofg);
 			Logger.debug("adding {} to workspace", ofile.toString());
 		}
 	}
@@ -92,7 +92,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 		List<Page> pages = new ArrayList<>(files.size());
 		for (METS.File file: files) {
 			try (InputStream is = file.openInputStream()) {
-				pages.add(Page.parse(is));
+				pages.add(Page.parse(Paths.get(file.getFLocat()), is));
 			}
 		}
 		return new FileGrpProfiler(pages, makeProfilerProcess());

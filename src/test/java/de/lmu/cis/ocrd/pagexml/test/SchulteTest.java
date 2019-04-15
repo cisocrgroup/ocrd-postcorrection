@@ -28,7 +28,7 @@ public class SchulteTest {
         	throw new Exception("missing dir: " + dir.toString());
         }
         for (File file: files) {
-            pages.add(Page.parse(new FileInputStream(file)));
+            pages.add(Page.parse(Paths.get(file.getPath()), new FileInputStream(file)));
         }
     }
 

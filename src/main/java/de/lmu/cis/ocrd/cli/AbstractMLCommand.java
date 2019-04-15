@@ -165,7 +165,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		List<Page> pages = new ArrayList<>(files.size());
 		for (METS.File file: files) {
 			try (InputStream is = file.openInputStream()) {
-				pages.add(Page.parse(is));
+				pages.add(Page.parse(Paths.get(file.getFLocat()), is));
 			}
 		}
 		return pages;

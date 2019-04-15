@@ -29,7 +29,7 @@ public class TokenizerCommand implements Command {
             for (METS.File file: files) {
                 final Page newPage = tokenize(file);
                 final Path flocat= Paths.get(file.getFLocat());
-                final METS.File newFile = addFile(mets, ofg, flocat.getFileName().toString());
+                final METS.File newFile = addFile(mets, newPage, ofg, flocat.getFileName().toString());
                 final Path newFlocat = Paths.get(newFile.getFLocat());
                 Files.createDirectories(newFlocat.getParent());
                 newPage.save(newFlocat.toFile());
@@ -45,12 +45,12 @@ public class TokenizerCommand implements Command {
     private Page tokenize(METS.File file) throws Exception {
         Logger.info("tokenizing file: {}", file.getFLocat());
         try (InputStream is = file.openInputStream()) {
-            final Page page = Page.parse(is);
+            final Page page = Page.parse(Paths.get(file.getFLocat()), is);
             return tokenizer.tokenize(page);
         }
     }
 
-    private static METS.File addFile(METS mets, String ofg, String base) {
+    private static METS.File addFile(METS mets, Page page, String ofg, String base) throws Exception {
         String id = base;
         int pos = id.lastIndexOf(".");
         if (pos > 0) {

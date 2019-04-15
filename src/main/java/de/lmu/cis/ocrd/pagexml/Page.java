@@ -19,26 +19,32 @@ import java.util.List;
 public class Page {
 	public static final String MIMEType = "application/vnd.prima.page+xml";
 	private final Document doc;
+	private final Path path;
 
 	// Open a page from a page-XML file path.
 	public static Page open(Path path) throws Exception {
 		try (final InputStream is = new FileInputStream(path.toFile())) {
-			return parse(is);
+			return parse(path, is);
 		}
 	}
 
-	public static Page parse(InputStream is) throws Exception {
+	public static Page parse(Path path, InputStream is) throws Exception {
 		final DocumentBuilder builder = DocumentBuilderFactory
 				.newInstance()
 				.newDocumentBuilder();
-		return new Page(builder.parse(is));
+		return new Page(path, builder.parse(is));
 	}
 
 	private final List<Line> lines;
 
-	public Page(Document doc) throws XPathExpressionException {
+	public Page(Path path, Document doc) throws XPathExpressionException {
+		this.path = path;
 		this.doc = doc;
 		this.lines = getLineNodes(doc);
+	}
+
+	public Path getPath() {
+		return path;
 	}
 
 	public List<Line> getLines() {

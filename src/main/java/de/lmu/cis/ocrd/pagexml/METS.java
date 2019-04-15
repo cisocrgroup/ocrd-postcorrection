@@ -66,7 +66,7 @@ public class METS {
 		return files;
 	}
 
-	public File addFileToFileGrp(String use) {
+	public File addFileToFileGrp(String use) throws Exception {
 		Node fileGrp = XPathHelper.getNode(xml, String.format(fileGrpFmt, use));
 		if (fileGrp == null) {
 			fileGrp = xml.createElement("mets:fileGrp");

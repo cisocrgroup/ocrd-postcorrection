@@ -47,7 +47,7 @@ public class CheckCorpusCommand implements Command{
 		for (File xml : files) {
 			Logger.info("checking file: {}", xml.toString());
 			try (FileInputStream is = new FileInputStream(xml)) {
-				check(Page.parse(is));
+				check(Page.parse(Paths.get(xml.getPath()), is));
 
 			}
 		}

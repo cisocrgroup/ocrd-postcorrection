@@ -9,6 +9,7 @@ import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
 import de.lmu.cis.ocrd.pagexml.Page;
+import de.lmu.cis.ocrd.pagexml.Workspace;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.AdditionalLexiconSet;
 import de.lmu.cis.ocrd.profile.Candidate;
@@ -23,7 +24,7 @@ import java.util.*;
 
 public class PostCorrectionCommand extends AbstractMLCommand {
     private ModelZIP model;
-    private METS mets;
+    private Workspace workspace;
     private LM lm;
 
     @Override
@@ -36,7 +37,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         setParameter(config);
         final Parameter parameter = getParameter();
         model = ModelZIP.open(Paths.get(parameter.model));
-        mets = METS.open(Paths.get(config.mustGetMETSFile()));
+        workspace = new Workspace(Paths.get(config.mustGetMETSFile()));
         lm = new LM(false, Paths.get(getParameter().trigrams));
         final String ifg = config.mustGetSingleInputFileGroup();
         final String ofg = config.mustGetSingleOutputFileGroup();
@@ -47,7 +48,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     }
 
     private void runDM(String ifg, Map<OCRToken, List<Ranking>> rankings, AdditionalLexicon alex, int nOCR) throws Exception {
-        final List<OCRToken> tokens = readTokens(mets, ifg, alex);
+        final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
         lm.setTokens(tokens);
         final FeatureSet fs = new FeatureSet()
                 .add(new DMBestRankFeature("dm-best-rank", rankings))
@@ -66,7 +67,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     }
 
     private Map<OCRToken, List<Ranking>> runRR(String ifg, AdditionalLexicon alex, int nOCR) throws Exception {
-        final List<OCRToken> tokens = readTokens(mets, ifg, alex);
+        final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.openRRFeatureSet());
         final LogisticClassifier c = LogisticClassifier.load(model.openRRModel(nOCR-1));
@@ -89,7 +90,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     }
 
     private AdditionalLexicon runDLE(String ifg, int nOCR) throws Exception {
-        final List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
+        final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, new NoAdditionalLexicon());
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.openDLEFeatureSet());
         final LogisticClassifier c = LogisticClassifier.load(model.openDLEModel(nOCR-1));
@@ -107,22 +108,10 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         return alex;
     }
 
-    private void saveOutputFileGroup(String ofg) {
+    private void saveOutputFileGroup(String ofg) throws Exception {
         for (Page page : getPages()) {
-            String flocat = savePage(page, ofg);
-            METS.File file = mets.addFileToFileGrp(ofg)
-                    .withFLocat(flocat)
-                    .withID(makeID(ofg, flocat))
-                    .withGroupID(ofg);
+            workspace.putPageXML(page, ofg);
         }
-    }
-
-    private String makeID(String ofg, String flocat) {
-
-    }
-
-    private String savePage(Page page, String ofg) {
-        mets.
     }
 
     private FeatureSet makeFeatureSet(InputStream is) throws Exception {

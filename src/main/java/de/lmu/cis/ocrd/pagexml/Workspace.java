@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.cli;
+package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.Page;
@@ -6,36 +6,36 @@ import de.lmu.cis.ocrd.pagexml.Page;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-class Workspace {
+public class Workspace {
     private final Path workDir;
     private final Path metsPath;
     private final METS mets;
 
-    Workspace(Path mets) throws Exception {
+    public Workspace(Path mets) throws Exception {
         this.workDir = mets.getParent();
         this.metsPath = mets;
         this.mets = METS.open(mets);
     }
 
-    METS getMETS() {
+    public METS getMETS() {
         return mets;
     }
 
-    void save() throws Exception {
+    public void save() throws Exception {
         mets.save(metsPath);
     }
 
-    Path putPageXML(Page page, String ofg, String oldFileName) throws Exception {
-        final Path name = getNewName(ofg, Paths.get(oldFileName));
-        final Path destination = workDir.resolve(Paths.get(ofg).resolve(name));
+    public Path putPageXML(Page page, String ofg) throws Exception {
+        final Path name = getNewName(ofg, page.getPath().getFileName());
+        final Path dest = workDir.resolve(Paths.get(ofg).resolve(name));
         //noinspection ResultOfMethodCallIgnored
-        destination.getParent().toFile().mkdirs();
-        page.save(destination);
+        dest.getParent().toFile().mkdirs();
+        page.save(dest);
         mets.addFileToFileGrp(ofg)
-                .withFLocat("file://" + destination.toAbsolutePath().toString())
+                .withFLocat("file://" + dest.toAbsolutePath().toString())
                 .withID(getID(name))
                 .withMIMEType(Page.MIMEType);
-        return destination.toAbsolutePath();
+        return dest.toAbsolutePath();
     }
 
     private String getID(Path name) {

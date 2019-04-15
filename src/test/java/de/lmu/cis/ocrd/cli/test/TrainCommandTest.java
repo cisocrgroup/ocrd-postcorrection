@@ -24,11 +24,13 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class TrainCommandTest {
-	private final Path tmp = Paths.get("src/test/resources/workspace/dump");
+	private final Path workspace = Paths.get("src/test/resources/workspace");
+	private final Path tmp = Paths.get(workspace.toString(), "dump");
 	private final String parameter = "src/test/resources/workspace/config.json";
 	private final String mets = "src/test/resources/workspace/mets.xml";
 	private final String inputFileGroupTrain = "OCR-D-PROFILED";
 	private final String inputFileGroupEval = "OCR-D-EVAL";
+	private final String outputFileGroup = "OCR-D-POST-CORRECTED";
 	private final String logLevel = "DEBUG";
 	private final String model = "src/test/resource/workspace/model.zip";
 
@@ -49,6 +51,7 @@ public class TrainCommandTest {
 		try {
 			new File(model).delete();
 			FileUtils.deleteDirectory(tmp.toFile());
+			FileUtils.deleteDirectory(Paths.get(workspace.toString(), outputFileGroup).toFile());
 		} catch (Exception e) {
 			// ignore
 		}
@@ -144,12 +147,16 @@ public class TrainCommandTest {
 				"--mets", mets,
 				"--parameter", parameter,
 				"-I", inputFileGroupEval,
-				"-O", "unused-outputFileGroup",
+				"-O", outputFileGroup,
 				"--log-level", logLevel,
 		};
 		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
 		PostCorrectionCommand cmd = new PostCorrectionCommand();
 		cmd.execute(cla);
+		assertThat(Paths.get(workspace.toString(), outputFileGroup).toFile().exists(), is(true));
+		assertThat(Paths.get(workspace.toString(), outputFileGroup).toFile().isDirectory(), is(true));
+		assertThat(Paths.get(workspace.toString(), outputFileGroup).toFile().listFiles().length, is(1));
+
 	}
 
 	private static boolean exists(String path, int i) {
