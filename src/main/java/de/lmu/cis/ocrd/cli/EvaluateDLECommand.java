@@ -35,7 +35,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 		fs = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().dleTraining.features))
+				.createFeatureSet(getFeatures(getParameter().dleTraining.features), getFeatureClassFilter())
 				.add(new DynamicLexiconGTFeature());
 		for (int i = 0; i < getParameter().nOCR; i++) {
             try (ARFFWriter w = ARFFWriter

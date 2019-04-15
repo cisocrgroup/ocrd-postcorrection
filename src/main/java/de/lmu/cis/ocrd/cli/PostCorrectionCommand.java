@@ -118,7 +118,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         try (InputStream iis = is) {
             final String json = IOUtils.toString(iis, Charset.forName("UTF-8"));
             final JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
-            return FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(os);
+            return FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(os, getFeatureClassFilter());
         }
     }
 

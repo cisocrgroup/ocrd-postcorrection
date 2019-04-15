@@ -45,12 +45,12 @@ public class TrainCommand extends AbstractMLCommand {
 		this.dleFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().dleTraining.features))
+				.createFeatureSet(getFeatures(getParameter().dleTraining.features), getFeatureClassFilter())
 				.add(new DynamicLexiconGTFeature());
 		this.rrFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().rrTraining.features))
+				.createFeatureSet(getFeatures(getParameter().rrTraining.features), getFeatureClassFilter())
 				.add(new ReRankingGTFeature());
 		// DM needs to be created separately (see below)
 		for (int i = 0; i < getParameter().nOCR; i++) {

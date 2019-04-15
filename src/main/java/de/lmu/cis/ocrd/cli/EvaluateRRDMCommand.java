@@ -44,7 +44,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		rrFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().rrTraining.features))
+				.createFeatureSet(getFeatures(getParameter().rrTraining.features), getFeatureClassFilter())
 				.add(new ReRankingGTFeature());
 		mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		for (int i = 0; i < getParameter().nOCR; i++) {

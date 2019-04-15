@@ -2,21 +2,20 @@ package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FeatureClassFilter {
     private final List<String>  classes;
-//
-//    public FeatureClassFilter() {
-//        classes = new ArrayList<>();
-//    }
+
+    FeatureClassFilter() {
+        classes = null;
+    }
 
     public FeatureClassFilter(List<String> classes) {
         this.classes = classes;
     }
 
-    public boolean filter(JsonObject o) {
+    boolean filter(JsonObject o) {
         if (classes == null || !o.has("class")) { // missing class or empty list; do not filter
             return false;
         }

@@ -2,10 +2,7 @@ package de.lmu.cis.ocrd.cli;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.ml.features.BinaryPrediction;
-import de.lmu.cis.ocrd.ml.features.BinaryPredictor;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
-import de.lmu.cis.ocrd.ml.features.Ranking;
+import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.*;
 import org.apache.commons.io.IOUtils;
@@ -49,12 +46,13 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		String trigrams = "";
 		int nOCR = 0;
 		int maxCandidates = 0;
+		List<String> filterClasses;
 	}
 
 	private Parameter parameter;
 	private List<Page> pages;
 
-	protected List<Page> getPages() {
+	List<Page> getPages() {
 		return pages;
 	}
 
@@ -64,6 +62,10 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 
 	void setParameter(CommandLineArguments args) throws Exception {
 		parameter = args.mustGetParameter(Parameter.class);
+	}
+
+	FeatureClassFilter getFeatureClassFilter() {
+		return new FeatureClassFilter(parameter.filterClasses);
 	}
 
 	static JsonObject[] getFeatures(String features) throws Exception {

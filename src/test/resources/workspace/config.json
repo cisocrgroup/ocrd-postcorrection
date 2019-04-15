@@ -29,7 +29,8 @@
           "result": "src/test/resources/workspace/dump/dm-eval.txt"
       },
     "model": "src/test/resources/workspace/model.zip",
-      "nOCR": 2,
-      "trigrams": "src/test/resources/nGrams.csv",
-      "maxCandidates": 5
+    "nOCR": 2,
+    "trigrams": "src/test/resources/nGrams.csv",
+    "maxCandidates": 5,
+    "filterClasses": ["filter-me"]
   }

@@ -37,5 +37,10 @@
 	{
 		"type": "de.lmu.cis.ocrd.ml.features.UnigramFeature",
 		"name": "UnigramOCRRelativeFrequency"
+	},
+	{
+		"type": "invalid",
+		"name": "invalid",
+		"class": "filter-me"
 	}
 ]
