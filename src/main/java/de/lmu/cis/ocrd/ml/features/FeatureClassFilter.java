@@ -7,17 +7,17 @@ import java.util.List;
 
 public class FeatureClassFilter {
     private final List<String>  classes;
-
-    public FeatureClassFilter() {
-        classes = new ArrayList<>();
-    }
+//
+//    public FeatureClassFilter() {
+//        classes = new ArrayList<>();
+//    }
 
     public FeatureClassFilter(List<String> classes) {
         this.classes = classes;
     }
 
     public boolean filter(JsonObject o) {
-        if (!o.has("class")) { // missing class; do not filter it
+        if (classes == null || !o.has("class")) { // missing class or empty list; do not filter
             return false;
         }
         final String objectClass = o.get("class").getAsString().toLowerCase();
