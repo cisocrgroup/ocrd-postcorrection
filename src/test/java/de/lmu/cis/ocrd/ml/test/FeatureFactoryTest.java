@@ -45,7 +45,8 @@ public class FeatureFactoryTest {
 
 	@Test
 	public void testWithDeactivated2() throws Exception {
-		final String json = "[{\"name\": \"test\", \"type\": \"de.lmu.cis.ocrd.ml.test.FeatureFactoryTest$TestFeature\", \"short\": 3, \"medium\": 8, \"long\": 13},{\"name\": \"test\", \"type\": \"invalid\",\"deactivate\": true}]";
+		final String json = "[{\"name\": \"test\", \"type\": \"de.lmu.cis.ocrd.ml.test.FeatureFactoryTest$TestFeature\", \"short\": 3, \"medium\": 8, \"long\": 13},"
+                +"{\"name\": \"test\", \"type\": \"invalid\",\"deactivate\": true}]";
 		JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
 		FeatureSet fs = featureFactory.createFeatureSet(os);
 		assertThat(fs.size(), is(1));
