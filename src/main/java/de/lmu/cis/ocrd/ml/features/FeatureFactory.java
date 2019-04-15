@@ -70,13 +70,20 @@ public class FeatureFactory {
 		return this;
 	}
 
-	public FeatureSet createFeatureSet(JsonObject[] os) throws Exception {
+	public FeatureSet createFeatureSet(JsonObject[] os, FeatureClassFilter ff) throws Exception {
 		FeatureSet fs = new FeatureSet();
 		for (JsonObject o : os) {
+			if (ff.filter(o)) {
+				continue;
+			}
 			Optional<Feature> feature = create(o);
             // feature is not deactivated
             feature.ifPresent(fs::add);
 		}
 		return fs;
+	}
+
+	public FeatureSet createFeatureSet(JsonObject[] os) throws Exception {
+		return createFeatureSet(os, new FeatureClassFilter());
 	}
 }

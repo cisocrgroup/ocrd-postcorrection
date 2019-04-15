@@ -6,6 +6,7 @@ import de.lmu.cis.ocrd.ml.features.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.Assert.assertThat;
@@ -46,10 +47,19 @@ public class FeatureFactoryTest {
 	@Test
 	public void testWithDeactivated2() throws Exception {
 		final String json = "[{\"name\": \"test\", \"type\": \"de.lmu.cis.ocrd.ml.test.FeatureFactoryTest$TestFeature\", \"short\": 3, \"medium\": 8, \"long\": 13},"
-                +"{\"name\": \"test\", \"type\": \"invalid\",\"deactivate\": true}]";
+				+"{\"name\": \"test\", \"type\": \"invalid\",\"deactivate\": true}]";
 		JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
 		FeatureSet fs = featureFactory.createFeatureSet(os);
 		assertThat(fs.size(), is(1));
+	}
+
+	@Test
+	public void testWithFeatureClassFilter() throws Exception {
+		FeatureClassFilter ff = new FeatureClassFilter(Arrays.asList(new String[]{"a", "b"}));
+		final String json = "[{\"class\":\"a\"},{\"class\":\"b\"},{\"class\":\"A.b\"},{\"class\":\"B.a\"}]";
+		JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
+		FeatureSet fs = featureFactory.createFeatureSet(os, ff);
+		assertThat(fs.size(), is(0));
 	}
 
 	public static class TestFeature extends TokenLengthClassFeature {
