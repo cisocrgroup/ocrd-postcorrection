@@ -2,10 +2,7 @@ package de.lmu.cis.ocrd.ml.test;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
-import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.FeatureFactory;
-import de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature;
+import de.lmu.cis.ocrd.ml.features.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,12 +27,28 @@ public class FeatureFactoryTest {
 		assertThat(feature.get(), is(new TestFeature(3, 8, 13, "test")));
 	}
 
-	@Test
+	@Test(expected = Exception.class)
 	public void testWithInvalidName() throws Exception {
 		final String json = "{\"name\": \"test\", \"type\": \"invalid.package.InvalidFeature\", \"MIN\": 0, \"max\": 1}";
 		JsonObject o = new Gson().fromJson(json, JsonObject.class);
 		Optional<Feature> feature = featureFactory.create(o);
 		assertThat(feature.isPresent(), is(false));
+	}
+
+	@Test
+	public void testWithDeactivated() throws Exception {
+		final String json = "[{\"name\": \"test\", \"type\": \"invalid\",\"deactivate\": true}]";
+		JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
+		FeatureSet fs = featureFactory.createFeatureSet(os);
+		assertThat(fs.size(), is(0));
+	}
+
+	@Test
+	public void testWithDeactivated2() throws Exception {
+		final String json = "[{\"name\": \"test\", \"type\": \"de.lmu.cis.ocrd.ml.test.FeatureFactoryTest$TestFeature\", \"short\": 3, \"medium\": 8, \"long\": 13},{\"name\": \"test\", \"type\": \"invalid\",\"deactivate\": true}]";
+		JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
+		FeatureSet fs = featureFactory.createFeatureSet(os);
+		assertThat(fs.size(), is(1));
 	}
 
 	public static class TestFeature extends TokenLengthClassFeature {
