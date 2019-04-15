@@ -56,7 +56,7 @@ public class FeatureFactory {
 		}
 		final String type = JSON.mustGet(o, "type").getAsString();
 		if (!features.contains(type)) {
-			return Optional.empty();
+			throw new Exception("cannot create feature: unknown type: " + type);
 		}
 		final Class<?> clazz = Class.forName(type);
 		final Class<?>[] parameters = new Class[] { JsonObject.class,
@@ -74,11 +74,8 @@ public class FeatureFactory {
 		FeatureSet fs = new FeatureSet();
 		for (JsonObject o : os) {
 			Optional<Feature> feature = create(o);
-			if (!feature.isPresent()) {
-				throw new Exception(
-						"cannot create feature from: " + o.toString());
-			}
-			fs.add(feature.get());
+            // feature is not deactivated
+            feature.ifPresent(fs::add);
 		}
 		return fs;
 	}
