@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.Gson;
+import org.jetbrains.annotations.NotNull;
 import org.pmw.tinylog.Logger;
 
 import java.io.PrintWriter;
@@ -29,7 +30,6 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 				if (!feature.handlesOCR(i, n)) {
 					continue;
 				}
-				Logger.debug("feature {}", feature.getName());
 				final Object val = feature.calculate(token, i, n);
 				Logger.debug("value for feature {}: {}", feature.getName(), val.toString());
 				vec.add(val);
@@ -50,7 +50,7 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 	public static class Vector extends ArrayList<Object> {
 		private static final long serialVersionUID = 4013744915440870424L;
 
-		public Vector(int n) {
+		Vector(int n) {
 			super(n);
 		}
 
