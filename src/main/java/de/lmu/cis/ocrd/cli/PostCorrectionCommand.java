@@ -8,6 +8,7 @@ import de.lmu.cis.ocrd.ml.Prediction;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
+import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.AdditionalLexiconSet;
 import de.lmu.cis.ocrd.profile.Candidate;
@@ -42,6 +43,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final AdditionalLexicon alex = runDLE(ifg, parameter.nOCR);
         final Map<OCRToken, List<Ranking>> rankings = runRR(ifg, alex, parameter.nOCR);
         runDM(ifg, rankings, alex, parameter.nOCR);
+        saveOutputFileGroup(ofg);
     }
 
     private void runDM(String ifg, Map<OCRToken, List<Ranking>> rankings, AdditionalLexicon alex, int nOCR) throws Exception {
@@ -103,6 +105,24 @@ public class PostCorrectionCommand extends AbstractMLCommand {
             }
         }
         return alex;
+    }
+
+    private void saveOutputFileGroup(String ofg) {
+        for (Page page : getPages()) {
+            String flocat = savePage(page, ofg);
+            METS.File file = mets.addFileToFileGrp(ofg)
+                    .withFLocat(flocat)
+                    .withID(makeID(ofg, flocat))
+                    .withGroupID(ofg);
+        }
+    }
+
+    private String makeID(String ofg, String flocat) {
+
+    }
+
+    private String savePage(Page page, String ofg) {
+        mets.
     }
 
     private FeatureSet makeFeatureSet(InputStream is) throws Exception {

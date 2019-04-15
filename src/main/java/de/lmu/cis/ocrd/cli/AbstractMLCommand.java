@@ -52,6 +52,11 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	}
 
 	private Parameter parameter;
+	private List<Page> pages;
+
+	protected List<Page> getPages() {
+		return pages;
+	}
 
 	public Parameter getParameter() {
 		return parameter;
@@ -135,7 +140,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		Logger.debug("read tokens ifg = {}, additional lex {}", ifg, additionalLex.toString());
 		List<OCRToken> tokens = new ArrayList<>();
 		final int gtIndex = parameter.nOCR;
-		List<Page> pages = openPages(openFiles(mets, ifg));
+		pages = openPages(openFiles(mets, ifg));
 		final Profile profile = openProfile(ifg, pages, additionalLex);
 		for (Page page: pages) {
 			eachLongWord(page, (word, mOCR)->{
