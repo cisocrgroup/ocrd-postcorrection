@@ -5,13 +5,11 @@ import org.pmw.tinylog.Logger;
 import java.util.List;
 import java.util.Map;
 
-// Classifies OCR tokens into one of three different classes:
+// Classifies OCR tokens into one of two different classes:
 // * true        if the best ranked correction candidate equals the ground truth
 //               token (the correction will improve or at least not harm the text accuracy)
 // * false       if the best ranked correction candidate is wrong and the original
 //               token was correct (the correction would disimprove the text accuracy)
-// * do-not-care if the ocr is not correct and the best ranked correction candidate is
-//               also wrong (the correction would not alter the text accuracy)
 public class DMGTFeature extends NamedFeature {
 	private final static String TRUE = Boolean.toString(true);
 	private final static String DO_NOT_CARE = "do-not-care";
@@ -53,5 +51,15 @@ public class DMGTFeature extends NamedFeature {
 		}
 		// the correction suggestion is false; but so is the ocr token
 		return DO_NOT_CARE;
+	}
+
+	// Returns true if the given token should be used for the DM-training.
+	// This is the not the case if a wrong w_ocr has wrong correction suggestion (in this case
+	// it would not matter if the w_ocr is corrected or not).
+	public static boolean isValidForTraining(OCRToken token, Map<OCRToken, List<Ranking>> rankings) {
+		if (!token.ocrIsCorrect()) {
+			return rankings.get(token).get(0).candidate.Suggestion.equalsIgnoreCase(token.getGT().orElse(""));
+		}
+		return true;
 	}
 }

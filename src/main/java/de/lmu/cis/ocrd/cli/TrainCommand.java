@@ -168,7 +168,7 @@ public class TrainCommand extends AbstractMLCommand {
 					if (!rankings.containsKey(token)) {
 						continue;
 					}
-					if (isValidForDMTraining(token, rankings)) {
+					if (DMGTFeature.isValidForTraining(token, rankings)) {
 						dmw.writeTokenWithFeatureSet(token, dmFS, i + 1);
 					}
 				}

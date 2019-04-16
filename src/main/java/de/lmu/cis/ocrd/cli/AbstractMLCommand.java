@@ -213,14 +213,4 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 				throw new Exception ("Invalid profiler type: " + parameter.profiler.type);
 		}
 	}
-
-	// Returns true if the given token is either a clear true (a correction with the best ranked candidate will fix w_ocr)
-	// or a clear false (the correction will disimprove w_ocr). It will return false if a wrong w_ocr would be corrected
-	// with a wrong correction suggestion.
-	boolean isValidForDMTraining(OCRToken token, Map<OCRToken, List<Ranking>> rankings) {
-		if (token.ocrIsCorrect()) {
-			return true;
-		}
-		return rankings.get(token).get(0).candidate.Suggestion.equalsIgnoreCase(token.getGT().orElse(""));
-	}
 }
