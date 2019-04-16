@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class FeatureSet implements Iterable<Feature>, Serializable {
 	private static final long serialVersionUID = -4802453739549010404L;
@@ -58,28 +59,15 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 
 		@Override
 		public String toString() {
-			StringBuilder builder = new StringBuilder();
-			boolean first = true;
+			StringJoiner sj = new StringJoiner(",");
 			for (Object feature : this) {
-				if (!first) {
-					builder.append(',');
-				}
-				builder.append(feature.toString());
-				first = false;
+				sj.add(feature.toString());
 			}
-			return builder.toString();
+			return sj.toString();
 		}
 
 		public void writeCSVLine(PrintWriter w) {
-			boolean first = true;
-			for (Object feature : this) {
-				if (!first) {
-					w.print(',');
-				}
-				w.print(feature);
-				first = false;
-			}
-			w.println();
+			w.println(this.toString());
 		}
 
 		public String toJSON() {
