@@ -28,7 +28,7 @@
           "evaluation": "src/test/resources/workspace/dump/dm-eval.arff",
           "result": "src/test/resources/workspace/dump/dm-eval.txt"
       },
-    "model": "src/test/resources/workspace/model.zip",
+    "model": "src/test/resources/workspace/dump/model.zip",
     "nOCR": 2,
     "trigrams": "src/test/resources/nGrams.csv",
     "maxCandidates": 5,

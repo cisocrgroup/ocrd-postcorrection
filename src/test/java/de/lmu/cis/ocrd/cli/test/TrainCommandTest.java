@@ -9,15 +9,10 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.pmw.tinylog.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
+import java.nio.file.*;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -32,7 +27,7 @@ public class TrainCommandTest {
 	private final String inputFileGroupEval = "OCR-D-EVAL";
 	private final String outputFileGroup = "OCR-D-POST-CORRECTED";
 	private final String logLevel = "DEBUG";
-	private final String model = "src/test/resource/workspace/model.zip";
+	private final String model = Paths.get(tmp.toString(), "model.zip").toString();
 
 	private AbstractMLCommand.Parameter config;
 
@@ -49,9 +44,12 @@ public class TrainCommandTest {
 	@After
 	public void deinit() {
 		try {
-			new File(model).delete();
-			FileUtils.deleteDirectory(tmp.toFile());
 			FileUtils.deleteDirectory(Paths.get(workspace.toString(), outputFileGroup).toFile());
+		} catch (Exception e) {
+			// ignore
+		}
+		try {
+			FileUtils.deleteDirectory(tmp.toFile());
 		} catch (Exception e) {
 			// ignore
 		}
@@ -150,13 +148,14 @@ public class TrainCommandTest {
 				"-O", outputFileGroup,
 				"--log-level", logLevel,
 		};
+		assertThat(Paths.get(model).toFile().exists(), is(true));
 		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
 		PostCorrectionCommand cmd = new PostCorrectionCommand();
 		cmd.execute(cla);
 		assertThat(Paths.get(workspace.toString(), outputFileGroup).toFile().exists(), is(true));
 		assertThat(Paths.get(workspace.toString(), outputFileGroup).toFile().isDirectory(), is(true));
 		assertThat(Paths.get(workspace.toString(), outputFileGroup).toFile().listFiles().length, is(1));
-
+		assertThat(Paths.get(model).toFile().exists(), is(true));
 	}
 
 	private static boolean exists(String path, int i) {
