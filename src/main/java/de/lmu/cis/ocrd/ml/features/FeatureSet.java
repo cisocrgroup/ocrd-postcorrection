@@ -13,6 +13,7 @@ import java.util.List;
 public class FeatureSet implements Iterable<Feature>, Serializable {
 	private static final long serialVersionUID = -4802453739549010404L;
 	private final List<Feature> features = new ArrayList<>();
+	private final Vector vector = new Vector(10);
 
 	public Feature get(int i) {
 		return features.get(i);
@@ -24,7 +25,8 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 	}
 
 	public Vector calculateFeatureVector(OCRToken token, int n) {
-		Vector vec = new Vector(this.size());
+		vector.clear();
+		int j = 0;
 		for (Feature feature : this.features) {
 			for (int i = 0; i < n; i++) {
 				if (!feature.handlesOCR(i, n)) {
@@ -32,10 +34,10 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 				}
 				final Object val = feature.calculate(token, i, n);
 				Logger.debug("value for feature {}: {}", feature.getName(), val.toString());
-				vec.add(val);
+				vector.add(j++, val);
 			}
 		}
-		return vec;
+		return vector;
 	}
 
 	public int size() {
