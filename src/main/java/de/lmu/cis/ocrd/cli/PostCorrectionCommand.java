@@ -26,6 +26,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     private ModelZIP model;
     private Workspace workspace;
     private LM lm;
+    private Protocol leProtocol = new LexiconExtensionProtocol();
 
     @Override
     public String getName() {
@@ -101,7 +102,9 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 continue;
             }
             final FeatureSet.Vector values = fs.calculateFeatureVector(token, nOCR-1);
-            if (c.predict(values).getPrediction()) {
+            final boolean prediction = c.predict(values).getPrediction();
+            leProtocol.register(token, prediction);
+            if (prediction) {
                 alex.add(token.getMasterOCR().toString());
             }
         }
