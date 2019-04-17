@@ -2,7 +2,6 @@ package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.profile.AbstractProfiler;
 import de.lmu.cis.ocrd.profile.ProfilerProcess;
-import org.pmw.tinylog.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -25,7 +24,7 @@ public class FileGrpProfiler extends AbstractProfiler {
                 for (Word word: line.getWords()) {
                     List<String> unicode = word.getUnicodeNormalized();
                     if (!unicode.isEmpty() && !unicode.get(0).isEmpty()) {
-                        Logger.debug("profiler input: {}", unicode.get(0));
+                        // Logger.debug("profiler input: {}", unicode.get(0));
                         // append master ocr (one token per line)
                         b.append(unicode.get(0));
                         b.append(":\n");
