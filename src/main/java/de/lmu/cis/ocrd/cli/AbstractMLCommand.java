@@ -175,19 +175,25 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 
 	private Profile openProfile(String ifg, List<Page> pages, AdditionalLexicon additionalLex) throws Exception {
 		Path cached = parameter.profiler.getCacheFilePath(ifg, additionalLex);
+		if (parameter.profiler.cacheDir == null || "".equals(parameter.profiler.cacheDir)) {
+			cached = null;
+		}
 		return openProfileMaybeCached(cached, pages, additionalLex);
 	}
 
 	private Profile openProfileMaybeCached(Path cached, List<Page> pages, AdditionalLexicon additionalLex) throws Exception {
-		if (cached.toFile().exists()) {
+		if (cached != null && cached.toFile().exists()) {
 			Logger.debug("opening cached profile: {}", cached.toString());
 			return new FileProfiler(cached).profile();
 		}
-		if (cached.getParent().toFile().mkdirs()) {
+		if (cached != null && cached.getParent().toFile().mkdirs()) {
 			Logger.debug("created cache directory {}", cached.getParent().toString());
 		}
 		Profile profile = getProfiler(pages, additionalLex).profile();
 		Charset utf8 = Charset.forName("UTF-8");
+		if (cached == null) {
+			return profile;
+		}
 		Logger.debug("caching profile: {}", cached.toString());
 		try (Writer w = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(cached.toFile())), utf8))) {
 			w.write(profile.toJSON());
