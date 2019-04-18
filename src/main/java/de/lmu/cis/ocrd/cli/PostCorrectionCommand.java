@@ -49,6 +49,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     }
 
     private void runDM(String ifg, Map<OCRToken, List<Ranking>> rankings, AdditionalLexicon alex, int nOCR) throws Exception {
+        Logger.info("running decision maker step: {} ({})", ifg, nOCR);
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
         lm.setTokens(tokens);
         final FeatureSet fs = new FeatureSet()
@@ -62,12 +63,16 @@ public class PostCorrectionCommand extends AbstractMLCommand {
             final Prediction p = c.predict(fs.calculateFeatureVector(token, nOCR));
             if (p.getPrediction()) {
                 final Ranking ranking = rankings.get(token).get(0);
-                token.correct(ranking.candidate.Suggestion, ranking.ranking);
+                final String correction = ranking.candidate.getAsSuggestionFor(token.getMasterOCR().getWord());
+                Logger.info("correcting '{}' with '{}' ({})",
+                        token.getMasterOCR().toString(), correction, ranking.ranking);
+                token.correct(correction, ranking.ranking);
             }
         }
     }
 
     private Map<OCRToken, List<Ranking>> runRR(String ifg, AdditionalLexicon alex, int nOCR) throws Exception {
+        Logger.info("running ranking step: {} ({})", ifg, nOCR);
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.openRRFeatureSet());
@@ -91,6 +96,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     }
 
     private AdditionalLexicon runDLE(String ifg, int nOCR) throws Exception {
+        Logger.info("running lexicon extension step: {} ({})", ifg, nOCR);
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, new NoAdditionalLexicon());
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.openDLEFeatureSet());
@@ -105,6 +111,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
             final boolean prediction = c.predict(values).getPrediction();
             leProtocol.register(token, prediction);
             if (prediction) {
+                Logger.debug("adding to extended lexicon: {}", token.getMasterOCR().toString());
                 alex.add(token.getMasterOCR().toString());
             }
         }
