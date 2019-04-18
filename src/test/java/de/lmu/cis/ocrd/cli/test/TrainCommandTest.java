@@ -26,7 +26,7 @@ public class TrainCommandTest {
 	private final String inputFileGroupTrain = "OCR-D-PROFILED";
 	private final String inputFileGroupEval = "OCR-D-EVAL";
 	private final String outputFileGroup = "OCR-D-POST-CORRECTED";
-	private final String logLevel = "DEBUG";
+	private final String logLevel = "INFO";
 	private final String model = Paths.get(tmp.toString(), "model.zip").toString();
 
 	private AbstractMLCommand.Parameter config;
