@@ -5,11 +5,7 @@ import de.lmu.cis.ocrd.ml.features.OCRWord;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
-import org.apache.commons.lang.WordUtils;
-import org.pmw.tinylog.Logger;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -112,27 +108,12 @@ public class OCRTokenImpl implements OCRToken {
 
 	@Override
 	public void correct(String correction, double confidence) {
-		correction = correctionFor(correction);
-		Logger.info("correcting '{}' with '{}'", getMasterOCR().toString(), correction);
 		word.appendNewTextEquiv()
 				.addUnicode(correction)
 				.withConfidence(confidence)
 				.withIndex(0)
 				.withDataType("OCR-D-CIS-POST-CORRECTION")
 				.withDataTypeDetails(word.toString());
-	}
-	private String correctionFor(String correction) {
-		String mOCR = getMasterOCR().toString();
-		if (mOCR == null || "".equals(mOCR) || correction == null || "".equals(correction)) {
-			return correction;
-		}
-		if (mOCR.codePoints().allMatch((c)-> Character.getType(c) == Character.UPPERCASE_LETTER)) {
-			return correction.toUpperCase();
-		}
-		if (Character.getType(mOCR.codePointAt(0)) == Character.UPPERCASE_LETTER) {
-			return WordUtils.capitalizeFully(correction);
-		}
-		return correction;
 	}
 
 	public List<Candidate> getAllProfilerCandidatesNoLimit() {

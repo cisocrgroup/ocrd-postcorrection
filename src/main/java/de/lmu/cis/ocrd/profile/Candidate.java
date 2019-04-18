@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.profile;
 
+import org.apache.commons.lang.WordUtils;
+
 public class Candidate {
 	public String Suggestion, Modern, Dict;
 	public PosPattern[] HistPatterns, OCRPatterns;
@@ -27,5 +29,19 @@ public class Candidate {
 	// i.e. has no historical or ocr patterns.
 	public boolean isLexiconEntry() {
 		return Distance == 0 && (HistPatterns == null || HistPatterns.length == 0);
+	}
+
+	// returns the proper cased suggestion string for the given ocr token.
+	public String getAsSuggestionFor(String ocr) {
+		if (ocr == null || "".equals(ocr) || Suggestion == null || "".equals(Suggestion)) {
+			return Suggestion;
+		}
+		if (ocr.codePoints().allMatch((c)-> Character.getType(c) == Character.UPPERCASE_LETTER)) {
+			return Suggestion.toUpperCase();
+		}
+		if (Character.getType(ocr.codePointAt(0)) == Character.UPPERCASE_LETTER) {
+			return WordUtils.capitalizeFully(Suggestion);
+		}
+		return Suggestion;
 	}
 }
