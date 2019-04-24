@@ -10,6 +10,6 @@ abstract class NamedFeature extends BaseFeatureImplementation {
 
 	@Override
 	public final String getName() {
-		return name;
+		return name.replaceAll("\\s+", "_");
 	}
 }
