@@ -64,6 +64,10 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		parameter = args.mustGetParameter(Parameter.class);
 	}
 
+	void setParameter(Parameter parameter) {
+		this.parameter = parameter;
+	}
+
 	FeatureClassFilter getFeatureClassFilter() {
 		return new FeatureClassFilter(parameter.filterClasses);
 	}
