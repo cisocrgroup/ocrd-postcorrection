@@ -30,7 +30,6 @@ public class FileProfiler implements Profiler {
 		Logger.debug("mime type for {}: {}", path.toString(), mime);
 		switch (mime) {
 			case "application/json":
-
 				return new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile()), utf8));
 			case "application/gzip":
 			case "application/x-gzip":
