@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.profile;
 
+import org.pmw.tinylog.Logger;
+
 import java.io.*;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -25,8 +27,10 @@ public class FileProfiler implements Profiler {
 	private Reader open() throws Exception {
 		final Charset utf8 = Charset.forName("UTF-8");
 		final String mime = getMIMEType(path);
+		Logger.debug("mime type for {}: {}", path.toString(), mime);
 		switch (mime) {
 			case "application/json":
+
 				return new BufferedReader(new InputStreamReader(new FileInputStream(path.toFile()), utf8));
 			case "application/gzip":
 			case "application/x-gzip":
