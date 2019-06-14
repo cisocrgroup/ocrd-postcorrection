@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.profile;
 import java.util.List;
 
 public class Candidates {
+	public int N = 0;
 	public String OCR = "";
 	public List<Candidate> Candidates;// = new Candidate[0];
 
