@@ -28,7 +28,6 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     private static class Configuration extends AbstractMLCommand.Parameter {
         String lexiconExtensionProtocol = "";
         String decisionMakerProtocol = "";
-        String additionalLexicon = "";
         boolean runLexiconExtension = false;
         boolean runDecisionMaker = false;
     }
@@ -51,11 +50,9 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         lm = new LM(false, Paths.get(this.config.trigrams));
         final String ifg = config.mustGetSingleInputFileGroup();
         final String ofg = config.mustGetSingleOutputFileGroup();
-        AdditionalLexicon alex;
+        AdditionalLexicon alex = new NoAdditionalLexicon();
         if (this.config.runLexiconExtension) {
             alex = runDLE(ifg);
-        } else {
-            alex = openAlex();
         }
         if (this.config.runDecisionMaker) {
             final Map<OCRToken, List<Ranking>> rankings = runRR(ifg, alex);
@@ -138,22 +135,6 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         }
         saveProtocol(protocol, config.lexiconExtensionProtocol);
         return alex;
-    }
-
-    private static class AlexTokens {
-        List<String> tokens;
-    }
-
-    private AdditionalLexicon openAlex() throws IOException {
-        final Path p = Paths.get(config.additionalLexicon);
-        try(Reader r = new InputStreamReader(new FileInputStream(p.toFile()), StandardCharsets.UTF_8)) {
-            AlexTokens alexTokens = new Gson().fromJson(r, AlexTokens.class);
-            AdditionalLexiconSet newAlex = new AdditionalLexiconSet();
-            for (String token : alexTokens.tokens) {
-                newAlex.add(token);
-            }
-            return newAlex;
-        }
     }
 
     private void saveProtocol(Protocol protocol, String path) throws IOException {
