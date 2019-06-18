@@ -1,7 +1,5 @@
 package de.lmu.cis.ocrd.profile;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
