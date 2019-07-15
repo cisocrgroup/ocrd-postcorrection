@@ -32,5 +32,9 @@
     "nOCR": 2,
     "trigrams": "src/test/resources/nGrams.csv",
     "maxCandidates": 5,
+    "runLexiconExtension": true,
+    "runDecisionMaker": true,
+    "lexiconExtensionProtocol": "src/test/resources/workspace/dump/lep.json",
+    "decisionMakerProtocol": "src/test/resources/workspace/dump/dmp.json",
     "filterClasses": ["filter-me"]
   }

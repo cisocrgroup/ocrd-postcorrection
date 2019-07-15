@@ -142,7 +142,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
             return;
         }
         final Path p = Paths.get(path);
-        Logger.debug("saving protcol to {}", p.toString());
+        Logger.debug("saving protocol to {}", p.toString());
         try(Writer w = new OutputStreamWriter(new FileOutputStream(p.toFile()), StandardCharsets.UTF_8)) {
             w.write(protocol.toJSON());
             w.flush();

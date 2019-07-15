@@ -152,13 +152,21 @@ public class TrainCommandTest {
 		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
 		PostCorrectionCommand cmd = new PostCorrectionCommand();
 		cmd.execute(cla);
-		assertThat(Paths.get(workspace.toString(), outputFileGroup).toFile().exists(), is(true));
-		assertThat(Paths.get(workspace.toString(), outputFileGroup).toFile().isDirectory(), is(true));
-		assertThat(Paths.get(workspace.toString(), outputFileGroup).toFile().listFiles().length, is(1));
+		final Path dir = Paths.get(workspace.toString(), outputFileGroup);
+		assertThat(dir.toFile().exists(), is(true));
+		assertThat(dir.toFile().isDirectory(), is(true));
+		assertThat(numberOfFiles(dir), is(1));
 		assertThat(Paths.get(model).toFile().exists(), is(true));
+		assertThat(Paths.get(tmp.toString(), "lep.json").toFile().exists(), is(true));
+		assertThat(Paths.get(tmp.toString(), "dmp.json").toFile().exists(), is(true));
 	}
 
 	private static boolean exists(String path, int i) {
 		return AbstractMLCommand.tagPath(path, i+1).toFile().exists();
+	}
+
+	private static int numberOfFiles(Path dir) {
+		final File[] files = dir.toFile().listFiles();
+		return files == null ? 0 : files.length;
 	}
 }
