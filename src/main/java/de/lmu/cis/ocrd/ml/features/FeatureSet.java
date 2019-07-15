@@ -1,9 +1,9 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.Gson;
-import org.jetbrains.annotations.NotNull;
 import org.pmw.tinylog.Logger;
 
+import javax.annotation.Nonnull;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,6 +47,7 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 	}
 
 	@Override
+	@Nonnull
 	public Iterator<Feature> iterator() {
 		return this.features.iterator();
 	}
