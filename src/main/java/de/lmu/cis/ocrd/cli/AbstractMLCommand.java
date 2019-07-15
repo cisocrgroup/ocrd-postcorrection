@@ -132,12 +132,18 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	}
 
 	private static void eachLongWord(Page page, WordOperation f) throws Exception {
+		Logger.debug("each long word in page {}", page.getPath().toString());
 		for (Line line : page.getLines()) {
 			for (Word word : line.getWords()) {
-				String mOCR = word.getUnicodeNormalized().get(0);
-				if (mOCR.length() > 3) {
-					f.apply(word, mOCR);
+				final List<String> unicodeNormalized = word.getUnicodeNormalized();
+				if (unicodeNormalized.isEmpty()) {
+					continue;
 				}
+				final String mOCR = unicodeNormalized.get(0);
+				if (mOCR.length() <= 3) {
+					continue;
+				}
+				f.apply(word, mOCR);
 			}
 		}
 	}

@@ -28,13 +28,14 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 	public Vector calculateFeatureVector(OCRToken token, int n) {
 		vector.clear();
 		int j = 0;
+		Logger.debug("features for token: {}", token.toString());
 		for (Feature feature : this.features) {
 			for (int i = 0; i < n; i++) {
 				if (!feature.handlesOCR(i, n)) {
 					continue;
 				}
 				final Object val = feature.calculate(token, i, n);
-				Logger.debug("value for feature {}: {}", feature.getName(), val.toString());
+				Logger.debug(" - value for feature {}: {}", feature.getName(), val.toString());
 				vector.add(j++, val);
 			}
 		}
