@@ -20,11 +20,14 @@ public class DynamicLexiconGTFeature extends NamedBooleanFeature {
 	// next profiler run. Any OCR token that is correct should be taken into the
 	// profiler lexicon. If tokens are smaller than 4 letters, the profiler ignores
 	// them, so small tokens should never be put into the dynamic lexicon.
+	// Also if a token is either first or last in its line, the token should be ignored
+	// since it could be a fragmented.
 	@Override
 	boolean doCalculate(OCRToken token, int i, int n) {
 		final String str = token.getMasterOCR().toString();
-		final boolean res = str.codePointCount(0, str.length()) > SHORT
-				&& token.getGT().get().equals(token.getMasterOCR().toString());
-		return res;
+		return str.codePointCount(0, str.length()) > SHORT
+				&& !token.getMasterOCR().isFirstInLine()
+				&& !token.getMasterOCR().isLastInLine()
+				&& token.getGT().orElse("").equalsIgnoreCase(str);
 	}
 }
