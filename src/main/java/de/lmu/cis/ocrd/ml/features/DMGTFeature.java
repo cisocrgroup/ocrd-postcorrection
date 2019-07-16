@@ -10,6 +10,8 @@ import java.util.Map;
 //               token (the correction will improve or at least not harm the text accuracy)
 // * false       if the best ranked correction candidate is wrong and the original
 //               token was correct (the correction would disimprove the text accuracy)
+// * do-not care if the best ranked candidate is false and the ocr token is also false
+//               the correction will not improve nor disimprove the accuracy of the text.
 public class DMGTFeature extends NamedFeature {
 	private final static String TRUE = Boolean.toString(true);
 	private final static String DO_NOT_CARE = "do-not-care";
@@ -54,8 +56,8 @@ public class DMGTFeature extends NamedFeature {
 	}
 
 	// Returns true if the given token should be used for the DM-training.
-	// This is the not the case if a wrong w_ocr has wrong correction suggestion (in this case
-	// it would not matter if the w_ocr is corrected or not).
+	// This is not the case if a wrong w_ocr has wrong correction suggestion (in this case
+	// it does not matter if the w_ocr is corrected or not).
 	public static boolean isValidForTraining(OCRToken token, Map<OCRToken, List<Ranking>> rankings) {
 		if (!token.ocrIsCorrect()) {
 			return rankings.get(token).get(0).candidate.Suggestion.equalsIgnoreCase(token.getGT().orElse(""));
