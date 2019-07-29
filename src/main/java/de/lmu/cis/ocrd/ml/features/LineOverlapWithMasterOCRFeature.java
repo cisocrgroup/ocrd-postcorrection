@@ -30,7 +30,7 @@ public class LineOverlapWithMasterOCRFeature extends NamedDoubleFeature {
 
 	@Override
 	public boolean handlesOCR(int i, int n) {
-		return handlesEveryOtherOCR(i, n);
+		return handlesEverySlaveOCR(i, n);
 	}
 
 	@Override

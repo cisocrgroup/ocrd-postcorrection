@@ -15,7 +15,7 @@ abstract class BaseFeatureImplementation implements Feature {
 		return (i + 1) == n && i > 0;
 	}
 
-	protected static boolean handlesEveryOtherOCR(int i, int n) {
+	protected static boolean handlesEverySlaveOCR(int i, int n) {
 		return !handlesOnlyMasterOCR(i, n);
 	}
 
