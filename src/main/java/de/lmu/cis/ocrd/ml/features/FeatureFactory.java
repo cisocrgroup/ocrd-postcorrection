@@ -42,6 +42,7 @@ public class FeatureFactory {
 				.register(LinePositionFeature.class)
 				.register(LineOverlapWithMasterOCRFeature.class)
 				.register(OCRWordConfidenceFeature.class)
+				.register(LevenshteinDistanceFeature.class)
 				.register(MaxCharNGramsFeature.class);
 	}
 
