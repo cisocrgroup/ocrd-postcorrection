@@ -25,6 +25,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
+		config.setCommand(this);
 		parameter = config.mustGetParameter(Parameter.class);
 		final String ifg = config.mustGetSingleInputFileGroup();
 		final String ofg = config.mustGetSingleOutputFileGroup();

@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.profile.Profile;
+import org.pmw.tinylog.Logger;
 
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +25,7 @@ public class Workspace {
     }
 
     public void save() throws Exception {
+        Logger.debug("saving mets: {}", metsPath.toString());
         mets.save(metsPath);
     }
 
@@ -41,16 +43,16 @@ public class Workspace {
     }
 
     public Path putProfile(Profile profile, String ofg) throws Exception {
-        final Path dest = getNewName(ofg, Paths.get("profile.json.gz"));
+        final Path dest = workDir.resolve(Paths.get(ofg).resolve(Paths.get("profile.json.gz")));
         //noinspection ResultOfMethodCallIgnored
         dest.getParent().toFile().mkdirs();
         try (java.io.OutputStream out = new GZIPOutputStream(new FileOutputStream(dest.toFile()))) {
             out.write(profile.toJSON().getBytes(StandardCharsets.UTF_8));
         }
         mets.addFileToFileGrp(ofg)
-                .withFLocat("application/json+gzip")
-                .withID(ofg + "-" + profile)
-                .withFLocat("file://" + dest.toAbsolutePath().toString());
+                .withMIMEType("application/json+gzip")
+                .withFLocat(Paths.get(dest.getParent().getFileName().toString(), dest.getFileName().toString()).toString())
+                .withID(ofg + "-" + "PROFILE");
         return dest.toAbsolutePath();
     }
 

@@ -75,6 +75,10 @@ public class CommandLineArguments {
         return c;
     }
 
+    public void setCommand(Command c) {
+        setupLogger("cis." + c.getClass().getSimpleName());
+    }
+
     public static CommandLineArguments fromCommandLine(String[] args) throws Exception {
         CommandLineParser parser = new DefaultParser();
         CommandLine line = parser.parse(createOptions(), args);
@@ -154,11 +158,11 @@ public class CommandLineArguments {
         }
         final String optArg = getParameter();
         if (!isReadableFile(optArg) && optArg.length() > 0 && optArg.charAt(0) == '{') {
-            Logger.debug("parsing parameter as json");
+            Logger.debug("parsing parameter as inline json");
             return new Gson().fromJson(optArg, typeOfT);
         }
         try(Reader r = new FileReader(optArg)) {
-            Logger.debug("reading parameter file");
+            Logger.debug("reading parameter as file");
             return new Gson().fromJson(r, typeOfT);
         }
     }
@@ -219,9 +223,18 @@ public class CommandLineArguments {
         Configurator.currentConfig()
                 .writer(new ConsoleWriter(System.err))
                 .level(Level.valueOf(getLogLevel()))
-                .formatPattern("{date:HH:mm:ss.S} - {level} {message}")
+                .formatPattern("{date:HH:mm:ss.S} {level} ocrd-cis-java - {message}")
                 .activate();
         Logger.debug("current log level: {}", Logger.getLevel());
+    }
+
+    private void setupLogger(String name) {
+        Configurator.currentConfig()
+                .writer(new ConsoleWriter(System.err))
+                .level(Level.valueOf(getLogLevel()))
+                .formatPattern("{date:HH:mm:ss.S} {level} " + name + " - {message}")
+                .activate();
+        Logger.debug("command: {}", name);
     }
 
 }
