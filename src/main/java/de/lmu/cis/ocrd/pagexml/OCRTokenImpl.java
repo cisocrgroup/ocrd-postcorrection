@@ -108,7 +108,7 @@ public class OCRTokenImpl implements OCRToken {
 
 	@Override
 	public void correct(String correction, double confidence) {
-		word.appendNewTextEquiv()
+		word.prependNewTextEquiv()
 				.addUnicode(correction)
 				.withConfidence(confidence)
 				.withIndex(0)
