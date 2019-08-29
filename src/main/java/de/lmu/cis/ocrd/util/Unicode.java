@@ -1,10 +1,10 @@
-package de.lmu.cis.ocrd;
+package de.lmu.cis.ocrd.util;
 
 public class Unicode {
 	private Unicode() {
 	}
 
-	public static boolean isLetter(int c) {
+	static boolean isLetter(int c) {
 		if (Character.isLetterOrDigit(c)) {
 			return true;
 		}

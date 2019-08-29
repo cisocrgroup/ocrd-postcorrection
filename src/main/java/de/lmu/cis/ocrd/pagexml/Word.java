@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import de.lmu.cis.ocrd.Unicode;
+import de.lmu.cis.ocrd.util.Unicode;
 import org.pmw.tinylog.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -47,7 +47,7 @@ public class Word extends TextRegion {
 				sj.add("...");
 				break;
 			}
-			String prefix = "";
+			String prefix;
 			if (te.getDataType().contains("master-ocr")) {
 				prefix = "master:";
 			} else if (te.getDataTypeDetails().contains("-GT-")) {
@@ -63,7 +63,7 @@ public class Word extends TextRegion {
     void split(String[] words) throws Exception {
 		Logger.debug("tokens: {}", String.join(" ", words));
 		// do nothing if it is just one word
-		if (words == null || words.length <= 1) {
+		if (words.length <= 1) {
 			return;
 		}
 		List<Node> tokens = new ArrayList<>();
