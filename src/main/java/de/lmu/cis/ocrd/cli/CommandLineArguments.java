@@ -223,7 +223,7 @@ public class CommandLineArguments {
         Configurator.currentConfig()
                 .writer(new ConsoleWriter(System.err))
                 .level(Level.valueOf(getLogLevel()))
-                .formatPattern("{date:HH:mm:ss.S} {level} ocrd-cis-java - {message}")
+                .formatPattern("{date:HH:mm:ss.S} {level} cis." + this.getClass().getSimpleName() + " - {message}")
                 .activate();
         Logger.debug("current log level: {}", Logger.getLevel());
     }
