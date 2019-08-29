@@ -25,7 +25,7 @@ public class Workspace {
     }
 
     public void save() throws Exception {
-        Logger.debug("saving mets: {}", metsPath.toString());
+        Logger.info("saving mets: {}", metsPath.toAbsolutePath().toString());
         mets.save(metsPath);
     }
 
