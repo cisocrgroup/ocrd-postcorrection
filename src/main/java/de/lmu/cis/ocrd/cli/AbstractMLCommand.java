@@ -11,6 +11,7 @@ import weka.core.Instance;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -18,7 +19,7 @@ import java.util.zip.GZIPOutputStream;
 
 public abstract class AbstractMLCommand extends AbstractIOCommand {
 	public static class Profiler {
-		String type = "", executable = "", config = "", cacheDir = "";
+		String path = "", config = "", cacheDir = "";
 
 		public Path getCacheFilePath(String ifg, AdditionalLexicon additionalLex) {
 			String suffix = ".json.gz";
@@ -33,20 +34,30 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		public String evaluation = "", model = "", training = "", features = "", result = "";
 	}
 
-	public static class DLETrainingResource extends TrainingResource {
+	static class ProtocolTrainingResource extends TrainingResource {
+		String protocol;
+	}
+
+	public static class DLETrainingResource extends ProtocolTrainingResource {
 		public String dynamicLexicon = "";
 	}
 
 	public static class Parameter {
 		public DLETrainingResource dleTraining;
 		public TrainingResource rrTraining;
-		public TrainingResource dmTraining;
-		public Profiler profiler;
+		public ProtocolTrainingResource dmTraining;
+		public Profiler profiler; // set
 		public String model;
-		String trigrams = "";
-		int nOCR = 0;
-		int maxCandidates = 0;
-		List<String> filterClasses;
+		public String dir; // set
+		public String dleFeatures = ""; // set
+		public String rrFeatures = ""; // set
+		public String dmFeatures = ""; // set
+		boolean runLexiconExtension = false; // set
+		boolean runDecisionMaker = false; // set
+		String trigrams = ""; // set
+		int nOCR = 0; // set
+		int maxCandidates = 0; // set
+		List<String> filterClasses; // set
 	}
 
 	private Parameter parameter;
@@ -62,6 +73,30 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 
 	void setParameter(CommandLineArguments args) throws Exception {
 		parameter = args.mustGetParameter(Parameter.class);
+		// set internal parameters
+		parameter.profiler.cacheDir = Paths.get(parameter.dir, "cache").toString();
+		parameter.model = Paths.get(parameter.dir, "model.zip").toString();
+		parameter.dleTraining = new DLETrainingResource();
+		parameter.dleTraining.dynamicLexicon = Paths.get(parameter.dir, "dle.txt").toString();
+		parameter.dleTraining.evaluation = Paths.get(parameter.dir, "dle-eval.arff").toString();
+		parameter.dleTraining.result = Paths.get(parameter.dir, "dle-result.arff").toString();
+		parameter.dleTraining.training = Paths.get(parameter.dir, "dle-training.arff").toString();
+		parameter.dleTraining.model = Paths.get(parameter.dir, "dle-model.bin").toString();
+		parameter.dleTraining.protocol = Paths.get(parameter.dir, "dle-protocol.json").toString();
+		parameter.dleTraining.features = parameter.dleFeatures;
+		parameter.rrTraining = new TrainingResource();
+		parameter.rrTraining.evaluation = Paths.get(parameter.dir, "rr-eval.arff").toString();
+		parameter.rrTraining.result = Paths.get(parameter.dir, "rr-result.arff").toString();
+		parameter.rrTraining.training = Paths.get(parameter.dir, "rr-training.arff").toString();
+		parameter.rrTraining.model = Paths.get(parameter.dir, "rr-model.bin").toString();
+		parameter.rrTraining.features = parameter.rrFeatures;
+		parameter.dmTraining = new ProtocolTrainingResource();
+		parameter.dmTraining.evaluation = Paths.get(parameter.dir, "dm-eval.arff").toString();
+		parameter.dmTraining.result = Paths.get(parameter.dir, "dm-result.arff").toString();
+		parameter.dmTraining.training = Paths.get(parameter.dir, "dm-training.arff").toString();
+		parameter.dmTraining.model = Paths.get(parameter.dir, "dm-model.bin").toString();
+		parameter.dmTraining.protocol = Paths.get(parameter.dir, "dm-protocol.json").toString();
+		parameter.dmTraining.features = parameter.dmFeatures;
 	}
 
 	void setParameter(Parameter parameter) {
@@ -76,7 +111,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		final Path path = Paths.get(features);
 		JsonObject[] os;
 		try (InputStream is = new FileInputStream(path.toFile())) {
-			final String json = IOUtils.toString(is, Charset.forName("UTF-8"));
+			final String json = IOUtils.toString(is, StandardCharsets.UTF_8);
 			os = new Gson().fromJson(json, JsonObject[].class);
 		}
 		return os;
@@ -154,8 +189,8 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		final int gtIndex = parameter.nOCR;
 		pages = openPages(openFiles(mets, ifg));
 		final Profile profile = openProfile(ifg, pages, additionalLex);
-		for (Page page: pages) {
-			eachLongWord(page, (word, mOCR)->{
+		for (Page page : pages) {
+			eachLongWord(page, (word, mOCR) -> {
 				final List<TextEquiv> tes = word.getTextEquivs();
 				if (gtIndex < tes.size() &&
 						tes.get(gtIndex).getDataTypeDetails().contains("OCR-D-GT")) {
@@ -175,7 +210,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 
 	private List<Page> openPages(List<METS.File> files) throws Exception {
 		List<Page> pages = new ArrayList<>(files.size());
-		for (METS.File file: files) {
+		for (METS.File file : files) {
 			try (InputStream is = file.openInputStream()) {
 				pages.add(Page.parse(Paths.get(file.getFLocat()), is));
 			}
@@ -200,7 +235,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 			Logger.debug("created cache directory {}", cached.getParent().toString());
 		}
 		Profile profile = getProfiler(pages, additionalLex).profile();
-		Charset utf8 = Charset.forName("UTF-8");
+		Charset utf8 = StandardCharsets.UTF_8;
 		if (cached == null) {
 			return profile;
 		}
@@ -213,20 +248,17 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	}
 
 	private de.lmu.cis.ocrd.profile.Profiler getProfiler(List<Page> pages, AdditionalLexicon additionalLex) throws Exception {
-		switch (parameter.profiler.type) {
-			case "local":
-				Logger.debug("using a local profiler: {} {}", parameter.profiler.executable, parameter.profiler.config);
-				return new FileGrpProfiler(pages, new LocalProfilerProcess(
-						Paths.get(parameter.profiler.executable),
-						Paths.get(parameter.profiler.config),
-						additionalLex));
-			case "file":
-				Logger.debug("using a file profiler: {}", parameter.profiler.config);
-				return new FileProfiler(Paths.get(parameter.profiler.config));
-			case "url":
-				throw new Exception("Profiler type url: not implemented");
-			default:
-				throw new Exception ("Invalid profiler type: " + parameter.profiler.type);
+		if (parameter.profiler.path.toLowerCase().endsWith(".json") || parameter.profiler.path.toLowerCase().endsWith(".gz")) {
+			Logger.debug("using a file profiler: {}", parameter.profiler.path);
+			return new FileProfiler(Paths.get(parameter.profiler.path));
 		}
+		if (parameter.profiler.path.toLowerCase().startsWith("http://") || parameter.profiler.path.toLowerCase().startsWith("https://")) {
+			throw new Exception("Profiler type url: not implemented");
+		}
+		Logger.debug("using a local profiler: {} {}", parameter.profiler.path, parameter.profiler.config);
+		return new FileGrpProfiler(pages, new LocalProfilerProcess(
+				Paths.get(parameter.profiler.path),
+				Paths.get(parameter.profiler.config),
+				additionalLex));
 	}
 }

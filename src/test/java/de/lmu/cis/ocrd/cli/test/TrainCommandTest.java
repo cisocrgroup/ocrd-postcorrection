@@ -157,8 +157,8 @@ public class TrainCommandTest {
 		assertThat(dir.toFile().isDirectory(), is(true));
 		assertThat(numberOfFiles(dir), is(1));
 		assertThat(Paths.get(model).toFile().exists(), is(true));
-		assertThat(Paths.get(tmp.toString(), "lep.json").toFile().exists(), is(true));
-		assertThat(Paths.get(tmp.toString(), "dmp.json").toFile().exists(), is(true));
+		assertThat(Paths.get(tmp.toString(), "dle-protocol.json").toFile().exists(), is(true));
+		assertThat(Paths.get(tmp.toString(), "dm-protocol.json").toFile().exists(), is(true));
 	}
 
 	private static boolean exists(String path, int i) {

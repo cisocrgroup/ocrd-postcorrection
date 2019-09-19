@@ -1,34 +1,8 @@
   {
       "profiler": {
-        "cacheDir": "src/test/resources/workspace/dump/profileCache",
-          "type": "file",
-          "executable": "/mounts/Users/student/finkf/devel/work/Profiler/build/bin/profiler",
-          "config": "src/test/resources/workspace/profile.json.gz",
-          "*invalid*": "/mounts/data/proj/clarin/pws_backend/german.ini"
+          "path": "src/test/resources/workspace/profile.json.gz"
       },
-      "dleTraining": {
-          "features": "src/test/resources/dle-features.json",
-          "model": "src/test/resources/workspace/dump/dle-model.bin",
-          "training": "src/test/resources/workspace/dump/dle-training.arff",
-          "dynamicLexicon": "src/test/resources/workspace/dump/dle.txt",
-          "evaluation": "src/test/resources/workspace/dump/dle-eval.arff",
-          "result": "src/test/resources/workspace/dump/dle-eval.txt"
-      },
-      "rrTraining": {
-          "features": "src/test/resources/rr-features.json",
-          "model": "src/test/resources/workspace/dump/rr-model.bin",
-          "training": "src/test/resources/workspace/dump/rr-training.arff",
-          "evaluation": "src/test/resources/workspace/dump/rr-eval.arff",
-          "result": "src/test/resources/workspace/dump/rr-eval.txt"
-      },
-      "dmTraining": {
-          "features": "src/test/resources/dm-features.json",
-          "model": "src/test/resources/workspace/dump/dm-model.bin",
-          "training": "src/test/resources/workspace/dump/dm-training.arff",
-          "evaluation": "src/test/resources/workspace/dump/dm-eval.arff",
-          "result": "src/test/resources/workspace/dump/dm-eval.txt"
-      },
-    "model": "src/test/resources/workspace/dump/model.zip",
+    "dir": "src/test/resources/workspace/dump",
     "nOCR": 2,
     "trigrams": "src/test/resources/nGrams.csv",
     "maxCandidates": 5,
@@ -36,5 +10,8 @@
     "runDecisionMaker": true,
     "lexiconExtensionProtocol": "src/test/resources/workspace/dump/lep.json",
     "decisionMakerProtocol": "src/test/resources/workspace/dump/dmp.json",
-    "filterClasses": ["filter-me"]
+    "filterClasses": ["filter-me"],
+    "dleFeatures":"src/test/resources/dle-features.json",
+    "rrFeatures": "src/test/resources/rr-features.json",
+    "dmFeatures": "src/test/resources/dm-features.json"
   }

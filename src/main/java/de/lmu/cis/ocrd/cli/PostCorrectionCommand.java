@@ -6,7 +6,6 @@ import de.lmu.cis.ocrd.ml.LM;
 import de.lmu.cis.ocrd.ml.LogisticClassifier;
 import de.lmu.cis.ocrd.ml.Prediction;
 import de.lmu.cis.ocrd.ml.features.*;
-import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
 import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Workspace;
@@ -18,20 +17,12 @@ import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Logger;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
 public class PostCorrectionCommand extends AbstractMLCommand {
-    private static class Configuration extends AbstractMLCommand.Parameter {
-        String lexiconExtensionProtocol = "";
-        String decisionMakerProtocol = "";
-        boolean runLexiconExtension = false;
-        boolean runDecisionMaker = false;
-    }
-    private Configuration config;
     private ModelZIP model;
     private Workspace workspace;
     private LM lm;
@@ -43,18 +34,17 @@ public class PostCorrectionCommand extends AbstractMLCommand {
 
     @Override
     public void execute(CommandLineArguments config) throws Exception {
-        this.config = config.mustGetParameter(Configuration.class);
-        setParameter(this.config); // setup super classes parameter for the profiler
-        model = ModelZIP.open(Paths.get(this.config.model));
+        setParameter(config);
+        model = ModelZIP.open(Paths.get(getParameter().model));
         workspace = new Workspace(Paths.get(config.mustGetMETSFile()));
-        lm = new LM(false, Paths.get(this.config.trigrams));
+        lm = new LM(false, Paths.get(getParameter().trigrams));
         final String ifg = config.mustGetSingleInputFileGroup();
         final String ofg = config.mustGetSingleOutputFileGroup();
         AdditionalLexicon alex = new NoAdditionalLexicon();
-        if (this.config.runLexiconExtension) {
+        if (getParameter().runLexiconExtension) {
             alex = runDLE(ifg);
         }
-        if (this.config.runDecisionMaker) {
+        if (getParameter().runDecisionMaker) {
             final Map<OCRToken, List<Ranking>> rankings = runRR(ifg, alex);
             runDM(ifg, rankings, alex);
             saveOutputFileGroup(ofg);
@@ -62,19 +52,19 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     }
 
     private void runDM(String ifg, Map<OCRToken, List<Ranking>> rankings, AdditionalLexicon alex) throws Exception {
-        Logger.info("running decision maker step: {} ({})", ifg, config.nOCR);
+        Logger.info("running decision maker step: {} ({})", ifg, getParameter().nOCR);
         final Protocol protocol = new DecisionMakerProtocol();
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
         lm.setTokens(tokens);
         final FeatureSet fs = new FeatureSet()
                 .add(new DMBestRankFeature("dm-best-rank", rankings))
                 .add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings));
-        final LogisticClassifier c = LogisticClassifier.load(model.openDMModel(config.nOCR-1));
+        final LogisticClassifier c = LogisticClassifier.load(model.openDMModel(getParameter().nOCR-1));
         for (OCRToken token : tokens) {
             if (!rankings.containsKey(token)) {
                 continue;
             }
-            final Prediction p = c.predict(fs.calculateFeatureVector(token, config.nOCR));
+            final Prediction p = c.predict(fs.calculateFeatureVector(token, getParameter().nOCR));
             final boolean prediction = p.getPrediction();
             protocol.register(token, prediction);
             if (prediction) {
@@ -85,22 +75,22 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 token.correct(correction, ranking.ranking);
             }
         }
-        saveProtocol(protocol, config.decisionMakerProtocol);
+        saveProtocol(protocol, getParameter().dmTraining.protocol);
     }
 
     private Map<OCRToken, List<Ranking>> runRR(String ifg, AdditionalLexicon alex) throws Exception {
-        Logger.info("running ranking step: {} ({})", ifg, config.nOCR);
+        Logger.info("running ranking step: {} ({})", ifg, getParameter().nOCR);
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.openRRFeatureSet());
-        final LogisticClassifier c = LogisticClassifier.load(model.openRRModel(config.nOCR-1));
+        final LogisticClassifier c = LogisticClassifier.load(model.openRRModel(getParameter().nOCR-1));
         Map<OCRToken, List<Ranking>> rankings = new HashMap<>();
         for (OCRToken token : tokens) {
             for (Candidate candidate : token.getAllProfilerCandidates()) {
                 if (!rankings.containsKey(token)) {
                     rankings.put(token, new ArrayList<>());
                 }
-                final FeatureSet.Vector values = fs.calculateFeatureVector(new OCRTokenWithCandidateImpl(token, candidate), config.nOCR);
+                final FeatureSet.Vector values = fs.calculateFeatureVector(new OCRTokenWithCandidateImpl(token, candidate), getParameter().nOCR);
                 final Prediction p = c.predict(values);
                 final double ranking = p.getPrediction()? p.getConfidence() : -p.getConfidence();
                 rankings.get(token).add(new Ranking(candidate, ranking));
@@ -113,19 +103,19 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     }
 
     private AdditionalLexicon runDLE(String ifg) throws Exception {
-        Logger.info("running lexicon extension step: {} ({})", ifg, config.nOCR);
+        Logger.info("running lexicon extension step: {} ({})", ifg, getParameter().nOCR);
         final Protocol protocol = new LexiconExtensionProtocol();
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, new NoAdditionalLexicon());
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.openDLEFeatureSet());
-        final LogisticClassifier c = LogisticClassifier.load(model.openDLEModel(config.nOCR-1));
+        final LogisticClassifier c = LogisticClassifier.load(model.openDLEModel(getParameter().nOCR-1));
         AdditionalLexiconSet alex = new AdditionalLexiconSet();
         for (OCRToken token: tokens) {
             if (token.isLexiconEntry()) {
                 Logger.debug("skipping lexicon entry: {}", token.toString());
                 continue;
             }
-            final FeatureSet.Vector values = fs.calculateFeatureVector(token, config.nOCR-1);
+            final FeatureSet.Vector values = fs.calculateFeatureVector(token, getParameter().nOCR-1);
             final boolean prediction = c.predict(values).getPrediction();
             protocol.register(token, prediction);
             if (prediction) {
@@ -133,7 +123,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 alex.add(token.getMasterOCR().toString());
             }
         }
-        saveProtocol(protocol, config.lexiconExtensionProtocol);
+        saveProtocol(protocol, getParameter().dleTraining.protocol);
         return alex;
     }
 
@@ -157,7 +147,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
 
     private FeatureSet makeFeatureSet(InputStream is) throws Exception {
         try (InputStream iis = is) {
-            final String json = IOUtils.toString(iis, Charset.forName("UTF-8"));
+            final String json = IOUtils.toString(iis, StandardCharsets.UTF_8);
             final JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
             return FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(os, getFeatureClassFilter());
         }
