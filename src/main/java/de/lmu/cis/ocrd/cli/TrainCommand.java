@@ -26,7 +26,7 @@ public class TrainCommand extends AbstractMLCommand {
 	private METS mets; // mets file
 	private LM lm;
 	private FeatureSet dleFS, rrFS, dmFS;
-	private ARFFWriter dlew, rrw, dmw;
+	private ARFFWriter lew, rrw, dmw;
 	private List<Double> rrConfidences;
 	private boolean debug;
 
@@ -45,7 +45,7 @@ public class TrainCommand extends AbstractMLCommand {
 		this.dleFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().dleTraining.features), getFeatureClassFilter())
+				.createFeatureSet(getFeatures(getParameter().leTraining.features), getFeatureClassFilter())
 				.add(new DynamicLexiconGTFeature());
 		this.rrFS = FeatureFactory
 				.getDefault()
@@ -55,10 +55,10 @@ public class TrainCommand extends AbstractMLCommand {
 		// DM needs to be created separately (see below)
 		for (int i = 0; i < getParameter().nOCR; i++) {
 			// DLE
-			final Path dleTrain = tagPath(getParameter().dleTraining.training,
+			final Path dleTrain = tagPath(getParameter().leTraining.training,
 					i+1);
-			final Path dleModel = tagPath(getParameter().dleTraining.model, i+1);
-			dlew = ARFFWriter
+			final Path dleModel = tagPath(getParameter().leTraining.model, i+1);
+			lew = ARFFWriter
 					.fromFeatureSet(dleFS)
 					.withWriter(getWriter(dleTrain))
 					.withDebugToken(debug)
@@ -79,7 +79,7 @@ public class TrainCommand extends AbstractMLCommand {
 				prepareDLEAndRR(tokens, i);
 			}
 			// Train models
-			dlew.close();
+			lew.close();
 			rrw.close();
 			train(dleTrain, dleModel);
 			train(rrTrain, rrModel);
@@ -103,7 +103,7 @@ public class TrainCommand extends AbstractMLCommand {
 				Logger.debug("skipping lexicon entry: {}", token.toString());
 				continue;
 			}
-			dlew.writeToken(token, i+1);
+			lew.writeToken(token, i+1);
 		}
 	}
 
@@ -181,11 +181,11 @@ public class TrainCommand extends AbstractMLCommand {
 	private void writeModelZIP() throws Exception {
 		final ModelZIP model = new ModelZIP();
 		for (int i = 0; i < getParameter().nOCR; i++) {
-			model.addDLEModel(tagPath(getParameter().dleTraining.model, i+1), i);
+			model.addDLEModel(tagPath(getParameter().leTraining.model, i+1), i);
 			model.addRRModel(tagPath(getParameter().rrTraining.model, i+1), i);
 			model.addDMModel(tagPath(getParameter().dmTraining.model, i+1), i);
 		}
-		model.setDLEFeatureSet(Paths.get(getParameter().dleTraining.features));
+		model.setDLEFeatureSet(Paths.get(getParameter().leTraining.features));
 		model.setRRFeatureSet(Paths.get(getParameter().rrTraining.features));
 		model.save(Paths.get(getParameter().model));
 	}

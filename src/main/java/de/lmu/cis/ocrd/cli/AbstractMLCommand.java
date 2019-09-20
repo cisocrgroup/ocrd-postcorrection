@@ -19,7 +19,7 @@ import java.util.zip.GZIPOutputStream;
 
 public abstract class AbstractMLCommand extends AbstractIOCommand {
 	public static class Profiler {
-		String path = "", config = "", cacheDir = "";
+		public String path = "", config = "", cacheDir = "";
 
 		public Path getCacheFilePath(String ifg, AdditionalLexicon additionalLex) {
 			String suffix = ".json.gz";
@@ -34,30 +34,30 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		public String evaluation = "", model = "", training = "", features = "", result = "";
 	}
 
-	static class ProtocolTrainingResource extends TrainingResource {
-		String protocol;
+	public static class ProtocolTrainingResource extends TrainingResource {
+		public String protocol;
 	}
 
-	public static class DLETrainingResource extends ProtocolTrainingResource {
-		public String dynamicLexicon = "";
+	public static class LETrainingResource extends ProtocolTrainingResource {
+		public String lexicon = "";
 	}
 
 	public static class Parameter {
-		public DLETrainingResource dleTraining;
+		public LETrainingResource leTraining;
 		public TrainingResource rrTraining;
 		public ProtocolTrainingResource dmTraining;
-		public Profiler profiler; // set
+		public Profiler profiler = new Profiler(); // set
 		public String model;
 		public String dir; // set
-		public String dleFeatures = ""; // set
+		public String leFeatures = ""; // set
 		public String rrFeatures = ""; // set
 		public String dmFeatures = ""; // set
-		boolean runLexiconExtension = false; // set
-		boolean runDecisionMaker = false; // set
-		String trigrams = ""; // set
-		int nOCR = 0; // set
-		int maxCandidates = 0; // set
-		List<String> filterClasses; // set
+		public String trigrams = ""; // set
+        public List<String> filterClasses; // set
+		public int nOCR = 0; // set
+		public int maxCandidates = 0; // set
+        public boolean runLE = false; // set
+        public boolean runDM = false; // set
 	}
 
 	private Parameter parameter;
@@ -76,14 +76,14 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		// set internal parameters
 		parameter.profiler.cacheDir = Paths.get(parameter.dir, "cache").toString();
 		parameter.model = Paths.get(parameter.dir, "model.zip").toString();
-		parameter.dleTraining = new DLETrainingResource();
-		parameter.dleTraining.dynamicLexicon = Paths.get(parameter.dir, "dle.txt").toString();
-		parameter.dleTraining.evaluation = Paths.get(parameter.dir, "dle-eval.arff").toString();
-		parameter.dleTraining.result = Paths.get(parameter.dir, "dle-result.arff").toString();
-		parameter.dleTraining.training = Paths.get(parameter.dir, "dle-training.arff").toString();
-		parameter.dleTraining.model = Paths.get(parameter.dir, "dle-model.bin").toString();
-		parameter.dleTraining.protocol = Paths.get(parameter.dir, "dle-protocol.json").toString();
-		parameter.dleTraining.features = parameter.dleFeatures;
+		parameter.leTraining = new LETrainingResource();
+		parameter.leTraining.lexicon = Paths.get(parameter.dir, "le.txt").toString();
+		parameter.leTraining.evaluation = Paths.get(parameter.dir, "le-eval.arff").toString();
+		parameter.leTraining.result = Paths.get(parameter.dir, "le-result.arff").toString();
+		parameter.leTraining.training = Paths.get(parameter.dir, "le-training.arff").toString();
+		parameter.leTraining.model = Paths.get(parameter.dir, "le-model.bin").toString();
+		parameter.leTraining.protocol = Paths.get(parameter.dir, "le-protocol.json").toString();
+		parameter.leTraining.features = parameter.leFeatures;
 		parameter.rrTraining = new TrainingResource();
 		parameter.rrTraining.evaluation = Paths.get(parameter.dir, "rr-eval.arff").toString();
 		parameter.rrTraining.result = Paths.get(parameter.dir, "rr-result.arff").toString();

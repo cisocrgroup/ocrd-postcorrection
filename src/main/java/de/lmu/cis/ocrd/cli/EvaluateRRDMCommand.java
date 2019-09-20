@@ -155,7 +155,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 
 	private AdditionalLexicon getAlex(boolean useAlex, int i) {
 		if (useAlex) {
-			return new AdditionalFileLexicon(tagPath(getParameter().dleTraining.dynamicLexicon, i + 1));
+			return new AdditionalFileLexicon(tagPath(getParameter().leTraining.lexicon, i + 1));
 		}
 		return new NoAdditionalLexicon();
 	}

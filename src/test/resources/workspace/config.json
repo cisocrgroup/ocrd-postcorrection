@@ -6,12 +6,12 @@
     "nOCR": 2,
     "trigrams": "src/test/resources/nGrams.csv",
     "maxCandidates": 5,
-    "runLexiconExtension": true,
-    "runDecisionMaker": true,
+    "runLE": true,
+    "runDM": true,
     "lexiconExtensionProtocol": "src/test/resources/workspace/dump/lep.json",
     "decisionMakerProtocol": "src/test/resources/workspace/dump/dmp.json",
     "filterClasses": ["filter-me"],
-    "dleFeatures":"src/test/resources/dle-features.json",
+    "leFeatures":"src/test/resources/dle-features.json",
     "rrFeatures": "src/test/resources/rr-features.json",
     "dmFeatures": "src/test/resources/dm-features.json"
   }

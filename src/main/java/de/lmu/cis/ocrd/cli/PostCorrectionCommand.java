@@ -41,10 +41,10 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final String ifg = config.mustGetSingleInputFileGroup();
         final String ofg = config.mustGetSingleOutputFileGroup();
         AdditionalLexicon alex = new NoAdditionalLexicon();
-        if (getParameter().runLexiconExtension) {
+        if (getParameter().runLE) {
             alex = runDLE(ifg);
         }
-        if (getParameter().runDecisionMaker) {
+        if (getParameter().runDM) {
             final Map<OCRToken, List<Ranking>> rankings = runRR(ifg, alex);
             runDM(ifg, rankings, alex);
             saveOutputFileGroup(ofg);
@@ -123,7 +123,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 alex.add(token.getMasterOCR().toString());
             }
         }
-        saveProtocol(protocol, getParameter().dleTraining.protocol);
+        saveProtocol(protocol, getParameter().leTraining.protocol);
         return alex;
     }
 
