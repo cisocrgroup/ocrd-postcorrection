@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.cli;
+package de.lmu.cis.ocrd.ml;
 
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
@@ -6,7 +6,7 @@ import de.lmu.cis.ocrd.ml.features.OCRToken;
 import java.util.HashMap;
 import java.util.Map;
 
-class DMProtocol implements Protocol {
+public class DMProtocol implements Protocol {
     private static class Protocol {
         private final Map<String, Integer> always = new HashMap<>();
         private final Map<String, Integer> sometimes = new HashMap<>();

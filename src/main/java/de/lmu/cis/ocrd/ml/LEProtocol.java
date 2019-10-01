@@ -1,12 +1,13 @@
-package de.lmu.cis.ocrd.cli;
+package de.lmu.cis.ocrd.ml;
 
 import com.google.gson.Gson;
+import de.lmu.cis.ocrd.ml.Protocol;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class LEProtocol implements Protocol {
+public class LEProtocol implements Protocol {
     private static class Protocol {
         private final Map<String, Integer> considered = new HashMap<>();
         private final Map<String, Integer> notConsidered = new HashMap<>();

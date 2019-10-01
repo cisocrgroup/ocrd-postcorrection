@@ -1,8 +1,8 @@
-package de.lmu.cis.ocrd.cli;
+package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 
-interface Protocol {
+public interface Protocol {
     // This function returns the json representation of the protocol as string.
     String toJSON();
 
