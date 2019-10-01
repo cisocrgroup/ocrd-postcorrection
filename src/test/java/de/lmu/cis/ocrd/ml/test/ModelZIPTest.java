@@ -1,6 +1,6 @@
-package de.lmu.cis.ocrd.cli.test;
+package de.lmu.cis.ocrd.ml.test;
 
-import de.lmu.cis.ocrd.cli.ModelZIP;
+import de.lmu.cis.ocrd.ml.ModelZIP;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
