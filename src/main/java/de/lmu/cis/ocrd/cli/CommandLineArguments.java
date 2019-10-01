@@ -53,7 +53,7 @@ public class CommandLineArguments {
             c.groupID = getArg(line, GROUPID);
         }
         if (isSet(line, INPUT_FILEGRP)) {
-            c.inputFilegrp = getArgs(line, INPUT_FILEGRP);
+            c.inputFilegrp = getArg(line, INPUT_FILEGRP).split(",");
         }
         if (isSet(line, METS)) {
             c.mets = getArg(line, METS);

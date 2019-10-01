@@ -4,7 +4,8 @@ import com.google.gson.Gson;
 
 import java.io.*;
 import java.net.URI;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class ModelZIP implements Closeable {
         return zipFile.getInputStream(zipFile.getEntry(config.rrFeatureSet));
     }
 
-    public ModelZIP addDLEModel(Path path, int i) {
+    public ModelZIP addLEModel(Path path, int i) {
         initConfig();
         addModel(config.dleModels, path, i);
         return this;
@@ -61,7 +62,7 @@ public class ModelZIP implements Closeable {
         return this;
     }
 
-    public ModelZIP setDLEFeatureSet(Path path) {
+    public ModelZIP setLEFeatureSet(Path path) {
         initConfig();
         config.dleFeatureSet = path.toString();
         return this;
@@ -102,7 +103,7 @@ public class ModelZIP implements Closeable {
 
     private void writeConfig(FileSystem fs) throws Exception {
         final String json = new Gson().toJson(config);
-        Files.copy(new ByteArrayInputStream(json.getBytes(Charset.forName("UTF-8"))),
+        Files.copy(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)),
                 fs.getPath("config.json"), StandardCopyOption.REPLACE_EXISTING);
     }
 

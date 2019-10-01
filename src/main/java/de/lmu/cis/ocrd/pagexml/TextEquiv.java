@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.util.Normalizer;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -10,6 +9,10 @@ public class TextEquiv {
 
 	TextEquiv(Node node) {
 		this.node = node;
+	}
+
+	public TextRegion getParentTextRegion() {
+		return new TextRegion(node.getParentNode());
 	}
 
 	public int getIndex() {

@@ -6,8 +6,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,7 +36,7 @@ public class ModelZIPTest {
         int j = 0;
         for (int i = 0; i < 3; i++) {
             out = writeTmpFile(names[j++]);
-            model.addDLEModel(out, i);
+            model.addLEModel(out, i);
         }
         for (int i = 0; i < 3; i++) {
             out = writeTmpFile(names[j++]);
@@ -45,7 +47,7 @@ public class ModelZIPTest {
             model.addDMModel(out, i);
         }
         out = writeTmpFile(names[j++]);
-        model.setDLEFeatureSet(out);
+        model.setLEFeatureSet(out);
         out = writeTmpFile(names[j]);
         model.setRRFeatureSet(out);
         model.save(Paths.get(tmpdir.toString(), "model.zip"));
@@ -69,7 +71,7 @@ public class ModelZIPTest {
 
     private String readStringAndClose(InputStream is) throws IOException {
         try (InputStream iis = is) {
-            return IOUtils.toString(iis, Charset.forName("UTF-8"));
+            return IOUtils.toString(iis, StandardCharsets.UTF_8);
         }
     }
 

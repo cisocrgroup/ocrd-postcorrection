@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.profile.AbstractProfiler;
 import de.lmu.cis.ocrd.profile.ProfilerProcess;
+import org.pmw.tinylog.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -14,6 +15,7 @@ public class FileGrpProfiler extends AbstractProfiler {
     public FileGrpProfiler(List<Page> pages, ProfilerProcess profiler) {
         super(profiler);
         this.pages = pages;
+        Logger.debug("FileGrpProfiler pages: {}", pages.size());
     }
 
     @Override

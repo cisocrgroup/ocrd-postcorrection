@@ -9,12 +9,19 @@ public class OCRWordImpl implements OCRWord {
 	private final List<Double> masterOCRCharConfidences;
 	private final double wordConfidence;
 	private final String line;
+	private final String id;
 
 	public OCRWordImpl(TextEquiv te, String line, List<Double> mConfs) {
 		this.line = line;
 		this.wordConfidence = te.getConfidence();
 		this.word = te.getUnicodeNormalized();
 		this.masterOCRCharConfidences = mConfs;
+		this.id = te.getParentTextRegion().getID();
+	}
+
+	@Override
+	public String id() {
+		return id;
 	}
 
 	@Override
@@ -24,7 +31,7 @@ public class OCRWordImpl implements OCRWord {
 
 	@Override
 	public boolean isFirstInLine() {
-		return line.startsWith(getWord(), 0);
+		return line.startsWith(getWord());
 	}
 
 	@Override

@@ -90,6 +90,8 @@ public class OCRTokenImpl implements OCRToken {
 		return this.candidates.subList(0, Integer.min(candidates.size(), maxCandidates));
 	}
 
+	// isLexiconEntry returns true if the list of candidates is not empty and if
+	// the first candidate marks a lexicon entry.
 	@Override
 	public boolean isLexiconEntry() {
 		return !candidates.isEmpty() && candidates.get(0).isLexiconEntry();

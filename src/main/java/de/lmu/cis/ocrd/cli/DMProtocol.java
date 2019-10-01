@@ -6,7 +6,7 @@ import de.lmu.cis.ocrd.ml.features.OCRToken;
 import java.util.HashMap;
 import java.util.Map;
 
-class DecisionMakerProtocol implements Protocol {
+class DMProtocol implements Protocol {
     private static class Protocol {
         private final Map<String, Integer> always = new HashMap<>();
         private final Map<String, Integer> sometimes = new HashMap<>();

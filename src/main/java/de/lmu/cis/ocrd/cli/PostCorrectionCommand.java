@@ -42,7 +42,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final String ofg = config.mustGetSingleOutputFileGroup();
         AdditionalLexicon alex = new NoAdditionalLexicon();
         if (getParameter().runLE) {
-            alex = runDLE(ifg);
+            alex = runLE(ifg);
         }
         if (getParameter().runDM) {
             final Map<OCRToken, List<Ranking>> rankings = runRR(ifg, alex);
@@ -53,7 +53,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
 
     private void runDM(String ifg, Map<OCRToken, List<Ranking>> rankings, AdditionalLexicon alex) throws Exception {
         Logger.info("running decision maker step: {} ({})", ifg, getParameter().nOCR);
-        final Protocol protocol = new DecisionMakerProtocol();
+        final Protocol protocol = new DMProtocol();
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
         lm.setTokens(tokens);
         final FeatureSet fs = new FeatureSet()
@@ -102,9 +102,9 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         return rankings;
     }
 
-    private AdditionalLexicon runDLE(String ifg) throws Exception {
+    private AdditionalLexicon runLE(String ifg) throws Exception {
         Logger.info("running lexicon extension step: {} ({})", ifg, getParameter().nOCR);
-        final Protocol protocol = new LexiconExtensionProtocol();
+        final Protocol protocol = new LEProtocol();
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, new NoAdditionalLexicon());
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.openDLEFeatureSet());

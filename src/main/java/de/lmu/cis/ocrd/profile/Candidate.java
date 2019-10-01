@@ -26,7 +26,7 @@ public class Candidate {
 	}
 
 	// returns true if the candidate is a lexicon entry,
-	// i.e. has no historical or ocr patterns.
+	// i.e. has no historical and no ocr patterns.
 	public boolean isLexiconEntry() {
 		return Distance == 0 && (HistPatterns == null || HistPatterns.length == 0);
 	}

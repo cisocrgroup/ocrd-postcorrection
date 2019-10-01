@@ -6,7 +6,7 @@ import de.lmu.cis.ocrd.ml.features.OCRToken;
 import java.util.HashMap;
 import java.util.Map;
 
-class LexiconExtensionProtocol implements Protocol {
+class LEProtocol implements Protocol {
     private static class Protocol {
         private final Map<String, Integer> considered = new HashMap<>();
         private final Map<String, Integer> notConsidered = new HashMap<>();
