@@ -1,14 +1,13 @@
 package de.lmu.cis.ocrd.pagexml.test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.nio.file.Paths;
-
+import de.lmu.cis.ocrd.pagexml.Page;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.lmu.cis.ocrd.pagexml.Page;
+import java.nio.file.Paths;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class PageTest {
 	private Page page;
@@ -136,5 +135,10 @@ public class PageTest {
 	@Test
 	public void FourthGlyphUnicode() throws Exception {
 		assertThat(page.getLines().get(2).getWords().get(1).getGlyphs().get(3).getUnicode().get(0), is("k"));
+	}
+
+	@Test
+	public void wordID() throws Exception {
+		assertThat(page.getLines().get(2).getWords().get(1).getID(), is("word_1478541244022_802"));
 	}
 }
