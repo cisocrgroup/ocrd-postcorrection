@@ -1,6 +1,6 @@
 /target/classes/
 /target/test-classes/
-TAGS
+tags
 .project
 .dir-locals.el
 .classpath
