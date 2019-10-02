@@ -12,7 +12,7 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -35,7 +35,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 		fs = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().leTraining.features), getFeatureClassFilter())
+				.createFeatureSet(getParameter().leTraining.features, getFeatureClassFilter())
 				.add(new DynamicLexiconGTFeature());
 		for (int i = 0; i < getParameter().nOCR; i++) {
             try (ARFFWriter w = ARFFWriter
@@ -71,7 +71,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 						i+1));
 		try (Writer out = new OutputStreamWriter(
 				new FileOutputStream(dlePath.toFile()),
-				     Charset.forName("UTF-8"))) {
+				StandardCharsets.UTF_8)) {
 			for (OCRToken token : tokens) {
 				if (token.isLexiconEntry()) {
 					Logger.debug("skipping lexicon entry: {}", token.toString());
@@ -105,7 +105,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 				new ConverterUtils.DataSource(evalPath.toString()).getDataSet();
 		instances.setClassIndex(instances.numAttributes()-1);
 		try (Writer w = new OutputStreamWriter(
-				new FileOutputStream(res.toFile()), Charset.forName("UTF-8"))) {
+				new FileOutputStream(res.toFile()), StandardCharsets.UTF_8)) {
 			new DLEEvaluator(w, c, instances, i).evaluate();
 		}
 	}

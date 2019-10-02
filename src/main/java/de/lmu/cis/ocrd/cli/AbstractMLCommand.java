@@ -18,6 +18,7 @@ import java.util.*;
 import java.util.zip.GZIPOutputStream;
 
 public abstract class AbstractMLCommand extends AbstractIOCommand {
+	@SuppressWarnings("WeakerAccess")
 	public static class Profiler {
 		public String path = "", config = "", cacheDir = "";
 
@@ -31,9 +32,11 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	}
 
 	public static class TrainingResource {
-		public String evaluation = "", model = "", training = "", features = "", result = "";
+		public String evaluation = "", model = "", training = "", result = "";
+		public List<JsonObject> features = new ArrayList<>();
 	}
 
+	@SuppressWarnings("WeakerAccess")
 	public static class ProtocolTrainingResource extends TrainingResource {
 		public String protocol;
 	}
@@ -42,6 +45,9 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		public String lexicon = "";
 	}
 
+	// Parameter is the main configuration file for ml commands.  Users should set the fields marked
+	// with set.  Other fields are there for legacy reasons.
+	@SuppressWarnings("WeakerAccess")
 	public static class Parameter {
 		public LETrainingResource leTraining;
 		public TrainingResource rrTraining;
@@ -49,9 +55,9 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		public Profiler profiler = new Profiler(); // set
 		public String model;
 		public String dir; // set
-		public String leFeatures = ""; // set
-		public String rrFeatures = ""; // set
-		public String dmFeatures = ""; // set
+		public List<JsonObject> leFeatures = new ArrayList<>(); // set
+		public List<JsonObject> rrFeatures = new ArrayList<>(); // set
+		public List<JsonObject> dmFeatures = new ArrayList<>(); // set
 		public String trigrams = ""; // set
         public List<String> filterClasses; // set
 		public int nOCR = 0; // set

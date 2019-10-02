@@ -4,7 +4,9 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.util.JSON;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 public class FeatureFactory {
@@ -60,8 +62,7 @@ public class FeatureFactory {
 			throw new Exception("cannot create feature: unknown type: " + type);
 		}
 		final Class<?> clazz = Class.forName(type);
-		final Class<?>[] parameters = new Class[] { JsonObject.class,
-				ArgumentFactory.class };
+		final Class<?>[] parameters = new Class[] { JsonObject.class, ArgumentFactory.class };
 		final Constructor<?> c = clazz.getConstructor(parameters);
 		return Optional.of((Feature) c.newInstance(o, args));
 	}
@@ -72,14 +73,18 @@ public class FeatureFactory {
 	}
 
 	public FeatureSet createFeatureSet(JsonObject[] os, FeatureClassFilter ff) throws Exception {
+		return createFeatureSet(Arrays.asList(os), ff);
+	}
+
+	public FeatureSet createFeatureSet(List<JsonObject> os, FeatureClassFilter ff) throws Exception {
 		FeatureSet fs = new FeatureSet();
 		for (JsonObject o : os) {
 			if (ff.filter(o)) {
 				continue;
 			}
 			Optional<Feature> feature = create(o);
-            // feature is not deactivated
-            feature.ifPresent(fs::add);
+			// feature is not deactivated
+			feature.ifPresent(fs::add);
 		}
 		return fs;
 	}

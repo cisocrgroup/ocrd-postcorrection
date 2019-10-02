@@ -47,12 +47,12 @@ public class TrainCommand extends AbstractMLCommand {
 		this.leFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().leTraining.features), getFeatureClassFilter())
+				.createFeatureSet(getParameter().leTraining.features, getFeatureClassFilter())
 				.add(new DynamicLexiconGTFeature());
 		this.rrFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().rrTraining.features), getFeatureClassFilter())
+				.createFeatureSet(getParameter().rrTraining.features, getFeatureClassFilter())
 				.add(new ReRankingGTFeature());
 		// DM needs to be created separately (see below)
 		for (int i = 0; i < getParameter().nOCR; i++) {
@@ -164,7 +164,7 @@ public class TrainCommand extends AbstractMLCommand {
 						.add(new DMBestRankFeature("dm-best-rank", rankings))
 						.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
 						.add(new DMGTFeature("dm-gt", rankings));
-				Logger.info("input file group (dm): {}", ifg);
+				Logger.debug("input file group (dm): {}", ifg);
 				for (OCRToken token: tokens) {
 					if (!rankings.containsKey(token)) {
 						continue;
@@ -186,8 +186,8 @@ public class TrainCommand extends AbstractMLCommand {
 			model.addRRModel(tagPath(getParameter().rrTraining.model, i+1), i);
 			model.addDMModel(tagPath(getParameter().dmTraining.model, i+1), i);
 		}
-		model.setLEFeatureSet(Paths.get(getParameter().leTraining.features));
-		model.setRRFeatureSet(Paths.get(getParameter().rrTraining.features));
+		model.setLEFeatureSet(getParameter().leTraining.features);
+		model.setRRFeatureSet(getParameter().rrTraining.features);
 		model.save(Paths.get(getParameter().model));
 	}
 
@@ -201,7 +201,7 @@ public class TrainCommand extends AbstractMLCommand {
 
 	private static Writer getWriter(Path path) throws Exception {
 		if (path.getParent().toFile().mkdirs()) {
-			Logger.info("created directory {}", path.getParent().toString());
+			Logger.debug("created directory {}", path.getParent().toString());
 		}
 		return new BufferedWriter(new FileWriter(path.toFile()));
 	}

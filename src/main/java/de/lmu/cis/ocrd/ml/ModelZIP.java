@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.URI;
@@ -36,12 +37,16 @@ public class ModelZIP implements Closeable {
         return openModel(config.dmModels, i);
     }
 
-    public InputStream openDLEFeatureSet() throws Exception {
-        return zipFile.getInputStream(zipFile.getEntry(config.dleFeatureSet));
+    public List<JsonObject> getLEFeatureSet() {
+        return config.leFeatureSet;
     }
 
-    public InputStream openRRFeatureSet() throws Exception {
-        return zipFile.getInputStream(zipFile.getEntry(config.rrFeatureSet));
+    public List<JsonObject> getRRFeatureSet() {
+        return config.rrFeatureSet;
+    }
+
+    public List<JsonObject> getDMFeatureSet() {
+        return config.dmFeatureSet;
     }
 
     public ModelZIP addLEModel(Path path, int i) {
@@ -62,15 +67,21 @@ public class ModelZIP implements Closeable {
         return this;
     }
 
-    public ModelZIP setLEFeatureSet(Path path) {
+    public ModelZIP setLEFeatureSet(List<JsonObject> set) {
         initConfig();
-        config.dleFeatureSet = path.toString();
+        config.leFeatureSet = set;
         return this;
     }
 
-    public ModelZIP setRRFeatureSet(Path path) {
+    public ModelZIP setRRFeatureSet(List<JsonObject> set) {
         initConfig();
-        config.rrFeatureSet = path.toString();
+        config.rrFeatureSet = set;
+        return this;
+    }
+
+    public ModelZIP setDMFeatureSet(List<JsonObject> set) {
+        initConfig();
+        config.dmFeatureSet = set;
         return this;
     }
 
@@ -88,8 +99,6 @@ public class ModelZIP implements Closeable {
             for (int i = 0; i < config.dmModels.size(); i++) {
                 config.dmModels.set(i, copyInto(zipfs, config.dmModels.get(i)));
             }
-            config.dleFeatureSet = copyInto(zipfs,  config.dleFeatureSet);
-            config.rrFeatureSet = copyInto(zipfs, config.rrFeatureSet);
             writeConfig(zipfs);
         }
     }
@@ -125,11 +134,6 @@ public class ModelZIP implements Closeable {
     private void initConfig() {
         if (config == null) {
             config = new Config();
-            config.dleModels = new ArrayList<>();
-            config.rrModels = new ArrayList<>();
-            config.dmModels = new ArrayList<>();
-            config.dleFeatureSet = "";
-            config.rrFeatureSet = "";
         }
     }
 
@@ -144,7 +148,11 @@ public class ModelZIP implements Closeable {
     }
 
     private static class Config {
-        List<String> dleModels, rrModels, dmModels;
-        String dleFeatureSet, rrFeatureSet;
+        List<String> dleModels = new ArrayList<>();
+        List<String> rrModels = new ArrayList<>();
+        List<String> dmModels = new ArrayList<>();
+        List<JsonObject> leFeatureSet = new ArrayList<>();
+        List<JsonObject> rrFeatureSet = new ArrayList<>();
+        List<JsonObject> dmFeatureSet = new ArrayList<>();
     }
 }

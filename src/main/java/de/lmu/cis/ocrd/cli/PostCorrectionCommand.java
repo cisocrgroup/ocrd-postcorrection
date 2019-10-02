@@ -1,6 +1,5 @@
 package de.lmu.cis.ocrd.cli;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.*;
@@ -11,10 +10,12 @@ import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.AdditionalLexiconSet;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
-import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Logger;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -80,7 +81,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         Logger.info("running ranking step: {} ({})", ifg, getParameter().nOCR);
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
         lm.setTokens(tokens);
-        final FeatureSet fs = makeFeatureSet(model.openRRFeatureSet());
+        final FeatureSet fs = makeFeatureSet(model.getRRFeatureSet());
         final LogisticClassifier c = LogisticClassifier.load(model.openRRModel(getParameter().nOCR-1));
         Map<OCRToken, List<Ranking>> rankings = new HashMap<>();
         for (OCRToken token : tokens) {
@@ -105,7 +106,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final Protocol protocol = new LEProtocol();
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, new NoAdditionalLexicon());
         lm.setTokens(tokens);
-        final FeatureSet fs = makeFeatureSet(model.openDLEFeatureSet());
+        final FeatureSet fs = makeFeatureSet(model.getLEFeatureSet());
         final LogisticClassifier c = LogisticClassifier.load(model.openDLEModel(getParameter().nOCR-1));
         AdditionalLexiconSet alex = new AdditionalLexiconSet();
         for (OCRToken token: tokens) {
@@ -143,12 +144,8 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         }
     }
 
-    private FeatureSet makeFeatureSet(InputStream is) throws Exception {
-        try (InputStream iis = is) {
-            final String json = IOUtils.toString(iis, StandardCharsets.UTF_8);
-            final JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
-            return FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(os, getFeatureClassFilter());
-        }
+    private FeatureSet makeFeatureSet(List<JsonObject> set) throws Exception {
+        return FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(set, getFeatureClassFilter());
     }
 
 }
