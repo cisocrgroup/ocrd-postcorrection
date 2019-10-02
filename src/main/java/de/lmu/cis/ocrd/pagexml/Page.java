@@ -9,7 +9,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -37,7 +36,7 @@ public class Page {
 
 	private final List<Line> lines;
 
-	public Page(Path path, Document doc) throws XPathExpressionException {
+	public Page(Path path, Document doc) {
 		this.path = path;
 		this.doc = doc;
 		this.lines = getLineNodes(doc);
@@ -51,12 +50,11 @@ public class Page {
 		return this.lines;
 	}
 
-	private static List<Line> getLineNodes(Document doc)
-			throws XPathExpressionException {
+	private List<Line> getLineNodes(Document doc) {
 		ArrayList<Line> nodeList = new ArrayList<>();
 		for (Node node : XPathHelper.getNodes(doc,
 				"/PcGts/Page/TextRegion/TextLine")) {
-			nodeList.add(new Line(node));
+			nodeList.add(new Line(node, this));
 		}
 		return nodeList;
 	}

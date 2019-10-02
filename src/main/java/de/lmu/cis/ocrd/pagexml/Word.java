@@ -5,16 +5,15 @@ import org.pmw.tinylog.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
 public class Word extends TextRegion {
 	private List<Glyph> glyphs;
-	private final Line parent;
+	private Line parent;
 
-	public Word(Node node, Line parent) throws XPathExpressionException {
+	public Word(Node node, Line parent) {
 		super(node);
 		this.parent = parent;
 		this.glyphs = getGlyphNodes(node);
@@ -28,10 +27,10 @@ public class Word extends TextRegion {
 		return parent;
 	}
 
-	private static List<Glyph> getGlyphNodes(Node node) throws XPathExpressionException {
+	private List<Glyph> getGlyphNodes(Node node) {
 		ArrayList<Glyph> glyphList = new ArrayList<>();
 		for (Node n : XPathHelper.getNodes(node, "./Glyph")) {
-			glyphList.add(new Glyph(n));
+			glyphList.add(new Glyph(n, this));
 		}
 		return glyphList;
 	}
@@ -119,7 +118,7 @@ public class Word extends TextRegion {
 		parent.words = newLine;
 	}
 
-    private Node newTokenNode(String word, int begin, int end) throws XPathExpressionException {
+    private Node newTokenNode(String word, int begin, int end) {
 		Word newWord = new Word(node.cloneNode(true), parent);
 		for (int i = 0; i < begin; i++) {
 			newWord.node.removeChild(newWord.glyphs.get(i).node);
