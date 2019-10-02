@@ -1,7 +1,5 @@
 package de.lmu.cis.ocrd.util;
 
-import de.lmu.cis.ocrd.Unicode;
-
 import java.util.ArrayList;
 
 public class Normalizer {
@@ -35,7 +33,7 @@ public class Normalizer {
 	// state 2 -- a:xa  -> 1
 	// state 3 -- w,z:e -> 3
 	// state 3 -- a:sa    -> 1
-	public void delta2(int c, double confidence) {
+	private void delta2(int c, double confidence) {
 		final int sigma = getSigma(c); // sigma = _ | . | a
 		// System.out.print("state " + state + " sigma " + (char)sigma);
 		switch (state) {
@@ -153,12 +151,10 @@ public class Normalizer {
 	}
 
 	private static boolean isLetter(int c) {
-		switch (c) {
-			case 0x2e17: // DOUBLE OBLIQUE HYPHEN aka '⸗'
-				return true;
-			default:
-				return Unicode.isLetter(c);
+		if (c == 0x2e17) { // DOUBLE OBLIQUE HYPHEN aka '⸗'
+			return true;
 		}
+		return Unicode.isLetter(c);
 	}
 
 	private static int getSigma(int c) {

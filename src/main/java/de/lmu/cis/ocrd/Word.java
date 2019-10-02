@@ -48,6 +48,11 @@ public class Word implements Serializable, OCRWord {
 	}
 
 	@Override
+	public String id() {
+		return Integer.toString(line.getLineId());
+	}
+
+	@Override
 	public double getConfidence() {
 		double min = Double.MAX_VALUE;
 		double max = Double.MIN_VALUE;

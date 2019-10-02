@@ -1,18 +1,18 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import javax.xml.xpath.XPathExpressionException;
-
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Glyph extends TextRegion {
-	public Glyph(Node node) throws XPathExpressionException {
+	private Word parent;
+	public Glyph(Node node, Word parent) {
 		super(node);
+		this.parent = parent;
 	}
 
-	public List<Integer> getLetters() {
+	List<Integer> getLetters() {
 		List<Integer> chars = new ArrayList<>();
 		for (String c: getUnicode()) {
 			if (!c.isEmpty()) {

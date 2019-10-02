@@ -18,10 +18,12 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class EvaluateRRDMCommand extends AbstractMLCommand {
 
@@ -44,7 +46,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		rrFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().rrTraining.features), getFeatureClassFilter())
+				.createFeatureSet(getParameter().rrTraining.features, getFeatureClassFilter())
 				.add(new ReRankingGTFeature());
 		mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		for (int i = 0; i < getParameter().nOCR; i++) {
@@ -64,14 +66,13 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
                 .withWriter(openTagged(getParameter().rrTraining.evaluation.replace(".arff", suffix + ".arff"), i+1))
                 .writeHeader(i+1)) {
             for (String ifg : ifgs) {
-                Integer tmp = i;
-                Logger.debug("input file group: {}", ifg);
+				Logger.debug("input file group: {}", ifg);
 				final List<OCRToken> tokens = readTokens(mets, ifg, getAlex(useAlex, i));
                 lm.setTokens(tokens);
                 tokens.forEach((token)->{
                     final List<Candidate> cs = token.getAllProfilerCandidates();
-                    Logger.debug("adding {} candidates (rr/{})", cs.size(), tmp+1);
-                    cs.forEach((c)-> w.writeToken(new OCRTokenWithCandidateImpl(token, c), tmp+1));
+                    Logger.debug("adding {} candidates (rr/{})", cs.size(), i +1);
+                    cs.forEach((c)-> w.writeToken(new OCRTokenWithCandidateImpl(token, c), i +1));
                 });
             }
         }
@@ -136,7 +137,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		dmEvaluator.setInstances(instances);
 
 		try (Writer w = new OutputStreamWriter(new FileOutputStream(
-				resultPath.toFile()), Charset.forName("UTF-8"))) {
+				resultPath.toFile()), StandardCharsets.UTF_8)) {
 			dmEvaluator.setWriter(w);
 			dmEvaluator.evaluate();
 		}
@@ -150,12 +151,12 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 		final LogisticClassifier c = LogisticClassifier.load(modelPath);
 		final String title = String.format("\nResults (%d):\n=============\n", i+1);
 		final String data = c.evaluate(title, evalPath);
-		FileUtils.writeStringToFile(resultPath.toFile(), data, Charset.forName("UTF-8"));
+		FileUtils.writeStringToFile(resultPath.toFile(), data, StandardCharsets.UTF_8);
 	}
 
 	private AdditionalLexicon getAlex(boolean useAlex, int i) {
 		if (useAlex) {
-			return new AdditionalFileLexicon(tagPath(getParameter().dleTraining.dynamicLexicon, i + 1));
+			return new AdditionalFileLexicon(tagPath(getParameter().leTraining.lexicon, i + 1));
 		}
 		return new NoAdditionalLexicon();
 	}

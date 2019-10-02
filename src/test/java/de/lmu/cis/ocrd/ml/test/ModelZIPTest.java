@@ -1,40 +1,45 @@
-package de.lmu.cis.ocrd.cli.test;
+package de.lmu.cis.ocrd.ml.test;
 
-import de.lmu.cis.ocrd.cli.ModelZIP;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import de.lmu.cis.ocrd.ml.ModelZIP;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ModelZIPTest {
     private ModelZIP model;
-    private Path tmpdir;
+    private Path tmp;
     private String[] names;
 
     @Before
     public void init() throws Exception {
-        tmpdir = Files.createTempDirectory("ocrd-cis-java");
+        tmp = Files.createTempDirectory("ocrd-cis-java");
         model = new ModelZIP();
         names = new String[]{
                 "a", "b", "c",
                 "d", "e", "f",
                 "g", "h", "i",
-                "j", "k",
         };
         Path out;
         int j = 0;
         for (int i = 0; i < 3; i++) {
             out = writeTmpFile(names[j++]);
-            model.addDLEModel(out, i);
+            model.addLEModel(out, i);
         }
         for (int i = 0; i < 3; i++) {
             out = writeTmpFile(names[j++]);
@@ -44,23 +49,22 @@ public class ModelZIPTest {
             out = writeTmpFile(names[j++]);
             model.addDMModel(out, i);
         }
-        out = writeTmpFile(names[j++]);
-        model.setDLEFeatureSet(out);
-        out = writeTmpFile(names[j]);
-        model.setRRFeatureSet(out);
-        model.save(Paths.get(tmpdir.toString(), "model.zip"));
-        model = ModelZIP.open(Paths.get(tmpdir.toString(), "model.zip"));
+        model.setLEFeatureSet(getLEFeatureSet());
+        model.setRRFeatureSet(getRRFeatureSet());
+        model.setDMFeatureSet(getDMFeatureSet());
+        model.save(Paths.get(tmp.toString(), "model.zip"));
+        model = ModelZIP.open(Paths.get(tmp.toString(), "model.zip"));
     }
 
     @After
     public void close() throws IOException {
         model.close();
         //noinspection ResultOfMethodCallIgnored
-        tmpdir.toFile().delete();
+        tmp.toFile().delete();
     }
 
     private Path writeTmpFile(String x) throws IOException {
-        final Path out = Paths.get(tmpdir.toString(), x);
+        final Path out = Paths.get(tmp.toString(), x);
         try (PrintWriter os = new PrintWriter(out.toString())) {
             os.print(x);
         }
@@ -69,8 +73,26 @@ public class ModelZIPTest {
 
     private String readStringAndClose(InputStream is) throws IOException {
         try (InputStream iis = is) {
-            return IOUtils.toString(iis, Charset.forName("UTF-8"));
+            return IOUtils.toString(iis, StandardCharsets.UTF_8);
         }
+    }
+
+    private List<JsonObject> getLEFeatureSet() {
+        List<JsonObject> ret = new ArrayList<>();
+        ret.add(new Gson().fromJson("{\"leFeature\": \"leFeatureValue\"}", JsonObject.class));
+        return ret;
+    }
+
+    private List<JsonObject> getRRFeatureSet() {
+        List<JsonObject> ret = new ArrayList<>();
+        ret.add(new Gson().fromJson("{\"rrFeature\": \"rrFeatureValue\"}", JsonObject.class));
+        return ret;
+    }
+
+    private List<JsonObject> getDMFeatureSet() {
+        List<JsonObject> ret = new ArrayList<>();
+        ret.add(new Gson().fromJson("{\"dmFeature\": \"dmFeatureValue\"}", JsonObject.class));
+        return ret;
     }
 
     @Test
@@ -128,14 +150,23 @@ public class ModelZIPTest {
     }
 
     @Test
-    public void testReadDLEFeatureSet() throws Exception {
-        final String got = readStringAndClose(model.openDLEFeatureSet());
-        assertThat(got, is(names[9]));
+    public void testReadDLEFeatureSet() {
+        final String want = new Gson().toJson(getLEFeatureSet());
+        final String got = new Gson().toJson(model.getLEFeatureSet());
+        assertThat(got, is(want));
     }
 
     @Test
-    public void testReadRRFeatureSet() throws Exception {
-        final String got = readStringAndClose(model.openRRFeatureSet());
-        assertThat(got, is(names[10]));
+    public void testReadRRFeatureSet() {
+        final String want = new Gson().toJson(getRRFeatureSet());
+        final String got = new Gson().toJson(model.getRRFeatureSet());
+        assertThat(got, is(want));
+    }
+
+    @Test
+    public void testReadDMFeatureSet() {
+        final String want = new Gson().toJson(getDMFeatureSet());
+        final String got = new Gson().toJson(model.getDMFeatureSet());
+        assertThat(got, is(want));
     }
 }

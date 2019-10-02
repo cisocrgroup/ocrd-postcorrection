@@ -12,7 +12,7 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -35,14 +35,14 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 		fs = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().dleTraining.features), getFeatureClassFilter())
+				.createFeatureSet(getParameter().leTraining.features, getFeatureClassFilter())
 				.add(new DynamicLexiconGTFeature());
 		for (int i = 0; i < getParameter().nOCR; i++) {
             try (ARFFWriter w = ARFFWriter
                     .fromFeatureSet(fs)
                     .withRelation("evaluate-dle")
                     .withDebugToken(debug)
-                    .withWriter(openTagged(getParameter().dleTraining.evaluation, i+1))
+                    .withWriter(openTagged(getParameter().leTraining.evaluation, i+1))
                     .writeHeader(i+1)) {
                 for (String ifg : config.mustGetInputFileGroups()) {
                     Logger.debug("input file group: {}", ifg);
@@ -65,13 +65,13 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 
 	private void writeDLE(List<OCRToken> tokens, int i) throws Exception {
 		Logger.debug("writeDLE({})", i);
-		final Path dlePath = tagPath(getParameter().dleTraining.dynamicLexicon, i + 1);
+		final Path dlePath = tagPath(getParameter().leTraining.lexicon, i + 1);
 		final LogisticClassifier c =
-				LogisticClassifier.load(tagPath(getParameter().dleTraining.model,
+				LogisticClassifier.load(tagPath(getParameter().leTraining.model,
 						i+1));
 		try (Writer out = new OutputStreamWriter(
 				new FileOutputStream(dlePath.toFile()),
-				     Charset.forName("UTF-8"))) {
+				StandardCharsets.UTF_8)) {
 			for (OCRToken token : tokens) {
 				if (token.isLexiconEntry()) {
 					Logger.debug("skipping lexicon entry: {}", token.toString());
@@ -96,16 +96,16 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 	}
 
 	private void evaluate(int i) throws Exception {
-		final Path evalPath = tagPath(getParameter().dleTraining.evaluation, i + 1);
-		final Path res = tagPath(getParameter().dleTraining.result, i + 1);
-		final Path model = tagPath(getParameter().dleTraining.model, i+1);
+		final Path evalPath = tagPath(getParameter().leTraining.evaluation, i + 1);
+		final Path res = tagPath(getParameter().leTraining.result, i + 1);
+		final Path model = tagPath(getParameter().leTraining.model, i+1);
 
 		final LogisticClassifier c = LogisticClassifier.load(model);
 		final Instances instances =
 				new ConverterUtils.DataSource(evalPath.toString()).getDataSet();
 		instances.setClassIndex(instances.numAttributes()-1);
 		try (Writer w = new OutputStreamWriter(
-				new FileOutputStream(res.toFile()), Charset.forName("UTF-8"))) {
+				new FileOutputStream(res.toFile()), StandardCharsets.UTF_8)) {
 			new DLEEvaluator(w, c, instances, i).evaluate();
 		}
 	}

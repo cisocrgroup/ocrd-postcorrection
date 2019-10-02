@@ -1,20 +1,19 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import de.lmu.cis.ocrd.Unicode;
+import de.lmu.cis.ocrd.util.Unicode;
 import org.pmw.tinylog.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
 public class Word extends TextRegion {
 	private List<Glyph> glyphs;
-	private final Line parent;
+	private Line parent;
 
-	public Word(Node node, Line parent) throws XPathExpressionException {
+	public Word(Node node, Line parent) {
 		super(node);
 		this.parent = parent;
 		this.glyphs = getGlyphNodes(node);
@@ -28,10 +27,10 @@ public class Word extends TextRegion {
 		return parent;
 	}
 
-	private static List<Glyph> getGlyphNodes(Node node) throws XPathExpressionException {
+	private List<Glyph> getGlyphNodes(Node node) {
 		ArrayList<Glyph> glyphList = new ArrayList<>();
 		for (Node n : XPathHelper.getNodes(node, "./Glyph")) {
-			glyphList.add(new Glyph(n));
+			glyphList.add(new Glyph(n, this));
 		}
 		return glyphList;
 	}
@@ -47,7 +46,7 @@ public class Word extends TextRegion {
 				sj.add("...");
 				break;
 			}
-			String prefix = "";
+			String prefix;
 			if (te.getDataType().contains("master-ocr")) {
 				prefix = "master:";
 			} else if (te.getDataTypeDetails().contains("-GT-")) {
@@ -63,7 +62,7 @@ public class Word extends TextRegion {
     void split(String[] words) throws Exception {
 		Logger.debug("tokens: {}", String.join(" ", words));
 		// do nothing if it is just one word
-		if (words == null || words.length <= 1) {
+		if (words.length <= 1) {
 			return;
 		}
 		List<Node> tokens = new ArrayList<>();
@@ -119,7 +118,7 @@ public class Word extends TextRegion {
 		parent.words = newLine;
 	}
 
-    private Node newTokenNode(String word, int begin, int end) throws XPathExpressionException {
+    private Node newTokenNode(String word, int begin, int end) {
 		Word newWord = new Word(node.cloneNode(true), parent);
 		for (int i = 0; i < begin; i++) {
 			newWord.node.removeChild(newWord.glyphs.get(i).node);

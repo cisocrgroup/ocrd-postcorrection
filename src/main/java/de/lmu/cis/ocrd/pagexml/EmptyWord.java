@@ -8,6 +8,8 @@ public class EmptyWord implements OCRWord {
 	private EmptyWord() {}
 
 	@Override
+	public String id() {return "empty";}
+	@Override
 	public boolean isLastInLine() {
 		return false;
 	}

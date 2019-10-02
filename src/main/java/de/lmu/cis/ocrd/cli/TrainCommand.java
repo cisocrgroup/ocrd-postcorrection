@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.cli;
 import de.lmu.cis.ocrd.ml.ARFFWriter;
 import de.lmu.cis.ocrd.ml.LM;
 import de.lmu.cis.ocrd.ml.LogisticClassifier;
+import de.lmu.cis.ocrd.ml.ModelZIP;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
@@ -25,8 +26,8 @@ public class TrainCommand extends AbstractMLCommand {
 	private String[] ifgs; // input file groups
 	private METS mets; // mets file
 	private LM lm;
-	private FeatureSet dleFS, rrFS, dmFS;
-	private ARFFWriter dlew, rrw, dmw;
+	private FeatureSet leFS, rrFS, dmFS;
+	private ARFFWriter lew, rrw, dmw;
 	private List<Double> rrConfidences;
 	private boolean debug;
 
@@ -37,32 +38,32 @@ public class TrainCommand extends AbstractMLCommand {
 
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
+		config.setCommand(this);
 		setParameter(config);
 		this.ifgs = config.mustGetInputFileGroups();
 		this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		this.debug = "DEBUG".equals(config.getLogLevel());
 		this.lm = new LM(true, Paths.get(getParameter().trigrams));
-		this.dleFS = FeatureFactory
+		this.leFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().dleTraining.features), getFeatureClassFilter())
+				.createFeatureSet(getParameter().leTraining.features, getFeatureClassFilter())
 				.add(new DynamicLexiconGTFeature());
 		this.rrFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)
-				.createFeatureSet(getFeatures(getParameter().rrTraining.features), getFeatureClassFilter())
+				.createFeatureSet(getParameter().rrTraining.features, getFeatureClassFilter())
 				.add(new ReRankingGTFeature());
 		// DM needs to be created separately (see below)
 		for (int i = 0; i < getParameter().nOCR; i++) {
-			// DLE
-			final Path dleTrain = tagPath(getParameter().dleTraining.training,
-					i+1);
-			final Path dleModel = tagPath(getParameter().dleTraining.model, i+1);
-			dlew = ARFFWriter
-					.fromFeatureSet(dleFS)
-					.withWriter(getWriter(dleTrain))
+			// LE
+			final Path leTrain = tagPath(getParameter().leTraining.training, i+1);
+			final Path leModel = tagPath(getParameter().leTraining.model, i+1);
+			lew = ARFFWriter
+					.fromFeatureSet(leFS)
+					.withWriter(getWriter(leTrain))
 					.withDebugToken(debug)
-					.withRelation("dle-train-" + (i+1))
+					.withRelation("le-train-" + (i+1))
 					.writeHeader(i+1);
 			// RR
 			final Path rrTrain = tagPath(getParameter().rrTraining.training, i+1);
@@ -74,14 +75,14 @@ public class TrainCommand extends AbstractMLCommand {
 					.withRelation("rr-train-" + (i+1))
 					.writeHeader(i+1);
 			for (String ifg : ifgs) {
-				Logger.info("input file group (dle, rr): {}", ifg);
+				Logger.info("input file group (le, rr): {}", ifg);
 				final List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
-				prepareDLEAndRR(tokens, i);
+				prepareLEAndRR(tokens, i);
 			}
 			// Train models
-			dlew.close();
+			lew.close();
 			rrw.close();
-			train(dleTrain, dleModel);
+			train(leTrain, leModel);
 			train(rrTrain, rrModel);
 		}
 		// dm must be trained after rr has been trained.
@@ -90,20 +91,20 @@ public class TrainCommand extends AbstractMLCommand {
 		writeModelZIP();
 	}
 
-	private void prepareDLEAndRR(List<OCRToken> tokens, int i) {
-		Logger.info("prepareDLEAndRR({})", i);
+	private void prepareLEAndRR(List<OCRToken> tokens, int i) {
+		Logger.info("prepareLEAndRR({})", i);
 		lm.setTokens(tokens);
-		prepareDLE(tokens, i);
+		prepareLE(tokens, i);
 		prepareRR(tokens, i);
 	}
 
-	private void prepareDLE(List<OCRToken> tokens, int i) {
+	private void prepareLE(List<OCRToken> tokens, int i) {
 		for (OCRToken token : tokens) {
 			if (token.isLexiconEntry()) {
 				Logger.debug("skipping lexicon entry: {}", token.toString());
 				continue;
 			}
-			dlew.writeToken(token, i+1);
+			lew.writeToken(token, i+1);
 		}
 	}
 
@@ -163,7 +164,7 @@ public class TrainCommand extends AbstractMLCommand {
 						.add(new DMBestRankFeature("dm-best-rank", rankings))
 						.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
 						.add(new DMGTFeature("dm-gt", rankings));
-				Logger.info("input file group (dm): {}", ifg);
+				Logger.debug("input file group (dm): {}", ifg);
 				for (OCRToken token: tokens) {
 					if (!rankings.containsKey(token)) {
 						continue;
@@ -181,12 +182,12 @@ public class TrainCommand extends AbstractMLCommand {
 	private void writeModelZIP() throws Exception {
 		final ModelZIP model = new ModelZIP();
 		for (int i = 0; i < getParameter().nOCR; i++) {
-			model.addDLEModel(tagPath(getParameter().dleTraining.model, i+1), i);
+			model.addLEModel(tagPath(getParameter().leTraining.model, i+1), i);
 			model.addRRModel(tagPath(getParameter().rrTraining.model, i+1), i);
 			model.addDMModel(tagPath(getParameter().dmTraining.model, i+1), i);
 		}
-		model.setDLEFeatureSet(Paths.get(getParameter().dleTraining.features));
-		model.setRRFeatureSet(Paths.get(getParameter().rrTraining.features));
+		model.setLEFeatureSet(getParameter().leTraining.features);
+		model.setRRFeatureSet(getParameter().rrTraining.features);
 		model.save(Paths.get(getParameter().model));
 	}
 
@@ -200,7 +201,7 @@ public class TrainCommand extends AbstractMLCommand {
 
 	private static Writer getWriter(Path path) throws Exception {
 		if (path.getParent().toFile().mkdirs()) {
-			Logger.info("created directory {}", path.getParent().toString());
+			Logger.debug("created directory {}", path.getParent().toString());
 		}
 		return new BufferedWriter(new FileWriter(path.toFile()));
 	}

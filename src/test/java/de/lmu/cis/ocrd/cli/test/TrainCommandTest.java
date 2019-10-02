@@ -76,8 +76,8 @@ public class TrainCommandTest {
 		cmd.execute(cla);
 		// 3 runs (dle, rr, dm), 2 files for each run with 2 OCRs
 		for (int i = 0; i < 2; i++) {
-			assertThat(exists(cmd.getParameter().dleTraining.model, i), is(true));
-			assertThat(exists(cmd.getParameter().dleTraining.training, i), is(true));
+			assertThat(exists(cmd.getParameter().leTraining.model, i), is(true));
+			assertThat(exists(cmd.getParameter().leTraining.training, i), is(true));
 			assertThat(exists(cmd.getParameter().rrTraining.model, i), is(true));
 			assertThat(exists(cmd.getParameter().rrTraining.training, i), is(true));
 			assertThat(exists(cmd.getParameter().dmTraining.model, i), is(true));
@@ -101,9 +101,9 @@ public class TrainCommandTest {
 		cmd.execute(cla);
 		// existing files (see above) + 2 lexicon, 2 eval and 2 result files
 		for (int i = 0; i < 2; i++) {
-			assertThat(exists(cmd.getParameter().dleTraining.evaluation, i), is(true));
-			assertThat(exists(cmd.getParameter().dleTraining.dynamicLexicon, i), is(true));
-			assertThat(exists(cmd.getParameter().dleTraining.result, i), is(true));
+			assertThat(exists(cmd.getParameter().leTraining.evaluation, i), is(true));
+			assertThat(exists(cmd.getParameter().leTraining.lexicon, i), is(true));
+			assertThat(exists(cmd.getParameter().leTraining.result, i), is(true));
 		}
 		// one cached profile for the single input file group
 		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, new NoAdditionalLexicon()).toFile().exists(), is(true));
@@ -130,7 +130,7 @@ public class TrainCommandTest {
 			assertThat(exists(cmd.getParameter().rrTraining.result.replace(".txt", "_no_dle.txt"), i), is(true));
 			assertThat(exists(cmd.getParameter().dmTraining.evaluation, i), is(true));
 			assertThat(exists(cmd.getParameter().dmTraining.result, i), is(true));
-			final Path al = AbstractMLCommand.tagPath(cmd.getParameter().dleTraining.dynamicLexicon, i+1);
+			final Path al = AbstractMLCommand.tagPath(cmd.getParameter().leTraining.lexicon, i+1);
 //			Logger.info("al: {}", al.toString());
 //			Logger.info("pr: {}", cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)));
 			assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, new AdditionalFileLexicon(al)).toFile().exists(), is(true));
@@ -157,8 +157,8 @@ public class TrainCommandTest {
 		assertThat(dir.toFile().isDirectory(), is(true));
 		assertThat(numberOfFiles(dir), is(1));
 		assertThat(Paths.get(model).toFile().exists(), is(true));
-		assertThat(Paths.get(tmp.toString(), "lep.json").toFile().exists(), is(true));
-		assertThat(Paths.get(tmp.toString(), "dmp.json").toFile().exists(), is(true));
+		assertThat(Paths.get(tmp.toString(), "le-protocol.json").toFile().exists(), is(true));
+		assertThat(Paths.get(tmp.toString(), "dm-protocol.json").toFile().exists(), is(true));
 	}
 
 	private static boolean exists(String path, int i) {

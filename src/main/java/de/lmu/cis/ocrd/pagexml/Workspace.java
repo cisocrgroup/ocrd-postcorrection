@@ -1,10 +1,13 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import de.lmu.cis.ocrd.pagexml.METS;
-import de.lmu.cis.ocrd.pagexml.Page;
+import de.lmu.cis.ocrd.profile.Profile;
+import org.pmw.tinylog.Logger;
 
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.zip.GZIPOutputStream;
 
 public class Workspace {
     private final Path workDir;
@@ -22,6 +25,7 @@ public class Workspace {
     }
 
     public void save() throws Exception {
+        Logger.info("saving mets: {}", metsPath.toAbsolutePath().toString());
         mets.save(metsPath);
     }
 
@@ -35,6 +39,20 @@ public class Workspace {
                 .withFLocat("file://" + dest.toAbsolutePath().toString())
                 .withID(getID(name))
                 .withMIMEType(Page.MIMEType);
+        return dest.toAbsolutePath();
+    }
+
+    public Path putProfile(Profile profile, String ofg) throws Exception {
+        final Path dest = workDir.resolve(Paths.get(ofg).resolve(Paths.get("profile.json.gz")));
+        //noinspection ResultOfMethodCallIgnored
+        dest.getParent().toFile().mkdirs();
+        try (java.io.OutputStream out = new GZIPOutputStream(new FileOutputStream(dest.toFile()))) {
+            out.write(profile.toJSON().getBytes(StandardCharsets.UTF_8));
+        }
+        mets.addFileToFileGrp(ofg)
+                .withMIMEType("application/json+gzip")
+                .withFLocat(Paths.get(dest.getParent().getFileName().toString(), dest.getFileName().toString()).toString())
+                .withID(ofg + "-" + "PROFILE");
         return dest.toAbsolutePath();
     }
 

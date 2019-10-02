@@ -7,6 +7,7 @@ import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 import org.pmw.tinylog.writers.ConsoleWriter;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -31,8 +32,6 @@ public class CommandLineArguments {
             .desc("URL der Parameterdatei in JSON Format").hasArg().build();
     private static final Option WORKDIR = Option.builder("w").longOpt("working-dir")
             .desc("Arbeitsverzeichnis").hasArg().build();
-    private static final Option DEFINE = Option.builder("D").longOpt("define").hasArgs().
-            desc("set values using inline json").build();
     private String groupID, logLevel, parameter, workdir, mets, output, command, define;
     private String[] inputFilegrp, outputFilegrp, args;
 
@@ -54,7 +53,7 @@ public class CommandLineArguments {
             c.groupID = getArg(line, GROUPID);
         }
         if (isSet(line, INPUT_FILEGRP)) {
-            c.inputFilegrp = getArgs(line, INPUT_FILEGRP);
+            c.inputFilegrp = getArg(line, INPUT_FILEGRP).split(",");
         }
         if (isSet(line, METS)) {
             c.mets = getArg(line, METS);
@@ -71,12 +70,13 @@ public class CommandLineArguments {
         if (isSet(line, WORKDIR)) {
             c.workdir = getArg(line, WORKDIR);
         }
-        if (isSet(line, DEFINE)) {
-            c.define = getArg(line, DEFINE);
-        }
         c.args = line.getArgs();
         c.setupLogger();
         return c;
+    }
+
+    public void setCommand(Command c) {
+        setupLogger("cis." + c.getClass().getSimpleName());
     }
 
     public static CommandLineArguments fromCommandLine(String[] args) throws Exception {
@@ -87,8 +87,7 @@ public class CommandLineArguments {
 
     private static Options createOptions() {
         return new Options().addOption(METS).addOption(WORKDIR).addOption(INPUT_FILEGRP).addOption(OUTPUT_FILEGRP)
-                .addOption(GROUPID).addOption(PARAMETER).addOption(LOG_LEVEL).addOption(OUTPUT).addOption(COMMAND)
-                .addOption(DEFINE);
+                .addOption(GROUPID).addOption(PARAMETER).addOption(LOG_LEVEL).addOption(OUTPUT).addOption(COMMAND);
     }
 
     private static String getArg(CommandLine line, Option option) {
@@ -143,12 +142,8 @@ public class CommandLineArguments {
         return notNull(outputFilegrp);
     }
 
-    public String getParameter() {
+    private String getParameter() {
         return notNull(parameter);
-    }
-
-    private <T> T getDefine(java.lang.reflect.Type typeOfT) {
-        return new Gson().fromJson(notNull(define), typeOfT);
     }
 
     private <T> T getParameterX(java.lang.reflect.Type typeOfT) throws IOException {
@@ -158,18 +153,27 @@ public class CommandLineArguments {
     }
 
     <T> T mustGetParameter(java.lang.reflect.Type typeOfT) throws Exception {
-        if (isSet(define)) {
-	        Logger.debug("define: {}", define);
-            return getDefine(typeOfT);
-        } else if (isSet(parameter)) {
-	        Logger.debug("parameter: {}", parameter);
-            return getParameterX(typeOfT);
+        if (isMissing(parameter)) {
+            throw new Exception("missing command line options: -p / --parameter");
         }
-        throw new Exception("missing command line options: -D or -p");
+        final String optArg = getParameter();
+        if (!isReadableFile(optArg) && optArg.length() > 0 && optArg.charAt(0) == '{') {
+            Logger.debug("parsing parameter as inline json");
+            return new Gson().fromJson(optArg, typeOfT);
+        }
+        try(Reader r = new FileReader(optArg)) {
+            Logger.debug("reading parameter as file");
+            return new Gson().fromJson(r, typeOfT);
+        }
+    }
+
+    private static boolean isReadableFile(String p) {
+        final File f = new File(p);
+        return f.isFile() && f.exists() && f.canRead();
     }
 
     String mustGetMETSFile() throws Exception {
-    	if (!isSet(mets)) {
+    	if (isMissing(mets)) {
     		throw new Exception("missing command line options: -m or --mets");
 	    }
 	    return mets;
@@ -207,8 +211,8 @@ public class CommandLineArguments {
         return outputFileGroups[0];
     }
 
-    private static boolean isSet(String str) {
-        return str != null && !"".equals(str);
+    private static boolean isMissing(String str) {
+        return str == null || "".equals(str);
     }
 
     String getWorkDir() {
@@ -219,9 +223,18 @@ public class CommandLineArguments {
         Configurator.currentConfig()
                 .writer(new ConsoleWriter(System.err))
                 .level(Level.valueOf(getLogLevel()))
-                .formatPattern("{date:HH:mm:ss.S} - {level} {message}")
+                .formatPattern("{date:HH:mm:ss.S} {level} cis." + this.getClass().getSimpleName() + " - {message}")
                 .activate();
         Logger.debug("current log level: {}", Logger.getLevel());
+    }
+
+    private void setupLogger(String name) {
+        Configurator.currentConfig()
+                .writer(new ConsoleWriter(System.err))
+                .level(Level.valueOf(getLogLevel()))
+                .formatPattern("{date:HH:mm:ss.S} {level} " + name + " - {message}")
+                .activate();
+        Logger.debug("command: {}", name);
     }
 
 }

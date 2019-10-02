@@ -11,10 +11,11 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public class METS {
 		return files;
 	}
 
-	public File addFileToFileGrp(String use) throws Exception {
+	public File addFileToFileGrp(String use) {
 		Node fileGrp = XPathHelper.getNode(xml, String.format(fileGrpFmt, use));
 		if (fileGrp == null) {
 			fileGrp = xml.createElement("mets:fileGrp");

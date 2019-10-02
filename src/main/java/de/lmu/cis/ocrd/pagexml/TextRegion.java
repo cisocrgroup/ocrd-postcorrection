@@ -18,18 +18,18 @@ public class TextRegion {
 		return ((Element)node).getAttribute("id");
 	}
 
-	public TextRegion withID(String id) {
+	TextRegion withID(String id) {
 		((Element)node).setAttribute("id", id);
 		return this;
 	}
 
-	public Coordinates getCoordinates() throws Exception {
+	Coordinates getCoordinates() throws Exception {
 		return Coordinates.fromString(
 				((Element)XPathHelper.getNode(node, "./Coords")).getAttribute("points")
 		);
 	}
 
-	public TextRegion withCoordinates(Coordinates coordinates) {
+	TextRegion withCoordinates(Coordinates coordinates) {
 		((Element)XPathHelper.getNode(node, "./Coords")).setAttribute("points", coordinates.toString());
 		return this;
 	}
@@ -45,6 +45,12 @@ public class TextRegion {
 	public TextEquiv appendNewTextEquiv() {
 		final TextEquiv te = new TextEquiv(node.getOwnerDocument().createElement("TextEquiv"));
 		node.appendChild(te.getNode());
+		return te;
+	}
+
+	TextEquiv prependNewTextEquiv() {
+		final TextEquiv te = new TextEquiv(node.getOwnerDocument().createElement("TextEquiv"));
+		node.getFirstChild().insertBefore(te.getNode(), node.getFirstChild());
 		return te;
 	}
 
