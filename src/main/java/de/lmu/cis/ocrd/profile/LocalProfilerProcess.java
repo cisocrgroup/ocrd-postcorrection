@@ -42,15 +42,15 @@ public class LocalProfilerProcess implements ProfilerProcess {
 			 Writer stdin = new BufferedWriter(new OutputStreamWriter(profiler.getOutputStream(), utf8));
 			 Reader stdout = new BufferedReader(new InputStreamReader(profiler.getInputStream(), utf8))) {
 
-			Thread t1 = new Thread(logStderr(stderr));
-			Thread t2 = new Thread(writeStdin(is, stdin));
-			Thread t3 = new Thread(readStdout(stdout, out));
-			t1.start();
-			t2.start();
-			t3.start();
-			t1.join();
-			t2.join();
-			t3.join();
+			Thread stderrThread = new Thread(logStderr(stderr));
+			Thread stdinThread = new Thread(writeStdin(is, stdin));
+			Thread stdoutThread = new Thread(readStdout(stdout, out));
+			stderrThread.start();
+			stdinThread.start();
+			stdoutThread.start();
+			stderrThread.join();
+			stdinThread.join();
+			stdoutThread.join();
 			final int exitStatus = profiler.waitFor();
 			if (exitStatus != 0) {
 				throw new Exception("profiler returned with exit status: " + exitStatus);
