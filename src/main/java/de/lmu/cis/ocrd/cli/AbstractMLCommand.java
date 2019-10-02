@@ -45,8 +45,9 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		public String lexicon = "";
 	}
 
-	// Parameter is the main configuration file for ml commands.  Users should set the fields marked
-	// with set.  Other fields are there for legacy reasons.
+	// Parameter is the main configuration file for ml commands.
+	// Users should set the fields marked with set.  Other fields are
+	// there for legacy reasons.
 	@SuppressWarnings("WeakerAccess")
 	public static class Parameter {
 		public LETrainingResource leTraining;
@@ -55,6 +56,9 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		public String model;
 		public boolean runLE = false;
 		public boolean runDM = false;
+		//
+		// These are the user settings for the parameter class.
+		//
 		public Profiler profiler = new Profiler(); // set
 		public String dir; // set
 		public List<JsonObject> leFeatures = new ArrayList<>(); // set
