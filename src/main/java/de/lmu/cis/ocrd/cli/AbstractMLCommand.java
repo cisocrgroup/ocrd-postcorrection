@@ -1,21 +1,47 @@
 package de.lmu.cis.ocrd.cli;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.ml.features.*;
-import de.lmu.cis.ocrd.pagexml.*;
-import de.lmu.cis.ocrd.profile.*;
-import org.apache.commons.io.IOUtils;
-import org.pmw.tinylog.Logger;
-import weka.core.Instance;
-
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 import java.util.zip.GZIPOutputStream;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.apache.commons.io.IOUtils;
+import org.pmw.tinylog.Logger;
+
+import de.lmu.cis.ocrd.ml.features.BinaryPrediction;
+import de.lmu.cis.ocrd.ml.features.BinaryPredictor;
+import de.lmu.cis.ocrd.ml.features.FeatureClassFilter;
+import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.features.Ranking;
+import de.lmu.cis.ocrd.pagexml.FileGrpProfiler;
+import de.lmu.cis.ocrd.pagexml.Line;
+import de.lmu.cis.ocrd.pagexml.METS;
+import de.lmu.cis.ocrd.pagexml.OCRTokenImpl;
+import de.lmu.cis.ocrd.pagexml.Page;
+import de.lmu.cis.ocrd.pagexml.TextEquiv;
+import de.lmu.cis.ocrd.pagexml.Word;
+import de.lmu.cis.ocrd.profile.AdditionalLexicon;
+import de.lmu.cis.ocrd.profile.Candidate;
+import de.lmu.cis.ocrd.profile.FileProfiler;
+import de.lmu.cis.ocrd.profile.LocalProfilerProcess;
+import de.lmu.cis.ocrd.profile.Profile;
+import weka.core.Instance;
 
 public abstract class AbstractMLCommand extends AbstractIOCommand {
 	@SuppressWarnings("WeakerAccess")

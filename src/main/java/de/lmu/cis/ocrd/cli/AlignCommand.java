@@ -1,17 +1,17 @@
 package de.lmu.cis.ocrd.cli;
 
-import com.google.gson.Gson;
-import de.lmu.cis.ocrd.util.Normalizer;
-import de.lmu.cis.ocrd.align.Graph;
-import de.lmu.cis.ocrd.align.Node;
-import de.lmu.cis.ocrd.align.TokenAlignment;
-import org.pmw.tinylog.Logger;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
+import com.google.gson.Gson;
+
+import org.pmw.tinylog.Logger;
+
+import de.lmu.cis.ocrd.align.Graph;
+import de.lmu.cis.ocrd.align.Node;
+import de.lmu.cis.ocrd.align.TokenAlignment;
 
 public class AlignCommand extends AbstractIOCommand {
     public static class Data {
