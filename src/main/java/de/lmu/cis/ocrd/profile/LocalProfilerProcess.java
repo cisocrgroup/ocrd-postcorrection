@@ -5,6 +5,7 @@ import org.pmw.tinylog.Logger;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +36,7 @@ public class LocalProfilerProcess implements ProfilerProcess {
 
 	@Override
 	public void profile(InputStream is, OutputStream out) throws Exception {
-		final Charset utf8 = Charset.forName("UTF-8");
+		final Charset utf8 = StandardCharsets.UTF_8;
 		Process profiler = startProfiler();
 		try (BufferedReader stderr = new BufferedReader(new InputStreamReader(profiler.getErrorStream(), utf8));
 			 Writer stdin = new BufferedWriter(new OutputStreamWriter(profiler.getOutputStream(), utf8));
@@ -80,7 +81,7 @@ public class LocalProfilerProcess implements ProfilerProcess {
 						stdin.write('\n');
 					}
 				}
-				IOUtils.copy(is, stdin, Charset.forName("UTF-8"));
+				IOUtils.copy(is, stdin, StandardCharsets.UTF_8);
 				stdin.flush();
 				stdin.close();
 			} catch (Exception e) {
@@ -92,7 +93,7 @@ public class LocalProfilerProcess implements ProfilerProcess {
 	private Runnable readStdout(Reader stdout, OutputStream os) {
 		return () -> {
 			try {
-				IOUtils.copy(stdout, os, Charset.forName("UTF-8"));
+				IOUtils.copy(stdout, os, StandardCharsets.UTF_8);
 				os.flush();
 				os.close();
 			} catch (IOException e) {
@@ -105,7 +106,7 @@ public class LocalProfilerProcess implements ProfilerProcess {
 		ProcessBuilder builder = new ProcessBuilder();
 		final List<String> command = makeArgs();
 		builder.command(command);
-		Logger.info("profiler command: " + String.join(" ", command));
+		Logger.debug("profiler command: " + String.join(" ", command));
 		return builder.start();
 	}
 
