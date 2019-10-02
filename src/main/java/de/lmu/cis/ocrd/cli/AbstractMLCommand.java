@@ -20,17 +20,18 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	public static class Profiler {
 		String type = "", executable = "", config = "", cacheDir = "";
 
-		public Path getCacheFilePath(String ifg, AdditionalLexicon additionalLex) {
+		public Path getCacheFilePath(String ifg, AdditionalLexicon alex) {
 			String suffix = ".json.gz";
-			if (additionalLex.use()) {
-				suffix = "_" + additionalLex.toString() + suffix;
+			if (alex.use()) {
+				suffix = "_" + alex.toString() + suffix;
 			}
 			return Paths.get(cacheDir, ifg + suffix);
 		}
 	}
 
 	public static class TrainingResource {
-		public String evaluation = "", model = "", training = "", features = "", result = "";
+		public String evaluation = "", model = "", training = "",
+			features = "", result = "";
 	}
 
 	public static class DLETrainingResource extends TrainingResource {
