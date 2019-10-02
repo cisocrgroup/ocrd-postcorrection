@@ -70,5 +70,4 @@ public class Page {
 		StreamResult result = new StreamResult(file);
 		transformer.transform(source, result);
 	}
-
 }
