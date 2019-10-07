@@ -36,7 +36,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         setParameter(config);
         model = ModelZIP.open(Paths.get(getParameter().model));
         workspace = new Workspace(Paths.get(config.mustGetMETSFile()));
-        lm = new LM(false, Paths.get(getParameter().trigrams));
+        lm = new LM(Paths.get(getParameter().trigrams));
         final String ifg = config.mustGetSingleInputFileGroup();
         final String ofg = config.mustGetSingleOutputFileGroup();
         AdditionalLexicon alex = new NoAdditionalLexicon();

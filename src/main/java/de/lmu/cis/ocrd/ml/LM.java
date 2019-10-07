@@ -2,20 +2,19 @@ package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 // step: Language Model
 public class LM implements ArgumentFactory {
-	private final boolean gt;
 	private final Path trigrams;
 	private List<OCRToken> tokens;
 	private List<FreqMap> freqMaps;
 	private FreqMap trigramFreqMap;
 
-	public LM(boolean gt, Path trigrams) {
-		this.gt = gt;
+	public LM(Path trigrams) {
 		this.trigrams = trigrams;
 		this.freqMaps = null;
 		this.trigramFreqMap = null;

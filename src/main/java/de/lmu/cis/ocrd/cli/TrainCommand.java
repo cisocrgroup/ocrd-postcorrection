@@ -43,7 +43,7 @@ public class TrainCommand extends AbstractMLCommand {
 		this.ifgs = config.mustGetInputFileGroups();
 		this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		this.debug = "DEBUG".equals(config.getLogLevel());
-		this.lm = new LM(true, Paths.get(getParameter().trigrams));
+		this.lm = new LM(Paths.get(getParameter().trigrams));
 		this.leFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)

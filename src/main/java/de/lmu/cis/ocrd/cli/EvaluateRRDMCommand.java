@@ -42,7 +42,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 	public void execute(CommandLineArguments config) throws Exception {
 		setParameter(config);
 		debug = "debug".equals(config.getLogLevel().toLowerCase());
-		lm = new LM(true, Paths.get(getParameter().trigrams));
+		lm = new LM(Paths.get(getParameter().trigrams));
 		rrFS = FeatureFactory
 				.getDefault()
 				.withArgumentFactory(lm)

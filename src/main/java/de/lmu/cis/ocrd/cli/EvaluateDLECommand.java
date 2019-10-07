@@ -30,7 +30,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 	public void execute(CommandLineArguments config) throws Exception {
 		final METS mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		setParameter(config);
-		final LM lm = new LM(true, Paths.get(getParameter().trigrams));
+		final LM lm = new LM(Paths.get(getParameter().trigrams));
 		debug = "debug".equalsIgnoreCase(config.getLogLevel());
 		fs = FeatureFactory
 				.getDefault()

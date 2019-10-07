@@ -15,19 +15,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-class FeaturesTestBase {
+public class FeaturesTestBase {
 	private static final Path pagexml = Paths.get(
 			"src/test/resources/workspace/OCR-D-PROFILED" +
 					"/aventinus_grammatica_1515" +
 					"-aventinus_grammatica_1515_0006.xml");
 	private static final Path trigrams = Paths.get("src/test/resources/nGrams.csv");
 	private static final Path profilePath = Paths.get("src/test/resources/workspace/profile.json.gz");
-	protected List<OCRToken> tokens;
+	private List<OCRToken> tokens;
 	protected LM lm;
 
 	@Before
 	public void init() throws Exception {
-		lm = new LM(true, trigrams);
+		lm = new LM(trigrams);
 		tokens = new ArrayList<>();
 		Profile profile = new FileProfiler(profilePath).profile();
 		Logger.info("profile size = " + profile.size());
@@ -42,12 +42,12 @@ class FeaturesTestBase {
 		}
 	}
 
-	protected OCRToken getToken(int i) {
+	OCRToken getToken(int i) {
         Logger.info("token({}) = {}", i, tokens.get(i).toString());
         return tokens.get(i);
 	}
 
-	protected OCRToken getCandidateToken(int i, int j) {
+	OCRToken getCandidateToken(int i, int j) {
 		final OCRToken t = getToken(i);
         Logger.info("token({}, {}) = {}", i, j, t.toString());
 		try {
@@ -55,9 +55,8 @@ class FeaturesTestBase {
 			Logger.info("lookup = {}", t.getMasterOCR().toString());
 			Logger.info("profile: {}", profile.get(t.getMasterOCR().toString()));
 		} catch (Exception e) {
-
+			throw new RuntimeException(e);
 		}
-
 		final List<Candidate> cs = t.getAllProfilerCandidates();
 		Logger.info("CANDIATE: " + new Gson().toJson(cs.get(j)));
 		return new OCRTokenWithCandidateImpl(t, cs.get(j));
