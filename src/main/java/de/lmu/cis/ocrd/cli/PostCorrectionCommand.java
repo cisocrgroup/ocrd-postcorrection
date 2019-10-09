@@ -13,10 +13,7 @@ import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import org.pmw.tinylog.Logger;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -65,7 +62,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
             }
             final Prediction p = c.predict(fs.calculateFeatureVector(token, getParameter().nOCR));
             final boolean prediction = p.getPrediction();
-            protocol.register(token, prediction);
+            protocol.protocol(token, p.getConfidence(), prediction);
             if (prediction) {
                 final Ranking ranking = rankings.get(token).get(0);
                 final String correction = ranking.candidate.getAsSuggestionFor(token.getMasterOCR().getWord());
@@ -115,8 +112,9 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 continue;
             }
             final FeatureSet.Vector values = fs.calculateFeatureVector(token, getParameter().nOCR-1);
-            final boolean prediction = c.predict(values).getPrediction();
-            protocol.register(token, prediction);
+            final Prediction p = c.predict(values);
+            final boolean prediction = p.getPrediction();
+            protocol.protocol(token, p.getConfidence(), prediction);
             if (prediction) {
                 Logger.debug("adding to extended lexicon: {}", token.getMasterOCR().toString());
                 alex.add(token.getMasterOCR().toString());
@@ -126,15 +124,15 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         return alex;
     }
 
-    private void saveProtocol(Protocol protocol, String path) throws IOException {
+    private void saveProtocol(Protocol protocol, String path) throws Exception {
         if (path == null || "".equals(path)) {
             return;
         }
         final Path p = Paths.get(path);
         Logger.debug("saving protocol to {}", p.toString());
-        try(Writer w = new OutputStreamWriter(new FileOutputStream(p.toFile()), StandardCharsets.UTF_8)) {
-            w.write(protocol.toJSON());
-            w.flush();
+        try(OutputStream out = new FileOutputStream(p.toFile())) {
+            protocol.write(out);
+            out.flush();
         }
     }
 

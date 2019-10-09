@@ -3,33 +3,44 @@ package de.lmu.cis.ocrd.ml;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 
-import java.util.ArrayList;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DMProtocol implements Protocol {
+    private static class ProtocolValue {
+        String normalized = "";
+        String ocr = "";
+        String cor = "";
+        double confidence = 0;
+        boolean taken = false;
+    }
+
     private static class Protocol {
-        private final Map<String, List<String>> considered = new HashMap<>();
-        private final Map<String, List<String>> notConsidered = new HashMap<>();
+        private final Map<String, ProtocolValue> corrections = new HashMap<>();
     }
 
-    private final Protocol protocol = new Protocol();
+    private Protocol protocol = new Protocol();
 
     @Override
-    public String toJSON() {
-        return new Gson().toJson(protocol);
+    public void read(InputStream is) {
+        protocol = new Gson().fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), protocol.getClass());
+    }
+    @Override
+    public void write(OutputStream out) throws Exception {
+        out.write(new Gson().toJson(protocol).getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
-    public void register(OCRToken token, boolean considered) {
+    public void protocol(OCRToken token, double confidence, boolean taken) {
         final String word = token.getMasterOCR().getWord().toLowerCase();
-        List<String> list;
-        if (considered) {
-            list = protocol.considered.computeIfAbsent(word, k -> new ArrayList<>());
-        } else {
-            list = protocol.notConsidered.computeIfAbsent(word, k -> new ArrayList<>());
-        }
-        list.add(token.getMasterOCR().id());
+        final ProtocolValue val = new ProtocolValue();
+        val.normalized = token.getMasterOCR().getWord().toLowerCase();
+        val.taken = taken;
+        val.confidence = confidence;
+        protocol.corrections.put(token.getMasterOCR().id(), val);
     }
 }

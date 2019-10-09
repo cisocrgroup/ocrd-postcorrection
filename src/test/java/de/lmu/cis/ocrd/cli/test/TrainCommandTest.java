@@ -1,6 +1,9 @@
 package de.lmu.cis.ocrd.cli.test;
 
 import de.lmu.cis.ocrd.cli.*;
+import de.lmu.cis.ocrd.ml.DMProtocol;
+import de.lmu.cis.ocrd.ml.LEProtocol;
+import de.lmu.cis.ocrd.ml.Protocol;
 import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
 import de.lmu.cis.ocrd.profile.FileProfiler;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
@@ -10,9 +13,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.*;
+import java.io.*;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -158,7 +163,15 @@ public class TrainCommandTest {
 		assertThat(numberOfFiles(dir), is(1));
 		assertThat(Paths.get(model).toFile().exists(), is(true));
 		assertThat(Paths.get(tmp.toString(), "le-protocol.json").toFile().exists(), is(true));
+		checkReadProtocol(new LEProtocol(), Paths.get(tmp.toString(), "le-protocol.json"));
 		assertThat(Paths.get(tmp.toString(), "dm-protocol.json").toFile().exists(), is(true));
+		checkReadProtocol(new DMProtocol(), Paths.get(tmp.toString(), "dm-protocol.json"));
+	}
+
+	private void checkReadProtocol(Protocol protocol, Path path) throws Exception {
+		try (InputStream is = new FileInputStream(path.toFile())) {
+			protocol.read(is);
+		}
 	}
 
 	private static boolean exists(String path, int i) {

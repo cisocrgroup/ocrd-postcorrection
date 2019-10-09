@@ -2,11 +2,16 @@ package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 
-public interface Protocol {
-    // This function returns the json representation of the protocol as string.
-    String toJSON();
+import java.io.InputStream;
+import java.io.OutputStream;
 
-    // Register an OCRToken with the information if the token was considered for
-    // the extension step.
-    void register(OCRToken token, boolean considered);
+public interface Protocol {
+    // Read the protocol from an input stream.
+    void read(InputStream is) throws Exception;
+
+    // Write the protocol into an output stream.
+    void write(OutputStream out) throws Exception;
+
+    // Protocol an OCRToken with its confidence and whether the token was taken as correction/lexicon entry.
+    void protocol(OCRToken token, double confidence, boolean taken);
 }
