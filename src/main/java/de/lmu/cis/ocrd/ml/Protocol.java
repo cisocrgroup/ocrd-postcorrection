@@ -12,6 +12,7 @@ public interface Protocol {
     // Write the protocol into an output stream.
     void write(OutputStream out) throws Exception;
 
-    // Protocol an OCRToken with its confidence and whether the token was taken as correction/lexicon entry.
-    void protocol(OCRToken token, double confidence, boolean taken);
+    // Protocol an OCRToken with its (optional correction), confidence
+    // and whether the token was taken as correction/lexicon entry.
+    void protocol(OCRToken token, String correction, double confidence, boolean taken);
 }

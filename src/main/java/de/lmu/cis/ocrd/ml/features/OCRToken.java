@@ -22,8 +22,8 @@ public interface OCRToken {
 	List<Candidate> getAllProfilerCandidates();
 	// Returns true if the ocr token is a lexicon entry.
 	boolean isLexiconEntry();
-	// Correct the ocr token with the given correction.
-	void correct(String correction, double confidence);
 	// Return true if the master OCR token is correct.
 	boolean ocrIsCorrect();
+	// Correct this token in the underlying document.
+	void correct(String correction, double confidence);
 }

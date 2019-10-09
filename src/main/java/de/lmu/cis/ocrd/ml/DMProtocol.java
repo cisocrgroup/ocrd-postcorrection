@@ -2,6 +2,8 @@ package de.lmu.cis.ocrd.ml;
 
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.features.OCRWord;
+import de.lmu.cis.ocrd.util.StringCorrector;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,12 +37,14 @@ public class DMProtocol implements Protocol {
     }
 
     @Override
-    public void protocol(OCRToken token, double confidence, boolean taken) {
-        final String word = token.getMasterOCR().getWordNormalized().toLowerCase();
+    public void protocol(OCRToken token, String correction, double confidence, boolean taken) {
+        final OCRWord word = token.getMasterOCR();
         final ProtocolValue val = new ProtocolValue();
-        val.normalized = token.getMasterOCR().getWordNormalized().toLowerCase();
-        val.taken = taken;
+        val.normalized = word.getWordNormalized().toLowerCase();
+        val.ocr = word.getWordRaw();
+        val.cor = new StringCorrector(val.ocr).correctWith(correction);
         val.confidence = confidence;
+        val.taken = taken;
         protocol.corrections.put(token.getMasterOCR().id(), val);
     }
 }

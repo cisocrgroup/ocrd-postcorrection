@@ -32,7 +32,7 @@ public class LEProtocol implements Protocol {
     }
 
     @Override
-    public void protocol(OCRToken token, double confidence, boolean taken) {
+    public void protocol(OCRToken token, String correction, double confidence, boolean taken) {
         // do *not* ignore case
         final String word = token.getMasterOCR().getWordNormalized();
         ProtocolValue val;

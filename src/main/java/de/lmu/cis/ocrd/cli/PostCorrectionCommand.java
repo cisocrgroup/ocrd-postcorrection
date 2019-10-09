@@ -62,10 +62,10 @@ public class PostCorrectionCommand extends AbstractMLCommand {
             }
             final Prediction p = c.predict(fs.calculateFeatureVector(token, getParameter().nOCR));
             final boolean prediction = p.getPrediction();
-            protocol.protocol(token, p.getConfidence(), prediction);
+            final Ranking ranking = rankings.get(token).get(0);
+            final String correction = ranking.candidate.getAsSuggestionFor(token.getMasterOCR().getWordNormalized());
+            protocol.protocol(token, correction, p.getConfidence(), prediction);
             if (prediction) {
-                final Ranking ranking = rankings.get(token).get(0);
-                final String correction = ranking.candidate.getAsSuggestionFor(token.getMasterOCR().getWordNormalized());
                 Logger.info("correcting '{}' with '{}' ({})",
                         token.getMasterOCR().toString(), correction, ranking.ranking);
                 token.correct(correction, ranking.ranking);
@@ -114,7 +114,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
             final FeatureSet.Vector values = fs.calculateFeatureVector(token, getParameter().nOCR-1);
             final Prediction p = c.predict(values);
             final boolean prediction = p.getPrediction();
-            protocol.protocol(token, p.getConfidence(), prediction);
+            protocol.protocol(token, "", p.getConfidence(), prediction);
             if (prediction) {
                 Logger.debug("adding to extended lexicon: {}", token.getMasterOCR().toString());
                 alex.add(token.getMasterOCR().toString());

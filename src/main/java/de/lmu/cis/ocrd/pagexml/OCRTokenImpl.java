@@ -5,6 +5,8 @@ import de.lmu.cis.ocrd.ml.features.OCRWord;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
+import de.lmu.cis.ocrd.util.StringCorrector;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -111,11 +113,11 @@ public class OCRTokenImpl implements OCRToken {
 	@Override
 	public void correct(String correction, double confidence) {
 		word.prependNewTextEquiv()
-				.addUnicode(correction)
+				.addUnicode(new StringCorrector(getMasterOCR().getWordRaw()).correctWith(correction))
 				.withConfidence(confidence)
 				.withIndex(0)
 				.withDataType("OCR-D-CIS-POST-CORRECTION")
-				.withDataTypeDetails(word.toString());
+				.withDataTypeDetails(getMasterOCR().getWordRaw());
 	}
 
 	public List<Candidate> getAllProfilerCandidatesNoLimit() {
