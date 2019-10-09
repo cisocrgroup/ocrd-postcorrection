@@ -7,6 +7,7 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 public class LevenshteinDistanceFeature extends NamedDoubleFeature {
     private final LevenshteinDistance ld;
 
+    @SuppressWarnings("WeakerAccess")
     LevenshteinDistanceFeature(String name, int threshold) {
         super(name);
         ld = new LevenshteinDistance(threshold);
@@ -24,8 +25,8 @@ public class LevenshteinDistanceFeature extends NamedDoubleFeature {
     @Override
     protected double doCalculate(OCRToken token, int i, int n) {
         assert(handlesOCR(i, n));
-        final String master = token.getMasterOCR().getWord();
-        final String slave = getWord(token, i, n).getWord();
+        final String master = token.getMasterOCR().getWordNormalized();
+        final String slave = getWord(token, i, n).getWordNormalized();
         final int distance = ld.apply(master, slave);
         return distance == -1? getThreshold(): distance;
     }

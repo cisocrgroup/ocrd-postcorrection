@@ -36,9 +36,9 @@ public class DMProtocol implements Protocol {
 
     @Override
     public void protocol(OCRToken token, double confidence, boolean taken) {
-        final String word = token.getMasterOCR().getWord().toLowerCase();
+        final String word = token.getMasterOCR().getWordNormalized().toLowerCase();
         final ProtocolValue val = new ProtocolValue();
-        val.normalized = token.getMasterOCR().getWord().toLowerCase();
+        val.normalized = token.getMasterOCR().getWordNormalized().toLowerCase();
         val.taken = taken;
         val.confidence = confidence;
         protocol.corrections.put(token.getMasterOCR().id(), val);

@@ -31,14 +31,20 @@ public class EmptyWord implements OCRWord {
 	public double getCharacterConfidenceAt(int i) {
 		return 0.0;
 	}
+
 	@Override
-	public String getWord() {
+	public String getWordRaw() {
+		return getWordNormalized();
+	}
+
+	@Override
+	public String getWordNormalized() {
 		return "**EMPTY-WORD**";
 	}
 
 	@Override
 	public String toString() {
-		return getWord();
+		return getWordNormalized();
 	}
 
 }

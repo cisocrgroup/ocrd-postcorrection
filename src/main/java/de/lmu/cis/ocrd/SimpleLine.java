@@ -93,8 +93,12 @@ public class SimpleLine implements Line, Serializable {
 		return getWord(offset, String.join(" ", words));
 	}
 
-	public static class Data {
-		public final int pageID, lineID;
+    String getRaw() {
+		return line;
+    }
+
+    public static class Data {
+		final int pageID, lineID;
 		final String normalized;
 
 		public Data(SimpleLine line) {

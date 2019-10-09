@@ -5,16 +5,17 @@ import de.lmu.cis.ocrd.ml.features.OCRWord;
 import java.util.List;
 
 public class OCRWordImpl implements OCRWord {
-	private final String word;
+	private final String word, raw;
 	private final List<Double> masterOCRCharConfidences;
 	private final double wordConfidence;
 	private final String line;
 	private final String id;
 
-	public OCRWordImpl(TextEquiv te, String line, List<Double> mConfs) {
+	OCRWordImpl(TextEquiv te, String line, List<Double> mConfs) {
 		this.line = line;
 		this.wordConfidence = te.getConfidence();
 		this.word = te.getUnicodeNormalized();
+		this.raw = te.getUnicode();
 		this.masterOCRCharConfidences = mConfs;
 		this.id = te.getParentTextRegion().getID();
 	}
@@ -26,12 +27,12 @@ public class OCRWordImpl implements OCRWord {
 
 	@Override
 	public boolean isLastInLine() {
-		return line.endsWith(getWord());
+		return line.endsWith(getWordNormalized());
 	}
 
 	@Override
 	public boolean isFirstInLine() {
-		return line.startsWith(getWord());
+		return line.startsWith(getWordNormalized());
 	}
 
 	@Override
@@ -53,13 +54,18 @@ public class OCRWordImpl implements OCRWord {
 	}
 
 	@Override
-	public String getWord() {
+	public String getWordRaw() {
+		return raw;
+	}
+
+	@Override
+	public String getWordNormalized() {
 		return word;
 	}
 
 	@Override
 	public String toString() {
-		return getWord();
+		return getWordNormalized();
 	}
 
 }

@@ -34,7 +34,7 @@ public class LEProtocol implements Protocol {
     @Override
     public void protocol(OCRToken token, double confidence, boolean taken) {
         // do *not* ignore case
-        final String word = token.getMasterOCR().getWord();
+        final String word = token.getMasterOCR().getWordNormalized();
         ProtocolValue val;
         if (taken) {
             val = protocol.considered.computeIfAbsent(word, k -> new ProtocolValue());

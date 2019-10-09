@@ -80,7 +80,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 				FeatureSet.Vector values = fs.calculateFeatureVector(token, i + 1);
 				final Prediction p = c.predict(values);
 				if (p.getPrediction()) {
-					out.write(token.getMasterOCR().getWord());
+					out.write(token.getMasterOCR().getWordNormalized());
 					out.write('\n');
 				}
 			}

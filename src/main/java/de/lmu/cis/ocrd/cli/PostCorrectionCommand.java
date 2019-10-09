@@ -65,7 +65,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
             protocol.protocol(token, p.getConfidence(), prediction);
             if (prediction) {
                 final Ranking ranking = rankings.get(token).get(0);
-                final String correction = ranking.candidate.getAsSuggestionFor(token.getMasterOCR().getWord());
+                final String correction = ranking.candidate.getAsSuggestionFor(token.getMasterOCR().getWordNormalized());
                 Logger.info("correcting '{}' with '{}' ({})",
                         token.getMasterOCR().toString(), correction, ranking.ranking);
                 token.correct(correction, ranking.ranking);

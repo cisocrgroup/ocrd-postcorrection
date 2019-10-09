@@ -73,12 +73,17 @@ public class Word implements Serializable, OCRWord {
 	}
 
 	@Override
-	public String getWord() {
+	public String getWordNormalized() {
 		return toString();
 	}
 
 	@Override
 	public String getLineNormalized() {
 		return getLine().getNormalized();
+	}
+
+	@Override
+	public String getWordRaw() {
+		return getLine().getRaw().substring(s, e);
 	}
 }

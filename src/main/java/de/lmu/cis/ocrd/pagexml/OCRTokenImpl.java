@@ -77,7 +77,7 @@ public class OCRTokenImpl implements OCRToken {
 		if (gtIndex <= 0 || gtIndex >= words.size()) {
 			return Optional.empty();
 		}
-		return Optional.of(words.get(gtIndex).getWord());
+		return Optional.of(words.get(gtIndex).getWordNormalized());
 	}
 
 	@Override

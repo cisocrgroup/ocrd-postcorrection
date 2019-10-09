@@ -43,11 +43,11 @@ public class TokenLengthClassFeature extends NamedStringSetFeature {
 
 	@Override
 	public Object calculate(OCRToken token, int i, int n) {
-		final int tokenLength = token.getMasterOCR().getWord().length();
+		final int tokenLength = token.getMasterOCR().getWordNormalized().length();
 		return getLengthClass(tokenLength);
 	}
 
-	protected String getLengthClass(int tokenLength) {
+	String getLengthClass(int tokenLength) {
 		if (tokenLength <= shrt) {
 			return SHORT;
 		}
