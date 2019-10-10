@@ -16,8 +16,8 @@ public class LEProtocol implements Protocol {
         private int count = 0;
     }
     private static class Protocol {
-        private final Map<String, ProtocolValue> considered = new HashMap<>();
-        private final Map<String, ProtocolValue> notConsidered = new HashMap<>();
+        private final Map<String, ProtocolValue> yes = new HashMap<>();
+        private final Map<String, ProtocolValue> no = new HashMap<>();
     }
     private Protocol protocol = new Protocol();
 
@@ -37,9 +37,9 @@ public class LEProtocol implements Protocol {
         final String word = token.getMasterOCR().getWordNormalized();
         ProtocolValue val;
         if (taken) {
-            val = protocol.considered.computeIfAbsent(word, k -> new ProtocolValue());
+            val = protocol.yes.computeIfAbsent(word, k -> new ProtocolValue());
         } else {
-            val = protocol.notConsidered.computeIfAbsent(word, k -> new ProtocolValue());
+            val = protocol.no.computeIfAbsent(word, k -> new ProtocolValue());
         }
         val.count++;
         val.confidence = confidence;
