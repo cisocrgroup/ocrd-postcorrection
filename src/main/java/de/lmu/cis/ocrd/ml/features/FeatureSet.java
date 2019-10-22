@@ -35,7 +35,7 @@ public class FeatureSet implements Iterable<Feature>, Serializable {
 					continue;
 				}
 				final Object val = feature.calculate(token, i, n);
-				Logger.debug(" - value for feature {}: {}", feature.getName(), val.toString());
+				Logger.debug(" * value for feature {}: {}", feature.getName(), val.toString());
 				vector.add(j++, val);
 			}
 		}
