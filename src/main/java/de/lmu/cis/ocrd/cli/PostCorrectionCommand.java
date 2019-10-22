@@ -41,7 +41,8 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final String ifg = config.mustGetSingleInputFileGroup();
         final String ofg = config.mustGetSingleOutputFileGroup();
         AdditionalLexicon alex = new NoAdditionalLexicon();
-        Logger.info("input file group: {}", ifg);
+        Logger.info("command: {}, input file group: {}", getName(), ifg);
+        Logger.debug("loaded {} language model trigrams", lm.getCharacterTrigrams().getTotal());
         if (getParameter().runLE) {
             alex = runLE(ifg);
         }
@@ -56,6 +57,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         Logger.info("running decision maker step: {} ({})", ifg, getParameter().nOCR);
         final Protocol protocol = new DMProtocol();
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
+        Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);
         lm.setTokens(tokens);
         final FeatureSet fs = new FeatureSet()
                 .add(new DMBestRankFeature("dm-best-rank", rankings))
@@ -82,6 +84,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     private Map<OCRToken, List<Ranking>> runRR(String ifg, AdditionalLexicon alex) throws Exception {
         Logger.info("running ranking step: {} ({})", ifg, getParameter().nOCR);
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
+        Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.getRRFeatureSet());
         final LogisticClassifier c = LogisticClassifier.load(model.openRRModel(getParameter().nOCR-1));
@@ -107,6 +110,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         Logger.info("running lexicon extension step: {} ({})", ifg, getParameter().nOCR);
         final Protocol protocol = new LEProtocol();
         final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, new NoAdditionalLexicon());
+        Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.getLEFeatureSet());
         final LogisticClassifier c = LogisticClassifier.load(model.openDLEModel(getParameter().nOCR-1));
