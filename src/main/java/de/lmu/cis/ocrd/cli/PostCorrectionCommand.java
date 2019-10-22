@@ -40,6 +40,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final String ifg = config.mustGetSingleInputFileGroup();
         final String ofg = config.mustGetSingleOutputFileGroup();
         AdditionalLexicon alex = new NoAdditionalLexicon();
+        Logger.info("input file group: {}", ifg);
         if (getParameter().runLE) {
             alex = runLE(ifg);
         }
