@@ -26,7 +26,7 @@ public class ModelZIP implements Closeable {
     }
 
     public InputStream openDLEModel(int i) throws Exception {
-        return openModel(config.dleModels, i);
+        return openModel(config.leModels, i);
     }
 
     public InputStream openRRModel(int i) throws Exception {
@@ -51,7 +51,7 @@ public class ModelZIP implements Closeable {
 
     public ModelZIP addLEModel(Path path, int i) {
         initConfig();
-        addModel(config.dleModels, path, i);
+        addModel(config.leModels, path, i);
         return this;
     }
 
@@ -90,8 +90,8 @@ public class ModelZIP implements Closeable {
         env.put("create", "true");
         URI uri = new URI("jar:" + path.toUri().getScheme(), path.toUri().getPath(), null);
         try (FileSystem zipfs = FileSystems.newFileSystem(uri, env)) {
-            for (int i = 0; i < config.dleModels.size(); i++) {
-                config.dleModels.set(i, copyInto(zipfs, config.dleModels.get(i)));
+            for (int i = 0; i < config.leModels.size(); i++) {
+                config.leModels.set(i, copyInto(zipfs, config.leModels.get(i)));
             }
             for (int i = 0; i < config.rrModels.size(); i++) {
                 config.rrModels.set(i, copyInto(zipfs, config.rrModels.get(i)));
@@ -148,7 +148,7 @@ public class ModelZIP implements Closeable {
     }
 
     private static class Config {
-        List<String> dleModels = new ArrayList<>();
+        List<String> leModels = new ArrayList<>();
         List<String> rrModels = new ArrayList<>();
         List<String> dmModels = new ArrayList<>();
         List<JsonObject> leFeatureSet = new ArrayList<>();
