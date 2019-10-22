@@ -53,8 +53,8 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		public TrainingResource rrTraining;
 		public ProtocolTrainingResource dmTraining;
 		public String model;
-		public boolean runLE = false;
-		public boolean runDM = false;
+		public boolean runLE = false; // set
+		public boolean runDM = false; // set
 		public Profiler profiler = new Profiler(); // set
 		public String dir; // set
 		public List<JsonObject> leFeatures = new ArrayList<>(); // set
@@ -103,8 +103,6 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		parameter.dmTraining.model = Paths.get(parameter.dir, "dm-model.bin").toString();
 		parameter.dmTraining.protocol = Paths.get(parameter.dir, "dm-protocol.json").toString();
 		parameter.dmTraining.features = parameter.dmFeatures;
-		parameter.runLE = parameter.leFeatures != null && parameter.leFeatures.size() > 0;
-		parameter.runDM = parameter.rrFeatures != null && parameter.rrFeatures.size() > 0;
 	}
 
 	void setParameter(Parameter parameter) {
