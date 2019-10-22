@@ -67,7 +67,8 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
                 .writeHeader(i+1)) {
             for (String ifg : ifgs) {
 				Logger.debug("input file group: {}", ifg);
-				final List<OCRToken> tokens = readTokens(mets, ifg, getAlex(useAlex, i));
+				final List<OCRToken> tokens = readTokensWithGT(mets, ifg, getAlex(useAlex, i));
+				Logger.debug("read {} OCR tokens with GT from input file group {}", tokens.size(), ifg);
                 lm.setTokens(tokens);
                 tokens.forEach((token)->{
                     final List<Candidate> cs = token.getAllProfilerCandidates();
@@ -104,7 +105,8 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 			Iterator<Instance> is = instances.iterator();
             for (String ifg : ifgs) {
                 Logger.debug("input file group: {}", ifg);
-                final List<OCRToken> tokens = readTokens(mets, ifg, getAlex(useAlex, i));
+                final List<OCRToken> tokens = readTokensWithGT(mets, ifg, getAlex(useAlex, i));
+				Logger.debug("read {} OCR tokens with GT from input file group {}", tokens.size(), ifg);
                 lm.setTokens(tokens);
                 Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
 				dmFS = new FeatureSet()

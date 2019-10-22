@@ -192,21 +192,32 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		Logger.info("processed {} long words in {}", i, page.getPath().toString());
 	}
 
-	List<OCRToken> readTokens(METS mets, String ifg, AdditionalLexicon additionalLex) throws Exception {
-		Logger.debug("read tokens ifg = {}, additional lex {}", ifg, additionalLex.toString());
+	List<OCRToken> readOCRTokens(METS mets, String ifg, AdditionalLexicon alex) throws Exception {
+		return readTokens(mets, ifg, alex, false);
+	}
+
+	List<OCRToken> readTokensWithGT(METS mets, String ifg, AdditionalLexicon alex) throws Exception {
+		return readTokens(mets, ifg, alex, true);
+	}
+
+	private List<OCRToken> readTokens(METS mets, String ifg, AdditionalLexicon alex, boolean ocr) throws Exception {
+		Logger.debug("read tokens ifg = {}, additional lex {}", ifg, alex.toString());
 		List<OCRToken> tokens = new ArrayList<>();
 		final int gtIndex = parameter.nOCR;
 		pages = openPages(openFiles(mets, ifg));
-		final Profile profile = openProfile(ifg, pages, additionalLex);
+		final Profile profile = openProfile(ifg, pages, alex);
 		for (Page page : pages) {
 			eachLongWord(page, (word, mOCR) -> {
-				final List<TextEquiv> tes = word.getTextEquivs();
-				if (gtIndex < tes.size() &&
-						tes.get(gtIndex).getDataTypeDetails().contains("OCR-D-GT")) {
-					OCRTokenImpl t = new OCRTokenImpl(word, parameter.nOCR, parameter.maxCandidates, profile);
-					if (t.getGT().isPresent()) {
-						tokens.add(t);
+				if (ocr) {
+					final List<TextEquiv> tes = word.getTextEquivs();
+					if (gtIndex < tes.size()) {
+						final OCRToken t = new OCRTokenImpl(word, parameter.nOCR, parameter.maxCandidates, profile);
+						if (t.getGT().isPresent()) {
+							tokens.add(t);
+						}
 					}
+				} else {
+					tokens.add(new OCRTokenImpl(word, parameter.nOCR, parameter.maxCandidates, profile));
 				}
 			});
 		}

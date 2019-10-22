@@ -19,8 +19,10 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class TrainCommand extends AbstractMLCommand {
 
@@ -77,7 +79,8 @@ public class TrainCommand extends AbstractMLCommand {
 					.writeHeader(i+1);
 			for (String ifg : ifgs) {
 				Logger.info("input file group (le, rr): {}", ifg);
-				final List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
+				final List<OCRToken> tokens = readTokensWithGT(mets, ifg, new NoAdditionalLexicon());
+				Logger.debug("read {} OCR tokens with GT from input file group {}", tokens.size(), ifg);
 				prepareLEAndRR(tokens, i);
 			}
 			// Train models
@@ -158,9 +161,9 @@ public class TrainCommand extends AbstractMLCommand {
 					.writeHeader(i+1);
 
 			for (String ifg : ifgs) {
-				final List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
+				final List<OCRToken> tokens = readTokensWithGT(mets, ifg, new NoAdditionalLexicon());
 				final Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
-
+				Logger.debug("read {} OCR tokens with GT from input file group {}", tokens.size(), ifg);
 				dmFS = new FeatureSet()
 						.add(new DMBestRankFeature("dm-best-rank", rankings))
 						.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))

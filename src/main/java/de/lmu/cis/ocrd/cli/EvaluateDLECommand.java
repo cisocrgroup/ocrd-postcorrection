@@ -46,7 +46,8 @@ public class EvaluateDLECommand extends AbstractMLCommand {
                     .writeHeader(i+1)) {
                 for (String ifg : config.mustGetInputFileGroups()) {
                     Logger.debug("input file group: {}", ifg);
-                    List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
+                    List<OCRToken> tokens = readTokensWithGT(mets, ifg, new NoAdditionalLexicon());
+					Logger.debug("read {} OCR tokens with GT from input file group {}", tokens.size(), ifg);
                     lm.setTokens(tokens);
                     writeTokens(w, tokens, i);
                 }
@@ -56,7 +57,8 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 		for (int i = 0; i < getParameter().nOCR; i++) {
 		    for (String ifg : config.mustGetInputFileGroups()) {
                 Logger.debug("input file group: {}", ifg);
-                List<OCRToken> tokens = readTokens(mets, ifg, new NoAdditionalLexicon());
+                List<OCRToken> tokens = readTokensWithGT(mets, ifg, new NoAdditionalLexicon());
+				Logger.debug("read {} OCR tokens with GT from input file group {}", tokens.size(), ifg);
                 lm.setTokens(tokens);
                 writeDLE(tokens, i);
             }

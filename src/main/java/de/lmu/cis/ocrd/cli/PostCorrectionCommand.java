@@ -59,7 +59,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     private void runDM(String ifg, Map<OCRToken, List<Ranking>> rankings, AdditionalLexicon alex) throws Exception {
         Logger.info("running decision maker step: {} ({})", ifg, getParameter().nOCR);
         final Protocol protocol = new DMProtocol();
-        final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
+        final List<OCRToken> tokens = readOCRTokens(workspace.getMETS(), ifg, alex);
         Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);
         lm.setTokens(tokens);
         final FeatureSet fs = new FeatureSet()
@@ -86,7 +86,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
 
     private Map<OCRToken, List<Ranking>> runRR(String ifg, AdditionalLexicon alex) throws Exception {
         Logger.info("running ranking step: {} ({})", ifg, getParameter().nOCR);
-        final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, alex);
+        final List<OCRToken> tokens = readOCRTokens(workspace.getMETS(), ifg, alex);
         Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.getRRFeatureSet());
@@ -112,7 +112,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     private AdditionalLexicon runLE(String ifg) throws Exception {
         Logger.info("running lexicon extension step: {} ({})", ifg, getParameter().nOCR);
         final Protocol protocol = new LEProtocol();
-        final List<OCRToken> tokens = readTokens(workspace.getMETS(), ifg, new NoAdditionalLexicon());
+        final List<OCRToken> tokens = readOCRTokens(workspace.getMETS(), ifg, new NoAdditionalLexicon());
         Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.getLEFeatureSet());
