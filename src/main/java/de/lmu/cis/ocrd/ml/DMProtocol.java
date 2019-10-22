@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.ml.features.OCRWord;
 import de.lmu.cis.ocrd.util.StringCorrector;
+import org.pmw.tinylog.Logger;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,6 +39,7 @@ public class DMProtocol implements Protocol {
 
     @Override
     public void protocol(OCRToken token, String correction, double confidence, boolean taken) {
+        Logger.debug("putting token into le protocol: {} {} {} {}", token, correction, confidence, taken);
         final OCRWord word = token.getMasterOCR();
         final ProtocolValue val = new ProtocolValue();
         val.normalized = word.getWordNormalized().toLowerCase();

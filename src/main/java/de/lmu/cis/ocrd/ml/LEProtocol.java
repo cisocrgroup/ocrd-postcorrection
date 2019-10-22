@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.ml;
 
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
+import org.pmw.tinylog.Logger;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,6 +34,7 @@ public class LEProtocol implements Protocol {
 
     @Override
     public void protocol(OCRToken token, String correction, double confidence, boolean taken) {
+        Logger.debug("putting token into le protocol: {} {} {} {}", token, correction, confidence, taken);
         // do *not* ignore case
         final String word = token.getMasterOCR().getWordNormalized();
         ProtocolValue val;
