@@ -26,7 +26,7 @@ public class ModelZIP implements Closeable {
         return m;
     }
 
-    public InputStream openDLEModel(int i) throws Exception {
+    public InputStream openLEModel(int i) throws Exception {
         return openModel(config.leModels, i);
     }
 

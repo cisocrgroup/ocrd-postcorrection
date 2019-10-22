@@ -99,19 +99,19 @@ public class ModelZIPTest {
 
     @Test
     public void testReadDLEModel1() throws Exception {
-        final String got = readStringAndClose(model.openDLEModel(0));
+        final String got = readStringAndClose(model.openLEModel(0));
         assertThat(got, is(names[0]));
     }
 
     @Test
     public void testReadDLEModel2() throws Exception {
-        final String got = readStringAndClose(model.openDLEModel(1));
+        final String got = readStringAndClose(model.openLEModel(1));
         assertThat(got, is(names[1]));
     }
 
     @Test
     public void testReadDLEModel3() throws Exception {
-        final String got = readStringAndClose(model.openDLEModel(2));
+        final String got = readStringAndClose(model.openLEModel(2));
         assertThat(got, is(names[2]));
     }
 

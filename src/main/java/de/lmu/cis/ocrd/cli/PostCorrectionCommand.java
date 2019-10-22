@@ -116,14 +116,14 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);
         lm.setTokens(tokens);
         final FeatureSet fs = makeFeatureSet(model.getLEFeatureSet());
-        final LogisticClassifier c = LogisticClassifier.load(model.openDLEModel(getParameter().nOCR-1));
+        final LogisticClassifier c = LogisticClassifier.load(model.openLEModel(getParameter().nOCR-1));
         AdditionalLexiconSet alex = new AdditionalLexiconSet();
         for (OCRToken token: tokens) {
             if (token.isLexiconEntry()) {
                 Logger.debug("skipping lexicon entry: {}", token.toString());
                 continue;
             }
-            final FeatureSet.Vector values = fs.calculateFeatureVector(token, getParameter().nOCR-1);
+            final FeatureSet.Vector values = fs.calculateFeatureVector(token, getParameter().nOCR -1);
             final Prediction p = c.predict(values);
             final boolean prediction = p.getPrediction();
             protocol.protocol(token, "", p.getConfidence(), prediction);
