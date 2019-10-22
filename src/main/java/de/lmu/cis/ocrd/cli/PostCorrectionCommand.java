@@ -31,6 +31,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
 
     @Override
     public void execute(CommandLineArguments config) throws Exception {
+        config.setCommand(this);
         setParameter(config);
         model = ModelZIP.open(Paths.get(getParameter().model));
         workspace = new Workspace(Paths.get(config.mustGetMETSFile()));
