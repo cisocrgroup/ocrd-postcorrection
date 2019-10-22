@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipFile;
 
 public class ModelZIP implements Closeable {
@@ -35,6 +36,10 @@ public class ModelZIP implements Closeable {
 
     public InputStream openDMModel(int i) throws Exception {
         return openModel(config.dmModels, i);
+    }
+
+    public InputStream openLanguageModel() throws Exception {
+        return openFile(config.languageModelPath);
     }
 
     public List<JsonObject> getLEFeatureSet() {
@@ -85,6 +90,12 @@ public class ModelZIP implements Closeable {
         return this;
     }
 
+    public ModelZIP setLanguageModelPath(String path) {
+        initConfig();
+        config.languageModelPath = path;
+        return this;
+    }
+
     public void save(Path path) throws Exception {
         Map<String, String> env = new HashMap<>();
         env.put("create", "true");
@@ -99,6 +110,7 @@ public class ModelZIP implements Closeable {
             for (int i = 0; i < config.dmModels.size(); i++) {
                 config.dmModels.set(i, copyInto(zipfs, config.dmModels.get(i)));
             }
+            config.languageModelPath = copyInto(zipfs, config.languageModelPath);
             writeConfig(zipfs);
         }
     }
@@ -147,6 +159,13 @@ public class ModelZIP implements Closeable {
         return zipFile.getInputStream(zipFile.getEntry(models.get(i)));
     }
 
+    private InputStream openFile(String path) throws Exception {
+        if (path.endsWith(".gz")) { // check for gzipped file
+            return new GZIPInputStream(zipFile.getInputStream(zipFile.getEntry(path)));
+        }
+        return zipFile.getInputStream(zipFile.getEntry(path));
+    }
+
     private static class Config {
         List<String> leModels = new ArrayList<>();
         List<String> rrModels = new ArrayList<>();
@@ -154,5 +173,6 @@ public class ModelZIP implements Closeable {
         List<JsonObject> leFeatureSet = new ArrayList<>();
         List<JsonObject> rrFeatureSet = new ArrayList<>();
         List<JsonObject> dmFeatureSet = new ArrayList<>();
+        String languageModelPath = "";
     }
 }

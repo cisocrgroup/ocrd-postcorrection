@@ -3,7 +3,9 @@ package de.lmu.cis.ocrd.ml;
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 
+import java.io.InputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,13 @@ public class LM implements ArgumentFactory {
 		this.trigrams = trigrams;
 		this.freqMaps = null;
 		this.trigramFreqMap = null;
+	}
+
+	public LM(InputStream is) throws Exception {
+		final FreqMap map = new CachingFreqMap();
+		this.trigrams = Paths.get("");
+		this.freqMaps = null;
+		this.trigramFreqMap = CharacterNGrams.readFromCSV(is, map);
 	}
 
 	private void loadFreqMapsIfNotPresent() {

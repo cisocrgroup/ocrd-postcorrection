@@ -13,6 +13,7 @@ import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import org.pmw.tinylog.Logger;
 
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,7 +34,9 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         setParameter(config);
         model = ModelZIP.open(Paths.get(getParameter().model));
         workspace = new Workspace(Paths.get(config.mustGetMETSFile()));
-        lm = new LM(Paths.get(getParameter().trigrams));
+        try (InputStream is = model.openLanguageModel()) {
+            lm = new LM(is);
+        }
         final String ifg = config.mustGetSingleInputFileGroup();
         final String ofg = config.mustGetSingleOutputFileGroup();
         AdditionalLexicon alex = new NoAdditionalLexicon();

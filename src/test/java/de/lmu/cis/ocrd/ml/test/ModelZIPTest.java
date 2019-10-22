@@ -8,9 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,6 +50,7 @@ public class ModelZIPTest {
         model.setLEFeatureSet(getLEFeatureSet());
         model.setRRFeatureSet(getRRFeatureSet());
         model.setDMFeatureSet(getDMFeatureSet());
+        model.setLanguageModelPath("src/test/resources/nGrams.csv");
         model.save(Paths.get(tmp.toString(), "model.zip"));
         model = ModelZIP.open(Paths.get(tmp.toString(), "model.zip"));
     }
@@ -167,6 +166,13 @@ public class ModelZIPTest {
     public void testReadDMFeatureSet() {
         final String want = new Gson().toJson(getDMFeatureSet());
         final String got = new Gson().toJson(model.getDMFeatureSet());
+        assertThat(got, is(want));
+    }
+
+    @Test
+    public void testReadLanguageModel() throws Exception {
+        final String want = readStringAndClose(new FileInputStream(new File("src/test/resources/nGrams.csv")));
+        final String got = readStringAndClose(model.openLanguageModel());
         assertThat(got, is(want));
     }
 }

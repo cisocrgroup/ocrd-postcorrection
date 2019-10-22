@@ -11,26 +11,22 @@ public class CharacterNGrams {
 	public static FreqMap fromCSV(String path) throws Exception {
 		try (InputStream is = new FileInputStream(new File(path))) {
 			final FreqMap map = new FreqMap();
-			return addFromCSV(is, map);
+			return readFromCSV(is, map);
 		}
 	}
 
 	static FreqMap addFromCSV(String path, FreqMap map) throws Exception {
 		if (path.endsWith(".gz")) {
-			return addFromZippedCSV(path, map);
+			try (InputStream is = new GZIPInputStream(new FileInputStream(new File(path)))) {
+				return readFromCSV(is, map);
+			}
 		}
 		try (InputStream is = new FileInputStream(new File(path))) {
-			return addFromCSV(is, map);
+			return readFromCSV(is, map);
 		}
 	}
 
-	private static FreqMap addFromZippedCSV(String path, FreqMap map) throws Exception {
-		try (InputStream is = new GZIPInputStream(new FileInputStream(new File(path)))) {
-			return addFromCSV(is, map);
-		}
-	}
-
-	private static FreqMap addFromCSV(InputStream is, FreqMap map) throws Exception {
+	static FreqMap readFromCSV(InputStream is, FreqMap map) throws Exception {
 		try (BufferedReader r = new BufferedReader(new InputStreamReader(is))) {
 			String line;
 			while ((line = r.readLine()) != null) {

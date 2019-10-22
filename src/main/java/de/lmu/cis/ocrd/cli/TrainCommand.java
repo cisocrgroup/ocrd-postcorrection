@@ -189,9 +189,9 @@ public class TrainCommand extends AbstractMLCommand {
 		model.setLEFeatureSet(getParameter().leTraining.features);
 		model.setRRFeatureSet(getParameter().rrTraining.features);
 		model.setDMFeatureSet(getParameter().dmTraining.features);
+		model.setLanguageModelPath(getParameter().trigrams);
 		model.save(Paths.get(getParameter().model));
 	}
-
 
 	private static void train(Path src, Path dest) throws Exception {
 		Logger.debug("training {} from {}", dest.toString(), src.toString());
