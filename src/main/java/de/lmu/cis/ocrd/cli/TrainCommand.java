@@ -188,6 +188,7 @@ public class TrainCommand extends AbstractMLCommand {
 		}
 		model.setLEFeatureSet(getParameter().leTraining.features);
 		model.setRRFeatureSet(getParameter().rrTraining.features);
+		model.setDMFeatureSet(getParameter().dmTraining.features);
 		model.save(Paths.get(getParameter().model));
 	}
 
