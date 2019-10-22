@@ -23,6 +23,7 @@ public class ModelZIPTest {
     private ModelZIP model;
     private Path tmp;
     private String[] names;
+    private long created;
 
     @Before
     public void init() throws Exception {
@@ -47,6 +48,8 @@ public class ModelZIPTest {
             out = writeTmpFile(names[j++]);
             model.addDMModel(out, i);
         }
+        created = System.currentTimeMillis();
+        model.setCreated(created);
         model.setLEFeatureSet(getLEFeatureSet());
         model.setRRFeatureSet(getRRFeatureSet());
         model.setDMFeatureSet(getDMFeatureSet());
@@ -174,5 +177,10 @@ public class ModelZIPTest {
         final String want = readStringAndClose(new FileInputStream(new File("src/test/resources/nGrams.csv")));
         final String got = readStringAndClose(model.openLanguageModel());
         assertThat(got, is(want));
+    }
+
+    @Test
+    public void testGetCreated() {
+        assertThat(model.getCreated(), is(created));
     }
 }

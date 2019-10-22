@@ -17,9 +17,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class PostCorrectionCommand extends AbstractMLCommand {
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
     private ModelZIP model;
     private Workspace workspace;
     private LM lm;
@@ -42,6 +44,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final String ofg = config.mustGetSingleOutputFileGroup();
         AdditionalLexicon alex = new NoAdditionalLexicon();
         Logger.info("command: {}, input file group: {}", getName(), ifg);
+        Logger.info("model {} created at: {}", getParameter().model, sdf.format(new Date(model.getCreated())));
         Logger.debug("loaded {} language model trigrams", lm.getCharacterTrigrams().getTotal());
         if (getParameter().runLE) {
             alex = runLE(ifg);

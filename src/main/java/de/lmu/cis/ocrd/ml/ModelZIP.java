@@ -42,6 +42,10 @@ public class ModelZIP implements Closeable {
         return openFile(config.languageModelPath);
     }
 
+    public long getCreated() {
+        return config.created;
+    }
+
     public List<JsonObject> getLEFeatureSet() {
         return config.leFeatureSet;
     }
@@ -55,44 +59,42 @@ public class ModelZIP implements Closeable {
     }
 
     public ModelZIP addLEModel(Path path, int i) {
-        initConfig();
-        addModel(config.leModels, path, i);
+        addModel(initConfig().leModels, path, i);
         return this;
     }
 
     public ModelZIP addRRModel(Path path, int i) {
-        initConfig();
-        addModel(config.rrModels, path, i);
+        addModel(initConfig().rrModels, path, i);
         return this;
     }
 
     public ModelZIP addDMModel(Path path, int i) {
-        initConfig();
-        addModel(config.dmModels, path, i);
+        addModel(initConfig().dmModels, path, i);
         return this;
     }
 
     public ModelZIP setLEFeatureSet(List<JsonObject> set) {
-        initConfig();
-        config.leFeatureSet = set;
+        initConfig().leFeatureSet = set;
         return this;
     }
 
     public ModelZIP setRRFeatureSet(List<JsonObject> set) {
-        initConfig();
-        config.rrFeatureSet = set;
+        initConfig().rrFeatureSet = set;
         return this;
     }
 
     public ModelZIP setDMFeatureSet(List<JsonObject> set) {
-        initConfig();
-        config.dmFeatureSet = set;
+        initConfig().dmFeatureSet = set;
         return this;
     }
 
     public ModelZIP setLanguageModelPath(String path) {
-        initConfig();
-        config.languageModelPath = path;
+        initConfig().languageModelPath = path;
+        return this;
+    }
+
+    public ModelZIP setCreated(long now) {
+        initConfig().created = now;
         return this;
     }
 
@@ -143,10 +145,11 @@ public class ModelZIP implements Closeable {
         models.set(i, path.toString());
     }
 
-    private void initConfig() {
+    private Config initConfig() {
         if (config == null) {
             config = new Config();
         }
+        return config;
     }
 
     private Config readConfig() throws Exception {
@@ -174,5 +177,6 @@ public class ModelZIP implements Closeable {
         List<JsonObject> rrFeatureSet = new ArrayList<>();
         List<JsonObject> dmFeatureSet = new ArrayList<>();
         String languageModelPath = "";
+        long created = 0;
     }
 }

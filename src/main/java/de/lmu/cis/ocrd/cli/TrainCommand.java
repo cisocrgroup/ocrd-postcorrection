@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.util.*;
 
 public class TrainCommand extends AbstractMLCommand {
@@ -190,6 +191,7 @@ public class TrainCommand extends AbstractMLCommand {
 		model.setRRFeatureSet(getParameter().rrTraining.features);
 		model.setDMFeatureSet(getParameter().dmTraining.features);
 		model.setLanguageModelPath(getParameter().trigrams);
+		model.setCreated(System.currentTimeMillis());
 		model.save(Paths.get(getParameter().model));
 	}
 
