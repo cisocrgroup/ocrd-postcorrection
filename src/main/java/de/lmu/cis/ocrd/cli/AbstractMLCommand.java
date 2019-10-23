@@ -9,28 +9,14 @@ import org.apache.commons.io.IOUtils;
 import org.pmw.tinylog.Logger;
 import weka.core.Instance;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.zip.GZIPOutputStream;
 
 public abstract class AbstractMLCommand extends AbstractIOCommand {
-	@SuppressWarnings("WeakerAccess")
-	public static class Profiler {
-		public String path = "", config = "", cacheDir = "";
-
-		public Path getCacheFilePath(String ifg, AdditionalLexicon additionalLex) {
-			String suffix = ".json.gz";
-			if (additionalLex.use()) {
-				suffix = "_" + additionalLex.toString() + suffix;
-			}
-			return Paths.get(cacheDir, ifg + suffix);
-		}
-	}
-
 	public static class TrainingResource {
 		public String evaluation = "", model = "", training = "", result = "";
 		public List<JsonObject> features = new ArrayList<>();
@@ -55,7 +41,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		public String model;
 		public boolean runLE = false; // set
 		public boolean runDM = false; // set
-		public Profiler profiler = new Profiler(); // set
+		public ConfigProfiler profiler = new ConfigProfiler(); // set
 		public String dir; // set
 		public List<JsonObject> leFeatures = new ArrayList<>(); // set
 		public List<JsonObject> rrFeatures = new ArrayList<>(); // set
@@ -239,47 +225,9 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	}
 
 	private Profile openProfile(String ifg, List<Page> pages, AdditionalLexicon additionalLex) throws Exception {
-		Path cached = parameter.profiler.getCacheFilePath(ifg, additionalLex);
-		if (parameter.profiler.cacheDir == null || "".equals(parameter.profiler.cacheDir)) {
-			cached = null;
-		}
-		return openProfileMaybeCached(cached, pages, additionalLex);
-	}
-
-	private Profile openProfileMaybeCached(Path cached, List<Page> pages, AdditionalLexicon additionalLex) throws Exception {
-		if (cached != null && !"".equals(cached.toString()) && cached.toFile().exists()) {
-			Logger.debug("opening cached profile: {}", cached.toString());
-			return new FileProfiler(cached).profile();
-		}
-		if (cached != null && cached.getParent().toFile().mkdirs()) {
-			Logger.debug("created cache directory {}", cached.getParent().toString());
-		}
-		Profile profile = getProfiler(pages, additionalLex).profile();
-		Logger.debug("loaded {} profiler types", profile.entrySet().size());
-		if (cached == null || "".equals(cached.toString())) {
-			return profile;
-		}
-		Charset utf8 = StandardCharsets.UTF_8;
-		Logger.debug("caching profile: {}", cached.toString());
-		try (Writer w = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(cached.toFile())), utf8))) {
-			w.write(profile.toJSON());
-			w.write('\n');
-		}
-		return profile;
-	}
-
-	private de.lmu.cis.ocrd.profile.Profiler getProfiler(List<Page> pages, AdditionalLexicon additionalLex) throws Exception {
-		if (parameter.profiler.path.toLowerCase().endsWith(".json") || parameter.profiler.path.toLowerCase().endsWith(".gz")) {
-			Logger.debug("using a file profiler: {}", parameter.profiler.path);
-			return new FileProfiler(Paths.get(parameter.profiler.path));
-		}
-		if (parameter.profiler.path.toLowerCase().startsWith("http://") || parameter.profiler.path.toLowerCase().startsWith("https://")) {
-			throw new Exception("profiler type url: not implemented");
-		}
-		Logger.debug("using a local profiler: {} {}", parameter.profiler.path, parameter.profiler.config);
-		return new FileGrpProfiler(pages, new LocalProfilerProcess(
-				Paths.get(parameter.profiler.path),
-				Paths.get(parameter.profiler.config),
-				additionalLex));
+		parameter.profiler.setAlex(additionalLex);
+		parameter.profiler.setPages(pages);
+		parameter.profiler.setInputFileGroup(ifg);
+		return parameter.profiler.profile();
 	}
 }

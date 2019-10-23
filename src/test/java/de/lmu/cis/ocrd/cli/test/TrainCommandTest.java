@@ -4,8 +4,6 @@ import de.lmu.cis.ocrd.cli.*;
 import de.lmu.cis.ocrd.ml.DMProtocol;
 import de.lmu.cis.ocrd.ml.LEProtocol;
 import de.lmu.cis.ocrd.ml.Protocol;
-import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
-import de.lmu.cis.ocrd.profile.FileProfiler;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
 import org.apache.commons.io.FileUtils;
@@ -13,7 +11,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -89,7 +90,9 @@ public class TrainCommandTest {
 			assertThat(exists(cmd.getParameter().dmTraining.training, i), is(true));
 		}
 		// one cached profile for the single input file group
-		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, new NoAdditionalLexicon()).toFile().exists(), is(true));
+		cmd.getParameter().profiler.setAlex(new NoAdditionalLexicon());
+		cmd.getParameter().profiler.setInputFileGroup(inputFileGroupTrain);
+		assertThat(cmd.getParameter().profiler.getCachePath().toFile().exists(), is(true));
 		assertThat(new File(cmd.getParameter().model).exists(), is(true));
 	}
 
@@ -111,8 +114,11 @@ public class TrainCommandTest {
 			assertThat(exists(cmd.getParameter().leTraining.result, i), is(true));
 		}
 		// one cached profile for the single input file group
-		assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, new NoAdditionalLexicon()).toFile().exists(), is(true));
-		Profile profile = new FileProfiler(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupTrain, new NoAdditionalLexicon())).profile();
+		cmd.getParameter().profiler.setAlex(new NoAdditionalLexicon());
+		cmd.getParameter().profiler.setInputFileGroup(inputFileGroupTrain);
+		assertThat(cmd.getParameter().profiler.getCachePath().toFile().exists(), is(true));
+		cmd.getParameter().profiler.path = cmd.getParameter().profiler.getCachePath().toString();
+		Profile profile = cmd.getParameter().profiler.profile();
 		assertThat(profile, notNullValue());
 	}
 
@@ -138,8 +144,11 @@ public class TrainCommandTest {
 			final Path al = AbstractMLCommand.tagPath(cmd.getParameter().leTraining.lexicon, i+1);
 //			Logger.info("al: {}", al.toString());
 //			Logger.info("pr: {}", cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)));
-			assertThat(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, new AdditionalFileLexicon(al)).toFile().exists(), is(true));
-			Profile profile = new FileProfiler(cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, new AdditionalFileLexicon(al))).profile();
+			cmd.getParameter().profiler.setAlex(new NoAdditionalLexicon());
+			cmd.getParameter().profiler.setInputFileGroup(inputFileGroupEval);
+			assertThat(cmd.getParameter().profiler.getCachePath().toFile().exists(), is(true));
+			cmd.getParameter().profiler.path = cmd.getParameter().profiler.getCachePath().toString();
+			Profile profile = cmd.getParameter().profiler.profile();
 			assertThat(profile, notNullValue());
 		}
 	}
