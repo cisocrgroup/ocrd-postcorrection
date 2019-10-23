@@ -39,7 +39,7 @@ public class DMProtocol implements Protocol {
 
     @Override
     public void protocol(OCRToken token, String correction, double confidence, boolean taken) {
-        Logger.debug("putting token into le protocol: {} {} {} {}", token, correction, confidence, taken);
+        Logger.debug("putting token into dm protocol: {} {} {} {}", token, correction, confidence, taken);
         final OCRWord word = token.getMasterOCR();
         final ProtocolValue val = new ProtocolValue();
         val.normalized = word.getWordNormalized().toLowerCase();

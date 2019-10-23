@@ -135,6 +135,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		final Instance instance = new DenseInstance(n);
 		instance.setDataset(structure);
 		instances.put(n, instance);
+		Logger.debug("structure:\n{}", structure.toString());
 		return setupInstance(instances.get(n), features);
 	}
 }
