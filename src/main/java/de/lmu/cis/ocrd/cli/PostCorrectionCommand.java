@@ -67,14 +67,9 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 .add(new DMBestRankFeature("dm-best-rank", rankings))
                 .add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings));
         final LogisticClassifier c = LogisticClassifier.load(model.openDMModel(getParameter().nOCR-1));
-        for (Map<OCRToken, List<Ranking>>.Entry entry : rankings) {
+		for (Map.Entry<OCRToken, List<Ranking>> entry : rankings.entrySet()) {
 			final OCRToken token = entry.getKey();
             Logger.debug("token {}", token);
-			// Token is already in rankings since we are iterating over the rankings
-            // if (!rankings.containsKey(token)) {
-            //     Logger.debug("not in rankings: {}", token);
-            //     continue;
-            // }
             final Prediction p = c.predict(fs.calculateFeatureVector(token, getParameter().nOCR));
             final boolean prediction = p.getPrediction();
             final Ranking ranking = rankings.get(token).get(0);
@@ -85,7 +80,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                         token.getMasterOCR().toString(), correction, ranking.ranking);
                 token.correct(correction, ranking.ranking);
             }
-        }
+			}
         saveProtocol(protocol, getParameter().dmTraining.protocol);
     }
 
