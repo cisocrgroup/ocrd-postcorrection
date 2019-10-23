@@ -123,7 +123,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 Logger.debug("skipping lexicon entry: {}", token.toString());
                 continue;
             }
-            final FeatureSet.Vector values = fs.calculateFeatureVector(token, getParameter().nOCR); //  -1);
+            final FeatureSet.Vector values = fs.calculateFeatureVector(token, getParameter().nOCR);
             final Prediction p = c.predict(values);
             final boolean prediction = p.getPrediction();
             protocol.protocol(token, "", p.getConfidence(), prediction);
