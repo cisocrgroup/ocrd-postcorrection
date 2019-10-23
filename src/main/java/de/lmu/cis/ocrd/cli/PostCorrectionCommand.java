@@ -59,19 +59,22 @@ public class PostCorrectionCommand extends AbstractMLCommand {
     private void runDM(String ifg, Map<OCRToken, List<Ranking>> rankings, AdditionalLexicon alex) throws Exception {
         Logger.info("running decision maker step: {} ({})", ifg, getParameter().nOCR);
         final Protocol protocol = new DMProtocol();
-        final List<OCRToken> tokens = readOCRTokens(workspace.getMETS(), ifg, alex);
-        Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);
-        lm.setTokens(tokens);
+		// Is done in previous rr step
+        // final List<OCRToken> tokens = readOCRTokens(workspace.getMETS(), ifg, alex);
+        // Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);
+        // lm.setTokens(tokens);
         final FeatureSet fs = new FeatureSet()
                 .add(new DMBestRankFeature("dm-best-rank", rankings))
                 .add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings));
         final LogisticClassifier c = LogisticClassifier.load(model.openDMModel(getParameter().nOCR-1));
-        for (OCRToken token : tokens) {
+        for (Map<OCRToken, List<Ranking>>.Entry entry : rankings) {
+			final OCRToken token = entry.getKey();
             Logger.debug("token {}", token);
-            if (!rankings.containsKey(token)) {
-                Logger.debug("not in rankings: {}", token);
-                continue;
-            }
+			// Token is already in rankings since we are iterating over the rankings
+            // if (!rankings.containsKey(token)) {
+            //     Logger.debug("not in rankings: {}", token);
+            //     continue;
+            // }
             final Prediction p = c.predict(fs.calculateFeatureVector(token, getParameter().nOCR));
             final boolean prediction = p.getPrediction();
             final Ranking ranking = rankings.get(token).get(0);
