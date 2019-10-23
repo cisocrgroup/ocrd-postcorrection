@@ -107,6 +107,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 rankings.get(token).sort(Comparator.comparingDouble(lhs -> lhs.ranking));
             }
         }
+        Logger.debug("re-ranked {} candidates", rankings.size());
         return rankings;
     }
 
