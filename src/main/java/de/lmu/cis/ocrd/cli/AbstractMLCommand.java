@@ -247,7 +247,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 	}
 
 	private Profile openProfileMaybeCached(Path cached, List<Page> pages, AdditionalLexicon additionalLex) throws Exception {
-		if (cached != null && cached.toFile().exists()) {
+		if (cached != null && !"".equals(cached.toString()) && cached.toFile().exists()) {
 			Logger.debug("opening cached profile: {}", cached.toString());
 			return new FileProfiler(cached).profile();
 		}
