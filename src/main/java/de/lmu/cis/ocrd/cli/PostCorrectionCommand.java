@@ -67,7 +67,9 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 .add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings));
         final LogisticClassifier c = LogisticClassifier.load(model.openDMModel(getParameter().nOCR-1));
         for (OCRToken token : tokens) {
+            Logger.debug("token {}", token);
             if (!rankings.containsKey(token)) {
+                Logger.debug("not in rankings: {}", token);
                 continue;
             }
             final Prediction p = c.predict(fs.calculateFeatureVector(token, getParameter().nOCR));
