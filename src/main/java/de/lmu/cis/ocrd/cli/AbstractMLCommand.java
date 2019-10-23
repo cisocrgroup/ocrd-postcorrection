@@ -255,10 +255,11 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 			Logger.debug("created cache directory {}", cached.getParent().toString());
 		}
 		Profile profile = getProfiler(pages, additionalLex).profile();
-		Charset utf8 = StandardCharsets.UTF_8;
-		if (cached == null) {
+		Logger.debug("loaded {} profiler types", profile.entrySet().size());
+		if (cached == null || "".equals(cached.toString())) {
 			return profile;
 		}
+		Charset utf8 = StandardCharsets.UTF_8;
 		Logger.debug("caching profile: {}", cached.toString());
 		try (Writer w = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(cached.toFile())), utf8))) {
 			w.write(profile.toJSON());

@@ -93,6 +93,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final LogisticClassifier c = LogisticClassifier.load(model.openRRModel(getParameter().nOCR-1));
         Map<OCRToken, List<Ranking>> rankings = new HashMap<>();
         for (OCRToken token : tokens) {
+            Logger.debug("token {} has {} candidates", token, token.getAllProfilerCandidates().size());
             for (Candidate candidate : token.getAllProfilerCandidates()) {
                 if (!rankings.containsKey(token)) {
                     rankings.put(token, new ArrayList<>());
