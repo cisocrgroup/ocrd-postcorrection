@@ -80,7 +80,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                         token.getMasterOCR().toString(), correction, ranking.ranking);
                 token.correct(correction, ranking.ranking);
             }
-			}
+        }
         saveProtocol(protocol, getParameter().dmTraining.protocol);
     }
 
@@ -93,7 +93,10 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final LogisticClassifier c = LogisticClassifier.load(model.openRRModel(getParameter().nOCR-1));
         Map<OCRToken, List<Ranking>> rankings = new HashMap<>();
         for (OCRToken token : tokens) {
-            Logger.debug("token {} has {} candidates", token, token.getAllProfilerCandidates().size());
+            if (token.isLexiconEntry()) {
+                Logger.debug("skipping lexicon entry: {}", token.toString());
+                continue;
+            }
             for (Candidate candidate : token.getAllProfilerCandidates()) {
                 if (!rankings.containsKey(token)) {
                     rankings.put(token, new ArrayList<>());
