@@ -50,7 +50,7 @@ public class TextRegion {
 
 	TextEquiv prependNewTextEquiv() {
 		final TextEquiv te = new TextEquiv(node.getOwnerDocument().createElement("TextEquiv"));
-		node.getFirstChild().insertBefore(te.getNode(), node.getFirstChild());
+		node.insertBefore(te.getNode(), node.getFirstChild());
 		return te;
 	}
 
