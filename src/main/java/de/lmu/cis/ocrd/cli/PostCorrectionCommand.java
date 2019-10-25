@@ -58,7 +58,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
 
     private void runDM(String ifg, Map<OCRToken, List<Ranking>> rankings, AdditionalLexicon alex) throws Exception {
         Logger.info("running decision maker step: {} ({})", ifg, getParameter().nOCR);
-        final Protocol protocol = new DMProtocol();
+        final Protocol protocol = new DMProtocol(rankings);
 		// Is done in previous rr step
         // final List<OCRToken> tokens = readOCRTokens(workspace.getMETS(), ifg, alex);
         // Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);

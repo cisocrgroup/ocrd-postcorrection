@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.ml;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.ml.features.OCRWord;
+import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.util.StringCorrector;
 import org.pmw.tinylog.Logger;
 
@@ -11,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DMProtocol implements Protocol {
@@ -18,6 +20,7 @@ public class DMProtocol implements Protocol {
         String normalized = "";
         String ocr = "";
         String cor = "";
+        List<Ranking> rankings;
         double confidence = 0;
         boolean taken = false;
     }
@@ -27,6 +30,11 @@ public class DMProtocol implements Protocol {
     }
 
     private Protocol protocol = new Protocol();
+    private Map<OCRToken, List<Ranking>> rankings;
+
+    public DMProtocol(Map<OCRToken, List<Ranking>> rankings) {
+        this.rankings = rankings;
+    }
 
     @Override
     public void read(InputStream is) {
@@ -47,6 +55,7 @@ public class DMProtocol implements Protocol {
         val.cor = new StringCorrector(val.ocr).correctWith(correction);
         val.confidence = confidence;
         val.taken = taken;
+        val.rankings = rankings.get(token);
         protocol.corrections.put(token.getMasterOCR().id(), val);
     }
 }

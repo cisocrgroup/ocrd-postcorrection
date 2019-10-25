@@ -19,6 +19,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -174,7 +175,7 @@ public class TrainCommandTest {
 		assertThat(Paths.get(tmp.toString(), "le-protocol.json").toFile().exists(), is(true));
 		checkReadProtocol(new LEProtocol(), Paths.get(tmp.toString(), "le-protocol.json"));
 		assertThat(Paths.get(tmp.toString(), "dm-protocol.json").toFile().exists(), is(true));
-		checkReadProtocol(new DMProtocol(), Paths.get(tmp.toString(), "dm-protocol.json"));
+		checkReadProtocol(new DMProtocol(new HashMap<>()), Paths.get(tmp.toString(), "dm-protocol.json"));
 	}
 
 	private void checkReadProtocol(Protocol protocol, Path path) throws Exception {
