@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.align;
 
+import java.util.Objects;
+
 public class LabelPos {
 	private final int id;
 	private Label label;
@@ -16,6 +18,11 @@ public class LabelPos {
 			this.label = this.label.next(this.id);
 			this.pos = 0;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, label, pos);
 	}
 
 	// Compare LabelPos based on the label and the position.

@@ -100,9 +100,7 @@ public class Util {
 
 		ArrayList result = new ArrayList();
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF8"));
-
-		try {
+		try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF8"))) {
 			File f = new File(filename);
 			// byte[] fileBytes = readBytes(f);
 
@@ -117,15 +115,8 @@ public class Util {
 			for (int i = strarray.length - 1; i >= 0; i--) {
 				result.add("#" + strarray[i].trim() + "$");
 			}
-
-		} finally {
-			br.close();
 		}
-
-		// for(int i=0;i<result.size();i++) System.out.println(" x"+result.get(i));
-
 		return result;
-
 	}
 
 	public static byte[] readBytes(File file) {

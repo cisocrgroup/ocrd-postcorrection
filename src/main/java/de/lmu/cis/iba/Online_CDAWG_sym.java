@@ -539,8 +539,8 @@ public class Online_CDAWG_sym extends IndexStructure {
 
 	int get_letter(int pos, int stringnr) {
 
-		Character letter = stringset.get(stringnr).charAt(pos);
-		return utf8_sequence_map.get(letter.toString());
+		char letter = stringset.get(stringnr).charAt(pos);
+		return utf8_sequence_map.get(Character.toString(letter));
 	}
 
 	// *******************************************************************************
