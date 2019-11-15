@@ -131,4 +131,14 @@ public class TokenAlignmentTest extends de.lmu.cis.ocrd.test.Test {
 		final TokenAlignment tokens = new TokenAlignment(a).add(b);
 		assertThat(tokens.size(), is(6));
 	}
+
+	@Test
+	public void testOverlap() {
+		final String a = "diee Presse";
+		final String b = "die Preſſe";
+		final TokenAlignment tokens = new TokenAlignment(a).add(b);
+		assertThat(tokens.size(), is(2));
+		assertThat(tokens.get(0).toString(), is("diee|die"));
+		assertThat(tokens.get(1).toString(), is("Presse|Preſſe"));
+	}
 }
