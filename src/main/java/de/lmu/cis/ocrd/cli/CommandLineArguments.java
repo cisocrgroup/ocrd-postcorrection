@@ -158,11 +158,11 @@ public class CommandLineArguments {
         }
         final String optArg = getParameter();
         if (!isReadableFile(optArg) && optArg.length() > 0 && optArg.charAt(0) == '{') {
-            Logger.debug("parsing parameter as inline json");
+            Logger.debug("parsing parameters as inline json");
             return new Gson().fromJson(optArg, typeOfT);
         }
         try(Reader r = new FileReader(optArg)) {
-            Logger.debug("reading parameter as file");
+            Logger.debug("reading parameters as file");
             return new Gson().fromJson(r, typeOfT);
         }
     }
