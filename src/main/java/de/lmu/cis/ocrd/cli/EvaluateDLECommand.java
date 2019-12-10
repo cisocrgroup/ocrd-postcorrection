@@ -28,6 +28,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
+		config.setCommand(this);
 		final METS mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		setParameter(config);
 		final LM lm = new LM(Paths.get(getParameter().trigrams));

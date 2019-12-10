@@ -19,6 +19,7 @@ public class TokenizerCommand implements Command {
     }
     @Override
     public void execute(CommandLineArguments config) throws Exception {
+        config.setCommand(this);
         final METS mets = METS.open(Paths.get(config.mustGetMETSFile()));
         final String ofg = config.mustGetSingleOutputFileGroup();
         final Parameter parameter = config.mustGetParameter(Parameter.class);

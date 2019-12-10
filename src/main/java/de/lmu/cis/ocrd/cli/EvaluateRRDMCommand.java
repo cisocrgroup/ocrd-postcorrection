@@ -40,6 +40,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
+		config.setCommand(this);
 		setParameter(config);
 		debug = "debug".equals(config.getLogLevel().toLowerCase());
 		lm = new LM(Paths.get(getParameter().trigrams));
