@@ -5,5 +5,5 @@ import de.lmu.cis.ocrd.ml.features.OCRToken;
 import java.util.List;
 
 public interface TokenReader {
-    List<OCRToken> readTokens(boolean candidateTokens) throws Exception;
+    List<OCRToken> readTokens() throws Exception;
 }

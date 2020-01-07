@@ -44,8 +44,8 @@ public class Trainer {
                 .writeHeader(n);
     }
 
-    public void prepare(String ifg, int n, boolean candidateTokens) throws Exception {
-        final List<OCRToken> tokens = readTokens(ifg, candidateTokens);
+    public void prepare(String ifg, int n) throws Exception {
+        final List<OCRToken> tokens = readTokens(ifg);
         lm.setTokens(tokens);
         for (OCRToken token : tokens) {
             arffWriter.writeToken(token, n);
@@ -58,13 +58,13 @@ public class Trainer {
         classifier.save(bin);
     }
 
-    private List<OCRToken> readTokens(String ifg, boolean candidateTokens) throws Exception {
+    private List<OCRToken> readTokens(String ifg) throws Exception {
         if (tokenReaders == null) {
             this.tokenReaders = new HashMap<>();
         }
         if (!tokenReaders.containsKey(ifg)) {
             tokenReaders.put(ifg, tokenReaderFactory.create(ifg));
         }
-        return tokenReaders.get(ifg).readTokens(candidateTokens);
+        return tokenReaders.get(ifg).readTokens();
     }
 }

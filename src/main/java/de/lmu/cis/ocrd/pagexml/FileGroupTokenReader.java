@@ -2,20 +2,19 @@ package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.ml.TokenReader;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
-import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
 
 import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class FileGroupTokenReader implements TokenReader {
     private final METS mets;
     private final String ifg;
     private  Profile profile;
     private List<Word> xmlWords;
+    private List<OCRToken> tokens;
     private int nOCR;
     private int maxCandidates;
     private boolean gt;
@@ -46,7 +45,14 @@ public class FileGroupTokenReader implements TokenReader {
     }
 
     @Override
-    public List<OCRToken> readTokens(boolean candidateTokens) throws Exception {
+    public List<OCRToken> readTokens() throws Exception {
+        if (tokens == null) {
+            tokens = doReadTokens();
+        }
+        return tokens;
+    }
+
+    private List<OCRToken> doReadTokens() throws Exception {
         ArrayList<OCRToken> tokens = new ArrayList<>();
         for (Word word : readWords()) {
             final List<String> unicodeNormalized = word.getUnicodeNormalized();
@@ -57,30 +63,14 @@ public class FileGroupTokenReader implements TokenReader {
             if (mOCR.length() <= 3) {
                 continue;
             }
-            append(tokens, word, candidateTokens);
+            final List<TextEquiv> te = word.getTextEquivs();
+            // skip token if gt is needed and the word does not have a text equiv with gt.
+            if (gt && nOCR >= te.size()) {
+                continue;
+            }
+            tokens.add(new OCRTokenImpl(word, nOCR, maxCandidates, profile));
         }
         return tokens;
-    }
-
-    private void append(List<OCRToken> tokens, Word word, boolean candidateTokens) throws Exception {
-        final List<TextEquiv> te = word.getTextEquivs();
-        // skip token if gt is needed and the word does not have a text equiv with gt.
-        if (gt && nOCR >= te.size()) {
-            return;
-        }
-
-        final OCRToken token = new OCRTokenImpl(word, nOCR, maxCandidates, profile);
-        if (candidateTokens) {
-            Optional<Candidates> candidates = profile.get(token.getMasterOCR().toString().toLowerCase());
-            if (!candidates.isPresent()) {
-                return;
-            }
-            for (int i = 0; i < candidates.get().Candidates.size() && i < maxCandidates; i++) {
-                tokens.add(new OCRTokenWithCandidateImpl(token, candidates.get().Candidates.get(i)));
-            }
-        } else {
-            tokens.add(token);
-        }
     }
 
     public List<Word> readWords() throws Exception {
