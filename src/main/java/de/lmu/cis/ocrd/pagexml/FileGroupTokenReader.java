@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.ml.TokenReader;
-import de.lmu.cis.ocrd.ml.TokenReaderFactory;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.profile.Profile;
 
@@ -95,18 +94,4 @@ public class FileGroupTokenReader implements TokenReader {
         }
         return words;
     }
-
-    public static class Factory implements TokenReaderFactory {
-        private final METS mets;
-
-        public Factory(METS mets) {
-            this.mets = mets;
-        }
-
-        @Override
-        public TokenReader create(String ifg) {
-            return new FileGroupCandidateTokenReader(mets, ifg);
-        }
-    }
-
 }
