@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
+import de.lmu.cis.ocrd.pagexml.OCRTokenWithRankingsImpl;
 import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Workspace;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
@@ -63,12 +64,14 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         // final List<OCRToken> tokens = readOCRTokens(workspace.getMETS(), ifg, alex);
         // Logger.debug("read {} OCR tokens from input file group {}", tokens.size(), ifg);
         // lm.setTokens(tokens);
-        final FeatureSet fs = new FeatureSet()
-                .add(new DMBestRankFeature("dm-best-rank", rankings))
-                .add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings));
+        final FeatureSet fs = FeatureFactory.getDefault()
+			.withArgumentFactory(lm)
+			.createFeatureSet(getParameter().dmTraining.features, getFeatureClassFilter())
+			.add(new DMBestRankFeature("dm-best-rank"))
+			.add(new DMDifferenceToNextRankFeature("dm-difference-to-next"));
         final LogisticClassifier c = LogisticClassifier.load(model.openDMModel(getParameter().nOCR-1));
 		for (Map.Entry<OCRToken, List<Ranking>> entry : rankings.entrySet()) {
-			final OCRToken token = entry.getKey();
+			final OCRToken token = new OCRTokenWithRankingsImpl(entry.getKey(), entry.getValue());
             Logger.debug("token {}", token);
             final Prediction p = c.predict(fs.calculateFeatureVector(token, getParameter().nOCR));
             final boolean prediction = p.getPrediction();

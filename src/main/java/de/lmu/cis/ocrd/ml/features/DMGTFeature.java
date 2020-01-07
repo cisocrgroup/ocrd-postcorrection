@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import java.util.List;
-import java.util.Map;
 
 // Classifies OCR tokens into one of two different classes:
 // * true        if the best ranked correction candidate equals the ground truth
@@ -14,11 +13,9 @@ public class DMGTFeature extends NamedFeature {
 	private final static String TRUE = Boolean.toString(true);
 	private final static String DO_NOT_CARE = "do-not-care";
 	private final static String FALSE = Boolean.toString(false);
-	private Map<OCRToken, List<Ranking>> rankings;
 
-	public DMGTFeature(String name, Map<OCRToken, List<Ranking>> rankings) {
+	public DMGTFeature(String name) {
 		super(name);
-		this.rankings = rankings;
 	}
 
 	@Override
@@ -36,8 +33,7 @@ public class DMGTFeature extends NamedFeature {
 	@Override
 	public Object calculate(OCRToken token, int i, int n) {
 		assert(handlesOCR(i, n));
-		assert(rankings.containsKey(token));
-		List<Ranking> rs = rankings.get(token);
+		final List<Ranking> rs = token.getRankings();
 		assert(!rs.isEmpty());
 
 		final String gt = token.getGT().orElse("");
@@ -56,9 +52,10 @@ public class DMGTFeature extends NamedFeature {
 	// Returns true if the given token should be used for the DM-training.
 	// This is not the case if a wrong w_ocr has wrong correction suggestion (in this case
 	// it does not matter if the w_ocr is corrected or not).
-	public static boolean isValidForTraining(OCRToken token, Map<OCRToken, List<Ranking>> rankings) {
+	public static boolean isValidForTraining(OCRToken token) {
+		assert(!token.getRankings().isEmpty());
 		if (!token.ocrIsCorrect()) {
-			return rankings.get(token).get(0).candidate.Suggestion.equalsIgnoreCase(token.getGT().orElse(""));
+			return token.getRankings().get(0).candidate.Suggestion.equalsIgnoreCase(token.getGT().orElse(""));
 		}
 		return true;
 	}

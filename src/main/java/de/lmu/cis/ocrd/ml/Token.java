@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.Word;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 
 import java.io.Serializable;
@@ -47,6 +48,11 @@ public class Token implements Serializable, OCRToken {
 	@Override
 	public Optional<String> getGT() {
 		return Optional.ofNullable(gt);
+	}
+
+	@Override
+	public List<Ranking> getRankings() {
+		return new ArrayList<>();
 	}
 
 	public boolean isCorrectToken() {

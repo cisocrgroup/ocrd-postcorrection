@@ -16,6 +16,9 @@ public interface OCRToken {
 	OCRWord getSlaveOCR(int i);
 	// Get the GT string (if it exists).
 	Optional<String> getGT();
+	// Get the rankings for the token.  If there are none, returns an
+	// empty list.
+	List<Ranking> getRankings();
 	// Get Candidate of an RR ocr token.
 	Optional<Candidate> getProfilerCandidate();
 	// Get list of candidates.

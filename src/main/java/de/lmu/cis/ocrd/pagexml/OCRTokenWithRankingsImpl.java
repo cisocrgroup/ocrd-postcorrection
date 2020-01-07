@@ -5,17 +5,20 @@ import de.lmu.cis.ocrd.ml.features.OCRWord;
 import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 
-public class OCRTokenWithCandidateImpl implements OCRToken {
+public class OCRTokenWithRankingsImpl implements OCRToken {
+	private final List<Ranking>rankings;
 	private final Candidate candidate;
 	private final OCRToken token;
 
-	public OCRTokenWithCandidateImpl(OCRToken token, Candidate c) {
+	public OCRTokenWithRankingsImpl(OCRToken token, List<Ranking> rs) {
+		assert(!rs.isEmpty());
 		this.token = token;
-		this.candidate = c;
+		this.rankings = rs;
+		this.candidate = rs.get(0).candidate;
 	}
 
 	@Override
@@ -40,7 +43,7 @@ public class OCRTokenWithCandidateImpl implements OCRToken {
 
 	@Override
 	public List<Ranking> getRankings() {
-		return new ArrayList<>();
+		return rankings;
 	}
 
 	@Override
@@ -70,7 +73,17 @@ public class OCRTokenWithCandidateImpl implements OCRToken {
 
 	@Override
 	public String toString() {
-		return String.format("%s,suggestion:%s,hist:%d,ocr:%d", token.toString(), candidate.Suggestion,
-				candidate.HistPatterns.length, candidate.OCRPatterns.length);
+		return String.format("%s,suggestion:%s,hist:%d,ocr:%d,rs:%s",
+							 token.toString(), candidate.Suggestion,
+							 candidate.HistPatterns.length, candidate.OCRPatterns.length,
+							 rankingsToString());
+	}
+
+	private String rankingsToString() {
+		StringJoiner sj = new StringJoiner(",", "[", "]");
+		for (Ranking ranking : rankings) {
+			sj.add(Double.toString(ranking.ranking));
+		}
+		return sj.toString();
 	}
 }

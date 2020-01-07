@@ -1,23 +1,19 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import org.pmw.tinylog.Logger;
-
 import java.util.List;
-import java.util.Map;
 
 public class DMDifferenceToNextRankFeature extends NamedDoubleFeature {
-    private Map<OCRToken, List<Ranking>> rankings;
-    public DMDifferenceToNextRankFeature(String name, Map<OCRToken, List<Ranking>> rankings) {
+    public DMDifferenceToNextRankFeature(String name) {
         super(name);
-        this.rankings = rankings;
     }
 
     @Override
     protected double doCalculate(OCRToken token, int i, int n) {
-        assert(rankings.containsKey(token));
-        List<Ranking> rs = rankings.get(token);
-        assert(!rs.isEmpty());
+     		assert(handlesOCR(i, n));
+		final List<Ranking> rs = token.getRankings();
+		assert(!rs.isEmpty());
         double before = Double.MAX_VALUE;
+		// make sure that we have ordered rankings
         for (Ranking r : rs) {
             assert(r.ranking < before);
         }
@@ -26,7 +22,6 @@ public class DMDifferenceToNextRankFeature extends NamedDoubleFeature {
             second = rs.get(1).ranking;
         }
         final double result = rs.get(0).ranking - second;
-        Logger.debug("{} result = {}", getName(), result);
         return result;
     }
 

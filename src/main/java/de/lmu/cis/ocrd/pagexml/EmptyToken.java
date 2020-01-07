@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.pagexml;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.ml.features.OCRWord;
+import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 
 import java.util.ArrayList;
@@ -33,6 +34,11 @@ public class EmptyToken implements OCRToken {
 	@Override
 	public Optional<String> getGT() {
 		return Optional.empty();
+	}
+
+	@Override
+	public List<Ranking> getRankings() {
+		return new ArrayList<>();
 	}
 
 	@Override

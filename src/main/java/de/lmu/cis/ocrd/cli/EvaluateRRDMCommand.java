@@ -7,6 +7,7 @@ import de.lmu.cis.ocrd.ml.LogisticClassifier;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
+import de.lmu.cis.ocrd.pagexml.OCRTokenWithRankingsImpl;
 import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Candidate;
@@ -85,10 +86,12 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
     }
 
     private void evaluateDM(String[] ifgs, int i, boolean useAlex) throws Exception {
-		FeatureSet dmFS = new FeatureSet()
-				.add(new DMBestRankFeature("dm-best-rank", null))
-				.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", null))
-				.add(new DMGTFeature("dm-gt", null));
+		FeatureSet dmFS = FeatureFactory.getDefault()
+				.withArgumentFactory(lm)
+				.createFeatureSet(getParameter().dmTraining.features, getFeatureClassFilter())
+				.add(new DMBestRankFeature("dm-best-rank"))
+				.add(new DMDifferenceToNextRankFeature("dm-difference-to-next"))
+				.add(new DMGTFeature("dm-gt"));
 		final String suffix = useAlex? "" : "_no_dle";
         try (ARFFWriter w = ARFFWriter
                 .fromFeatureSet(dmFS)
@@ -110,17 +113,24 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 				Logger.debug("read {} OCR tokens with GT from input file group {}", tokens.size(), ifg);
                 lm.setTokens(tokens);
                 Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
-				dmFS = new FeatureSet()
-						.add(new DMBestRankFeature("dm-best-rank", rankings))
-						.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
-						.add(new DMGTFeature("dm-gt", rankings));
+				// TODO: is this really needed?
+                dmFS = FeatureFactory.getDefault()
+						.withArgumentFactory(lm)
+						.createFeatureSet(getParameter().dmTraining.features, getFeatureClassFilter())
+						.add(new DMBestRankFeature("dm-best-rank"))
+						.add(new DMDifferenceToNextRankFeature("dm-difference-to-next"))
+						.add(new DMGTFeature("dm-gt"));
                 dmEvaluator = new DMEvaluator(rankings, i);
 				for (OCRToken token : tokens) {
 					dmEvaluator.register(token);
-					if (!rankings.containsKey(token)) {
+					if (!rankings.containsKey(token) || rankings.get(token).isEmpty()) {
 						continue;
 					}
-					w.writeTokenWithFeatureSet(token, dmFS,i+1);
+					final OCRToken rankedToken = new OCRTokenWithRankingsImpl(token, rankings.get(token));
+					if (!DMGTFeature.isValidForTraining(rankedToken)) {
+						continue;
+					}
+					w.writeTokenWithFeatureSet(rankedToken, dmFS, i + 1);
 				}
             }
         }

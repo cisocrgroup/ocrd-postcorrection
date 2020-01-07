@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.ml.features.OCRWord;
+import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
@@ -80,6 +81,11 @@ public class OCRTokenImpl implements OCRToken {
 			return Optional.empty();
 		}
 		return Optional.of(words.get(gtIndex).getWordNormalized());
+	}
+
+	@Override
+	public List<Ranking> getRankings() {
+		return new ArrayList<>();
 	}
 
 	@Override

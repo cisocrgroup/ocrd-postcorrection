@@ -7,6 +7,7 @@ import de.lmu.cis.ocrd.ml.ModelZIP;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
+import de.lmu.cis.ocrd.pagexml.OCRTokenWithRankingsImpl;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import org.pmw.tinylog.Logger;
@@ -147,10 +148,12 @@ public class TrainCommand extends AbstractMLCommand {
 			instances.setClassIndex(instances.numAttributes() - 1);
 			final Iterator<Instance> is = instances.iterator();
 
-			dmFS = new FeatureSet()
-					.add(new DMBestRankFeature("dm-best-rank", null))
-					.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", null))
-					.add(new DMGTFeature("dm-gt", null));
+			dmFS = FeatureFactory.getDefault()
+				.withArgumentFactory(lm)
+				.createFeatureSet(getParameter().dmTraining.features, getFeatureClassFilter())
+				.add(new DMBestRankFeature("dm-best-rank"))
+				.add(new DMDifferenceToNextRankFeature("dm-difference-to-next"))
+				.add(new DMGTFeature("dm-gt"));
 			// arff writer only needs names and types of the features.
 			// the feature set is recalculated for each file group
 			dmw = ARFFWriter
@@ -164,18 +167,23 @@ public class TrainCommand extends AbstractMLCommand {
 				final List<OCRToken> tokens = readTokensWithGT(mets, ifg, new NoAdditionalLexicon());
 				final Map<OCRToken, List<Ranking>> rankings = calculateRankings(tokens, is, c);
 				Logger.debug("read {} OCR tokens with GT from input file group {}", tokens.size(), ifg);
-				dmFS = new FeatureSet()
-						.add(new DMBestRankFeature("dm-best-rank", rankings))
-						.add(new DMDifferenceToNextRankFeature("dm-difference-to-next", rankings))
-						.add(new DMGTFeature("dm-gt", rankings));
+				// TODO: is this really needed?
+				dmFS = FeatureFactory.getDefault()
+					.withArgumentFactory(lm)
+					.createFeatureSet(getParameter().dmTraining.features, getFeatureClassFilter())
+					.add(new DMBestRankFeature("dm-best-rank"))
+					.add(new DMDifferenceToNextRankFeature("dm-difference-to-next"))
+					.add(new DMGTFeature("dm-gt"));
 				Logger.debug("input file group (dm): {}", ifg);
 				for (OCRToken token: tokens) {
-					if (!rankings.containsKey(token)) {
+					if (!rankings.containsKey(token) || rankings.get(token).isEmpty()) {
 						continue;
 					}
-					if (DMGTFeature.isValidForTraining(token, rankings)) {
-						dmw.writeTokenWithFeatureSet(token, dmFS, i + 1);
+					final OCRToken rankedToken = new OCRTokenWithRankingsImpl(token, rankings.get(token));
+					if (!DMGTFeature.isValidForTraining(rankedToken)) {
+						continue;
 					}
+					dmw.writeTokenWithFeatureSet(rankedToken, dmFS, i + 1);
 				}
 			}
 			dmw.close();

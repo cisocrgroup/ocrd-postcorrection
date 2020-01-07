@@ -76,7 +76,7 @@ public class EvaluateDLECommand extends AbstractMLCommand {
 				new FileOutputStream(dlePath.toFile()),
 				StandardCharsets.UTF_8)) {
 			for (OCRToken token : tokens) {
-				if (token.isLexiconEntry()) {
+				if (token.getProfilerCandidate().isPresent() && token.getProfilerCandidate().get().isLexiconEntry()) {
 					Logger.debug("skipping lexicon entry: {}", token.toString());
 					continue;
 				}
