@@ -9,10 +9,10 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class FileGrpProfiler extends AbstractProfiler {
+public class FileGroupProfiler extends AbstractProfiler {
     private final List<Page> pages;
 
-    public FileGrpProfiler(List<Page> pages, ProfilerProcess profiler) {
+    public FileGroupProfiler(List<Page> pages, ProfilerProcess profiler) {
         super(profiler);
         this.pages = pages;
         Logger.debug("FileGrpProfiler pages: {}", pages.size());

@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.cli;
 
-import de.lmu.cis.ocrd.pagexml.FileGrpProfiler;
+import de.lmu.cis.ocrd.pagexml.FileGroupProfiler;
 import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.profile.*;
 import org.pmw.tinylog.Logger;
@@ -74,6 +74,6 @@ public class ConfigProfiler implements Profiler {
             throw new Exception("profiler type url: not implemented");
         }
         Logger.debug("using a local profiler: {} {}", path, config);
-        return new FileGrpProfiler(pages, new LocalProfilerProcess(Paths.get(path), Paths.get(config), alex));
+        return new FileGroupProfiler(pages, new LocalProfilerProcess(Paths.get(path), Paths.get(config), alex));
     }
 }

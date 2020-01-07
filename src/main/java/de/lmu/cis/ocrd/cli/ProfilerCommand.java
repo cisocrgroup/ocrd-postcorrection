@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.cli;
 
-import de.lmu.cis.ocrd.pagexml.FileGrpProfiler;
+import de.lmu.cis.ocrd.pagexml.FileGroupProfiler;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Workspace;
@@ -50,7 +50,7 @@ public class ProfilerCommand extends AbstractIOCommand {
 				pages.add(Page.parse(Paths.get(file.getFLocat()), is));
 			}
 		}
-		return new FileGrpProfiler(pages, makeProfilerProcess());
+		return new FileGroupProfiler(pages, makeProfilerProcess());
 	}
 
 	private ProfilerProcess makeProfilerProcess() {
