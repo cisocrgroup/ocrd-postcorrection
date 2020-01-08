@@ -82,7 +82,7 @@ public class OCRTokenWithRankingsImpl implements OCRToken {
 	private String rankingsToString() {
 		StringJoiner sj = new StringJoiner(",", "[", "]");
 		for (Ranking ranking : rankings) {
-			sj.add(Double.toString(ranking.ranking));
+			sj.add(ranking.candidate + ":" + Double.toString(ranking.ranking));
 		}
 		return sj.toString();
 	}
