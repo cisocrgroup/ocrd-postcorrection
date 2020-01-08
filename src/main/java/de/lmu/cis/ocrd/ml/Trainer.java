@@ -39,9 +39,10 @@ public class Trainer {
     public void prepare(TokenReader tokenReader, int n) throws Exception {
         final List<OCRToken> tokens = tokenReader.readTokens();
         lm.setTokens(tokens);
-        for (OCRToken token : tokens) {
+
+        tokens.stream().filter(OCRToken::isLexiconEntry).forEach(token->{
             arffWriter.writeToken(token, n);
-        }
+        });
     }
 
     public void train(Path arff, Path bin) throws Exception {
