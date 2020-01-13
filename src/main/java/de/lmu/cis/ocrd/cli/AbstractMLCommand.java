@@ -48,7 +48,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		public List<JsonObject> rrFeatures = new ArrayList<>(); // set
 		public List<JsonObject> dmFeatures = new ArrayList<>(); // set
 		public String trigrams = ""; // set
-        public List<String> filterClasses; // set
+		public List<String> filterClasses; // set
 		public int nOCR = 0; // set
 		public int maxCandidates = 0; // set
 	}
@@ -71,24 +71,24 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		parameter.model = Paths.get(parameter.dir, "model.zip").toString();
 		parameter.leTraining = new LETrainingResource();
 		parameter.leTraining.lexicon = Paths.get(parameter.dir, "le.txt").toString();
-		parameter.leTraining.evaluation = Paths.get(parameter.dir, "le-eval.arff").toString();
-		parameter.leTraining.result = Paths.get(parameter.dir, "le-result.txt").toString();
-		parameter.leTraining.training = Paths.get(parameter.dir, "le-training.arff").toString();
-		parameter.leTraining.model = Paths.get(parameter.dir, "le-model.bin").toString();
-		parameter.leTraining.protocol = Paths.get(parameter.dir, "le-protocol.json").toString();
+		parameter.leTraining.evaluation = Paths.get(parameter.dir, "le_eval.arff").toString();
+		parameter.leTraining.result = Paths.get(parameter.dir, "le_result.txt").toString();
+		parameter.leTraining.training = Paths.get(parameter.dir, "le_training.arff").toString();
+		parameter.leTraining.model = Paths.get(parameter.dir, "le_model.bin").toString();
+		parameter.leTraining.protocol = Paths.get(parameter.dir, "le_protocol.json").toString();
 		parameter.leTraining.features = parameter.leFeatures;
 		parameter.rrTraining = new TrainingResource();
-		parameter.rrTraining.evaluation = Paths.get(parameter.dir, "rr-eval.arff").toString();
-		parameter.rrTraining.result = Paths.get(parameter.dir, "rr-result.txt").toString();
-		parameter.rrTraining.training = Paths.get(parameter.dir, "rr-training.arff").toString();
-		parameter.rrTraining.model = Paths.get(parameter.dir, "rr-model.bin").toString();
+		parameter.rrTraining.evaluation = Paths.get(parameter.dir, "rr_eval.arff").toString();
+		parameter.rrTraining.result = Paths.get(parameter.dir, "rr_result.txt").toString();
+		parameter.rrTraining.training = Paths.get(parameter.dir, "rr_training.arff").toString();
+		parameter.rrTraining.model = Paths.get(parameter.dir, "rr_model.bin").toString();
 		parameter.rrTraining.features = parameter.rrFeatures;
 		parameter.dmTraining = new ProtocolTrainingResource();
-		parameter.dmTraining.evaluation = Paths.get(parameter.dir, "dm-eval.arff").toString();
-		parameter.dmTraining.result = Paths.get(parameter.dir, "dm-result.txt").toString();
-		parameter.dmTraining.training = Paths.get(parameter.dir, "dm-training.arff").toString();
-		parameter.dmTraining.model = Paths.get(parameter.dir, "dm-model.bin").toString();
-		parameter.dmTraining.protocol = Paths.get(parameter.dir, "dm-protocol.json").toString();
+		parameter.dmTraining.evaluation = Paths.get(parameter.dir, "dm_eval.arff").toString();
+		parameter.dmTraining.result = Paths.get(parameter.dir, "dm_result.txt").toString();
+		parameter.dmTraining.training = Paths.get(parameter.dir, "dm_training.arff").toString();
+		parameter.dmTraining.model = Paths.get(parameter.dir, "dm_model.bin").toString();
+		parameter.dmTraining.protocol = Paths.get(parameter.dir, "dm_protocol.json").toString();
 		parameter.dmTraining.features = parameter.dmFeatures;
 	}
 

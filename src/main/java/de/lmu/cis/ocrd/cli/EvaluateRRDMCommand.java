@@ -122,10 +122,10 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 						.add(new DMGTFeature("dm-gt"));
                 dmEvaluator = new DMEvaluator(rankings, i);
 				for (OCRToken token : tokens) {
-					dmEvaluator.register(token);
 					if (!rankings.containsKey(token) || rankings.get(token).isEmpty()) {
 						continue;
 					}
+					dmEvaluator.register(token);
 					final OCRToken rankedToken = new OCRTokenWithRankingsImpl(token, rankings.get(token));
 					if (!DMGTFeature.isValidForTraining(rankedToken)) {
 						continue;

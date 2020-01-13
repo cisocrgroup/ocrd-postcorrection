@@ -75,7 +75,8 @@ public class PostCorrectionCommand extends AbstractMLCommand {
             Logger.debug("token {}", token);
             final Prediction p = c.predict(fs.calculateFeatureVector(token, getParameter().nOCR));
             final boolean prediction = p.getPrediction();
-            final Ranking ranking = rankings.get(token).get(0);
+            // final Ranking ranking = rankings.get(token).get(0);
+            final Ranking ranking = entry.getValue().get(0);
             final String correction = ranking.candidate.getAsSuggestionFor(token.getMasterOCR().getWordNormalized());
             protocol.protocol(token, correction, p.getConfidence(), prediction);
             if (prediction) {

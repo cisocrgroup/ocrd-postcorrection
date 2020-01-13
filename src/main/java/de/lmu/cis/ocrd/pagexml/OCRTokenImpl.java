@@ -16,7 +16,7 @@ public class OCRTokenImpl implements OCRToken {
 
 	private final Word word;
 	private final List<OCRWordImpl> words;
-	private final List<Candidate> candidates;
+	private List<Candidate> candidates;
 	private final int gtIndex;
 	private final int maxCandidates;
 
@@ -52,6 +52,10 @@ public class OCRTokenImpl implements OCRToken {
 			words.add(new OCRWordImpl(tes.get(0), normLines.get(0), mConfs));
 		}
 		return words;
+	}
+
+	public void setProfile(Profile profile) {
+		this.candidates = getCandidates(profile);
 	}
 
 	@Override

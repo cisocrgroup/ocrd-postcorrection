@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.pagexml;
 
+import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.TokenReader;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.profile.Profile;
@@ -9,39 +10,28 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileGroupTokenReader implements TokenReader {
+public class FileGroupTokenReader implements TokenReader, WordReader {
     private final METS mets;
     private final String ifg;
+    private final Parameters parameters;
     private  Profile profile;
     private List<Word> xmlWords;
     private List<OCRToken> tokens;
-    private int nOCR;
-    private int maxCandidates;
-    private boolean gt;
 
-    public FileGroupTokenReader(METS mets, String ifg) {
+    public FileGroupTokenReader(METS mets, Parameters parameters, String ifg) {
         this.mets = mets;
+        this.parameters = parameters;
         this.ifg = ifg;
     }
 
-    public FileGroupTokenReader withNOCR(int nOCR) {
-        this.nOCR = nOCR;
-        return this;
-    }
-
-    public FileGroupTokenReader withMaxCandidates(int maxCandidates) {
-        this.maxCandidates = maxCandidates;
-        return this;
-    }
-
-    public FileGroupTokenReader withProfile(Profile profile) {
+    public void setProfile(Profile profile) {
         this.profile = profile;
-        return this;
-    }
-
-    public FileGroupTokenReader withGT(boolean gt) {
-        this.gt = gt;
-        return this;
+        // update profile in tokens
+        if (tokens != null) {
+            for (OCRToken token : tokens) {
+                ((OCRTokenImpl) token).setProfile(profile);
+            }
+        }
     }
 
     @Override
@@ -64,15 +54,12 @@ public class FileGroupTokenReader implements TokenReader {
                 continue;
             }
             final List<TextEquiv> te = word.getTextEquivs();
-            // skip token if gt is needed and the word does not have a text equiv with gt.
-            if (gt && nOCR >= te.size()) {
-                continue;
-            }
-            tokens.add(new OCRTokenImpl(word, nOCR, maxCandidates, profile));
+            tokens.add(new OCRTokenImpl(word, parameters.getNOCR(), parameters.getMaxCandidates(), profile));
         }
         return tokens;
     }
 
+    @Override
     public List<Word> readWords() throws Exception {
         if (xmlWords == null) {
             xmlWords = doReadWords();

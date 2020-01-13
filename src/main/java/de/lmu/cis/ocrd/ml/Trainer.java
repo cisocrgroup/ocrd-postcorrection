@@ -1,13 +1,22 @@
 package de.lmu.cis.ocrd.ml;
 
+import de.lmu.cis.ocrd.ml.features.BinaryPrediction;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.features.Ranking;
+import de.lmu.cis.ocrd.profile.Candidate;
+import org.pmw.tinylog.Logger;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils;
 
 import java.io.Writer;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-// Trainer prepares an arff file and trains a model:
+// Trainer prepares an arff file and trains a model; must be called in this sequence:
 // 1. setup the trainer using withLM, withFeatureSet, ...
 // 2. For each n:
 //    1. call openARFFWriter
@@ -39,15 +48,48 @@ public class Trainer {
     public void prepare(TokenReader tokenReader, int n) throws Exception {
         final List<OCRToken> tokens = tokenReader.readTokens();
         lm.setTokens(tokens);
-
-        tokens.stream().filter(OCRToken::isLexiconEntry).forEach(token->{
+        filter(tokens).forEach(token->{
             arffWriter.writeToken(token, n);
         });
     }
 
     public void train(Path arff, Path bin) throws Exception {
+        Logger.info("train({}, {})", arff, bin);
         arffWriter.close();
         LogisticClassifier classifier = LogisticClassifier.train(arff);
         classifier.save(bin);
+    }
+
+    private Stream<OCRToken> filter(List<OCRToken> tokens) {
+        return tokens.stream().filter(OCRToken::isLexiconEntry);
+    }
+
+    public Map<OCRToken, List<Ranking>> getRankings(TokenReader tokenReader, Path rrModel, Path rrTrain) throws Exception {
+        final LogisticClassifier classifier = LogisticClassifier.load(rrModel);
+        final Instances instances = new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
+        instances.setClassIndex(instances.numAttributes() - 1);
+
+        final Iterator<Instance> iis = instances.iterator();
+        final Iterator<OCRToken> tis = filter(tokenReader.readTokens()).collect(Collectors.toList()).iterator();
+        final Map<OCRToken, List<Ranking>> rankings = new HashMap<>();
+        while (iis.hasNext() && tis.hasNext()) {
+            final Instance i = iis.next();
+            final OCRToken t = tis.next();
+            for (Candidate candidate: t.getAllProfilerCandidates()) {
+                final BinaryPrediction p = classifier.predict(i);
+                final double ranking = p.getPrediction() ? p.getConfidence() : -p.getConfidence();
+                if (Double.isNaN(ranking)) {
+                    continue;
+                }
+                if (!rankings.containsKey(t)) {
+                    rankings.put(t, new ArrayList<>());
+                }
+                rankings.get(t).add(new Ranking(candidate, ranking));
+            }
+            if (rankings.containsKey(t)) {
+                rankings.get(t).sort((lhs, rhs) -> Double.compare(rhs.ranking, lhs.ranking));
+            }
+        }
+        return rankings;
     }
 }
