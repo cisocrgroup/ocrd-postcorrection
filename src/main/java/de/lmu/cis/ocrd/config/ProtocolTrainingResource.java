@@ -11,7 +11,7 @@ public class ProtocolTrainingResource extends TrainingResource {
         super(prefix, dir, features);
     }
 
-    Path getProtocol(int n) {
-        return Paths.get(dir, String.format("%s_protocol_%d.txt", prefix, n));
+    public Path getProtocol(int n) {
+        return Paths.get(dir, String.format("%s_protocol_%d.json", prefix, n));
     }
 }

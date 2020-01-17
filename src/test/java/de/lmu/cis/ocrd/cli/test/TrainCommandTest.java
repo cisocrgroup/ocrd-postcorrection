@@ -1,6 +1,8 @@
 package de.lmu.cis.ocrd.cli.test;
 
+import com.google.gson.Gson;
 import de.lmu.cis.ocrd.cli.*;
+import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.DMProtocol;
 import de.lmu.cis.ocrd.ml.LEProtocol;
 import de.lmu.cis.ocrd.ml.Protocol;
@@ -11,10 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -68,6 +67,7 @@ public class TrainCommandTest {
 		evalDLE();
 		evalRRDM();
 		postCorrect();
+		eval();
 	}
 
 	private void train() throws Exception {
@@ -99,20 +99,20 @@ public class TrainCommandTest {
 
 	private void evalDLE() throws Exception {
 		String[] args = {
-			"-c", "eval-dle",
-			"--mets", mets,
-			"--parameter", parameter,
-			"-I", inputFileGroupEval,
-			"--log-level", logLevel,
+				"-c", "eval-dle",
+				"--mets", mets,
+				"--parameter", parameter,
+				"-I", inputFileGroupEval,
+				"--log-level", logLevel,
 		};
 		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
 		EvaluateDLECommand cmd = new EvaluateDLECommand();
 		cmd.execute(cla);
 		// existing files (see above) + 2 lexicon, 2 eval and 2 result files
 		for (int i = 0; i < 2; i++) {
-			assertThat(exists(cmd.getParameter().leTraining.evaluation, i), is(true));
-			assertThat(exists(cmd.getParameter().leTraining.lexicon, i), is(true));
-			assertThat(exists(cmd.getParameter().leTraining.result, i), is(true));
+			assertThat(exists(cmd.getParameter().leTraining.evaluation, i+1), is(true));
+			assertThat(exists(cmd.getParameter().leTraining.lexicon, i+1), is(true));
+			assertThat(exists(cmd.getParameter().leTraining.result, i+1), is(true));
 		}
 		// one cached profile for the single input file group
 		cmd.getParameter().profiler.setAlex(new NoAdditionalLexicon());
@@ -136,12 +136,12 @@ public class TrainCommandTest {
 		cmd.execute(cla);
 		// existing files (see above) + 4 eval and 4 result files (for each rr and dm training) and two profile cache files
 		for (int i = 0; i < 2; i++) {
-			assertThat(exists(cmd.getParameter().rrTraining.evaluation, i), is(true));
-			assertThat(exists(cmd.getParameter().rrTraining.evaluation.replace(".arff", "_no_dle.arff"), i), is(true));
-			assertThat(exists(cmd.getParameter().rrTraining.result, i), is(true));
-			assertThat(exists(cmd.getParameter().rrTraining.result.replace(".txt", "_no_dle.txt"), i), is(true));
-			assertThat(exists(cmd.getParameter().dmTraining.evaluation, i), is(true));
-			assertThat(exists(cmd.getParameter().dmTraining.result, i), is(true));
+			assertThat(exists(cmd.getParameter().rrTraining.evaluation, i+1), is(true));
+			assertThat(exists(cmd.getParameter().rrTraining.evaluation.replace(".arff", "_no_dle.arff"), i+1), is(true));
+			assertThat(exists(cmd.getParameter().rrTraining.result, i+1), is(true));
+			assertThat(exists(cmd.getParameter().rrTraining.result.replace(".txt", "_no_dle.txt"), i+1), is(true));
+			assertThat(exists(cmd.getParameter().dmTraining.evaluation, i+1), is(true));
+			assertThat(exists(cmd.getParameter().dmTraining.result, i+1), is(true));
 			final Path al = AbstractMLCommand.tagPath(cmd.getParameter().leTraining.lexicon, i+1);
 //			Logger.info("al: {}", al.toString());
 //			Logger.info("pr: {}", cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)));
@@ -164,29 +164,59 @@ public class TrainCommandTest {
 				"--log-level", logLevel,
 		};
 		assertThat(Paths.get(model).toFile().exists(), is(true));
-		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-		PostCorrectionCommand cmd = new PostCorrectionCommand();
-		cmd.execute(cla);
-		final Path dir = Paths.get(workspace.toString(), outputFileGroup);
-		assertThat(dir.toFile().exists(), is(true));
-		assertThat(dir.toFile().isDirectory(), is(true));
-		assertThat(numberOfFiles(dir), is(1));
-		assertThat(Paths.get(model).toFile().exists(), is(true));
-		assertThat(Paths.get(tmp.toString(), "le_protocol.json").toFile().exists(), is(true));
-		checkReadProtocol(new LEProtocol(), Paths.get(tmp.toString(), "le_protocol.json"));
-		assertThat(Paths.get(tmp.toString(), "dm_protocol.json").toFile().exists(), is(true));
-		checkReadProtocol(new DMProtocol(new HashMap<>()), Paths.get(tmp.toString(), "dm_protocol.json"));
+		AbstractMLCommand.Parameter parameter;
+		try (Reader r = new FileReader(Paths.get(this.parameter).toFile())) {
+			parameter = new Gson().fromJson(r, AbstractMLCommand.Parameter.class);
+		}
+		for (int i = 0; i < 2; i++) {
+			parameter.nOCR = i + 1;
+			args[5] = new Gson().toJson(parameter); // set parameter as inline json string
+            CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
+			PostCorrectionCommand cmd = new PostCorrectionCommand();
+			cmd.execute(cla);
+			assertThat(cmd.getParameter().nOCR, is(parameter.nOCR));
+			final Path dir = Paths.get(workspace.toString(), outputFileGroup);
+			assertThat(dir.toFile().exists(), is(true));
+			assertThat(dir.toFile().isDirectory(), is(true));
+			assertThat(numberOfFiles(dir), is(1));
+			assertThat(Paths.get(model).toFile().exists(), is(true));
+            assertThat(exists(Paths.get(tmp.toString(), "le_protocol.json").toString(), i+1), is(true));
+			checkReadProtocol(new LEProtocol(), Paths.get(tmp.toString(), "le_protocol.json"), i+1);
+            assertThat(exists(Paths.get(tmp.toString(), "dm_protocol.json").toString(), i+1), is(true));
+			checkReadProtocol(new DMProtocol(new HashMap<>()), Paths.get(tmp.toString(), "dm_protocol.json"), i+1);
+		}
 	}
 
-	private void checkReadProtocol(Protocol protocol, Path path) throws Exception {
+    private void eval() throws Exception {
+        String[] args = {
+                "-c", "eval-dle",
+                "--mets", mets,
+                "--parameter", parameter,
+                "-I", inputFileGroupEval,
+                "--log-level", logLevel,
+        };
+        for (int i = 0; i < 2; i++) {
+            Parameters parameters;
+            try (Reader r = new FileReader(Paths.get(parameter).toFile())) {
+                parameters = new Gson().fromJson(r, Parameters.class);
+            }
+            parameters.setNOCR(i+1);
+            args[5] = new Gson().toJson(parameters); // set parameter as inline json string
+            CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
+            EvaluateCommand cmd = new EvaluateCommand();
+            cmd.execute(cla);
+        }
+    }
+
+    private void checkReadProtocol(Protocol protocol, Path path, int n) throws Exception {
+		path = AbstractMLCommand.tagPath(path.toString(), n);
 		try (InputStream is = new FileInputStream(path.toFile())) {
 			protocol.read(is);
 		}
 	}
 
-
-	private static boolean exists(String path, int i) {
-		return AbstractMLCommand.tagPath(path, i+1).toFile().exists();
+	private static boolean exists(String path, int n) {
+		return AbstractMLCommand.tagPath(path, n).toFile().exists();
 	}
 
 	private static int numberOfFiles(Path dir) {

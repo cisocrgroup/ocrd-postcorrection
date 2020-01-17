@@ -16,17 +16,17 @@ import java.util.List;
 import java.util.Map;
 
 public class DMProtocol implements Protocol {
-    private static class ProtocolValue {
-        String normalized = "";
-        String ocr = "";
-        String cor = "";
-        List<Ranking> rankings;
-        double confidence = 0;
-        boolean taken = false;
+    public static class ProtocolValue {
+        public String normalized = "";
+        public String ocr = "";
+        public String cor = "";
+        public List<Ranking> rankings;
+        public double confidence = 0;
+        public boolean taken = false;
     }
 
-    private static class Protocol {
-        private final Map<String, ProtocolValue> corrections = new HashMap<>();
+    public static class Protocol {
+        public final Map<String, ProtocolValue> corrections = new HashMap<>();
     }
 
     private Protocol protocol = new Protocol();
@@ -34,6 +34,12 @@ public class DMProtocol implements Protocol {
 
     public DMProtocol(Map<OCRToken, List<Ranking>> rankings) {
         this.rankings = rankings;
+    }
+    public DMProtocol() {
+    }
+
+    public Protocol getProtocol() {
+        return protocol;
     }
 
     @Override

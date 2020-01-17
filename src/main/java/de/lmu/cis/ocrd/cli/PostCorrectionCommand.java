@@ -85,7 +85,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 token.correct(correction, ranking.ranking);
             }
         }
-        saveProtocol(protocol, getParameter().dmTraining.protocol);
+        saveProtocol(protocol, tagPath(getParameter().dmTraining.protocol.toString(), getParameter().nOCR));
     }
 
     private Map<OCRToken, List<Ranking>> runRR(String ifg, AdditionalLexicon alex) throws Exception {
@@ -141,17 +141,16 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 alex.add(token.getMasterOCR().toString());
             }
         }
-        saveProtocol(protocol, getParameter().leTraining.protocol);
+        saveProtocol(protocol, tagPath(getParameter().leTraining.protocol.toString(), getParameter().nOCR));
         return alex;
     }
 
-    private void saveProtocol(Protocol protocol, String path) throws Exception {
+    private void saveProtocol(Protocol protocol, Path path) throws Exception {
         if (path == null || "".equals(path)) {
             return;
         }
-        final Path p = Paths.get(path);
-        Logger.debug("saving protocol to {}", p.toString());
-        try(OutputStream out = new FileOutputStream(p.toFile())) {
+        Logger.info("saving protocol to {}", path.toString());
+        try(OutputStream out = new FileOutputStream(path.toFile())) {
             protocol.write(out);
             out.flush();
         }
