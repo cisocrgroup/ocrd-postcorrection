@@ -1,4 +1,4 @@
-package de.lmu.cis.ocrd.ml.features;
+package de.lmu.cis.ocrd.ml;
 
 public interface OCRWord {
 	String id();

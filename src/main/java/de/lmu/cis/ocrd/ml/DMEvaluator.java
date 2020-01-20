@@ -1,6 +1,5 @@
 package de.lmu.cis.ocrd.ml;
 
-import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.pagexml.OCRTokenImpl;
 import de.lmu.cis.ocrd.profile.Candidate;

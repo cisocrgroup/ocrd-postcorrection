@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import de.lmu.cis.ocrd.ml.OCRToken;
+
 // DynamicLexiconGTFeature is a feature that simply checks if the master OCR of any given token
 // equals its ground-truth. This feature should be used to simply add GT-data to
 // the training and evaluation steps.

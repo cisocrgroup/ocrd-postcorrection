@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.Gson;
+import de.lmu.cis.ocrd.ml.OCRToken;
 import org.pmw.tinylog.Logger;
 
 import javax.annotation.Nonnull;

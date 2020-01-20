@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import de.lmu.cis.ocrd.ml.features.OCRToken;
-import de.lmu.cis.ocrd.ml.features.OCRWord;
+import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.OCRWord;
 import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;

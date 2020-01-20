@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import de.lmu.cis.ocrd.ml.OCRToken;
+
 public abstract class AbstractConfidenceFeature extends NamedDoubleFeature {
     public final static double MIN = 1e-5;
 

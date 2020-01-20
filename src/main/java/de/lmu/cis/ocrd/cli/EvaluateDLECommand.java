@@ -4,7 +4,7 @@ import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.DynamicLexiconGTFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import org.pmw.tinylog.Logger;

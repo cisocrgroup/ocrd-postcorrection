@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import de.lmu.cis.ocrd.ml.OCRToken;
+
 public abstract class NamedDoubleFeature extends NamedFeature {
 	private static final long serialVersionUID = -2596016620596603718L;
 

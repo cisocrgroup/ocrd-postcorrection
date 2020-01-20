@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import de.lmu.cis.ocrd.ml.OCRToken;
+
 public abstract class NamedBooleanFeature extends NamedFeature {
 	private static final long serialVersionUID = 2760200162824149331L;
 

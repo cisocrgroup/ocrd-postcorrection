@@ -1,8 +1,6 @@
 package de.lmu.cis.ocrd.ml;
 
 import com.google.gson.Gson;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
-import de.lmu.cis.ocrd.ml.features.OCRWord;
 import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.util.StringCorrector;
 import org.pmw.tinylog.Logger;

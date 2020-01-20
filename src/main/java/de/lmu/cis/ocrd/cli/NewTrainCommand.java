@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.cli;
 import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.LM;
 import de.lmu.cis.ocrd.ml.ModelZIP;
+import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.ml.Trainer;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.CachingProfiler;

@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.cli;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.*;

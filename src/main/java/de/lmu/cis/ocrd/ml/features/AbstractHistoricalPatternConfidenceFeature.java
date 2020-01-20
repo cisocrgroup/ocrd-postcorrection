@@ -1,5 +1,6 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import de.lmu.cis.ocrd.ml.OCRWord;
 import de.lmu.cis.ocrd.profile.PosPattern;
 
 abstract class AbstractHistoricalPatternConfidenceFeature extends AbstractConfidenceFeature {

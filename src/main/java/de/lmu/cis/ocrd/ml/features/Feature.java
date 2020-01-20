@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import de.lmu.cis.ocrd.ml.OCRToken;
+
 import java.io.Serializable;
 
 // Feature represents the feature for the training and evaluation of a document.

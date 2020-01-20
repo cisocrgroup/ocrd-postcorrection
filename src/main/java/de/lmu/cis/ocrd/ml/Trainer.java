@@ -2,7 +2,6 @@ package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.BinaryPrediction;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 import org.pmw.tinylog.Logger;

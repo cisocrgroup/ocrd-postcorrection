@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.ArgumentFactory;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
 
 import java.io.InputStream;
 import java.nio.file.Path;

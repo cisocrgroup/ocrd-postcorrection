@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.OCRWord;
 import de.lmu.cis.ocrd.profile.Candidate;
 
 import java.util.Optional;

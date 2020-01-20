@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd;
 
-import de.lmu.cis.ocrd.ml.features.OCRWord;
+import de.lmu.cis.ocrd.ml.OCRWord;
 
 import java.io.Serializable;
 import java.util.Optional;

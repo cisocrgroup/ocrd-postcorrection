@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.ml.test.features.test;
 
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.LM;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.FileProfiler;

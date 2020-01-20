@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
+import de.lmu.cis.ocrd.ml.OCRToken;
+
 import java.util.List;
 
 public class DecisionMakerConfidenceFeature extends NamedDoubleFeature {

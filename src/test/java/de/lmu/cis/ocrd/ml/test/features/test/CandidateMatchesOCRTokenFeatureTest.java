@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.ml.test.features.test;
 
 import de.lmu.cis.ocrd.ml.features.CandidateMatchesOCRTokenFeature;
 import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.OCRToken;
 import org.junit.Before;
 import org.junit.Test;
 

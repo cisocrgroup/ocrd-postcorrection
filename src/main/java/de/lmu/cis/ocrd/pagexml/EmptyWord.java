@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import de.lmu.cis.ocrd.ml.features.OCRWord;
+import de.lmu.cis.ocrd.ml.OCRWord;
 
 public class EmptyWord implements OCRWord {
 	static final OCRWord instance = new EmptyWord();

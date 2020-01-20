@@ -2,11 +2,8 @@ package de.lmu.cis.ocrd.ml.test.features.test;
 
 import de.lmu.cis.ocrd.ml.features.CandidateUnigramFeature;
 import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.MatchingOCRTokensFeature;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
 import org.junit.Before;
 import org.junit.Test;
-import org.pmw.tinylog.Logger;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

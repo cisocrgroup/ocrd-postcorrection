@@ -1,8 +1,7 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import com.google.gson.Gson;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
-import de.lmu.cis.ocrd.ml.features.OCRWord;
+import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.OCRWord;
 import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 
@@ -10,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class EmptyToken implements OCRToken {
-	final OCRToken instance = new EmptyToken();
+public class EmptyOCRToken implements OCRToken {
+	final OCRToken instance = new EmptyOCRToken();
 	private final List<Candidate> candidates = new ArrayList<>();
 
-	private EmptyToken() {}
+	private EmptyOCRToken() {}
 
 	@Override
 	public int getNOCR() {

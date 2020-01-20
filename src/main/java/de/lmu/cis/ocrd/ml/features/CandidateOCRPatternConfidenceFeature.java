@@ -1,6 +1,8 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import com.google.gson.JsonObject;
+import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.OCRWord;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.util.JSON;
 

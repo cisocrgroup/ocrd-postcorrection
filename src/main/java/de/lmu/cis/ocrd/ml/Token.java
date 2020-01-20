@@ -3,7 +3,6 @@ package de.lmu.cis.ocrd.ml;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.Word;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
 import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 

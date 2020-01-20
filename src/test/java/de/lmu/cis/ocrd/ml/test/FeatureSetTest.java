@@ -9,7 +9,7 @@ import org.junit.Test;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
-import de.lmu.cis.ocrd.ml.features.OCRToken;
+import de.lmu.cis.ocrd.ml.OCRToken;
 
 public class FeatureSetTest {
 	private FeatureSet features;
