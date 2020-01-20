@@ -93,12 +93,12 @@ public class OCRTokenImpl implements OCRToken {
 	}
 
 	@Override
-	public Optional<Candidate> getProfilerCandidate() {
+	public Optional<Candidate> getCandidate() {
 		return Optional.empty();
 	}
 
 	@Override
-	public List<Candidate> getAllProfilerCandidates() {
+	public List<Candidate> getCandidates() {
 		return this.candidates.subList(0, Integer.min(candidates.size(), maxCandidates));
 	}
 

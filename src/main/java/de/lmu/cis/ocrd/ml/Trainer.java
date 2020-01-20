@@ -60,7 +60,7 @@ public class Trainer {
     }
 
     private Stream<OCRToken> filter(List<OCRToken> tokens) {
-        return tokens.stream().filter((t)-> !t.getAllProfilerCandidates().isEmpty() && t.getAllProfilerCandidates().get(0).isLexiconEntry());
+        return tokens.stream().filter((t)-> !t.getCandidates().isEmpty() && t.getCandidates().get(0).isLexiconEntry());
     }
 
     public Map<OCRToken, List<Ranking>> getRankings(TokenReader tokenReader, Path rrModel, Path rrTrain) throws Exception {
@@ -74,7 +74,7 @@ public class Trainer {
         while (iis.hasNext() && tis.hasNext()) {
             final Instance i = iis.next();
             final OCRToken t = tis.next();
-            for (Candidate candidate: t.getAllProfilerCandidates()) {
+            for (Candidate candidate: t.getCandidates()) {
                 final BinaryPrediction p = classifier.predict(i);
                 final double ranking = p.getPrediction() ? p.getConfidence() : -p.getConfidence();
                 if (Double.isNaN(ranking)) {

@@ -41,12 +41,12 @@ public class EmptyOCRToken implements OCRToken {
 	}
 
 	@Override
-	public Optional<Candidate> getProfilerCandidate() {
+	public Optional<Candidate> getCandidate() {
 		return Optional.empty();
 	}
 
 	@Override
-	public List<Candidate> getAllProfilerCandidates() {
+	public List<Candidate> getCandidates() {
 		return candidates;
 	}
 

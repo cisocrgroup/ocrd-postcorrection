@@ -121,7 +121,7 @@ public class DMEvaluator {
 		// is the token interpretable?
 		// it is not interpretable if the Profiler did not return any correction suggestion
 		// or if there are no rankings for the token because NaNs etc.
-		if (token.getAllProfilerCandidates().isEmpty() || rankings.get(token) == null) {
+		if (token.getCandidates().isEmpty() || rankings.get(token) == null) {
 			notInterpretableTokenList.add(token);
 			if (token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
 				classifications.put(token, Classification.UNINTERPRETABLE_OCR_CORRECT);
@@ -148,7 +148,7 @@ public class DMEvaluator {
 		}
 		// ocr error (we want to correct something)
 		interpretableNotCorrectTokens++;
-		if (token.getAllProfilerCandidates().get(0).Suggestion.equalsIgnoreCase(gt)) {
+		if (token.getCandidates().get(0).Suggestion.equalsIgnoreCase(gt)) {
 			profilerFirstRankTokens++;
 		}
 		int placement = getPlacement(token, gt);
@@ -397,8 +397,8 @@ public class DMEvaluator {
 				postCorrectionMissedOpportunities++;
 			}
 			// count false friends
-			if (token.getAllProfilerCandidates().size() == 1) {
-				final Candidate c = token.getAllProfilerCandidates().get(0);
+			if (token.getCandidates().size() == 1) {
+				final Candidate c = token.getCandidates().get(0);
 				if (c.Distance == 0 && c.HistPatterns.length == 0) {
 					postCorrectionFalseFriends++;
 				}

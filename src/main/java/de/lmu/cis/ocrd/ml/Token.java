@@ -110,7 +110,7 @@ public class Token implements Serializable, OCRToken {
 	}
 
 	@Override
-	public List<Candidate> getAllProfilerCandidates() {
+	public List<Candidate> getCandidates() {
 		return new ArrayList<>();
 	}
 
@@ -146,7 +146,7 @@ public class Token implements Serializable, OCRToken {
 	}
 
 	@Override
-	public Optional<Candidate> getProfilerCandidate() {
+	public Optional<Candidate> getCandidate() {
 		return Optional.empty();
 	}
 }

@@ -115,7 +115,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 		Map<OCRToken, List<Ranking>> rankings = new HashMap<>();
 		for (OCRToken token : tokens) {
 			boolean first = true;
-			for (Candidate candidate : token.getAllProfilerCandidates()) {
+			for (Candidate candidate : token.getCandidates()) {
 				if (!is.hasNext()) {
 					throw new Exception("instances and tokens out of sync");
 				}

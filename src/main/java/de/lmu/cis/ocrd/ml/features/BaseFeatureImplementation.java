@@ -39,7 +39,7 @@ abstract class BaseFeatureImplementation implements Feature {
 	}
 
 	protected Candidate mustGetCandidate(OCRToken token) {
-		final Optional<Candidate> candidate = token.getProfilerCandidate();
+		final Optional<Candidate> candidate = token.getCandidate();
 		if (!candidate.isPresent()) {
 			throw new RuntimeException("missing profiler candidate for: " + token.toString() + " [" + token.getClass().getName() + "]");
 		}

@@ -57,7 +57,7 @@ public class FeaturesTestBase {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		final List<Candidate> cs = t.getAllProfilerCandidates();
+		final List<Candidate> cs = t.getCandidates();
 		Logger.info("CANDIATE: " + new Gson().toJson(cs.get(j)));
 		return new OCRTokenWithCandidateImpl(t, cs.get(j));
 	}

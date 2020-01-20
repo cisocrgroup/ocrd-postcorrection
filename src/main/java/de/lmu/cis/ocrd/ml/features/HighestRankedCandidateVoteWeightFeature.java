@@ -25,7 +25,7 @@ public class HighestRankedCandidateVoteWeightFeature extends NamedDoubleFeature 
 
 	@Override
 	protected double doCalculate(OCRToken token, int i, int n) {
-		final List<Candidate> cs  = token.getAllProfilerCandidates();
+		final List<Candidate> cs  = token.getCandidates();
 		return cs.size() > 0 ? cs.get(0).Weight : 1.0;
 	}
 }

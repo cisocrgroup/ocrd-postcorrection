@@ -102,7 +102,7 @@ public class TrainCommand extends AbstractMLCommand {
 
 	private void prepareLE(List<OCRToken> tokens, int i) {
 		for (OCRToken token : tokens) {
-			if (!token.getAllProfilerCandidates().isEmpty() && token.getAllProfilerCandidates().get(0).isLexiconEntry()) {
+			if (!token.getCandidates().isEmpty() && token.getCandidates().get(0).isLexiconEntry()) {
 				Logger.debug("skipping lexicon entry: {}", token.toString());
 				continue;
 			}
@@ -112,7 +112,7 @@ public class TrainCommand extends AbstractMLCommand {
 
 	private void prepareRR(List<OCRToken> tokens, int i) {
 		tokens.forEach((token)->{
-			final List<Candidate> cs = token.getAllProfilerCandidates();
+			final List<Candidate> cs = token.getCandidates();
 			Logger.debug("token: '{}': adding {} candidates", token.toString(), cs.size());
 			cs.forEach((c)->{
 				OCRTokenWithCandidateImpl tc =

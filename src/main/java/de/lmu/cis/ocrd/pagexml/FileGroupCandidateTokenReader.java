@@ -26,7 +26,7 @@ public class FileGroupCandidateTokenReader implements TokenReader {
     private List<OCRToken> readCandidateTokens() throws Exception {
         List<OCRToken> tokens = new ArrayList<>();
         for (OCRToken token : tokenReader.readTokens()) {
-            for (Candidate candidate : token.getAllProfilerCandidates()) {
+            for (Candidate candidate : token.getCandidates()) {
                 tokens.add(new OCRTokenWithCandidateImpl(token, candidate));
             }
         }

@@ -101,7 +101,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 Logger.debug("skipping lexicon entry: {}", token.toString());
                 continue;
             }
-            for (Candidate candidate : token.getAllProfilerCandidates()) {
+            for (Candidate candidate : token.getCandidates()) {
                 if (!rankings.containsKey(token)) {
                     rankings.put(token, new ArrayList<>());
                 }
@@ -128,7 +128,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final LogisticClassifier c = LogisticClassifier.load(model.openLEModel(getParameter().nOCR-1));
         AdditionalLexiconSet alex = new AdditionalLexiconSet();
         for (OCRToken token: tokens) {
-            if (!token.getAllProfilerCandidates().isEmpty() && token.getAllProfilerCandidates().get(0).isLexiconEntry()) {
+            if (!token.getCandidates().isEmpty() && token.getCandidates().get(0).isLexiconEntry()) {
                 Logger.debug("skipping lexicon entry: {}", token.toString());
                 continue;
             }

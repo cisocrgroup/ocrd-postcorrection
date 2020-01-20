@@ -21,7 +21,7 @@ public class ReRankingGTFeature extends NamedBooleanFeature {
 
 	@Override
 	boolean doCalculate(OCRToken token, int i, int n) {
-		Optional<Candidate> cand = token.getProfilerCandidate();
+		Optional<Candidate> cand = token.getCandidate();
 		if (!cand.isPresent()) {
 			return token.getGT().get().equals(token.getMasterOCR().toString());
 		}

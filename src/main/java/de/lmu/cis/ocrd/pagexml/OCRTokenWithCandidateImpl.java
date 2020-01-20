@@ -44,13 +44,13 @@ public class OCRTokenWithCandidateImpl implements OCRToken {
 	}
 
 	@Override
-	public Optional<Candidate> getProfilerCandidate() {
+	public Optional<Candidate> getCandidate() {
 		return Optional.of(candidate);
 	}
 
 	@Override
-	public List<Candidate> getAllProfilerCandidates() {
-		return token.getAllProfilerCandidates();
+	public List<Candidate> getCandidates() {
+		return token.getCandidates();
 	}
 
 	@Override

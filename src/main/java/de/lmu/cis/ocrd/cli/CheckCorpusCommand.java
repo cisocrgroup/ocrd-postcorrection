@@ -87,7 +87,7 @@ public class CheckCorpusCommand implements Command{
 	}
 
 	private void check(OCRToken token) throws Exception {
-		for (Candidate c : token.getAllProfilerCandidates()) {
+		for (Candidate c : token.getCandidates()) {
 			if (c == null) {
 				throw new Exception("invalid candiate = null");
 			}
