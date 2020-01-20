@@ -57,16 +57,6 @@ public class OCRTokenWithRankingsImpl implements OCRToken {
 	}
 
 	@Override
-	public boolean isLexiconEntry() {
-		return candidate.isLexiconEntry();
-	}
-
-	@Override
-	public boolean ocrIsCorrect() {
-		return token.ocrIsCorrect();
-	}
-
-	@Override
 	public void correct(String correction, double confidence) {
 		token.correct(correction, confidence);
 	}

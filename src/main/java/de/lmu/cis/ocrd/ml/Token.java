@@ -115,18 +115,8 @@ public class Token implements Serializable, OCRToken {
 	}
 
 	@Override
-	public boolean isLexiconEntry() {
-		return false;
-	}
-
-	@Override
 	public void correct(String correction, double confidence) {
 		/* do nothing */
-	}
-
-	@Override
-	public boolean ocrIsCorrect() {
-		return false;
 	}
 
 	public boolean hasGT() {

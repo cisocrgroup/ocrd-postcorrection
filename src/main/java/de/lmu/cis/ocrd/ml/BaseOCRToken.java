@@ -2,6 +2,9 @@ package de.lmu.cis.ocrd.ml;
 
 import java.util.Optional;
 
+// Main interface to implement tokens from different sources.
+// CandidateOCRToken, CandidatesOCRToken and RankingsOCRTokens
+// use this interface to implement the required OCRToken interface.
 public interface BaseOCRToken {
     // Return the number of ocrs (including master ocr).
     int getNOCR();
@@ -12,10 +15,6 @@ public interface BaseOCRToken {
     OCRWord getSlaveOCR(int i);
     // Get the GT string (if it exists).
     Optional<String> getGT();
-    // Returns true if the ocr token is a lexicon entry.
-    boolean isLexiconEntry();
-    // Return true if the master OCR token is correct.
-    boolean ocrIsCorrect();
     // Correct this token in the underlying document.
     void correct(String correction, double confidence);
 }

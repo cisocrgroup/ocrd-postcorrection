@@ -53,16 +53,6 @@ public class CandidatesOCRToken implements OCRToken {
     }
 
     @Override
-    public boolean isLexiconEntry() {
-        return base.isLexiconEntry();
-    }
-
-    @Override
-    public boolean ocrIsCorrect() {
-        return base.ocrIsCorrect();
-    }
-
-    @Override
     public void correct(String correction, double confidence) {
         base.correct(correction, confidence);
     }

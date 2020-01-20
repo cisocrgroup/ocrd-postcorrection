@@ -97,7 +97,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final LogisticClassifier c = LogisticClassifier.load(model.openRRModel(getParameter().nOCR-1));
         Map<OCRToken, List<Ranking>> rankings = new HashMap<>();
         for (OCRToken token : tokens) {
-            if (token.isLexiconEntry()) {
+            if (token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
                 Logger.debug("skipping lexicon entry: {}", token.toString());
                 continue;
             }
@@ -128,7 +128,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
         final LogisticClassifier c = LogisticClassifier.load(model.openLEModel(getParameter().nOCR-1));
         AdditionalLexiconSet alex = new AdditionalLexiconSet();
         for (OCRToken token: tokens) {
-            if (token.isLexiconEntry()) {
+            if (!token.getAllProfilerCandidates().isEmpty() && token.getAllProfilerCandidates().get(0).isLexiconEntry()) {
                 Logger.debug("skipping lexicon entry: {}", token.toString());
                 continue;
             }

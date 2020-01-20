@@ -123,7 +123,7 @@ public class DMEvaluator {
 		// or if there are no rankings for the token because NaNs etc.
 		if (token.getAllProfilerCandidates().isEmpty() || rankings.get(token) == null) {
 			notInterpretableTokenList.add(token);
-			if (token.ocrIsCorrect()) {
+			if (token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
 				classifications.put(token, Classification.UNINTERPRETABLE_OCR_CORRECT);
 				notInterpretableCorrectTokens++;
 			} else {
@@ -136,12 +136,12 @@ public class DMEvaluator {
 		interpretableTokens++;
 		// we only care about tokens that we are going to correct
 		// correct or incorrect uninterpretable tokens cannot be corrected anyway
-		if (token.ocrIsCorrect()) {
+		if (token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
 			correctOCRTokensBefore++;
 		} else {
 			badOCRTokensBefore++;
 		}
-		if (token.ocrIsCorrect()) {
+		if (token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
 			interpretableCorrectTokens++;
 			classifications.put(token, Classification.INTERPRETABLE_OCR_CORRECT);
 			return;
@@ -346,7 +346,7 @@ public class DMEvaluator {
 	private void evaluate(OCRToken token, Instance instance) throws Exception {
 		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
 		final boolean yes = classify(instance);
-		final boolean ocrCorrect = token.ocrIsCorrect();
+		final boolean ocrCorrect = token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString());
 		final String correction = rankings.get(token).get(0).candidate.Suggestion;
 		final boolean correctionCorrect = gt.equalsIgnoreCase(correction);
 		counts.get(classifications.get(token)).add(yes, correctionCorrect);

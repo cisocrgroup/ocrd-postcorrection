@@ -44,7 +44,7 @@ public class DMGTFeature extends NamedFeature {
 			return TRUE;
 		}
 		// the correction suggestion is false, but the ocr is correct: DO NOT "CORRECT" HERE.
-		if (token.ocrIsCorrect()) {
+		if (token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
 			return FALSE;
 		}
 		// the correction suggestion is false; but so is the ocr token
@@ -56,7 +56,7 @@ public class DMGTFeature extends NamedFeature {
 	// it does not matter if the w_ocr is corrected or not).
 	public static boolean isValidForTraining(OCRToken token) {
 		assert(!token.getRankings().isEmpty());
-		if (!token.ocrIsCorrect()) {
+		if (!token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
 			return token.getRankings().get(0).candidate.Suggestion.equalsIgnoreCase(token.getGT().orElse(""));
 		}
 		return true;

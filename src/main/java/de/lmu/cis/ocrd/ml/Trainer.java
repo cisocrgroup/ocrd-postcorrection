@@ -60,7 +60,7 @@ public class Trainer {
     }
 
     private Stream<OCRToken> filter(List<OCRToken> tokens) {
-        return tokens.stream().filter(OCRToken::isLexiconEntry);
+        return tokens.stream().filter((t)-> !t.getAllProfilerCandidates().isEmpty() && t.getAllProfilerCandidates().get(0).isLexiconEntry());
     }
 
     public Map<OCRToken, List<Ranking>> getRankings(TokenReader tokenReader, Path rrModel, Path rrTrain) throws Exception {

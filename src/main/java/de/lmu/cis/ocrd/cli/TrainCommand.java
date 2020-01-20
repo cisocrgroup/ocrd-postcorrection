@@ -102,7 +102,7 @@ public class TrainCommand extends AbstractMLCommand {
 
 	private void prepareLE(List<OCRToken> tokens, int i) {
 		for (OCRToken token : tokens) {
-			if (token.isLexiconEntry()) {
+			if (!token.getAllProfilerCandidates().isEmpty() && token.getAllProfilerCandidates().get(0).isLexiconEntry()) {
 				Logger.debug("skipping lexicon entry: {}", token.toString());
 				continue;
 			}
