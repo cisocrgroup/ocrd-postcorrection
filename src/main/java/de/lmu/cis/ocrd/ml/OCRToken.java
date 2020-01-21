@@ -13,6 +13,6 @@ public interface OCRToken extends BaseOCRToken {
 	List<Ranking> getRankings();
 	// Get Candidate of an RR ocr token.
 	Optional<Candidate> getCandidate();
-	// Get list of candidates.
+	// Get list of candidates.  If there are none, returns an empty list.
 	List<Candidate> getCandidates();
 }
