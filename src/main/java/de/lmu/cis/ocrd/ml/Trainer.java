@@ -14,7 +14,6 @@ import java.io.Writer;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 // Trainer prepares an arff file and trains a model; must be called in this sequence:
 // 1. setup the trainer using withLM, withFeatureSet, ...
@@ -55,7 +54,7 @@ public class Trainer {
     public void prepare(TokenReader tokenReader, int n) throws Exception {
         final List<OCRToken> tokens = tokenReader.readTokens();
         lm.setTokens(tokens);
-        filter(tokens).forEach(token->{
+        TokenFilter.filter(tokens).forEach(token->{
             Logger.debug("preparing {}: {}", arffWriter.getRelation(), token.toString());
             arffWriter.writeToken(token, n);
         });
@@ -89,7 +88,7 @@ public class Trainer {
     private List<Result> predict(List<OCRToken> tokens, int n, InputStream is) throws Exception {
         LogisticClassifier classifier = LogisticClassifier.load(is);
         List<Result> results = new ArrayList<>(tokens.size());
-        for (OCRToken token: filter(tokens).collect(Collectors.toList())) {
+        for (OCRToken token: TokenFilter.filter(tokens).collect(Collectors.toList())) {
             final FeatureSet.Vector values = featureSet.calculateFeatureVector(token, n);
             final Prediction prediction = classifier.predict(values);
             results.add(new Result(token, prediction));
@@ -103,7 +102,7 @@ public class Trainer {
         instances.setClassIndex(instances.numAttributes() - 1);
 
         final Iterator<Instance> iis = instances.iterator();
-        final Iterator<OCRToken> tis = filter(tokenReader.readTokens()).collect(Collectors.toList()).iterator();
+        final Iterator<OCRToken> tis = TokenFilter.filter(tokenReader.readTokens()).collect(Collectors.toList()).iterator();
         final Map<OCRToken, List<Ranking>> rankings = new HashMap<>();
         while (iis.hasNext() && tis.hasNext()) {
             final Instance i = iis.next();
@@ -124,17 +123,5 @@ public class Trainer {
             }
         }
         return rankings;
-    }
-
-    private static Stream<OCRToken> filter(List<OCRToken> tokens) {
-        return tokens.stream().filter((t)-> !tokenIsLexiconEntry(t) && !tokenIsTooShort(t));
-    }
-
-    private static boolean tokenIsLexiconEntry(OCRToken token) {
-        return token.getCandidates().size() == 1 && token.getCandidates().get(0).isLexiconEntry();
-    }
-
-    private static boolean tokenIsTooShort(OCRToken token) {
-        return token.getMasterOCR().getWordNormalized().length() <= 3;
     }
 }
