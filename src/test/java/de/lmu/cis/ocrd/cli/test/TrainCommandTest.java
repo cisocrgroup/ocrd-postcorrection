@@ -94,11 +94,7 @@ public class TrainCommandTest {
 			assertThat(cmd.getParameters().getDMTraining().getModel(i+1).toFile().exists(), is(true));
 			assertThat(cmd.getParameters().getDMTraining().getTraining(i+1).toFile().exists(), is(true));
 		}
-		// one cached profile for the single input file group
-		// cmd.getParameters().getLETraining().profiler.setAlex(new NoAdditionalLexicon());
-		// cmd.getParameter().profiler.setInputFileGroup(inputFileGroupTrain);
-		// assertThat(cmd.getParameters().getProfiler().getCachedPath(inputFileGroupTrain, new NoAdditionalLexicon(), i+1);//getCachePath().toFile().exists(), is(true));
-		// assertThat(new File(cmd.getParameter().model).exists(), is(true));
+		assertThat(cmd.getParameters().getModel().toFile().exists(), is(true));
 	}
 
 	private void evalDLE() throws Exception {
