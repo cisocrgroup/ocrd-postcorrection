@@ -1,6 +1,5 @@
 package de.lmu.cis.ocrd.ml;
 
-import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.pagexml.OCRTokenImpl;
 import de.lmu.cis.ocrd.profile.Candidate;
 import weka.core.Instance;
@@ -174,9 +173,9 @@ public class DMEvaluator {
 		final List<Ranking> rs = rankings.get(token);
 		double before = Double.MAX_VALUE;
 		for (int i = 0; i < rs.size(); i++) {
-			assert(rs.get(i).ranking <= before);
-			before = rs.get(i).ranking;
-			if (gt.equalsIgnoreCase(rs.get(i).candidate.Suggestion)) {
+			assert(rs.get(i).getRanking() <= before);
+			before = rs.get(i).getRanking();
+			if (gt.equalsIgnoreCase(rs.get(i).getCandidate().Suggestion)) {
 				return i;
 			}
 		}
@@ -345,7 +344,7 @@ public class DMEvaluator {
 		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
 		final boolean yes = classify(instance);
 		final boolean ocrCorrect = token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString());
-		final String correction = rankings.get(token).get(0).candidate.Suggestion;
+		final String correction = rankings.get(token).get(0).getCandidate().Suggestion;
 		final boolean correctionCorrect = gt.equalsIgnoreCase(correction);
 		counts.get(classifications.get(token)).add(yes, correctionCorrect);
 

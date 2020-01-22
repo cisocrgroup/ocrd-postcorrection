@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.ml.OCRWord;
-import de.lmu.cis.ocrd.ml.features.Ranking;
+import de.lmu.cis.ocrd.ml.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 
 import java.util.ArrayList;

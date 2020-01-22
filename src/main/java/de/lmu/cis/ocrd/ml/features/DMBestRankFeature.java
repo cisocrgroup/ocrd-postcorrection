@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.Ranking;
 
 import java.util.List;
 
@@ -18,10 +19,9 @@ public class DMBestRankFeature extends NamedDoubleFeature {
 		// make sure that we have ordered rankings
         double before = Double.MAX_VALUE;
         for (Ranking r : rs) {
-            assert(r.ranking < before);
+            assert(r.getRanking() < before);
         }
-        final double result =  rs.get(0).ranking;
-        return result;
+        return rs.get(0).getRanking();
     }
 
     @Override

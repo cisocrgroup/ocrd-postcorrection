@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.pagexml;
 import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.OCRToken;
-import de.lmu.cis.ocrd.ml.features.Ranking;
+import de.lmu.cis.ocrd.ml.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;

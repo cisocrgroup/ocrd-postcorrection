@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.Ranking;
 
 import java.util.List;
 
@@ -11,20 +12,19 @@ public class DMDifferenceToNextRankFeature extends NamedDoubleFeature {
 
     @Override
     protected double doCalculate(OCRToken token, int i, int n) {
-     		assert(handlesOCR(i, n));
+        assert(handlesOCR(i, n));
 		final List<Ranking> rs = token.getRankings();
 		assert(!rs.isEmpty());
         double before = Double.MAX_VALUE;
 		// make sure that we have ordered rankings
         for (Ranking r : rs) {
-            assert(r.ranking < before);
+            assert(r.getRanking() < before);
         }
         double second = -1;
         if (rs.size() > 1) {
-            second = rs.get(1).ranking;
+            second = rs.get(1).getRanking();
         }
-        final double result = rs.get(0).ranking - second;
-        return result;
+        return rs.get(0).getRanking() - second;
     }
 
     @Override

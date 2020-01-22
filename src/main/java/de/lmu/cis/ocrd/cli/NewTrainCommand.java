@@ -3,20 +3,18 @@ package de.lmu.cis.ocrd.cli;
 import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.LM;
 import de.lmu.cis.ocrd.ml.ModelZIP;
-import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.Rankings;
 import de.lmu.cis.ocrd.ml.Trainer;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.CachingProfiler;
-import de.lmu.cis.ocrd.pagexml.METSFileGroupReader;
 import de.lmu.cis.ocrd.pagexml.METS;
+import de.lmu.cis.ocrd.pagexml.METSFileGroupReader;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
 
 public class NewTrainCommand implements Command {
 	private Parameters parameters;
@@ -60,8 +58,8 @@ public class NewTrainCommand implements Command {
 		for (int i = 0; i < parameters.getNOCR(); i++) {
 			final Trainer dmTrainer = openDMTrainer(i+1);
 			for (String ifg: ifgs) {
-				Map<OCRToken, List<Ranking>> rankings = dmTrainer.getRankings(
-						trCache.getNormalTokenReader(ifg, null),
+				final Rankings rankings = Rankings.load(
+						trCache.getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
 						parameters.getRRTraining().getModel(i+1),
 						parameters.getRRTraining().getTraining(i+1));
 				dmTrainer.prepare(trCache.getRankedTokenReader(ifg, null, rankings), i+1);

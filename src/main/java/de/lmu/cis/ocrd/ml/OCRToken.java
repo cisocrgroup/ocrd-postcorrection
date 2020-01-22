@@ -1,6 +1,5 @@
 package de.lmu.cis.ocrd.ml;
 
-import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 
 import java.util.List;

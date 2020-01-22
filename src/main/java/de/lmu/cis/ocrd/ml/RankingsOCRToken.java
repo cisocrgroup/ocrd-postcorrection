@@ -1,6 +1,5 @@
 package de.lmu.cis.ocrd.ml;
 
-import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class RankingsOCRToken extends AbstractOCRToken {
         StringJoiner sj = new StringJoiner("|");
         sj.add(getBase().toString());
         for (Ranking ranking: getRankings()) {
-            sj.add(ranking.candidate.toString() + ":" + ranking.ranking);
+            sj.add(ranking.getCandidate().toString() + ":" + ranking.getRanking());
         }
         return sj.toString();
     }

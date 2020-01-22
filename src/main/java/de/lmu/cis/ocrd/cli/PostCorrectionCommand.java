@@ -75,12 +75,12 @@ public class PostCorrectionCommand extends AbstractMLCommand {
             final boolean prediction = p.getPrediction();
             // final Ranking ranking = rankings.get(token).get(0);
             final Ranking ranking = entry.getValue().get(0);
-            final String correction = ranking.candidate.getAsSuggestionFor(token.getMasterOCR().getWordNormalized());
+            final String correction = ranking.getCandidate().getAsSuggestionFor(token.getMasterOCR().getWordNormalized());
             protocol.protocol(token, correction, p.getConfidence(), prediction);
             if (prediction) {
                 Logger.debug("correcting '{}' with '{}' ({})",
-                        token.getMasterOCR().toString(), correction, ranking.ranking);
-                token.correct(correction, ranking.ranking);
+                        token.getMasterOCR().toString(), correction, ranking.getRanking());
+                token.correct(correction, ranking.getRanking());
             }
         }
         saveProtocol(protocol, tagPath(getParameter().dmTraining.protocol, getParameter().nOCR));
@@ -109,7 +109,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 rankings.get(token).add(new Ranking(candidate, ranking));
             }
             if (rankings.containsKey(token)) {
-                rankings.get(token).sort(Comparator.comparingDouble(lhs -> lhs.ranking));
+                rankings.get(token).sort(Comparator.comparingDouble(Ranking::getRanking));
             }
         }
         Logger.debug("re-ranked {} candidates", rankings.size());

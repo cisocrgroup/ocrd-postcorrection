@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.cli;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.Ranking;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.*;
@@ -138,7 +139,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 				rankings.get(token).add(new Ranking(candidate, ranking));
 			}
 			if (rankings.containsKey(token)) {
-				rankings.get(token).sort((lhs, rhs) -> Double.compare(rhs.ranking, lhs.ranking));
+				rankings.get(token).sort((lhs, rhs) -> Double.compare(rhs.getRanking(), lhs.getRanking()));
 			}
 		}
 		return rankings;

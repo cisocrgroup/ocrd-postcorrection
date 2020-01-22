@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.Ranking;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class DMGTFeature extends NamedFeature {
 
 		final String gt = token.getGT().orElse("");
 		// correct decision to use the top ranked candidate
-		if (gt.equalsIgnoreCase(rs.get(0).candidate.Suggestion)) {
+		if (gt.equalsIgnoreCase(rs.get(0).getCandidate().Suggestion)) {
 			return TRUE;
 		}
 		// the correction suggestion is false, but the ocr is correct: DO NOT "CORRECT" HERE.
@@ -57,7 +58,7 @@ public class DMGTFeature extends NamedFeature {
 	public static boolean isValidForTraining(OCRToken token) {
 		assert(!token.getRankings().isEmpty());
 		if (!token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
-			return token.getRankings().get(0).candidate.Suggestion.equalsIgnoreCase(token.getGT().orElse(""));
+			return token.getRankings().get(0).getCandidate().Suggestion.equalsIgnoreCase(token.getGT().orElse(""));
 		}
 		return true;
 	}
