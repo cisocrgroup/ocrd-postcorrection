@@ -13,7 +13,7 @@ public class Profiler {
     public Path getCachedPath(String ifg, AdditionalLexicon alex, int n) {
         String suffix = ".json.gz";
         if (alex.use()) {
-            suffix = "_alex_" + n + ".json.gz";
+            suffix = "_alex_" + n + suffix;
         }
         return Paths.get(cacheDir, ifg + suffix);
     }
