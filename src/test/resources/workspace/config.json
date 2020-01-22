@@ -57,6 +57,10 @@
             "maxThreshold": 5
         },
         {
+            "type": "de.lmu.cis.ocrd.ml.features.OCRPatternConfidenceFeature",
+            "name": "OCRPatternConfidence"
+        },
+        {
             "type": "invalid",
             "name": "invalid",
             "class": "filter-me"
@@ -160,6 +164,10 @@
         {
             "type": "de.lmu.cis.ocrd.ml.features.UnigramFeature",
             "name": "UnigramOCRRelativeFrequency"
+        },
+        {
+            "type": "de.lmu.cis.ocrd.ml.features.CandidateOCRPatternConfidenceFeature",
+            "name": "OCRPatternConfidence"
         }
     ],
     "dmFeatures":[

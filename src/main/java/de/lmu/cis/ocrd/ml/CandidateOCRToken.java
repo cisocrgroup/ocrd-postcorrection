@@ -6,6 +6,7 @@ import de.lmu.cis.ocrd.profile.Candidate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 public class CandidateOCRToken implements OCRToken {
     private static final List<Ranking> EMPTY_RANKINGS = new ArrayList<>();
@@ -16,6 +17,10 @@ public class CandidateOCRToken implements OCRToken {
     public CandidateOCRToken(BaseOCRToken base, Candidate candidate) {
         this.base = base;
         this.candidate = candidate;
+    }
+
+    public BaseOCRToken getBase() {
+        return base;
     }
 
     @Override
@@ -56,5 +61,13 @@ public class CandidateOCRToken implements OCRToken {
     @Override
     public void correct(String correction, double confidence) {
         base.correct(correction, confidence);
+    }
+
+    @Override
+    public String toString() {
+        StringJoiner sj = new StringJoiner("|");
+        sj.add(base.toString());
+        sj.add(candidate.toString());
+        return sj.toString();
     }
 }

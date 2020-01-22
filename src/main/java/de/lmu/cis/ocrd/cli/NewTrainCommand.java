@@ -7,7 +7,7 @@ import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.ml.Trainer;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.CachingProfiler;
-import de.lmu.cis.ocrd.pagexml.FileGroupTokenReaderCache;
+import de.lmu.cis.ocrd.pagexml.METSFileGroupReader;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
@@ -23,7 +23,8 @@ public class NewTrainCommand implements Command {
 	private String[] ifgs; // input file groups
 	private METS mets; // mets file
 	private LM lm;
-	private FileGroupTokenReaderCache trCache;
+	private METSFileGroupReader trCache;
+	private boolean debug;
 
 	@Override
 	public String getName() {
@@ -41,7 +42,8 @@ public class NewTrainCommand implements Command {
 		this.lm = new LM(parameters.getTrigrams());
 		this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		this.ifgs = config.mustGetInputFileGroups();
-		this.trCache = new FileGroupTokenReaderCache(mets, parameters);
+		this.trCache = new METSFileGroupReader(mets, parameters);
+		this.debug = config.getLogLevel().equalsIgnoreCase("debug");
 
 		for (int i = 0; i < parameters.getNOCR(); i++) {
 			final Trainer leTrainer = openLETrainer(i+1);
@@ -87,6 +89,7 @@ public class NewTrainCommand implements Command {
 
 	private Trainer openLETrainer(int n) throws Exception {
 		final Trainer trainer = new Trainer()
+				.withDebug(debug)
 				.withLM(lm)
 				.withFeatureSet(
 						FeatureFactory
@@ -102,6 +105,7 @@ public class NewTrainCommand implements Command {
 
 	private Trainer openRRTrainer(int n) throws Exception {
 		final Trainer trainer = new Trainer()
+				.withDebug(debug)
 				.withLM(lm)
 				.withFeatureSet(
 						FeatureFactory

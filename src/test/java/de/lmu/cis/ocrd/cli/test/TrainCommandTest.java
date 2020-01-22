@@ -33,6 +33,7 @@ public class TrainCommandTest {
 	private final String inputFileGroupEval = "OCR-D-EVAL";
 	private final String outputFileGroup = "OCR-D-POST-CORRECTED";
 	private final String logLevel = "INFO";
+	// private final String logLevel = "DEBUG"; // use this to enable debugging
 	private final String model = Paths.get(tmp.toString(), "model.zip").toString();
 
 	private AbstractMLCommand.Parameter config;
@@ -49,6 +50,9 @@ public class TrainCommandTest {
 
 	@After
 	public void deinit() {
+		if ("debug".equalsIgnoreCase(logLevel)) { // do not remove while debugging
+			return;
+		}
 		try {
 			FileUtils.deleteDirectory(Paths.get(workspace.toString(), outputFileGroup).toFile());
 		} catch (Exception e) {

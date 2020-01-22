@@ -2,6 +2,8 @@ package de.lmu.cis.ocrd.profile;
 
 import org.apache.commons.lang.WordUtils;
 
+import java.util.StringJoiner;
+
 public class Candidate {
 	public String Suggestion, Modern, Dict;
 	public PosPattern[] HistPatterns, OCRPatterns;
@@ -43,5 +45,25 @@ public class Candidate {
 			return WordUtils.capitalizeFully(Suggestion);
 		}
 		return Suggestion;
+	}
+
+	public String toString() {
+		StringJoiner sj = new StringJoiner(",");
+		sj.add(Suggestion);
+		sj.add("ocr:" + patternsToString(HistPatterns));
+		sj.add("hist:" + patternsToString(OCRPatterns));
+		sj.add(Double.toString(Weight));
+		return sj.toString();
+	}
+
+	private static String patternsToString(PosPattern[] pats) {
+		StringJoiner sj = new StringJoiner(",", "[", "]");
+		if (pats == null) {
+			return sj.toString();
+		}
+		for (PosPattern pat: pats) {
+			sj.add("(" + pat.Left + ":" + pat.Right + ":" + pat.Pos + ")");
+		}
+		return sj.toString();
 	}
 }

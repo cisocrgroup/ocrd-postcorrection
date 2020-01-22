@@ -20,7 +20,7 @@ import java.util.Optional;
 public class EvaluateCommand implements Command {
     private Parameters parameters;
     private METS mets;
-    private FileGroupTokenReaderCache trCache;
+    private METSFileGroupReader trCache;
     private Counts counts;
 
     @Override
@@ -32,7 +32,7 @@ public class EvaluateCommand implements Command {
     public void execute(CommandLineArguments config) throws Exception {
         this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
         this.parameters = config.mustGetParameter(Parameters.class);
-        this.trCache = new FileGroupTokenReaderCache(mets, parameters);
+        this.trCache = new METSFileGroupReader(mets, parameters);
         this.counts = new Counts();
         for (String ifg: config.mustGetInputFileGroups()) {
             evaluate(ifg);
@@ -144,10 +144,7 @@ public class EvaluateCommand implements Command {
 
     private List<Candidate> getCandidates(Profile profile, String mOCR) {
         Optional<Candidates> candidate = profile.get(mOCR);
-        if (candidate.isPresent()) {
-            return candidate.get().Candidates.subList(0, Math.min(candidate.get().Candidates.size(), parameters.getMaxCandidates()));
-        }
-        return null;
+        return candidate.map(candidates -> candidates.Candidates.subList(0, Math.min(candidates.Candidates.size(), parameters.getMaxCandidates()))).orElse(null);
     }
 
     public static class Counts {

@@ -25,6 +25,12 @@ public class Trainer {
     private LM lm;
     private FeatureSet featureSet;
     private ARFFWriter arffWriter;
+    private boolean debug;
+
+    public Trainer withDebug(boolean debug) {
+        this.debug = debug;
+        return this;
+    }
 
     public Trainer withLM(LM lm) {
         this.lm = lm;
@@ -39,6 +45,7 @@ public class Trainer {
     public void openARFFWriter(Writer writer, String relation, int n) {
         this.arffWriter = ARFFWriter
                 .fromFeatureSet(featureSet)
+                .withDebugToken(debug)
                 .withRelation(relation + "-" + n)
                 .withWriter(writer)
                 .writeHeader(n);
@@ -48,6 +55,7 @@ public class Trainer {
         final List<OCRToken> tokens = tokenReader.readTokens();
         lm.setTokens(tokens);
         filter(tokens).forEach(token->{
+            Logger.debug("preparing {}: {}", arffWriter.getRelation(), token.toString());
             arffWriter.writeToken(token, n);
         });
     }
@@ -60,7 +68,7 @@ public class Trainer {
     }
 
     private Stream<OCRToken> filter(List<OCRToken> tokens) {
-        return tokens.stream().filter((t)-> !t.getCandidates().isEmpty() && t.getCandidates().get(0).isLexiconEntry());
+        return tokens.stream().filter((t)-> !(t.getCandidates().size() == 1 && t.getCandidates().get(0).isLexiconEntry()));
     }
 
     public Map<OCRToken, List<Ranking>> getRankings(TokenReader tokenReader, Path rrModel, Path rrTrain) throws Exception {

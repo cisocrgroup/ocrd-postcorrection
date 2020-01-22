@@ -6,6 +6,7 @@ import de.lmu.cis.ocrd.util.StringCorrector;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 public class OCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
@@ -76,7 +77,15 @@ public class OCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
 	@Override
 	public String toString() {
-		return word.toString();
+		StringJoiner sj = new StringJoiner(",");
+		sj.add("mOCR:" + getMasterOCR().toString());
+		for (int i = 1; i < getNOCR(); i++) {
+			sj.add("OCR" + (i + 1) + ":" + getSlaveOCR(i - 1).toString());
+		}
+		if (getGT().isPresent()) {
+			sj.add("gt:" + getGT().get());
+		}
+		return sj.toString();
 	}
 
 	@Override

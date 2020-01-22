@@ -45,33 +45,37 @@ public class ARFFWriter implements AutoCloseable {
 		return this;
 	}
 
+	String getRelation() {
+		return relation;
+	}
+
 	private ARFFWriter addFeature(Feature feature) {
 		this.features.add(feature);
 		return this;
 	}
 
 	public ARFFWriter writeHeader(int n) {
-		writer.printf("%% Created by de.lmu.cis.ocrd.ml.ARFFWriter at %s\n",
+		printf("%% Created by de.lmu.cis.ocrd.ml.ARFFWriter at %s\n",
 				new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-		writer.printf("@RELATION\t%s\n", relation);
+		printf("@RELATION\t%s\n", relation);
 		for (Feature feature : features) {
 			for (int i = 0; i < n; i++) {
 				if (!feature.handlesOCR(i, n)) {
 					continue;
 				}
 				final String attribute = String.format("%s_%d\t%s", feature.getName(), i+1, feature.getClasses());
-				writer.printf("@ATTRIBUTE\t%s\n", attribute);
+				printf("@ATTRIBUTE\t%s\n", attribute);
 			}
 		}
-		writer.println("@DATA");
+		println("@DATA");
 		return this;
 	}
 
-	public void debugToken(OCRToken token) {
+	private void debugToken(OCRToken token) {
 		if (!debugToken) {
 			return;
 		}
-		writer.printf("%% %s\n", token.toString());
+		printf("%% %s\n", token.toString());
 	}
 
 	public void writeTokenWithFeatureSet(OCRToken token, FeatureSet fs, int n) {
@@ -88,24 +92,12 @@ public class ARFFWriter implements AutoCloseable {
 		features.writeCSVLine(writer);
 	}
 
-	private String getAttributeOfNamedBooleanFeature(NamedBooleanFeature feature, int i) {
-		return String.format("%s_%d\t{%s,%s}", feature.getName(), i+1,
-				Boolean.toString(true), Boolean.toString(false));
+	private void printf(String fmt, Object...args) {
+		writer.printf(fmt, args);
 	}
 
-	private String getAttributeOfNamedStringSetFeature(NamedStringSetFeature feature, int i) {
-		StringBuilder builder = new StringBuilder(
-				String.format("%s_%d", feature.getName(), i+1));
-		builder.append("\t{");
-		boolean first = true;
-		for (String s : feature.getSet()) {
-			if (!first) {
-				builder.append(',');
-			}
-			builder.append(s);
-			first = false;
-		}
-		return builder.append('}').toString();
+	private void println(String str) {
+		writer.println(str);
 	}
 
 	@Override
