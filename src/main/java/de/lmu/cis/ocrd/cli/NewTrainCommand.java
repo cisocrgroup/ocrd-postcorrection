@@ -87,8 +87,8 @@ public class NewTrainCommand implements Command {
 
 	private Trainer openLETrainer(int n) throws Exception {
 		final Trainer trainer = new Trainer()
+				.withLanguageModel(lm)
 				.withDebug(debug)
-				.withLM(lm)
 				.withFeatureSet(
 						FeatureFactory
 								.getDefault()
@@ -96,15 +96,15 @@ public class NewTrainCommand implements Command {
 								.createFeatureSet(parameters.getLETraining().getFeatures(), parameters.getFilterClasses())
 								.add(new DynamicLexiconGTFeature())
 				);
-		// trainer closes the writer
+		// trainer.train() closes the writer
 		trainer.openARFFWriter(new BufferedWriter(new FileWriter(parameters.getLETraining().getTraining(n).toFile())), "le", n);
 		return trainer;
 	}
 
 	private Trainer openRRTrainer(int n) throws Exception {
 		final Trainer trainer = new Trainer()
+				.withLanguageModel(lm)
 				.withDebug(debug)
-				.withLM(lm)
 				.withFeatureSet(
 						FeatureFactory
 								.getDefault()
@@ -112,14 +112,15 @@ public class NewTrainCommand implements Command {
 								.createFeatureSet(parameters.getRRTraining().getFeatures(), parameters.getFilterClasses())
 								.add(new ReRankingGTFeature())
 				);
-		// trainer closes the writer
+		// trainer.train() closes the writer
 		trainer.openARFFWriter(new BufferedWriter(new FileWriter(parameters.getRRTraining().getTraining(n).toFile())), "rr", n);
 		return trainer;
 	}
 
 	private Trainer openDMTrainer(int n) throws Exception {
 		final Trainer trainer = new Trainer()
-				.withLM(lm)
+				.withLanguageModel(lm)
+				.withDebug(debug)
 				.withFeatureSet(
 						FeatureFactory
 								.getDefault()
@@ -129,7 +130,7 @@ public class NewTrainCommand implements Command {
 								.add(new DMDifferenceToNextRankFeature("dm-difference-to-next"))
 								.add(new DMGTFeature("dm-gt"))
 				);
-        // trainer closes the writer
+        // trainer.train() closes the writer
 		trainer.openARFFWriter(new BufferedWriter(new FileWriter(parameters.getDMTraining().getTraining(n).toFile())), "dm", n);
 		return trainer;
 	}

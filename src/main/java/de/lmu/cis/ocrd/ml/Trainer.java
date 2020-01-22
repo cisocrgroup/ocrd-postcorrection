@@ -5,9 +5,7 @@ import org.pmw.tinylog.Logger;
 
 import java.io.Writer;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 // Trainer prepares an arff file and trains a model; must be called in this sequence:
 // 1. setup the trainer using withLM, withFeatureSet, ...
@@ -26,13 +24,13 @@ public class Trainer {
         return this;
     }
 
-    public Trainer withLM(LM lm) {
-        this.lm = lm;
+    public Trainer withFeatureSet(FeatureSet featureSet) {
+        this.featureSet = featureSet;
         return this;
     }
 
-    public Trainer withFeatureSet(FeatureSet featureSet) {
-        this.featureSet = featureSet;
+    public Trainer withLanguageModel(LM lm) {
+        this.lm = lm;
         return this;
     }
 
@@ -59,34 +57,5 @@ public class Trainer {
         arffWriter.close();
         LogisticClassifier classifier = LogisticClassifier.train(arff);
         classifier.save(bin);
-    }
-
-    public static class Result {
-        private final OCRToken token;
-        private final Prediction prediction;
-
-        private Result(OCRToken token, Prediction prediction) {
-            this.token = token;
-            this.prediction = prediction;
-        }
-
-        public OCRToken getToken() {
-            return token;
-        }
-
-        public Prediction getPrediction() {
-            return prediction;
-        }
-    }
-
-    private List<Result> predict(List<OCRToken> tokens, int n, Path bin) throws Exception {
-        LogisticClassifier classifier = LogisticClassifier.load(bin);
-        List<Result> results = new ArrayList<>(tokens.size());
-        for (OCRToken token: TokenFilter.filter(tokens).collect(Collectors.toList())) {
-            final FeatureSet.Vector values = featureSet.calculateFeatureVector(token, n);
-            final Prediction prediction = classifier.predict(values);
-            results.add(new Result(token, prediction));
-        }
-        return results;
     }
 }
