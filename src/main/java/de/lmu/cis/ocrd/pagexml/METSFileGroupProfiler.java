@@ -11,14 +11,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.zip.GZIPOutputStream;
 
-public class CachingProfiler implements Profiler {
+public class METSFileGroupProfiler implements Profiler {
     private final Parameters parameters;
     private final WordReader wordReader;
     private final AdditionalLexicon alex;
     private final int n;
     private final String ifg;
 
-    public CachingProfiler(Parameters parameters, WordReader wordReader, String ifg, AdditionalLexicon alex, int n) {
+    public METSFileGroupProfiler(Parameters parameters, WordReader wordReader, String ifg, AdditionalLexicon alex, int n) {
         this.parameters = parameters;
         this.wordReader = wordReader;
         this.ifg = ifg;

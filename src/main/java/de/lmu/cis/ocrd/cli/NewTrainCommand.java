@@ -6,7 +6,7 @@ import de.lmu.cis.ocrd.ml.ModelZIP;
 import de.lmu.cis.ocrd.ml.Rankings;
 import de.lmu.cis.ocrd.ml.Trainer;
 import de.lmu.cis.ocrd.ml.features.*;
-import de.lmu.cis.ocrd.pagexml.CachingProfiler;
+import de.lmu.cis.ocrd.pagexml.METSFileGroupProfiler;
 import de.lmu.cis.ocrd.pagexml.METS;
 import de.lmu.cis.ocrd.pagexml.METSFileGroupReader;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
@@ -47,7 +47,7 @@ public class NewTrainCommand implements Command {
 			final Trainer leTrainer = openLETrainer(i+1);
 			final Trainer rrTrainer = openRRTrainer(i+1);
 			for (String ifg: ifgs) {
-				final Profile profile = new CachingProfiler(parameters, trCache.getWordReader(ifg), ifg, new NoAdditionalLexicon(), i+1).profile();
+				final Profile profile = new METSFileGroupProfiler(parameters, trCache.getWordReader(ifg), ifg, new NoAdditionalLexicon(), i+1).profile();
 				leTrainer.prepare(trCache.getNormalTokenReader(ifg, profile), i+1);
 				rrTrainer.prepare(trCache.getCandidateTokenReader(ifg, null), i+1);
 			}

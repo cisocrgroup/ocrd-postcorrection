@@ -43,7 +43,7 @@ public class EvaluateCommand implements Command {
     }
 
     private void evaluate(String ifg) throws Exception {
-        final Profile profile = new CachingProfiler(parameters, trCache.getWordReader(ifg), ifg, new NoAdditionalLexicon(), parameters.getNOCR()).profile();
+        final Profile profile = new METSFileGroupProfiler(parameters, trCache.getWordReader(ifg), ifg, new NoAdditionalLexicon(), parameters.getNOCR()).profile();
         final DMProtocol protocol = new DMProtocol();
         try (InputStream is = new FileInputStream(parameters.getDMTraining().getProtocol(parameters.getNOCR()).toFile())) {
             protocol.read(is);
