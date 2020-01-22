@@ -3,8 +3,6 @@ package de.lmu.cis.ocrd.cli;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
-import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
-import de.lmu.cis.ocrd.pagexml.OCRTokenWithRankingsImpl;
 import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Candidate;
@@ -72,7 +70,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
                 tokens.forEach((token)->{
                     final List<Candidate> cs = token.getCandidates();
                     Logger.debug("adding {} candidates (rr/{})", cs.size(), i +1);
-                    cs.forEach((c)-> w.writeToken(new OCRTokenWithCandidateImpl(token, c), i +1));
+                    cs.forEach((c)-> w.writeToken(new CandidateOCRToken(token, c), i +1));
                 });
             }
         }
@@ -123,7 +121,7 @@ public class EvaluateRRDMCommand extends AbstractMLCommand {
 						continue;
 					}
 					dmEvaluator.register(token);
-					final OCRToken rankedToken = new OCRTokenWithRankingsImpl(token, rankings.get(token));
+					final OCRToken rankedToken = new RankingsOCRToken(token, rankings.get(token));
 					if (!DMGTFeature.isValidForTraining(rankedToken)) {
 						continue;
 					}

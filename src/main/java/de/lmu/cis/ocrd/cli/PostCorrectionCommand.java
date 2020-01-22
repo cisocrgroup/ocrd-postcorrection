@@ -3,8 +3,6 @@ package de.lmu.cis.ocrd.cli;
 import com.google.gson.JsonObject;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.*;
-import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
-import de.lmu.cis.ocrd.pagexml.OCRTokenWithRankingsImpl;
 import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Workspace;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
@@ -71,7 +69,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
 			.add(new DMDifferenceToNextRankFeature("dm-difference-to-next"));
         final LogisticClassifier c = LogisticClassifier.load(model.openDMModel(getParameter().nOCR-1));
 		for (Map.Entry<OCRToken, List<Ranking>> entry : rankings.entrySet()) {
-			final OCRToken token = new OCRTokenWithRankingsImpl(entry.getKey(), entry.getValue());
+			final OCRToken token = new RankingsOCRToken(entry.getKey(), entry.getValue());
             Logger.debug("token {}", token);
             final Prediction p = c.predict(fs.calculateFeatureVector(token, getParameter().nOCR));
             final boolean prediction = p.getPrediction();
@@ -85,7 +83,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 token.correct(correction, ranking.ranking);
             }
         }
-        saveProtocol(protocol, tagPath(getParameter().dmTraining.protocol.toString(), getParameter().nOCR));
+        saveProtocol(protocol, tagPath(getParameter().dmTraining.protocol, getParameter().nOCR));
     }
 
     private Map<OCRToken, List<Ranking>> runRR(String ifg, AdditionalLexicon alex) throws Exception {
@@ -105,7 +103,7 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 if (!rankings.containsKey(token)) {
                     rankings.put(token, new ArrayList<>());
                 }
-                final FeatureSet.Vector values = fs.calculateFeatureVector(new OCRTokenWithCandidateImpl(token, candidate), getParameter().nOCR);
+                final FeatureSet.Vector values = fs.calculateFeatureVector(new CandidateOCRToken(token, candidate), getParameter().nOCR);
                 final Prediction p = c.predict(values);
                 final double ranking = p.getPrediction()? p.getConfidence() : -p.getConfidence();
                 rankings.get(token).add(new Ranking(candidate, ranking));
@@ -141,12 +139,12 @@ public class PostCorrectionCommand extends AbstractMLCommand {
                 alex.add(token.getMasterOCR().toString());
             }
         }
-        saveProtocol(protocol, tagPath(getParameter().leTraining.protocol.toString(), getParameter().nOCR));
+        saveProtocol(protocol, tagPath(getParameter().leTraining.protocol, getParameter().nOCR));
         return alex;
     }
 
     private void saveProtocol(Protocol protocol, Path path) throws Exception {
-        if (path == null || "".equals(path)) {
+        if (path == null || "".equals(path.toString())) {
             return;
         }
         Logger.info("saving protocol to {}", path.toString());

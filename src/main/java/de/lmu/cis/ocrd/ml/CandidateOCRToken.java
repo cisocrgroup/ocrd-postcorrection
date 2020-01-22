@@ -8,19 +8,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
 
-public class CandidateOCRToken implements OCRToken {
+public class CandidateOCRToken extends AbstractOCRToken {
     private static final List<Ranking> EMPTY_RANKINGS = new ArrayList<>();
     private static final List<Candidate> EMPTY_CANDIDATES = new ArrayList<>();
-    private final BaseOCRToken base;
     private final Candidate candidate;
 
     public CandidateOCRToken(BaseOCRToken base, Candidate candidate) {
-        this.base = base;
+        super(base);
         this.candidate = candidate;
-    }
-
-    public BaseOCRToken getBase() {
-        return base;
     }
 
     @Override
@@ -39,34 +34,9 @@ public class CandidateOCRToken implements OCRToken {
     }
 
     @Override
-    public int getNOCR() {
-        return base.getNOCR();
-    }
-
-    @Override
-    public OCRWord getMasterOCR() {
-        return base.getMasterOCR();
-    }
-
-    @Override
-    public OCRWord getSlaveOCR(int i) {
-        return base.getSlaveOCR(i);
-    }
-
-    @Override
-    public Optional<String> getGT() {
-        return base.getGT();
-    }
-
-    @Override
-    public void correct(String correction, double confidence) {
-        base.correct(correction, confidence);
-    }
-
-    @Override
     public String toString() {
         StringJoiner sj = new StringJoiner("|");
-        sj.add(base.toString());
+        sj.add(getBase().toString());
         sj.add(candidate.toString());
         return sj.toString();
     }

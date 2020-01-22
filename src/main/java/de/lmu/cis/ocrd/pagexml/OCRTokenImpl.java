@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.ml.OCRToken;
-import de.lmu.cis.ocrd.ml.OCRWord;
 import de.lmu.cis.ocrd.ml.features.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
@@ -15,7 +14,7 @@ import java.util.Optional;
 public class OCRTokenImpl implements OCRToken {
 
 	private final Word word;
-	private final List<OCRWordImpl> words;
+	private final List<OCRWord> words;
 	private List<Candidate> candidates;
 	private final int gtIndex;
 	private final int maxCandidates;
@@ -28,8 +27,8 @@ public class OCRTokenImpl implements OCRToken {
 		this.candidates = getCandidates(profile);
 	}
 
-	private static List<OCRWordImpl> getWords(Word word, int gtIndex) throws Exception {
-		List<OCRWordImpl> words = new ArrayList<>();
+	private static List<OCRWord> getWords(Word word, int gtIndex) throws Exception {
+		List<OCRWord> words = new ArrayList<>();
 		final List<TextEquiv> tes = word.getTextEquivs();
 		if (tes.isEmpty()) {
 			throw new Exception("empty word");
@@ -46,10 +45,10 @@ public class OCRTokenImpl implements OCRToken {
 		final List<String> normLines =
 				word.getParentLine().getUnicodeNormalized();
 		for (int i = 0; i <= gtIndex && i < tes.size() && i < normLines.size(); i++) {
-			words.add(new OCRWordImpl(tes.get(i), normLines.get(i), mConfs));
+			words.add(new OCRWord(tes.get(i), normLines.get(i), mConfs));
 		}
 		while (words.size() < gtIndex) {
-			words.add(new OCRWordImpl(tes.get(0), normLines.get(0), mConfs));
+			words.add(new OCRWord(tes.get(0), normLines.get(0), mConfs));
 		}
 		return words;
 	}
@@ -64,7 +63,7 @@ public class OCRTokenImpl implements OCRToken {
 	}
 
 	@Override
-	public OCRWord getMasterOCR() {
+	public de.lmu.cis.ocrd.ml.OCRWord getMasterOCR() {
 		if (0 < words.size()) {
 			return words.get(0);
 		}
@@ -72,7 +71,7 @@ public class OCRTokenImpl implements OCRToken {
 	}
 
 	@Override
-	public OCRWord getSlaveOCR(int i) {
+	public de.lmu.cis.ocrd.ml.OCRWord getSlaveOCR(int i) {
 		if (i+1 < words.size()) {
 			return words.get(i+1);
 		}

@@ -1,17 +1,15 @@
 package de.lmu.cis.ocrd.pagexml;
 
-import de.lmu.cis.ocrd.ml.OCRWord;
-
 import java.util.List;
 
-public class OCRWordImpl implements OCRWord {
+public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 	private final String word, raw;
 	private final List<Double> masterOCRCharConfidences;
 	private final double wordConfidence;
 	private final String line;
 	private final String id;
 
-	OCRWordImpl(TextEquiv te, String line, List<Double> mConfs) {
+	OCRWord(TextEquiv te, String line, List<Double> mConfs) {
 		this.line = line;
 		this.wordConfidence = te.getConfidence();
 		this.word = te.getUnicodeNormalized();

@@ -185,19 +185,17 @@ public class DMEvaluator {
 
 	// look at all candidates and count type(i) and type(ii) errors
 	private void updateErrorTypeCounts_I_II(OCRToken token, String gt) {
-		if (token instanceof OCRTokenImpl) {
-			boolean found = false;
-			for (Candidate candidate : ((OCRTokenImpl)token).getAllProfilerCandidatesNoLimit()) {
-				if (gt.equalsIgnoreCase(candidate.Suggestion)) {
-					found = true;
-					break;
-				}
+		boolean found = false;
+		for (Candidate candidate : token.getCandidates()) {
+			if (gt.equalsIgnoreCase(candidate.Suggestion)) {
+				found = true;
+				break;
 			}
-			if (found) {
-				typeIIerrors++;
-			} else {
-				typeIerrors++;
-			}
+		}
+		if (found) {
+			typeIIerrors++;
+		} else {
+			typeIerrors++;
 		}
 	}
 

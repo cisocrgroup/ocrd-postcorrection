@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml.test.features.test;
 
 import com.google.gson.Gson;
+import de.lmu.cis.ocrd.ml.CandidateOCRToken;
 import de.lmu.cis.ocrd.ml.LM;
 import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.pagexml.*;
@@ -59,6 +60,6 @@ public class FeaturesTestBase {
 		}
 		final List<Candidate> cs = t.getCandidates();
 		Logger.info("CANDIATE: " + new Gson().toJson(cs.get(j)));
-		return new OCRTokenWithCandidateImpl(t, cs.get(j));
+		return new CandidateOCRToken(t, cs.get(j));
 	}
 }

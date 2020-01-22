@@ -9,6 +9,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
+import java.io.InputStream;
 import java.io.Writer;
 import java.nio.file.Path;
 import java.util.*;
@@ -65,6 +66,35 @@ public class Trainer {
         arffWriter.close();
         LogisticClassifier classifier = LogisticClassifier.train(arff);
         classifier.save(bin);
+    }
+
+    public static class Result {
+        private final OCRToken token;
+        private final Prediction prediction;
+
+        private Result(OCRToken token, Prediction prediction) {
+            this.token = token;
+            this.prediction = prediction;
+        }
+
+        public OCRToken getToken() {
+            return token;
+        }
+
+        public Prediction getPrediction() {
+            return prediction;
+        }
+    }
+
+    private List<Result> predict(List<OCRToken> tokens, int n, InputStream is) throws Exception {
+        LogisticClassifier classifier = LogisticClassifier.load(is);
+        List<Result> results = new ArrayList<>(tokens.size());
+        for (OCRToken token: filter(tokens).collect(Collectors.toList())) {
+            final FeatureSet.Vector values = featureSet.calculateFeatureVector(token, n);
+            final Prediction prediction = classifier.predict(values);
+            results.add(new Result(token, prediction));
+        }
+        return results;
     }
 
     public Map<OCRToken, List<Ranking>> getRankings(TokenReader tokenReader, Path rrModel, Path rrTrain) throws Exception {

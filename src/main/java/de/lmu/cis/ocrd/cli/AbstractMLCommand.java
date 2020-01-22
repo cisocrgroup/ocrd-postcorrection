@@ -19,6 +19,7 @@ import java.util.*;
 
 public abstract class AbstractMLCommand extends AbstractIOCommand {
 	public static class TrainingResource {
+		@SuppressWarnings("WeakerAccess")
 		public String evaluation = "", model = "", training = "", result = "";
 		public List<JsonObject> features = new ArrayList<>();
 	}
@@ -199,6 +200,7 @@ public abstract class AbstractMLCommand extends AbstractIOCommand {
 				if (ocr) {
 					final List<TextEquiv> tes = word.getTextEquivs();
 					if (gtIndex < tes.size()) {
+
 						final OCRToken t = new OCRTokenImpl(word, parameter.nOCR, parameter.maxCandidates, profile);
 						if (t.getGT().isPresent()) {
 							tokens.add(t);

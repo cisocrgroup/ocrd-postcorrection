@@ -15,7 +15,7 @@ public class METSFileGroupReader {
     private final Parameters parameters;
     private Map<OCRToken, List<Ranking>> rankings;
     private final Map<String, WordReader> words;
-    private final Map<String, List<de.lmu.cis.ocrd.pagexml.OCRToken>> base;
+    private final Map<String, List<BaseOCRToken>> base;
     private final Map<String, TokenReader> normal;
     private final Map<String, TokenReader> candidate;
     private final Map<String, TokenReader> ranked;
@@ -38,11 +38,11 @@ public class METSFileGroupReader {
         return words.get(ifg);
     }
 
-    private List<de.lmu.cis.ocrd.pagexml.OCRToken> getBase(String ifg) throws Exception {
+    private List<BaseOCRToken> getBase(String ifg) throws Exception {
         if (!base.containsKey(ifg)) {
-            final List<de.lmu.cis.ocrd.pagexml.OCRToken> tokens = new ArrayList<>();
+            final List<BaseOCRToken> tokens = new ArrayList<>();
             for (Word word: getWordReader(ifg).readWords()) {
-                tokens.add(new de.lmu.cis.ocrd.pagexml.OCRToken(word, parameters.getNOCR()));
+                tokens.add(new BaseOCRToken(word, parameters.getNOCR()));
             }
             base.put(ifg, tokens);
         }
@@ -52,7 +52,7 @@ public class METSFileGroupReader {
     public TokenReader getNormalTokenReader(String ifg, Profile profile) throws Exception {
         if (!normal.containsKey(ifg)) {
             final List<OCRToken> tokens = new ArrayList<>();
-            for (de.lmu.cis.ocrd.pagexml.OCRToken token: getBase(ifg)) {
+            for (BaseOCRToken token: getBase(ifg)) {
                 final Optional<Candidates> maybeCandidates = profile.get(token.getMasterOCR().getWordNormalized());
                 if (maybeCandidates.isPresent()) {
                     final List<Candidate> candidates = maybeCandidates.get().Candidates;
@@ -70,9 +70,8 @@ public class METSFileGroupReader {
         if (!candidate.containsKey(ifg)) {
             final List<OCRToken> tokens = new ArrayList<>();
             for (OCRToken token: getNormalTokenReader(ifg, profile).readTokens()) {
-                final BaseOCRToken base = ((CandidatesOCRToken)token).getBase();
                 for (Candidate candidate: token.getCandidates()) {
-                    tokens.add(new CandidateOCRToken(base, candidate));
+                    tokens.add(new CandidateOCRToken(token, candidate));
                 }
             }
             candidate.put(ifg, new TokenReaderImpl(tokens));
@@ -85,8 +84,7 @@ public class METSFileGroupReader {
             final List<OCRToken> tokens = new ArrayList<>();
             for (OCRToken token: getNormalTokenReader(ifg, profile).readTokens()) {
                 if (rankings.containsKey(token)) {
-                    final BaseOCRToken base = ((CandidatesOCRToken)token).getBase();
-                    tokens.add(new RankingsOCRToken(base, rankings.get(token)));
+                    tokens.add(new RankingsOCRToken(token, rankings.get(token)));
                 }
             }
             ranked.put(ifg, new TokenReaderImpl(tokens));

@@ -3,8 +3,6 @@ package de.lmu.cis.ocrd.cli;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.pagexml.METS;
-import de.lmu.cis.ocrd.pagexml.OCRTokenWithCandidateImpl;
-import de.lmu.cis.ocrd.pagexml.OCRTokenWithRankingsImpl;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import org.pmw.tinylog.Logger;
@@ -115,8 +113,7 @@ public class TrainCommand extends AbstractMLCommand {
 			final List<Candidate> cs = token.getCandidates();
 			Logger.debug("token: '{}': adding {} candidates", token.toString(), cs.size());
 			cs.forEach((c)->{
-				OCRTokenWithCandidateImpl tc =
-						new OCRTokenWithCandidateImpl(token, c);
+				OCRToken tc = new CandidateOCRToken(token, c);
 				// Logger.debug("prepareRR: adding {} (Candidate: {}, GT: {})",
 				// 		tc.getMasterOCR().toString(),
 				// 		c.Suggestion,
@@ -176,7 +173,7 @@ public class TrainCommand extends AbstractMLCommand {
 					if (!rankings.containsKey(token) || rankings.get(token).isEmpty()) {
 						continue;
 					}
-					final OCRToken rankedToken = new OCRTokenWithRankingsImpl(token, rankings.get(token));
+					final OCRToken rankedToken = new RankingsOCRToken(token, rankings.get(token));
 					if (!DMGTFeature.isValidForTraining(rankedToken)) {
 						continue;
 					}
