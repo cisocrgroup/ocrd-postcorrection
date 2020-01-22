@@ -5,6 +5,7 @@ import de.lmu.cis.ocrd.cli.*;
 import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.DMProtocol;
 import de.lmu.cis.ocrd.ml.LEProtocol;
+import de.lmu.cis.ocrd.ml.ModelZIP;
 import de.lmu.cis.ocrd.ml.Protocol;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
@@ -94,7 +95,27 @@ public class TrainCommandTest {
 			assertThat(cmd.getParameters().getDMTraining().getModel(i+1).toFile().exists(), is(true));
 			assertThat(cmd.getParameters().getDMTraining().getTraining(i+1).toFile().exists(), is(true));
 		}
+
+		// check model
 		assertThat(cmd.getParameters().getModel().toFile().exists(), is(true));
+		ModelZIP model = ModelZIP.open(cmd.getParameters().getModel());
+		assertThat(model.getLEFeatureSet(), notNullValue());
+		assertThat(model.getLEFeatureSet().size(), is(cmd.getParameters().getLETraining().getFeatures().size()));
+		assertThat(model.getRRFeatureSet(), notNullValue());
+		assertThat(model.getRRFeatureSet().size(), is(cmd.getParameters().getRRTraining().getFeatures().size()));
+		assertThat(model.getDMFeatureSet(), notNullValue());
+		assertThat(model.getDMFeatureSet().size(), is(cmd.getParameters().getDMTraining().getFeatures().size()));
+		assertThat(checkInputStream(model.openLanguageModel()), is(true));
+		for (int i = 0; i < 2; i++) {
+			assertThat(checkInputStream(model.openLEModel(i)), is(true));
+			assertThat(checkInputStream(model.openRRModel(i)), is(true));
+			assertThat(checkInputStream(model.openDMModel(i)), is(true));
+		}
+	}
+
+	private static boolean checkInputStream(InputStream is) throws IOException {
+		is.close();
+		return is != null;
 	}
 
 	private void evalDLE() throws Exception {
