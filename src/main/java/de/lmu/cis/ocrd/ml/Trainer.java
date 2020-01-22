@@ -67,10 +67,6 @@ public class Trainer {
         classifier.save(bin);
     }
 
-    private Stream<OCRToken> filter(List<OCRToken> tokens) {
-        return tokens.stream().filter((t)-> !(t.getCandidates().size() == 1 && t.getCandidates().get(0).isLexiconEntry()));
-    }
-
     public Map<OCRToken, List<Ranking>> getRankings(TokenReader tokenReader, Path rrModel, Path rrTrain) throws Exception {
         final LogisticClassifier classifier = LogisticClassifier.load(rrModel);
         final Instances instances = new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
@@ -98,5 +94,17 @@ public class Trainer {
             }
         }
         return rankings;
+    }
+
+    private static Stream<OCRToken> filter(List<OCRToken> tokens) {
+        return tokens.stream().filter((t)-> !tokenIsLexiconEntry(t) && !tokenIsTooShort(t));
+    }
+
+    private static boolean tokenIsLexiconEntry(OCRToken token) {
+        return token.getCandidates().size() == 1 && token.getCandidates().get(0).isLexiconEntry();
+    }
+
+    private static boolean tokenIsTooShort(OCRToken token) {
+        return token.getMasterOCR().getWordNormalized().length() <= 3;
     }
 }
