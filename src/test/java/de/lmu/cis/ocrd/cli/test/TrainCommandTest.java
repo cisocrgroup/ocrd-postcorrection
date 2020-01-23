@@ -27,18 +27,22 @@ import static org.junit.Assert.assertThat;
 
 public class TrainCommandTest {
 	private final Path workspace = Paths.get("src/test/resources/workspace");
-	private final Path tmp = Paths.get(workspace.toString(), "dump");
-	private final String parameter = "src/test/resources/workspace/config.json";
+	private Path tmp;
+	private Parameters parameters;
 	private final String mets = "src/test/resources/workspace/mets.xml";
 	private final String inputFileGroupTrain = "OCR-D-PROFILED";
 	private final String inputFileGroupEval = "OCR-D-EVAL";
 	private final String outputFileGroup = "OCR-D-POST-CORRECTED";
 	private final String logLevel = "INFO";
 	// private final String logLevel = "DEBUG"; // use this to enable debugging
-	private final String model = Paths.get(tmp.toString(), "model.zip").toString();
 
 	@Before
 	public void init() throws IOException {
+		tmp =  Files.createTempDirectory("OCR-D-CIS-JAVA");
+		try (Reader r = new FileReader(Paths.get("src/test/resources/workspace/config.json").toFile())) {
+			parameters = new Gson().fromJson(r, Parameters.class);
+		}
+		parameters.setDir(tmp.toString());
 		try {
 			Files.createDirectory(tmp);
 		} catch (FileAlreadyExistsException e) {
@@ -74,7 +78,7 @@ public class TrainCommandTest {
 		String[] args = {
 				"-c", "train",
 				"--mets", mets,
-				"--parameter", parameter,
+				"--parameter", new Gson().toJson(parameters),
 				"-I", inputFileGroupTrain,
 				"--log-level", logLevel,
 		};
@@ -117,16 +121,12 @@ public class TrainCommandTest {
 		String[] args = {
 				"-c", "post-correct",
 				"--mets", mets,
-				"--parameter", parameter,
+				"--parameter", new Gson().toJson(parameters),
 				"-I", inputFileGroupEval,
 				"-O", outputFileGroup,
 				"--log-level", logLevel,
 		};
-		Parameters parameters;
-		try (Reader r = new FileReader(Paths.get(this.parameter).toFile())) {
-			parameters = new Gson().fromJson(r, Parameters.class);
-		}
-		assertThat(Paths.get(model).toFile().exists(), is(true));
+		assertThat(parameters.getModel().toFile().exists(), is(true));
 		for (int i = 0; i < 2; i++) {
 			parameters.setNOCR(i+1);
 			args[5] = new Gson().toJson(parameters); // set parameter as inline json string
@@ -138,7 +138,7 @@ public class TrainCommandTest {
 			assertThat(dir.toFile().exists(), is(true));
 			assertThat(dir.toFile().isDirectory(), is(true));
 			assertThat(numberOfFiles(dir), is(1));
-			assertThat(Paths.get(model).toFile().exists(), is(true));
+			assertThat(parameters.getModel().toFile().exists(), is(true));
             assertThat(cmd.getParameters().getLETraining().getProtocol(i+1).toFile().exists(), is(true));
 			checkReadProtocol(new LEProtocol(), cmd.getParameters().getLETraining().getProtocol(i+1));
             assertThat(cmd.getParameters().getDMTraining().getProtocol(i+1).toFile().exists(), is(true));
@@ -150,15 +150,11 @@ public class TrainCommandTest {
         String[] args = {
                 "-c", "eval",
                 "--mets", mets,
-                "--parameter", parameter,
+                "--parameter", new Gson().toJson(parameters),
                 "-I", inputFileGroupEval,
                 "--log-level", logLevel,
         };
         for (int i = 0; i < 2; i++) {
-            Parameters parameters;
-            try (Reader r = new FileReader(Paths.get(parameter).toFile())) {
-                parameters = new Gson().fromJson(r, Parameters.class);
-            }
             parameters.setNOCR(i+1);
             args[5] = new Gson().toJson(parameters); // set parameter as inline json string
             CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
