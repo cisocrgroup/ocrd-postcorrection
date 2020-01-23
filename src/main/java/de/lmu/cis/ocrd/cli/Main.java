@@ -21,9 +21,9 @@ public class Main {
 				.register(ProfilerCommand.class)
 				.register(CheckCorpusCommand.class)
 				.register(TokenizerCommand.class)
-				.register(NewEvaluateCommand.class)
-				.register(NewPostCorrectionCommand.class)
-				.register(NewTrainCommand.class)
+				.register(EvaluateCommand.class)
+				.register(PostCorrectionCommand.class)
+				.register(TrainCommand.class)
 				.register(AlignCommand.class);
 	}
 

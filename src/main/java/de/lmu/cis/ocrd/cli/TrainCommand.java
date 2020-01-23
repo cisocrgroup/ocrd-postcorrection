@@ -15,14 +15,14 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.nio.file.Paths;
 
-public class NewTrainCommand extends ParametersCommand {
+public class TrainCommand extends ParametersCommand {
 	private String[] ifgs; // input file groups
 	private METS mets; // mets file
 	private LM lm;
 	private METSFileGroupReader trCache;
 	private boolean debug;
 
-	public NewTrainCommand() {
+	public TrainCommand() {
 		super("train");
 	}
 

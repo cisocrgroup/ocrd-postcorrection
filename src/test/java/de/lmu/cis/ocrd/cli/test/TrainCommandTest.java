@@ -2,9 +2,9 @@ package de.lmu.cis.ocrd.cli.test;
 
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.cli.CommandLineArguments;
-import de.lmu.cis.ocrd.cli.NewEvaluateCommand;
-import de.lmu.cis.ocrd.cli.NewPostCorrectionCommand;
-import de.lmu.cis.ocrd.cli.NewTrainCommand;
+import de.lmu.cis.ocrd.cli.EvaluateCommand;
+import de.lmu.cis.ocrd.cli.PostCorrectionCommand;
+import de.lmu.cis.ocrd.cli.TrainCommand;
 import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.DMProtocol;
 import de.lmu.cis.ocrd.ml.LEProtocol;
@@ -79,7 +79,7 @@ public class TrainCommandTest {
 				"--log-level", logLevel,
 		};
 		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-		NewTrainCommand cmd = new NewTrainCommand();
+		TrainCommand cmd = new TrainCommand();
 		cmd.execute(cla);
 		// 3 runs (dle, rr, dm), 2 files for each run with 2 OCRs
 		for (int i = 0; i < 2; i++) {
@@ -131,7 +131,7 @@ public class TrainCommandTest {
 			parameters.setNOCR(i+1);
 			args[5] = new Gson().toJson(parameters); // set parameter as inline json string
             CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-			NewPostCorrectionCommand cmd = new NewPostCorrectionCommand();
+			PostCorrectionCommand cmd = new PostCorrectionCommand();
 			cmd.execute(cla);
 			assertThat(cmd.getParameters().getNOCR(), is(parameters.getNOCR()));
 			final Path dir = Paths.get(workspace.toString(), outputFileGroup);
@@ -162,7 +162,7 @@ public class TrainCommandTest {
             parameters.setNOCR(i+1);
             args[5] = new Gson().toJson(parameters); // set parameter as inline json string
             CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-            NewEvaluateCommand cmd = new NewEvaluateCommand();
+            EvaluateCommand cmd = new EvaluateCommand();
             cmd.execute(cla);
             assertThat(cmd.getParameters().getDMTraining().getEvaluation(i+1).toFile().exists(), is(true));
         }

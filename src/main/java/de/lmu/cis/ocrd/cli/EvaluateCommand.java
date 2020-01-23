@@ -16,12 +16,12 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
-public class NewEvaluateCommand extends ParametersCommand {
+public class EvaluateCommand extends ParametersCommand {
     private METS mets;
     private METSFileGroupReader trCache;
     private Counts counts;
 
-    public NewEvaluateCommand() {
+    public EvaluateCommand() {
         super("eval");
     }
 

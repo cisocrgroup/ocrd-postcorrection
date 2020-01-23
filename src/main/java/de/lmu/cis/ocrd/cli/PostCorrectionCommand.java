@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
-public class NewPostCorrectionCommand extends ParametersCommand {
+public class PostCorrectionCommand extends ParametersCommand {
 	private String ifg; // input file group
 	private String ofg; // output file group
 	private Workspace workspace;
@@ -28,7 +28,7 @@ public class NewPostCorrectionCommand extends ParametersCommand {
 	private Profile profile;
 	private boolean debug;
 
-	public NewPostCorrectionCommand() {
+	public PostCorrectionCommand() {
 		super("post-correct");
 	}
 
