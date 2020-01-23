@@ -29,6 +29,18 @@ public class Workspace {
         mets.save(metsPath);
     }
 
+    public void putWords(WordReader wordReader, String ofg) throws Exception {
+        Page old = null;
+        for (Word word: wordReader.readWords()) {
+            final Page current = word.getParentLine().getParentPage();
+            // write new pages
+            if (current != old) {
+                old = current;
+                putPageXML(current, ofg);
+            }
+        }
+    }
+
     public Path putPageXML(Page page, String ofg) throws Exception {
         final Path name = getNewName(ofg, page.getPath().getFileName());
         final Path dest = workDir.resolve(Paths.get(ofg).resolve(name));
