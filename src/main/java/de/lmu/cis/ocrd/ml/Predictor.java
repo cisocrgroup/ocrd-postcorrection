@@ -8,10 +8,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Predictor {
-    private final FeatureSet featureSet;
+    private FeatureSet featureSet;
+    private LM lm;
 
-    public Predictor(FeatureSet featureSet) {
+    public Predictor withFeatureSet(FeatureSet featureSet) {
         this.featureSet = featureSet;
+        return this;
+    }
+
+    public Predictor withLanguageModel(LM lm) {
+        this.lm = lm;
+        return this;
     }
 
     public static class Result {
@@ -32,7 +39,9 @@ public class Predictor {
         }
     }
 
-    public List<Result> predict(List<OCRToken> tokens, int n, Path bin) throws Exception {
+    public List<Result> predict(TokenReader tokenReader, int n, Path bin) throws Exception {
+        List<OCRToken> tokens = tokenReader.readTokens();
+        lm.setTokens(tokens);
         LogisticClassifier classifier = LogisticClassifier.load(bin);
         List<Result> results = new ArrayList<>(tokens.size());
         for (OCRToken token: TokenFilter.filter(tokens).collect(Collectors.toList())) {
