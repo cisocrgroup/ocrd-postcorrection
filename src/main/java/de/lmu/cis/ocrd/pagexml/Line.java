@@ -7,12 +7,16 @@ import java.util.List;
 
 public class Line extends TextRegion {
 	List<Word> words;
-	private Page parent;
+	private final Page parent;
 
 	public Line(Node node, Page parent) {
 		super(node);
 		this.words = getWordNodes(node, this);
 		this.parent = parent;
+	}
+
+	Page getParentPage() {
+		return parent;
 	}
 
 	public List<Word> getWords() {
