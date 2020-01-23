@@ -3,9 +3,13 @@ package de.lmu.cis.ocrd.ml;
 import java.util.List;
 import java.util.stream.Stream;
 
-class TokenFilter {
-    static Stream<OCRToken> filter(List<OCRToken> tokens) {
+public class TokenFilter {
+    public static Stream<OCRToken> filter(List<OCRToken> tokens) {
         return tokens.stream().filter((t)-> !tokenIsLexiconEntry(t) && !tokenIsTooShort(t));
+    }
+
+    public static Stream<OCRToken> filter(TokenReader tokenReader) throws Exception {
+        return filter(tokenReader.readTokens());
     }
 
     private static boolean tokenIsLexiconEntry(OCRToken token) {
