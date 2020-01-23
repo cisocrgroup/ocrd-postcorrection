@@ -42,7 +42,7 @@ public class NewEvaluateCommand extends ParametersCommand {
 
     private void evaluate(String ifg) throws Exception {
         final Profile profile = new METSFileGroupProfiler(parameters, trCache.getWordReader(ifg), ifg, new NoAdditionalLexicon(), parameters.getNOCR()).profile();
-        final DMProtocol protocol = new DMProtocol();
+        final DMProtocol protocol = new DMProtocol(null);
         try (InputStream is = new FileInputStream(parameters.getDMTraining().getProtocol(parameters.getNOCR()).toFile())) {
             protocol.read(is);
         }

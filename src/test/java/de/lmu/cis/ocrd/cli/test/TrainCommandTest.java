@@ -1,7 +1,10 @@
 package de.lmu.cis.ocrd.cli.test;
 
 import com.google.gson.Gson;
-import de.lmu.cis.ocrd.cli.*;
+import de.lmu.cis.ocrd.cli.CommandLineArguments;
+import de.lmu.cis.ocrd.cli.NewEvaluateCommand;
+import de.lmu.cis.ocrd.cli.NewPostCorrectionCommand;
+import de.lmu.cis.ocrd.cli.NewTrainCommand;
 import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.DMProtocol;
 import de.lmu.cis.ocrd.ml.LEProtocol;
@@ -17,7 +20,6 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -140,7 +142,7 @@ public class TrainCommandTest {
             assertThat(cmd.getParameters().getLETraining().getProtocol(i+1).toFile().exists(), is(true));
 			checkReadProtocol(new LEProtocol(), cmd.getParameters().getLETraining().getProtocol(i+1));
             assertThat(cmd.getParameters().getDMTraining().getProtocol(i+1).toFile().exists(), is(true));
-			checkReadProtocol(new DMProtocol(new HashMap<>()), cmd.getParameters().getDMTraining().getProtocol(i+1));
+			checkReadProtocol(new DMProtocol(null), cmd.getParameters().getDMTraining().getProtocol(i+1));
 		}
 	}
 

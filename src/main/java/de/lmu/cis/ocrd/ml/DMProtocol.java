@@ -43,8 +43,6 @@ public class DMProtocol implements Protocol {
     public DMProtocol(Map<OCRToken, List<Ranking>> rankings) {
         this.rankings = rankings;
     }
-    public DMProtocol() {
-    }
 
     public Protocol getProtocol() {
         return protocol;
