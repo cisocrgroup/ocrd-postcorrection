@@ -35,9 +35,6 @@ public class TrainCommandTest {
 	// private final String logLevel = "DEBUG"; // use this to enable debugging
 	private final String model = Paths.get(tmp.toString(), "model.zip").toString();
 
-	private AbstractMLCommand.Parameter config;
-
-
 	@Before
 	public void init() throws IOException {
 		try {
@@ -130,22 +127,20 @@ public class TrainCommandTest {
 		assertThat(Paths.get(model).toFile().exists(), is(true));
 		for (int i = 0; i < 2; i++) {
 			parameters.setNOCR(i+1);
-			System.out.printf("%d\n", parameters.getNOCR());
 			args[5] = new Gson().toJson(parameters); // set parameter as inline json string
             CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
 			NewPostCorrectionCommand cmd = new NewPostCorrectionCommand();
 			cmd.execute(cla);
-			System.out.printf("%d - %d\n", cmd.getParameters().getNOCR(), parameters.getNOCR());
 			assertThat(cmd.getParameters().getNOCR(), is(parameters.getNOCR()));
 			final Path dir = Paths.get(workspace.toString(), outputFileGroup);
 			assertThat(dir.toFile().exists(), is(true));
 			assertThat(dir.toFile().isDirectory(), is(true));
 			assertThat(numberOfFiles(dir), is(1));
 			assertThat(Paths.get(model).toFile().exists(), is(true));
-            assertThat(exists(Paths.get(tmp.toString(), "le_protocol.json").toString(), i+1), is(true));
-			checkReadProtocol(new LEProtocol(), Paths.get(tmp.toString(), "le_protocol.json"), i+1);
-            assertThat(exists(Paths.get(tmp.toString(), "dm_protocol.json").toString(), i+1), is(true));
-			checkReadProtocol(new DMProtocol(new HashMap<>()), Paths.get(tmp.toString(), "dm_protocol.json"), i+1);
+            assertThat(cmd.getParameters().getLETraining().getProtocol(i+1).toFile().exists(), is(true));
+			checkReadProtocol(new LEProtocol(), cmd.getParameters().getLETraining().getProtocol(i+1));
+            assertThat(cmd.getParameters().getDMTraining().getProtocol(i+1).toFile().exists(), is(true));
+			checkReadProtocol(new DMProtocol(new HashMap<>()), cmd.getParameters().getDMTraining().getProtocol(i+1));
 		}
 	}
 
@@ -171,15 +166,10 @@ public class TrainCommandTest {
         }
     }
 
-    private void checkReadProtocol(Protocol protocol, Path path, int n) throws Exception {
-		path = AbstractMLCommand.tagPath(path.toString(), n);
+    private void checkReadProtocol(Protocol protocol, Path path) throws Exception {
 		try (InputStream is = new FileInputStream(path.toFile())) {
 			protocol.read(is);
 		}
-	}
-
-	private static boolean exists(String path, int n) {
-		return AbstractMLCommand.tagPath(path, n).toFile().exists();
 	}
 
 	private static int numberOfFiles(Path dir) {

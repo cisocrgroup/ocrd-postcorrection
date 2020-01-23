@@ -19,12 +19,8 @@ public class Main {
 	private static CommandFactory makeCommandFactory() throws Exception {
 		return new CommandFactory()
 				.register(ProfilerCommand.class)
-				.register(TrainCommand.class)
-				.register(EvaluateDLECommand.class)
-				.register(EvaluateRRDMCommand.class)
 				.register(CheckCorpusCommand.class)
 				.register(TokenizerCommand.class)
-				.register(PostCorrectionCommand.class)
 				.register(NewEvaluateCommand.class)
 				.register(NewPostCorrectionCommand.class)
 				.register(NewTrainCommand.class)
