@@ -2,14 +2,12 @@ package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.InputStream;
 
 public class Predictor {
     private FeatureSet featureSet;
     private LM lm;
+    private LogisticClassifier classifier;
 
     public Predictor withFeatureSet(FeatureSet featureSet) {
         this.featureSet = featureSet;
@@ -18,6 +16,16 @@ public class Predictor {
 
     public Predictor withLanguageModel(LM lm) {
         this.lm = lm;
+        return this;
+    }
+
+    public Predictor withOpenClassifier(InputStream is) throws Exception {
+        classifier = LogisticClassifier.load(is);
+        return this;
+    }
+
+    public Predictor withTokens(TokenReader tokenReader) throws Exception {
+        lm.setTokens(tokenReader.readTokens());
         return this;
     }
 
@@ -39,16 +47,9 @@ public class Predictor {
         }
     }
 
-    public List<Result> predict(TokenReader tokenReader, int n, Path bin) throws Exception {
-        List<OCRToken> tokens = tokenReader.readTokens();
-        lm.setTokens(tokens);
-        LogisticClassifier classifier = LogisticClassifier.load(bin);
-        List<Result> results = new ArrayList<>(tokens.size());
-        for (OCRToken token: TokenFilter.filter(tokens).collect(Collectors.toList())) {
-            final FeatureSet.Vector values = featureSet.calculateFeatureVector(token, n);
-            final Prediction prediction = classifier.predict(values);
-            results.add(new Result(token, prediction));
-        }
-        return results;
+    public Result predict(OCRToken token, int n) throws Exception {
+        final FeatureSet.Vector values = featureSet.calculateFeatureVector(token, n);
+        final Prediction prediction = classifier.predict(values);
+        return new Result(token, prediction);
     }
 }
