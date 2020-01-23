@@ -7,8 +7,6 @@ import de.lmu.cis.ocrd.ml.DMProtocol;
 import de.lmu.cis.ocrd.ml.LEProtocol;
 import de.lmu.cis.ocrd.ml.ModelZIP;
 import de.lmu.cis.ocrd.ml.Protocol;
-import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
-import de.lmu.cis.ocrd.profile.Profile;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -69,8 +67,6 @@ public class TrainCommandTest {
 	@Test
 	public void test() throws Exception {
 		train();
-		evalDLE();
-		evalRRDM();
 		postCorrect();
 		eval();
 	}
@@ -118,63 +114,6 @@ public class TrainCommandTest {
 		return is != null;
 	}
 
-	private void evalDLE() throws Exception {
-		String[] args = {
-				"-c", "eval-dle",
-				"--mets", mets,
-				"--parameter", parameter,
-				"-I", inputFileGroupEval,
-				"--log-level", logLevel,
-		};
-		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-		EvaluateDLECommand cmd = new EvaluateDLECommand();
-		cmd.execute(cla);
-		// existing files (see above) + 2 lexicon, 2 eval and 2 result files
-		for (int i = 0; i < 2; i++) {
-			assertThat(exists(cmd.getParameter().leTraining.evaluation, i+1), is(true));
-			assertThat(exists(cmd.getParameter().leTraining.lexicon, i+1), is(true));
-			assertThat(exists(cmd.getParameter().leTraining.result, i+1), is(true));
-		}
-		// one cached profile for the single input file group
-		cmd.getParameter().profiler.setAlex(new NoAdditionalLexicon());
-		cmd.getParameter().profiler.setInputFileGroup(inputFileGroupTrain);
-		// assertThat(cmd.getParameter().profiler.getCachePath().toFile().exists(), is(true));
-		// cmd.getParameter().profiler.path = cmd.getParameter().profiler.getCachePath().toString();
-		// Profile profile = cmd.getParameter().profiler.profile();
-		// assertThat(profile, notNullValue());
-	}
-
-	private void evalRRDM() throws Exception {
-		String[] args = {
-				"-c", "eval-rrdm",
-				"--mets", mets,
-				"--parameter", parameter,
-				"-I", inputFileGroupEval,
-				"--log-level", logLevel,
-		};
-		CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-		EvaluateRRDMCommand cmd = new EvaluateRRDMCommand();
-		cmd.execute(cla);
-		// existing files (see above) + 4 eval and 4 result files (for each rr and dm training) and two profile cache files
-		for (int i = 0; i < 2; i++) {
-			assertThat(exists(cmd.getParameter().rrTraining.evaluation, i+1), is(true));
-			assertThat(exists(cmd.getParameter().rrTraining.evaluation.replace(".arff", "_no_dle.arff"), i+1), is(true));
-			assertThat(exists(cmd.getParameter().rrTraining.result, i+1), is(true));
-			assertThat(exists(cmd.getParameter().rrTraining.result.replace(".txt", "_no_dle.txt"), i+1), is(true));
-			assertThat(exists(cmd.getParameter().dmTraining.evaluation, i+1), is(true));
-			assertThat(exists(cmd.getParameter().dmTraining.result, i+1), is(true));
-			final Path al = AbstractMLCommand.tagPath(cmd.getParameter().leTraining.lexicon, i+1);
-//			Logger.info("al: {}", al.toString());
-//			Logger.info("pr: {}", cmd.getParameter().profiler.getCacheFilePath(inputFileGroupEval, Optional.of(al)));
-			cmd.getParameter().profiler.setAlex(new NoAdditionalLexicon());
-			cmd.getParameter().profiler.setInputFileGroup(inputFileGroupEval);
-			assertThat(cmd.getParameter().profiler.getCachePath().toFile().exists(), is(true));
-			cmd.getParameter().profiler.path = cmd.getParameter().profiler.getCachePath().toString();
-			Profile profile = cmd.getParameter().profiler.profile();
-			assertThat(profile, notNullValue());
-		}
-	}
-
 	private void postCorrect() throws Exception {
 		String[] args = {
 				"-c", "post-correct",
@@ -184,18 +123,20 @@ public class TrainCommandTest {
 				"-O", outputFileGroup,
 				"--log-level", logLevel,
 		};
-		assertThat(Paths.get(model).toFile().exists(), is(true));
-		AbstractMLCommand.Parameter parameter;
+		Parameters parameters;
 		try (Reader r = new FileReader(Paths.get(this.parameter).toFile())) {
-			parameter = new Gson().fromJson(r, AbstractMLCommand.Parameter.class);
+			parameters = new Gson().fromJson(r, Parameters.class);
 		}
+		assertThat(Paths.get(model).toFile().exists(), is(true));
 		for (int i = 0; i < 2; i++) {
-			parameter.nOCR = i + 1;
-			args[5] = new Gson().toJson(parameter); // set parameter as inline json string
+			parameters.setNOCR(i+1);
+			System.out.printf("%d\n", parameters.getNOCR());
+			args[5] = new Gson().toJson(parameters); // set parameter as inline json string
             CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-			PostCorrectionCommand cmd = new PostCorrectionCommand();
+			NewPostCorrectionCommand cmd = new NewPostCorrectionCommand();
 			cmd.execute(cla);
-			assertThat(cmd.getParameter().nOCR, is(parameter.nOCR));
+			System.out.printf("%d - %d\n", cmd.getParameters().getNOCR(), parameters.getNOCR());
+			assertThat(cmd.getParameters().getNOCR(), is(parameters.getNOCR()));
 			final Path dir = Paths.get(workspace.toString(), outputFileGroup);
 			assertThat(dir.toFile().exists(), is(true));
 			assertThat(dir.toFile().isDirectory(), is(true));
@@ -210,7 +151,7 @@ public class TrainCommandTest {
 
     private void eval() throws Exception {
         String[] args = {
-                "-c", "eval-dle",
+                "-c", "eval",
                 "--mets", mets,
                 "--parameter", parameter,
                 "-I", inputFileGroupEval,
@@ -224,8 +165,9 @@ public class TrainCommandTest {
             parameters.setNOCR(i+1);
             args[5] = new Gson().toJson(parameters); // set parameter as inline json string
             CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
-            EvaluateCommand cmd = new EvaluateCommand();
+            NewEvaluateCommand cmd = new NewEvaluateCommand();
             cmd.execute(cla);
+            assertThat(cmd.getParameters().getDMTraining().getEvaluation(i+1).toFile().exists(), is(true));
         }
     }
 

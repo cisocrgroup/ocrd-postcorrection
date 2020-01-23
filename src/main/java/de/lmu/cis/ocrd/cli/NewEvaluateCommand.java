@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.cli;
 
 import com.google.gson.Gson;
-import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.DMProtocol;
 import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
@@ -17,21 +16,20 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
-public class EvaluateCommand implements Command {
-    private Parameters parameters;
+public class NewEvaluateCommand extends ParametersCommand {
     private METS mets;
     private METSFileGroupReader trCache;
     private Counts counts;
 
-    @Override
-    public String getName() {
-        return "evaluate";
+    public NewEvaluateCommand() {
+        super("eval");
     }
 
     @Override
     public void execute(CommandLineArguments config) throws Exception {
+        init(config);
+        config.setCommand(this); // logging
         this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
-        this.parameters = config.mustGetParameter(Parameters.class);
         this.trCache = new METSFileGroupReader(mets, parameters);
         this.counts = new Counts();
         for (String ifg: config.mustGetInputFileGroups()) {

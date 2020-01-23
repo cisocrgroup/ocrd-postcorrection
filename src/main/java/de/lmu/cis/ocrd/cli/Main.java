@@ -25,7 +25,8 @@ public class Main {
 				.register(CheckCorpusCommand.class)
 				.register(TokenizerCommand.class)
 				.register(PostCorrectionCommand.class)
-				.register(EvaluateCommand.class)
+				.register(NewEvaluateCommand.class)
+				.register(NewPostCorrectionCommand.class)
 				.register(NewTrainCommand.class)
 				.register(AlignCommand.class);
 	}

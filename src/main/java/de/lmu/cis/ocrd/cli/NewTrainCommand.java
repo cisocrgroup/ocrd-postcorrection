@@ -1,13 +1,12 @@
 package de.lmu.cis.ocrd.cli;
 
-import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.LM;
 import de.lmu.cis.ocrd.ml.ModelZIP;
 import de.lmu.cis.ocrd.ml.Rankings;
 import de.lmu.cis.ocrd.ml.Trainer;
 import de.lmu.cis.ocrd.ml.features.*;
-import de.lmu.cis.ocrd.pagexml.METSFileGroupProfiler;
 import de.lmu.cis.ocrd.pagexml.METS;
+import de.lmu.cis.ocrd.pagexml.METSFileGroupProfiler;
 import de.lmu.cis.ocrd.pagexml.METSFileGroupReader;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
@@ -16,27 +15,21 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.nio.file.Paths;
 
-public class NewTrainCommand implements Command {
-	private Parameters parameters;
+public class NewTrainCommand extends ParametersCommand {
 	private String[] ifgs; // input file groups
 	private METS mets; // mets file
 	private LM lm;
 	private METSFileGroupReader trCache;
 	private boolean debug;
 
-	@Override
-	public String getName() {
-		return "train";
-	}
-
-	public Parameters getParameters() {
-		return parameters;
+	public NewTrainCommand() {
+		super("train");
 	}
 
 	@Override
 	public void execute(CommandLineArguments config) throws Exception {
+		init(config);
 		config.setCommand(this); // logging
-		this.parameters = config.mustGetParameter(Parameters.class);
 		this.lm = new LM(parameters.getTrigrams());
 		this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
 		this.ifgs = config.mustGetInputFileGroups();

@@ -162,7 +162,7 @@ public class CommandLineArguments {
             return new Gson().fromJson(optArg, typeOfT);
         }
         try(Reader r = new FileReader(optArg)) {
-            Logger.debug("reading parameters as file");
+            Logger.debug("reading parameters from file {}", optArg);
             return new Gson().fromJson(r, typeOfT);
         }
     }
