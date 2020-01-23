@@ -5,7 +5,6 @@ import de.lmu.cis.ocrd.ml.features.DMBestRankFeature;
 import de.lmu.cis.ocrd.ml.features.DMDifferenceToNextRankFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.pagexml.METSFileGroupProfiler;
-import de.lmu.cis.ocrd.pagexml.METSFileGroupReader;
 import de.lmu.cis.ocrd.pagexml.Workspace;
 import de.lmu.cis.ocrd.profile.*;
 
@@ -20,13 +19,9 @@ import java.util.stream.Collectors;
 
 public class PostCorrectionCommand extends ParametersCommand {
 	private String ifg; // input file group
-	private String ofg; // output file group
-	private Workspace workspace;
 	private LM lm;
 	private ModelZIP model;
-	private METSFileGroupReader trCache;
 	private Profile profile;
-	private boolean debug;
 
 	public PostCorrectionCommand() {
 		super("post-correct");
@@ -36,13 +31,14 @@ public class PostCorrectionCommand extends ParametersCommand {
 	public void execute(CommandLineArguments config) throws Exception {
 		init(config);
 		config.setCommand(this); // logging
-		this.lm = new LM(parameters.getTrigrams());
 		this.workspace = new Workspace(Paths.get(config.mustGetMETSFile()));
 		this.ifg = config.mustGetSingleInputFileGroup();
-		this.ofg = config.mustGetSingleOutputFileGroup();
-		this.trCache = new METSFileGroupReader(workspace.getMETS(), parameters);
-		this.debug = config.getLogLevel().equalsIgnoreCase("debug");
+		// output file group
+		String ofg = config.mustGetSingleOutputFileGroup();
 		this.model = ModelZIP.open(parameters.getModel());
+		try (InputStream is = model.openLanguageModel()) {
+			this.lm = new LM(is);
+		}
 
 		AdditionalLexicon alex = new NoAdditionalLexicon();
 		if (parameters.isRunLE()) {
@@ -52,16 +48,16 @@ public class PostCorrectionCommand extends ParametersCommand {
 			final Rankings rankings = predictRankings(alex);
 			decide(rankings);
 		}
-		workspace.putWords(trCache.getWordReader(ifg), ofg);
+		workspace.putWords(getFGR().getWordReader(ifg), ofg);
 	}
 
 	private AdditionalLexicon predictLexiconExtensions() throws Exception {
 		final AdditionalLexicon alex = new NoAdditionalLexicon();
-		profile = new METSFileGroupProfiler(parameters, trCache.getWordReader(ifg), ifg, alex, parameters.getNOCR()).profile();
+		profile = new METSFileGroupProfiler(parameters, getFGR().getWordReader(ifg), ifg, alex, parameters.getNOCR()).profile();
 		final Predictor predictor = getLEPredictor();
 		final Protocol protocol = new LEProtocol();
 		final AdditionalLexiconSet ret = new AdditionalLexiconSet();
-		for (OCRToken token: TokenFilter.filter(trCache.getNormalTokenReader(ifg, profile)).collect(Collectors.toList())){
+		for (OCRToken token: TokenFilter.filter(getFGR().getNormalTokenReader(ifg, profile)).collect(Collectors.toList())){
 			final Predictor.Result result = predictor.predict(token, parameters.getNOCR());
 			final boolean take = result.getPrediction().getPrediction();
 			final double conf = result.getPrediction().getConfidence();
@@ -75,12 +71,11 @@ public class PostCorrectionCommand extends ParametersCommand {
 	}
 
 	private Rankings predictRankings(AdditionalLexicon alex) throws Exception {
-		// getProfile(ifg, alex, nocr)
 		// no protocol
-		profile = new METSFileGroupProfiler(parameters, trCache.getWordReader(ifg), ifg, alex, parameters.getNOCR()).profile();
+		profile = new METSFileGroupProfiler(parameters, getFGR().getWordReader(ifg), ifg, alex, parameters.getNOCR()).profile();
 		final Predictor predictor = getRRPredictor();
 		Rankings rankings = new Rankings();
-		for (OCRToken token: TokenFilter.filter(trCache.getNormalTokenReader(ifg, profile)).collect(Collectors.toList())) {
+		for (OCRToken token: TokenFilter.filter(getFGR().getNormalTokenReader(ifg, profile)).collect(Collectors.toList())) {
 			if (token.getCandidates().isEmpty()) { // skip token with no interpretation
 				continue;
 			}
@@ -120,7 +115,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 		try (InputStream is = model.openLEModel(parameters.getNOCR()-1)) {
 			return new Predictor()
 					.withLanguageModel(lm)
-					.withTokens(trCache.getNormalTokenReader(ifg, profile))
+					.withTokens(getFGR().getNormalTokenReader(ifg, profile))
 					.withOpenClassifier(is)
 					.withFeatureSet(
 							FeatureFactory
@@ -135,7 +130,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 		try (InputStream is = model.openRRModel(parameters.getNOCR()-1)) {
 			return new Predictor()
 					.withLanguageModel(lm)
-					.withTokens(trCache.getNormalTokenReader(ifg, profile))
+					.withTokens(getFGR().getNormalTokenReader(ifg, profile))
 					.withOpenClassifier(is)
 					.withFeatureSet(
 							FeatureFactory
@@ -150,7 +145,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 		try (InputStream is = model.openDMModel(parameters.getNOCR()-1)) {
 			return new Predictor()
 					.withLanguageModel(lm)
-					.withTokens(trCache.getNormalTokenReader(ifg, profile))
+					.withTokens(getFGR().getNormalTokenReader(ifg, profile))
 					.withOpenClassifier(is)
 					.withFeatureSet(
 							FeatureFactory

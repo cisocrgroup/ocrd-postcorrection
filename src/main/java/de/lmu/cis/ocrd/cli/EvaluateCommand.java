@@ -12,13 +12,10 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.Writer;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
 public class EvaluateCommand extends ParametersCommand {
-    private METS mets;
-    private METSFileGroupReader trCache;
     private Counts counts;
 
     public EvaluateCommand() {
@@ -29,8 +26,6 @@ public class EvaluateCommand extends ParametersCommand {
     public void execute(CommandLineArguments config) throws Exception {
         init(config);
         config.setCommand(this); // logging
-        this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
-        this.trCache = new METSFileGroupReader(mets, parameters);
         this.counts = new Counts();
         for (String ifg: config.mustGetInputFileGroups()) {
             evaluate(ifg);
@@ -41,12 +36,12 @@ public class EvaluateCommand extends ParametersCommand {
     }
 
     private void evaluate(String ifg) throws Exception {
-        final Profile profile = new METSFileGroupProfiler(parameters, trCache.getWordReader(ifg), ifg, new NoAdditionalLexicon(), parameters.getNOCR()).profile();
+        final Profile profile = getProfile(ifg, new NoAdditionalLexicon(), parameters.getNOCR());
         final DMProtocol protocol = new DMProtocol(null);
         try (InputStream is = new FileInputStream(parameters.getDMTraining().getProtocol(parameters.getNOCR()).toFile())) {
             protocol.read(is);
         }
-        for (Word word: trCache.getWordReader(ifg).readWords()) {
+        for (Word word: getFGR().getWordReader(ifg).readWords()) {
             evaluate(profile, protocol, word);
         }
     }

@@ -5,21 +5,14 @@ import de.lmu.cis.ocrd.ml.ModelZIP;
 import de.lmu.cis.ocrd.ml.Rankings;
 import de.lmu.cis.ocrd.ml.Trainer;
 import de.lmu.cis.ocrd.ml.features.*;
-import de.lmu.cis.ocrd.pagexml.METS;
-import de.lmu.cis.ocrd.pagexml.METSFileGroupProfiler;
-import de.lmu.cis.ocrd.pagexml.METSFileGroupReader;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.nio.file.Paths;
 
 public class TrainCommand extends ParametersCommand {
-	private String[] ifgs; // input file groups
-	private METS mets; // mets file
 	private LM lm;
-	private METSFileGroupReader trCache;
 	private boolean debug;
 
 	public TrainCommand() {
@@ -31,18 +24,17 @@ public class TrainCommand extends ParametersCommand {
 		init(config);
 		config.setCommand(this); // logging
 		this.lm = new LM(parameters.getTrigrams());
-		this.mets = METS.open(Paths.get(config.mustGetMETSFile()));
-		this.ifgs = config.mustGetInputFileGroups();
-		this.trCache = new METSFileGroupReader(mets, parameters);
+		// input file groups
+		String[] ifgs = config.mustGetInputFileGroups();
 		this.debug = config.getLogLevel().equalsIgnoreCase("debug");
 
 		for (int i = 0; i < parameters.getNOCR(); i++) {
 			final Trainer leTrainer = openLETrainer(i+1);
 			final Trainer rrTrainer = openRRTrainer(i+1);
 			for (String ifg: ifgs) {
-				final Profile profile = new METSFileGroupProfiler(parameters, trCache.getWordReader(ifg), ifg, new NoAdditionalLexicon(), i+1).profile();
-				leTrainer.prepare(trCache.getNormalTokenReader(ifg, profile), i+1);
-				rrTrainer.prepare(trCache.getCandidateTokenReader(ifg, null), i+1);
+				final Profile profile = getProfile(ifg, new NoAdditionalLexicon(), i+1);
+				leTrainer.prepare(getFGR().getNormalTokenReader(ifg, profile), i+1);
+				rrTrainer.prepare(getFGR().getCandidateTokenReader(ifg, null), i+1);
 			}
 			leTrainer.train(parameters.getLETraining().getTraining(i+1), parameters.getLETraining().getModel(i+1));
 			rrTrainer.train(parameters.getRRTraining().getTraining(i+1), parameters.getRRTraining().getModel(i+1));
@@ -52,10 +44,10 @@ public class TrainCommand extends ParametersCommand {
 			final Trainer dmTrainer = openDMTrainer(i+1);
 			for (String ifg: ifgs) {
 				final Rankings rankings = Rankings.load(
-						trCache.getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
+						getFGR().getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
 						parameters.getRRTraining().getModel(i+1),
 						parameters.getRRTraining().getTraining(i+1));
-				dmTrainer.prepare(trCache.getRankedTokenReader(ifg, null, rankings), i+1);
+				dmTrainer.prepare(getFGR().getRankedTokenReader(ifg, null, rankings), i+1);
 			}
 			dmTrainer.train(parameters.getDMTraining().getTraining(i+1), parameters.getDMTraining().getModel(i+1));
 		}
