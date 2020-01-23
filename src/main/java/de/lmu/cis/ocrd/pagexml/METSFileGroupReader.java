@@ -2,8 +2,6 @@ package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.*;
-import de.lmu.cis.ocrd.ml.OCRToken;
-import de.lmu.cis.ocrd.ml.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
@@ -51,19 +49,28 @@ public class METSFileGroupReader {
 
     public TokenReader getNormalTokenReader(String ifg, Profile profile) throws Exception {
         if (!normal.containsKey(ifg)) {
-            final List<OCRToken> tokens = new ArrayList<>();
-            for (BaseOCRToken token: getBase(ifg)) {
-                final Optional<Candidates> maybeCandidates = profile.get(token.getMasterOCR().getWordNormalized());
-                if (maybeCandidates.isPresent()) {
-                    final List<Candidate> candidates = maybeCandidates.get().Candidates;
-                    tokens.add(new CandidatesOCRToken(token, candidates.subList(0, Math.min(candidates.size(), parameters.getMaxCandidates()))));
-                } else {
-                    tokens.add(new CandidatesOCRToken(token));
-                }
-            }
-            normal.put(ifg, new TokenReaderImpl(tokens));
+            updateNormalTokens(ifg, profile);
         }
         return normal.get(ifg);
+    }
+
+    private void updateNormalTokens(String ifg, Profile profile) throws Exception {
+        final List<OCRToken> tokens = new ArrayList<>();
+        for (BaseOCRToken token: getBase(ifg)) {
+            final Optional<Candidates> maybeCandidates = profile.get(token.getMasterOCR().getWordNormalized());
+            if (maybeCandidates.isPresent()) {
+                final List<Candidate> candidates = maybeCandidates.get().Candidates;
+                tokens.add(new CandidatesOCRToken(token, candidates.subList(0, Math.min(candidates.size(), parameters.getMaxCandidates()))));
+            } else {
+                tokens.add(new CandidatesOCRToken(token));
+            }
+        }
+        normal.put(ifg, new TokenReaderImpl(tokens));
+    }
+
+    public void setProfile(String ifg, Profile profile) throws Exception {
+        normal.remove(ifg);
+        updateNormalTokens(ifg, profile); // reset normal tokens with updated profile
     }
 
     public TokenReader getCandidateTokenReader(String ifg, Profile profile) throws Exception {
