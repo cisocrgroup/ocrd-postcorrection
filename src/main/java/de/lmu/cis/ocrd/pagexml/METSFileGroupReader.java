@@ -11,7 +11,6 @@ import java.util.*;
 public class METSFileGroupReader {
     private final METS mets;
     private final Parameters parameters;
-    private Map<OCRToken, List<Ranking>> rankings;
     private final Map<String, WordReader> words;
     private final Map<String, List<BaseOCRToken>> base;
     private final Map<String, TokenReader> normal;
@@ -86,7 +85,7 @@ public class METSFileGroupReader {
         return candidate.get(ifg);
     }
 
-    public TokenReader getRankedTokenReader(String ifg, Profile profile, Map<OCRToken, List<Ranking>> rankings) throws Exception {
+    public TokenReader getRankedTokenReader(String ifg, Profile profile, Rankings rankings) throws Exception {
         if (!ranked.containsKey(ifg)) {
             final List<OCRToken> tokens = new ArrayList<>();
             for (OCRToken token: getNormalTokenReader(ifg, profile).readTokens()) {
