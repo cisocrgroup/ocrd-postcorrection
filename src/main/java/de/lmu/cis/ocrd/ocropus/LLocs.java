@@ -30,13 +30,13 @@ public class LLocs {
             return conf;
         }
 
-        private static final Pattern P = Pattern.compile("(.)\t([0-9]*\\.?[0-9]*)\t([0-9]*\\.?[0-9]*)");
+        private static final Pattern P = Pattern.compile("^(.?)\t([0-9]*\\.?[0-9]*)\t([0-9]*\\.?[0-9]*)$");
         static Pair scan(String line) throws Exception {
             final Matcher m = P.matcher(line);
             if (!m.matches()) {
                 throw new Exception("invalid llocs line: " + line);
             }
-            final int c = m.group(1).codePointAt(0);
+            final int c = m.group(1).isEmpty() ? (int)' ' : m.group(1).codePointAt(0);
             final double confidence = Double.parseDouble(m.group(3));
             return new Pair(c, confidence);
         }

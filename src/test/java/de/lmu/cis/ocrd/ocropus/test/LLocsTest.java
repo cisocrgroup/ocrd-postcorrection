@@ -5,9 +5,10 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.file.Paths;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class LLocsTest {
     @Test
@@ -25,6 +26,24 @@ public class LLocsTest {
         assertThat(llocs.length(), is(2));
         assertThat(llocs.at(0).getConfidence(), is(0.2));
         assertThat(llocs.at(1).getConfidence(), is(0.4));
+    }
+
+    @Test
+    public void testReadLLocsPath1() throws Exception {
+        final LLocs llocs = LLocs.read(Paths.get("src/test/resources/ocropus/0001/0001.llocs.1"));
+        assertThat(llocs.toString(), is("ab cd ef"));
+    }
+
+    @Test
+    public void testReadLLocsPath2() throws Exception {
+        final LLocs llocs = LLocs.read(Paths.get("src/test/resources/ocropus/0001/0001.llocs.2"));
+        assertThat(llocs.toString(), is("abc d ef"));
+    }
+
+    @Test
+    public void testReadLLocsPath3() throws Exception {
+        final LLocs llocs = LLocs.read(Paths.get("src/test/resources/ocropus/0001/0001.llocs.3"));
+        assertThat(llocs.toString(), is("abc def"));
     }
 
     private static InputStream isFromString(String string) {
