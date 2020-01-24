@@ -5,6 +5,7 @@ import de.lmu.cis.ocrd.align.Lines;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -46,7 +47,12 @@ public class LLocs {
     private String string;
 
     private LLocs(List<Pair> pairs) {
+        this(pairs, Paths.get(""));
+    }
+
+    private LLocs(List<Pair> pairs, Path path) {
         this.pairs = pairs;
+        this.path = path;
     }
 
     public Pair at(int index) {
@@ -59,6 +65,14 @@ public class LLocs {
 
     public Path getPath() {
         return path;
+    }
+
+    double getAverageConfidence() {
+        double sum = 0;
+        for (Pair pair: pairs) {
+            sum += pair.getConfidence();
+        }
+        return length() == 0 ? 0 : sum/(double)length();
     }
 
     public static LLocs read(Path path) throws Exception {
@@ -115,7 +129,7 @@ public class LLocs {
     private LLocs sublist(int start, int end) {
         int a = toString().codePointCount(0, start);
         int e = toString().codePointCount(start, end);
-        return new LLocs(this.pairs.subList(a, e));
+        return new LLocs(this.pairs.subList(a, e), this.path);
     }
 
     @Override
