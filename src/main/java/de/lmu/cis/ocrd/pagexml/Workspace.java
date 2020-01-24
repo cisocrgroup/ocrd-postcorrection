@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
-public class Workspace {
+public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
     private final Path workDir;
     private final Path metsPath;
     private final METS mets;
@@ -27,6 +27,7 @@ public class Workspace {
         this.fgr = new METSFileGroupReader(this.mets, parameters);
     }
 
+    @Override
     public void save() throws Exception {
         Logger.info("saving mets: {}", metsPath.toAbsolutePath().toString());
         mets.save(metsPath);
@@ -36,20 +37,29 @@ public class Workspace {
         return fgr.getWordReader(ifg);
     }
 
+    @Override
     public TokenReader getNormalTokenReader(String ifg, Profile profile) throws Exception {
         return fgr.getNormalTokenReader(ifg, profile);
     }
 
+    @Override
     public TokenReader getCandidateTokenReader(String ifg, Profile profile) throws Exception {
         return fgr.getCandidateTokenReader(ifg, profile);
     }
 
+    @Override
     public TokenReader getRankedTokenReader(String ifg, Profile profile, Rankings rankings) throws Exception {
         return fgr.getRankedTokenReader(ifg, profile, rankings);
     }
 
+    @Override
     public void write(String ifg, String ofg) throws Exception {
         putWords(getWordReader(ifg), ofg);
+    }
+
+    @Override
+    public void resetProfile(String ifg, Profile profile) throws Exception {
+        fgr.setProfile(ifg, profile);
     }
 
     private void putWords(WordReader wordReader, String ofg) throws Exception {

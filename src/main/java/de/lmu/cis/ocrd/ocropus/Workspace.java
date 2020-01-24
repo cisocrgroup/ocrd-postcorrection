@@ -11,7 +11,7 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 
-public class Workspace {
+public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
     private final Parameters parameters;
     private final Map<String, TokenReader> normal = new HashMap<>();
     private final Map<String, TokenReader> candidates = new HashMap<>();
@@ -21,6 +21,7 @@ public class Workspace {
         this.parameters = parameters;
     }
 
+    @Override
     public TokenReader getNormalTokenReader(String dir, Profile profile) throws Exception {
         if (!normal.containsKey(dir)) {
             List<Path> imageFiles = gatherImageFiles(Paths.get(dir));
@@ -34,6 +35,7 @@ public class Workspace {
         return normal.get(dir);
     }
 
+    @Override
     public TokenReader getCandidateTokenReader(String dir, Profile profile) throws Exception {
         if (!candidates.containsKey(dir)) {
             List<OCRToken> tokens = new ArrayList<>();
@@ -43,6 +45,7 @@ public class Workspace {
         return candidates.get(dir);
     }
 
+    @Override
     public TokenReader getRankedTokenReader(String dir, Profile profile, Rankings rankings) throws Exception {
         if (!ranked.containsKey(dir)) {
             List<OCRToken> tokens = new ArrayList<>();
@@ -52,6 +55,17 @@ public class Workspace {
         return ranked.get(dir);
     }
 
+    @Override
+    public void write(String ifg, String ofg) throws Exception {
+        throw new Exception("write: not implemented");
+    }
+
+    @Override
+    public void save() throws Exception {
+        throw new Exception("save: not implemented");
+    }
+
+    @Override
     public void resetProfile(String dir, Profile profile) throws Exception {
         List<OCRToken> tokens = getNormalTokenReader(dir, profile).readTokens();
         for (int i = 0; i < tokens.size(); i++) {
