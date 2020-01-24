@@ -41,7 +41,7 @@ public class EvaluateCommand extends ParametersCommand {
         try (InputStream is = new FileInputStream(parameters.getDMTraining().getProtocol(parameters.getNOCR()).toFile())) {
             protocol.read(is);
         }
-        for (Word word: getFGR().getWordReader(ifg).readWords()) {
+        for (Word word: workspace.getWordReader(ifg).readWords()) {
             evaluate(profile, protocol, word);
         }
     }

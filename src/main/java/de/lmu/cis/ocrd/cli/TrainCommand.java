@@ -33,8 +33,8 @@ public class TrainCommand extends ParametersCommand {
 			final Trainer rrTrainer = openRRTrainer(i+1);
 			for (String ifg: ifgs) {
 				final Profile profile = getProfile(ifg, new NoAdditionalLexicon(), i+1);
-				leTrainer.prepare(getFGR().getNormalTokenReader(ifg, profile), i+1);
-				rrTrainer.prepare(getFGR().getCandidateTokenReader(ifg, null), i+1);
+				leTrainer.prepare(workspace.getNormalTokenReader(ifg, profile), i+1);
+				rrTrainer.prepare(workspace.getCandidateTokenReader(ifg, null), i+1);
 			}
 			leTrainer.train(parameters.getLETraining().getTraining(i+1), parameters.getLETraining().getModel(i+1));
 			rrTrainer.train(parameters.getRRTraining().getTraining(i+1), parameters.getRRTraining().getModel(i+1));
@@ -44,10 +44,10 @@ public class TrainCommand extends ParametersCommand {
 			final Trainer dmTrainer = openDMTrainer(i+1);
 			for (String ifg: ifgs) {
 				final Rankings rankings = Rankings.load(
-						getFGR().getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
+						workspace.getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
 						parameters.getRRTraining().getModel(i+1),
 						parameters.getRRTraining().getTraining(i+1));
-				dmTrainer.prepare(getFGR().getRankedTokenReader(ifg, null, rankings), i+1);
+				dmTrainer.prepare(workspace.getRankedTokenReader(ifg, null, rankings), i+1);
 			}
 			dmTrainer.train(parameters.getDMTraining().getTraining(i+1), parameters.getDMTraining().getModel(i+1));
 		}

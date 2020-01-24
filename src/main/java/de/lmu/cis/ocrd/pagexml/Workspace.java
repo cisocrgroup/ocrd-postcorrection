@@ -1,5 +1,8 @@
 package de.lmu.cis.ocrd.pagexml;
 
+import de.lmu.cis.ocrd.config.Parameters;
+import de.lmu.cis.ocrd.ml.Rankings;
+import de.lmu.cis.ocrd.ml.TokenReader;
 import de.lmu.cis.ocrd.profile.Profile;
 import org.pmw.tinylog.Logger;
 
@@ -13,11 +16,13 @@ public class Workspace {
     private final Path workDir;
     private final Path metsPath;
     private final METS mets;
+    private final METSFileGroupReader fgr;
 
-    public Workspace(Path mets) throws Exception {
+    public Workspace(Path mets, Parameters parameters) throws Exception {
         this.workDir = mets.getParent();
         this.metsPath = mets;
         this.mets = METS.open(mets);
+        this.fgr = new METSFileGroupReader(this.mets, parameters);
     }
 
     public METS getMETS() {
@@ -27,6 +32,22 @@ public class Workspace {
     public void save() throws Exception {
         Logger.info("saving mets: {}", metsPath.toAbsolutePath().toString());
         mets.save(metsPath);
+    }
+
+    public WordReader getWordReader(String ifg) throws Exception {
+        return fgr.getWordReader(ifg);
+    }
+
+    public TokenReader getNormalTokenReader(String ifg, Profile profile) throws Exception {
+        return fgr.getNormalTokenReader(ifg, profile);
+    }
+
+    public TokenReader getCandidateTokenReader(String ifg, Profile profile) throws Exception {
+        return fgr.getCandidateTokenReader(ifg, profile);
+    }
+
+    public TokenReader getRankedTokenReader(String ifg, Profile profile, Rankings rankings) throws Exception {
+        return fgr.getRankedTokenReader(ifg, profile, rankings);
     }
 
     public void putWords(WordReader wordReader, String ofg) throws Exception {
@@ -41,7 +62,7 @@ public class Workspace {
         }
     }
 
-    public Path putPageXML(Page page, String ofg) throws Exception {
+    private Path putPageXML(Page page, String ofg) throws Exception {
         final Path name = getNewName(ofg, page.getPath().getFileName());
         final Path dest = workDir.resolve(Paths.get(ofg).resolve(name));
         //noinspection ResultOfMethodCallIgnored
