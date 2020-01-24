@@ -47,16 +47,6 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
         return averageConfidence;
     }
 
-    @Override
-    public boolean isFirstInLine() {
-        return normalizedLine.startsWith(normalized);
-    }
-
-    @Override
-    public boolean isLastInLine() {
-        return normalizedLine.endsWith(normalized);
-    }
-
     private static String getID(LLocs llocs) {
         final int pos = llocs.getPath().getFileName().toString().indexOf('.');
         return llocs.getPath().getParent().getFileName().toString() + ":" + llocs.getPath().getFileName().toString().substring(pos+1);
