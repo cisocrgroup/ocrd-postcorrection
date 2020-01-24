@@ -41,12 +41,10 @@ public class Lines {
     }
 
     public static Alignment align(String[] lines) {
-        // final String master = Normalizer.normalize(lines[0]);
         final String master = lines[0];
         Alignment data = new Alignment(master);
         final TokenAlignment tokenAlignment = new TokenAlignment(master);
         for (int i = 1; i < lines.length; i++) {
-            // final String other = Normalizer.normalize(lines[i]);
             final String other = lines[i];
             final Graph g = new Graph(master, other);
             data.lineAlignment.raw.add(g.getStartNode().toString());
