@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.ml.test;
 
 import de.lmu.cis.ocrd.ml.ARFFWriter;
-import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.ml.features.FeatureSet;
 import de.lmu.cis.ocrd.ml.features.NamedDoubleFeature;
 import de.lmu.cis.ocrd.ml.OCRToken;

@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.ml.test;
 
 import de.lmu.cis.ocrd.SimpleLine;
-import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.ml.features.*;
 import org.junit.Before;
 import org.junit.Test;

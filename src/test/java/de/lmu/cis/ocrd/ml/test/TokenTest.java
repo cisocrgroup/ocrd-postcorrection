@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 import de.lmu.cis.ocrd.Word;
-import de.lmu.cis.ocrd.ml.Token;
 
 public class TokenTest {
 

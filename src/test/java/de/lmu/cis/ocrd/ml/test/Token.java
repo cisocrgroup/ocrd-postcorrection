@@ -1,8 +1,8 @@
-package de.lmu.cis.ocrd.ml;
+package de.lmu.cis.ocrd.ml.test;
 
-import com.google.gson.Gson;
-import de.lmu.cis.ocrd.SimpleLine;
 import de.lmu.cis.ocrd.Word;
+import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 
 import java.io.Serializable;
@@ -19,18 +19,14 @@ public class Token implements Serializable, OCRToken {
 	private String gt;
 	private ArrayList<Word> otherOCR;
 
-	public Token(Word masterOCR, int id) {
+	Token(Word masterOCR, int id) {
 		assert masterOCR != null;
 		this.masterOCR = masterOCR;
 		this.id = id;
 	}
 
-	public static Token create(String str, int id) {
+	static Token create(String str, int id) {
 		return new Token(Word.create(str), id);
-	}
-
-	private int getID() {
-		return id;
 	}
 
 	public Token withGT(List<String> gtTokens) {
@@ -38,7 +34,7 @@ public class Token implements Serializable, OCRToken {
 		return this;
 	}
 
-	public Token withGT(String gt) {
+	Token withGT(String gt) {
 		this.gt = gt;
 		return this;
 	}
@@ -53,13 +49,6 @@ public class Token implements Serializable, OCRToken {
 		return new ArrayList<>();
 	}
 
-	public boolean isCorrectToken() {
-		if (gt == null) {
-			return false;
-		}
-		return gt.equals(masterOCR.toString());
-	}
-
 	@Override
 	public int getNOCR() {
 		return otherOCR.size() + 1;
@@ -70,7 +59,7 @@ public class Token implements Serializable, OCRToken {
 		return this.masterOCR;
 	}
 
-	public Token addOCR(Word ocr) {
+	Token addOCR(Word ocr) {
 		assert ocr != null;
 		if (this.otherOCR == null) {
 			this.otherOCR = new ArrayList<>();
@@ -79,7 +68,7 @@ public class Token implements Serializable, OCRToken {
 		return this;
 	}
 
-	public int getNumberOfOtherOCRs() {
+	int getNumberOfOtherOCRs() {
 		if (otherOCR == null) {
 			return 0;
 		}
@@ -116,32 +105,6 @@ public class Token implements Serializable, OCRToken {
 	@Override
 	public void correct(String correction, double confidence) {
 		/* do nothing */
-	}
-
-	public boolean hasGT() {
-		return gt != null;
-	}
-
-	public String toJSON() {
-		return new Gson().toJson(new Data(this));
-	}
-
-	static class Data {
-		final String[] ocr;
-		final String gt;
-		final SimpleLine.Data line;
-		final int tokenID;
-
-		Data(Token token) {
-			line = new SimpleLine.Data(token.getMasterOCR().getLine());
-			tokenID = token.getID();
-			gt = token.getGT().isPresent() ? token.getGT().get() : "";
-			ocr = new String[1 + token.getNumberOfOtherOCRs()];
-			ocr[0] = token.getMasterOCR().toString();
-			for (int i = 0; i < token.getNumberOfOtherOCRs(); i++) {
-				ocr[i + 1] = token.getSlaveOCR(i).toString();
-			}
-		}
 	}
 
 	@Override
