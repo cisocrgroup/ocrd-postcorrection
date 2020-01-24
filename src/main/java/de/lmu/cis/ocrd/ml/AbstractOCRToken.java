@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.ml;
 
 import java.util.Optional;
 
-abstract class AbstractOCRToken implements OCRToken {
+public abstract class AbstractOCRToken implements OCRToken {
     private final BaseOCRToken base;
 
     AbstractOCRToken(BaseOCRToken base) {
@@ -13,7 +13,7 @@ abstract class AbstractOCRToken implements OCRToken {
         }
     }
 
-    BaseOCRToken getBase() {
+    public BaseOCRToken getBase() {
         return base;
     }
 

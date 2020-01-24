@@ -41,12 +41,10 @@ public class Lines {
     }
 
     public static Alignment align(String[] lines) {
-        // final String master = Normalizer.normalize(lines[0]);
         final String master = lines[0];
         Alignment data = new Alignment(master);
         final TokenAlignment tokenAlignment = new TokenAlignment(master);
         for (int i = 1; i < lines.length; i++) {
-            // final String other = Normalizer.normalize(lines[i]);
             final String other = lines[i];
             final Graph g = new Graph(master, other);
             data.lineAlignment.raw.add(g.getStartNode().toString());
@@ -59,9 +57,9 @@ public class Lines {
         for (TokenAlignment.Token t : tokenAlignment) {
             WordAlignment word = new WordAlignment(t.getMaster());
             for (int i = 1; i < lines.length; i++) {
-                List<String> strs = t.getAlignment(i-1);
-                word.alignments.add(strs);
-                word.pairwise.add(getPairwise(new Graph(word.master, join(strs)).getStartNode()));
+                List<String> parts = t.getAlignment(i-1);
+                word.alignments.add(parts);
+                word.pairwise.add(getPairwise(new Graph(word.master, join(parts)).getStartNode()));
             }
             data.wordAlignments.add(word);
         }
@@ -76,28 +74,26 @@ public class Lines {
             if (node.next(0) == null) {
                 break;
             }
-            String g0 = node.next(0).getLabel();
-            String g1 = node.next(1).getLabel();
+            StringBuilder g0 = new StringBuilder(node.next(0).getLabel());
+            StringBuilder g1 = new StringBuilder(node.next(1).getLabel());
             while (g0.length() < g1.length()) {
-                g0 += '_';
+                g0.append('_');
             }
             while (g1.length() < g0.length()) {
-                g1 += '_';
+                g1.append('_');
             }
-            pair[0] += g0;
-            pair[1] += g1;
-            node = (Node) node.next(0).next(0);
+            pair[0] += g0.toString();
+            pair[1] += g1.toString();
+            node = node.next(0).next(0);
         }
         pair[0] = pair[0].substring(1, pair[0].length() - 1);
         pair[1] = pair[1].substring(1, pair[1].length() - 1);
         return pair;
     }
 
-    private static String join(List<String> strs) {
+    public static String join(List<String> strs) {
         StringJoiner sj = new StringJoiner(" ");
-        for (String str : strs) {
-            sj.add(str);
-        }
+        strs.forEach(sj::add);
         return sj.toString();
     }
 }
