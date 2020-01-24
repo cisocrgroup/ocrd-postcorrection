@@ -27,10 +27,6 @@ public class Workspace {
         this.fgr = new METSFileGroupReader(this.mets, parameters);
     }
 
-    public METS getMETS() {
-        return mets;
-    }
-
     public void save() throws Exception {
         Logger.info("saving mets: {}", metsPath.toAbsolutePath().toString());
         mets.save(metsPath);
@@ -52,8 +48,8 @@ public class Workspace {
         return fgr.getRankedTokenReader(ifg, profile, rankings);
     }
 
-    public void write(WordReader wordReader, String ofg) throws Exception {
-        putWords(wordReader, ofg);
+    public void write(String ifg, String ofg) throws Exception {
+        putWords(getWordReader(ifg), ofg);
     }
 
     private void putWords(WordReader wordReader, String ofg) throws Exception {
