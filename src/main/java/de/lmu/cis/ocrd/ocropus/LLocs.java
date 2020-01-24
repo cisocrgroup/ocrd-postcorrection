@@ -101,7 +101,7 @@ public class LLocs {
             // handle master
             if (index == 0) {
                 final int pos = mustGetIndexOf(wordAlignment.master, offset);
-                offset += pos + wordAlignment.master.length();
+                offset = pos + wordAlignment.master.length();
                 ret.add(sublist(pos, offset));
             } else { // alignment: index > 0
                 int start = -1;
@@ -110,7 +110,7 @@ public class LLocs {
                     if (start == -1) {
                         start = pos;
                     }
-                    offset += pos + part.length();
+                    offset = pos + part.length();
                 }
                 ret.add(sublist(start, offset));
             }
@@ -119,17 +119,23 @@ public class LLocs {
     }
 
     private int mustGetIndexOf(String needle, int offset) throws Exception {
-        final int pos = toString().substring(offset).indexOf(needle);
-        if (pos < 0) {
-            throw new Exception("cannot find alignment in llocs: " + needle);
+        int pos = toString().indexOf(needle, offset);
+        if (pos >= 0) {
+            return pos;
         }
-        return pos;
+        if (offset >= needle.length()) {
+            pos = toString().indexOf(needle, offset-needle.length());
+            if (pos >= 0) {
+                return pos;
+            }
+        }
+        throw new Exception("cannot find alignment in llocs: " + needle);
     }
 
     private LLocs sublist(int start, int end) {
-        int a = toString().codePointCount(0, start);
-        int e = toString().codePointCount(start, end);
-        return new LLocs(this.pairs.subList(a, e), this.path);
+        int s = toString().codePointCount(0, start);
+        int len = toString().codePointCount(start, end);
+        return new LLocs(this.pairs.subList(s, s+len), this.path);
     }
 
     @Override

@@ -76,17 +76,17 @@ public class Lines {
             if (node.next(0) == null) {
                 break;
             }
-            String g0 = node.next(0).getLabel();
-            String g1 = node.next(1).getLabel();
+            StringBuilder g0 = new StringBuilder(node.next(0).getLabel());
+            StringBuilder g1 = new StringBuilder(node.next(1).getLabel());
             while (g0.length() < g1.length()) {
-                g0 += '_';
+                g0.append('_');
             }
             while (g1.length() < g0.length()) {
-                g1 += '_';
+                g1.append('_');
             }
-            pair[0] += g0;
-            pair[1] += g1;
-            node = (Node) node.next(0).next(0);
+            pair[0] += g0.toString();
+            pair[1] += g1.toString();
+            node = node.next(0).next(0);
         }
         pair[0] = pair[0].substring(1, pair[0].length() - 1);
         pair[1] = pair[1].substring(1, pair[1].length() - 1);
@@ -95,9 +95,7 @@ public class Lines {
 
     public static String join(List<String> strs) {
         StringJoiner sj = new StringJoiner(" ");
-        for (String str : strs) {
-            sj.add(str);
-        }
+        strs.forEach(sj::add);
         return sj.toString();
     }
 }

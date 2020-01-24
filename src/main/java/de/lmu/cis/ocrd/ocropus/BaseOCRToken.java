@@ -1,38 +1,45 @@
 package de.lmu.cis.ocrd.ocropus;
 
-import de.lmu.cis.ocrd.ml.OCRWord;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
-    private final int nOCR;
+    private final List<OCRWord> ocrs;
+    private final String gt;
 
-    BaseOCRToken(int nOCR) {
-        this.nOCR = nOCR;
+    BaseOCRToken(List<LLocs> ocrs, List<String> normalizedLines, String gt) {
+        this.ocrs = new ArrayList<>(ocrs.size());
+        for (int i = 0; i < ocrs.size(); i++) {
+            this.ocrs.add(new de.lmu.cis.ocrd.ocropus.OCRWord(ocrs.get(i), normalizedLines.get(i)));
+        }
+        this.gt = gt;
     }
 
     @Override
     public int getNOCR() {
-        return nOCR;
+        return ocrs.size();
     }
 
     @Override
     public OCRWord getMasterOCR() {
-        return null;
+        return ocrs.get(0);
     }
 
     @Override
     public OCRWord getSlaveOCR(int i) {
-        return null;
+        return ocrs.get(i+1);
     }
 
     @Override
     public Optional<String> getGT() {
-        return Optional.empty();
+        return Optional.ofNullable(gt);
     }
 
     @Override
     public void correct(String correction, double confidence) {
-
+        throw new NotImplementedException();
     }
 }
