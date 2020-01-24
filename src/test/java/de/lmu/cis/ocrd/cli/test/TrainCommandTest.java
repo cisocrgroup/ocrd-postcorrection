@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -38,7 +39,7 @@ public class TrainCommandTest {
 
 	@Before
 	public void init() throws IOException {
-		tmp =  Files.createTempDirectory("OCR-D-CIS-JAVA");
+		tmp = Files.createTempDirectory("OCR-D-CIS-JAVA");
 		try (Reader r = new FileReader(Paths.get("src/test/resources/workspace/config.json").toFile())) {
 			parameters = new Gson().fromJson(r, Parameters.class);
 		}
@@ -48,12 +49,18 @@ public class TrainCommandTest {
 		} catch (FileAlreadyExistsException e) {
 			// ignore
 		}
+		Files.copy(Paths.get(mets), Paths.get(tmp.toString(), "mets.xml"), REPLACE_EXISTING);
 	}
 
 	@After
 	public void deinit() {
 		if ("debug".equalsIgnoreCase(logLevel)) { // do not remove while debugging
 			return;
+		}
+		try {
+			Files.copy(Paths.get(tmp.toString(), "mets.xml"), Paths.get(mets), REPLACE_EXISTING);
+		} catch (Exception e) {
+			// ignore
 		}
 		try {
 			FileUtils.deleteDirectory(Paths.get(workspace.toString(), outputFileGroup).toFile());
