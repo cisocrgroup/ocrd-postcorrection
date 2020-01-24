@@ -59,9 +59,9 @@ public class Lines {
         for (TokenAlignment.Token t : tokenAlignment) {
             WordAlignment word = new WordAlignment(t.getMaster());
             for (int i = 1; i < lines.length; i++) {
-                List<String> strs = t.getAlignment(i-1);
-                word.alignments.add(strs);
-                word.pairwise.add(getPairwise(new Graph(word.master, join(strs)).getStartNode()));
+                List<String> parts = t.getAlignment(i-1);
+                word.alignments.add(parts);
+                word.pairwise.add(getPairwise(new Graph(word.master, join(parts)).getStartNode()));
             }
             data.wordAlignments.add(word);
         }
@@ -93,7 +93,7 @@ public class Lines {
         return pair;
     }
 
-    private static String join(List<String> strs) {
+    public static String join(List<String> strs) {
         StringJoiner sj = new StringJoiner(" ");
         for (String str : strs) {
             sj.add(str);
