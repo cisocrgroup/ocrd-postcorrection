@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.ml.OCRToken;
+import de.lmu.cis.ocrd.ml.OCRWord;
 
 // DynamicLexiconGTFeature is a feature that simply checks if the master OCR of any given token
 // equals its ground-truth. This feature should be used to simply add GT-data to
@@ -26,10 +27,11 @@ public class DynamicLexiconGTFeature extends NamedBooleanFeature {
 	// since it could be a fragmented.
 	@Override
 	boolean doCalculate(OCRToken token, int i, int n) {
-		final String str = token.getMasterOCR().toString();
-		return str.codePointCount(0, str.length()) > SHORT
-				&& !token.getMasterOCR().isFirstInLine()
-				&& !token.getMasterOCR().isLastInLine()
-				&& token.getGT().orElse("").equalsIgnoreCase(str);
+		final OCRWord mOCR = token.getMasterOCR();
+		final String normalized = mOCR.getWordNormalized();
+		return normalized.codePointCount(0, normalized.length()) > SHORT
+				&& !mOCR.getLineNormalized().startsWith(normalized)
+				&& !mOCR.getLineNormalized().endsWith(normalized)
+				&& token.getGT().orElse("").equalsIgnoreCase(normalized);
 	}
 }

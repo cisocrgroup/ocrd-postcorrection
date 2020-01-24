@@ -9,14 +9,7 @@ public class EmptyWord implements OCRWord {
 
 	@Override
 	public String id() {return "empty";}
-	@Override
-	public boolean isLastInLine() {
-		return false;
-	}
-	@Override
-	public boolean isFirstInLine() {
-		return false;
-	}
+
 	@Override
 	public String getLineNormalized() {
 		return "";

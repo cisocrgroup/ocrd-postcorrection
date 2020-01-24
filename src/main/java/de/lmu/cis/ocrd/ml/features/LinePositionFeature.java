@@ -29,10 +29,10 @@ public class LinePositionFeature extends NamedStringSetFeature {
 	@Override
 	public Object calculate(OCRToken token, int i, int n) {
 		final OCRWord word = getWord(token, i, n);
-		if (word.isFirstInLine()) {
+		if (word.getLineNormalized().startsWith(word.getWordNormalized())) {
 			return FIRST;
 		}
-		if (word.isLastInLine()) {
+		if (word.getLineNormalized().endsWith(word.getWordNormalized())) {
 			return LAST;
 		}
 		return MIDDLE;

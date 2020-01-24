@@ -7,6 +7,4 @@ public interface OCRWord {
 	String getWordRaw();
 	double getCharacterConfidenceAt(int i);
 	double getConfidence();
-	boolean isFirstInLine();
-	boolean isLastInLine();
 }

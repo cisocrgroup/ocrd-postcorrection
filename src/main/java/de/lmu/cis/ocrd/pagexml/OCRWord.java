@@ -24,16 +24,6 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 	}
 
 	@Override
-	public boolean isLastInLine() {
-		return line.endsWith(getWordNormalized());
-	}
-
-	@Override
-	public boolean isFirstInLine() {
-		return line.startsWith(getWordNormalized());
-	}
-
-	@Override
 	public String getLineNormalized() {
 		return line;
 	}
