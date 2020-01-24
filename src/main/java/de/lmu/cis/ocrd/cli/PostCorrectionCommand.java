@@ -45,7 +45,8 @@ public class PostCorrectionCommand extends ParametersCommand {
 			final Rankings rankings = predictRankings(alex);
 			decide(rankings);
 		}
-		workspace.putWords(workspace.getWordReader(ifg), ofg);
+		workspace.write(workspace.getWordReader(ifg), ofg);
+		workspace.save();
 	}
 
 	private AdditionalLexicon predictLexiconExtensions() throws Exception {

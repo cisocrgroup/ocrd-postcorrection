@@ -10,6 +10,8 @@ import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
 public class Workspace {
@@ -50,15 +52,18 @@ public class Workspace {
         return fgr.getRankedTokenReader(ifg, profile, rankings);
     }
 
-    public void putWords(WordReader wordReader, String ofg) throws Exception {
-        Page old = null;
+    public void write(WordReader wordReader, String ofg) throws Exception {
+        putWords(wordReader, ofg);
+    }
+
+    private void putWords(WordReader wordReader, String ofg) throws Exception {
+        Set<Page> changedPages = new HashSet<>();
         for (Word word: wordReader.readWords()) {
             final Page current = word.getParentLine().getParentPage();
-            // write new pages
-            if (current != old) {
-                old = current;
-                putPageXML(current, ofg);
-            }
+            changedPages.add(word.getParentLine().getParentPage());
+        }
+        for (Page page: changedPages) {
+            putPageXML(page, ofg);
         }
     }
 
