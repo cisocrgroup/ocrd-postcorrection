@@ -45,7 +45,6 @@ public class PostCorrectionCommand extends ParametersCommand {
 			decide(rankings);
 		}
 		workspace.write(ifg, ofg);
-		workspace.save();
 	}
 
 	private AdditionalLexicon predictLexiconExtensions() throws Exception {

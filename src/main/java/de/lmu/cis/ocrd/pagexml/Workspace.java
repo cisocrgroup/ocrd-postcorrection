@@ -24,12 +24,12 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
     public Workspace(Path mets, Parameters parameters) throws Exception {
         this.workDir = mets.getParent();
         this.metsPath = mets;
-        this.mets = METS.open(mets);
+        this.mets = METS.open(metsPath);
         this.fgr = new METSFileGroupReader(this.mets, parameters);
     }
 
-    @Override
-    public void save() throws Exception {
+
+    private void saveMETS() throws Exception {
         Logger.info("saving mets: {}", metsPath.toAbsolutePath().toString());
         mets.save(metsPath);
     }
@@ -57,6 +57,7 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
     @Override
     public void write(String ifg, String ofg) throws Exception {
         putWords(fgr.getWordReader(ifg), ofg);
+        saveMETS();
     }
 
     @Override

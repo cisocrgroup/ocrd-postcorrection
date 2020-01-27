@@ -72,11 +72,6 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
     }
 
     @Override
-    public void save() throws Exception {
-        throw new Exception("save: not implemented");
-    }
-
-    @Override
     public void resetProfile(String dir, Profile profile) throws Exception {
         List<OCRToken> tokens = getNormalTokenReader(dir, profile).read();
         for (int i = 0; i < tokens.size(); i++) {
