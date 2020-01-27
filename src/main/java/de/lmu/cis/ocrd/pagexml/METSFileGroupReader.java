@@ -6,12 +6,14 @@ import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
 
+import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.*;
 
 class METSFileGroupReader {
     private final METS mets;
     private final Parameters parameters;
-    private final Map<String, WordReader> words;
+    private final Map<String, List<Word>> words;
     private final Map<String, List<de.lmu.cis.ocrd.ml.BaseOCRToken>> base;
     private final Map<String, OCRTokenReader> normal;
     private final Map<String, OCRTokenReader> candidate;
@@ -27,10 +29,18 @@ class METSFileGroupReader {
         ranked = new HashMap<>();
     }
 
-    WordReader getWordReader(String ifg) throws Exception {
+    List<Word> readWords(String ifg) throws Exception {
         if (!words.containsKey(ifg)) {
-            final METSFileGroupWordReader tr = new METSFileGroupWordReader(mets, parameters, ifg);
-            words.put(ifg, new WordReaderImpl(tr.readWords()));
+            ArrayList<Word> tmp = new ArrayList<>();
+            for (METS.File file : mets.findFileGrpFiles(ifg)) {
+                try (InputStream is = file.openInputStream()) {
+                    final Page page = Page.parse(Paths.get(file.getFLocat()), is);
+                    for (Line line : page.getLines()) {
+                        tmp.addAll(line.getWords());
+                    }
+                }
+            }
+            words.put(ifg, tmp);
         }
         return words.get(ifg);
     }
@@ -38,7 +48,7 @@ class METSFileGroupReader {
     BaseOCRTokenReader getBaseOCRTokenReader(String ifg) throws Exception {
         if (!base.containsKey(ifg)) {
             final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
-            for (Word word: getWordReader(ifg).readWords()) {
+            for (Word word: readWords(ifg)) {
                 tokens.add(new BaseOCRToken(word, parameters.getNOCR()));
             }
             base.put(ifg, tokens);
@@ -96,19 +106,6 @@ class METSFileGroupReader {
             ranked.put(ifg, new OCRTokenReaderImpl(tokens));
         }
         return ranked.get(ifg);
-    }
-
-    private static class WordReaderImpl implements WordReader {
-        private final List<Word> words;
-
-        WordReaderImpl(List<Word> words) {
-            this.words = words;
-        }
-
-        @Override
-        public List<Word> readWords() {
-            return words;
-        }
     }
 
     private static class BaseOCRTokenReaderImpl implements BaseOCRTokenReader {

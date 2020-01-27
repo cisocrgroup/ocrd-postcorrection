@@ -2,8 +2,8 @@ package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.BaseOCRTokenReader;
-import de.lmu.cis.ocrd.ml.Rankings;
 import de.lmu.cis.ocrd.ml.OCRTokenReader;
+import de.lmu.cis.ocrd.ml.Rankings;
 import de.lmu.cis.ocrd.profile.Profile;
 import org.pmw.tinylog.Logger;
 
@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
@@ -56,7 +57,7 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
 
     @Override
     public void write(String ifg, String ofg) throws Exception {
-        putWords(fgr.getWordReader(ifg), ofg);
+        putWords(fgr.readWords(ifg), ofg);
         saveMETS();
     }
 
@@ -65,9 +66,9 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
         fgr.setProfile(ifg, profile);
     }
 
-    private void putWords(WordReader wordReader, String ofg) throws Exception {
+    private void putWords(List<Word> words, String ofg) throws Exception {
         Set<Page> changedPages = new HashSet<>();
-        for (Word word: wordReader.readWords()) {
+        for (Word word: words) {
             final Page current = word.getParentLine().getParentPage();
             changedPages.add(word.getParentLine().getParentPage());
         }
