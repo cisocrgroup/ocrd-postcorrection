@@ -60,7 +60,7 @@ public class EvaluateCommand extends ParametersCommand {
     private void evaluate(DMProtocol.ProtocolValue value, List<Candidate> candidates, String gt) {
         counts.n++;
         if (value.ocr.equalsIgnoreCase(gt)) {
-            counts.corBefore++;
+            counts.correctBefore++;
         }
         if (isTypeIError(value.ocr, candidates, gt)) {
             counts.typeI++;
@@ -73,17 +73,17 @@ public class EvaluateCommand extends ParametersCommand {
         }
         if ((value.taken && value.cor.equalsIgnoreCase(gt)) ||
                 (!value.taken && value.ocr.equalsIgnoreCase(gt))) {
-            counts.corAfter++;
+            counts.correctAfter++;
         }
         if (value.taken && value.cor.equalsIgnoreCase(gt) && !value.ocr.equalsIgnoreCase(gt)) {
-            counts.succCors++;
+            counts.successfulCorrections++;
         }
     }
 
     private void evaluate(String mOCR, List<Candidate> candidates, String gt) {
         counts.n++;
         if (mOCR.equalsIgnoreCase(gt)) {
-            counts.corBefore++;
+            counts.correctBefore++;
         }
         if (isTypeIError(mOCR, candidates, gt)) {
             counts.typeI++;
@@ -144,9 +144,9 @@ public class EvaluateCommand extends ParametersCommand {
         int typeII = 0;  // good correction not on rank one
         int typeIII = 0; // missed opportunity
         int typeIV = 0;  // infelicitous correction
-        int corBefore = 0;
-        int corAfter = 0;
-        int succCors = 0;
+        int correctBefore = 0;
+        int correctAfter = 0;
+        int successfulCorrections = 0;
         int n = 0;
     }
 }
