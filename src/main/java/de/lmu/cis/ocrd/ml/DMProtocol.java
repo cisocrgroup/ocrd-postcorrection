@@ -69,6 +69,6 @@ public class DMProtocol implements Protocol {
         val.confidence = confidence;
         val.taken = taken;
         val.rankings = rankings.get(token);
-        protocol.corrections.put(token.getMasterOCR().id(), val);
+        protocol.corrections.put(token.getMasterOCR().getID(), val);
     }
 }

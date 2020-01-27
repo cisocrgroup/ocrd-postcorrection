@@ -19,7 +19,7 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 	}
 
 	@Override
-	public String id() {
+	public String getID() {
 		return id;
 	}
 

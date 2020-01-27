@@ -48,8 +48,8 @@ public class EvaluateCommand extends ParametersCommand {
         if (gt.isEmpty()) {
             return;
         }
-        if (protocol.getProtocol().corrections.containsKey(token.getMasterOCR().id())) {
-            final DMProtocol.ProtocolValue value = protocol.getProtocol().corrections.get(token.getMasterOCR().id());
+        if (protocol.getProtocol().corrections.containsKey(token.getMasterOCR().getID())) {
+            final DMProtocol.ProtocolValue value = protocol.getProtocol().corrections.get(token.getMasterOCR().getID());
             evaluate(value, getCandidates(profile, value.ocr), gt);
         } else {
             final String mOCR = token.getMasterOCR().getWordNormalized().toLowerCase();

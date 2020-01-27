@@ -8,7 +8,7 @@ public class EmptyWord implements OCRWord {
 	private EmptyWord() {}
 
 	@Override
-	public String id() {return "empty";}
+	public String getID() {return "empty";}
 
 	@Override
 	public String getLineNormalized() {

@@ -48,7 +48,7 @@ public class Word implements Serializable, OCRWord {
 	}
 
 	@Override
-	public String id() {
+	public String getID() {
 		return Integer.toString(line.getLineId());
 	}
 
