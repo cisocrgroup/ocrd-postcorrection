@@ -36,7 +36,7 @@ public class EvaluateCommand extends ParametersCommand {
 
     private void evaluate(String ifg) throws Exception {
         final Profile profile = getProfile(ifg, new NoAdditionalLexicon(), parameters.getNOCR());
-        final DMProtocol protocol = new DMProtocol(null);
+        final DMProtocol protocol = new DMProtocol();
         try (InputStream is = new FileInputStream(parameters.getDMTraining().getProtocol(parameters.getNOCR()).toFile())) {
             protocol.read(is);
         }
@@ -74,6 +74,9 @@ public class EvaluateCommand extends ParametersCommand {
         if ((value.taken && value.cor.equalsIgnoreCase(gt)) ||
                 (!value.taken && value.ocr.equalsIgnoreCase(gt))) {
             counts.corAfter++;
+        }
+        if (value.taken && value.cor.equalsIgnoreCase(gt) && !value.ocr.equalsIgnoreCase(gt)) {
+            counts.succCors++;
         }
     }
 
@@ -143,6 +146,7 @@ public class EvaluateCommand extends ParametersCommand {
         int typeIV = 0;  // infelicitous correction
         int corBefore = 0;
         int corAfter = 0;
+        int succCors = 0;
         int n = 0;
     }
 }
