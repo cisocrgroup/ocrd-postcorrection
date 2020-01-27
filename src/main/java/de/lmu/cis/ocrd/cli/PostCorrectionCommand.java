@@ -68,7 +68,10 @@ public class PostCorrectionCommand extends ParametersCommand {
 
 	private Rankings predictRankings(AdditionalLexicon alex) throws Exception {
 		// no protocol
+		// if a profile exists, we need to overwrite it with an alexed profile
+		// otherwise no profile exists and we need to create one anyway.
 		profile = getProfile(ifg, alex, parameters.getNOCR());
+		workspace.resetProfile(ifg, profile);
 		final Predictor predictor = getRRPredictor();
 		Rankings rankings = new Rankings();
 		for (OCRToken token: TokenFilter.filter(workspace.getNormalTokenReader(ifg, profile)).collect(Collectors.toList())) {
