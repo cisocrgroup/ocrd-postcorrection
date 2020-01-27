@@ -1,6 +1,5 @@
 package de.lmu.cis.ocrd.ml;
 
-import de.lmu.cis.ocrd.pagexml.OCRTokenImpl;
 import de.lmu.cis.ocrd.profile.Candidate;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -332,7 +331,7 @@ public class DMEvaluator {
             printf("%s: %s", entry.getValue().toString(), entry.getKey());
             if (entry.getValue() == Classification.INTERPRETABLE_OCR_ERROR_HAVE_NO_CANDIDATE ||
 					entry.getValue() == Classification.INTERPRETABLE_OCR_ERROR_HAVE_CANDIDATE_ON_OTHER_RANK) {
-                ((OCRTokenImpl) entry.getKey()).getAllProfilerCandidatesNoLimit().forEach((c) -> printf(
+                entry.getKey().getCandidates().forEach((c) -> printf(
                 		",suggestion:%s;dict:%s;nHist:%d;nOCR:%d", c.Suggestion, c.Dict,
 						c.HistPatterns.length, c.OCRPatterns.length));
             }

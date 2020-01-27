@@ -13,7 +13,7 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 	private final List<OCRWord> words;
 	private final int gtIndex;
 
-	BaseOCRToken(Word word, int gtIndex) throws Exception {
+	public BaseOCRToken(Word word, int gtIndex) throws Exception {
 		this.gtIndex = gtIndex;
 		this.word = word;
 		this.words = getWords(word, gtIndex);

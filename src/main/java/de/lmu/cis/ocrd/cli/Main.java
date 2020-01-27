@@ -18,7 +18,6 @@ public class Main {
 
 	private static CommandFactory makeCommandFactory() throws Exception {
 		return new CommandFactory()
-				.register(CheckCorpusCommand.class)
 				.register(TokenizerCommand.class)
 				.register(EvaluateCommand.class)
 				.register(PostCorrectionCommand.class)

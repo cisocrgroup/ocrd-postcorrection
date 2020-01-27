@@ -1,7 +1,7 @@
 package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.config.Parameters;
-import de.lmu.cis.ocrd.pagexml.WordReaderProfiler;
+import de.lmu.cis.ocrd.ml.BaseOCRTokenProfiler;
 import de.lmu.cis.ocrd.pagexml.Workspace;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.FileProfiler;
@@ -41,7 +41,7 @@ abstract class ParametersCommand implements Command {
             return new FileProfiler(parameters.getProfiler().getPath()).profile();
         }
         final Profile profile;
-        profile = new WordReaderProfiler(
+        profile = new BaseOCRTokenProfiler(
                 workspace.getBaseOCRTokenReader(ifg),
                 new LocalProfilerProcess(
                         parameters.getProfiler().getPath(),
