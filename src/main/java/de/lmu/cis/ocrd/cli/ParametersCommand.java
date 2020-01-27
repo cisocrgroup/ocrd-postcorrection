@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.BaseOCRTokenProfiler;
-import de.lmu.cis.ocrd.pagexml.Workspace;
+import de.lmu.cis.ocrd.ml.Workspace;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.FileProfiler;
 import de.lmu.cis.ocrd.profile.LocalProfilerProcess;
@@ -28,7 +28,14 @@ abstract class ParametersCommand implements Command {
 
     protected void init(CommandLineArguments config) throws Exception {
         this.parameters = config.mustGetParameter(Parameters.class);
-        this.workspace = new Workspace(Paths.get(config.mustGetMETSFile()), this.parameters);
+        this.workspace = makeWorkspace(config, this.parameters);
+    }
+
+    private static Workspace makeWorkspace(CommandLineArguments config, Parameters parameters) throws Exception {
+        if (parameters.isOcropus()) {
+            return new de.lmu.cis.ocrd.ocropus.Workspace(parameters);
+        }
+        return new de.lmu.cis.ocrd.pagexml.Workspace(Paths.get(config.mustGetMETSFile()), parameters);
     }
 
     Profile getProfile(String ifg, AdditionalLexicon alex, int n) throws Exception {
@@ -48,6 +55,7 @@ abstract class ParametersCommand implements Command {
                         parameters.getProfiler().getConfig(),
                         alex)
         ).profile();
+        // cache the profile
         try (Writer w = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(cachedPath.toFile())), StandardCharsets.UTF_8))) {
             w.write(profile.toJSON());
             w.write('\n');

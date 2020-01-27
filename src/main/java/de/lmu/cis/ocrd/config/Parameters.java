@@ -20,6 +20,7 @@ public class Parameters {
     private int maxCandidates = 0;
     private boolean runLE = false;
     private boolean runDM = false;
+    private boolean ocropus = false;
 
     public void setLEFeatures(List<JsonObject> leFeatures) {
         this.leFeatures = leFeatures;
@@ -88,6 +89,10 @@ public class Parameters {
     public void setRunDM(boolean runDM) {
         this.runDM = runDM;
     }
+
+    public boolean isOcropus() {return ocropus;}
+
+    public void setOcropus(boolean ocropus) {this.ocropus = ocropus;}
 
     public Path getModel() {
         return Paths.get(dir, "model.zip");
