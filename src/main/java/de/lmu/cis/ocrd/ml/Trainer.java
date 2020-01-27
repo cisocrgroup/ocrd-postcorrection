@@ -43,8 +43,8 @@ public class Trainer {
                 .writeHeader(n);
     }
 
-    public void prepare(TokenReader tokenReader, int n) throws Exception {
-        final List<OCRToken> tokens = tokenReader.readTokens();
+    public void prepare(OCRTokenReader tokenReader, int n) throws Exception {
+        final List<OCRToken> tokens = tokenReader.read();
         lm.setTokens(tokens);
         TokenFilter.filter(tokens).forEach(token->{
             Logger.debug("preparing {}: {}", arffWriter.getRelation(), token.toString());

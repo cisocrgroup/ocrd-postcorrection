@@ -12,10 +12,10 @@ public class METSFileGroupReader {
     private final METS mets;
     private final Parameters parameters;
     private final Map<String, WordReader> words;
-    private final Map<String, List<BaseOCRToken>> base;
-    private final Map<String, TokenReader> normal;
-    private final Map<String, TokenReader> candidate;
-    private final Map<String, TokenReader> ranked;
+    private final Map<String, List<de.lmu.cis.ocrd.ml.BaseOCRToken>> base;
+    private final Map<String, OCRTokenReader> normal;
+    private final Map<String, OCRTokenReader> candidate;
+    private final Map<String, OCRTokenReader> ranked;
 
     public METSFileGroupReader(METS mets, Parameters parameters) {
         this.mets = mets;
@@ -35,18 +35,18 @@ public class METSFileGroupReader {
         return words.get(ifg);
     }
 
-    private List<BaseOCRToken> getBase(String ifg) throws Exception {
+    public BaseOCRTokenReader getBaseOCRTokenReader(String ifg) throws Exception {
         if (!base.containsKey(ifg)) {
-            final List<BaseOCRToken> tokens = new ArrayList<>();
+            final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
             for (Word word: getWordReader(ifg).readWords()) {
                 tokens.add(new BaseOCRToken(word, parameters.getNOCR()));
             }
             base.put(ifg, tokens);
         }
-        return base.get(ifg);
+        return new BaseOCRTokenReaderImpl(base.get(ifg));
     }
 
-    public TokenReader getNormalTokenReader(String ifg, Profile profile) throws Exception {
+    public OCRTokenReader getNormalTokenReader(String ifg, Profile profile) throws Exception {
         if (!normal.containsKey(ifg)) {
             updateNormalTokens(ifg, profile);
         }
@@ -55,7 +55,7 @@ public class METSFileGroupReader {
 
     private void updateNormalTokens(String ifg, Profile profile) throws Exception {
         final List<OCRToken> tokens = new ArrayList<>();
-        for (BaseOCRToken token: getBase(ifg)) {
+        for (de.lmu.cis.ocrd.ml.BaseOCRToken token: getBaseOCRTokenReader(ifg).read()) {
             final Optional<Candidates> maybeCandidates = profile.get(token.getMasterOCR().getWordNormalized());
             if (maybeCandidates.isPresent()) {
                 final List<Candidate> candidates = maybeCandidates.get().Candidates;
@@ -64,7 +64,7 @@ public class METSFileGroupReader {
                 tokens.add(new CandidatesOCRToken(token));
             }
         }
-        normal.put(ifg, new TokenReaderImpl(tokens));
+        normal.put(ifg, new OCRTokenReaderImpl(tokens));
     }
 
     public void setProfile(String ifg, Profile profile) throws Exception {
@@ -72,28 +72,28 @@ public class METSFileGroupReader {
         updateNormalTokens(ifg, profile); // reset normal tokens with updated profile
     }
 
-    public TokenReader getCandidateTokenReader(String ifg, Profile profile) throws Exception {
+    public OCRTokenReader getCandidateTokenReader(String ifg, Profile profile) throws Exception {
         if (!candidate.containsKey(ifg)) {
             final List<OCRToken> tokens = new ArrayList<>();
-            for (OCRToken token: getNormalTokenReader(ifg, profile).readTokens()) {
+            for (OCRToken token: getNormalTokenReader(ifg, profile).read()) {
                 for (Candidate candidate: token.getCandidates()) {
                     tokens.add(new CandidateOCRToken(token, candidate));
                 }
             }
-            candidate.put(ifg, new TokenReaderImpl(tokens));
+            candidate.put(ifg, new OCRTokenReaderImpl(tokens));
         }
         return candidate.get(ifg);
     }
 
-    public TokenReader getRankedTokenReader(String ifg, Profile profile, Rankings rankings) throws Exception {
+    public OCRTokenReader getRankedTokenReader(String ifg, Profile profile, Rankings rankings) throws Exception {
         if (!ranked.containsKey(ifg)) {
             final List<OCRToken> tokens = new ArrayList<>();
-            for (OCRToken token: getNormalTokenReader(ifg, profile).readTokens()) {
+            for (OCRToken token: getNormalTokenReader(ifg, profile).read()) {
                 if (rankings.containsKey(token)) {
                     tokens.add(new RankingsOCRToken(token, rankings.get(token)));
                 }
             }
-            ranked.put(ifg, new TokenReaderImpl(tokens));
+            ranked.put(ifg, new OCRTokenReaderImpl(tokens));
         }
         return ranked.get(ifg);
     }
@@ -111,15 +111,28 @@ public class METSFileGroupReader {
         }
     }
 
-    private static class TokenReaderImpl implements TokenReader {
+    private static class BaseOCRTokenReaderImpl implements BaseOCRTokenReader {
+        private final List<de.lmu.cis.ocrd.ml.BaseOCRToken> words;
+
+        BaseOCRTokenReaderImpl(List<de.lmu.cis.ocrd.ml.BaseOCRToken> words) {
+            this.words = words;
+        }
+
+        @Override
+        public List<de.lmu.cis.ocrd.ml.BaseOCRToken> read() {
+            return words;
+        }
+    }
+
+    private static class OCRTokenReaderImpl implements OCRTokenReader {
         private final List<OCRToken> tokens;
 
-        TokenReaderImpl(List<OCRToken> tokens) {
+        OCRTokenReaderImpl(List<OCRToken> tokens) {
             this.tokens = tokens;
         }
 
         @Override
-        public List<OCRToken> readTokens() {
+        public List<OCRToken> read() {
             return tokens;
         }
     }

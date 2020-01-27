@@ -13,44 +13,55 @@ import java.util.*;
 
 public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
     private final Parameters parameters;
-    private final Map<String, TokenReader> normal = new HashMap<>();
-    private final Map<String, TokenReader> candidates = new HashMap<>();
-    private final Map<String, TokenReader> ranked = new HashMap<>();
+    private final Map<String, BaseOCRTokenReader> base = new HashMap<>();
+    private final Map<String, OCRTokenReader> normal = new HashMap<>();
+    private final Map<String, OCRTokenReader> candidates = new HashMap<>();
+    private final Map<String, OCRTokenReader> ranked = new HashMap<>();
 
     public Workspace(Parameters parameters) {
         this.parameters = parameters;
     }
 
     @Override
-    public TokenReader getNormalTokenReader(String dir, Profile profile) throws Exception {
-        if (!normal.containsKey(dir)) {
-            List<Path> imageFiles = gatherImageFiles(Paths.get(dir));
-            List<OCRToken> tokens = new ArrayList<>();
+    public BaseOCRTokenReader getBaseOCRTokenReader(String ifg) throws Exception {
+        if (!base.containsKey(ifg)) {
+            List<Path> imageFiles = gatherImageFiles(Paths.get(ifg));
+            List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
             for (Path imageFile: imageFiles) {
-                List<BaseOCRToken> lineTokens = new LLocsLineAlignment(Paths.get(dir)).align(parameters.getNOCR());
-                lineTokens.forEach(t->tokens.add(makeCandidateOCRToken(t, profile)));
+                List<BaseOCRToken> lineTokens = new LLocsLineAlignment(Paths.get(ifg)).align(parameters.getNOCR());
+                tokens.addAll(lineTokens);
             }
-            normal.put(dir, new TokenReaderImpl(tokens));
+            base.put(ifg, new BaseOCRTokenReaderImpl(tokens));
+        }
+        return base.get(ifg);
+    }
+
+    @Override
+    public OCRTokenReader getNormalTokenReader(String dir, Profile profile) throws Exception {
+        if (!normal.containsKey(dir)) {
+            List<OCRToken> tokens = new ArrayList<>();
+            getBaseOCRTokenReader(dir).read().forEach(t -> tokens.add(makeCandidateOCRToken(t, profile)));
+            normal.put(dir, new OCRTokenReaderImpl(tokens));
         }
         return normal.get(dir);
     }
 
     @Override
-    public TokenReader getCandidateTokenReader(String dir, Profile profile) throws Exception {
+    public OCRTokenReader getCandidateTokenReader(String dir, Profile profile) throws Exception {
         if (!candidates.containsKey(dir)) {
             List<OCRToken> tokens = new ArrayList<>();
-            getNormalTokenReader(dir, profile).readTokens().forEach(t-> t.getCandidates().forEach(c->tokens.add(new CandidateOCRToken(t, c))));
-            candidates.put(dir, new TokenReaderImpl(tokens));
+            getNormalTokenReader(dir, profile).read().forEach(t-> t.getCandidates().forEach(c->tokens.add(new CandidateOCRToken(t, c))));
+            candidates.put(dir, new OCRTokenReaderImpl(tokens));
         }
         return candidates.get(dir);
     }
 
     @Override
-    public TokenReader getRankedTokenReader(String dir, Profile profile, Rankings rankings) throws Exception {
+    public OCRTokenReader getRankedTokenReader(String dir, Profile profile, Rankings rankings) throws Exception {
         if (!ranked.containsKey(dir)) {
             List<OCRToken> tokens = new ArrayList<>();
-            getNormalTokenReader(dir, profile).readTokens().forEach(t-> t.getCandidates().forEach(c->tokens.add(new RankingsOCRToken(t, rankings.get(t)))));
-            ranked.put(dir, new TokenReaderImpl(tokens));
+            getNormalTokenReader(dir, profile).read().forEach(t-> t.getCandidates().forEach(c->tokens.add(new RankingsOCRToken(t, rankings.get(t)))));
+            ranked.put(dir, new OCRTokenReaderImpl(tokens));
         }
         return ranked.get(dir);
     }
@@ -67,11 +78,11 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
 
     @Override
     public void resetProfile(String dir, Profile profile) throws Exception {
-        List<OCRToken> tokens = getNormalTokenReader(dir, profile).readTokens();
+        List<OCRToken> tokens = getNormalTokenReader(dir, profile).read();
         for (int i = 0; i < tokens.size(); i++) {
             tokens.add(i, makeCandidateOCRToken(((AbstractOCRToken)tokens.get(i)).getBase(), profile));
         }
-        normal.put(dir, new TokenReaderImpl(tokens));
+        normal.put(dir, new OCRTokenReaderImpl(tokens));
     }
 
     private OCRToken makeCandidateOCRToken(de.lmu.cis.ocrd.ml.BaseOCRToken token, Profile profile) {
@@ -103,15 +114,29 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
             return FileVisitResult.CONTINUE;
         }
     }
-    private static class TokenReaderImpl implements TokenReader {
+
+    private static class OCRTokenReaderImpl implements OCRTokenReader {
         private final List<OCRToken> tokens;
 
-        TokenReaderImpl(List<OCRToken> tokens) {
+        OCRTokenReaderImpl(List<OCRToken> tokens) {
             this.tokens = tokens;
         }
 
         @Override
-        public List<OCRToken> readTokens() {
+        public List<OCRToken> read() {
+            return tokens;
+        }
+    }
+
+    private static class BaseOCRTokenReaderImpl implements BaseOCRTokenReader {
+        private final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens;
+
+        BaseOCRTokenReaderImpl(List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens) {
+            this.tokens = tokens;
+        }
+
+        @Override
+        public List<de.lmu.cis.ocrd.ml.BaseOCRToken> read() {
             return tokens;
         }
     }

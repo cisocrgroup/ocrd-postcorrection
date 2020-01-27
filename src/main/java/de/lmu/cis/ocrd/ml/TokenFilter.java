@@ -8,8 +8,8 @@ public class TokenFilter {
         return tokens.stream().filter((t)-> !tokenIsLexiconEntry(t) && !tokenIsTooShort(t));
     }
 
-    public static Stream<OCRToken> filter(TokenReader tokenReader) throws Exception {
-        return filter(tokenReader.readTokens());
+    public static Stream<OCRToken> filter(OCRTokenReader tokenReader) throws Exception {
+        return filter(tokenReader.read());
     }
 
     private static boolean tokenIsLexiconEntry(OCRToken token) {

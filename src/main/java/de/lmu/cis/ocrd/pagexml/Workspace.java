@@ -1,8 +1,9 @@
 package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.config.Parameters;
+import de.lmu.cis.ocrd.ml.BaseOCRTokenReader;
 import de.lmu.cis.ocrd.ml.Rankings;
-import de.lmu.cis.ocrd.ml.TokenReader;
+import de.lmu.cis.ocrd.ml.OCRTokenReader;
 import de.lmu.cis.ocrd.profile.Profile;
 import org.pmw.tinylog.Logger;
 
@@ -33,28 +34,29 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
         mets.save(metsPath);
     }
 
-    public WordReader getWordReader(String ifg) throws Exception {
-        return fgr.getWordReader(ifg);
+    @Override
+    public BaseOCRTokenReader getBaseOCRTokenReader(String ifg) throws Exception {
+        return fgr.getBaseOCRTokenReader(ifg);
     }
 
     @Override
-    public TokenReader getNormalTokenReader(String ifg, Profile profile) throws Exception {
+    public OCRTokenReader getNormalTokenReader(String ifg, Profile profile) throws Exception {
         return fgr.getNormalTokenReader(ifg, profile);
     }
 
     @Override
-    public TokenReader getCandidateTokenReader(String ifg, Profile profile) throws Exception {
+    public OCRTokenReader getCandidateTokenReader(String ifg, Profile profile) throws Exception {
         return fgr.getCandidateTokenReader(ifg, profile);
     }
 
     @Override
-    public TokenReader getRankedTokenReader(String ifg, Profile profile, Rankings rankings) throws Exception {
+    public OCRTokenReader getRankedTokenReader(String ifg, Profile profile, Rankings rankings) throws Exception {
         return fgr.getRankedTokenReader(ifg, profile, rankings);
     }
 
     @Override
     public void write(String ifg, String ofg) throws Exception {
-        putWords(getWordReader(ifg), ofg);
+        putWords(fgr.getWordReader(ifg), ofg);
     }
 
     @Override

@@ -24,8 +24,8 @@ public class Predictor {
         return this;
     }
 
-    public Predictor withTokens(TokenReader tokenReader) throws Exception {
-        lm.setTokens(tokenReader.readTokens());
+    public Predictor withTokens(OCRTokenReader tokenReader) throws Exception {
+        lm.setTokens(tokenReader.read());
         return this;
     }
 

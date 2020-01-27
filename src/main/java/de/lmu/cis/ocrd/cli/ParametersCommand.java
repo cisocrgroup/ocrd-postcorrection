@@ -1,12 +1,21 @@
 package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.config.Parameters;
-import de.lmu.cis.ocrd.pagexml.METSFileGroupProfiler;
+import de.lmu.cis.ocrd.pagexml.WordReaderProfiler;
 import de.lmu.cis.ocrd.pagexml.Workspace;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
+import de.lmu.cis.ocrd.profile.FileProfiler;
+import de.lmu.cis.ocrd.profile.LocalProfilerProcess;
 import de.lmu.cis.ocrd.profile.Profile;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.zip.GZIPOutputStream;
 
 abstract class ParametersCommand implements Command {
     private final String name;
@@ -23,7 +32,27 @@ abstract class ParametersCommand implements Command {
     }
 
     Profile getProfile(String ifg, AdditionalLexicon alex, int n) throws Exception {
-        return new METSFileGroupProfiler(parameters, workspace.getWordReader(ifg), ifg, alex, parameters.getNOCR()).profile();
+        final Path cachedPath = parameters.getProfiler().getCachedPath(ifg, alex, n);
+        if (cachedPath.toFile().exists()) {
+            return new FileProfiler(cachedPath).profile();
+        }
+        if (parameters.getProfiler().getPath().toString().endsWith(".json") ||
+                parameters.getProfiler().getPath().toString().endsWith(".json.gz")) {
+            return new FileProfiler(parameters.getProfiler().getPath()).profile();
+        }
+        final Profile profile;
+        profile = new WordReaderProfiler(
+                workspace.getBaseOCRTokenReader(ifg),
+                new LocalProfilerProcess(
+                        parameters.getProfiler().getPath(),
+                        parameters.getProfiler().getConfig(),
+                        alex)
+        ).profile();
+        try (Writer w = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(cachedPath.toFile())), StandardCharsets.UTF_8))) {
+            w.write(profile.toJSON());
+            w.write('\n');
+        }
+        return profile;
     }
 
     public Parameters getParameters() {

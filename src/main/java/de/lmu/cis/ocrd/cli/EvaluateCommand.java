@@ -2,7 +2,6 @@ package de.lmu.cis.ocrd.cli;
 
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.DMProtocol;
-import de.lmu.cis.ocrd.pagexml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
@@ -41,22 +40,19 @@ public class EvaluateCommand extends ParametersCommand {
         try (InputStream is = new FileInputStream(parameters.getDMTraining().getProtocol(parameters.getNOCR()).toFile())) {
             protocol.read(is);
         }
-        for (Word word: workspace.getWordReader(ifg).readWords()) {
-            evaluate(profile, protocol, word);
-        }
+        workspace.getBaseOCRTokenReader(ifg).read().forEach(t -> evaluate(profile, protocol, t));
     }
 
-    private void evaluate(Profile profile, DMProtocol protocol, Word word) {
-        final List<TextEquiv> tes = word.getTextEquivs();
-        if (tes.isEmpty()) {
+    private void evaluate(Profile profile, DMProtocol protocol, de.lmu.cis.ocrd.ml.BaseOCRToken token) {
+        final String gt = token.getGT().orElse("").toLowerCase();
+        if (gt.isEmpty()) {
             return;
         }
-        final String gt = tes.get(tes.size()-1).getUnicode().toLowerCase();
-        if (protocol.getProtocol().corrections.containsKey(word.getID())) {
-            final DMProtocol.ProtocolValue value = protocol.getProtocol().corrections.get(word.getID());
+        if (protocol.getProtocol().corrections.containsKey(token.getMasterOCR().id())) {
+            final DMProtocol.ProtocolValue value = protocol.getProtocol().corrections.get(token.getMasterOCR().id());
             evaluate(value, getCandidates(profile, value.ocr), gt);
         } else {
-            final String mOCR = tes.get(0).getUnicode().toLowerCase();
+            final String mOCR = token.getMasterOCR().getWordNormalized().toLowerCase();
             evaluate(mOCR, getCandidates(profile, mOCR), gt);
         }
     }

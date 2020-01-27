@@ -4,7 +4,6 @@ import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.DMBestRankFeature;
 import de.lmu.cis.ocrd.ml.features.DMDifferenceToNextRankFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
-import de.lmu.cis.ocrd.pagexml.METSFileGroupProfiler;
 import de.lmu.cis.ocrd.profile.*;
 
 import java.io.FileOutputStream;
@@ -51,7 +50,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 
 	private AdditionalLexicon predictLexiconExtensions() throws Exception {
 		final AdditionalLexicon alex = new NoAdditionalLexicon();
-		profile = new METSFileGroupProfiler(parameters, workspace.getWordReader(ifg), ifg, alex, parameters.getNOCR()).profile();
+		profile = getProfile(ifg, alex, parameters.getNOCR());
 		final Predictor predictor = getLEPredictor();
 		final Protocol protocol = new LEProtocol();
 		final AdditionalLexiconSet ret = new AdditionalLexiconSet();
@@ -70,7 +69,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 
 	private Rankings predictRankings(AdditionalLexicon alex) throws Exception {
 		// no protocol
-		profile = new METSFileGroupProfiler(parameters, workspace.getWordReader(ifg), ifg, alex, parameters.getNOCR()).profile();
+		profile = getProfile(ifg, alex, parameters.getNOCR());
 		final Predictor predictor = getRRPredictor();
 		Rankings rankings = new Rankings();
 		for (OCRToken token: TokenFilter.filter(workspace.getNormalTokenReader(ifg, profile)).collect(Collectors.toList())) {

@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Rankings extends HashMap<OCRToken, List<Ranking>> {
-    public static Rankings load(TokenReader tokenReader, Path rrModel, Path rrTrain) throws Exception {
+    public static Rankings load(OCRTokenReader tokenReader, Path rrModel, Path rrTrain) throws Exception {
         final LogisticClassifier classifier = LogisticClassifier.load(rrModel);
         final Instances instances = new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
         instances.setClassIndex(instances.numAttributes() - 1);
 
         final Iterator<Instance> iis = instances.iterator();
-        final Iterator<OCRToken> tis = TokenFilter.filter(tokenReader.readTokens()).collect(Collectors.toList()).iterator();
+        final Iterator<OCRToken> tis = TokenFilter.filter(tokenReader.read()).collect(Collectors.toList()).iterator();
         final Rankings rankings = new Rankings();
         while (iis.hasNext() && tis.hasNext()) {
             final Instance i = iis.next();
