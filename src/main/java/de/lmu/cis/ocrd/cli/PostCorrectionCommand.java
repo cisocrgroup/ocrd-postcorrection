@@ -86,6 +86,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 				if (!take) {
 					conf = -conf;
 				}
+				assert(take && conf >= 0 || !take && conf <= 0);
 				rankings.get(token).add(new Ranking(candidate, conf));
 			}
 			rankings.get(token).sort(Comparator.comparingDouble(Ranking::getRanking));
@@ -100,11 +101,10 @@ public class PostCorrectionCommand extends ParametersCommand {
 		for (OCRToken token: rankings.keySet()) {
 			final Predictor.Result result = predictor.predict(new RankingsOCRToken(token, rankings.get(token)), parameters.getNOCR());
 			final boolean take = result.getPrediction().getPrediction();
-			final String correction = rankings.get(token).get(0).getCandidate().Suggestion;
-			final double conf = rankings.get(token).get(0).getRanking();
-			protocol.protocol(token, correction,conf, take);
+			final Ranking topRanking = rankings.get(token).get(0);
+			protocol.protocol(token, topRanking.getCandidate().Suggestion, topRanking.getRanking(), take);
 			if (take) {
-				token.correct(correction, conf);
+				token.correct(topRanking.getCandidate().Suggestion, topRanking.getRanking());
 			}
 		}
 		saveProtocol(parameters.getDMTraining().getProtocol(parameters.getNOCR()), protocol);
