@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,12 +65,16 @@ public class EvaluateCommand extends ParametersCommand {
         }
         if (isTypeIError(value.ocr, candidates, gt)) {
             counts.typeI++;
+            counts.typeIValues.add(value);
         } else if (isTypeIIError(value, candidates, gt)) {
-                counts.typeII++;
+            counts.typeII++;
+            counts.typeIIValues.add(value);
         } else if (isTypeIIIError(value, gt)) {
             counts.typeIII++;
+            counts.typeIIIValues.add(value);
         } else if (isTypeIVError(value, gt)) {
             counts.typeIV++;
+            counts.typeIVValues.add(value);
         }
         if ((value.taken && value.cor.equalsIgnoreCase(gt)) ||
                 (!value.taken && value.ocr.equalsIgnoreCase(gt))) {
@@ -140,6 +145,10 @@ public class EvaluateCommand extends ParametersCommand {
     }
 
     public static class Counts {
+        List<DMProtocol.ProtocolValue> typeIValues = new ArrayList<>();
+        List<DMProtocol.ProtocolValue> typeIIValues = new ArrayList<>();
+        List<DMProtocol.ProtocolValue> typeIIIValues = new ArrayList<>();
+        List<DMProtocol.ProtocolValue> typeIVValues = new ArrayList<>();
         int typeI = 0;   // no correction candidate
         int typeII = 0;  // good correction not on rank one
         int typeIII = 0; // missed opportunity
