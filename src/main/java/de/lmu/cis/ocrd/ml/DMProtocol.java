@@ -40,6 +40,7 @@ public class DMProtocol implements Protocol {
     private Protocol protocol = new Protocol();
     private Map<OCRToken, List<Ranking>> rankings;
 
+    public DMProtocol() {}
     public DMProtocol(Map<OCRToken, List<Ranking>> rankings) {
         this.rankings = rankings;
     }
