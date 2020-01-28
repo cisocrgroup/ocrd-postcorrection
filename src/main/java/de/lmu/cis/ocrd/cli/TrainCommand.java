@@ -7,6 +7,7 @@ import de.lmu.cis.ocrd.ml.Trainer;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
+import org.pmw.tinylog.Logger;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -32,6 +33,7 @@ public class TrainCommand extends ParametersCommand {
 			final Trainer leTrainer = openLETrainer(i+1);
 			final Trainer rrTrainer = openRRTrainer(i+1);
 			for (String ifg: ifgs) {
+				Logger.debug("le/rr training for {}({})", ifg, i+1);
 				final Profile profile = getProfile(ifg, new NoAdditionalLexicon(), i+1);
 				leTrainer.prepare(workspace.getNormalTokenReader(ifg, profile), i+1);
 				rrTrainer.prepare(workspace.getCandidateTokenReader(ifg, null), i+1);
@@ -43,6 +45,7 @@ public class TrainCommand extends ParametersCommand {
 		for (int i = 0; i < parameters.getNOCR(); i++) {
 			final Trainer dmTrainer = openDMTrainer(i+1);
 			for (String ifg: ifgs) {
+				Logger.debug("le/rr training for {}({})", ifg, i+1);
 				final Rankings rankings = Rankings.load(
 						workspace.getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
 						parameters.getRRTraining().getModel(i+1),
@@ -67,6 +70,7 @@ public class TrainCommand extends ParametersCommand {
 		model.setDMFeatureSet(parameters.getDMTraining().getFeatures());
 		model.setLanguageModelPath(parameters.getTrigrams().toString());
 		model.setCreated(System.currentTimeMillis());
+		Logger.debug("saving model to {}", parameters.getModel().toString());
 		model.save(parameters.getModel());
 	}
 

@@ -7,6 +7,7 @@ import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.FileProfiler;
 import de.lmu.cis.ocrd.profile.LocalProfilerProcess;
 import de.lmu.cis.ocrd.profile.Profile;
+import org.pmw.tinylog.Logger;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -41,12 +42,15 @@ abstract class ParametersCommand implements Command {
     Profile getProfile(String ifg, AdditionalLexicon alex, int n) throws Exception {
         final Path cachedPath = parameters.getProfiler().getCachedPath(ifg, alex, n);
         if (cachedPath.toFile().exists()) {
+            Logger.debug("opening cached profile {}", cachedPath.toString());
             return new FileProfiler(cachedPath).profile();
         }
         if (parameters.getProfiler().getPath().toString().endsWith(".json") ||
                 parameters.getProfiler().getPath().toString().endsWith(".json.gz")) {
+            Logger.debug("opening file profile {}", parameters.getProfiler().getPath().toString());
             return new FileProfiler(parameters.getProfiler().getPath()).profile();
         }
+        Logger.debug("calculating profile");
         final Profile profile;
         profile = new BaseOCRTokenProfiler(
                 workspace.getBaseOCRTokenReader(ifg),
@@ -56,6 +60,7 @@ abstract class ParametersCommand implements Command {
                         alex)
         ).profile();
         // cache the profile
+        Logger.debug("caching profile to {}", cachedPath.toString());
         try (Writer w = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(cachedPath.toFile())), StandardCharsets.UTF_8))) {
             w.write(profile.toJSON());
             w.write('\n');
