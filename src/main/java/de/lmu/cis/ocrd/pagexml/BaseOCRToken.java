@@ -34,13 +34,12 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 				mConfs.add(gtes.get(0).getConfidence());
 			}
 		}
-		final List<String> normLines =
-				word.getParentLine().getUnicodeNormalized();
+		final List<String> normLines = word.getParentLine().getUnicodeNormalized();
 		for (int i = 0; i <= gtIndex && i < tes.size() && i < normLines.size(); i++) {
 			words.add(new OCRWord(tes.get(i), normLines.get(i), mConfs));
 		}
-		while (words.size() < gtIndex) {
-			words.add(new OCRWord(tes.get(0), normLines.get(0), mConfs));
+		if (words.size() < gtIndex) { // 0, ..., gtIndex-1, gtIndex
+			throw new Exception("missing words with gtIndex = " + gtIndex);
 		}
 		return words;
 	}

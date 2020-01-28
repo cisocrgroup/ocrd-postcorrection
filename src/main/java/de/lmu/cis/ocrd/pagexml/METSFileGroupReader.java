@@ -5,6 +5,7 @@ import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
+import org.pmw.tinylog.Logger;
 
 import java.io.InputStream;
 import java.nio.file.Paths;
@@ -31,6 +32,7 @@ class METSFileGroupReader {
 
     List<Word> readWords(String ifg) throws Exception {
         if (!words.containsKey(ifg)) {
+            Logger.debug("reading words for {}", ifg);
             ArrayList<Word> tmp = new ArrayList<>();
             for (METS.File file : mets.findFileGrpFiles(ifg)) {
                 try (InputStream is = file.openInputStream()) {
@@ -41,17 +43,27 @@ class METSFileGroupReader {
                 }
             }
             words.put(ifg, tmp);
+            Logger.debug("read {} words for {}", tmp.size(), ifg);
         }
         return words.get(ifg);
     }
 
     BaseOCRTokenReader getBaseOCRTokenReader(String ifg) throws Exception {
         if (!base.containsKey(ifg)) {
-            final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
-            for (Word word: readWords(ifg)) {
+            Logger.debug("adding base ocr tokens for {}", ifg);
+            final List<Word> words = readWords(ifg);
+            final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>(words.size());
+            for (Word word: words) {
+                // skip empty words
+                if (word.getTextEquivs() == null || word.getTextEquivs().size() < parameters.getNOCR()) {
+                    Logger.warn("skipping word {}", word);
+                    continue;
+                }
+                // Logger.debug("adding word {}", word.toString());
                 tokens.add(new BaseOCRToken(word, parameters.getNOCR()));
             }
             base.put(ifg, tokens);
+            Logger.debug("added {} base ocr tokens for {}", tokens.size(), ifg);
         }
         return new BaseOCRTokenReaderImpl(base.get(ifg));
     }

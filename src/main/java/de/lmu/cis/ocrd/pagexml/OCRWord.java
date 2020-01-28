@@ -9,12 +9,12 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 	private final String line;
 	private final String id;
 
-	OCRWord(TextEquiv te, String line, List<Double> mConfs) {
+	OCRWord(TextEquiv te, String line, List<Double> masterOCRCharConfidences) {
 		this.line = line;
 		this.wordConfidence = te.getConfidence();
 		this.word = te.getUnicodeNormalized();
 		this.raw = te.getUnicode();
-		this.masterOCRCharConfidences = mConfs;
+		this.masterOCRCharConfidences = masterOCRCharConfidences;
 		this.id = te.getParentTextRegion().getID();
 	}
 
