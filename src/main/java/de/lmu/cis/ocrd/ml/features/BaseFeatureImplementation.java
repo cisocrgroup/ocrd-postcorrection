@@ -2,8 +2,10 @@ package de.lmu.cis.ocrd.ml.features;
 
 import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.ml.OCRWord;
+import de.lmu.cis.ocrd.ml.Ranking;
 import de.lmu.cis.ocrd.profile.Candidate;
 
+import java.util.List;
 import java.util.Optional;
 
 abstract class BaseFeatureImplementation implements Feature {
@@ -38,11 +40,16 @@ abstract class BaseFeatureImplementation implements Feature {
 		return token.getSlaveOCR(i - 1);
 	}
 
+	// return either the candidate of the token or the best ranked candidate for the token
 	protected Candidate mustGetCandidate(OCRToken token) {
 		final Optional<Candidate> candidate = token.getCandidate();
-		if (!candidate.isPresent()) {
+		if (candidate.isPresent()) {
+			return candidate.get();
+		}
+		List<Ranking> rankings = token.getRankings();
+		if (rankings.isEmpty()) {
 			throw new RuntimeException("missing profiler candidate for: " + token.toString() + " [" + token.getClass().getName() + "]");
 		}
-		return candidate.get();
+		return rankings.get(0).getCandidate();
 	}
 }
