@@ -95,7 +95,7 @@ public class EvaluateCommand extends ParametersCommand {
         }
     }
 
-    // No correction candidate
+    // No good correction candidate
     private static boolean isTypeIError(String mOCR, List<Candidate> candidates, String gt) {
         if (mOCR.equalsIgnoreCase(gt)) {
             return false;
