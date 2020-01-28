@@ -8,14 +8,13 @@ import java.nio.file.Paths;
 public class Profiler {
     private String path = "";
     private String config = "";
-    private String cacheDir = "";
 
-    public Path getCachedPath(String ifg, AdditionalLexicon alex, int n) {
+    public Path getCachedPath(Path cache, String ifg, AdditionalLexicon alex, int n) {
         String suffix = ".json.gz";
         if (alex.use()) {
             suffix = "_alex_" + n + suffix;
         }
-        return Paths.get(cacheDir, ifg + suffix);
+        return Paths.get(cache.toString(), ifg + suffix);
     }
 
     public Path getPath() {

@@ -34,6 +34,8 @@ public class Parameters {
         this.dmFeatures = dmFeatures;
     }
 
+    public Path getCacheDir() {return Paths.get(dir, "cache");}
+
     public Path getDir() {
         return Paths.get(dir);
     }

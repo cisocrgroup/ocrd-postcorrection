@@ -1,8 +1,7 @@
 package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.config.Parameters;
-import de.lmu.cis.ocrd.ml.BaseOCRTokenProfiler;
-import de.lmu.cis.ocrd.ml.Workspace;
+import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.FileProfiler;
 import de.lmu.cis.ocrd.profile.LocalProfilerProcess;
@@ -40,7 +39,7 @@ abstract class ParametersCommand implements Command {
     }
 
     Profile getProfile(String ifg, AdditionalLexicon alex, int n) throws Exception {
-        final Path cachedPath = parameters.getProfiler().getCachedPath(ifg, alex, n);
+        final Path cachedPath = parameters.getProfiler().getCachedPath(parameters.getCacheDir(), ifg, alex, n);
         if (cachedPath.toFile().exists()) {
             Logger.debug("opening cached profile {}", cachedPath.toString());
             return new FileProfiler(cachedPath).profile();
