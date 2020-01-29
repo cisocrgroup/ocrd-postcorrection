@@ -1,7 +1,5 @@
 package de.lmu.cis.ocrd.ocropus;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +38,6 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
     @Override
     public void correct(String correction, double confidence) {
-        throw new NotImplementedException();
+        throw new RuntimeException("not implemented");
     }
 }
