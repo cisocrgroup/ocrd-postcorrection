@@ -34,19 +34,24 @@ public class Page {
 		return new Page(path, builder.parse(is));
 	}
 
-	private final List<Line> lines;
+	private List<Line> lines;
 
 	public Page(Path path, Document doc) {
 		this.path = path;
 		this.doc = doc;
-		this.lines = getLineNodes(doc);
+		this.lines = null;//getLineNodes(doc);
 	}
 
 	public Path getPath() {
 		return path;
 	}
 
+	Node getRoot() {return doc;}
+
 	public List<Line> getLines() {
+		if (lines == null) {
+			lines = getLineNodes(doc);
+		}
 		return this.lines;
 	}
 

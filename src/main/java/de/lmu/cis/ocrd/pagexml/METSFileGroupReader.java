@@ -6,7 +6,11 @@ import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
 import org.pmw.tinylog.Logger;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathException;
 import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.*;
@@ -48,22 +52,60 @@ class METSFileGroupReader {
         return words.get(ifg);
     }
 
+    private static interface Func {
+        void apply(Node word, String parentLine);
+    }
+
+    private List<Node> readWordNodes(String ifg) throws Exception {
+        List<Node> ret = new ArrayList<>();
+        for (METS.File file : mets.findFileGrpFiles(ifg)) {
+            try (InputStream is = file.openInputStream()) {
+                Logger.info("loading page");
+                final Page page = Page.parse(Paths.get(file.getFLocat()), is);
+                Logger.info("loaded page");
+                ret.addAll(XPathHelper.getNodes(page.getRoot(), "//TextLine/Word"));
+                Logger.info("added nodes");
+            }
+        }
+        return ret;
+    }
+
+    private void eachWord(String ifg, Func func) throws Exception {
+        for (METS.File file: mets.findFileGrpFiles(ifg)) {
+            try (InputStream is = file.openInputStream()) {
+                Logger.info("loading page {}", file.getFLocat());
+                final Page page = Page.parse(Paths.get(file.getFLocat()), is);
+                NodeList nodes = (NodeList) XPathHelper.TEXT_LINES.evaluate(page.getRoot(), XPathConstants.NODESET);
+                for (int i = 0; i < nodes.getLength(); i++) {
+                    final Node te = ((NodeList) XPathHelper.CHILD_TEXT_EQUIV.evaluate(nodes.item(i), XPathConstants.NODESET)).item(0);
+                    final String line = new TextEquiv(te).getUnicodeNormalized();
+                    if (line.isEmpty()) { // skip empty lines
+                        continue;
+                    }
+                    NodeList wordNodes = (NodeList) XPathHelper.CHILD_WORD.evaluate(nodes.item(i), XPathConstants.NODESET);
+                    for (int j = 0; j < wordNodes.getLength(); j++) {
+                        func.apply(wordNodes.item(j), line);
+                    }
+                }
+                Logger.info("loaded page {}", file.getFLocat());
+            }
+        }
+    }
+
     BaseOCRTokenReader getBaseOCRTokenReader(String ifg) throws Exception {
         if (!base.containsKey(ifg)) {
-            Logger.debug("adding base ocr tokens for {}", ifg);
-            final List<Word> words = readWords(ifg);
-            final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>(words.size());
-            for (Word word: words) {
-                // skip empty words
-                if (word.getTextEquivs() == null || word.getTextEquivs().size() < parameters.getNOCR()) {
-                    Logger.warn("skipping word {}", word);
-                    continue;
+            Logger.info("adding base ocr tokens for {}", ifg);
+            final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
+            eachWord(ifg, (node, line)->{
+                try {
+                    tokens.add(new BaseOCRToken(node, line, parameters.getNOCR()));
+                } catch (XPathException e) {
+                    Logger.warn("cannot add token: {}", e.toString());
                 }
-                // Logger.debug("adding word {}", word.toString());
-                tokens.add(new BaseOCRToken(word, parameters.getNOCR()));
-            }
+            });
+            Logger.info("loaded tokens");
             base.put(ifg, tokens);
-            Logger.debug("added {} base ocr tokens for {}", tokens.size(), ifg);
+            Logger.info("added {} base ocr tokens for {}", tokens.size(), ifg);
         }
         return new BaseOCRTokenReaderImpl(base.get(ifg));
     }

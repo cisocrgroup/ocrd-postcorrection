@@ -16,15 +16,26 @@ public class Word extends TextRegion {
 	public Word(Node node, Line parent) {
 		super(node);
 		this.parent = parent;
-		this.glyphs = getGlyphNodes(node);
+		this.glyphs = null; // loaded lazily
 	}
 
 	public List<Glyph> getGlyphs() {
+		if (glyphs == null) {
+			glyphs = getGlyphNodes(node);
+		}
 		return glyphs;
 	}
 
 	Line getParentLine() {
 		return parent;
+	}
+
+	List<Double> getCharConfidences() {
+		List<Double> confidences = new ArrayList<>();
+		for (Node node: XPathHelper.getNodes(node, "./Glyph/TextEquiv[@conf]")) {
+			confidences.add(Double.parseDouble(node.getAttributes().getNamedItem("conf").getNodeValue()));
+		}
+		return confidences;
 	}
 
 	private List<Glyph> getGlyphNodes(Node node) {
@@ -69,14 +80,14 @@ public class Word extends TextRegion {
 		int offset = 0;
 		for (String word: words) {
 			// skip whitespace in characters (we do not care)
-			for (;offset < glyphs.size(); offset++) {
-				if (!Unicode.isSpace(glyphs.get(offset).getLetters().get(0))) {
+			for (;offset < getGlyphs().size(); offset++) {
+				if (!Unicode.isSpace(getGlyphs().get(offset).getLetters().get(0))) {
 					break;
 				}
 			}
 			int[] cps = word.codePoints().toArray();
 			for (int i = 0; i < cps.length; i++) {
-				if (cps[i] != glyphs.get(offset + i).getLetters().get(0)) {
+				if (cps[i] != getGlyphs().get(offset + i).getLetters().get(0)) {
 					throw new Exception("word and glyphs out of sync");
 				}
 			}
@@ -94,8 +105,8 @@ public class Word extends TextRegion {
 			final String newID = getID() + String.format("_%04d", id+1);
 			newWord.withID(newID);
 			// word coordinates
-			List<Coordinates> glyphCoords = new ArrayList<>(newWord.glyphs.size());
-			for (Glyph glyph: newWord.glyphs) {
+			List<Coordinates> glyphCoords = new ArrayList<>(newWord.getGlyphs().size());
+			for (Glyph glyph: newWord.getGlyphs()) {
 				glyphCoords.add(glyph.getCoordinates());
 			}
 			newWord.withCoordinates(Coordinates.fromCoordinates(glyphCoords));
@@ -121,10 +132,10 @@ public class Word extends TextRegion {
     private Node newTokenNode(String word, int begin, int end) {
 		Word newWord = new Word(node.cloneNode(true), parent);
 		for (int i = 0; i < begin; i++) {
-			newWord.node.removeChild(newWord.glyphs.get(i).node);
+			newWord.node.removeChild(newWord.getGlyphs().get(i).node);
 		}
-		for (int i = end; i < glyphs.size(); i++) {
-			newWord.node.removeChild(newWord.glyphs.get(i).node);
+		for (int i = end; i < getGlyphs().size(); i++) {
+			newWord.node.removeChild(newWord.getGlyphs().get(i).node);
 		}
 		// fix text equivs
 		Node te = XPathHelper.getNode(newWord.node, "./TextEquiv");

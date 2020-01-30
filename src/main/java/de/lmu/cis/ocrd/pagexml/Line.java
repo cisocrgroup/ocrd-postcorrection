@@ -11,7 +11,7 @@ public class Line extends TextRegion {
 
 	public Line(Node node, Page parent) {
 		super(node);
-		this.words = getWordNodes(node, this);
+		this.words = null;//getWordNodes(node, this);
 		this.parent = parent;
 	}
 
@@ -20,6 +20,9 @@ public class Line extends TextRegion {
 	}
 
 	public List<Word> getWords() {
+		if (words == null) {
+			this.words = getWordNodes(node, this);
+		}
 		return words;
 	}
 
