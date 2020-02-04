@@ -31,7 +31,6 @@ public class TrainCommandTest {
 	private Path tmp;
 	private Parameters parameters;
 	private final String mets = "src/test/resources/workspace/mets.xml";
-	private final String inputFileGroupTrain = "OCR-D-PROFILED";
 	private final String inputFileGroupEval = "OCR-D-EVAL";
 	private final String outputFileGroup = "OCR-D-POST-CORRECTED";
 	private final String logLevel = "INFO";
@@ -82,6 +81,7 @@ public class TrainCommandTest {
 	}
 
 	private void train() throws Exception {
+		String inputFileGroupTrain = "OCR-D-PROFILED";
 		String[] args = {
 				"-c", "train",
 				"--mets", mets,
