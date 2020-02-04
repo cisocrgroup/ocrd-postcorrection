@@ -11,13 +11,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
-    private final Path workDir;
     private final Path metsPath;
     private final METS mets;
     private final METSFileGroupReader fgr;
 
     public Workspace(Path mets, Parameters parameters) throws Exception {
-        this.workDir = mets.getParent();
         this.metsPath = mets;
         this.mets = METS.open(metsPath);
         this.fgr = new METSFileGroupReader(this.mets, parameters);
@@ -63,6 +61,7 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
     }
 
     private Path putPageXML(Page page, String ofg) throws Exception {
+        final Path workDir = metsPath.getParent();
         final Path name = getNewName(ofg, page.getPath().getFileName());
         final Path destination = workDir.resolve(Paths.get(ofg).resolve(name));
         //noinspection ResultOfMethodCallIgnored

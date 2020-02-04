@@ -32,5 +32,5 @@
         <mets:FLocat xlink:href="OCR-D-EVAL/aventinus_grammatica_1515-aventinus_grammatica_1515_0008.xml"/>
       </mets:file>
   </mets:fileGrp>
-  <mets:fileGrp USE="OCR-D-POST-CORRECTED"><mets:file ID="OCR-D-POST-CORRECTED-aventinus_grammatica_1515_0008" MIMETYPE="application/vnd.prima.page+xml"><mets:FLocat xlink:href="file:///mounts/Users/student/finkf/devel/work/ocrd/src/test/resources/workspace/OCR-D-POST-CORRECTED/OCR-D-POST-CORRECTED-aventinus_grammatica_1515_0008.xml"/></mets:file><mets:file ID="OCR-D-POST-CORRECTED-aventinus_grammatica_1515_0008" MIMETYPE="application/vnd.prima.page+xml"><mets:FLocat xlink:href="file:///mounts/Users/student/finkf/devel/work/ocrd/src/test/resources/workspace/OCR-D-POST-CORRECTED/OCR-D-POST-CORRECTED-aventinus_grammatica_1515_0008.xml"/></mets:file></mets:fileGrp></mets:fileSec>
+  </mets:fileSec>
 </mets:mets>

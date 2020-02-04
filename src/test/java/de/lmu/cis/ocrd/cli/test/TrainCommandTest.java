@@ -144,12 +144,15 @@ public class TrainCommandTest {
 			PostCorrectionCommand cmd = new PostCorrectionCommand();
 			cmd.execute(cla);
 			assertThat(cmd.getParameters().getNOCR(), is(parameters.getNOCR()));
+			// check corrected files in output file group
 			final Path dir = Paths.get(workspace.toString(), ofg);
 			assertThat(dir.toFile().exists(), is(true));
 			assertThat(dir.toFile().isDirectory(), is(true));
 			assertThat(numberOfFiles(dir), is(1));
 			assertThat(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).size(), is(1));
-			assertThat(parameters.getModel().toFile().exists(), is(true));
+			FileUtils.deleteDirectory(dir.toFile());
+			assertThat(dir.toFile().exists(), is(false));
+			// check protocols
             assertThat(cmd.getParameters().getLETraining().getProtocol(i+1).toFile().exists(), is(true));
 			checkReadProtocol(new LEProtocol(), cmd.getParameters().getLETraining().getProtocol(i+1));
             assertThat(cmd.getParameters().getDMTraining().getProtocol(i+1).toFile().exists(), is(true));
