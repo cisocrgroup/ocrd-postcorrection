@@ -17,7 +17,7 @@ import java.util.*;
 class METSFileGroupReader {
     private final METS mets;
     private final Parameters parameters;
-    private final Map<String, List<Word>> words;
+    private final Map<String, List<Page>> pages;
     private final Map<String, List<de.lmu.cis.ocrd.ml.BaseOCRToken>> base;
     private final Map<String, OCRTokenReader> normal;
     private final Map<String, OCRTokenReader> candidate;
@@ -26,52 +26,43 @@ class METSFileGroupReader {
     METSFileGroupReader(METS mets, Parameters parameters) {
         this.mets = mets;
         this.parameters = parameters;
-        words = new HashMap<>();
+        pages = new HashMap<>();
         base = new HashMap<>();
         normal = new HashMap<>();
         candidate = new HashMap<>();
         ranked = new HashMap<>();
     }
 
-    List<Word> readWords(String ifg) throws Exception {
-        if (!words.containsKey(ifg)) {
-            Logger.debug("reading words for {}", ifg);
-            ArrayList<Word> tmp = new ArrayList<>();
-            for (METS.File file : mets.findFileGrpFiles(ifg)) {
-                try (InputStream is = file.openInputStream()) {
-                    final Page page = Page.parse(Paths.get(file.getFLocat()), is);
-                    for (Line line : page.getLines()) {
-                        tmp.addAll(line.getWords());
-                    }
-                }
-            }
-            words.put(ifg, tmp);
-            Logger.debug("read {} words for {}", tmp.size(), ifg);
-        }
-        return words.get(ifg);
-    }
-
     private interface Func {
         void apply(Node word, List<String> linesNormalized);
     }
 
-    private void eachWord(String ifg, Func func) throws Exception {
-        for (METS.File file: mets.findFileGrpFiles(ifg)) {
-            try (InputStream is = file.openInputStream()) {
-                Logger.info("loading page {}", file.getFLocat());
-                final Page page = Page.parse(Paths.get(file.getFLocat()), is);
-                NodeList nodes = (NodeList) XPathHelper.TEXT_LINES.evaluate(page.getRoot(), XPathConstants.NODESET);
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    final List<String> linesNormalized = new Line(nodes.item(i), page).getUnicodeNormalized();
-                    final NodeList words = (NodeList) XPathHelper.CHILD_WORD.evaluate(nodes.item(i), XPathConstants.NODESET);
-                    if (linesNormalized.isEmpty() || linesNormalized.get(0).isEmpty()) {
-                        continue;
-                    }
-                    for (int j = 0; j < words.getLength(); j++) {
-                        func.apply(words.item(j), linesNormalized);
-                    }
+    List<Page> getPages(String ifg) throws Exception {
+        if (!pages.containsKey(ifg)) {
+            pages.put(ifg, new ArrayList<>());
+            for (METS.File file: mets.findFileGrpFiles(ifg)) {
+                try (InputStream is = file.openInputStream()) {
+                    Logger.debug("loading page", file.getFLocat());
+                    pages.get(ifg).add(Page.parse(Paths.get(file.getFLocat()), is));
                 }
-                Logger.info("loaded page {}", file.getFLocat());
+                Logger.debug("loaded page {}", file.getFLocat());
+            }
+        }
+        return pages.get(ifg);
+    }
+
+    private void eachWord(String ifg, Func func) throws Exception {
+        for (Page page: getPages(ifg)) {
+            NodeList nodes = (NodeList) XPathHelper.TEXT_LINES.evaluate(page.getRoot(), XPathConstants.NODESET);
+            for (int i = 0; i < nodes.getLength(); i++) {
+                final List<String> linesNormalized = new Line(nodes.item(i), page).getUnicodeNormalized();
+                final NodeList words = (NodeList) XPathHelper.CHILD_WORD.evaluate(nodes.item(i), XPathConstants.NODESET);
+                if (linesNormalized.isEmpty() || linesNormalized.get(0).isEmpty()) {
+                    continue;
+                }
+                for (int j = 0; j < words.getLength(); j++) {
+                    func.apply(words.item(j), linesNormalized);
+                }
             }
         }
     }

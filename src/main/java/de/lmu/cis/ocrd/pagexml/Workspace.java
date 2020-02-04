@@ -9,9 +9,6 @@ import org.pmw.tinylog.Logger;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
     private final Path workDir;
@@ -54,7 +51,9 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
 
     @Override
     public void write(String ifg, String ofg) throws Exception {
-        putWords(fgr.readWords(ifg), ofg);
+        for (Page page: fgr.getPages(ifg)) {
+            putPageXML(page, ofg);
+        }
         saveMETS();
     }
 
@@ -63,28 +62,17 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
         fgr.setProfile(ifg, profile);
     }
 
-    private void putWords(List<Word> words, String ofg) throws Exception {
-        Set<Page> changedPages = new HashSet<>();
-        for (Word word: words) {
-            final Page current = word.getParentLine().getParentPage();
-            changedPages.add(word.getParentLine().getParentPage());
-        }
-        for (Page page: changedPages) {
-            putPageXML(page, ofg);
-        }
-    }
-
     private Path putPageXML(Page page, String ofg) throws Exception {
         final Path name = getNewName(ofg, page.getPath().getFileName());
-        final Path dest = workDir.resolve(Paths.get(ofg).resolve(name));
+        final Path destination = workDir.resolve(Paths.get(ofg).resolve(name));
         //noinspection ResultOfMethodCallIgnored
-        dest.getParent().toFile().mkdirs();
-        page.save(dest);
+        destination.getParent().toFile().mkdirs();
+        page.save(destination);
         mets.addFileToFileGrp(ofg)
-                .withFLocat("file://" + dest.toAbsolutePath().toString())
+                .withFLocat("file://" + destination.toAbsolutePath().toString())
                 .withID(getID(name))
                 .withMIMEType(Page.MIMEType);
-        return dest.toAbsolutePath();
+        return destination.toAbsolutePath();
     }
 
     private String getID(Path name) {
