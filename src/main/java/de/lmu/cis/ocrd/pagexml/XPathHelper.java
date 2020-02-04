@@ -16,6 +16,7 @@ class XPathHelper {
 	static final XPathExpression CHILD_WORD = compile("./Word");
 	static final XPathExpression CHILD_GLYPH_TEXT_EQUIV = compile("./Glyph/TextEquiv[@conf]");
     static final XPathExpression CHILD_TEXT_EQUIV_UNICODE = compile("./TextEquiv/Unicode");
+	static final XPathExpression CHILD_UNICODE = compile("./Unicode");
 	static final XPathExpression TEXT_LINES = compile("//TextRegion/TextLine");
 
 	private static XPathExpression compile(String expr) {

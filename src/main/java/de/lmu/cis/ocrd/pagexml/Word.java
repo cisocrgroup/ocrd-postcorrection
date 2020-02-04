@@ -5,6 +5,7 @@ import org.pmw.tinylog.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
@@ -65,7 +66,11 @@ public class Word extends TextRegion {
 			} else {
 				prefix = "slave:";
 			}
-			sj.add(prefix + te.getUnicodeNormalized());
+			try {
+				sj.add(prefix + te.getUnicodeNormalized());
+			} catch (XPathExpressionException e) {
+				// ignore
+			}
 		}
 		return sj.toString();
 	}

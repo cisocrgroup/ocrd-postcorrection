@@ -4,14 +4,19 @@ import de.lmu.cis.ocrd.util.Normalizer;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+
 public class TextEquiv {
+	private String unicode;
 	private final Node node;
 
 	TextEquiv(Node node) {
+		this.unicode = null;
 		this.node = node;
 	}
 
-	public TextRegion getParentTextRegion() {
+	TextRegion getParentTextRegion() {
 		return new TextRegion(node.getParentNode());
 	}
 
@@ -31,15 +36,20 @@ public class TextEquiv {
 		return XPathHelper.getAttribute(node, "dataTypeDetails").orElse("");
 	}
 
-	public String getUnicode() {
-		final Node n = XPathHelper.getNode(node, "./Unicode");
-		if (n == null || n.getFirstChild() == null || n.getFirstChild().getTextContent() == null) {
-			return "";
+	public String getUnicode() throws XPathExpressionException {
+		if (unicode != null) {
+			return unicode;
 		}
-		return n.getFirstChild().getTextContent();
+		final Node n = (Node) XPathHelper.CHILD_UNICODE.evaluate(node, XPathConstants.NODE);
+		if (n == null || n.getFirstChild() == null || n.getFirstChild().getTextContent() == null) {
+			unicode = "";
+		} else {
+			unicode = n.getFirstChild().getTextContent();
+		}
+		return unicode;
 	}
 
-	String getUnicodeNormalized() {
+	String getUnicodeNormalized() throws XPathExpressionException {
 		return Normalizer.normalize(getUnicode());
 	}
 
@@ -59,7 +69,7 @@ public class TextEquiv {
 	    return setAttribute("dataTypeDetails", dataTypeDetails);
     }
 
-	public TextEquiv addUnicode(String unicode) {
+	TextEquiv addUnicode(String unicode) {
 		final Node u = node.getOwnerDocument().createTextNode(unicode);
 		node.appendChild(u);
 		return this;

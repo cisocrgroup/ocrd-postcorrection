@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.pagexml;
 
 import org.w3c.dom.Node;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.util.List;
 
 public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
@@ -11,7 +12,7 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 	private final String line;
 	private final String id;
 
-	private OCRWord(TextEquiv te, String line, List<Double> masterOCRCharConfidences) {
+	private OCRWord(TextEquiv te, String line, List<Double> masterOCRCharConfidences) throws XPathExpressionException {
 		this.line = line;
 		this.wordConfidence = te.getConfidence();
 		this.word = te.getUnicodeNormalized();
@@ -20,7 +21,7 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 		this.id = te.getParentTextRegion().getID();
 	}
 
-	OCRWord(Node node, String line, List<Double> mConfs) {
+	OCRWord(Node node, String line, List<Double> mConfs) throws XPathExpressionException {
 		this(new TextEquiv(node), line, mConfs);
 	}
 
