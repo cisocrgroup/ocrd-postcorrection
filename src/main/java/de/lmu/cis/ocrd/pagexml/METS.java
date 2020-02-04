@@ -40,7 +40,7 @@ public class METS {
 	private final Document xml;
 	private final Path path;
 
-	public METS(String path, Document doc) {
+	private METS(String path, Document doc) {
 		this.path = Paths.get(path);
 		this.xml = doc;
 	}
@@ -50,6 +50,11 @@ public class METS {
 	}
 
 	public void save(java.io.File file) throws Exception {
+		if (!file.createNewFile()) {
+			if (!file.delete()) {
+				throw new Exception("cannot overwrite file: " + file.getPath());
+			}
+		}
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(xml);

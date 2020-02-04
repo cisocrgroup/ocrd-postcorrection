@@ -9,6 +9,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -68,7 +69,12 @@ public class Page {
 		save(path.toFile());
 	}
 
-	public void save(java.io.File file) throws Exception {
+	public void save(File file) throws Exception {
+		if (!file.createNewFile()) {
+			if (!file.delete()) {
+				throw new Exception("cannot overwrite file: " + file.getPath());
+			}
+		}
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(doc);

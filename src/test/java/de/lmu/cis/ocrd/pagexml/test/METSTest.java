@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class METSTest {
 	}
 
 	private interface Lambda {
-		void execute(METS mets);
+		void execute(METS mets) throws MalformedURLException;
 	}
 
 	private void withTmpMETSFile(Lambda l) throws Exception {

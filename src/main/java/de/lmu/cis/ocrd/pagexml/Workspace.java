@@ -66,11 +66,11 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
         final Path destination = workDir.resolve(Paths.get(ofg).resolve(name));
         //noinspection ResultOfMethodCallIgnored
         destination.getParent().toFile().mkdirs();
-        page.save(destination);
         mets.addFileToFileGrp(ofg)
                 .withFLocat("file://" + destination.toAbsolutePath().toString())
                 .withID(getID(name))
                 .withMIMEType(Page.MIMEType);
+        page.save(destination);
         return destination.toAbsolutePath();
     }
 

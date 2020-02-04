@@ -54,13 +54,13 @@ public class TrainCommandTest {
 
 	@After
 	public void deinit() {
-		if ("debug".equalsIgnoreCase(logLevel)) { // do not remove while debugging
-			return;
-		}
 		try {
 			Files.copy(Paths.get(tmp.toString(), "mets.xml"), Paths.get(mets), REPLACE_EXISTING);
 		} catch (Exception e) {
 			// ignore
+		}
+		if ("debug".equalsIgnoreCase(logLevel)) { // do not remove tmp dir if debugging
+			return;
 		}
 		try {
 			FileUtils.deleteDirectory(Paths.get(workspace.toString(), outputFileGroup).toFile());
@@ -150,8 +150,10 @@ public class TrainCommandTest {
 			assertThat(dir.toFile().isDirectory(), is(true));
 			assertThat(numberOfFiles(dir), is(1));
 			assertThat(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).size(), is(1));
+			assertThat(Paths.get(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).get(0).getFLocat().substring(7)).toFile().exists(), is(true));
 			FileUtils.deleteDirectory(dir.toFile());
 			assertThat(dir.toFile().exists(), is(false));
+			assertThat(Paths.get(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).get(0).getFLocat().substring(7)).toFile().exists(), is(false));
 			// check protocols
             assertThat(cmd.getParameters().getLETraining().getProtocol(i+1).toFile().exists(), is(true));
 			checkReadProtocol(new LEProtocol(), cmd.getParameters().getLETraining().getProtocol(i+1));
