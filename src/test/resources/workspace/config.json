@@ -64,6 +64,11 @@
             "type": "invalid",
             "name": "invalid",
             "class": "filter-me"
+        },
+        {
+            "type":  null,
+            "name": null,
+            "deactivate": true
         }
     ],
     "rrFeatures": [
