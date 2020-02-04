@@ -10,6 +10,7 @@ import de.lmu.cis.ocrd.ml.DMProtocol;
 import de.lmu.cis.ocrd.ml.LEProtocol;
 import de.lmu.cis.ocrd.ml.ModelZIP;
 import de.lmu.cis.ocrd.ml.Protocol;
+import de.lmu.cis.ocrd.pagexml.METS;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -135,16 +136,19 @@ public class TrainCommandTest {
 		};
 		assertThat(parameters.getModel().toFile().exists(), is(true));
 		for (int i = 0; i < 2; i++) {
+			final String ofg = outputFileGroup + "-" + (i+1);
+			args[9] = ofg;
 			parameters.setNOCR(i+1);
 			args[5] = new Gson().toJson(parameters); // set parameter as inline json string
             CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
 			PostCorrectionCommand cmd = new PostCorrectionCommand();
 			cmd.execute(cla);
 			assertThat(cmd.getParameters().getNOCR(), is(parameters.getNOCR()));
-			final Path dir = Paths.get(workspace.toString(), outputFileGroup);
+			final Path dir = Paths.get(workspace.toString(), ofg);
 			assertThat(dir.toFile().exists(), is(true));
 			assertThat(dir.toFile().isDirectory(), is(true));
 			assertThat(numberOfFiles(dir), is(1));
+			assertThat(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).size(), is(1));
 			assertThat(parameters.getModel().toFile().exists(), is(true));
             assertThat(cmd.getParameters().getLETraining().getProtocol(i+1).toFile().exists(), is(true));
 			checkReadProtocol(new LEProtocol(), cmd.getParameters().getLETraining().getProtocol(i+1));
