@@ -10,7 +10,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathException;
 import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.*;
@@ -52,22 +51,8 @@ class METSFileGroupReader {
         return words.get(ifg);
     }
 
-    private static interface Func {
-        void apply(Node word, String parentLine);
-    }
-
-    private List<Node> readWordNodes(String ifg) throws Exception {
-        List<Node> ret = new ArrayList<>();
-        for (METS.File file : mets.findFileGrpFiles(ifg)) {
-            try (InputStream is = file.openInputStream()) {
-                Logger.info("loading page");
-                final Page page = Page.parse(Paths.get(file.getFLocat()), is);
-                Logger.info("loaded page");
-                ret.addAll(XPathHelper.getNodes(page.getRoot(), "//TextLine/Word"));
-                Logger.info("added nodes");
-            }
-        }
-        return ret;
+    private interface Func {
+        void apply(Node word, List<String> linesNormalized);
     }
 
     private void eachWord(String ifg, Func func) throws Exception {
@@ -77,14 +62,13 @@ class METSFileGroupReader {
                 final Page page = Page.parse(Paths.get(file.getFLocat()), is);
                 NodeList nodes = (NodeList) XPathHelper.TEXT_LINES.evaluate(page.getRoot(), XPathConstants.NODESET);
                 for (int i = 0; i < nodes.getLength(); i++) {
-                    final Node te = ((NodeList) XPathHelper.CHILD_TEXT_EQUIV.evaluate(nodes.item(i), XPathConstants.NODESET)).item(0);
-                    final String line = new TextEquiv(te).getUnicodeNormalized();
-                    if (line.isEmpty()) { // skip empty lines
+                    final List<String> linesNormalized = new Line(nodes.item(i), page).getUnicodeNormalized();
+                    final NodeList words = (NodeList) XPathHelper.CHILD_WORD.evaluate(nodes.item(i), XPathConstants.NODESET);
+                    if (linesNormalized.isEmpty() || linesNormalized.get(0).isEmpty()) {
                         continue;
                     }
-                    NodeList wordNodes = (NodeList) XPathHelper.CHILD_WORD.evaluate(nodes.item(i), XPathConstants.NODESET);
-                    for (int j = 0; j < wordNodes.getLength(); j++) {
-                        func.apply(wordNodes.item(j), line);
+                    for (int j = 0; j < words.getLength(); j++) {
+                        func.apply(words.item(j), linesNormalized);
                     }
                 }
                 Logger.info("loaded page {}", file.getFLocat());
@@ -96,10 +80,10 @@ class METSFileGroupReader {
         if (!base.containsKey(ifg)) {
             Logger.info("adding base ocr tokens for {}", ifg);
             final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
-            eachWord(ifg, (node, line)->{
+            eachWord(ifg, (word, linesNormalized)->{
                 try {
-                    tokens.add(new BaseOCRToken(node, line, parameters.getNOCR()));
-                } catch (XPathException e) {
+                    tokens.add(new BaseOCRToken(word, linesNormalized, parameters.getNOCR()));
+                } catch (Exception e) {
                     Logger.warn("cannot add token: {}", e.toString());
                 }
             });

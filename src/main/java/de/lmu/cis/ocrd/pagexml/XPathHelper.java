@@ -9,14 +9,16 @@ import java.util.List;
 import java.util.Optional;
 
 class XPathHelper {
-	private static final XPath xpath = XPathFactory.newInstance().newXPath();
+
+    private static final XPath xpath = XPathFactory.newInstance().newXPath();
 
 	static final XPathExpression CHILD_TEXT_EQUIV = compile("./TextEquiv");
 	static final XPathExpression CHILD_WORD = compile("./Word");
 	static final XPathExpression CHILD_GLYPH_TEXT_EQUIV = compile("./Glyph/TextEquiv[@conf]");
+    static final XPathExpression CHILD_TEXT_EQUIV_UNICODE = compile("./TextEquiv/Unicode");
 	static final XPathExpression TEXT_LINES = compile("//TextRegion/TextLine");
 
-	static XPathExpression compile(String expr) {
+	private static XPathExpression compile(String expr) {
 		try {
 			return xpath.compile(expr);
 		} catch (XPathExpressionException e) {

@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.pagexml;
 
+import org.w3c.dom.Node;
+
 import java.util.List;
 
 public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
@@ -9,13 +11,17 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 	private final String line;
 	private final String id;
 
-	OCRWord(TextEquiv te, String line, List<Double> masterOCRCharConfidences) {
+	private OCRWord(TextEquiv te, String line, List<Double> masterOCRCharConfidences) {
 		this.line = line;
 		this.wordConfidence = te.getConfidence();
 		this.word = te.getUnicodeNormalized();
 		this.raw = te.getUnicode();
 		this.masterOCRCharConfidences = masterOCRCharConfidences;
 		this.id = te.getParentTextRegion().getID();
+	}
+
+	OCRWord(Node node, String line, List<Double> mConfs) {
+		this(new TextEquiv(node), line, mConfs);
 	}
 
 	@Override

@@ -3,7 +3,10 @@ package de.lmu.cis.ocrd.pagexml;
 import de.lmu.cis.ocrd.util.Normalizer;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,11 +57,12 @@ public class TextRegion {
 		return te;
 	}
 
-	public List<String> getUnicode() {
+	public List<String> getUnicode() throws XPathExpressionException {
 		List<String> stringList = new ArrayList<>();
-		for (Node n : XPathHelper.getNodes(this.node, "./TextEquiv/Unicode")) {
-			if (n != null && n.getFirstChild() != null) {
-				String c = n.getFirstChild().getTextContent();
+		NodeList nodes = (NodeList) XPathHelper.CHILD_TEXT_EQUIV_UNICODE.evaluate(node, XPathConstants.NODESET);
+		for (int i = 0; i < nodes.getLength(); i++) {
+			if (nodes.item(i) != null && nodes.item(i).getFirstChild() != null) {
+				String c = nodes.item(i).getFirstChild().getTextContent();
 				if (c != null) {
 					stringList.add(c);
 				}
@@ -67,11 +71,15 @@ public class TextRegion {
 		return stringList;
 	}
 
-	public List<String> getUnicodeNormalized() {
+	public List<String> getUnicodeNormalized() throws XPathExpressionException {
 		final List<String> unicode = this.getUnicode();
 		for (int i = 0; i < unicode.size(); i++) {
 			unicode.set(i, Normalizer.normalize(unicode.get(i)));
 		}
 		return unicode;
+	}
+
+	public Node getNode() {
+		return node;
 	}
 }

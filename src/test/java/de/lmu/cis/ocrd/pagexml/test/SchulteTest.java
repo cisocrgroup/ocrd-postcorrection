@@ -6,6 +6,7 @@ import de.lmu.cis.ocrd.pagexml.Word;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Path;
@@ -38,7 +39,7 @@ public class SchulteTest {
     }
 
     @Test
-    public void readAllTokens() {
+    public void readAllTokens() throws XPathExpressionException {
     	final String search = "master:azt,slave:vazt,gt:Laßt,slave:abbt,slave:ammt,...";
     	boolean found = false;
         int i = 0;

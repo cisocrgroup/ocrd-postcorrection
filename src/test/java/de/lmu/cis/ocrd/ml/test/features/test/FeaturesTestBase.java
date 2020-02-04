@@ -37,7 +37,7 @@ public class FeaturesTestBase {
 		// Logger.info("profile size = " + profile.size());
 		for (Line line : Page.open(pagexml).getLines()) {
 			for (Word word : line.getWords()) {
-				tokens.add(makeToken(word, 2, 10, profile));
+				tokens.add(makeToken(word, line,2, 10, profile));
 				if (tokens.size() == 10) {
 					lm.setTokens(tokens);
 					return;
@@ -46,7 +46,7 @@ public class FeaturesTestBase {
 		}
 	}
 
-	private static OCRToken makeToken(Word word, int gtIndex, int maxCandidates, Profile profile) throws Exception {
+	private static OCRToken makeToken(Word word, Line line, int gtIndex, int maxCandidates, Profile profile) throws Exception {
 		Candidates candidates = profile.get(word.getUnicodeNormalized().get(0)).orElse(new Candidates());
 		List<Candidate> cands;
 		if (candidates.Candidates == null) {
@@ -54,7 +54,7 @@ public class FeaturesTestBase {
 		} else {
 			cands = candidates.Candidates.subList(0, Math.min(candidates.Candidates.size(), maxCandidates));
 		}
-		return new CandidatesOCRToken(new BaseOCRToken(word, gtIndex), cands);
+		return new CandidatesOCRToken(new BaseOCRToken(word.getNode(), line.getUnicodeNormalized(), gtIndex), cands);
 	}
 
 	OCRToken getToken(int i) {

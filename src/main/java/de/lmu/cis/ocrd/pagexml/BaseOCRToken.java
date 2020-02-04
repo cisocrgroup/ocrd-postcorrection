@@ -1,10 +1,10 @@
 package de.lmu.cis.ocrd.pagexml;
 
+import de.lmu.cis.ocrd.util.StringCorrector;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,48 +12,11 @@ import java.util.StringJoiner;
 
 public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
-	// private final Word word;
+	private final Node node;
 	private final List<OCRWord> words;
 	private final int gtIndex;
 
-	public BaseOCRToken(Word word, int gtIndex) throws Exception {
-		this.gtIndex = gtIndex;
-		// this.word = word;
-		this.words = getWords(word, gtIndex);
-	}
-
-	private static List<OCRWord> getWords(Word word, int gtIndex) throws Exception {
-		List<OCRWord> words = new ArrayList<>();
-		final List<TextEquiv> tes = word.getTextEquivs();
-		if (tes.isEmpty()) {
-			throw new Exception("empty word");
-		}
-//		final List<Double> mConfs = new ArrayList<>();
-//		for (Glyph g : word.getGlyphs()) {
-//			final List<TextEquiv> gtes = g.getTextEquivs();
-//			if (gtes == null || gtes.isEmpty()) {
-//				mConfs.add(0.0);
-//			} else {
-//				mConfs.add(gtes.get(0).getConfidence());
-//			}
-//		}
-		final List<Double> mConfs = word.getCharConfidences();
-		if (mConfs.isEmpty()) {
-			throw new Exception("empty character confidences");
-		}
-		final List<String> normLines = word.getParentLine().getUnicodeNormalized();
-		for (int i = 0; i <= gtIndex && i < tes.size() && i < normLines.size(); i++) {
-			words.add(new OCRWord(tes.get(i), normLines.get(i), mConfs));
-		}
-		if (words.size() < gtIndex) { // 0, ..., gtIndex-1, gtIndex
-			throw new Exception("missing words with gtIndex = " + gtIndex);
-		}
-		return words;
-	}
-
-
-
-	public BaseOCRToken(Node node, String line, int gtIndex) throws XPathExpressionException {
+	public BaseOCRToken(Node node, List<String> linesNormalized, int gtIndex) throws Exception {
 		// master ocr character confidences
 		NodeList nodes = (NodeList) XPathHelper.CHILD_GLYPH_TEXT_EQUIV.evaluate(node, XPathConstants.NODESET);
 		final List<Double> mConfs = new ArrayList<>(nodes.getLength());
@@ -63,9 +26,13 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 		// words
 		nodes = (NodeList) XPathHelper.CHILD_TEXT_EQUIV.evaluate(node, XPathConstants.NODESET);
 		final List<OCRWord> words = new ArrayList<>(nodes.getLength());
-		for (int i = 0; i < nodes.getLength(); i++) {
-			words.add(new OCRWord(new TextEquiv(nodes.item(i)), line, mConfs));
+		for (int i = 0; i < nodes.getLength() && i <= gtIndex && i < linesNormalized.size(); i++) {
+			words.add(new OCRWord(nodes.item(i), linesNormalized.get(i), mConfs));
 		}
+		if (words.size() < (gtIndex - 1)) {
+			throw new Exception("not enough aligned words for nOCR = " + gtIndex + ": " + words.size());
+		}
+		this.node = node;
 		this.gtIndex = gtIndex;
 		this.words = words;
 	}
@@ -114,12 +81,11 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
 	@Override
 	public void correct(String correction, double confidence) {
-		throw new RuntimeException("correct: not implemented");
-//		word.prependNewTextEquiv()
-//				.addUnicode(new StringCorrector(getMasterOCR().getWordRaw()).correctWith(correction))
-//				.withConfidence(confidence)
-//				.withIndex(0)
-//				.withDataType("OCR-D-CIS-POST-CORRECTION")
-//				.withDataTypeDetails(getMasterOCR().getWordRaw());
+		new TextRegion(node).prependNewTextEquiv()
+				.addUnicode(new StringCorrector(getMasterOCR().getWordRaw()).correctWith(correction))
+				.withConfidence(confidence)
+				.withIndex(0)
+				.withDataType("OCR-D-CIS-POST-CORRECTION")
+				.withDataTypeDetails(getMasterOCR().getWordRaw());
 	}
 }
