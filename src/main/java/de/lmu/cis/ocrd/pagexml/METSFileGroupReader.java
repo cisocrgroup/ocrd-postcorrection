@@ -69,7 +69,7 @@ class METSFileGroupReader {
 
     BaseOCRTokenReader getBaseOCRTokenReader(String ifg) throws Exception {
         if (!base.containsKey(ifg)) {
-            Logger.debug("adding base ocr tokens for {}", ifg);
+            Logger.debug("reading base ocr tokens for input file group {}", ifg);
             final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
             eachWord(ifg, (word, linesNormalized)->{
                 try {
@@ -79,7 +79,7 @@ class METSFileGroupReader {
                 }
             });
             base.put(ifg, tokens);
-            Logger.debug("added {} base ocr tokens for {}", tokens.size(), ifg);
+            Logger.info("read {} base ocr tokens for input file group {}", tokens.size(), ifg);
         }
         return new BaseOCRTokenReaderImpl(base.get(ifg));
     }
