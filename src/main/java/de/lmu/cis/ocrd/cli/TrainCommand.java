@@ -115,8 +115,6 @@ public class TrainCommand extends ParametersCommand {
 								.getDefault()
 								.withArgumentFactory(lm)
 								.createFeatureSet(parameters.getDMTraining().getFeatures(), parameters.getFilterClasses())
-								.add(new DMBestRankFeature("dm-best-rank"))
-								.add(new DMDifferenceToNextRankFeature("dm-difference-to-next"))
 								.add(new DMGTFeature("dm-gt"))
 				);
         // trainer.train() closes the writer

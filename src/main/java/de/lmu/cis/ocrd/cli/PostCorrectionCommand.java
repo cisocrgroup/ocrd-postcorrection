@@ -1,8 +1,6 @@
 package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.ml.*;
-import de.lmu.cis.ocrd.ml.features.DMBestRankFeature;
-import de.lmu.cis.ocrd.ml.features.DMDifferenceToNextRankFeature;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.profile.*;
 
@@ -151,8 +149,6 @@ public class PostCorrectionCommand extends ParametersCommand {
 									.getDefault()
 									.withArgumentFactory(lm)
 									.createFeatureSet(model.getDMFeatureSet(), parameters.getFilterClasses())
-									.add(new DMBestRankFeature("dm-best-rank"))
-									.add(new DMDifferenceToNextRankFeature("dm-difference-to-next"))
 					);
 		}
 	}

@@ -47,6 +47,8 @@ public class FeatureFactory {
 				.register(LevenshteinDistanceFeature.class)
 				.register(OCRPatternConfidenceFeature.class)
 				.register(CandidateOCRPatternConfidenceFeature.class)
+				.register(DMBestRankFeature.class)
+				.register(DMDifferenceToNextRankFeature.class)
 				.register(MaxCharNGramsFeature.class);
 	}
 
