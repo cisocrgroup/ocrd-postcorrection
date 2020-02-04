@@ -41,8 +41,8 @@ class METSFileGroupReader {
         if (!pages.containsKey(ifg)) {
             pages.put(ifg, new ArrayList<>());
             for (METS.File file: mets.findFileGrpFiles(ifg)) {
+                Logger.debug("loading page", file.getFLocat());
                 try (InputStream is = file.openInputStream()) {
-                    Logger.debug("loading page", file.getFLocat());
                     pages.get(ifg).add(Page.parse(Paths.get(file.getFLocat()), is));
                 }
                 Logger.debug("loaded page {}", file.getFLocat());
@@ -69,7 +69,7 @@ class METSFileGroupReader {
 
     BaseOCRTokenReader getBaseOCRTokenReader(String ifg) throws Exception {
         if (!base.containsKey(ifg)) {
-            Logger.info("adding base ocr tokens for {}", ifg);
+            Logger.debug("adding base ocr tokens for {}", ifg);
             final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
             eachWord(ifg, (word, linesNormalized)->{
                 try {
@@ -78,9 +78,8 @@ class METSFileGroupReader {
                     Logger.warn("cannot add token: {}", e.toString());
                 }
             });
-            Logger.info("loaded tokens");
             base.put(ifg, tokens);
-            Logger.info("added {} base ocr tokens for {}", tokens.size(), ifg);
+            Logger.debug("added {} base ocr tokens for {}", tokens.size(), ifg);
         }
         return new BaseOCRTokenReaderImpl(base.get(ifg));
     }
