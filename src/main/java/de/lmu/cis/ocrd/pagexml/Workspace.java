@@ -1,16 +1,16 @@
 package de.lmu.cis.ocrd.pagexml;
 
 import de.lmu.cis.ocrd.config.Parameters;
+import de.lmu.cis.ocrd.ml.AbstractWorkspace;
 import de.lmu.cis.ocrd.ml.BaseOCRTokenReader;
 import de.lmu.cis.ocrd.ml.OCRTokenReader;
-import de.lmu.cis.ocrd.ml.Rankings;
 import de.lmu.cis.ocrd.profile.Profile;
 import org.pmw.tinylog.Logger;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
+public class Workspace extends AbstractWorkspace {
     private final Path metsPath;
     private final METS mets;
     private final METSFileGroupReader fgr;
@@ -35,16 +35,6 @@ public class Workspace implements de.lmu.cis.ocrd.ml.Workspace {
     @Override
     public OCRTokenReader getNormalTokenReader(String ifg, Profile profile) throws Exception {
         return fgr.getNormalTokenReader(ifg, profile);
-    }
-
-    @Override
-    public OCRTokenReader getCandidateTokenReader(String ifg, Profile profile) throws Exception {
-        return fgr.getCandidateTokenReader(ifg, profile);
-    }
-
-    @Override
-    public OCRTokenReader getRankedTokenReader(String ifg, Profile profile, Rankings rankings) throws Exception {
-        return fgr.getRankedTokenReader(ifg, profile, rankings);
     }
 
     @Override

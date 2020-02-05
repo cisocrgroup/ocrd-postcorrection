@@ -46,10 +46,11 @@ public class Trainer {
     public void prepare(OCRTokenReader tokenReader, int n, TokenFilter.Func func) throws Exception {
         final List<OCRToken> tokens = tokenReader.read();
         lm.setTokens(tokens);
-        TokenFilter.filter(tokens, func).forEach(token->{
+        TokenFilter.filter(tokens, (t)-> func.apply(t) && t.getGT().isPresent()).forEach(token->{
             Logger.debug("preparing {}: {}", arffWriter.getRelation(), token.toString());
             assert(TokenFilter.isNonLexical(token));
             assert(TokenFilter.isLong(token));
+            assert(token.getGT().isPresent());
             arffWriter.writeToken(token, n);
         });
     }
@@ -57,8 +58,11 @@ public class Trainer {
     public void prepare(OCRTokenReader tokenReader, int n) throws Exception {
         final List<OCRToken> tokens = tokenReader.read();
         lm.setTokens(tokens);
-        TokenFilter.filter(tokens).forEach(token->{
+        TokenFilter.filter(tokens, (t)-> t.getGT().isPresent()).forEach(token->{
             Logger.debug("preparing {}: {}", arffWriter.getRelation(), token.toString());
+            assert(TokenFilter.isNonLexical(token));
+            assert(TokenFilter.isLong(token));
+            assert(token.getGT().isPresent());
             arffWriter.writeToken(token, n);
         });
     }
