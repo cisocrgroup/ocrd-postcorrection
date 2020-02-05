@@ -25,7 +25,7 @@ public class FeatureFactoryTest {
 		JsonObject o = new Gson().fromJson(json, JsonObject.class);
 		Optional<Feature> feature = featureFactory.create(o);
 		assertThat(feature.isPresent(), is(true));
-		assertThat(feature.get(), is(new TestFeature(3, 8, 13, "test")));
+		assertThat(feature.orElseThrow(Exception::new), is(new TestFeature(3, 8, 13, "test")));
 	}
 
 	@Test(expected = Exception.class)
@@ -37,25 +37,8 @@ public class FeatureFactoryTest {
 	}
 
 	@Test
-	public void testWithDeactivated() throws Exception {
-		final String json = "[{\"name\": \"test\", \"type\": \"invalid\",\"deactivate\": true}]";
-		JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
-		FeatureSet fs = featureFactory.createFeatureSet(os);
-		assertThat(fs.size(), is(0));
-	}
-
-	@Test
-	public void testWithDeactivated2() throws Exception {
-		final String json = "[{\"name\": \"test\", \"type\": \"de.lmu.cis.ocrd.ml.test.FeatureFactoryTest$TestFeature\", \"short\": 3, \"medium\": 8, \"long\": 13},"
-				+"{\"name\": \"test\", \"type\": \"invalid\",\"deactivate\": true}]";
-		JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
-		FeatureSet fs = featureFactory.createFeatureSet(os);
-		assertThat(fs.size(), is(1));
-	}
-
-	@Test
 	public void testWithFeatureClassFilter() throws Exception {
-		FeatureClassFilter ff = new FeatureClassFilter(Arrays.asList(new String[]{"a", "b"}));
+		FeatureClassFilter ff = new FeatureClassFilter(Arrays.asList("a", "b"));
 		final String json = "[{\"class\":\"a\"},{\"class\":\"b\"},{\"class\":\"A.b\"},{\"class\":\"B.a\"}]";
 		JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
 		FeatureSet fs = featureFactory.createFeatureSet(os, ff);

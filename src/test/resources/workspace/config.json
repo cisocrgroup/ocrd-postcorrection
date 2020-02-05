@@ -10,7 +10,7 @@
     "runDM": true,
     "lexiconExtensionProtocol": "src/test/resources/workspace/dump/lep.json",
     "decisionMakerProtocol": "src/test/resources/workspace/dump/dmp.json",
-    "filterClasses": ["filter-me"],
+    "filterClasses": ["deactivate"],
     "leFeatures": [
         {
             "type": "de.lmu.cis.ocrd.ml.features.TokenLengthClassFeature",
@@ -61,14 +61,9 @@
             "name": "OCRPatternConfidence"
         },
         {
-            "type": "invalid",
-            "name": "invalid",
-            "class": "filter-me"
-        },
-        {
             "type":  null,
             "name": null,
-            "deactivate": true
+            "class": "deactivate"
         }
     ],
     "rrFeatures": [

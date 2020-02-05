@@ -58,9 +58,6 @@ public class FeatureFactory {
 	}
 
 	public Optional<Feature> create(JsonObject o) throws Exception {
-		if (o.has("deactivate") && o.get("deactivate").getAsBoolean()) {
-			return Optional.empty();
-		}
 		final String type = JSON.mustGet(o, "type").getAsString();
 		if (!features.contains(type)) {
 			throw new Exception("cannot create feature: unknown type: " + type);

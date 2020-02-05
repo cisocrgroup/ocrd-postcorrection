@@ -21,8 +21,8 @@ public class DefaultFeatureFactoryTest {
 		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.MinOCRCharacterConfidenceFeature\",\"name\":\"MinOCRConfidence\",\"ocrIndex\":0}";
 		final Optional<Feature> feature = makeFeature(json);
 		assertThat(feature.isPresent(), is(true));
-		assertThat(feature.get().getName(), is("MinOCRConfidence"));
-		assertThat(feature.get() instanceof MinOCRCharacterConfidenceFeature, is(true));
+		assertThat(feature.orElseThrow(Exception::new).getName(), is("MinOCRConfidence"));
+		assertThat(feature.orElseThrow(Exception::new) instanceof MinOCRCharacterConfidenceFeature, is(true));
 	}
 
 	@Test
@@ -30,8 +30,8 @@ public class DefaultFeatureFactoryTest {
 		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.MaxOCRCharacterConfidenceFeature\",\"name\":\"MaxOCRConfidence\",\"ocrIndex\":0}";
 		final Optional<Feature> feature = makeFeature(json);
 		assertThat(feature.isPresent(), is(true));
-		assertThat(feature.get().getName(), is("MaxOCRConfidence"));
-		assertThat(feature.get() instanceof MaxOCRCharacterConfidenceFeature, is(true));
+		assertThat(feature.orElseThrow(Exception::new).getName(), is("MaxOCRConfidence"));
+		assertThat(feature.orElseThrow(Exception::new) instanceof MaxOCRCharacterConfidenceFeature, is(true));
 	}
 
 	@Test
@@ -39,8 +39,8 @@ public class DefaultFeatureFactoryTest {
 		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.MinCharNGramsFeature\",\"name\":\"MinCharNGrams\"}";
 		final Optional<Feature> feature = makeFeature(json);
 		assertThat(feature.isPresent(), is(true));
-		assertThat(feature.get().getName(), is("MinCharNGrams"));
-		assertThat(feature.get() instanceof MinCharNGramsFeature, is(true));
+		assertThat(feature.orElseThrow(Exception::new).getName(), is("MinCharNGrams"));
+		assertThat(feature.orElseThrow(Exception::new) instanceof MinCharNGramsFeature, is(true));
 	}
 
 	@Test
@@ -48,8 +48,8 @@ public class DefaultFeatureFactoryTest {
 		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.MaxCharNGramsFeature\",\"name\":\"MaxCharNGrams\"}";
 		final Optional<Feature> feature = makeFeature(json);
 		assertThat(feature.isPresent(), is(true));
-		assertThat(feature.get().getName(), is("MaxCharNGrams"));
-		assertThat(feature.get() instanceof MaxCharNGramsFeature, is(true));
+		assertThat(feature.orElseThrow(Exception::new).getName(), is("MaxCharNGrams"));
+		assertThat(feature.orElseThrow(Exception::new) instanceof MaxCharNGramsFeature, is(true));
 	}
 
 	@Test
@@ -57,15 +57,8 @@ public class DefaultFeatureFactoryTest {
 		final String json = "{\"type\":\"de.lmu.cis.ocrd.ml.features.HighestRankedCandidateVoteWeightFeature\",\"name\":\"ProfilerHighestVoteWeight\"}";
 		final Optional<Feature> feature = makeFeature(json);
 		assertThat(feature.isPresent(), is(true));
-		assertThat(feature.get().getName(), is("ProfilerHighestVoteWeight"));
-		assertThat(feature.get() instanceof HighestRankedCandidateVoteWeightFeature, is(true));
-	}
-
-	@Test
-	public void testDeactivateFeatureTrue() throws Exception {
-		final String json = "{\"deactivate\":true,\"type\":\"de.lmu.cis.ocrd.ml.features.MaxCharNGramsFeature\",\"name\":\"MaxCharNGrams\"}";
-		final Optional<Feature> feature = makeFeature(json);
-		assertThat(feature.isPresent(), is(false));
+		assertThat(feature.orElseThrow(Exception::new).getName(), is("ProfilerHighestVoteWeight"));
+		assertThat(feature.orElseThrow(Exception::new) instanceof HighestRankedCandidateVoteWeightFeature, is(true));
 	}
 
 	@Test
