@@ -48,6 +48,8 @@ public class Trainer {
         lm.setTokens(tokens);
         TokenFilter.filter(tokens, func).forEach(token->{
             Logger.debug("preparing {}: {}", arffWriter.getRelation(), token.toString());
+            assert(TokenFilter.isNonLexical(token));
+            assert(TokenFilter.isLong(token));
             arffWriter.writeToken(token, n);
         });
     }

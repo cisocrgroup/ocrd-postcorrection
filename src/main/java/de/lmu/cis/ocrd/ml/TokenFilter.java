@@ -9,11 +9,11 @@ public class TokenFilter {
     }
 
     static Stream<OCRToken> filter(List<OCRToken> tokens) {
-        return tokens.stream().filter((t)-> isNonLexicalToken(t) && isLongToken(t));
+        return tokens.stream().filter((t)-> isNonLexical(t) && isLong(t));
     }
 
     static Stream<OCRToken> filter(List<OCRToken> tokens, Func func) {
-        return tokens.stream().filter((t)-> isNonLexicalToken(t) && isLongToken(t) && func.apply(t));
+        return tokens.stream().filter((t)-> isNonLexical(t) && isLong(t) && func.apply(t));
     }
 
     public static Stream<OCRToken> filter(OCRTokenReader tokenReader, Func func) throws Exception {
@@ -24,11 +24,11 @@ public class TokenFilter {
         return filter(tokenReader.read());
     }
 
-    private static boolean isNonLexicalToken(OCRToken token) {
+    static boolean isNonLexical(OCRToken token) {
         return !(token.getCandidates().size() == 1 && token.getCandidates().get(0).isLexiconEntry());
     }
 
-    private static boolean isLongToken(OCRToken token) {
+    static boolean isLong(OCRToken token) {
         return token.getMasterOCR().getWordNormalized().length() > 3;
     }
 }
