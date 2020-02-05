@@ -25,6 +25,8 @@ public class Rankings extends HashMap<OCRToken, List<Ranking>> {
         while (iis.hasNext() && tis.hasNext()) {
             final Instance i = iis.next();
             final OCRToken t = tis.next();
+
+            // calculate a ranking for each of the token's candidates and put it into the map
             for (Candidate candidate: t.getCandidates()) {
                 final BinaryPrediction p = classifier.predict(i);
                 final double ranking = p.getPrediction() ? p.getConfidence() : -p.getConfidence();

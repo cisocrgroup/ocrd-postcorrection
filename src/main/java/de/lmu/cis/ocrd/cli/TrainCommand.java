@@ -29,6 +29,7 @@ public class TrainCommand extends ParametersCommand {
 		String[] ifgs = config.mustGetInputFileGroups();
 		this.debug = config.getLogLevel().equalsIgnoreCase("debug");
 
+		// train lexicon extension and ranking
 		for (int i = 0; i < parameters.getNOCR(); i++) {
 			final Trainer leTrainer = openLETrainer(i+1);
 			final Trainer rrTrainer = openRRTrainer(i+1);
@@ -42,6 +43,7 @@ public class TrainCommand extends ParametersCommand {
 			rrTrainer.train(parameters.getRRTraining().getTraining(i+1), parameters.getRRTraining().getModel(i+1));
 		}
 
+		// train decision maker
 		for (int i = 0; i < parameters.getNOCR(); i++) {
 			final Trainer dmTrainer = openDMTrainer(i+1);
 			for (String ifg: ifgs) {
@@ -50,7 +52,7 @@ public class TrainCommand extends ParametersCommand {
 						workspace.getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
 						parameters.getRRTraining().getModel(i+1),
 						parameters.getRRTraining().getTraining(i+1));
-				dmTrainer.prepare(workspace.getRankedTokenReader(ifg, null, rankings), i+1);
+				dmTrainer.prepare(workspace.getRankedTokenReader(ifg, null, rankings), i+1, (DMGTFeature::isValidForTraining));
 			}
 			dmTrainer.train(parameters.getDMTraining().getTraining(i+1), parameters.getDMTraining().getModel(i+1));
 		}

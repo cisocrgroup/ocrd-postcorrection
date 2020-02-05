@@ -43,6 +43,15 @@ public class Trainer {
                 .writeHeader(n);
     }
 
+    public void prepare(OCRTokenReader tokenReader, int n, TokenFilter.Func func) throws Exception {
+        final List<OCRToken> tokens = tokenReader.read();
+        lm.setTokens(tokens);
+        TokenFilter.filter(tokens, func).forEach(token->{
+            Logger.debug("preparing {}: {}", arffWriter.getRelation(), token.toString());
+            arffWriter.writeToken(token, n);
+        });
+    }
+
     public void prepare(OCRTokenReader tokenReader, int n) throws Exception {
         final List<OCRToken> tokens = tokenReader.read();
         lm.setTokens(tokens);
