@@ -11,7 +11,7 @@ public class CandidateOCRPatternConfidenceFeature extends AbstractPatternConfide
         this(JSON.mustGetNameOrType(o));
     }
 
-    private CandidateOCRPatternConfidenceFeature(String name) {
+    public CandidateOCRPatternConfidenceFeature(String name) {
         super(name);
     }
 
