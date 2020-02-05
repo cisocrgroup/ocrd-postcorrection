@@ -3,10 +3,8 @@ package de.lmu.cis.ocrd.ml.features;
 import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.profile.Candidate;
 
-import java.util.Optional;
-
 public class ReRankingGTFeature extends NamedBooleanFeature {
-	public ReRankingGTFeature(String name) {
+	private ReRankingGTFeature(String name) {
 		super(name);
 	}
 
@@ -21,10 +19,7 @@ public class ReRankingGTFeature extends NamedBooleanFeature {
 
 	@Override
 	boolean doCalculate(OCRToken token, int i, int n) {
-		Optional<Candidate> cand = token.getCandidate();
-		if (!cand.isPresent()) {
-			return token.getGT().get().equals(token.getMasterOCR().toString());
-		}
-		return token.getGT().get().equals(cand.get().Suggestion);
+		Candidate candidate = mustGetCandidate(token);
+		return token.getGT().orElseThrow(RuntimeException::new).equalsIgnoreCase(candidate.Suggestion);
 	}
 }
