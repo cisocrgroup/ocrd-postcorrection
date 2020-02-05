@@ -52,7 +52,8 @@ public class Candidate {
 		sj.add(Suggestion);
 		sj.add("ocr:" + patternsToString(HistPatterns));
 		sj.add("hist:" + patternsToString(OCRPatterns));
-		sj.add(Double.toString(Weight));
+		sj.add("dist:" + Distance);
+		sj.add("weight:" + Weight);
 		return sj.toString();
 	}
 
