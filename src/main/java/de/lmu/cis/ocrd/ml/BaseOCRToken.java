@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface BaseOCRToken {
     // Return the number of ocrs (including master ocr).
     int getNOCR();
+    // Return the unique token id
+    String getID();
     // Get master ocr result.
     OCRWord getMasterOCR();
     // Get result of a slave ocr (index starts at 0 e.g. the

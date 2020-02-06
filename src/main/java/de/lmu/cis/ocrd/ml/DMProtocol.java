@@ -15,6 +15,7 @@ import java.util.Map;
 public class DMProtocol implements Protocol {
     public static class Value {
         public GroundTruth gt;
+        public String id = "";
         public String normalized = "";
         public String ocr = "";
         public String cor = "";
@@ -63,6 +64,7 @@ public class DMProtocol implements Protocol {
         Logger.debug("putting token into dm protocol: {} {} {} {}", token, correction, confidence, taken);
         final OCRWord word = token.getMasterOCR();
         final Value val = new Value();
+        val.id = token.getID();
         val.gt = new GroundTruth(token);
         val.normalized = word.getWordNormalized().toLowerCase();
         val.ocr = word.getWordRaw();
@@ -70,6 +72,6 @@ public class DMProtocol implements Protocol {
         val.confidence = confidence;
         val.taken = taken;
         val.rankings = rankings.get(token);
-        protocol.corrections.put(token.getMasterOCR().getID(), val);
+        protocol.corrections.put(token.getID(), val);
     }
 }

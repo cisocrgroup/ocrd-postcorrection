@@ -40,6 +40,11 @@ public class Token implements Serializable, OCRToken {
 	}
 
 	@Override
+	public String getID() {
+		throw new RuntimeException("getID: not implemented");
+	}
+
+	@Override
 	public Optional<String> getGT() {
 		return Optional.ofNullable(gt);
 	}

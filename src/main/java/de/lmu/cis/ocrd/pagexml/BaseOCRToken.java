@@ -15,8 +15,9 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 	private final Node node;
 	private final List<OCRWord> words;
 	private final int gtIndex;
+	private final int id;
 
-	public BaseOCRToken(Node node, List<String> linesNormalized, int gtIndex) throws Exception {
+	public BaseOCRToken(int id, Node node, List<String> linesNormalized, int gtIndex) throws Exception {
 		// master ocr character confidences
 		NodeList nodes = (NodeList) XPathHelper.CHILD_GLYPH_TEXT_EQUIV.evaluate(node, XPathConstants.NODESET);
 		final List<Double> mConfs = new ArrayList<>(nodes.getLength());
@@ -33,8 +34,14 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 			throw new Exception("not enough aligned words for nOCR = " + gtIndex + ": " + words.size());
 		}
 		this.node = node;
-		this.gtIndex = gtIndex;
 		this.words = words;
+		this.gtIndex = gtIndex;
+		this.id = id;
+	}
+
+	@Override
+	public String getID() {
+		return Integer.toString(id);
 	}
 
 	@Override

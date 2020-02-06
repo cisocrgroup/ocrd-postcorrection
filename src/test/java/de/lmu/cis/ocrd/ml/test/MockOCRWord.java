@@ -11,11 +11,6 @@ public class MockOCRWord implements OCRWord {
     private double[] charConfidences = new double[0];
 
 
-    public MockOCRWord setId(String id) {
-        this.id = id;
-        return this;
-    }
-
     public MockOCRWord setWordNormalized(String wordNormalized) {
         this.wordNormalized = wordNormalized;
         return this;
@@ -39,11 +34,6 @@ public class MockOCRWord implements OCRWord {
     public MockOCRWord setCharConfidences(double[] charConfidences) {
         this.charConfidences = charConfidences;
         return this;
-    }
-
-    @Override
-    public String getID() {
-        return id;
     }
 
     @Override

@@ -18,6 +18,9 @@ public abstract class AbstractOCRToken implements OCRToken {
     }
 
     @Override
+    public String getID() {return base.getID();}
+
+    @Override
     public int getNOCR() {
         return base.getNOCR();
     }

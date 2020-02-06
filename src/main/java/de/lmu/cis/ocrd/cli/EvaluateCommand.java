@@ -54,7 +54,7 @@ public class EvaluateCommand extends ParametersCommand {
             counts.correctBefore++;
         }
         // corrections
-        final String id = token.getMasterOCR().getID();
+        final String id = token.getID();
         if (protocol.getProtocol().corrections.containsKey(id)) {
             final DMProtocol.Value value = protocol.getProtocol().corrections.get(id);
             if (!value.gt.present) {

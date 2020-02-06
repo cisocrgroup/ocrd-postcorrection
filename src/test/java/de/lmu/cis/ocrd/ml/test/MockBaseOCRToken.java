@@ -22,6 +22,11 @@ public class MockBaseOCRToken implements BaseOCRToken {
     }
 
     @Override
+    public String getID() {
+        return "**MOCK**ID**";
+    }
+
+    @Override
     public int getNOCR() {
         return nOCR;
     }

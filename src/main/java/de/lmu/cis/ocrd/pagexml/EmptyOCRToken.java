@@ -21,6 +21,9 @@ public class EmptyOCRToken implements OCRToken {
 	}
 
 	@Override
+	public String getID() {return "**EMPTY**ID**";}
+
+	@Override
 	public OCRWord getMasterOCR() {
 		return EmptyWord.instance;
 	}

@@ -81,7 +81,7 @@ public class Workspace extends AbstractWorkspace {
             if (!attrs.isRegularFile()) { // skip dirs, links ...
                 return FileVisitResult.CONTINUE;
             }
-            if (file.toString().endsWith(".png") && !(file.toString().endsWith(".dew.png") || file.toString().endsWith(".bin.png"))) {
+            if (file.toString().endsWith(".png")) {
                 imageFiles.add(file);
             }
             return FileVisitResult.CONTINUE;

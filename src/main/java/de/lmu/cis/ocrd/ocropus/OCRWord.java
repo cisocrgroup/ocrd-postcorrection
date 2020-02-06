@@ -6,7 +6,6 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
     private final LLocs word;
     private final String normalizedLine;
     private final String normalized;
-    private final String id;
     private final double averageConfidence;
 
     OCRWord(LLocs word, String normalizedLine) {
@@ -14,12 +13,6 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
         this.normalizedLine = normalizedLine;
         this.normalized = Normalizer.normalize(word.toString());
         this.averageConfidence = word.getAverageConfidence();
-        this.id = getID(word);
-    }
-
-    @Override
-    public String getID() {
-        return id;
     }
 
     @Override
@@ -45,10 +38,5 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
     @Override
     public double getConfidence() {
         return averageConfidence;
-    }
-
-    private static String getID(LLocs llocs) {
-        final int pos = llocs.getPath().getFileName().toString().indexOf('.');
-        return llocs.getPath().getParent().getFileName().toString() + ":" + llocs.getPath().getFileName().toString().substring(pos+1);
     }
 }

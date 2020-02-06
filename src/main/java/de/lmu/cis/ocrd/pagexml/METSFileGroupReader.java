@@ -30,7 +30,7 @@ class METSFileGroupReader {
     }
 
     private interface Func {
-        void apply(Node word, List<String> linesNormalized);
+        void apply(int id, Node word, List<String> linesNormalized);
     }
 
     List<Page> getPages(String ifg) throws Exception {
@@ -43,11 +43,13 @@ class METSFileGroupReader {
                 }
                 Logger.debug("loaded page {}", file.getFLocat());
             }
+            pages.get(ifg).sort(Comparator.comparing(lhs -> lhs.getPath().toString()));
         }
         return pages.get(ifg);
     }
 
     private void eachWord(String ifg, Func func) throws Exception {
+        int id = 1;
         for (Page page: getPages(ifg)) {
             NodeList nodes = (NodeList) XPathHelper.TEXT_LINES.evaluate(page.getRoot(), XPathConstants.NODESET);
             for (int i = 0; i < nodes.getLength(); i++) {
@@ -57,7 +59,7 @@ class METSFileGroupReader {
                     continue;
                 }
                 for (int j = 0; j < words.getLength(); j++) {
-                    func.apply(words.item(j), linesNormalized);
+                    func.apply(id++, words.item(j), linesNormalized);
                 }
             }
         }
@@ -67,9 +69,9 @@ class METSFileGroupReader {
         if (!base.containsKey(ifg)) {
             Logger.debug("reading base ocr tokens for input file group {}", ifg);
             final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
-            eachWord(ifg, (word, linesNormalized)->{
+            eachWord(ifg, (id, word, linesNormalized)->{
                 try {
-                    tokens.add(new BaseOCRToken(word, linesNormalized, parameters.getNOCR()));
+                    tokens.add(new BaseOCRToken(id, word, linesNormalized, parameters.getNOCR()));
                 } catch (Exception e) {
                     Logger.warn("cannot add token: {}", e.toString());
                 }

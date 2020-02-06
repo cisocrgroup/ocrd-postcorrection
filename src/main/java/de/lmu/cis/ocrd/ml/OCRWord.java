@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.ml;
 
 public interface OCRWord {
-	String getID();
 	String getWordNormalized();
 	String getLineNormalized();
 	String getWordRaw();
