@@ -38,6 +38,15 @@ abstract class ParametersCommand implements Command {
         return new de.lmu.cis.ocrd.pagexml.Workspace(Paths.get(config.mustGetMETSFile()), parameters);
     }
 
+    void setupDirs() {
+        if (parameters.getDir().toFile().mkdirs()) {
+            Logger.debug("created dir {}", parameters.getDir().toString());
+        }
+        if (parameters.getCacheDir().toFile().mkdirs()) {
+            Logger.debug("created dir {}", parameters.getCacheDir().toString());
+        }
+    }
+
     Profile getProfile(String ifg, AdditionalLexicon alex, int n) throws Exception {
         final Path cachedPath = parameters.getProfiler().getCachedPath(parameters.getCacheDir(), ifg, alex, n);
         if (cachedPath.toFile().exists()) {
