@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 public class DMProtocol implements Protocol {
-    public static class ProtocolValue {
-        public GroundTruth groundTruth;
+    public static class Value {
+        public GroundTruth gt;
         public String normalized = "";
         public String ocr = "";
         public String cor = "";
@@ -24,17 +24,17 @@ public class DMProtocol implements Protocol {
     }
 
     public static class GroundTruth {
-        public String groundTruth;
-        public boolean available;
+        public String gt;
+        public boolean present;
 
         public GroundTruth(OCRToken token) {
-            available = token.getGT().isPresent();
-            groundTruth = token.getGT().orElse("");
+            present = token.getGT().isPresent();
+            gt = token.getGT().orElse("");
         }
     }
 
     public static class Protocol {
-        public final Map<String, ProtocolValue> corrections = new HashMap<>();
+        public final Map<String, Value> corrections = new HashMap<>();
     }
 
     private Protocol protocol = new Protocol();
@@ -62,8 +62,8 @@ public class DMProtocol implements Protocol {
     public void protocol(OCRToken token, String correction, double confidence, boolean taken) {
         Logger.debug("putting token into dm protocol: {} {} {} {}", token, correction, confidence, taken);
         final OCRWord word = token.getMasterOCR();
-        final ProtocolValue val = new ProtocolValue();
-        val.groundTruth = new GroundTruth(token);
+        final Value val = new Value();
+        val.gt = new GroundTruth(token);
         val.normalized = word.getWordNormalized().toLowerCase();
         val.ocr = word.getWordRaw();
         val.cor = new StringCorrector(val.ocr).correctWith(correction);

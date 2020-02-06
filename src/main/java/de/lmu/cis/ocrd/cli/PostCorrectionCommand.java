@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class PostCorrectionCommand extends ParametersCommand {
@@ -87,8 +86,8 @@ public class PostCorrectionCommand extends ParametersCommand {
 				assert(take && conf >= 0 || !take && conf <= 0);
 				rankings.get(token).add(new Ranking(candidate, conf));
 			}
-			rankings.get(token).sort(Comparator.comparingDouble(Ranking::getRanking));
 		}
+		rankings.sort();
 		return rankings;
 	}
 

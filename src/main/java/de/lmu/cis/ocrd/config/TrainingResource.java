@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class TrainingResource {
-    protected final String dir, prefix;
+    final String dir, prefix;
     private final List<JsonObject> features;
 
     TrainingResource(String prefix, String dir, List<JsonObject> features) {
@@ -17,7 +17,7 @@ public class TrainingResource {
     }
 
     public Path getEvaluation(int n) {
-        return Paths.get(dir, String.format("%s_eval_%d.arff", prefix, n));
+        return Paths.get(dir, String.format("%s_eval_%d.json", prefix, n));
     }
 
     public Path getModel(int n) {
@@ -26,10 +26,6 @@ public class TrainingResource {
 
     public Path getTraining(int n) {
         return Paths.get(dir, String.format("%s_training_%d.arff", prefix, n));
-    }
-
-    public Path getResult(int n) {
-        return Paths.get(dir, String.format("%s_result_%d.bin", prefix, n));
     }
 
     public List<JsonObject> getFeatures() {

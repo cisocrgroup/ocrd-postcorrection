@@ -7,13 +7,29 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Rankings extends HashMap<OCRToken, List<Ranking>> {
+    // sort the rankings in descending order from highest rank to lowest rank.
+    private void sort(List<Ranking> rs) {
+        assert(!rs.isEmpty());
+        rs.sort((lhs, rhs)-> Double.compare(rhs.getRanking(), lhs.getRanking()));
+        double before = rs.get(0).getRanking();
+        // ensure descending order of the list
+        for (int i = 1; i < rs.size(); i++) {
+            final double current = rs.get(i).getRanking();
+            assert (before >= current);
+        }
+    }
+
+    // sort all rankings in this map.
+    public void sort() {
+        for (Entry<OCRToken, List<Ranking>> entry: this.entrySet()) {
+            sort(entry.getValue());
+        }
+    }
+
     public static Rankings load(OCRTokenReader tokenReader, Path rrModel, Path rrTrain) throws Exception {
         final LogisticClassifier classifier = LogisticClassifier.load(rrModel);
         final Instances instances = new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
@@ -23,25 +39,34 @@ public class Rankings extends HashMap<OCRToken, List<Ranking>> {
         final Iterator<OCRToken> tis = TokenFilter.filter(tokenReader.read()).collect(Collectors.toList()).iterator();
         final Rankings rankings = new Rankings();
         while (iis.hasNext() && tis.hasNext()) {
-            final Instance i = iis.next();
-            final OCRToken t = tis.next();
+            final Instance instance = iis.next();
+            final OCRToken token = tis.next();
 
             // calculate a ranking for each of the token's candidates and put it into the map
-            for (Candidate candidate: t.getCandidates()) {
-                final BinaryPrediction p = classifier.predict(i);
-                final double ranking = p.getPrediction() ? p.getConfidence() : -p.getConfidence();
+            List<Ranking> rs = null;
+            for (Candidate candidate: token.getCandidates()) {
+                final BinaryPrediction p = classifier.predict(instance);
+                final boolean t = p.getPrediction();
+                final double ranking = t ? p.getConfidence() : -p.getConfidence();
+                if (!((t && ranking >= 0) || (!t && ranking <= 0))) {
+                    throw new Exception("bad ranking: " + t + "," + ranking);
+                }
+
                 if (Double.isNaN(ranking)) {
                     continue;
                 }
-                if (!rankings.containsKey(t)) {
-                    rankings.put(t, new ArrayList<>());
+                if (rs == null) {
+                    rs = new ArrayList<>();
                 }
-                rankings.get(t).add(new Ranking(candidate, ranking));
+                rs.add(new Ranking(candidate, ranking));
             }
-            if (rankings.containsKey(t)) {
-                rankings.get(t).sort((lhs, rhs) -> Double.compare(rhs.getRanking(), lhs.getRanking()));
+            // put into map
+            assert(!rankings.containsKey(token));
+            if (rs != null) {
+                rankings.put(token, rs);
             }
         }
+        rankings.sort();
         return rankings;
     }
 }

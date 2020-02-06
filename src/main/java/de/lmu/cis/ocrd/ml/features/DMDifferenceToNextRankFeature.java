@@ -22,16 +22,15 @@ public class DMDifferenceToNextRankFeature extends NamedDoubleFeature {
         assert(handlesOCR(i, n));
 		final List<Ranking> rs = token.getRankings();
 		assert(!rs.isEmpty());
-        double before = Double.MAX_VALUE;
-		// make sure that we have ordered rankings
-        for (Ranking r : rs) {
-            assert(r.getRanking() < before);
-        }
-        double second = -1;
+		final double first = rs.get(0).getRanking();
+		double second = -1;
         if (rs.size() > 1) {
             second = rs.get(1).getRanking();
         }
-        return rs.get(0).getRanking() - second;
+        assert(first >= second);
+        final double ret = Math.abs(first - second);
+        assert(ret >= 0);
+        return ret;
     }
 
     @Override
