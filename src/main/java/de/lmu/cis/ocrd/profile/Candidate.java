@@ -50,8 +50,8 @@ public class Candidate {
 	public String toString() {
 		StringJoiner sj = new StringJoiner(",");
 		sj.add(Suggestion);
-		sj.add("ocr:" + patternsToString(HistPatterns));
-		sj.add("hist:" + patternsToString(OCRPatterns));
+		sj.add("ocr:" + patternsToString(OCRPatterns));
+		sj.add("hist:" + patternsToString(HistPatterns));
 		sj.add("dist:" + Distance);
 		sj.add("weight:" + Weight);
 		return sj.toString();
