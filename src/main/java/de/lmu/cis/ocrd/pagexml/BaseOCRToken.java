@@ -83,12 +83,13 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 	public String toString() {
 		StringJoiner sj = new StringJoiner(",");
 		sj.add("id:" + getID());
-		sj.add("mOCR:" + getMasterOCR().toString());
+		sj.add("mOCR:" + getMasterOCR().getWordNormalized());
 		for (int i = 1; i < words.size(); i++) {
-			sj.add("OCR" + (i + 1) + ":" + getSlaveOCR(i - 1).toString());
-		}
-		if (getGT().isPresent()) {
-			sj.add("gt:" + getGT().get());
+		    if (words.get(i).isGT()) {
+                sj.add("GT:" + words.get(i).getWordNormalized());
+            } else {
+		    	sj.add("OCR:" + (i+1) + ":" + words.get(i).getWordNormalized());
+            }
 		}
 		return sj.toString();
 	}

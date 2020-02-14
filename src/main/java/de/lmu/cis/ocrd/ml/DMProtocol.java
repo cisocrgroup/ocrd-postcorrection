@@ -16,7 +16,8 @@ public class DMProtocol implements Protocol {
     public static class Value {
         public GroundTruth gt;
         public String id = "";
-        public String normalized = "";
+        public String ocrNormalized = "";
+        public String corNormalized = "";
         public String ocr = "";
         public String cor = "";
         public List<Ranking> rankings;
@@ -62,12 +63,19 @@ public class DMProtocol implements Protocol {
     @Override
     public void protocol(OCRToken token, String correction, double confidence, boolean taken) {
         Logger.debug("putting token into dm protocol: {} {} {} {}", token, correction, confidence, taken);
-        final OCRWord word = token.getMasterOCR();
+        if (protocol.corrections.containsKey(token.getID())) {
+            throw new RuntimeException("not a unique id: " + token.getID() + " for token: " + token.toString());
+        }
+        if ("130".equals(token.getID())) {
+            throw new RuntimeException("again this FUCKING token: " + token.toString());
+        }
+        final OCRWord masterOCR = token.getMasterOCR();
         final Value val = new Value();
         val.id = token.getID();
         val.gt = new GroundTruth(token);
-        val.normalized = word.getWordNormalized().toLowerCase();
-        val.ocr = word.getWordRaw();
+        val.ocrNormalized = masterOCR.getWordNormalized().toLowerCase();
+        val.corNormalized = correction.toLowerCase();
+        val.ocr = masterOCR.getWordRaw();
         val.cor = new StringCorrector(val.ocr).correctWith(correction);
         val.confidence = confidence;
         val.taken = taken;

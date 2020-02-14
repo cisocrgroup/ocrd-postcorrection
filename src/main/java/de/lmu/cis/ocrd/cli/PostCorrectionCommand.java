@@ -3,10 +3,9 @@ package de.lmu.cis.ocrd.cli;
 import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.profile.*;
+import org.pmw.tinylog.Logger;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -38,18 +37,19 @@ public class PostCorrectionCommand extends ParametersCommand {
 			alex = predictLexiconExtensions();
 		}
 		if (parameters.isRunDM()) {
-			final Rankings rankings = predictRankings(alex);
-			decide(rankings);
+			decide(predictRankings(alex));
 		}
 		workspace.write(ifg, ofg);
 	}
 
 	private AdditionalLexicon predictLexiconExtensions() throws Exception {
+		// profile with no additional lexicon
 		final AdditionalLexicon alex = new NoAdditionalLexicon();
 		profile = getProfile(ifg, alex, parameters.getNOCR());
+		// predict lexicon entries and return them
 		final Predictor predictor = getLEPredictor();
-		final Protocol protocol = new LEProtocol();
 		final AdditionalLexiconSet ret = new AdditionalLexiconSet();
+		final Protocol protocol = new LEProtocol();
 		for (OCRToken token: TokenFilter.filter(workspace.getNormalTokenReader(ifg, profile)).collect(Collectors.toList())){
 			final Predictor.Result result = predictor.predict(token, parameters.getNOCR());
 			final boolean take = result.getPrediction().getPrediction();
@@ -59,7 +59,8 @@ public class PostCorrectionCommand extends ParametersCommand {
 				ret.add(result.getToken().getMasterOCR().getWordNormalized());
 			}
 		}
-		saveProtocol(parameters.getLETraining().getProtocol(parameters.getNOCR()), protocol);
+		saveProtocol(parameters.getLETraining().getProtocol(parameters.getNOCR(), true), protocol);
+		saveAdditionalLexicon(ret, parameters.getLETraining().getLexicon(parameters.getNOCR()));
 		return ret;
 	}
 
@@ -93,8 +94,9 @@ public class PostCorrectionCommand extends ParametersCommand {
 
 	private void decide(Rankings rankings) throws Exception {
 		// no profile
+		OCRToken token130 = null;
 		final Predictor predictor = getDMPredictor();
-		final Protocol protocol = new DMProtocol(rankings);
+		final DMProtocol protocol = new DMProtocol(rankings);
 		for (OCRToken token: rankings.keySet()) {
 			final Predictor.Result result = predictor.predict(new RankingsOCRToken(token, rankings.get(token)), parameters.getNOCR());
 			final boolean take = result.getPrediction().getPrediction();
@@ -103,8 +105,16 @@ public class PostCorrectionCommand extends ParametersCommand {
 			if (take) {
 				token.correct(topRanking.getCandidate().Suggestion, topRanking.getRanking());
 			}
+			if ("130".equals(token.getID())) {
+				token130 = token;
+			}
 		}
-		saveProtocol(parameters.getDMTraining().getProtocol(parameters.getNOCR()), protocol);
+		saveProtocol(parameters.getDMTraining().getProtocol(parameters.getNOCR(), parameters.isRunLE()), protocol);
+		if (token130 != null) {
+			Logger.debug("token130: {}", token130.toString());
+			Logger.debug("protocol: {}", protocol.getProtocol().corrections.containsKey(token130.getID()) ? protocol.getProtocol().corrections.get(token130.getID()).id : "not found");
+			throw new Exception("again this fucking token: " + token130.toString());
+		}
 	}
 
 	private Predictor getLEPredictor() throws Exception {
@@ -152,7 +162,17 @@ public class PostCorrectionCommand extends ParametersCommand {
 		}
 	}
 
+	private void saveAdditionalLexicon(AdditionalLexiconSet alex, Path path) throws Exception {
+		try(Writer w = new BufferedWriter(new FileWriter(path.toFile()))) {
+			for (String str: alex) {
+				w.write(str);
+				w.write('\n');
+			}
+		}
+	}
+
 	private void saveProtocol(Path path, Protocol protocol) throws Exception {
+		Logger.debug("saving protocol to {}", path.toString());
 		try (OutputStream os = new FileOutputStream(path.toFile())) {
 			protocol.write(os);
 		}

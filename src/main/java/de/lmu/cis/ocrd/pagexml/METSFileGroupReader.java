@@ -41,7 +41,6 @@ class METSFileGroupReader {
                 try (InputStream is = file.openInputStream()) {
                     pages.get(ifg).add(Page.parse(Paths.get(file.getFLocat()), is));
                 }
-                Logger.debug("loaded page {}", file.getFLocat());
             }
             pages.get(ifg).sort(Comparator.comparing(lhs -> lhs.getPath().toString()));
         }

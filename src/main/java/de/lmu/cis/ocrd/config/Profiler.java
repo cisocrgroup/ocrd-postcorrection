@@ -1,7 +1,5 @@
 package de.lmu.cis.ocrd.config;
 
-import de.lmu.cis.ocrd.profile.AdditionalLexicon;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -9,9 +7,9 @@ public class Profiler {
     private String path = "";
     private String config = "";
 
-    public Path getCachedPath(Path cache, String ifg, AdditionalLexicon alex, int n) {
+    public Path getCachedPath(Path cache, String ifg, boolean alex, int n) {
         String suffix = ".json.gz";
-        if (alex.use()) {
+        if (alex) {
             suffix = "_alex_" + n + suffix;
         }
         return Paths.get(cache.toString(), ifg + suffix);

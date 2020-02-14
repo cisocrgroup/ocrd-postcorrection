@@ -48,7 +48,7 @@ abstract class ParametersCommand implements Command {
     }
 
     Profile getProfile(String ifg, AdditionalLexicon alex, int n) throws Exception {
-        final Path cachedPath = parameters.getProfiler().getCachedPath(parameters.getCacheDir(), ifg, alex, n);
+        final Path cachedPath = parameters.getProfiler().getCachedPath(parameters.getCacheDir(), ifg, alex.use(), n);
         if (cachedPath.toFile().exists()) {
             Logger.debug("opening cached profile {}", cachedPath.toString());
             return new FileProfiler(cachedPath).profile();

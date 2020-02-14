@@ -155,10 +155,10 @@ public class TrainCommandTest {
 			assertThat(dir.toFile().exists(), is(false));
 			assertThat(Paths.get(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).get(0).getFLocat().substring(7)).toFile().exists(), is(false));
 			// check protocols
-            assertThat(cmd.getParameters().getLETraining().getProtocol(i+1).toFile().exists(), is(true));
-			checkReadProtocol(new LEProtocol(), cmd.getParameters().getLETraining().getProtocol(i+1));
-            assertThat(cmd.getParameters().getDMTraining().getProtocol(i+1).toFile().exists(), is(true));
-			checkReadProtocol(new DMProtocol(null), cmd.getParameters().getDMTraining().getProtocol(i+1));
+            assertThat(cmd.getParameters().getLETraining().getProtocol(i+1, parameters.isRunLE()).toFile().exists(), is(true));
+			checkReadProtocol(new LEProtocol(), cmd.getParameters().getLETraining().getProtocol(i+1, parameters.isRunLE()));
+            assertThat(cmd.getParameters().getDMTraining().getProtocol(i+1, parameters.isRunLE()).toFile().exists(), is(true));
+			checkReadProtocol(new DMProtocol(null), cmd.getParameters().getDMTraining().getProtocol(i+1, parameters.isRunLE()));
 		}
 	}
 
