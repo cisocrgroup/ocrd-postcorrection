@@ -54,10 +54,10 @@ class METSFileGroupReader {
             NodeList nodes = (NodeList) XPathHelper.TEXT_LINES.evaluate(page.getRoot(), XPathConstants.NODESET);
             for (int i = 0; i < nodes.getLength(); i++) {
                 final List<String> linesNormalized = new Line(nodes.item(i), page).getUnicodeNormalized();
-                final NodeList words = (NodeList) XPathHelper.CHILD_WORD.evaluate(nodes.item(i), XPathConstants.NODESET);
                 if (linesNormalized.isEmpty() || linesNormalized.get(0).isEmpty()) {
                     continue;
                 }
+                final NodeList words = (NodeList) XPathHelper.CHILD_WORD.evaluate(nodes.item(i), XPathConstants.NODESET);
                 for (int j = 0; j < words.getLength(); j++) {
                     func.apply(id++, words.item(j), linesNormalized);
                 }
@@ -71,7 +71,7 @@ class METSFileGroupReader {
             final List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
             eachWord(ifg, (id, word, linesNormalized)->{
                 try {
-                    tokens.add(new BaseOCRToken(id, word, linesNormalized, parameters.getNOCR()));
+                    tokens.add(new BaseOCRToken(id, word, linesNormalized));
                 } catch (Exception e) {
                     Logger.warn("cannot add token: {}", e.toString());
                 }

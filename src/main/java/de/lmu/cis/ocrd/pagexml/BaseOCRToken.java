@@ -14,10 +14,9 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
 	private final Node node;
 	private final List<OCRWord> words;
-	private final int gtIndex;
 	private final int id;
 
-	public BaseOCRToken(int id, Node node, List<String> linesNormalized, int gtIndex) throws Exception {
+	public BaseOCRToken(int id, Node node, List<String> linesNormalized) throws Exception {
 		// master ocr character confidences
 		NodeList nodes = (NodeList) XPathHelper.CHILD_GLYPH_TEXT_EQUIV.evaluate(node, XPathConstants.NODESET);
 		final List<Double> mConfs = new ArrayList<>(nodes.getLength());
@@ -27,15 +26,14 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 		// words
 		nodes = (NodeList) XPathHelper.CHILD_TEXT_EQUIV.evaluate(node, XPathConstants.NODESET);
 		final List<OCRWord> words = new ArrayList<>(nodes.getLength());
-		for (int i = 0; i < nodes.getLength() && i <= gtIndex && i < linesNormalized.size(); i++) {
+		for (int i = 0; i < nodes.getLength() && i < linesNormalized.size(); i++) {
 			words.add(new OCRWord(nodes.item(i), linesNormalized.get(i), mConfs));
 		}
-		if (words.size() < (gtIndex - 1)) {
-			throw new Exception("not enough aligned words for nOCR = " + gtIndex + ": " + words.size());
+		if (words.isEmpty()) {
+			throw new Exception("too few text equiv for ocr token");
 		}
 		this.node = node;
 		this.words = words;
-		this.gtIndex = gtIndex;
 		this.id = id;
 	}
 
@@ -46,7 +44,15 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
 	@Override
 	public int getNOCR() {
-		return gtIndex;
+		if (getLastWord().isGT()) {
+			return words.size() - 1; // last word is ground truth
+		}
+		// no ground truth -- all words are ocr tokens
+		return words.size();
+	}
+
+	private OCRWord getLastWord() {
+		return words.get(words.size() - 1);
 	}
 
 	@Override
@@ -67,17 +73,18 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
 	@Override
 	public Optional<String> getGT() {
-		if (gtIndex <= 0 || gtIndex >= words.size()) {
-			return Optional.empty();
+		if (getLastWord().isGT()) {
+			return Optional.of(getLastWord().getWordNormalized());
 		}
-		return Optional.of(words.get(gtIndex).getWordNormalized());
+		return Optional.empty();
 	}
 
 	@Override
 	public String toString() {
 		StringJoiner sj = new StringJoiner(",");
+		sj.add("id:" + getID());
 		sj.add("mOCR:" + getMasterOCR().toString());
-		for (int i = 1; i < getNOCR(); i++) {
+		for (int i = 1; i < words.size(); i++) {
 			sj.add("OCR" + (i + 1) + ":" + getSlaveOCR(i - 1).toString());
 		}
 		if (getGT().isPresent()) {

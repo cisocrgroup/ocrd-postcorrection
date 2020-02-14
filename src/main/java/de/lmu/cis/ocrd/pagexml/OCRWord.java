@@ -10,6 +10,7 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 	private final List<Double> masterOCRCharConfidences;
 	private final double wordConfidence;
 	private final String line;
+	private final boolean isGT;
 
 	private OCRWord(TextEquiv te, String line, List<Double> masterOCRCharConfidences) throws XPathExpressionException {
 		this.line = line;
@@ -17,10 +18,20 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 		this.word = te.getUnicodeNormalized();
 		this.raw = te.getUnicode();
 		this.masterOCRCharConfidences = masterOCRCharConfidences;
+		this.isGT = isGT(te);
 	}
 
 	OCRWord(Node node, String line, List<Double> mConfs) throws XPathExpressionException {
 		this(new TextEquiv(node), line, mConfs);
+	}
+
+	boolean isGT() {
+		return isGT;
+	}
+
+	private static boolean isGT(TextEquiv te) {
+		// TODO: data type details should contain embedded json e.g. `{"gt": true, "name": "ground truth", ...}`
+		return te.getDataTypeDetails().startsWith("OCR-D-GT");
 	}
 
 	@Override
