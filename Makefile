@@ -5,7 +5,7 @@ JAR := target/ocrd-0.1-cli.jar
 default: ${JAR}
 
 ${JAR}: ${SRCS}
-	mvn --batch-mode -Dmaven.test.skip=true package
+	mvn -q --batch-mode -Dmaven.test.skip=true package
 
 .PHONY: install
 install: ${JAR}
