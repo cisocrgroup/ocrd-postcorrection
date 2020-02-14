@@ -5,8 +5,12 @@ JAR := target/ocrd-0.1-cli.jar
 default: ${JAR}
 
 ${JAR}: ${SRCS}
-	mvn --batch-mode package
+	mvn --batch-mode -Dmaven.test.skip=true package
 
 .PHONY: install
 install: ${JAR}
 	install -D $< ${DESTDIR}/ocrd.jar
+
+.PHONY: test
+test:
+	mvn test
