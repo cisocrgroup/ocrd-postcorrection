@@ -16,8 +16,8 @@ public class TrainingResource {
         this.features = features;
     }
 
-    public Path getEvaluation(int n) {
-        return Paths.get(dir, String.format("%s_eval_%d.json", prefix, n));
+    public Path getEvaluation(int n, boolean alex) {
+        return Paths.get(dir, String.format("%s_eval%s_%d.json", prefix, alex ? "_alex":"", n));
     }
 
     public Path getModel(int n) {

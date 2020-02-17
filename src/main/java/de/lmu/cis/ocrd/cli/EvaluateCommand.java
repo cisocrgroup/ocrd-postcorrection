@@ -33,7 +33,7 @@ public class EvaluateCommand extends ParametersCommand {
         for (String ifg: config.mustGetInputFileGroups()) {
             evaluate(ifg);
         }
-        try(Writer w = new FileWriter(parameters.getDMTraining().getEvaluation(parameters.getNOCR()).toFile())) {
+        try(Writer w = new FileWriter(parameters.getDMTraining().getEvaluation(parameters.getNOCR(), parameters.isRunLE()).toFile())) {
             new Gson().toJson(counts, w);
         }
     }

@@ -176,7 +176,7 @@ public class TrainCommandTest {
             CommandLineArguments cla = CommandLineArguments.fromCommandLine(args);
             EvaluateCommand cmd = new EvaluateCommand();
             cmd.execute(cla);
-            assertThat(cmd.getParameters().getDMTraining().getEvaluation(i+1).toFile().exists(), is(true));
+            assertThat(cmd.getParameters().getDMTraining().getEvaluation(i+1, parameters.isRunLE()).toFile().exists(), is(true));
         }
     }
 
