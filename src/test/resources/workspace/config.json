@@ -63,7 +63,7 @@
         {
             "type":  null,
             "name": null,
-            "class": "deactivate"
+            "classes": ["deactivate"]
         }
     ],
     "rrFeatures": [

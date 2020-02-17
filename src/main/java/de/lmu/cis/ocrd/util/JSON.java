@@ -7,7 +7,7 @@ public class JSON {
 	public static JsonElement mustGet(JsonObject o, String key) {
 		final JsonElement val = o.get(key);
 		if (val == null) {
-			throw new ClassCastException("JSON object does not have member " + key);
+			throw new ClassCastException("JSON object does not have member \"" + key + "\"");
 		}
 		return val;
 	}

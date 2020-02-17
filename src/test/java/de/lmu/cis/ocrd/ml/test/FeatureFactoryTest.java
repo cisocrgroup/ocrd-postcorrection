@@ -39,7 +39,7 @@ public class FeatureFactoryTest {
 	@Test
 	public void testWithFeatureClassFilter() throws Exception {
 		FeatureClassFilter ff = new FeatureClassFilter(Arrays.asList("a", "b"));
-		final String json = "[{\"class\":\"a\"},{\"class\":\"b\"},{\"class\":\"A.b\"},{\"class\":\"B.a\"}]";
+		final String json = "[{\"classes\":[\"a\"]},{\"classes\":[\"b\"]},{\"classes\":[\"A\",\"b\"]},{\"classes\":[\"B\",\"a\"]}]";
 		JsonObject[] os = new Gson().fromJson(json, JsonObject[].class);
 		FeatureSet fs = featureFactory.createFeatureSet(os, ff);
 		assertThat(fs.size(), is(0));

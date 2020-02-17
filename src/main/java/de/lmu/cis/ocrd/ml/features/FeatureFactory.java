@@ -89,8 +89,4 @@ public class FeatureFactory {
 		}
 		return fs;
 	}
-
-	public FeatureSet createFeatureSet(JsonObject[] os) throws Exception {
-		return createFeatureSet(os, new FeatureClassFilter());
-	}
 }
