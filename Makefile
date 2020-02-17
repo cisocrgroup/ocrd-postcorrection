@@ -1,4 +1,6 @@
-DESTDIR ?= /usr/lib
+DESTDIR ?= ""
+PREFIX ?= /usr/share
+LIBDIR ?= ${PREFIX}/lib
 SRCS := ${shell find src/main/java/ -type f -name '*.java'}
 JAR := target/ocrd-0.1-cli.jar
 
@@ -9,7 +11,7 @@ ${JAR}: ${SRCS}
 
 .PHONY: install
 install: ${JAR}
-	install -D $< ${DESTDIR}/ocrd.jar
+	install -D $< ${DESTDIR}/${LIBDIR}/ocrd.jar
 
 .PHONY: test
 test:
