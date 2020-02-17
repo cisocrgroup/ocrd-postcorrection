@@ -58,44 +58,36 @@ public class ModelZIP implements Closeable {
         return config.dmFeatureSet;
     }
 
-    public ModelZIP addLEModel(Path path, int i) {
+    public void addLEModel(Path path, int i) {
         addModel(initConfig().leModels, path, i);
-        return this;
     }
 
-    public ModelZIP addRRModel(Path path, int i) {
+    public void addRRModel(Path path, int i) {
         addModel(initConfig().rrModels, path, i);
-        return this;
     }
 
-    public ModelZIP addDMModel(Path path, int i) {
+    public void addDMModel(Path path, int i) {
         addModel(initConfig().dmModels, path, i);
-        return this;
     }
 
-    public ModelZIP setLEFeatureSet(List<JsonObject> set) {
+    public void setLEFeatureSet(List<JsonObject> set) {
         initConfig().leFeatureSet = set;
-        return this;
     }
 
-    public ModelZIP setRRFeatureSet(List<JsonObject> set) {
+    public void setRRFeatureSet(List<JsonObject> set) {
         initConfig().rrFeatureSet = set;
-        return this;
     }
 
-    public ModelZIP setDMFeatureSet(List<JsonObject> set) {
+    public void setDMFeatureSet(List<JsonObject> set) {
         initConfig().dmFeatureSet = set;
-        return this;
     }
 
-    public ModelZIP setLanguageModelPath(String path) {
+    public void setLanguageModelPath(String path) {
         initConfig().languageModelPath = path;
-        return this;
     }
 
-    public ModelZIP setCreated(long now) {
+    public void setCreated(long now) {
         initConfig().created = now;
-        return this;
     }
 
     public void save(Path path) throws Exception {
