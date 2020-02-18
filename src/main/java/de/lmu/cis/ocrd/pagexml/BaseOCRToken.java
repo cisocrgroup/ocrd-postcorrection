@@ -30,7 +30,7 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 			words.add(new OCRWord(nodes.item(i), linesNormalized.get(i), mConfs));
 		}
 		if (words.isEmpty()) {
-			throw new Exception("too few text equiv for ocr token");
+			throw new Exception("too few text equivs for ocr token");
 		}
 		this.node = node;
 		this.words = words;

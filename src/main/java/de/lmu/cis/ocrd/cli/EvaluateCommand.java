@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.BaseOCRToken;
 import de.lmu.cis.ocrd.ml.DMProtocol;
 import de.lmu.cis.ocrd.ml.Ranking;
-import de.lmu.cis.ocrd.profile.*;
+import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
+import de.lmu.cis.ocrd.profile.Candidates;
+import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
+import de.lmu.cis.ocrd.profile.Profile;
 import de.lmu.cis.ocrd.util.Normalizer;
 import org.pmw.tinylog.Logger;
 
@@ -78,20 +81,21 @@ public class EvaluateCommand extends ParametersCommand {
     }
 
     private void countAttempted(DMProtocol.Value value) {
+        counts.attempted++;
         if (isTypeIError(value)) {
-            counts.typeI++;
+            counts.missingCandidate++;
             counts.typeIValues.add(value);
         }
         if (isTypeIIError(value)) {
-            counts.typeII++;
+            counts.badRank++;
             counts.typeIIValues.add(value);
         }
         if (isTypeIIIError(value)) {
-            counts.typeIII++;
+            counts.missedOpportunity++;
             counts.typeIIIValues.add(value);
         }
         if (isTypeIVError(value)) {
-            counts.typeIV++;
+            counts.infelicitousCorrection++;
             counts.typeIVValues.add(value);
         }
         if ((value.taken && correctionIsGood(value)) || (!value.taken && !correctionIsGood(value))) {
@@ -116,10 +120,6 @@ public class EvaluateCommand extends ParametersCommand {
                     counts.skippedFalseFriends++;
                 }
             } else {
-                for (Candidate candidate: maybeCandidates.get().Candidates) {
-                    Logger.debug("candidate: {}", candidate.toString());
-                }
-                Logger.debug("token nOCR: {}, slave ocr: {}", token.getNOCR(), token.getSlaveOCR(0).getWordNormalized());
                 throw new Exception("bad unhandled token: " + token.toString());
             }
         }
@@ -176,18 +176,19 @@ public class EvaluateCommand extends ParametersCommand {
         List<DMProtocol.Value> typeIIValues = new ArrayList<>();
         List<DMProtocol.Value> typeIIIValues = new ArrayList<>();
         List<DMProtocol.Value> typeIVValues = new ArrayList<>();
-        int typeI = 0;   // no correction candidate
-        int typeII = 0;  // good correction not on rank one
-        int typeIII = 0; // missed opportunity
-        int typeIV = 0;  // infelicitous correction
+        int missingCandidate = 0;        // no correction candidate (error type I)
+        int badRank = 0;                 // good correction not on rank one (error type II)
+        int missedOpportunity = 0;       // missed opportunity (error type III)
+        int infelicitousCorrection = 0;  // infelicitous correction (error type IV)
         int correctBefore = 0;
         int correctAfter = 0;
-        int successfulCorrections = 0; // a wrong OCR token was corrected with a correct correction
-        int skipped = 0;               // no correction attempt because one of the three causes below
-        int skippedTooShort = 0;       // no correction attempt because the token is too short
-        int skippedNoCandidates = 0;   // no correction attempt because the token has no correction candidates
-        int skippedLexiconEntry = 0;   // no correction attempt because the token is a lexicon entry
-        int skippedFalseFriends = 0;   // token is a lexicon entry but it is an OCR error
-        int n = 0;
+        int successfulCorrections = 0;   // a wrong OCR token was corrected with a correct correction
+        int attempted = 0;               // number of tokens where a correction was
+        int skipped = 0;                 // no correction attempt because one of the three causes below
+        int skippedTooShort = 0;         // no correction attempt because the token is too short
+        int skippedNoCandidates = 0;     // no correction attempt because the token has no correction candidates
+        int skippedLexiconEntry = 0;     // no correction attempt because the token is a lexicon entry
+        int skippedFalseFriends = 0;     // token is a lexicon entry but it is an OCR error
+        int n = 0;                       // total number of tokens
     }
 }

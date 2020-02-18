@@ -1,4 +1,4 @@
-DESTDIR ?= ""
+DESTDIR ?=
 PREFIX ?= /usr/share
 LIBDIR ?= ${PREFIX}/lib
 SRCS := ${shell find src/main/java/ -type f -name '*.java'}
@@ -11,7 +11,7 @@ ${JAR}: ${SRCS}
 
 .PHONY: install
 install: ${JAR}
-	install -D $< ${DESTDIR}/${LIBDIR}/ocrd.jar
+	install -D $< ${DESTDIR}${LIBDIR}/ocrd.jar
 
 .PHONY: test
 test:

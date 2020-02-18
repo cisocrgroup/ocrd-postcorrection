@@ -12,5 +12,5 @@ public interface Protocol {
 
     // Protocol an OCRToken with its (optional correction), confidence
     // and whether the token was taken as correction/lexicon entry.
-    void protocol(OCRToken token, String correction, double confidence, boolean taken);
+    void protocol(OCRToken token, String correction, double confidence, boolean taken) throws Exception;
 }

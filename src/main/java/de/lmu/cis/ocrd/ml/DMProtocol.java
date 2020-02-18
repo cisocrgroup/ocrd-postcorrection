@@ -16,8 +16,8 @@ public class DMProtocol implements Protocol {
     public static class Value {
         public GroundTruth gt;
         public String id = "";
-        public String ocrNormalized = "";
-        public String corNormalized = "";
+        String ocrNormalized = "";
+        String corNormalized = "";
         public String ocr = "";
         public String cor = "";
         public List<Ranking> rankings;
@@ -29,7 +29,7 @@ public class DMProtocol implements Protocol {
         public String gt;
         public boolean present;
 
-        public GroundTruth(OCRToken token) {
+        GroundTruth(OCRToken token) {
             present = token.getGT().isPresent();
             gt = token.getGT().orElse("");
         }
@@ -61,13 +61,10 @@ public class DMProtocol implements Protocol {
     }
 
     @Override
-    public void protocol(OCRToken token, String correction, double confidence, boolean taken) {
+    public void protocol(OCRToken token, String correction, double confidence, boolean taken) throws Exception {
         Logger.debug("putting token into dm protocol: {} {} {} {}", token, correction, confidence, taken);
         if (protocol.corrections.containsKey(token.getID())) {
-            throw new RuntimeException("not a unique id: " + token.getID() + " for token: " + token.toString());
-        }
-        if ("130".equals(token.getID())) {
-            throw new RuntimeException("again this FUCKING token: " + token.toString());
+            throw new Exception("not a unique id: " + token.getID() + " for token: " + token.toString());
         }
         final OCRWord masterOCR = token.getMasterOCR();
         final Value val = new Value();

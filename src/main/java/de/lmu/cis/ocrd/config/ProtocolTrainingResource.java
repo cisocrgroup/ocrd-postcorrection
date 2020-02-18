@@ -12,6 +12,6 @@ public class ProtocolTrainingResource extends TrainingResource {
     }
 
     public Path getProtocol(int n, boolean alex) {
-        return Paths.get(dir, String.format("%s_protocol%s_%d.json", alex? "_alex_": "", prefix, n));
+        return Paths.get(dir, String.format("%s_protocol%s_%d.json", prefix, alex? "_alex": "", n));
     }
 }

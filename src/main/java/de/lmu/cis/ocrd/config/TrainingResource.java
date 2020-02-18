@@ -20,6 +20,7 @@ public class TrainingResource {
         return Paths.get(dir, String.format("%s_eval%s_%d.json", prefix, alex ? "_alex":"", n));
     }
 
+
     public Path getModel(int n) {
         return Paths.get(dir, String.format("%s_model_%d.bin", prefix, n));
     }

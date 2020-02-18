@@ -94,7 +94,6 @@ public class PostCorrectionCommand extends ParametersCommand {
 
 	private void decide(Rankings rankings) throws Exception {
 		// no profile
-		OCRToken token130 = null;
 		final Predictor predictor = getDMPredictor();
 		final DMProtocol protocol = new DMProtocol(rankings);
 		for (OCRToken token: rankings.keySet()) {
@@ -105,16 +104,8 @@ public class PostCorrectionCommand extends ParametersCommand {
 			if (take) {
 				token.correct(topRanking.getCandidate().Suggestion, topRanking.getRanking());
 			}
-			if ("130".equals(token.getID())) {
-				token130 = token;
-			}
 		}
 		saveProtocol(parameters.getDMTraining().getProtocol(parameters.getNOCR(), parameters.isRunLE()), protocol);
-		if (token130 != null) {
-			Logger.debug("token130: {}", token130.toString());
-			Logger.debug("protocol: {}", protocol.getProtocol().corrections.containsKey(token130.getID()) ? protocol.getProtocol().corrections.get(token130.getID()).id : "not found");
-			throw new Exception("again this fucking token: " + token130.toString());
-		}
 	}
 
 	private Predictor getLEPredictor() throws Exception {
