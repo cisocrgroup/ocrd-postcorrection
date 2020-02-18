@@ -1,24 +1,27 @@
 package de.lmu.cis.ocrd;
 
+import de.lmu.cis.ocrd.ml.OCRWord;
+
 import java.io.Serializable;
 import java.util.Optional;
 
-public class Word implements Serializable {
+public class Word implements Serializable, OCRWord {
+	private static final long serialVersionUID = 2254894331400744361L;
 	private static final int SMALL_WORD = 3;
-    private final SimpleLine line;
-    private final int s, e;
+	private final SimpleLine line;
+	private final int s, e;
 
-    public Word(int s, int e, SimpleLine line) {
-        this.s = s;
-        this.e = e;
-        this.line = line;
-    }
+	public Word(int s, int e, SimpleLine line) {
+		this.s = s;
+		this.e = e;
+		this.line = line;
+	}
 
-    public static Word create(String str) {
-        Optional<Word> word = SimpleLine.normalized(str, 0.0).getWord(str);
-        assert(word.isPresent());
-        return word.get();
-    }
+	public static Word create(String str) {
+		Optional<Word> word = SimpleLine.normalized(str, 0.0).getWord(str);
+		assert (word.isPresent());
+		return word.get();
+	}
 
 	public static Word empty(SimpleLine line) {
 		return new Word(0, 0, line);
@@ -32,24 +35,50 @@ public class Word implements Serializable {
 		return this.s == 0;
 	}
 
-    public SimpleLine getLine() {
-        return line;
-    }
+	public SimpleLine getLine() {
+		return line;
+	}
 
 	public int getSize() {
 		return e - s;
 	}
 
-    public double getConfidenceAt(int i) {
-        return line.getConfidenceAt(s + i);
-    }
+	public double getCharacterConfidenceAt(int i) {
+		return line.getConfidenceAt(s + i);
+	}
 
-    @Override
-    public String toString() {
-        return line.getNormalized().substring(s, e);
-    }
+	@Override
+	public double getConfidence() {
+		double min = Double.MAX_VALUE;
+		double max = Double.MIN_VALUE;
+		for (int i = 0; i < getSize(); i++) {
+			min = Double.min(min, getCharacterConfidenceAt(i));
+			max = Double.max(max, getCharacterConfidenceAt(i));
+		}
+		return (min + max) / 2.0;
+	}
+
+	@Override
+	public String toString() {
+		return line.getNormalized().substring(s, e);
+	}
 
 	public boolean isShort() {
 		return getSize() <= SMALL_WORD;
+	}
+
+	@Override
+	public String getWordNormalized() {
+		return toString();
+	}
+
+	@Override
+	public String getLineNormalized() {
+		return getLine().getNormalized();
+	}
+
+	@Override
+	public String getWordRaw() {
+		return getLine().getRaw().substring(s, e);
 	}
 }

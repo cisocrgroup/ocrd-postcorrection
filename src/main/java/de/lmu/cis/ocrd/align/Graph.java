@@ -2,7 +2,6 @@ package de.lmu.cis.ocrd.align;
 
 import de.lmu.cis.iba.LCS_Alignment_Pairwise;
 import de.lmu.cis.iba.LCS_Alignment_Pairwise.AlignmentPair;
-import org.pmw.tinylog.Logger;
 
 import java.util.ArrayList;
 
@@ -16,6 +15,20 @@ public class Graph {
 		this.alignment = new LCS_Alignment_Pairwise(a, b);
 		this.alignment.align();
 		build(alignment.getAligmentPairs());
+	}
+
+	private static boolean isOverlap(AlignmentPair previous, AlignmentPair current) {
+		return previous.epos1 > current.spos1 || previous.epos2 > current.spos2;
+	}
+
+	private static Gap makeGap(int s, int e, String str, Node node) {
+		// Logger.debug("getGapLabel(" + s + ", " + e + ", " + str + ")");
+		// s += 1;
+		// e += 1;
+		if (s > e) {
+			s = e;
+		}
+		return new Gap(s, e, str, node);
 	}
 
 	public Node getStartNode() {
@@ -46,24 +59,24 @@ public class Graph {
 			start = new Node(s1);
 			return;
 		}
-		Logger.debug("s1: {}", s1);
-		Logger.debug("s2: {}", s2);
+		// Logger.debug("s1: {}", s1);
+		// Logger.debug("s2: {}", s2);
 		start = new Node(ps.get(0).label);
 		Node prevn = start;
 		AlignmentPair prevp = ps.get(0);
 		for (int i = 1; i < ps.size(); i++) {
 			final AlignmentPair curp = ps.get(i);
 			if (isOverlap(prevp, curp)) {
-				Logger.debug("skipping {} {}", prevp, curp);
+				// Logger.debug("skipping {} {}", prevp, curp);
 				continue;
 			}
 			final Node curn = new Node(curp.label);
 			final Gap g1 = makeGap(prevp.epos1, curp.spos1, s1, curn);
 			final Gap g2 = makeGap(prevp.epos2, curp.spos2, s2, curn);
-			Logger.debug("previous: {}", prevp);
-			Logger.debug("current:  {}", curp);
-			Logger.debug("gap1: {}", g1.getLabel());
-			Logger.debug("gap2: {}", g2.getLabel());
+			// Logger.debug("previous: {}", prevp);
+			// Logger.debug("current:  {}", curp);
+			// Logger.debug("gap1: {}", g1.getLabel());
+			// Logger.debug("gap2: {}", g2.getLabel());
 			prevn.add(g1);
 			prevn.add(g2);
 			prevp = curp;
@@ -78,33 +91,5 @@ public class Graph {
 			prevn.add(g1);
 			prevn.add(g2);
 		}
-	}
-
-	private static boolean isOverlap(AlignmentPair previous, AlignmentPair current) {
-		return previous.epos1 > current.spos1 || previous.epos2 > current.spos2;
-	}
-
-	private AlignmentPair handleOverlap(AlignmentPair previous, AlignmentPair current) {
-		final String s1 = alignment.getString(0);
-		final String s2 = alignment.getString(1);
-		if (previous.epos1 > current.spos1) {
-			String label = current.label.substring(previous.epos1 - current.spos1);
-			return new AlignmentPair(label, current.epos1, current.epos2);
-		}
-		if (previous.epos2 > current.spos2) {
-			String label = current.label.substring(previous.epos2 - current.spos2);
-			return new AlignmentPair(label, current.epos1, current.epos2);
-		}
-		return current;
-	}
-
-	private static Gap makeGap(int s, int e, String str, Node node) {
-		// Logger.debug("getGapLabel(" + s + ", " + e + ", " + str + ")");
-		// s += 1;
-		// e += 1;
-		if (s > e) {
-			s = e;
-		}
-		return new Gap(s, e, str, node);
 	}
 }

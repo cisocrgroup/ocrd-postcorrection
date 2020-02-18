@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:lc/xmlns/premis-v2 http://www.loc.gov/standards/premis/v2/premis-v2-0.xsd http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/version17/mets.v1-7.xsd http://www.loc.gov/mix/v10 http://www.loc.gov/standards/mix/mix10/mix10.xsd">
+  <mets:metsHdr CREATEDATE="2019-01-04 15:47:33.683804">
+    <mets:agent OTHERTYPE="SOFTWARE" ROLE="CREATOR" TYPE="OTHER">
+      <mets:name>ocrd/core v0.14.0</mets:name>
+    </mets:agent>
+  </mets:metsHdr>
+  <mets:structMap TYPE="PHYSICAL">
+    <mets:div TYPE="physSequence">
+        </mets:div>
+  </mets:structMap>
+  <mets:dmdSec ID="DMDLOG_0001">
+    <mets:mdWrap MDTYPE="MODS">
+      <mets:xmlData>
+        <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+                </mods:mods>
+      </mets:xmlData>
+    </mets:mdWrap>
+  </mets:dmdSec>
+  <mets:amdSec ID="AMD">
+    </mets:amdSec>
+  <mets:fileSec>
+    <mets:fileGrp USE="OCR-D-PROFILED">
+      <mets:file ID="aventinus_grammatica_1515-aventinus_grammatica_1515_0006" MIMETYPE="application/vnd.prima.page+xml">
+        <mets:FLocat xlink:href="OCR-D-PROFILED/aventinus_grammatica_1515-aventinus_grammatica_1515_0006.xml"/>
+      </mets:file>
+      <mets:file ID="aventinus_grammatica_1515-aventinus_grammatica_1515_0007" MIMETYPE="application/vnd.prima.page+xml">
+        <mets:FLocat xlink:href="OCR-D-PROFILED/aventinus_grammatica_1515-aventinus_grammatica_1515_0007.xml"/>
+      </mets:file>
+    </mets:fileGrp>
+  <mets:fileGrp USE="OCR-D-EVAL">
+      <mets:file ID="aventinus_grammatica_1515-aventinus_grammatica_1515_0008" MIMETYPE="application/vnd.prima.page+xml">
+        <mets:FLocat xlink:href="OCR-D-EVAL/aventinus_grammatica_1515-aventinus_grammatica_1515_0008.xml"/>
+      </mets:file>
+  </mets:fileGrp>
+  </mets:fileSec>
+</mets:mets>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pc:PcGts xmlns:pc="http://schema.primaresearch.org/PAGE/gts/pagecontent/2017-07-15">
+    <pc:Metadata>
+        <pc:Creator>OCR-D</pc:Creator>
+        <pc:Created>2016-09-21T15:54:01.637000+02:00</pc:Created>
+        <pc:LastChange>2017-03-06T17:13:45.802000+01:00</pc:LastChange>
+        <pc:Comments>
+                Measurement unit: pixel
+                PrimaryLanguage: German
+                Language: GermanStandard
+                Language: EnglishUnitedStates
+                Producer: ABBYY FineReader Engine 11</pc:Comments>
+    </pc:Metadata>
+    <pc:Page imageFilename="file:///workspace/OCR-D-IMG-aventinus_grammatica_1515/aventinus_grammatica_1515_0006.tif" imageWidth="1756" imageHeight="2440" type="content">
+        <pc:PrintSpace>
+            <pc:Coords points="306,178 1631,178 1628,1721 303,1721"/>
+        </pc:PrintSpace>
+        <pc:ReadingOrder>
+            <pc:OrderedGroup id="ro_1488816825834" caption="Regions reading order">
+                <pc:RegionRefIndexed index="0" regionRef="r_1_1"/>
+                <pc:RegionRefIndexed index="1" regionRef="r_1_2"/>
+                <pc:RegionRefIndexed index="2" regionRef="r_1_3"/>
+                <pc:RegionRefIndexed index="3" regionRef="r_1_4"/>
+            </pc:OrderedGroup>
+        </pc:ReadingOrder>
+        <pc:TextRegion id="r_1_1" custom="readingOrder {index:0;} structure {type:heading;}" type="heading">
+            <pc:Coords points="456,188 1478,188 1478,279 456,279"/>
+            <pc:TextLine id="tl_1" primaryLanguage="German" custom="readingOrder {index:0;} textStyle {offset:0; length:28;fontFamily:Times\u0020New\u0020Roman; fontSize:27.0;}">
+                <pc:Coords points="457,189 1477,189 1477,278 457,278"/>
+                <pc:Baseline points="457,273 1477,273"/>
+                <pc:Word id="tl_1_word0000">
+                    <pc:Coords points="457,189 1640.395225464191,189 1640.395225464191,278 457,278"/>
+                    <pc:Glyph id="tl_1_word0000_glyph0000">
+                        <pc:Coords points="457,189 1485.7533156498673,189 1485.7533156498673,278 457,278"/>
+                        <pc:TextEquiv conf="0.922908516700493">
+                            <pc:Unicode>J</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0000_glyph0001">
+                        <pc:Coords points="465.7533156498674,189 1497.424403183024,189 1497.424403183024,278 465.7533156498674,278"/>
+                        <pc:TextEquiv conf="0.736466494721585">
+                            <pc:Unicode>z</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0000_glyph0002">
+                        <pc:Coords points="477.42440318302386,189 1529.5198938992041,189 1529.5198938992041,278 477.42440318302386,278"/>
+                        <pc:TextEquiv conf="0.950638899133771">
+                            <pc:Unicode>o</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0000_glyph0003">
+                        <pc:Coords points="509.51989389920425,189 1549.944297082228,189 1549.944297082228,278 509.51989389920425,278"/>
+                        <pc:TextEquiv conf="0.995603385102794">
+                            <pc:Unicode>a</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0000_glyph0004">
+                        <pc:Coords points="529.9442970822281,189 1565.9920424403183,189 1565.9920424403183,278 529.9442970822281,278"/>
+                        <pc:TextEquiv conf="0.980223133230919">
+                            <pc:Unicode>n</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0000_glyph0005">
+                        <pc:Coords points="545.9920424403183,189 1590.7931034482758,189 1590.7931034482758,278 545.9920424403183,278"/>
+                        <pc:TextEquiv conf="0.913427824884699">
+                            <pc:Unicode>n</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0000_glyph0006">
+                        <pc:Coords points="570.7931034482758,189 1615.5941644562333,189 1615.5941644562333,278 570.7931034482758,278"/>
+                        <pc:TextEquiv conf="0.982605406122238">
+                            <pc:Unicode>e</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0000_glyph0007">
+                        <pc:Coords points="595.5941644562334,189 1640.395225464191,189 1640.395225464191,278 595.5941644562334,278"/>
+                        <pc:TextEquiv conf="0.984903995772036">
+                            <pc:Unicode>s</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:TextEquiv index="1" conf="0.866034939912189" dataType="ocrd-cis-word-alignment-master-ocr" dataTypeDetails="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/tl_1_word0000">
+                        <pc:Unicode>Jzoannes</pc:Unicode>
+                    </pc:TextEquiv>
+                    <pc:TextEquiv index="2" conf="0.968166982685307" dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/tl_1_word0000">
+                        <pc:Unicode>oannes</pc:Unicode>
+                    </pc:TextEquiv>
+                    <pc:TextEquiv index="3" conf="1." dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-GT-aventinus_grammatica_1515/w_w1aab1b1b2b1b1ab1">
+                        <pc:Unicode>Joannes</pc:Unicode>
+                    </pc:TextEquiv>
+                    <pc:TextEquiv index="4" conf="0.996182" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "joannes", "Modern": "johannes", "Dict": "dict_modernhypotheticerror", "HistPatterns": [{"Pos": 1, "Left": "oh", "Right": "o"}], "OCRPatterns": [{"Pos": 1, "Left": "", "Right": "z"}], "Distance": 1, "Weight": 0.996182}'>
+                        <pc:Unicode>Joannes</pc:Unicode>
+                    </pc:TextEquiv>
+                    <pc:TextEquiv index="5" conf="0.000332476" dataType="ocrd-cis-profiler-candidate" dataTypeDetails='{"Suggestion": "johannes", "Modern": "johannes", "Dict": "dict_modernhypotheticerror", "HistPatterns": [], "OCRPatterns": [{"Pos": 1, "Left": "o", "Right": "z"}, {"Pos": 2, "Left": "h", "Right": "o"}], "Distance": 2, "Weight": 0.000332476}'>
+                        <pc:Unicode>Johannes</pc:Unicode>
+                    </pc:TextEquiv>
+                </pc:Word>
+                <pc:Word id="tl_1_word0001">
+                    <pc:Coords points="633.525198938992,189 1843.1803713527852,189 1843.1803713527852,278 633.525198938992,278"/>
+                    <pc:Glyph id="tl_1_word0001_glyph0000">
+                        <pc:Coords points="633.525198938992,189 1678.3262599469497,189 1678.3262599469497,278 633.525198938992,278"/>
+                        <pc:TextEquiv conf="0.834405466780872">
+                            <pc:Unicode>A</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0001">
+                        <pc:Coords points="658.3262599469496,189 1701.6684350132625,189 1701.6684350132625,278 658.3262599469496,278"/>
+                        <pc:TextEquiv conf="0.959197496655642">
+                            <pc:Unicode>u</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0002">
+                        <pc:Coords points="681.6684350132626,189 1723.551724137931,189 1723.551724137931,278 681.6684350132626,278"/>
+                        <pc:TextEquiv conf="0.988225231560171">
+                            <pc:Unicode>e</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0003">
+                        <pc:Coords points="703.551724137931,189 1733.763925729443,189 1733.763925729443,278 703.551724137931,278"/>
+                        <pc:TextEquiv conf="0.982223555006406">
+                            <pc:Unicode>n</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0004">
+                        <pc:Coords points="713.7639257294429,189 1760.023872679045,189 1760.023872679045,278 713.7639257294429,278"/>
+                        <pc:TextEquiv conf="0.997629529759434">
+                            <pc:Unicode>t</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0005">
+                        <pc:Coords points="740.0238726790451,189 1773.1538461538462,189 1773.1538461538462,278 740.0238726790451,278"/>
+                        <pc:TextEquiv conf="0.999144886609328">
+                            <pc:Unicode>i</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0006">
+                        <pc:Coords points="753.1538461538462,189 1790.6604774535808,189 1790.6604774535808,278 753.1538461538462,278"/>
+                        <pc:TextEquiv conf="0.974182099322468">
+                            <pc:Unicode>n</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0007">
+                        <pc:Coords points="770.6604774535808,189 1819.838196286472,189 1819.838196286472,278 770.6604774535808,278"/>
+                        <pc:TextEquiv conf="0.926503245547135">
+                            <pc:Unicode>u</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0001_glyph0008">
+                        <pc:Coords points="799.8381962864721,189 1843.1803713527852,189 1843.1803713527852,278 799.8381962864721,278"/>
+                        <pc:TextEquiv conf="0.982033939667955">
+                            <pc:Unicode>s</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:TextEquiv index="1" conf="0.9167751766951" dataType="ocrd-cis-word-alignment-master-ocr" dataTypeDetails="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/tl_1_word0001">
+                        <pc:Unicode>Auentinus</pc:Unicode>
+                    </pc:TextEquiv>
+                    <pc:TextEquiv index="2" conf="0.98536443266575" dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/tl_1_word0001">
+                        <pc:Unicode>Auentinus</pc:Unicode>
+                    </pc:TextEquiv>
+                    <pc:TextEquiv index="3" conf="1." dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-GT-aventinus_grammatica_1515/w_w1aab1b1b2b1b1ac17">
+                        <pc:Unicode>Auentinus</pc:Unicode>
+                    </pc:TextEquiv>
+                </pc:Word>
+                <pc:Word id="tl_1_word0002">
+                    <pc:Coords points="833.3925729442971,189 2027.0,189 2027.0,278 833.3925729442971,278"/>
+                    <pc:Glyph id="tl_1_word0002_glyph0000">
+                        <pc:Coords points="833.3925729442971,189 1866.522546419098,189 1866.522546419098,278 833.3925729442971,278"/>
+                        <pc:TextEquiv conf="0.878733484543043">
+                            <pc:Unicode>ſ</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0001">
+                        <pc:Coords points="846.5225464190981,189 1876.73474801061,189 1876.73474801061,278 846.5225464190981,278"/>
+                        <pc:TextEquiv conf="0.91667510985841">
+                            <pc:Unicode>t</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0002">
+                        <pc:Coords points="856.73474801061,189 1900.076923076923,189 1900.076923076923,278 856.73474801061,278"/>
+                        <pc:TextEquiv conf="0.967866922896049">
+                            <pc:Unicode>u</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0003">
+                        <pc:Coords points="880.0769230769231,189 1916.1246684350133,189 1916.1246684350133,278 880.0769230769231,278"/>
+                        <pc:TextEquiv conf="0.543835982259942">
+                            <pc:Unicode>a</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0004">
+                        <pc:Coords points="896.1246684350133,189 1933.631299734748,189 1933.631299734748,278 896.1246684350133,278"/>
+                        <pc:TextEquiv conf="0.671041357352528">
+                            <pc:Unicode>l</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0005">
+                        <pc:Coords points="913.6312997347479,189 1942.3846153846152,189 1942.3846153846152,278 913.6312997347479,278"/>
+                        <pc:TextEquiv conf="0.996720774255952">
+                            <pc:Unicode>i</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0006">
+                        <pc:Coords points="922.3846153846154,189 1965.7267904509283,189 1965.7267904509283,278 922.3846153846154,278"/>
+                        <pc:TextEquiv conf="0.976456089179791">
+                            <pc:Unicode>o</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0007">
+                        <pc:Coords points="945.7267904509283,189 1980.315649867374,189 1980.315649867374,278 945.7267904509283,278"/>
+                        <pc:TextEquiv conf="0.62298695245858">
+                            <pc:Unicode>ſ</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0008">
+                        <pc:Coords points="960.3156498673741,189 1994.9045092838196,189 1994.9045092838196,278 960.3156498673741,278"/>
+                        <pc:TextEquiv conf="0.967741501909303">
+                            <pc:Unicode>i</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0009">
+                        <pc:Coords points="974.9045092838196,189 2009.4933687002654,189 2009.4933687002654,278 974.9045092838196,278"/>
+                        <pc:TextEquiv conf="0.890054575749918">
+                            <pc:Unicode>s</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:Glyph id="tl_1_word0002_glyph0010">
+                        <pc:Coords points="989.4933687002653,189 2027.0,189 2027.0,278 989.4933687002653,278"/>
+                        <pc:TextEquiv conf="0.993625158291433">
+                            <pc:Unicode>.</pc:Unicode>
+                        </pc:TextEquiv>
+                    </pc:Glyph>
+                    <pc:TextEquiv index="1" conf="0.770278378257947" dataType="ocrd-cis-word-alignment-master-ocr" dataTypeDetails="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/tl_1_word0002">
+                        <pc:Unicode>ſtualioſis.</pc:Unicode>
+                    </pc:TextEquiv>
+                    <pc:TextEquiv index="2" conf="0.825820670486948" dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/tl_1_word0002">
+                        <pc:Unicode>ſtucioſis.</pc:Unicode>
+                    </pc:TextEquiv>
+                    <pc:TextEquiv index="3" conf="1." dataType="ocrd-cis-word-alignment" dataTypeDetails="OCR-D-GT-aventinus_grammatica_1515/w_w1aab1b1b2b1b1ac37">
+                        <pc:Unicode>ſtudioſis.</pc:Unicode>
+                    </pc:TextEquiv>
+                </pc:Word>
+                <pc:TextEquiv conf="0.843526777476523" dataType="ocrd-cis-line-alignment-master-ocr" comments="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/tl_1">
+                    <pc:Unicode>Jzoannes Auentinus ſtualioſis.</pc:Unicode>
+                </pc:TextEquiv>
+                <pc:TextEquiv conf="0.905592551576349" dataType="ocrd-cis-line-alignment" comments="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/tl_1">
+                    <pc:Unicode>oannes Auentinus ſtucioſis.</pc:Unicode>
+                </pc:TextEquiv>
+                <pc:TextEquiv dataType="ocrd-cis-line-alignment" comments="OCR-D-GT-aventinus_grammatica_1515/tl_1">
+                    <pc:Unicode>Joannes Auentinus ſtudioſis.</pc:Unicode>
+                </pc:TextEquiv>
+                <pc:TextStyle fontFamily="Times New Roman" fontSize="27."/>
+            </pc:TextLine>
+            <pc:TextEquiv>
+                <pc:Unicode>Joannes Auentinus ſtudioſis.</pc:Unicode>
+            </pc:TextEquiv>
+        </pc:TextRegion>
+        <pc:NoiseRegion id="Noise_1488816823349_473" custom="readingOrder {index:4;}">
+            <pc:Coords points="818,1753 1158,1753 1160,2131 820,2131"/>
+        </pc:NoiseRegion>
+    </pc:Page>
+</pc:PcGts>

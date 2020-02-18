@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="info:lc/xmlns/premis-v2 http://www.loc.gov/standards/premis/v2/premis-v2-0.xsd http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/version17/mets.v1-7.xsd http://www.loc.gov/mix/v10 http://www.loc.gov/standards/mix/mix10/mix10.xsd">
+  <mets:metsHdr CREATEDATE="2018-12-12 10:03:09.938326">
+    <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="CREATOR">
+      <mets:name>ocrd/core v0.13.3</mets:name>
+    </mets:agent>
+    <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="OTHER" OTHERROLE="recognition/text-recognition">
+      <mets:name>ocrd-cis-ocropy-recognize v0.0.1</mets:name>
+    </mets:agent>
+    <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="OTHER" OTHERROLE="recognition/text-recognition">
+      <mets:name>ocrd-cis-ocropy-recognize v0.0.1</mets:name>
+    </mets:agent>
+    <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="OTHER" OTHERROLE="postprocessing/alignment">
+      <mets:name>ocrd-cis-align v0.0.1</mets:name>
+    </mets:agent>
+    <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="OTHER" OTHERROLE="postprocessing/alignment">
+      <mets:name>ocrd-cis-profile v0.0.1</mets:name>
+    </mets:agent>
+  </mets:metsHdr>
+  <mets:dmdSec ID="DMDLOG_0001">
+    <mets:mdWrap MDTYPE="MODS">
+      <mets:xmlData>
+        <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+                </mods:mods>
+      </mets:xmlData>
+    </mets:mdWrap>
+  </mets:dmdSec>
+  <mets:amdSec ID="AMD">
+    </mets:amdSec>
+  <mets:fileSec>
+    <mets:fileGrp USE="OCR-D-IMG-aventinus_grammatica_1515">
+      <mets:file GROUPID="OCR-D-IMG-aventinus_grammatica_1515" MIMETYPE="image/tif" ID="OCR-D-IMG-aventinus_grammatica_1515-aventinus_grammatica_1515_0007">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-IMG-aventinus_grammatica_1515/aventinus_grammatica_1515_0007.tif"/>
+      </mets:file>
+      <mets:file GROUPID="OCR-D-IMG-aventinus_grammatica_1515" MIMETYPE="image/tif" ID="OCR-D-IMG-aventinus_grammatica_1515-aventinus_grammatica_1515_0006">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-IMG-aventinus_grammatica_1515/aventinus_grammatica_1515_0006.tif"/>
+      </mets:file>
+      <mets:file GROUPID="OCR-D-IMG-aventinus_grammatica_1515" MIMETYPE="image/tif" ID="OCR-D-IMG-aventinus_grammatica_1515-aventinus_grammatica_1515_0008">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-IMG-aventinus_grammatica_1515/aventinus_grammatica_1515_0008.tif"/>
+      </mets:file>
+    </mets:fileGrp>
+    <mets:fileGrp USE="OCR-D-GT-aventinus_grammatica_1515">
+      <mets:file GROUPID="OCR-D-GT-aventinus_grammatica_1515" MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-GT-aventinus_grammatica_1515-aventinus_grammatica_1515_0007">
+        <mets:FLocat xlink:href="file://workspace/aventinus_grammatica_1515_0007.xml"/>
+      </mets:file>
+      <mets:file GROUPID="OCR-D-GT-aventinus_grammatica_1515" MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-GT-aventinus_grammatica_1515-aventinus_grammatica_1515_0006">
+        <mets:FLocat xlink:href="file://workspace/aventinus_grammatica_1515_0006.xml"/>
+      </mets:file>
+      <mets:file GROUPID="OCR-D-GT-aventinus_grammatica_1515" MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-GT-aventinus_grammatica_1515-aventinus_grammatica_1515_0008">
+        <mets:FLocat xlink:href="file://workspace/aventinus_grammatica_1515_0008.xml"/>
+      </mets:file>
+    </mets:fileGrp>
+    <mets:fileGrp USE="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515">
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515_0001">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0007.xml"/>
+      </mets:file>
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515_0002">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0006.xml"/>
+      </mets:file>
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515_0003">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515/OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0008.xml"/>
+      </mets:file>
+    </mets:fileGrp>
+    <mets:fileGrp USE="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515">
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515_0001">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0007.xml"/>
+      </mets:file>
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515_0002">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0006.xml"/>
+      </mets:file>
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515_0003">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515/OCR-D-OCROPY-fraktur2-00062000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0008.xml"/>
+      </mets:file>
+    </mets:fileGrp>
+    <mets:fileGrp USE="OCR-D-ALIGN-aventinus_grammatica_1515">
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-ALIGN-aventinus_grammatica_1515_0002">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-ALIGN-aventinus_grammatica_1515-OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0006.xml"/>
+      </mets:file>
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-ALIGN-aventinus_grammatica_1515_0003">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-ALIGN-aventinus_grammatica_1515-OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0007.xml"/>
+      </mets:file>
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-ALIGN-aventinus_grammatica_1515_0004">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-ALIGN-aventinus_grammatica_1515-OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0008.xml"/>
+      </mets:file>
+    </mets:fileGrp>
+    <mets:fileGrp USE="OCR-D-PROFILE-aventinus_grammatica_1515">
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-ALIGN-aventinus_grammatica_1515_0002_OCR-D-PROFILE-aventinus_grammatica_1515">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-PROFILE-aventinus_grammatica_1515/OCR-D-ALIGN-aventinus_grammatica_1515-OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0006.xml"/>
+      </mets:file>
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-ALIGN-aventinus_grammatica_1515_0003_OCR-D-PROFILE-aventinus_grammatica_1515">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-PROFILE-aventinus_grammatica_1515/OCR-D-ALIGN-aventinus_grammatica_1515-OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0007.xml"/>
+      </mets:file>
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" ID="OCR-D-ALIGN-aventinus_grammatica_1515_0004_OCR-D-PROFILE-aventinus_grammatica_1515">
+        <mets:FLocat xlink:href="file://workspace/OCR-D-PROFILE-aventinus_grammatica_1515/OCR-D-ALIGN-aventinus_grammatica_1515-OCR-D-OCROPY-fraktur1-00085000.pyrnn.gz-aventinus_grammatica_1515-aventinus_grammatica_1515_0008.xml"/>
+      </mets:file>
+    </mets:fileGrp>
+    <mets:fileGrp USE="OCR-D-TEST">
+      <mets:file MIMETYPE="application/vnd.prima.page+xml" GROUPID="OCR-D-TEST" ID="OCR-D-TEST">
+        <mets:FLocat xlink:href="page.xml"/>
+      </mets:file>
+    </mets:fileGrp>
+  </mets:fileSec>
+</mets:mets>

@@ -20,7 +20,6 @@ public class EmptyArgumentFactory implements ArgumentFactory {
 		return new FreqMap();
 	}
 
-	@Override
 	public Profile getProfile() {
 		return Profile.empty();
 	}

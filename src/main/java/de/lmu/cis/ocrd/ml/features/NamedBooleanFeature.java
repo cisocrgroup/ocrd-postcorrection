@@ -1,16 +1,23 @@
 package de.lmu.cis.ocrd.ml.features;
 
-import de.lmu.cis.ocrd.ml.Token;
+import de.lmu.cis.ocrd.ml.OCRToken;
 
 public abstract class NamedBooleanFeature extends NamedFeature {
-    NamedBooleanFeature(String name) {
-        super(name);
-    }
+	private static final long serialVersionUID = 2760200162824149331L;
 
-    @Override
-    public final Object calculate(Token token, int i, int n) {
-        return this.doCalculate(token, i, n);
-    }
+	NamedBooleanFeature(String name) {
+		super(name);
+	}
 
-    abstract boolean doCalculate(Token token, int i, int n);
+	@Override
+	public final Object calculate(OCRToken token, int i, int n) {
+		return this.doCalculate(token, i, n);
+	}
+
+	@Override
+	public final String getClasses() {
+		return String.format("{%s,%s}", Boolean.toString(true), Boolean.toString(false));
+	}
+
+	abstract boolean doCalculate(OCRToken token, int i, int n);
 }

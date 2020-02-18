@@ -8,21 +8,26 @@ public class Main {
 		try {
 			run(args);
 		} catch (ParseException e) {
-		    e.printStackTrace(System.err);
+			e.printStackTrace(System.err);
 			System.exit(2);
 		} catch (Exception e) {
-            e.printStackTrace(System.err);
+			e.printStackTrace(System.err);
 			System.exit(1);
 		}
 	}
 
 	private static CommandFactory makeCommandFactory() throws Exception {
-		return new CommandFactory().register(TrainCommand.class);
+		return new CommandFactory()
+				.register(TokenizerCommand.class)
+				.register(EvaluateCommand.class)
+				.register(PostCorrectionCommand.class)
+				.register(TrainCommand.class)
+				.register(AlignCommand.class);
 	}
 
 	// Parses command line arguments and execute command.
 	private static void run(String[] args) throws Exception {
-	    final CommandFactory commandFactory = makeCommandFactory();
+		final CommandFactory commandFactory = makeCommandFactory();
 		CommandLineArguments commandLineArguments = CommandLineArguments.fromCommandLine(args);
 		commandFactory.get(commandLineArguments.getCommand()).execute(commandLineArguments);
 	}

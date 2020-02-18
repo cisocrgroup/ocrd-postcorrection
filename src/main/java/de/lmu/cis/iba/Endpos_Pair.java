@@ -14,7 +14,6 @@ public class Endpos_Pair {
 
 		this.node = node;
 	}
-	
-	
+
 
 }

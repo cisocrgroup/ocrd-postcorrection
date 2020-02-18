@@ -3,8 +3,8 @@ package de.lmu.cis.ocrd.align;
 import java.util.ArrayList;
 
 public class Node implements Label {
-	private ArrayList<Gap> gaps;
 	private final String label;
+	private ArrayList<Gap> gaps;
 
 	public Node(String label) {
 		this.label = label;
@@ -37,29 +37,29 @@ public class Node implements Label {
 	}
 
 	@Override
-    public String toString() {
-	    StringBuilder builder = new StringBuilder(getLabel());
-	    boolean first = true;
-	    if (gaps == null)  {
-	        return builder.toString();
-        }
-        builder.append('[');
-	    for (Gap gap: gaps) {
-	        if (!first) {
-	            builder.append('|');
-            }
-            builder.append(gap.getLabel());
-	        first = false;
-        }
-        builder.append(']');
-	    if (gaps.isEmpty()) {
-	        return builder.toString();
-        }
-	    builder.append(gaps.get(0).next(0).toString());
-	    return builder.toString();
-    }
+	public String toString() {
+		StringBuilder builder = new StringBuilder(getLabel());
+		boolean first = true;
+		if (gaps == null) {
+			return builder.toString();
+		}
+		builder.append('[');
+		for (Gap gap : gaps) {
+			if (!first) {
+				builder.append('|');
+			}
+			builder.append(gap.getLabel());
+			first = false;
+		}
+		builder.append(']');
+		if (gaps.isEmpty()) {
+			return builder.toString();
+		}
+		builder.append(gaps.get(0).next(0).toString());
+		return builder.toString();
+	}
 
-    public double calculateOverlap() {
+	public double calculateOverlap() {
 		// ignore # and $ for *both* strings
 		double divident = -4.0;
 		double divisor = -4.0;
@@ -74,7 +74,7 @@ public class Node implements Label {
 			divisor += node.next(1).getLabel().length();
 			node = node.next(0).next(0);
 		}
-		System.out.println("divident: " + divident + " divisor: " + divisor);
+		// System.out.println("divident: " + divident + " divisor: " + divisor);
 		return divident / divisor;
 	}
 

@@ -1402,5 +1402,19 @@
   "null": {
     "OCR": "null",
     "Candidates": null
+  },
+  "Wasser": {
+    "OCR": "Wasser",
+    "Candidates": [
+      {
+        "Suggestion": "wasser",
+        "Modern": "wasser",
+        "Dict": "dict_modern",
+        "HistPatterns": [],
+        "OCRPatterns": [],
+        "Distance": 0,
+        "Weight": 1.0
+      }
+    ]
   }
 }

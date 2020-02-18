@@ -1,6 +1,6 @@
 package de.lmu.cis.ocrd.align;
 
-class Gap implements Label {
+public class Gap implements Label {
 	private final int e;
 	private final String label;
 	private final int s;

@@ -1,8 +1,6 @@
 package de.lmu.cis.ocrd.ml;
 
-import de.lmu.cis.ocrd.ml.features.Feature;
-import de.lmu.cis.ocrd.ml.features.NamedBooleanFeature;
-import de.lmu.cis.ocrd.ml.features.NamedStringSetFeature;
+import de.lmu.cis.ocrd.ml.features.*;
 
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -13,86 +11,98 @@ import java.util.Date;
 // ARFFWriter writes feature vectors into WEKAs ARFF (Attribute-Relation-File-Format).
 // After all features have been added to this writer using `addFeature()`,
 // make sure to write the header using `writeHeader()`, before writing any feature vectors.
-public class ARFFWriter {
-    private String relation;
-    private PrintWriter writer;
-    private ArrayList<Feature> features = new ArrayList<>();
-    private boolean debugToken;
+public class ARFFWriter implements AutoCloseable {
+	private String relation;
+	private PrintWriter writer;
+	private ArrayList<Feature> features = new ArrayList<>();
+	private de.lmu.cis.ocrd.ml.features.FeatureSet fs;
+	private boolean debugToken;
 
-    public static ARFFWriter fromFeatureSet(FeatureSet fs) {
-        ARFFWriter arff = new ARFFWriter();
-        for (Feature f : fs) {
-           arff.addFeature(f);
-        }
-        return arff;
-    }
+	private ARFFWriter(de.lmu.cis.ocrd.ml.features.FeatureSet fs) {
+		this.fs = fs;
+	}
 
-    public ARFFWriter withDebugToken(boolean debugToken) {
-        this.debugToken = debugToken;
-        return this;
-    }
+	public static ARFFWriter fromFeatureSet(de.lmu.cis.ocrd.ml.features.FeatureSet fs) {
+		ARFFWriter arff = new ARFFWriter(fs);
+		for (Feature f : fs) {
+			arff.addFeature(f);
+		}
+		return arff;
+	}
 
-    public ARFFWriter withRelation(String relation) {
-        this.relation = relation;
-        return this;
-    }
+	public ARFFWriter withDebugToken(boolean debugToken) {
+		this.debugToken = debugToken;
+		return this;
+	}
 
-    public ARFFWriter withWriter(Writer writer) {
-        this.writer = new PrintWriter(writer);
-        return this;
-    }
+	public ARFFWriter withRelation(String relation) {
+		this.relation = relation;
+		return this;
+	}
 
-    private ARFFWriter addFeature(Feature feature) {
-        this.features.add(feature);
-        return this;
-    }
+	public ARFFWriter withWriter(Writer writer) {
+		this.writer = new PrintWriter(writer);
+		return this;
+	}
 
-    public void writeHeader(int n) {
-        writer.printf("%% Created by de.lmu.cis.ocrd.ml.ARFFWriter at %s\n", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        writer.printf("@RELATION\t%s\n", relation);
-        for (Feature feature : features) {
-            for (int i = 0; i < n; i++) {
-                if (!feature.handlesOCR(i, n)) {
-                    continue;
-                }
-                String attribute = String.format("%s_%d\tREAL", feature.getName(), i+1);
-                if (feature instanceof NamedBooleanFeature) {
-                    attribute = getAttributeOfNamedBooleanFeature((NamedBooleanFeature) feature);
-                } else if (feature instanceof NamedStringSetFeature) {
-                    attribute = getAttributeOfNamedStringSetFeature((NamedStringSetFeature) feature);
-                }
-                writer.printf("@ATTRIBUTE\t%s\n", attribute);
-            }
-        }
-        writer.println("@DATA");
-    }
+	String getRelation() {
+		return relation;
+	}
 
-    public void writeToken(Token token) {
-        if (!debugToken) {
-            return;
-        }
-        writer.printf("%% %s\n", token.toJSON());
-    }
+	private ARFFWriter addFeature(Feature feature) {
+		this.features.add(feature);
+		return this;
+	}
 
-    public void writeFeatureVector(FeatureSet.Vector features) {
-        writer.println(features);
-    }
+	public ARFFWriter writeHeader(int n) {
+		printf("%% Created by de.lmu.cis.ocrd.ml.ARFFWriter at %s\n",
+				new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+		printf("@RELATION\t%s\n", relation);
+		for (Feature feature : features) {
+			for (int i = 0; i < n; i++) {
+				if (!feature.handlesOCR(i, n)) {
+					continue;
+				}
+				final String attribute = String.format("%s_%d\t%s", feature.getName(), i+1, feature.getClasses());
+				printf("@ATTRIBUTE\t%s\n", attribute);
+			}
+		}
+		println("@DATA");
+		return this;
+	}
 
-    private String getAttributeOfNamedBooleanFeature(NamedBooleanFeature feature) {
-        return String.format("%s\t{%s,%s}", feature.getName(), Boolean.toString(true), Boolean.toString(false));
-    }
+	private void debugToken(OCRToken token) {
+		if (!debugToken) {
+			return;
+		}
+		printf("%% %s\n", token.toString());
+	}
 
-    private String getAttributeOfNamedStringSetFeature(NamedStringSetFeature feature) {
-        StringBuilder builder = new StringBuilder(feature.getName());
-        builder.append("\t{");
-        boolean first = true;
-        for (String s : feature.getSet()) {
-            if (!first) {
-                builder.append(',');
-            }
-            builder.append(s);
-            first = false;
-        }
-        return builder.append('}').toString();
-    }
+	public void writeTokenWithFeatureSet(OCRToken token, FeatureSet fs, int n) {
+		debugToken(token);
+		writeFeatureVector(fs.calculateFeatureVector(token, n));
+	}
+
+	public void writeToken(OCRToken token, int n) {
+		debugToken(token);
+		writeFeatureVector(fs.calculateFeatureVector(token, n));
+	}
+
+	private void writeFeatureVector(de.lmu.cis.ocrd.ml.features.FeatureSet.Vector features) {
+		features.writeCSVLine(writer);
+	}
+
+	private void printf(String fmt, Object...args) {
+		writer.printf(fmt, args);
+	}
+
+	private void println(String str) {
+		writer.println(str);
+	}
+
+	@Override
+	public void close() {
+		writer.flush();
+		writer.close();
+	}
 }

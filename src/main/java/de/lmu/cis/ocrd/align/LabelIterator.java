@@ -20,6 +20,11 @@ public class LabelIterator implements Iterator<LabelPos> {
 	}
 
 	@Override
+	public int hashCode() {
+		return pos.hashCode();
+	}
+
+	@Override
 	public boolean hasNext() {
 		return pos.valid();
 	}

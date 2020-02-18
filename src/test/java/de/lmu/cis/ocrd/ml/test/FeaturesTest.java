@@ -1,13 +1,12 @@
 package de.lmu.cis.ocrd.ml.test;
 
 import de.lmu.cis.ocrd.SimpleLine;
-import de.lmu.cis.ocrd.ml.Token;
 import de.lmu.cis.ocrd.ml.features.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
 public class FeaturesTest {
 	private Token t1, t2;
@@ -21,14 +20,14 @@ public class FeaturesTest {
 
 	@Test
 	public void testMinOCRConfidenceFeature() {
-		final Feature feature = new MinOCRConfidenceFeature("name");
+		final Feature feature = new MinOCRCharacterConfidenceFeature("name");
 		assertThat(feature.calculate(t1, 0, 1), is(0.0));
 		assertThat(feature.calculate(t2, 0, 1), is(0.4));
 	}
 
 	@Test
 	public void testMaxOCRConfidenceFeature() {
-		final Feature feature = new MaxOCRConfidenceFeature("name");
+		final Feature feature = new MaxOCRCharacterConfidenceFeature("name");
 		assertThat(feature.calculate(t1, 0, 1), is(0.2));
 		assertThat(feature.calculate(t2, 0, 1), is(0.8));
 	}

@@ -26,9 +26,7 @@ public class Util {
 				}
 			});
 
-		}
-
-		else {
+		} else {
 
 			Collections.sort(list, new Comparator() {
 				public int compare(Object o2, Object o1) {
@@ -38,9 +36,9 @@ public class Util {
 
 		}
 
-		
+
 		HashMap sortedHashMap = new LinkedHashMap();
-		for (Iterator it = list.iterator(); it.hasNext();) {
+		for (Iterator it = list.iterator(); it.hasNext(); ) {
 			Map.Entry entry = (Map.Entry) it.next();
 			sortedHashMap.put(entry.getKey(), entry.getValue());
 		}
@@ -59,9 +57,7 @@ public class Util {
 				}
 			});
 
-		}
-
-		else {
+		} else {
 
 			Collections.sort(list, new Comparator() {
 				public int compare(Object o2, Object o1) {
@@ -74,27 +70,27 @@ public class Util {
 
 
 		HashMap sortedHashMap = new LinkedHashMap();
-		for (Iterator it = list.iterator(); it.hasNext();) {
+		for (Iterator it = list.iterator(); it.hasNext(); ) {
 			Map.Entry entry = (Map.Entry) it.next();
 			sortedHashMap.put(entry.getKey(), entry.getValue());
 		}
 		return sortedHashMap;
 	}
-	
-	
+
+
 	public static ArrayList<Endpos_Pair> sortEndposPair(ArrayList<Endpos_Pair> pairs, String mode, Online_CDAWG_sym scdawg) {
 
-		Collections.sort(pairs, new Comparator<Endpos_Pair>() {	  
+		Collections.sort(pairs, new Comparator<Endpos_Pair>() {
 			@Override
 			public int compare(Endpos_Pair o1, Endpos_Pair o2) {
-		        return o1.endpos_s1.get(0).compareTo(o2.endpos_s1.get(0));
+				return o1.endpos_s1.get(0).compareTo(o2.endpos_s1.get(0));
 
 			}
 		});
 
 		return pairs;
 	}
-	
+
 
 	public static <K extends Comparable, V> Map<K, V> sortByKeys(Map<K, V> map) {
 		return new TreeMap<>(map);
@@ -104,9 +100,7 @@ public class Util {
 
 		ArrayList result = new ArrayList();
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF8"));
-
-		try {
+		try(BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF8"))) {
 			File f = new File(filename);
 			// byte[] fileBytes = readBytes(f);
 
@@ -121,15 +115,8 @@ public class Util {
 			for (int i = strarray.length - 1; i >= 0; i--) {
 				result.add("#" + strarray[i].trim() + "$");
 			}
-
-		} finally {
-			br.close();
 		}
-
-		// for(int i=0;i<result.size();i++) System.out.println(" x"+result.get(i));
-
 		return result;
-
 	}
 
 	public static byte[] readBytes(File file) {

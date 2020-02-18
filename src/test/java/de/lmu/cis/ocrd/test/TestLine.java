@@ -1,4 +1,5 @@
 package de.lmu.cis.ocrd.test;
+
 import de.lmu.cis.ocrd.Line;
 
 public class TestLine implements Line {
