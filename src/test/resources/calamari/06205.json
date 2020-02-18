@@ -1,0 +1,3974 @@
+{
+  "predictions": [
+    {
+      "id": "voted",
+      "sentence": "und Unterdru\u0364ckung durch Fremde, Unempfindlichkeit",
+      "positions": [
+        {
+          "chars": [
+            {
+              "char": "u",
+              "probability": 0.9999248385429382,
+              "label": 0
+            },
+            {
+              "char": "\u00fc",
+              "probability": 5.567803236772306e-05,
+              "label": 0
+            }
+          ],
+          "globalStart": 5,
+          "globalEnd": 21,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "probability": 0.9999942779541016,
+              "label": 0
+            }
+          ],
+          "globalStart": 37,
+          "globalEnd": 42,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "probability": 1.0,
+              "label": 0
+            },
+            {
+              "probability": 0.0018436131067574024,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 48,
+          "globalEnd": 58,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "probability": 0.9998801946640015,
+              "label": 0
+            },
+            {
+              "probability": 0.12320824712514877,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 74,
+          "globalEnd": 85,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "U",
+              "probability": 0.9999998807907104,
+              "label": 0
+            }
+          ],
+          "globalStart": 106,
+          "globalEnd": 112,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "probability": 0.9999923706054688,
+              "label": 0
+            }
+          ],
+          "globalStart": 128,
+          "globalEnd": 133,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "t",
+              "probability": 0.9999990463256836,
+              "label": 0
+            }
+          ],
+          "globalStart": 138,
+          "globalEnd": 149,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "probability": 0.9999947547912598,
+              "label": 0
+            }
+          ],
+          "globalStart": 154,
+          "globalEnd": 165,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "probability": 0.9999880790710449,
+              "label": 0
+            },
+            {
+              "probability": 2.6543100830167532e-05,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 170,
+          "globalEnd": 181,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "probability": 1.0,
+              "label": 0
+            },
+            {
+              "probability": 0.0987711027264595,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 186,
+          "globalEnd": 197,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "probability": 0.9999994039535522,
+              "label": 0
+            },
+            {
+              "probability": 0.0010001631453633308,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 208,
+          "globalEnd": 218,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "probability": 0.9998469948768616,
+              "label": 0
+            },
+            {
+              "probability": 0.00020683975890278816,
+              "char": "",
+              "label": 0
+            },
+            {
+              "char": "\u0364",
+              "probability": 2.9537963200709783e-05,
+              "label": 0
+            }
+          ],
+          "globalStart": 224,
+          "globalEnd": 234,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "\u0364",
+              "probability": 0.9999744892120361,
+              "label": 0
+            },
+            {
+              "probability": 0.029861202463507652,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 234,
+          "globalEnd": 245,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "probability": 0.9999982118606567,
+              "label": 0
+            },
+            {
+              "probability": 0.0001314439286943525,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 245,
+          "globalEnd": 256,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "k",
+              "probability": 1.0,
+              "label": 0
+            }
+          ],
+          "globalStart": 261,
+          "globalEnd": 266,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "probability": 0.9999263882637024,
+              "label": 0
+            },
+            {
+              "char": "\u00fc",
+              "probability": 6.233805470401421e-05,
+              "label": 0
+            }
+          ],
+          "globalStart": 272,
+          "globalEnd": 288,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "probability": 0.9999997615814209,
+              "label": 0
+            },
+            {
+              "probability": 0.11734511703252792,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 298,
+          "globalEnd": 309,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "g",
+              "probability": 1.0,
+              "label": 0
+            },
+            {
+              "probability": 0.0770568996667862,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 314,
+          "globalEnd": 325,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "probability": 0.9999746084213257,
+              "label": 0
+            },
+            {
+              "probability": 0.0040082610212266445,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 346,
+          "globalEnd": 357,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "probability": 0.9999999403953552,
+              "label": 0
+            }
+          ],
+          "globalStart": 362,
+          "globalEnd": 373,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "probability": 0.999984860420227,
+              "label": 0
+            },
+            {
+              "probability": 0.04769033566117287,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 384,
+          "globalEnd": 400,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "probability": 0.999998927116394,
+              "label": 0
+            },
+            {
+              "probability": 0.12442600727081299,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 405,
+          "globalEnd": 416,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "probability": 0.9999997615814209,
+              "label": 0
+            },
+            {
+              "probability": 0.0008330484852194786,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 421,
+          "globalEnd": 432,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "h",
+              "probability": 0.9999998807907104,
+              "label": 0
+            },
+            {
+              "probability": 3.8322719774441794e-05,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 432,
+          "globalEnd": 442,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "probability": 0.9999356865882874,
+              "label": 0
+            },
+            {
+              "probability": 0.13169851899147034,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 458,
+          "globalEnd": 469,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "F",
+              "probability": 1.0,
+              "label": 0
+            },
+            {
+              "probability": 0.008262436836957932,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 485,
+          "globalEnd": 496,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "probability": 0.9999740719795227,
+              "label": 0
+            },
+            {
+              "probability": 0.00011359446216374636,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 501,
+          "globalEnd": 512,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "probability": 0.9999994039535522,
+              "label": 0
+            },
+            {
+              "probability": 0.0006456177216023207,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 517,
+          "globalEnd": 528,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "m",
+              "probability": 0.999985933303833,
+              "label": 0
+            },
+            {
+              "probability": 0.04397892206907272,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 549,
+          "globalEnd": 560,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "probability": 1.0,
+              "label": 0
+            }
+          ],
+          "globalStart": 565,
+          "globalEnd": 576,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "probability": 1.0,
+              "label": 0
+            }
+          ],
+          "globalStart": 586,
+          "globalEnd": 592,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": ",",
+              "probability": 0.9998065829277039,
+              "label": 0
+            },
+            {
+              "probability": 0.008017009124159813,
+              "char": "",
+              "label": 0
+            },
+            {
+              "char": "\u201a",
+              "probability": 5.735572995035909e-05,
+              "label": 0
+            }
+          ],
+          "globalStart": 608,
+          "globalEnd": 618,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "probability": 0.999967098236084,
+              "label": 0
+            },
+            {
+              "probability": 0.023141486570239067,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 640,
+          "globalEnd": 650,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "U",
+              "probability": 0.9999579191207886,
+              "label": 0
+            },
+            {
+              "char": "\u00dc",
+              "probability": 3.864510290441103e-05,
+              "label": 0
+            }
+          ],
+          "globalStart": 672,
+          "globalEnd": 677,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "probability": 0.9999982118606567,
+              "label": 0
+            },
+            {
+              "probability": 0.012772545218467712,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 693,
+          "globalEnd": 704,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "probability": 1.0,
+              "label": 0
+            }
+          ],
+          "globalStart": 709,
+          "globalEnd": 714,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "m",
+              "probability": 0.9999995231628418,
+              "label": 0
+            }
+          ],
+          "globalStart": 741,
+          "globalEnd": 746,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "p",
+              "probability": 0.9999998807907104,
+              "label": 0
+            }
+          ],
+          "globalStart": 757,
+          "globalEnd": 768,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "f",
+              "probability": 0.9998643398284912,
+              "label": 0
+            },
+            {
+              "char": "\u017f",
+              "probability": 9.921807213686407e-05,
+              "label": 0
+            }
+          ],
+          "globalStart": 778,
+          "globalEnd": 784,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "probability": 0.9999994039535522,
+              "label": 0
+            }
+          ],
+          "globalStart": 789,
+          "globalEnd": 794,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "probability": 0.999998927116394,
+              "label": 0
+            },
+            {
+              "probability": 0.003463920671492815,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 805,
+          "globalEnd": 816,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "probability": 1.0,
+              "label": 0
+            }
+          ],
+          "globalStart": 821,
+          "globalEnd": 832,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "l",
+              "probability": 1.0,
+              "label": 0
+            }
+          ],
+          "globalStart": 842,
+          "globalEnd": 848,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "probability": 0.9999992251396179,
+              "label": 0
+            },
+            {
+              "probability": 0.004542896989732981,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 853,
+          "globalEnd": 864,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "probability": 1.0,
+              "label": 0
+            }
+          ],
+          "globalStart": 869,
+          "globalEnd": 874,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "h",
+              "probability": 1.0,
+              "label": 0
+            }
+          ],
+          "globalStart": 880,
+          "globalEnd": 890,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "k",
+              "probability": 0.9999998211860657,
+              "label": 0
+            }
+          ],
+          "globalStart": 901,
+          "globalEnd": 906,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "probability": 1.0,
+              "label": 0
+            }
+          ],
+          "globalStart": 917,
+          "globalEnd": 922,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "probability": 1.0,
+              "label": 0
+            }
+          ],
+          "globalStart": 933,
+          "globalEnd": 938,
+          "localStart": 0,
+          "localEnd": 0
+        },
+        {
+          "chars": [
+            {
+              "char": "t",
+              "probability": 1.0,
+              "label": 0
+            },
+            {
+              "probability": 0.07176431268453598,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "globalStart": 944,
+          "globalEnd": 954,
+          "localStart": 0,
+          "localEnd": 0
+        }
+      ],
+      "logits": {
+        "rows": 0,
+        "cols": 0,
+        "data": []
+      },
+      "isVotedResult": true,
+      "avgCharProbability": 0.9999793171882629,
+      "labels": [],
+      "totalProbability": 0.0,
+      "linePath": ""
+    },
+    {
+      "id": "fold_0",
+      "sentence": "und Unterdru\u0364ckung durch Fremde, Unempfindlichkeit",
+      "labels": [
+        74,
+        67,
+        57,
+        1,
+        45,
+        67,
+        73,
+        58,
+        71,
+        57,
+        71,
+        74,
+        117,
+        56,
+        64,
+        74,
+        67,
+        60,
+        1,
+        57,
+        74,
+        71,
+        56,
+        61,
+        1,
+        31,
+        71,
+        58,
+        66,
+        57,
+        58,
+        8,
+        1,
+        45,
+        67,
+        58,
+        66,
+        69,
+        59,
+        62,
+        67,
+        57,
+        65,
+        62,
+        56,
+        61,
+        64,
+        58,
+        62,
+        73
+      ],
+      "positions": [
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.999996542930603
+            }
+          ],
+          "localStart": 7,
+          "localEnd": 8,
+          "globalStart": 16,
+          "globalEnd": 21
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.999997615814209
+            }
+          ],
+          "localStart": 11,
+          "localEnd": 12,
+          "globalStart": 37,
+          "globalEnd": 42
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 13,
+          "localEnd": 15,
+          "globalStart": 48,
+          "globalEnd": 58
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.999832272529602
+            },
+            {
+              "probability": 0.042415421456098557,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 18,
+          "localEnd": 20,
+          "globalStart": 74,
+          "globalEnd": 85
+        },
+        {
+          "chars": [
+            {
+              "char": "U",
+              "label": 45,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 24,
+          "localEnd": 25,
+          "globalStart": 106,
+          "globalEnd": 112
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999996423721313
+            }
+          ],
+          "localStart": 28,
+          "localEnd": 29,
+          "globalStart": 128,
+          "globalEnd": 133
+        },
+        {
+          "chars": [
+            {
+              "char": "t",
+              "label": 73,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 31,
+          "localEnd": 32,
+          "globalStart": 144,
+          "globalEnd": 149
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 0.9999997615814209
+            }
+          ],
+          "localStart": 33,
+          "localEnd": 34,
+          "globalStart": 154,
+          "globalEnd": 160
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 37,
+          "localEnd": 38,
+          "globalStart": 176,
+          "globalEnd": 181
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            },
+            {
+              "probability": 0.0008864410337992013,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 39,
+          "localEnd": 41,
+          "globalStart": 186,
+          "globalEnd": 197
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 44,
+          "localEnd": 45,
+          "globalStart": 213,
+          "globalEnd": 218
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 47,
+          "localEnd": 48,
+          "globalStart": 229,
+          "globalEnd": 234
+        },
+        {
+          "chars": [
+            {
+              "char": "\u0364",
+              "label": 117,
+              "probability": 0.999994158744812
+            },
+            {
+              "probability": 0.11567407846450806,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 48,
+          "localEnd": 50,
+          "globalStart": 234,
+          "globalEnd": 245
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 51,
+          "localEnd": 52,
+          "globalStart": 250,
+          "globalEnd": 256
+        },
+        {
+          "chars": [
+            {
+              "char": "k",
+              "label": 64,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 53,
+          "localEnd": 54,
+          "globalStart": 261,
+          "globalEnd": 266
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999779462814331
+            }
+          ],
+          "localStart": 57,
+          "localEnd": 58,
+          "globalStart": 282,
+          "globalEnd": 288
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 61,
+          "localEnd": 62,
+          "globalStart": 304,
+          "globalEnd": 309
+        },
+        {
+          "chars": [
+            {
+              "char": "g",
+              "label": 60,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 63,
+          "localEnd": 64,
+          "globalStart": 314,
+          "globalEnd": 320
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.99998939037323
+            },
+            {
+              "probability": 0.00756853586062789,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 69,
+          "localEnd": 71,
+          "globalStart": 346,
+          "globalEnd": 357
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 72,
+          "localEnd": 73,
+          "globalStart": 362,
+          "globalEnd": 368
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999643564224243
+            },
+            {
+              "probability": 0.0009758005035109818,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 77,
+          "localEnd": 79,
+          "globalStart": 389,
+          "globalEnd": 400
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 0.9999974966049194
+            },
+            {
+              "probability": 0.007900994271039963,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 80,
+          "localEnd": 82,
+          "globalStart": 405,
+          "globalEnd": 416
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 83,
+          "localEnd": 84,
+          "globalStart": 421,
+          "globalEnd": 426
+        },
+        {
+          "chars": [
+            {
+              "char": "h",
+              "label": 61,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 85,
+          "localEnd": 87,
+          "globalStart": 432,
+          "globalEnd": 442
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999480247497559
+            },
+            {
+              "probability": 0.2131834477186203,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 90,
+          "localEnd": 92,
+          "globalStart": 458,
+          "globalEnd": 469
+        },
+        {
+          "chars": [
+            {
+              "char": "F",
+              "label": 31,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 95,
+          "localEnd": 97,
+          "globalStart": 485,
+          "globalEnd": 496
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 99,
+          "localEnd": 100,
+          "globalStart": 506,
+          "globalEnd": 512
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 0.999997615814209
+            }
+          ],
+          "localStart": 101,
+          "localEnd": 103,
+          "globalStart": 517,
+          "globalEnd": 528
+        },
+        {
+          "chars": [
+            {
+              "char": "m",
+              "label": 66,
+              "probability": 0.9999527931213379
+            }
+          ],
+          "localStart": 107,
+          "localEnd": 109,
+          "globalStart": 549,
+          "globalEnd": 560
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 110,
+          "localEnd": 111,
+          "globalStart": 565,
+          "globalEnd": 570
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 114,
+          "localEnd": 115,
+          "globalStart": 586,
+          "globalEnd": 592
+        },
+        {
+          "chars": [
+            {
+              "char": ",",
+              "label": 8,
+              "probability": 0.9994921684265137
+            },
+            {
+              "probability": 0.03206803649663925,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 118,
+          "localEnd": 120,
+          "globalStart": 608,
+          "globalEnd": 618
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999887943267822
+            },
+            {
+              "probability": 0.0411422960460186,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 124,
+          "localEnd": 126,
+          "globalStart": 640,
+          "globalEnd": 650
+        },
+        {
+          "chars": [
+            {
+              "char": "U",
+              "label": 45,
+              "probability": 0.9999990463256836
+            }
+          ],
+          "localStart": 130,
+          "localEnd": 131,
+          "globalStart": 672,
+          "globalEnd": 677
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999995231628418
+            }
+          ],
+          "localStart": 134,
+          "localEnd": 135,
+          "globalStart": 693,
+          "globalEnd": 698
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 137,
+          "localEnd": 138,
+          "globalStart": 709,
+          "globalEnd": 714
+        },
+        {
+          "chars": [
+            {
+              "char": "m",
+              "label": 66,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 143,
+          "localEnd": 144,
+          "globalStart": 741,
+          "globalEnd": 746
+        },
+        {
+          "chars": [
+            {
+              "char": "p",
+              "label": 69,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 146,
+          "localEnd": 147,
+          "globalStart": 757,
+          "globalEnd": 762
+        },
+        {
+          "chars": [
+            {
+              "char": "f",
+              "label": 59,
+              "probability": 0.9997431635856628
+            },
+            {
+              "char": "\u017f",
+              "label": 115,
+              "probability": 0.00025687197921797633
+            }
+          ],
+          "localStart": 150,
+          "localEnd": 151,
+          "globalStart": 778,
+          "globalEnd": 784
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 0.9999982118606567
+            }
+          ],
+          "localStart": 152,
+          "localEnd": 153,
+          "globalStart": 789,
+          "globalEnd": 794
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999996423721313
+            }
+          ],
+          "localStart": 156,
+          "localEnd": 157,
+          "globalStart": 810,
+          "globalEnd": 816
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 158,
+          "localEnd": 159,
+          "globalStart": 821,
+          "globalEnd": 826
+        },
+        {
+          "chars": [
+            {
+              "char": "l",
+              "label": 65,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 162,
+          "localEnd": 163,
+          "globalStart": 842,
+          "globalEnd": 848
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 0.9999998807907104
+            },
+            {
+              "probability": 0.017529156059026718,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 164,
+          "localEnd": 166,
+          "globalStart": 853,
+          "globalEnd": 864
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 167,
+          "localEnd": 168,
+          "globalStart": 869,
+          "globalEnd": 874
+        },
+        {
+          "chars": [
+            {
+              "char": "h",
+              "label": 61,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 169,
+          "localEnd": 170,
+          "globalStart": 880,
+          "globalEnd": 885
+        },
+        {
+          "chars": [
+            {
+              "char": "k",
+              "label": 64,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 173,
+          "localEnd": 174,
+          "globalStart": 901,
+          "globalEnd": 906
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 176,
+          "localEnd": 177,
+          "globalStart": 917,
+          "globalEnd": 922
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 179,
+          "localEnd": 180,
+          "globalStart": 933,
+          "globalEnd": 938
+        },
+        {
+          "chars": [
+            {
+              "char": "t",
+              "label": 73,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 181,
+          "localEnd": 182,
+          "globalStart": 944,
+          "globalEnd": 949
+        }
+      ],
+      "logits": {
+        "rows": 0,
+        "cols": 0,
+        "data": []
+      },
+      "avgCharProbability": 0.9999774694442749,
+      "totalProbability": 0.0,
+      "isVotedResult": false,
+      "linePath": ""
+    },
+    {
+      "id": "fold_1",
+      "sentence": "und Unterdru\u0364ckung durch Fremde, Unempfindlichkeit",
+      "labels": [
+        74,
+        67,
+        57,
+        1,
+        45,
+        67,
+        73,
+        58,
+        71,
+        57,
+        71,
+        74,
+        117,
+        56,
+        64,
+        74,
+        67,
+        60,
+        1,
+        57,
+        74,
+        71,
+        56,
+        61,
+        1,
+        31,
+        71,
+        58,
+        66,
+        57,
+        58,
+        8,
+        1,
+        45,
+        67,
+        58,
+        66,
+        69,
+        59,
+        62,
+        67,
+        57,
+        65,
+        62,
+        56,
+        61,
+        64,
+        58,
+        62,
+        73
+      ],
+      "positions": [
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9997542500495911
+            },
+            {
+              "char": "\u00fc",
+              "label": 113,
+              "probability": 0.00022271212947089225
+            }
+          ],
+          "localStart": 7,
+          "localEnd": 8,
+          "globalStart": 16,
+          "globalEnd": 21
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999881982803345
+            }
+          ],
+          "localStart": 11,
+          "localEnd": 12,
+          "globalStart": 37,
+          "globalEnd": 42
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            },
+            {
+              "probability": 0.0067314389161765575,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 13,
+          "localEnd": 15,
+          "globalStart": 48,
+          "globalEnd": 58
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999775886535645
+            },
+            {
+              "probability": 0.3072776794433594,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 18,
+          "localEnd": 20,
+          "globalStart": 74,
+          "globalEnd": 85
+        },
+        {
+          "chars": [
+            {
+              "char": "U",
+              "label": 45,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 24,
+          "localEnd": 25,
+          "globalStart": 106,
+          "globalEnd": 112
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999908208847046
+            }
+          ],
+          "localStart": 28,
+          "localEnd": 29,
+          "globalStart": 128,
+          "globalEnd": 133
+        },
+        {
+          "chars": [
+            {
+              "char": "t",
+              "label": 73,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 31,
+          "localEnd": 32,
+          "globalStart": 144,
+          "globalEnd": 149
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 0.9999799728393555
+            }
+          ],
+          "localStart": 33,
+          "localEnd": 35,
+          "globalStart": 154,
+          "globalEnd": 165
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 37,
+          "localEnd": 38,
+          "globalStart": 176,
+          "globalEnd": 181
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 40,
+          "localEnd": 41,
+          "globalStart": 192,
+          "globalEnd": 197
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 44,
+          "localEnd": 45,
+          "globalStart": 213,
+          "globalEnd": 218
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999992847442627
+            }
+          ],
+          "localStart": 47,
+          "localEnd": 48,
+          "globalStart": 229,
+          "globalEnd": 234
+        },
+        {
+          "chars": [
+            {
+              "char": "\u0364",
+              "label": 117,
+              "probability": 0.9999672174453735
+            },
+            {
+              "probability": 0.0037707334849983454,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 48,
+          "localEnd": 50,
+          "globalStart": 234,
+          "globalEnd": 245
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 0.9999994039535522
+            }
+          ],
+          "localStart": 51,
+          "localEnd": 52,
+          "globalStart": 250,
+          "globalEnd": 256
+        },
+        {
+          "chars": [
+            {
+              "char": "k",
+              "label": 64,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 53,
+          "localEnd": 54,
+          "globalStart": 261,
+          "globalEnd": 266
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9998656511306763
+            },
+            {
+              "char": "\u00fc",
+              "label": 113,
+              "probability": 0.0001219957775902003
+            }
+          ],
+          "localStart": 57,
+          "localEnd": 58,
+          "globalStart": 282,
+          "globalEnd": 288
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999997615814209
+            }
+          ],
+          "localStart": 61,
+          "localEnd": 62,
+          "globalStart": 304,
+          "globalEnd": 309
+        },
+        {
+          "chars": [
+            {
+              "char": "g",
+              "label": 60,
+              "probability": 1.0
+            },
+            {
+              "probability": 0.3082275986671448,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 63,
+          "localEnd": 65,
+          "globalStart": 314,
+          "globalEnd": 325
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999895095825195
+            },
+            {
+              "probability": 0.004147913306951523,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 69,
+          "localEnd": 71,
+          "globalStart": 346,
+          "globalEnd": 357
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 0.9999997615814209
+            }
+          ],
+          "localStart": 72,
+          "localEnd": 74,
+          "globalStart": 362,
+          "globalEnd": 373
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999979734420776
+            },
+            {
+              "probability": 0.18978554010391235,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 77,
+          "localEnd": 79,
+          "globalStart": 389,
+          "globalEnd": 400
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 81,
+          "localEnd": 82,
+          "globalStart": 410,
+          "globalEnd": 416
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 0.9999991655349731
+            },
+            {
+              "probability": 0.0033321939408779144,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 83,
+          "localEnd": 85,
+          "globalStart": 421,
+          "globalEnd": 432
+        },
+        {
+          "chars": [
+            {
+              "char": "h",
+              "label": 61,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 85,
+          "localEnd": 87,
+          "globalStart": 432,
+          "globalEnd": 442
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999310970306396
+            }
+          ],
+          "localStart": 90,
+          "localEnd": 91,
+          "globalStart": 458,
+          "globalEnd": 464
+        },
+        {
+          "chars": [
+            {
+              "char": "F",
+              "label": 31,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 95,
+          "localEnd": 97,
+          "globalStart": 485,
+          "globalEnd": 496
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 99,
+          "localEnd": 100,
+          "globalStart": 506,
+          "globalEnd": 512
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 102,
+          "localEnd": 103,
+          "globalStart": 522,
+          "globalEnd": 528
+        },
+        {
+          "chars": [
+            {
+              "char": "m",
+              "label": 66,
+              "probability": 0.9999943971633911
+            },
+            {
+              "probability": 0.1679879128932953,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 107,
+          "localEnd": 109,
+          "globalStart": 549,
+          "globalEnd": 560
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 110,
+          "localEnd": 112,
+          "globalStart": 565,
+          "globalEnd": 576
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 114,
+          "localEnd": 115,
+          "globalStart": 586,
+          "globalEnd": 592
+        },
+        {
+          "chars": [
+            {
+              "char": ",",
+              "label": 8,
+              "probability": 0.9999788999557495
+            }
+          ],
+          "localStart": 118,
+          "localEnd": 119,
+          "globalStart": 608,
+          "globalEnd": 613
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999979734420776
+            },
+            {
+              "probability": 0.018510745838284492,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 124,
+          "localEnd": 126,
+          "globalStart": 640,
+          "globalEnd": 650
+        },
+        {
+          "chars": [
+            {
+              "char": "U",
+              "label": 45,
+              "probability": 0.9998420476913452
+            },
+            {
+              "char": "\u00dc",
+              "label": 91,
+              "probability": 0.00015458041161764413
+            }
+          ],
+          "localStart": 130,
+          "localEnd": 131,
+          "globalStart": 672,
+          "globalEnd": 677
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999995231628418
+            }
+          ],
+          "localStart": 134,
+          "localEnd": 135,
+          "globalStart": 693,
+          "globalEnd": 698
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 137,
+          "localEnd": 138,
+          "globalStart": 709,
+          "globalEnd": 714
+        },
+        {
+          "chars": [
+            {
+              "char": "m",
+              "label": 66,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 143,
+          "localEnd": 144,
+          "globalStart": 741,
+          "globalEnd": 746
+        },
+        {
+          "chars": [
+            {
+              "char": "p",
+              "label": 69,
+              "probability": 0.9999995231628418
+            }
+          ],
+          "localStart": 146,
+          "localEnd": 148,
+          "globalStart": 757,
+          "globalEnd": 768
+        },
+        {
+          "chars": [
+            {
+              "char": "f",
+              "label": 59,
+              "probability": 0.9999535083770752
+            }
+          ],
+          "localStart": 150,
+          "localEnd": 151,
+          "globalStart": 778,
+          "globalEnd": 784
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 152,
+          "localEnd": 153,
+          "globalStart": 789,
+          "globalEnd": 794
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999969005584717
+            },
+            {
+              "probability": 0.002695956965908408,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 155,
+          "localEnd": 157,
+          "globalStart": 805,
+          "globalEnd": 816
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 158,
+          "localEnd": 160,
+          "globalStart": 821,
+          "globalEnd": 832
+        },
+        {
+          "chars": [
+            {
+              "char": "l",
+              "label": 65,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 162,
+          "localEnd": 163,
+          "globalStart": 842,
+          "globalEnd": 848
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 0.999998927116394
+            },
+            {
+              "probability": 0.0006424322491511703,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 164,
+          "localEnd": 166,
+          "globalStart": 853,
+          "globalEnd": 864
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 167,
+          "localEnd": 168,
+          "globalStart": 869,
+          "globalEnd": 874
+        },
+        {
+          "chars": [
+            {
+              "char": "h",
+              "label": 61,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 169,
+          "localEnd": 171,
+          "globalStart": 880,
+          "globalEnd": 890
+        },
+        {
+          "chars": [
+            {
+              "char": "k",
+              "label": 64,
+              "probability": 0.9999997615814209
+            }
+          ],
+          "localStart": 173,
+          "localEnd": 174,
+          "globalStart": 901,
+          "globalEnd": 906
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 176,
+          "localEnd": 177,
+          "globalStart": 917,
+          "globalEnd": 922
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 179,
+          "localEnd": 180,
+          "globalStart": 933,
+          "globalEnd": 938
+        },
+        {
+          "chars": [
+            {
+              "char": "t",
+              "label": 73,
+              "probability": 1.0
+            },
+            {
+              "probability": 0.2870572507381439,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 181,
+          "localEnd": 183,
+          "globalStart": 944,
+          "globalEnd": 954
+        }
+      ],
+      "logits": {
+        "rows": 0,
+        "cols": 0,
+        "data": []
+      },
+      "avgCharProbability": 0.9999841451644897,
+      "totalProbability": 0.0,
+      "isVotedResult": false,
+      "linePath": ""
+    },
+    {
+      "id": "fold_2",
+      "sentence": "und Unterdru\u0364ckung durch Fremde, Unempfindlichkeit",
+      "labels": [
+        74,
+        67,
+        57,
+        1,
+        45,
+        67,
+        73,
+        58,
+        71,
+        57,
+        71,
+        74,
+        117,
+        56,
+        64,
+        74,
+        67,
+        60,
+        1,
+        57,
+        74,
+        71,
+        56,
+        61,
+        1,
+        31,
+        71,
+        58,
+        66,
+        57,
+        58,
+        8,
+        1,
+        45,
+        67,
+        58,
+        66,
+        69,
+        59,
+        62,
+        67,
+        57,
+        65,
+        62,
+        56,
+        61,
+        64,
+        58,
+        62,
+        73
+      ],
+      "positions": [
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999889135360718
+            }
+          ],
+          "localStart": 5,
+          "localEnd": 6,
+          "globalStart": 5,
+          "globalEnd": 10
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999971389770508
+            }
+          ],
+          "localStart": 11,
+          "localEnd": 12,
+          "globalStart": 37,
+          "globalEnd": 42
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            },
+            {
+              "probability": 0.0005092050414532423,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 13,
+          "localEnd": 15,
+          "globalStart": 48,
+          "globalEnd": 58
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999254941940308
+            },
+            {
+              "probability": 0.006493192631751299,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 18,
+          "localEnd": 20,
+          "globalStart": 74,
+          "globalEnd": 85
+        },
+        {
+          "chars": [
+            {
+              "char": "U",
+              "label": 45,
+              "probability": 0.9999997615814209
+            }
+          ],
+          "localStart": 24,
+          "localEnd": 25,
+          "globalStart": 106,
+          "globalEnd": 112
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999833106994629
+            }
+          ],
+          "localStart": 28,
+          "localEnd": 29,
+          "globalStart": 128,
+          "globalEnd": 133
+        },
+        {
+          "chars": [
+            {
+              "char": "t",
+              "label": 73,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 31,
+          "localEnd": 32,
+          "globalStart": 144,
+          "globalEnd": 149
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 33,
+          "localEnd": 34,
+          "globalStart": 154,
+          "globalEnd": 160
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 0.9999988079071045
+            }
+          ],
+          "localStart": 37,
+          "localEnd": 38,
+          "globalStart": 176,
+          "globalEnd": 181
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            },
+            {
+              "probability": 0.3941979706287384,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 39,
+          "localEnd": 41,
+          "globalStart": 186,
+          "globalEnd": 197
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 44,
+          "localEnd": 45,
+          "globalStart": 213,
+          "globalEnd": 218
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999984502792358
+            }
+          ],
+          "localStart": 47,
+          "localEnd": 48,
+          "globalStart": 229,
+          "globalEnd": 234
+        },
+        {
+          "chars": [
+            {
+              "char": "\u0364",
+              "label": 117,
+              "probability": 0.9999922513961792
+            }
+          ],
+          "localStart": 48,
+          "localEnd": 49,
+          "globalStart": 234,
+          "globalEnd": 240
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 51,
+          "localEnd": 52,
+          "globalStart": 250,
+          "globalEnd": 256
+        },
+        {
+          "chars": [
+            {
+              "char": "k",
+              "label": 64,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 53,
+          "localEnd": 54,
+          "globalStart": 261,
+          "globalEnd": 266
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9998724460601807
+            },
+            {
+              "char": "\u00fc",
+              "label": 113,
+              "probability": 0.00012735644122585654
+            }
+          ],
+          "localStart": 55,
+          "localEnd": 56,
+          "globalStart": 272,
+          "globalEnd": 277
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999992847442627
+            },
+            {
+              "probability": 0.4693804681301117,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 60,
+          "localEnd": 62,
+          "globalStart": 298,
+          "globalEnd": 309
+        },
+        {
+          "chars": [
+            {
+              "char": "g",
+              "label": 60,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 63,
+          "localEnd": 64,
+          "globalStart": 314,
+          "globalEnd": 320
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999948740005493
+            },
+            {
+              "probability": 0.0008153259987011552,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 69,
+          "localEnd": 71,
+          "globalStart": 346,
+          "globalEnd": 357
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 72,
+          "localEnd": 73,
+          "globalStart": 362,
+          "globalEnd": 368
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999790191650391
+            }
+          ],
+          "localStart": 76,
+          "localEnd": 77,
+          "globalStart": 384,
+          "globalEnd": 389
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 0.9999984502792358
+            },
+            {
+              "probability": 0.4898030459880829,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 80,
+          "localEnd": 82,
+          "globalStart": 405,
+          "globalEnd": 416
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 83,
+          "localEnd": 84,
+          "globalStart": 421,
+          "globalEnd": 426
+        },
+        {
+          "chars": [
+            {
+              "char": "h",
+              "label": 61,
+              "probability": 0.9999996423721313
+            },
+            {
+              "probability": 0.00015329087909776717,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 85,
+          "localEnd": 87,
+          "globalStart": 432,
+          "globalEnd": 442
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999244213104248
+            },
+            {
+              "probability": 0.028936496004462242,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 90,
+          "localEnd": 92,
+          "globalStart": 458,
+          "globalEnd": 469
+        },
+        {
+          "chars": [
+            {
+              "char": "F",
+              "label": 31,
+              "probability": 1.0
+            },
+            {
+              "probability": 0.033049747347831726,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 95,
+          "localEnd": 97,
+          "globalStart": 485,
+          "globalEnd": 496
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 0.9998964071273804
+            },
+            {
+              "probability": 0.00045437784865498543,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 98,
+          "localEnd": 100,
+          "globalStart": 501,
+          "globalEnd": 512
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 0.9999998807907104
+            },
+            {
+              "probability": 0.0025824708864092827,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 101,
+          "localEnd": 103,
+          "globalStart": 517,
+          "globalEnd": 528
+        },
+        {
+          "chars": [
+            {
+              "char": "m",
+              "label": 66,
+              "probability": 0.9999980926513672
+            }
+          ],
+          "localStart": 107,
+          "localEnd": 109,
+          "globalStart": 549,
+          "globalEnd": 560
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 110,
+          "localEnd": 111,
+          "globalStart": 565,
+          "globalEnd": 570
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 114,
+          "localEnd": 115,
+          "globalStart": 586,
+          "globalEnd": 592
+        },
+        {
+          "chars": [
+            {
+              "char": ",",
+              "label": 8,
+              "probability": 0.9999865293502808
+            }
+          ],
+          "localStart": 118,
+          "localEnd": 119,
+          "globalStart": 608,
+          "globalEnd": 613
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999964237213135
+            },
+            {
+              "probability": 0.003080738475546241,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 124,
+          "localEnd": 126,
+          "globalStart": 640,
+          "globalEnd": 650
+        },
+        {
+          "chars": [
+            {
+              "char": "U",
+              "label": 45,
+              "probability": 0.9999933242797852
+            }
+          ],
+          "localStart": 130,
+          "localEnd": 131,
+          "globalStart": 672,
+          "globalEnd": 677
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999955892562866
+            },
+            {
+              "probability": 0.003268137341365218,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 134,
+          "localEnd": 136,
+          "globalStart": 693,
+          "globalEnd": 704
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 137,
+          "localEnd": 138,
+          "globalStart": 709,
+          "globalEnd": 714
+        },
+        {
+          "chars": [
+            {
+              "char": "m",
+              "label": 66,
+              "probability": 0.9999990463256836
+            }
+          ],
+          "localStart": 143,
+          "localEnd": 144,
+          "globalStart": 741,
+          "globalEnd": 746
+        },
+        {
+          "chars": [
+            {
+              "char": "p",
+              "label": 69,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 146,
+          "localEnd": 147,
+          "globalStart": 757,
+          "globalEnd": 762
+        },
+        {
+          "chars": [
+            {
+              "char": "f",
+              "label": 59,
+              "probability": 0.9998599290847778
+            },
+            {
+              "char": "\u017f",
+              "label": 115,
+              "probability": 0.0001400002947775647
+            }
+          ],
+          "localStart": 150,
+          "localEnd": 151,
+          "globalStart": 778,
+          "globalEnd": 784
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 0.9999997615814209
+            }
+          ],
+          "localStart": 152,
+          "localEnd": 153,
+          "globalStart": 789,
+          "globalEnd": 794
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999992847442627
+            },
+            {
+              "probability": 0.011159725487232208,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 155,
+          "localEnd": 157,
+          "globalStart": 805,
+          "globalEnd": 816
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 158,
+          "localEnd": 159,
+          "globalStart": 821,
+          "globalEnd": 826
+        },
+        {
+          "chars": [
+            {
+              "char": "l",
+              "label": 65,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 162,
+          "localEnd": 163,
+          "globalStart": 842,
+          "globalEnd": 848
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 0.9999980926513672
+            }
+          ],
+          "localStart": 164,
+          "localEnd": 166,
+          "globalStart": 853,
+          "globalEnd": 864
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 167,
+          "localEnd": 168,
+          "globalStart": 869,
+          "globalEnd": 874
+        },
+        {
+          "chars": [
+            {
+              "char": "h",
+              "label": 61,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 169,
+          "localEnd": 170,
+          "globalStart": 880,
+          "globalEnd": 885
+        },
+        {
+          "chars": [
+            {
+              "char": "k",
+              "label": 64,
+              "probability": 0.9999995231628418
+            }
+          ],
+          "localStart": 173,
+          "localEnd": 174,
+          "globalStart": 901,
+          "globalEnd": 906
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 176,
+          "localEnd": 177,
+          "globalStart": 917,
+          "globalEnd": 922
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 179,
+          "localEnd": 180,
+          "globalStart": 933,
+          "globalEnd": 938
+        },
+        {
+          "chars": [
+            {
+              "char": "t",
+              "label": 73,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 181,
+          "localEnd": 182,
+          "globalStart": 944,
+          "globalEnd": 949
+        }
+      ],
+      "logits": {
+        "rows": 0,
+        "cols": 0,
+        "data": []
+      },
+      "avgCharProbability": 0.9999874830245972,
+      "totalProbability": 0.0,
+      "isVotedResult": false,
+      "linePath": ""
+    },
+    {
+      "id": "fold_3",
+      "sentence": "und Unterdru\u0364ckung durch Fremde, Unempfindlichkeit",
+      "labels": [
+        74,
+        67,
+        57,
+        1,
+        45,
+        67,
+        73,
+        58,
+        71,
+        57,
+        71,
+        74,
+        117,
+        56,
+        64,
+        74,
+        67,
+        60,
+        1,
+        57,
+        74,
+        71,
+        56,
+        61,
+        1,
+        31,
+        71,
+        58,
+        66,
+        57,
+        58,
+        8,
+        1,
+        45,
+        67,
+        58,
+        66,
+        69,
+        59,
+        62,
+        67,
+        57,
+        65,
+        62,
+        56,
+        61,
+        64,
+        58,
+        62,
+        73
+      ],
+      "positions": [
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999597072601318
+            }
+          ],
+          "localStart": 5,
+          "localEnd": 6,
+          "globalStart": 5,
+          "globalEnd": 10
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999940395355225
+            }
+          ],
+          "localStart": 11,
+          "localEnd": 12,
+          "globalStart": 37,
+          "globalEnd": 42
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            },
+            {
+              "probability": 0.00013380833843257278,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 13,
+          "localEnd": 15,
+          "globalStart": 48,
+          "globalEnd": 58
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9997854828834534
+            },
+            {
+              "probability": 0.13664668798446655,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 18,
+          "localEnd": 20,
+          "globalStart": 74,
+          "globalEnd": 85
+        },
+        {
+          "chars": [
+            {
+              "char": "U",
+              "label": 45,
+              "probability": 0.9999997615814209
+            }
+          ],
+          "localStart": 24,
+          "localEnd": 25,
+          "globalStart": 106,
+          "globalEnd": 112
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999955892562866
+            }
+          ],
+          "localStart": 28,
+          "localEnd": 29,
+          "globalStart": 128,
+          "globalEnd": 133
+        },
+        {
+          "chars": [
+            {
+              "char": "t",
+              "label": 73,
+              "probability": 0.9999960660934448
+            }
+          ],
+          "localStart": 30,
+          "localEnd": 32,
+          "globalStart": 138,
+          "globalEnd": 149
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 0.9999994039535522
+            }
+          ],
+          "localStart": 33,
+          "localEnd": 34,
+          "globalStart": 154,
+          "globalEnd": 160
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 0.9999535083770752
+            },
+            {
+              "probability": 0.00010617240332067013,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 36,
+          "localEnd": 38,
+          "globalStart": 170,
+          "globalEnd": 181
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 39,
+          "localEnd": 41,
+          "globalStart": 186,
+          "globalEnd": 197
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 0.999997615814209
+            },
+            {
+              "probability": 0.004000652581453323,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 43,
+          "localEnd": 45,
+          "globalStart": 208,
+          "globalEnd": 218
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9993903636932373
+            },
+            {
+              "probability": 0.0008273590356111526,
+              "char": "",
+              "label": 0
+            },
+            {
+              "char": "\u0364",
+              "label": 117,
+              "probability": 0.00011815185280283913
+            }
+          ],
+          "localStart": 46,
+          "localEnd": 48,
+          "globalStart": 224,
+          "globalEnd": 234
+        },
+        {
+          "chars": [
+            {
+              "char": "\u0364",
+              "label": 117,
+              "probability": 0.9999443292617798
+            }
+          ],
+          "localStart": 48,
+          "localEnd": 49,
+          "globalStart": 234,
+          "globalEnd": 240
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 0.9999934434890747
+            },
+            {
+              "probability": 0.00052577571477741,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 50,
+          "localEnd": 52,
+          "globalStart": 245,
+          "globalEnd": 256
+        },
+        {
+          "chars": [
+            {
+              "char": "k",
+              "label": 64,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 53,
+          "localEnd": 54,
+          "globalStart": 261,
+          "globalEnd": 266
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999895095825195
+            }
+          ],
+          "localStart": 55,
+          "localEnd": 56,
+          "globalStart": 272,
+          "globalEnd": 277
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 61,
+          "localEnd": 62,
+          "globalStart": 304,
+          "globalEnd": 309
+        },
+        {
+          "chars": [
+            {
+              "char": "g",
+              "label": 60,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 63,
+          "localEnd": 64,
+          "globalStart": 314,
+          "globalEnd": 320
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999245405197144
+            },
+            {
+              "probability": 0.0035012695007026196,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 69,
+          "localEnd": 71,
+          "globalStart": 346,
+          "globalEnd": 357
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 72,
+          "localEnd": 73,
+          "globalStart": 362,
+          "globalEnd": 368
+        },
+        {
+          "chars": [
+            {
+              "char": "u",
+              "label": 74,
+              "probability": 0.9999979734420776
+            }
+          ],
+          "localStart": 76,
+          "localEnd": 77,
+          "globalStart": 384,
+          "globalEnd": 389
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 0.9999996423721313
+            }
+          ],
+          "localStart": 80,
+          "localEnd": 81,
+          "globalStart": 405,
+          "globalEnd": 410
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 83,
+          "localEnd": 84,
+          "globalStart": 421,
+          "globalEnd": 426
+        },
+        {
+          "chars": [
+            {
+              "char": "h",
+              "label": 61,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 85,
+          "localEnd": 86,
+          "globalStart": 432,
+          "globalEnd": 437
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9999392032623291
+            },
+            {
+              "probability": 0.28467413783073425,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 90,
+          "localEnd": 92,
+          "globalStart": 458,
+          "globalEnd": 469
+        },
+        {
+          "chars": [
+            {
+              "char": "F",
+              "label": 31,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 95,
+          "localEnd": 96,
+          "globalStart": 485,
+          "globalEnd": 490
+        },
+        {
+          "chars": [
+            {
+              "char": "r",
+              "label": 71,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 98,
+          "localEnd": 99,
+          "globalStart": 501,
+          "globalEnd": 506
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 101,
+          "localEnd": 102,
+          "globalStart": 517,
+          "globalEnd": 522
+        },
+        {
+          "chars": [
+            {
+              "char": "m",
+              "label": 66,
+              "probability": 0.9999983310699463
+            },
+            {
+              "probability": 0.007927767932415009,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 107,
+          "localEnd": 109,
+          "globalStart": 549,
+          "globalEnd": 560
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 110,
+          "localEnd": 111,
+          "globalStart": 565,
+          "globalEnd": 570
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 114,
+          "localEnd": 115,
+          "globalStart": 586,
+          "globalEnd": 592
+        },
+        {
+          "chars": [
+            {
+              "char": ",",
+              "label": 8,
+              "probability": 0.9997686743736267
+            },
+            {
+              "char": "\u201a",
+              "label": 165,
+              "probability": 0.00022942291980143636
+            }
+          ],
+          "localStart": 118,
+          "localEnd": 119,
+          "globalStart": 608,
+          "globalEnd": 613
+        },
+        {
+          "chars": [
+            {
+              "char": " ",
+              "label": 1,
+              "probability": 0.9998853206634521
+            },
+            {
+              "probability": 0.02983216382563114,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 124,
+          "localEnd": 126,
+          "globalStart": 640,
+          "globalEnd": 650
+        },
+        {
+          "chars": [
+            {
+              "char": "U",
+              "label": 45,
+              "probability": 0.9999973773956299
+            }
+          ],
+          "localStart": 130,
+          "localEnd": 131,
+          "globalStart": 672,
+          "globalEnd": 677
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 0.9999982118606567
+            },
+            {
+              "probability": 0.04782204329967499,
+              "char": "",
+              "label": 0
+            }
+          ],
+          "localStart": 134,
+          "localEnd": 136,
+          "globalStart": 693,
+          "globalEnd": 704
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 137,
+          "localEnd": 138,
+          "globalStart": 709,
+          "globalEnd": 714
+        },
+        {
+          "chars": [
+            {
+              "char": "m",
+              "label": 66,
+              "probability": 0.9999992847442627
+            }
+          ],
+          "localStart": 143,
+          "localEnd": 144,
+          "globalStart": 741,
+          "globalEnd": 746
+        },
+        {
+          "chars": [
+            {
+              "char": "p",
+              "label": 69,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 146,
+          "localEnd": 147,
+          "globalStart": 757,
+          "globalEnd": 762
+        },
+        {
+          "chars": [
+            {
+              "char": "f",
+              "label": 59,
+              "probability": 0.9999006986618042
+            }
+          ],
+          "localStart": 150,
+          "localEnd": 151,
+          "globalStart": 778,
+          "globalEnd": 784
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 0.9999998807907104
+            }
+          ],
+          "localStart": 152,
+          "localEnd": 153,
+          "globalStart": 789,
+          "globalEnd": 794
+        },
+        {
+          "chars": [
+            {
+              "char": "n",
+              "label": 67,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 156,
+          "localEnd": 157,
+          "globalStart": 810,
+          "globalEnd": 816
+        },
+        {
+          "chars": [
+            {
+              "char": "d",
+              "label": 57,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 158,
+          "localEnd": 159,
+          "globalStart": 821,
+          "globalEnd": 826
+        },
+        {
+          "chars": [
+            {
+              "char": "l",
+              "label": 65,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 162,
+          "localEnd": 163,
+          "globalStart": 842,
+          "globalEnd": 848
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 164,
+          "localEnd": 165,
+          "globalStart": 853,
+          "globalEnd": 858
+        },
+        {
+          "chars": [
+            {
+              "char": "c",
+              "label": 56,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 167,
+          "localEnd": 168,
+          "globalStart": 869,
+          "globalEnd": 874
+        },
+        {
+          "chars": [
+            {
+              "char": "h",
+              "label": 61,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 169,
+          "localEnd": 170,
+          "globalStart": 880,
+          "globalEnd": 885
+        },
+        {
+          "chars": [
+            {
+              "char": "k",
+              "label": 64,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 173,
+          "localEnd": 174,
+          "globalStart": 901,
+          "globalEnd": 906
+        },
+        {
+          "chars": [
+            {
+              "char": "e",
+              "label": 58,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 176,
+          "localEnd": 177,
+          "globalStart": 917,
+          "globalEnd": 922
+        },
+        {
+          "chars": [
+            {
+              "char": "i",
+              "label": 62,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 179,
+          "localEnd": 180,
+          "globalStart": 933,
+          "globalEnd": 938
+        },
+        {
+          "chars": [
+            {
+              "char": "t",
+              "label": 73,
+              "probability": 1.0
+            }
+          ],
+          "localStart": 181,
+          "localEnd": 182,
+          "globalStart": 944,
+          "globalEnd": 949
+        }
+      ],
+      "logits": {
+        "rows": 0,
+        "cols": 0,
+        "data": []
+      },
+      "avgCharProbability": 0.9999681711196899,
+      "totalProbability": 0.0,
+      "isVotedResult": false,
+      "linePath": ""
+    }
+  ],
+  "linePath": "../corpus/dta19/1828-menzel_literatur01/06205.nrm.png"
+}
