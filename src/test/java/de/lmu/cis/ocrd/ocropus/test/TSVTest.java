@@ -13,7 +13,7 @@ import static org.junit.Assert.assertThat;
 public class TSVTest {
     @Test
     public void testReadLLocsString() throws Exception {
-        final TSV llocs = TSV.read(isFromString("a\t0.1\t0.2\nb\t0.3\t0.4\n"));
+        final TSV llocs = TSV.read(isFromString("a\t0.2\nb\t0.4\n"));
         assertThat(llocs.toString(), is("ab"));
         assertThat(llocs.length(), is(2));
         assertThat(llocs.at(0).getChar(), is((int)'a'));
@@ -22,7 +22,7 @@ public class TSVTest {
 
     @Test
     public void testReadLLocsConfidence() throws Exception {
-        final TSV llocs = TSV.read(isFromString("a\t0.1\t0.2\nb\t0.3\t0.4\n"));
+        final TSV llocs = TSV.read(isFromString("a\t0.2\nb\t0.4\n"));
         assertThat(llocs.length(), is(2));
         assertThat(llocs.at(0).getConfidence(), is(0.2));
         assertThat(llocs.at(1).getConfidence(), is(0.4));
