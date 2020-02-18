@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class LLocsLineAlignment {
     private final Path img;
-    private List<LLocs> llocs;
+    private List<TSV> llocs;
     private Lines.Alignment alignment;
 
     public LLocsLineAlignment(Path img) {
@@ -41,10 +41,10 @@ public class LLocsLineAlignment {
     private List<BaseOCRToken> align(List<Path> paths, int nOCR, boolean withGT) throws Exception {
         this.llocs = new ArrayList<>(nOCR);
         for (int i = 0; i < nOCR; i++) {
-            this.llocs.add(LLocs.read(paths.get(i)));
+            this.llocs.add(TSV.read(paths.get(i)));
         }
         List<String> lines = new ArrayList<>(nOCR);
-        for (LLocs ll: this.llocs) {
+        for (TSV ll: this.llocs) {
             lines.add(clean(ll.toString()));
         }
         if (withGT) {
@@ -59,13 +59,13 @@ public class LLocsLineAlignment {
     private List<BaseOCRToken> align(int nOCR, boolean withGT) throws Exception {
         final List<BaseOCRToken> tokens = new ArrayList<>(alignment.wordAlignments.size());
         final List<String> normalizedLines = new ArrayList<>(nOCR);
-        final List<List<LLocs>> splits = new ArrayList<>(alignment.wordAlignments.size());
+        final List<List<TSV>> splits = new ArrayList<>(alignment.wordAlignments.size());
         for (int i = 0; i < nOCR; i++) {
             normalizedLines.add(clean(llocs.get(i).toString()));
             splits.add(llocs.get(i).split(i, alignment.wordAlignments));
         }
 
-        final List<LLocs> words = new ArrayList<>(nOCR);
+        final List<TSV> words = new ArrayList<>(nOCR);
         for (int i = 0; i < splits.get(0).size(); i++) { // because of the alignment all split lists have the same length
             String gt = withGT ? Lines.join(alignment.wordAlignments.get(i).alignments.get(nOCR-1)) : null;
             for (int j = 0; j < nOCR; j++) {

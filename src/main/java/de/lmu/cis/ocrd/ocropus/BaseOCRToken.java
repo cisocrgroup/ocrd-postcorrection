@@ -9,7 +9,7 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
     private final String gt;
     private final String id;
 
-    BaseOCRToken(List<LLocs> ocrs, List<String> normalizedLines, String gt) {
+    BaseOCRToken(List<TSV> ocrs, List<String> normalizedLines, String gt) {
         this.ocrs = new ArrayList<>(ocrs.size());
         for (int i = 0; i < ocrs.size(); i++) {
             this.ocrs.add(new de.lmu.cis.ocrd.ocropus.OCRWord(ocrs.get(i), normalizedLines.get(i)));
@@ -47,7 +47,7 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
     }
 
 
-    private static String getID(LLocs llocs) {
+    private static String getID(TSV llocs) {
         final int pos = llocs.getPath().getFileName().toString().indexOf('.');
         return llocs.getPath().getParent().getFileName().toString() + ":" + llocs.getPath().getFileName().toString().substring(pos+1);
     }

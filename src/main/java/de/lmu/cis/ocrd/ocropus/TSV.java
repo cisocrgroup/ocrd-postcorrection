@@ -12,7 +12,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LLocs {
+public class TSV {
     public static class Pair {
         private final int c;
         private final double conf;
@@ -22,7 +22,7 @@ public class LLocs {
             this.conf = conf;
         }
 
-        public int getC() {
+        public int getChar() {
             return c;
         }
 
@@ -30,14 +30,14 @@ public class LLocs {
             return conf;
         }
 
-        private static final Pattern P = Pattern.compile("^(.?)\t([0-9]*\\.?[0-9]*)\t([0-9]*\\.?[0-9]*)$");
+        private static final Pattern P = Pattern.compile("^([^\t]*)\t([0-9]*\\.?[0-9]*)$");
         static Pair scan(String line) throws Exception {
             final Matcher m = P.matcher(line);
             if (!m.matches()) {
-                throw new Exception("invalid llocs line: " + line);
+                throw new Exception("invalid tsv line: " + line);
             }
             final int c = m.group(1).isEmpty() ? (int)' ' : m.group(1).codePointAt(0);
-            final double confidence = Double.parseDouble(m.group(3));
+            final double confidence = Double.parseDouble(m.group(2));
             return new Pair(c, confidence);
         }
     }
@@ -46,11 +46,11 @@ public class LLocs {
     private Path path;
     private String string;
 
-    private LLocs(List<Pair> pairs) {
+    private TSV(List<Pair> pairs) {
         this(pairs, Paths.get(""));
     }
 
-    private LLocs(List<Pair> pairs, Path path) {
+    private TSV(List<Pair> pairs, Path path) {
         this.pairs = pairs;
         this.path = path;
     }
@@ -75,27 +75,27 @@ public class LLocs {
         return length() == 0 ? 0 : sum/(double)length();
     }
 
-    public static LLocs read(Path path) throws Exception {
+    public static TSV read(Path path) throws Exception {
         try (InputStream is = new FileInputStream(path.toFile())) {
-            LLocs llocs = read(is);
-            llocs.path = path;
-            return llocs;
+            TSV tsv = read(is);
+            tsv.path = path;
+            return tsv;
         }
     }
 
-    public static LLocs read(InputStream is) throws Exception {
-        LLocs ret = new LLocs(new ArrayList<>());
+    public static TSV read(InputStream is) throws Exception {
+        TSV tsv = new TSV(new ArrayList<>());
         Scanner scanner = new Scanner(is);
         while (scanner.hasNextLine()) {
             final String line = scanner.nextLine();
-            ret.pairs.add(Pair.scan(line));
+            tsv.pairs.add(Pair.scan(line));
         }
-        return ret;
+        return tsv;
     }
 
-    public List<LLocs> split(int index, List<Lines.WordAlignment> wordAlignments) throws Exception {
+    public List<TSV> split(int index, List<Lines.WordAlignment> wordAlignments) throws Exception {
         int offset = 0;
-        List<LLocs> ret = new ArrayList<>();
+        List<TSV> ret = new ArrayList<>();
 
         for (Lines.WordAlignment wordAlignment : wordAlignments) {
             // handle master
@@ -132,10 +132,10 @@ public class LLocs {
         throw new Exception("cannot find alignment in llocs: " + needle);
     }
 
-    private LLocs sublist(int start, int end) {
+    private TSV sublist(int start, int end) {
         int s = toString().codePointCount(0, start);
         int len = toString().codePointCount(start, end);
-        return new LLocs(this.pairs.subList(s, s+len), this.path);
+        return new TSV(this.pairs.subList(s, s+len), this.path);
     }
 
     @Override

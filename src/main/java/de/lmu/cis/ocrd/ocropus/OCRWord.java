@@ -3,12 +3,12 @@ package de.lmu.cis.ocrd.ocropus;
 import de.lmu.cis.ocrd.util.Normalizer;
 
 public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
-    private final LLocs word;
+    private final TSV word;
     private final String normalizedLine;
     private final String normalized;
     private final double averageConfidence;
 
-    OCRWord(LLocs word, String normalizedLine) {
+    OCRWord(TSV word, String normalizedLine) {
         this.word = word;
         this.normalizedLine = normalizedLine;
         this.normalized = Normalizer.normalize(word.toString());

@@ -12,7 +12,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class LLocsLineAlignmentTest {
+public class TSVLineAlignmentTest {
     private Path img = Paths.get("src/test/resources/ocropus/0001/0001.bin.png");
     private final int nOCR = 3;
     private LLocsLineAlignment alignment;
