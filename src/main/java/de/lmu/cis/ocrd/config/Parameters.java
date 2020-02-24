@@ -15,6 +15,7 @@ public class Parameters {
     private List<JsonObject> dmFeatures = new ArrayList<>();
     private String dir = "";
     private String trigrams = "";
+    private String ocropusImageExtension = "";
     private List<String> filterClasses = new ArrayList<>();
     private List<String> ocropusOCRExtensions = new ArrayList<>();
     private int nOCR = 0;
@@ -92,12 +93,27 @@ public class Parameters {
         this.runDM = runDM;
     }
 
+    public String getOcropusImageExtension() {
+        return ocropusImageExtension;
+    }
+
+    public void setOcropusImageExtension(String extension) {
+        ocropusImageExtension = extension;
+    }
+
     public List<String> getOcropusOCRExtensions() {
         return ocropusOCRExtensions;
     }
 
+    public void setOcropusOCRExtensions(List<String> extensions) {
+        ocropusOCRExtensions = extensions;
+    }
+
     public boolean isOcropus() {
-        return ocropusOCRExtensions != null && !ocropusOCRExtensions.isEmpty();
+        return ocropusOCRExtensions != null
+                && !ocropusOCRExtensions.isEmpty()
+                && ocropusImageExtension != null
+                && !ocropusImageExtension.isEmpty();
     }
 
     public Path getModel() {

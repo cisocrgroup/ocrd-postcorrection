@@ -58,6 +58,10 @@ public class Workspace extends AbstractWorkspace {
         normal.put(dir, new AbstractWorkspace.OCRTokenReaderImpl(tokens));
     }
 
+    public Parameters getParameters() {
+        return parameters;
+    }
+
     private OCRToken makeCandidateOCRToken(de.lmu.cis.ocrd.ml.BaseOCRToken token, Profile profile) {
         final Optional<Candidates> maybeCandidates = profile.get(token.getMasterOCR().getWordNormalized());
         if (!maybeCandidates.isPresent()) {
@@ -67,21 +71,27 @@ public class Workspace extends AbstractWorkspace {
         return new CandidatesOCRToken(token, candidates.subList(0, Math.min(candidates.size(), parameters.getMaxCandidates())));
     }
 
-    private static List<Path> gatherImageFiles(Path base) throws IOException {
-        ImagePathGatherer v = new ImagePathGatherer();
+    private List<Path> gatherImageFiles(Path base) throws IOException {
+        ImagePathGatherer v = new ImagePathGatherer(parameters.getOcropusImageExtension());
         Files.walkFileTree(base, v);
         v.imageFiles.sort(Comparator.comparing(Path::toString));
         return v.imageFiles;
     }
 
     private static class ImagePathGatherer extends SimpleFileVisitor<Path> {
-        private final List<Path> imageFiles = new ArrayList<>();
+        private final String extension;
+        private final List<Path> imageFiles;
+        private ImagePathGatherer(String extension) {
+            this.extension = extension;
+            this.imageFiles = new ArrayList<>();
+        }
+
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             if (!attrs.isRegularFile()) { // skip dirs, links ...
                 return FileVisitResult.CONTINUE;
             }
-            if (file.toString().endsWith(".nrm.png")) {
+            if (file.toString().endsWith(extension)) {
                 imageFiles.add(file);
             }
             return FileVisitResult.CONTINUE;

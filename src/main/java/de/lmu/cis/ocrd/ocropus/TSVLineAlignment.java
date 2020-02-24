@@ -65,10 +65,10 @@ public class TSVLineAlignment {
         }
 
         final List<TSV> words = new ArrayList<>(nOCR);
-        for (int i = 0; i < splits.get(0).size(); i++) { // because of the alignment all split lists have the same length
+        for (int i = 0; i < nOCR; i++) {
             String gt = withGT ? Lines.join(alignment.wordAlignments.get(i).alignments.get(nOCR-1)) : null;
-            for (int j = 0; j < nOCR; j++) {
-                words.add(splits.get(i).get(j));
+            for (int j = 0; j < splits.get(0).size(); j++) { // because of the alignment all split lists have the same length
+                words.add(splits.get(j).get(i));
             }
             tokens.add(new BaseOCRToken(words, normalizedLines, gt));
             words.clear();
