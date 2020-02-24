@@ -22,7 +22,7 @@ public class HighestRankedCandidateOCRPatternsDistanceFeature extends NamedDoubl
 	protected double doCalculate(OCRToken token, int i, int n) {
 		final List<Candidate> cs = token.getCandidates();
 		if (cs.isEmpty()) {
-			return 0;
+			return -1;
 		}
 		return cs.get(0).Distance;
 	}
