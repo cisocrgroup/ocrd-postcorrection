@@ -15,12 +15,12 @@ public class Parameters {
     private List<JsonObject> dmFeatures = new ArrayList<>();
     private String dir = "";
     private String trigrams = "";
-    private List<String> filterClasses;
+    private List<String> filterClasses = new ArrayList<>();
+    private List<String> ocropusOCRExtensions = new ArrayList<>();
     private int nOCR = 0;
     private int maxCandidates = 0;
     private boolean runLE = false;
     private boolean runDM = false;
-    private boolean ocropus = false;
 
     public void setLEFeatures(List<JsonObject> leFeatures) {
         this.leFeatures = leFeatures;
@@ -92,9 +92,13 @@ public class Parameters {
         this.runDM = runDM;
     }
 
-    public boolean isOcropus() {return ocropus;}
+    public List<String> getOcropusOCRExtensions() {
+        return ocropusOCRExtensions;
+    }
 
-    public void setOcropus(boolean ocropus) {this.ocropus = ocropus;}
+    public boolean isOcropus() {
+        return ocropusOCRExtensions != null && !ocropusOCRExtensions.isEmpty();
+    }
 
     public Path getModel() {
         return Paths.get(dir, "model.zip");

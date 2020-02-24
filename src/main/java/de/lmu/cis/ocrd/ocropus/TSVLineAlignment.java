@@ -11,31 +11,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class LLocsLineAlignment {
+public class TSVLineAlignment {
     private final Path img;
     private List<TSV> llocs;
     private Lines.Alignment alignment;
 
-    public LLocsLineAlignment(Path img) {
+    public TSVLineAlignment(Path img) {
         this.img = img;
     }
 
-    public List<BaseOCRToken> align(int nOCR) throws Exception {
+    public List<BaseOCRToken> align(List<String> extensions) throws Exception {
         List<Path> paths = new ArrayList<>();
-        for (int i = 0; i < nOCR; i++) {
-            final String ext = ".llocs." + (i+1);
-            Optional<Path> maybePath = findPathWithExtension(img.toString(), ext);
+        for (String extension : extensions) {
+            Optional<Path> maybePath = findPathWithExtension(img.toString(), extension);
             if (!maybePath.isPresent()) {
-                throw new Exception("cannot find ocr llocs file with extension: " + ext);
+                throw new Exception("cannot find ocr llocs file with extension: " + extension);
             }
             paths.add(maybePath.get());
         }
         Optional<Path> maybePath = findPathWithExtension(img.toString(), ".gt.txt");
         if (maybePath.isPresent()) {
             paths.add(maybePath.get());
-            return align(paths, nOCR, true);
+            return align(paths, extensions.size(), true);
         }
-        return align(paths, nOCR, false);
+        return align(paths, extensions.size(), false);
     }
 
     private List<BaseOCRToken> align(List<Path> paths, int nOCR, boolean withGT) throws Exception {

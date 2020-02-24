@@ -26,7 +26,7 @@ public class Workspace extends AbstractWorkspace {
             List<Path> imageFiles = gatherImageFiles(Paths.get(ifg));
             List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
             for (Path imageFile: imageFiles) {
-                List<BaseOCRToken> lineTokens = new LLocsLineAlignment(imageFile).align(parameters.getNOCR());
+                List<BaseOCRToken> lineTokens = new TSVLineAlignment(imageFile).align(parameters.getOcropusOCRExtensions());
                 tokens.addAll(lineTokens);
             }
             base.put(ifg, new AbstractWorkspace.BaseOCRTokenReaderImpl(tokens));
@@ -81,7 +81,7 @@ public class Workspace extends AbstractWorkspace {
             if (!attrs.isRegularFile()) { // skip dirs, links ...
                 return FileVisitResult.CONTINUE;
             }
-            if (file.toString().endsWith(".png")) {
+            if (file.toString().endsWith(".nrm.png")) {
                 imageFiles.add(file);
             }
             return FileVisitResult.CONTINUE;
