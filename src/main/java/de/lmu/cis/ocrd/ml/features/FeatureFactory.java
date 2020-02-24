@@ -26,7 +26,7 @@ public class FeatureFactory {
 				.register(CandidateCaseClassFeature.class)
 				.register(CandidateVoteWeightFeature.class)
 				.register(CandidateHistoricalPatternsDistanceFeature.class)
-				.register(CandidateOCRPatternsDistance.class)
+				.register(CandidateOCRPatternsDistanceFeature.class)
 				.register(CandidateMatchingOCRsFeature.class)
 				.register(CandidateMatchesOCRTokenFeature.class)
 				.register(TokenLengthClassFeature.class)
