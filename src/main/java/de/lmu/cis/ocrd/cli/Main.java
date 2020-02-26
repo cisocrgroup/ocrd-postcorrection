@@ -18,10 +18,10 @@ public class Main {
 
 	private static CommandFactory makeCommandFactory() throws Exception {
 		return new CommandFactory()
-				.register(TokenizerCommand.class)
 				.register(EvaluateCommand.class)
 				.register(PostCorrectionCommand.class)
 				.register(TrainCommand.class)
+				.register(TokenizeCommand.class)
 				.register(AlignCommand.class);
 	}
 
