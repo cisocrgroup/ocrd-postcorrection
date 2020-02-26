@@ -31,19 +31,19 @@ public class TSVTest {
     @Test
     public void testReadLLocsPath1() throws Exception {
         final TSV llocs = TSV.read(Paths.get("src/test/resources/ocropus/0001/0001.llocs.1"));
-        assertThat(llocs.toString(), is("ab cd ef"));
+        assertThat(llocs.toString(), is("ab cd ef ghi"));
     }
 
     @Test
     public void testReadLLocsPath2() throws Exception {
         final TSV llocs = TSV.read(Paths.get("src/test/resources/ocropus/0001/0001.llocs.2"));
-        assertThat(llocs.toString(), is("abc d ef"));
+        assertThat(llocs.toString(), is("abc d ef ghi"));
     }
 
     @Test
     public void testReadLLocsPath3() throws Exception {
         final TSV llocs = TSV.read(Paths.get("src/test/resources/ocropus/0001/0001.llocs.3"));
-        assertThat(llocs.toString(), is("abc def"));
+        assertThat(llocs.toString(), is("abc defghi"));
     }
 
     private static InputStream isFromString(String string) {

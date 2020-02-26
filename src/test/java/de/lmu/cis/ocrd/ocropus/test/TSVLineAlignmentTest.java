@@ -26,14 +26,14 @@ public class TSVLineAlignmentTest {
     @Test
     public void testReadTokens() throws Exception {
         final List<BaseOCRToken> tokens = alignment.align(extensions);
-        assertThat(tokens.size(), is(3));
+        assertThat(tokens.size(), is(4));
     }
 
     @Test
     public void testMasterOCRNormLine() throws Exception {
         final List<BaseOCRToken> tokens = alignment.align(extensions);
         for (BaseOCRToken token: tokens) {
-            assertThat(token.getMasterOCR().getLineNormalized(), is("ab cd ef"));
+            assertThat(token.getMasterOCR().getLineNormalized(), is("ab cd ef ghi"));
         }
     }
 
@@ -41,7 +41,7 @@ public class TSVLineAlignmentTest {
     public void testFirstSlaveOCRNormLine() throws Exception {
         final List<BaseOCRToken> tokens = alignment.align(extensions);
         for (BaseOCRToken token: tokens) {
-            assertThat(token.getSlaveOCR(0).getLineNormalized(), is("abc d ef"));
+            assertThat(token.getSlaveOCR(0).getLineNormalized(), is("abc d ef ghi"));
         }
     }
 
@@ -49,7 +49,7 @@ public class TSVLineAlignmentTest {
     public void testSecondSlaveOCRNormLine() throws Exception {
         final List<BaseOCRToken> tokens = alignment.align(extensions);
         for (BaseOCRToken token: tokens) {
-            assertThat(token.getSlaveOCR(1).getLineNormalized(), is("abc def"));
+            assertThat(token.getSlaveOCR(1).getLineNormalized(), is("abc defghi"));
         }
     }
 

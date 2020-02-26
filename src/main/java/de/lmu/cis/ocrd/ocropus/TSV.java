@@ -85,6 +85,7 @@ public class TSV {
 
     public static TSV read(InputStream is) throws Exception {
         TSV tsv = new TSV(new ArrayList<>());
+        tsv.path = Paths.get("");
         Scanner scanner = new Scanner(is);
         while (scanner.hasNextLine()) {
             final String line = scanner.nextLine();

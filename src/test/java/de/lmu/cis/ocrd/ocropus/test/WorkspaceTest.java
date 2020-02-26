@@ -41,12 +41,12 @@ public class WorkspaceTest {
 
     @Test
     public void testNumberOfBaseTokens() throws Exception {
-        assertThat(workspace.getBaseOCRTokenReader(ocropusDir).read().size(), is(3));
+        assertThat(workspace.getBaseOCRTokenReader(ocropusDir).read().size(), is(4));
     }
 
     @Test
     public void testMasterOCR() throws Exception {
-        final String[] want = new String[]{"ab", "cd", "ef"};
+        final String[] want = new String[]{"ab", "cd", "ef", "ghi"};
         final List<BaseOCRToken> tokens = workspace.getBaseOCRTokenReader(ocropusDir).read();
         for (int i = 0; i < tokens.size(); i++) {
             assertThat(tokens.get(i).getMasterOCR().getWordNormalized(), is(want[i]));
@@ -55,7 +55,7 @@ public class WorkspaceTest {
 
     @Test
     public void testSecondOCR() throws Exception {
-        final String[] want = new String[]{"abc", "d", "ef"};
+        final String[] want = new String[]{"abc", "d", "ef", "ghi"};
         final List<BaseOCRToken> tokens = workspace.getBaseOCRTokenReader(ocropusDir).read();
         for (int i = 0; i < tokens.size(); i++) {
             assertThat(tokens.get(i).getSlaveOCR(0).getWordNormalized(), is(want[i]));
@@ -64,7 +64,7 @@ public class WorkspaceTest {
 
     @Test
     public void testThirdOCR() throws Exception {
-        final String[] want = new String[]{"abc", "abc", "def"};
+        final String[] want = new String[]{"abc", "abc", "defghi", "defghi"};
         final List<BaseOCRToken> tokens = workspace.getBaseOCRTokenReader(ocropusDir).read();
         for (int i = 0; i < tokens.size(); i++) {
             assertThat(tokens.get(i).getSlaveOCR(1).getWordNormalized(), is(want[i]));
@@ -73,7 +73,7 @@ public class WorkspaceTest {
 
     @Test
     public void testGT() throws Exception {
-        final String[] want = new String[]{"abc", "d", "ef"};
+        final String[] want = new String[]{"abc", "d", "efghi", "efghi"};
         final List<BaseOCRToken> tokens = workspace.getBaseOCRTokenReader(ocropusDir).read();
         for (int i = 0; i < tokens.size(); i++) {
             assertThat(tokens.get(i).getGT().orElse(""), is(want[i]));

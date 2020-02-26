@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class TSVLineAlignment {
     private final Path img;
-    private List<TSV> llocs;
+    private List<TSV> tsvs;
     private Lines.Alignment alignment;
 
     public TSVLineAlignment(Path img) {
@@ -38,12 +38,12 @@ public class TSVLineAlignment {
     }
 
     private List<BaseOCRToken> align(List<Path> paths, int nOCR, boolean withGT) throws Exception {
-        this.llocs = new ArrayList<>(nOCR);
+        this.tsvs = new ArrayList<>(nOCR);
         for (int i = 0; i < nOCR; i++) {
-            this.llocs.add(TSV.read(paths.get(i)));
+            this.tsvs.add(TSV.read(paths.get(i)));
         }
         List<String> lines = new ArrayList<>(nOCR);
-        for (TSV ll: this.llocs) {
+        for (TSV ll: this.tsvs) {
             lines.add(clean(ll.toString()));
         }
         if (withGT) {
@@ -56,19 +56,19 @@ public class TSVLineAlignment {
     }
 
     private List<BaseOCRToken> align(int nOCR, boolean withGT) throws Exception {
-        final List<BaseOCRToken> tokens = new ArrayList<>(alignment.wordAlignments.size());
         final List<String> normalizedLines = new ArrayList<>(nOCR);
         final List<List<TSV>> splits = new ArrayList<>(alignment.wordAlignments.size());
-        for (int i = 0; i < nOCR; i++) {
-            normalizedLines.add(clean(llocs.get(i).toString()));
-            splits.add(llocs.get(i).split(i, alignment.wordAlignments));
+        for (int i = 0; i < tsvs.size(); i++) {
+            normalizedLines.add(clean(tsvs.get(i).toString()));
+            splits.add(tsvs.get(i).split(i, alignment.wordAlignments));
         }
 
+        final List<BaseOCRToken> tokens = new ArrayList<>(alignment.wordAlignments.size());
         final List<TSV> words = new ArrayList<>(nOCR);
-        for (int i = 0; i < nOCR; i++) {
+        for (int i = 0; i < splits.get(0).size(); i++) { // because of the alignment all split lists have the same length
             String gt = withGT ? Lines.join(alignment.wordAlignments.get(i).alignments.get(nOCR-1)) : null;
-            for (int j = 0; j < splits.get(0).size(); j++) { // because of the alignment all split lists have the same length
-                words.add(splits.get(j).get(i));
+            for (List<TSV> split : splits) {
+                words.add(split.get(i));
             }
             tokens.add(new BaseOCRToken(words, normalizedLines, gt));
             words.clear();
