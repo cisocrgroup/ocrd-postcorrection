@@ -4,10 +4,10 @@ import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
 
-class TokenizeCommand extends ParametersCommand {
+class CatCommand extends ParametersCommand {
 
-    TokenizeCommand() {
-        super("tokenize");
+    CatCommand() {
+        super("cat");
     }
 
     @Override

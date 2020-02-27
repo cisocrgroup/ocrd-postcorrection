@@ -21,7 +21,7 @@ public class Main {
 				.register(EvaluateCommand.class)
 				.register(PostCorrectionCommand.class)
 				.register(TrainCommand.class)
-				.register(TokenizeCommand.class)
+				.register(CatCommand.class)
 				.register(AlignCommand.class);
 	}
 
