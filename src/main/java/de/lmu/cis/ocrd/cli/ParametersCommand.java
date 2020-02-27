@@ -1,17 +1,15 @@
 package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.config.Parameters;
-import de.lmu.cis.ocrd.ml.*;
+import de.lmu.cis.ocrd.ml.BaseOCRTokenProfiler;
+import de.lmu.cis.ocrd.ml.Workspace;
 import de.lmu.cis.ocrd.profile.AdditionalLexicon;
 import de.lmu.cis.ocrd.profile.FileProfiler;
 import de.lmu.cis.ocrd.profile.LocalProfilerProcess;
 import de.lmu.cis.ocrd.profile.Profile;
 import org.pmw.tinylog.Logger;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +27,7 @@ abstract class ParametersCommand implements Command {
     protected void init(CommandLineArguments config) throws Exception {
         this.parameters = config.mustGetParameter(Parameters.class);
         this.workspace = makeWorkspace(config, this.parameters);
+        setupDirs();
     }
 
     private static Workspace makeWorkspace(CommandLineArguments config, Parameters parameters) throws Exception {
@@ -38,7 +37,7 @@ abstract class ParametersCommand implements Command {
         return new de.lmu.cis.ocrd.pagexml.Workspace(Paths.get(config.mustGetMETSFile()), parameters);
     }
 
-    void setupDirs() {
+    private void setupDirs() {
         if (parameters.getDir().toFile().mkdirs()) {
             Logger.debug("created dir {}", parameters.getDir().toString());
         }
@@ -67,11 +66,18 @@ abstract class ParametersCommand implements Command {
                         parameters.getProfiler().getConfig(),
                         alex)
         ).profile();
+
         // cache the profile
         Logger.debug("caching profile to {}", cachedPath.toString());
+        // input file group could be a directory (if ocropus is used). So build all path components for the cache file
+        if (cachedPath.getParent().toFile().mkdirs()) {
+            Logger.debug("created dir {}", cachedPath.getParent().toString());
+        }
         try (Writer w = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(cachedPath.toFile())), StandardCharsets.UTF_8))) {
             w.write(profile.toJSON());
             w.write('\n');
+        } catch (IOException e) {
+            Logger.warn("cannot create profiler cache file {}: {}", cachedPath.toString(), e.getMessage());
         }
         return profile;
     }

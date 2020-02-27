@@ -24,7 +24,6 @@ public class TrainCommand extends ParametersCommand {
 	public void execute(CommandLineArguments config) throws Exception {
 		init(config);
 		config.setCommand(this); // logging
-		setupDirs();
 		this.lm = new LM(parameters.getTrigrams());
 		// input file groups
 		String[] ifgs = config.mustGetInputFileGroups();
