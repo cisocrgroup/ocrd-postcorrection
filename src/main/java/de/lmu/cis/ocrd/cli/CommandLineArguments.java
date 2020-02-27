@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Optional;
 
 public class CommandLineArguments {
 
@@ -32,8 +33,10 @@ public class CommandLineArguments {
             .desc("URL der Parameterdatei in JSON Format").hasArg().build();
     private static final Option WORKDIR = Option.builder("w").longOpt("working-dir")
             .desc("Arbeitsverzeichnis").hasArg().build();
+    private static final Option NOCR = Option.builder("n").longOpt("nOCR").desc("number of OCRs").hasArg().build();
     private String groupID, logLevel, parameter, workdir, mets, output, command, define;
     private String[] inputFilegrp, outputFilegrp, args;
+    private Integer nOCR = null;
 
     private static CommandLineArguments defaultConfiguration() {
         CommandLineArguments c = new CommandLineArguments();
@@ -70,12 +73,16 @@ public class CommandLineArguments {
         if (isSet(line, WORKDIR)) {
             c.workdir = getArg(line, WORKDIR);
         }
+        c.nOCR = null;
+        if (isSet(line, NOCR)) {
+            c.nOCR = Integer.parseInt(getArg(line, NOCR));
+        }
         c.args = line.getArgs();
         c.setupLogger();
         return c;
     }
 
-    public void setCommand(Command c) {
+    void setCommand(Command c) {
         setupLogger("cis." + c.getClass().getSimpleName());
     }
 
@@ -87,7 +94,8 @@ public class CommandLineArguments {
 
     private static Options createOptions() {
         return new Options().addOption(METS).addOption(WORKDIR).addOption(INPUT_FILEGRP).addOption(OUTPUT_FILEGRP)
-                .addOption(GROUPID).addOption(PARAMETER).addOption(LOG_LEVEL).addOption(OUTPUT).addOption(COMMAND);
+                .addOption(GROUPID).addOption(PARAMETER).addOption(LOG_LEVEL).addOption(OUTPUT).addOption(COMMAND)
+                .addOption(NOCR);
     }
 
     private static String getArg(CommandLine line, Option option) {
@@ -114,8 +122,12 @@ public class CommandLineArguments {
         return notNull(args);
     }
 
-    public String getCommand() {
+    String getCommand() {
         return notNull(command);
+    }
+
+    Optional<Integer> maybeGetNOCR() {
+        return Optional.ofNullable(nOCR);
     }
 
     public String getGroupID() {

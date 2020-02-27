@@ -26,6 +26,10 @@ abstract class ParametersCommand implements Command {
 
     protected void init(CommandLineArguments config) throws Exception {
         this.parameters = config.mustGetParameter(Parameters.class);
+        // overwrite nOCR from commandline
+        if (config.maybeGetNOCR().isPresent()) {
+            this.parameters.setNOCR(config.maybeGetNOCR().get());
+        }
         this.workspace = makeWorkspace(config, this.parameters);
         setupDirs();
     }
