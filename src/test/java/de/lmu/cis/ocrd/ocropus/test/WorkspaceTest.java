@@ -79,4 +79,13 @@ public class WorkspaceTest {
             assertThat(tokens.get(i).getGT().orElse(""), is(want[i]));
         }
     }
+
+    @Test
+    public void testIds() throws Exception {
+        final int[] ids = new int[]{1, 2, 3, 4};
+        final List<BaseOCRToken> tokens = workspace.getBaseOCRTokenReader(ocropusDir).read();
+        for (int i = 0; i < tokens.size(); i++) {
+            assertThat(tokens.get(i).getID(), is(Integer.toString(ids[i])));
+        }
+    }
 }

@@ -25,7 +25,7 @@ public class TSVLineAlignment {
         for (String extension : extensions) {
             Optional<Path> maybePath = findPathWithExtension(img.toString(), extension);
             if (!maybePath.isPresent()) {
-                throw new Exception("cannot find ocr llocs file with extension: " + extension);
+                throw new Exception("cannot find ocr tsv file with extension: " + extension);
             }
             paths.add(maybePath.get());
         }
@@ -45,6 +45,10 @@ public class TSVLineAlignment {
         List<String> lines = new ArrayList<>(nOCR);
         for (TSV ll: this.tsvs) {
             lines.add(clean(ll.toString()));
+        }
+        // simply skip empty or too short lines
+        if (lines.isEmpty() || lines.get(0).length() <= 3) {
+            return new ArrayList<>();
         }
         if (withGT) {
             try (BufferedReader r = new BufferedReader(new FileReader(paths.get(nOCR).toFile()))) {

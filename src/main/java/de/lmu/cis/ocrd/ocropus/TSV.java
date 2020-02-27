@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ocropus;
 
 import de.lmu.cis.ocrd.align.Lines;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -97,7 +98,6 @@ public class TSV {
     public List<TSV> split(int index, List<Lines.WordAlignment> wordAlignments) throws Exception {
         int offset = 0;
         List<TSV> ret = new ArrayList<>();
-
         for (Lines.WordAlignment wordAlignment : wordAlignments) {
             // handle master
             if (index == 0) {
@@ -120,17 +120,39 @@ public class TSV {
     }
 
     private int mustGetIndexOf(String needle, int offset) throws Exception {
-        int pos = toString().indexOf(needle, offset);
+        final String str = toString();
+        int pos = str.indexOf(needle, offset);
         if (pos >= 0) {
             return pos;
         }
         if (offset >= needle.length()) {
-            pos = toString().indexOf(needle, offset-needle.length());
+            pos = str.indexOf(needle, offset-needle.length());
             if (pos >= 0) {
                 return pos;
             }
         }
-        throw new Exception("cannot find alignment in llocs: " + needle);
+        // We have some problem with the alignment.
+        // We search around the offset position for the best match using levenshtein distance.
+        LevenshteinDistance lev = new LevenshteinDistance(Math.min(3, needle.length() / 2));
+        final int from = offset >= 2 ? offset-2 : 0;
+        final int to = offset + needle.length() + 2;
+        int argMin = -1;
+        int min = needle.length();
+        for (int i = from; i < to && i < str.length(); i++) {
+            int endPos = i + needle.length();
+            if (endPos > str.length()) {
+                endPos = str.length();
+            }
+            int distance = lev.apply(str.substring(i, endPos), needle);
+            if (distance < min) {
+                min = distance;
+                argMin = i;
+            }
+        }
+        if (argMin < 0) {
+            throw new Exception("cannot find alignment in llocs: " + needle);
+        }
+        return argMin;
     }
 
     private TSV sublist(int start, int end) {

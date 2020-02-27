@@ -3,11 +3,12 @@ package de.lmu.cis.ocrd.ocropus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
     private final List<OCRWord> ocrs;
     private final String gt;
-    private final String id;
+    private String id;
 
     BaseOCRToken(List<TSV> ocrs, List<String> normalizedLines, String gt) {
         this.ocrs = new ArrayList<>(ocrs.size());
@@ -15,7 +16,11 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
             this.ocrs.add(new de.lmu.cis.ocrd.ocropus.OCRWord(ocrs.get(i), normalizedLines.get(i)));
         }
         this.gt = gt;
-        this.id = getID(ocrs.get(0));
+        this.id = "";
+    }
+
+    void setID(int id) {
+        this.id = Integer.toString(id);
     }
 
     @Override
@@ -46,9 +51,15 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
         throw new RuntimeException("not implemented");
     }
 
-
-    private static String getID(TSV llocs) {
-        final int pos = llocs.getPath().getFileName().toString().indexOf('.');
-        return llocs.getPath().getParent().getFileName().toString() + ":" + llocs.getPath().getFileName().toString().substring(pos+1);
+    @Override
+    public String toString() {
+        StringJoiner sj = new StringJoiner(",");
+        sj.add("id:" + getID());
+        sj.add("mOCR:" + getMasterOCR().getWordNormalized());
+        for (int i = 1; i < ocrs.size(); i++) {
+            sj.add("OCR:" + (i+1) + ":" + ocrs.get(i).getWordNormalized());
+        }
+        sj.add("GT:" + gt);
+        return sj.toString();
     }
 }

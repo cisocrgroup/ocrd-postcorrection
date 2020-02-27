@@ -24,10 +24,14 @@ public class Workspace extends AbstractWorkspace {
     public BaseOCRTokenReader getBaseOCRTokenReader(String ifg) throws Exception {
         if (!base.containsKey(ifg)) {
             List<Path> imageFiles = gatherImageFiles(Paths.get(ifg));
-            List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>();
+            imageFiles.sort(Path::compareTo);
+            List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>(imageFiles.size());
             for (Path imageFile: imageFiles) {
                 List<BaseOCRToken> lineTokens = new TSVLineAlignment(imageFile).align(parameters.getOcropusOCRExtensions());
                 tokens.addAll(lineTokens);
+            }
+            for (int i = 0; i < tokens.size(); i++) {
+                ((BaseOCRToken)tokens.get(i)).setID(i+1);
             }
             base.put(ifg, new AbstractWorkspace.BaseOCRTokenReaderImpl(tokens));
         }
