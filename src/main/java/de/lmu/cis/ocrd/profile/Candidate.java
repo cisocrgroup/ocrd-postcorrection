@@ -54,6 +54,7 @@ public class Candidate {
 		sj.add("hist:" + patternsToString(HistPatterns));
 		sj.add("dist:" + Distance);
 		sj.add("weight:" + Weight);
+		sj.add("dict:" + Dict);
 		return sj.toString();
 	}
 

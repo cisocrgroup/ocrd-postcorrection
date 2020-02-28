@@ -9,4 +9,9 @@ public class PosPattern {
 		this.Right = this.Right.toLowerCase();
 		return this;
 	}
+
+	@Override
+	public String toString() {
+		return Left + ":" + Right + ":" + Pos;
+	}
 }

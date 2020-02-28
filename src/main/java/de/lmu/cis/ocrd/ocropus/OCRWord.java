@@ -2,6 +2,8 @@ package de.lmu.cis.ocrd.ocropus;
 
 import de.lmu.cis.ocrd.util.Normalizer;
 
+import java.util.StringJoiner;
+
 public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
     private final TSV word;
     private final String normalizedLine;
@@ -38,5 +40,14 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
     @Override
     public double getConfidence() {
         return averageConfidence;
+    }
+
+    @Override
+    public String toString() {
+        StringJoiner sj = new StringJoiner(",");
+        for (int i = 0; i < word.length(); i++) {
+            sj.add(Double.toString(word.at(i).getConfidence()));
+        }
+        return word.toString() + "|" + sj.toString();
     }
 }
