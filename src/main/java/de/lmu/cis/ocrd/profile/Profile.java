@@ -6,10 +6,12 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class Profile extends HashMap<String, Candidates> {
 	// private final HashMap<String, Candidates> data;
@@ -29,7 +31,7 @@ public class Profile extends HashMap<String, Candidates> {
 	}
 
 	public static Profile read(InputStream is) throws Exception {
-		return fromJSON(IOUtils.toString(is, Charset.forName("UTF-8")));
+		return fromJSON(IOUtils.toString(is, StandardCharsets.UTF_8));
 	}
 
 	public static Profile read(Path path) throws Exception {
@@ -50,7 +52,10 @@ public class Profile extends HashMap<String, Candidates> {
 		if (data == null) {
 			throw new Exception("cannot parse profile from json");
 		}
-		return new Profile(toLowerCase(data)).removeEmptyCandidates().sortCandidatesByVoteWeight();
+		return new Profile(toLowerCase(data))
+				.removeEmptyCandidates()
+				.sortCandidatesByVoteWeight()
+				.adjustCandidatePostPatterns();
 	}
 
 	private static HashMap<String, Candidates> toLowerCase(HashMap<String, Candidates> map) {
@@ -61,6 +66,15 @@ public class Profile extends HashMap<String, Candidates> {
 			newMap.put(lower, cLower);
 		}
 		return newMap;
+	}
+
+	private Profile adjustCandidatePostPatterns() {
+		for (Map.Entry<String, Candidates> e: this.entrySet()) {
+			for (Candidate candidate: e.getValue().Candidates) {
+				candidate.adjustOCRPosPatterns();
+			}
+		}
+		return this;
 	}
 
 	private Profile removeEmptyCandidates() {

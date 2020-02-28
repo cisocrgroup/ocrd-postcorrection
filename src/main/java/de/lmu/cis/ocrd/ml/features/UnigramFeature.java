@@ -9,11 +9,11 @@ public class UnigramFeature extends NamedDoubleFeature {
 	private static final long serialVersionUID = 1507211972850104646L;
 	private final ArgumentFactory args;
 
-	public UnigramFeature(JsonObject o, ArgumentFactory args) throws Exception {
+	public UnigramFeature(JsonObject o, ArgumentFactory args) {
 		this(args, JSON.mustGetNameOrType(o));
 	}
 
-	public UnigramFeature(ArgumentFactory factory, String name) throws Exception {
+	UnigramFeature(ArgumentFactory factory, String name) {
 		super(name);
 		this.args = factory;
 	}
@@ -30,7 +30,7 @@ public class UnigramFeature extends NamedDoubleFeature {
 		return getUnigrams(i).getRelative(getWord(token, i, n).toString());
 	}
 
-	protected FreqMap getUnigrams(int i) {
+	FreqMap getUnigrams(int i) {
 		try {
 			if (i == 0) {
 				return this.args.getMasterOCRUnigrams();

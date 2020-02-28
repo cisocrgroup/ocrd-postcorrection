@@ -18,17 +18,21 @@ abstract class AbstractPatternConfidenceFeature extends NamedDoubleFeature {
     // NOTES:
     // ======
     // Pattern:    a:b  -> substitution
-    // Pattern:    a:"" -> insertion ("" means empty string)
-    // Pattern:    "":a -> deletion
+    // Pattern:    a:"" -> deletion ("" means empty string)
+    // Pattern:    "":a -> insertion ("" means empty string)
     static double calculateConfidence(OCRWord word, PosPattern pattern) {
-        if (pattern.Right.isEmpty()) {
+        if (pattern.isInsertion()) {
             return calculateConfidenceForInsertion(word, pattern);
         }
-        return calculateConfidenceForSubstitutionOrDeletion(word, pattern);
+        if (pattern.isDeletion()) {
+            return calculateConfidenceForDeletion(word, pattern);
+        }
+        // pattern must be a substitution
+        return calculateConfidenceForSubstitution(word, pattern);
     }
 
-    // Use the product of the substituted/deleted characters.
-    private static double calculateConfidenceForSubstitutionOrDeletion(OCRWord word, PosPattern pattern) {
+    // Use the product of the substituted characters.
+    private static double calculateConfidenceForSubstitution(OCRWord word, PosPattern pattern) {
         double ret = 1;
         final int[] cp = pattern.Right.codePoints().toArray();
         for (int i = 0; i < cp.length; i++) {
@@ -37,11 +41,12 @@ abstract class AbstractPatternConfidenceFeature extends NamedDoubleFeature {
         return ret;
     }
 
-    // There are three possible positions for insertions:
+
+    // There are three possible positions for deletions (Right=""):
     // at 0:           use confidence for character at pos=0
     // if pos+1 < len: use confidence for the surrounding characters (c(pos)+c(pos+1))/2
     // else :          use confidence for last character at pos=len-1
-    private static double calculateConfidenceForInsertion(OCRWord word, PosPattern pattern) {
+    private static double calculateConfidenceForDeletion(OCRWord word, PosPattern pattern) {
         if (pattern.Pos == 0) {
             return word.getCharacterConfidenceAt(0);
         }
@@ -50,5 +55,14 @@ abstract class AbstractPatternConfidenceFeature extends NamedDoubleFeature {
             return (word.getCharacterConfidenceAt(pattern.Pos) + word.getCharacterConfidenceAt(pattern.Pos + 1)) / 2.0;
         }
         return word.getCharacterConfidenceAt(cp.length-1);
+    }
+
+    // Use the product of the inserted characters.
+    private static double calculateConfidenceForInsertion(OCRWord word, PosPattern pattern) {
+        double ret = 1;
+        for (int i = 0; i < pattern.Right.codePointCount(0, pattern.Right.length()); i++) {
+            ret *= word.getCharacterConfidenceAt(i + pattern.Pos);
+        }
+        return ret;
     }
 }

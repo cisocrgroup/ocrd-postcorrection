@@ -43,6 +43,10 @@ public class Trainer {
                 .writeHeader(n);
     }
 
+    public void closeARFFWriter() {
+        arffWriter.close();
+    }
+
     public void prepare(OCRTokenReader tokenReader, int n, TokenFilter.Func func) throws Exception {
         final List<OCRToken> tokens = tokenReader.read();
         lm.setTokens(tokens);
@@ -69,7 +73,7 @@ public class Trainer {
 
     public void train(Path arff, Path bin) throws Exception {
         Logger.info("train({}, {})", arff, bin);
-        arffWriter.close();
+        closeARFFWriter();
         LogisticClassifier classifier = LogisticClassifier.train(arff);
         classifier.save(bin);
     }

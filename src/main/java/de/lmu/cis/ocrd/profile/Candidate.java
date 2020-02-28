@@ -27,6 +27,18 @@ public class Candidate {
 		return this;
 	}
 
+	void adjustOCRPosPatterns() {
+		if (OCRPatterns.length <= 1) {
+			return;
+		}
+		// at least 2 pos patterns
+		int adjustment = OCRPatterns[0].getAdjustment();
+		for (int i = 1; i < OCRPatterns.length; i++) {
+			OCRPatterns[i].Pos += adjustment;
+			adjustment += OCRPatterns[i].getAdjustment();
+		}
+	}
+
 	// returns true if the candidate is a lexicon entry,
 	// i.e. has no historical and no ocr patterns.
 	public boolean isLexiconEntry() {

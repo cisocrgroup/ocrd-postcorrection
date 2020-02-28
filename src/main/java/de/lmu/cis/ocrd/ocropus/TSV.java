@@ -43,7 +43,7 @@ public class TSV {
         }
     }
 
-    private List<Pair> pairs;
+    private final List<Pair> pairs;
     private Path path;
     private String string;
 
