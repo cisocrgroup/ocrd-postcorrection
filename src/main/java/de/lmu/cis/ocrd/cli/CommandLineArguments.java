@@ -34,9 +34,12 @@ public class CommandLineArguments {
     private static final Option WORKDIR = Option.builder("w").longOpt("working-dir")
             .desc("Arbeitsverzeichnis").hasArg().build();
     private static final Option NOCR = Option.builder("n").longOpt("nOCR").desc("number of OCRs").hasArg().build();
-    private String groupID, logLevel, parameter, workdir, mets, output, command, define;
+    private static final Option TRAINING = Option.builder("t").longOpt("training").desc("set feature type").hasArg().build();
+    private String groupID, logLevel, parameter, workdir, mets, output, command;
     private String[] inputFilegrp, outputFilegrp, args;
     private Integer nOCR = null;
+    enum TrainingType {LE, RR, DM};
+    private TrainingType trainingType;
 
     private static CommandLineArguments defaultConfiguration() {
         CommandLineArguments c = new CommandLineArguments();
@@ -77,6 +80,19 @@ public class CommandLineArguments {
         if (isSet(line, NOCR)) {
             c.nOCR = Integer.parseInt(getArg(line, NOCR));
         }
+        c.trainingType = TrainingType.LE;
+        if (isSet(line, TRAINING)) {
+            final String f = getArg(line, TRAINING).toLowerCase();
+            if ("le".equals(f)) {
+                c.trainingType = TrainingType.LE;
+            } else if ("dm".equals(f)) {
+                c.trainingType = TrainingType.DM;
+            } else if ("rr".equals(f)) {
+                c.trainingType = TrainingType.RR;
+            } else {
+                throw new RuntimeException("invalid feature type: " + getArg(line, TRAINING));
+            }
+        }
         c.args = line.getArgs();
         c.setupLogger();
         return c;
@@ -95,7 +111,7 @@ public class CommandLineArguments {
     private static Options createOptions() {
         return new Options().addOption(METS).addOption(WORKDIR).addOption(INPUT_FILEGRP).addOption(OUTPUT_FILEGRP)
                 .addOption(GROUPID).addOption(PARAMETER).addOption(LOG_LEVEL).addOption(OUTPUT).addOption(COMMAND)
-                .addOption(NOCR);
+                .addOption(NOCR).addOption(TRAINING);
     }
 
     private static String getArg(CommandLine line, Option option) {
@@ -128,6 +144,10 @@ public class CommandLineArguments {
 
     Optional<Integer> maybeGetNOCR() {
         return Optional.ofNullable(nOCR);
+    }
+
+    TrainingType getTrainingType() {
+        return trainingType;
     }
 
     public String getGroupID() {

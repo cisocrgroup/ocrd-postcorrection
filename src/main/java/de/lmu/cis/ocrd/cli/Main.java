@@ -22,6 +22,7 @@ public class Main {
 				.register(PostCorrectionCommand.class)
 				.register(TrainCommand.class)
 				.register(CatCommand.class)
+				.register(ARFFCommand.class)
 				.register(AlignCommand.class);
 	}
 
