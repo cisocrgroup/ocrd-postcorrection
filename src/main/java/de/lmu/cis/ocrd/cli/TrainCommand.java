@@ -14,6 +14,7 @@ import java.io.FileWriter;
 
 public class TrainCommand extends ParametersCommand {
 	private LM lm;
+	private DMGTFeature dmgtFeature;
 	private boolean debug;
 
 	public TrainCommand() {
@@ -52,7 +53,7 @@ public class TrainCommand extends ParametersCommand {
 						workspace.getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
 						parameters.getRRTraining().getModel(i+1),
 						parameters.getRRTraining().getTraining(i+1));
-				dmTrainer.prepare(workspace.getRankedTokenReader(ifg, null, rankings), i+1, (DMGTFeature::isValidForTraining));
+				dmTrainer.prepare(workspace.getRankedTokenReader(ifg, null, rankings), i+1, (dmgtFeature::isValidForTraining));
 			}
 			dmTrainer.train(parameters.getDMTraining().getTraining(i+1), parameters.getDMTraining().getModel(i+1));
 		}
@@ -108,6 +109,9 @@ public class TrainCommand extends ParametersCommand {
 	}
 
 	private Trainer openDMTrainer(int n) throws Exception {
+		dmgtFeature = parameters.isCourageous() ?
+				new DMGTFeature("dm-gt"):
+				new CourageousDMGTFeature("courageous-dm-gt");
 		final Trainer trainer = new Trainer()
 				.withLanguageModel(lm)
 				.withDebug(debug)
@@ -116,7 +120,7 @@ public class TrainCommand extends ParametersCommand {
 								.getDefault()
 								.withArgumentFactory(lm)
 								.createFeatureSet(parameters.getDMTraining().getFeatures(), parameters.getFilterClasses())
-								.add(new DMGTFeature("dm-gt"))
+								.add(dmgtFeature)
 				);
         // trainer.train() closes the writer
 		trainer.openARFFWriter(new BufferedWriter(new FileWriter(parameters.getDMTraining().getTraining(n).toFile())), "dm", n);

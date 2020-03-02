@@ -22,6 +22,7 @@ public class Parameters {
     private int maxCandidates = 0;
     private boolean runLE = false;
     private boolean runDM = false;
+    private boolean courageous = false;
 
     public void setLEFeatures(List<JsonObject> leFeatures) {
         this.leFeatures = leFeatures;
@@ -92,6 +93,12 @@ public class Parameters {
     public void setRunDM(boolean runDM) {
         this.runDM = runDM;
     }
+
+    public boolean isCourageous() {
+        return courageous;
+    }
+
+    public void setCourageous(boolean courageous) {this.courageous = courageous;}
 
     public String getOcropusImageExtension() {
         return ocropusImageExtension;

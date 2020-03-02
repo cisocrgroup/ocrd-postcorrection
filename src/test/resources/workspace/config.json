@@ -8,6 +8,7 @@
     "maxCandidates": 5,
     "runLE": true,
     "runDM": true,
+      "courageous": true,
     "lexiconExtensionProtocol": "src/test/resources/workspace/dump/lep.json",
     "decisionMakerProtocol": "src/test/resources/workspace/dump/dmp.json",
     "filterClasses": ["deactivate"],
