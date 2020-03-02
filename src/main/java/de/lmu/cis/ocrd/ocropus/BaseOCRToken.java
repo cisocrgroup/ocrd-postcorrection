@@ -1,5 +1,7 @@
 package de.lmu.cis.ocrd.ocropus;
 
+import org.pmw.tinylog.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +50,7 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
     @Override
     public void correct(String correction, double confidence) {
-        throw new RuntimeException("not implemented");
+        Logger.debug("correcting {} with {}/{}", toString(), correction, confidence);
     }
 
     @Override

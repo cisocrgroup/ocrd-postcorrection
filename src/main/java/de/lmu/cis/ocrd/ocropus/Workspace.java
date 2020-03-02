@@ -5,6 +5,7 @@ import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.Profile;
+import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -49,15 +50,16 @@ public class Workspace extends AbstractWorkspace {
     }
 
     @Override
-    public void write(String ifg, String ofg) throws Exception {
-        throw new Exception("write: not implemented");
+    public void write(String ifg, String ofg) {
+        Logger.debug("writing {} to {}", ifg, ofg);
     }
 
     @Override
     public void resetProfile(String dir, Profile profile) throws Exception {
         List<OCRToken> tokens = getNormalTokenReader(dir, profile).read();
         for (int i = 0; i < tokens.size(); i++) {
-            tokens.add(i, makeCandidateOCRToken(((AbstractOCRToken)tokens.get(i)).getBase(), profile));
+            final de.lmu.cis.ocrd.ml.BaseOCRToken token = ((AbstractOCRToken)tokens.get(i)).getBase();
+            tokens.set(i, makeCandidateOCRToken(token, profile));
         }
         normal.put(dir, new AbstractWorkspace.OCRTokenReaderImpl(tokens));
     }
