@@ -23,6 +23,7 @@ public class Main {
 				.register(TrainCommand.class)
 				.register(CatCommand.class)
 				.register(ARFFCommand.class)
+				.register(DefaultConfigCommand.class)
 				.register(AlignCommand.class);
 	}
 
