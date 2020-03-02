@@ -4,6 +4,7 @@ import org.w3c.dom.Node;
 
 import javax.xml.xpath.XPathExpressionException;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 	private final String word, raw;
@@ -64,7 +65,11 @@ public class OCRWord implements de.lmu.cis.ocrd.ml.OCRWord {
 
 	@Override
 	public String toString() {
-		return getWordNormalized();
+		StringJoiner sj = new StringJoiner(",");
+		for (int i = 0; i < word.length(); i++) {
+			sj.add(Double.toString(getCharacterConfidenceAt(i)));
+		}
+		return getWordNormalized() + "|" + sj.toString();
 	}
 
 }

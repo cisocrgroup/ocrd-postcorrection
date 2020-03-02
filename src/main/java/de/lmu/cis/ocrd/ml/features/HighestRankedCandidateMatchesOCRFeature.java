@@ -24,7 +24,7 @@ public class HighestRankedCandidateMatchesOCRFeature extends NamedBooleanFeature
 		if (cs.isEmpty()) {
 			return false;
 		}
-		return cs.get(0).Suggestion.equals(getWord(token, i, n).toString().toLowerCase());
+		return cs.get(0).Suggestion.equalsIgnoreCase(getWord(token, i, n).getWordNormalized());
 	}
 
 	@Override
