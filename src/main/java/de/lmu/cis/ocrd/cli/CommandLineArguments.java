@@ -35,11 +35,13 @@ public class CommandLineArguments {
             .desc("Arbeitsverzeichnis").hasArg().build();
     private static final Option NOCR = Option.builder("n").longOpt("nOCR").desc("number of OCRs").hasArg().build();
     private static final Option TRAINING = Option.builder("t").longOpt("training").desc("set feature type").hasArg().build();
+    private static final Option ITERATE = Option.builder("i").longOpt("iterate").desc("iterate over nOCR").hasArg(false).build();
     private String groupID, logLevel, parameter, workdir, mets, output, command;
     private String[] inputFilegrp, outputFilegrp, args;
     private Integer nOCR = null;
-    enum TrainingType {LE, RR, DM};
+    public enum TrainingType {LE, RR, DM}
     private TrainingType trainingType;
+    private boolean iterate;
 
     private static CommandLineArguments defaultConfiguration() {
         CommandLineArguments c = new CommandLineArguments();
@@ -83,16 +85,21 @@ public class CommandLineArguments {
         c.trainingType = TrainingType.LE;
         if (isSet(line, TRAINING)) {
             final String f = getArg(line, TRAINING).toLowerCase();
-            if ("le".equals(f)) {
-                c.trainingType = TrainingType.LE;
-            } else if ("dm".equals(f)) {
-                c.trainingType = TrainingType.DM;
-            } else if ("rr".equals(f)) {
-                c.trainingType = TrainingType.RR;
-            } else {
-                throw new RuntimeException("invalid feature type: " + getArg(line, TRAINING));
+            switch (f) {
+                case "le":
+                    c.trainingType = TrainingType.LE;
+                    break;
+                case "dm":
+                    c.trainingType = TrainingType.DM;
+                    break;
+                case "rr":
+                    c.trainingType = TrainingType.RR;
+                    break;
+                default:
+                    throw new RuntimeException("invalid feature type: " + getArg(line, TRAINING));
             }
         }
+        c.iterate = isSet(line, ITERATE);
         c.args = line.getArgs();
         c.setupLogger();
         return c;
@@ -108,10 +115,14 @@ public class CommandLineArguments {
         return CommandLineArguments.fromCommandLine(line);
     }
 
+    public static CommandLineArguments fromArgs(String... args) throws Exception {
+        return fromCommandLine(args);
+    }
+
     private static Options createOptions() {
         return new Options().addOption(METS).addOption(WORKDIR).addOption(INPUT_FILEGRP).addOption(OUTPUT_FILEGRP)
                 .addOption(GROUPID).addOption(PARAMETER).addOption(LOG_LEVEL).addOption(OUTPUT).addOption(COMMAND)
-                .addOption(NOCR).addOption(TRAINING);
+                .addOption(NOCR).addOption(TRAINING).addOption(ITERATE);
     }
 
     private static String getArg(CommandLine line, Option option) {
@@ -138,15 +149,19 @@ public class CommandLineArguments {
         return notNull(args);
     }
 
-    String getCommand() {
+    public String getCommand() {
         return notNull(command);
     }
 
-    Optional<Integer> maybeGetNOCR() {
+    public Optional<Integer> maybeGetNOCR() {
         return Optional.ofNullable(nOCR);
     }
 
-    TrainingType getTrainingType() {
+    public boolean isIterate() {
+        return iterate;
+    }
+
+    public TrainingType getTrainingType() {
         return trainingType;
     }
 
