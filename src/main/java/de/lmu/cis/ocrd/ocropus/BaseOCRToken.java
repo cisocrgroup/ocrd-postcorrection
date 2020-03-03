@@ -59,7 +59,7 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
         sj.add("id:" + getID());
         sj.add("mOCR:" + getMasterOCR().getWordNormalized());
         for (int i = 1; i < ocrs.size(); i++) {
-            sj.add("OCR:" + (i+1) + ":" + ocrs.get(i).getWordNormalized());
+            sj.add("OCR" + (i+1) + ":" + ocrs.get(i).getWordNormalized());
         }
         sj.add("GT:" + gt);
         return sj.toString();

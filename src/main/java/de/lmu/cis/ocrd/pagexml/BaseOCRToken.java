@@ -88,7 +88,7 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 		    if (words.get(i).isGT()) {
                 sj.add("GT:" + words.get(i).getWordNormalized());
             } else {
-		    	sj.add("OCR:" + (i+1) + ":" + words.get(i).getWordNormalized());
+		    	sj.add("OCR" + (i+1) + ":" + words.get(i).getWordNormalized());
             }
 		}
 		return sj.toString();
