@@ -36,6 +36,9 @@ public class Candidate {
 		for (int i = 1; i < OCRPatterns.length; i++) {
 			OCRPatterns[i].Pos += adjustment;
 			adjustment += OCRPatterns[i].getAdjustment();
+			if (OCRPatterns[i].Pos < 0) { // clip to 0
+				OCRPatterns[i].Pos = 0;
+			}
 		}
 	}
 
