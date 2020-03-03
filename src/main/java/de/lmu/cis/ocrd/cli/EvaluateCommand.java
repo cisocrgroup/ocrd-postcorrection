@@ -67,6 +67,7 @@ public class EvaluateCommand extends ParametersCommand {
         if (token.getMasterOCR().getWordNormalized().equalsIgnoreCase(gt)) {
             counts.correctBefore++;
         }
+        Logger.debug("evaluating token {}/{} {}", counts.n, counts.correctBefore, token.toString());
         // corrections
         final String id = token.getID();
         if (protocol.getProtocol().corrections.containsKey(id)) {
@@ -85,18 +86,22 @@ public class EvaluateCommand extends ParametersCommand {
         if (isTypeIError(value)) {
             counts.missingCandidate++;
             counts.typeIValues.add(value);
+            Logger.debug(" * type I error (missing candidate)");
         }
         if (isTypeIIError(value)) {
             counts.badRank++;
             counts.typeIIValues.add(value);
+            Logger.debug(" * type II error (bad rank)");
         }
         if (isTypeIIIError(value)) {
             counts.missedOpportunity++;
             counts.typeIIIValues.add(value);
+            Logger.debug(" * type III error (missed opportunity)");
         }
         if (isTypeIVError(value)) {
             counts.infelicitousCorrection++;
             counts.typeIVValues.add(value);
+            Logger.debug(" * type IV error (infelicitous correction)");
         }
         if ((value.taken && correctionIsGood(value)) || (!value.taken && !correctionIsGood(value))) {
             counts.correctAfter++;
@@ -110,14 +115,18 @@ public class EvaluateCommand extends ParametersCommand {
         counts.skipped++;
         if (token.getMasterOCR().getWordNormalized().length() <= 3) {
             counts.skippedTooShort++;
+            Logger.debug(" * no correction attempted: too short");
         } else {
             final Optional<Candidates> maybeCandidates = profile.get(token.getMasterOCR().getWordNormalized());
             if (!maybeCandidates.isPresent() || maybeCandidates.get().Candidates.isEmpty()) {
                 counts.skippedNoCandidates++;
+                Logger.debug(" * no correction attempted: skipped because no candidates");
             } else if (maybeCandidates.get().Candidates.size() == 1 && maybeCandidates.get().Candidates.get(0).isLexiconEntry()) {
                 counts.skippedLexiconEntry++;
+                Logger.debug(" * no correction attempted: lexicon entry");
                 if (!token.getMasterOCR().getWordNormalized().equalsIgnoreCase(gt)) {
                     counts.skippedFalseFriends++;
+                    Logger.debug(" * no correction attempted: false friend");
                 }
             } else {
                 throw new Exception("bad unhandled token: " + token.toString());
