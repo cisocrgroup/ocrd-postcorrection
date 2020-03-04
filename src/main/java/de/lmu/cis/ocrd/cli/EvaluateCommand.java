@@ -32,28 +32,38 @@ public class EvaluateCommand extends ParametersCommand {
     public void execute(CommandLineArguments config) throws Exception {
         init(config);
         config.setCommand(this); // logging
-        this.counts = new Counts();
-        for (String ifg: config.mustGetInputFileGroups()) {
-            evaluate(ifg);
-        }
-        try(Writer w = new FileWriter(parameters.getDMTraining().getEvaluation(parameters.getNOCR(), parameters.isRunLE()).toFile())) {
-            new Gson().toJson(counts, w);
+        if (config.isIterate()) {
+            final boolean[] runLE = new boolean[]{false, true};
+            for (boolean b : runLE) {
+                for (int n = 0; n < parameters.getNOCR(); n++) {
+                    evaluate(config.mustGetInputFileGroups(), n + 1, b);
+                }
+            }
+        } else {
+            evaluate(config.mustGetInputFileGroups(), parameters.getNOCR(), parameters.isRunLE());
         }
     }
 
-    private void evaluate(String ifg) throws Exception {
-        if (parameters.isRunLE()) {
-            profile = getProfile(ifg, new AdditionalFileLexicon(parameters.getLETraining().getLexicon(parameters.getNOCR())), parameters.getNOCR());
-        } else {
-            profile = getProfile(ifg, new NoAdditionalLexicon(), parameters.getNOCR());
+    private void evaluate(String[] ifgs, int nOCR, boolean runLE) throws Exception {
+        this.counts = new Counts();
+        for (String ifg: ifgs) {
+            Logger.debug("evaluate({}, {}, {})", ifg, nOCR, runLE);
+            if (runLE) {
+                profile = getProfile(ifg, new AdditionalFileLexicon(parameters.getLETraining().getLexicon(nOCR)), nOCR);
+            } else {
+                profile = getProfile(ifg, new NoAdditionalLexicon(), nOCR);
+            }
+            protocol = new DMProtocol();
+            Logger.debug("reading protocol to {}", parameters.getDMTraining().getProtocol(nOCR, runLE).toString());
+            try (InputStream is = new FileInputStream(parameters.getDMTraining().getProtocol(nOCR, runLE).toFile())) {
+                protocol.read(is);
+            }
+            for (BaseOCRToken token : workspace.getBaseOCRTokenReader(ifg).read()) {
+                evaluate(token);
+            }
         }
-        protocol = new DMProtocol();
-        Logger.debug("reading protocol to {}", parameters.getDMTraining().getProtocol(parameters.getNOCR(), parameters.isRunLE()).toString());
-        try (InputStream is = new FileInputStream(parameters.getDMTraining().getProtocol(parameters.getNOCR(), parameters.isRunLE()).toFile())) {
-            protocol.read(is);
-        }
-        for (BaseOCRToken token: workspace.getBaseOCRTokenReader(ifg).read()) {
-            evaluate(token);
+        try (Writer w = new FileWriter(parameters.getDMTraining().getEvaluation(nOCR, runLE).toFile())) {
+            new Gson().toJson(counts, w);
         }
     }
 

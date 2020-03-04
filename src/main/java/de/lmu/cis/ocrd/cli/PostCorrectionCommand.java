@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class PostCorrectionCommand extends ParametersCommand {
-	private String ifg; // input file group
 	private LM lm;
 	private ModelZIP model;
 	private Profile profile;
@@ -24,7 +23,6 @@ public class PostCorrectionCommand extends ParametersCommand {
 	public void execute(CommandLineArguments config) throws Exception {
 		init(config);
 		config.setCommand(this); // logging
-		this.ifg = config.mustGetSingleInputFileGroup();
 		// output file group
 		String ofg = config.mustGetSingleOutputFileGroup();
 		this.model = ModelZIP.open(parameters.getModel());
@@ -32,26 +30,42 @@ public class PostCorrectionCommand extends ParametersCommand {
 			this.lm = new LM(is);
 		}
 
+		final String ifg = config.mustGetSingleInputFileGroup();
+		if (config.isIterate()) {
+			final boolean[] runLE = new boolean[]{false, true};
+			for (boolean b : runLE) {
+				for (int n = 0; n < parameters.getNOCR(); n++) {
+					postCorrect(ifg, ofg, n + 1, b);
+				}
+			}
+		} else {
+			postCorrect(ifg, ofg, parameters.getNOCR(), parameters.isRunLE());
+		}
+	}
+
+	private void postCorrect(String ifg, String ofg, int nOCR, boolean runLE) throws Exception {
+		Logger.debug("postCorrect({}, {}, {}, {})", ifg, ofg, nOCR, runLE);
 		AdditionalLexicon alex = new NoAdditionalLexicon();
-		if (parameters.isRunLE()) {
-			alex = predictLexiconExtensions();
+		if (runLE) {
+			alex = predictLexiconExtensions(ifg, nOCR);
 		}
 		if (parameters.isRunDM()) {
-			decide(predictRankings(alex));
+			decide(predictRankings(alex, ifg, nOCR), ifg, nOCR, runLE);
 		}
 		workspace.write(ifg, ofg);
 	}
 
-	private AdditionalLexicon predictLexiconExtensions() throws Exception {
+	private AdditionalLexicon predictLexiconExtensions(String ifg, int nOCR) throws Exception {
+		Logger.debug("predictLexiconExtensions({}, {})", ifg, nOCR);
 		// profile with no additional lexicon
 		final AdditionalLexicon alex = new NoAdditionalLexicon();
-		profile = getProfile(ifg, alex, parameters.getNOCR());
+		profile = getProfile(ifg, alex, nOCR);
 		// predict lexicon entries and return them
-		final Predictor predictor = getLEPredictor();
+		final Predictor predictor = getLEPredictor(ifg, nOCR);
 		final AdditionalLexiconSet ret = new AdditionalLexiconSet();
 		final Protocol protocol = new LEProtocol();
 		for (OCRToken token: TokenFilter.filter(workspace.getNormalTokenReader(ifg, profile)).collect(Collectors.toList())){
-			final Predictor.Result result = predictor.predict(token, parameters.getNOCR());
+			final Predictor.Result result = predictor.predict(token, nOCR);
 			final boolean take = result.getPrediction().getPrediction();
 			final double conf = result.getPrediction().getConfidence();
 			protocol.protocol(result.getToken(), "", conf, take);
@@ -59,18 +73,19 @@ public class PostCorrectionCommand extends ParametersCommand {
 				ret.add(result.getToken().getMasterOCR().getWordNormalized());
 			}
 		}
-		saveProtocol(parameters.getLETraining().getProtocol(parameters.getNOCR(), true), protocol);
-		saveAdditionalLexicon(ret, parameters.getLETraining().getLexicon(parameters.getNOCR()));
+		saveProtocol(parameters.getLETraining().getProtocol(nOCR, true), protocol);
+		saveAdditionalLexicon(ret, parameters.getLETraining().getLexicon(nOCR));
 		return ret;
 	}
 
-	private Rankings predictRankings(AdditionalLexicon alex) throws Exception {
+	private Rankings predictRankings(AdditionalLexicon alex, String ifg, int nOCR) throws Exception {
+		Logger.debug("predictRankings({}, {})", ifg, nOCR);
 		// no protocol
 		// if a profile exists, we need to overwrite it with an alexed profile
 		// otherwise no profile exists and we need to create one anyway.
-		profile = getProfile(ifg, alex, parameters.getNOCR());
+		profile = getProfile(ifg, alex, nOCR);
 		workspace.resetProfile(ifg, profile);
-		final Predictor predictor = getRRPredictor();
+		final Predictor predictor = getRRPredictor(ifg, nOCR);
 		Rankings rankings = new Rankings();
 		for (OCRToken token: TokenFilter.filter(workspace.getNormalTokenReader(ifg, profile)).collect(Collectors.toList())) {
 			if (token.getCandidates().isEmpty()) { // skip token with no interpretation
@@ -78,7 +93,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 			}
 			rankings.put(token, new ArrayList<>());
 			for (Candidate candidate: token.getCandidates()) {
-				final Predictor.Result result = predictor.predict(new CandidateOCRToken(token, candidate), parameters.getNOCR());
+				final Predictor.Result result = predictor.predict(new CandidateOCRToken(token, candidate), nOCR);
 				double conf = result.getPrediction().getConfidence();
 				final boolean take = result.getPrediction().getPrediction();
 				if (!take) {
@@ -92,12 +107,13 @@ public class PostCorrectionCommand extends ParametersCommand {
 		return rankings;
 	}
 
-	private void decide(Rankings rankings) throws Exception {
+	private void decide(Rankings rankings, String ifg, int nOCR, boolean runLE) throws Exception {
+		Logger.debug("decide({}, {}, {})", ifg, nOCR, runLE);
 		// no profile
-		final Predictor predictor = getDMPredictor();
+		final Predictor predictor = getDMPredictor(ifg, nOCR);
 		final DMProtocol protocol = new DMProtocol(rankings);
 		for (OCRToken token: rankings.keySet()) {
-			final Predictor.Result result = predictor.predict(new RankingsOCRToken(token, rankings.get(token)), parameters.getNOCR());
+			final Predictor.Result result = predictor.predict(new RankingsOCRToken(token, rankings.get(token)), nOCR);
 			final boolean take = result.getPrediction().getPrediction();
 			final Ranking topRanking = rankings.get(token).get(0);
 			protocol.protocol(token, topRanking.getCandidate().Suggestion, topRanking.getRanking(), take);
@@ -105,11 +121,11 @@ public class PostCorrectionCommand extends ParametersCommand {
 				token.correct(topRanking.getCandidate().Suggestion, topRanking.getRanking());
 			}
 		}
-		saveProtocol(parameters.getDMTraining().getProtocol(parameters.getNOCR(), parameters.isRunLE()), protocol);
+		saveProtocol(parameters.getDMTraining().getProtocol(nOCR, runLE), protocol);
 	}
 
-	private Predictor getLEPredictor() throws Exception {
-		try (InputStream is = model.openLEModel(parameters.getNOCR()-1)) {
+	private Predictor getLEPredictor(String ifg, int nOCR) throws Exception {
+		try (InputStream is = model.openLEModel(nOCR-1)) {
 			return new Predictor()
 					.withLanguageModel(lm)
 					.withTokens(workspace.getNormalTokenReader(ifg, profile))
@@ -123,8 +139,8 @@ public class PostCorrectionCommand extends ParametersCommand {
 		}
 	}
 
-	private Predictor getRRPredictor() throws Exception {
-		try (InputStream is = model.openRRModel(parameters.getNOCR()-1)) {
+	private Predictor getRRPredictor(String ifg, int nOCR) throws Exception {
+		try (InputStream is = model.openRRModel(nOCR-1)) {
 			return new Predictor()
 					.withLanguageModel(lm)
 					.withTokens(workspace.getNormalTokenReader(ifg, profile))
@@ -138,8 +154,8 @@ public class PostCorrectionCommand extends ParametersCommand {
 		}
 	}
 
-	private Predictor getDMPredictor() throws Exception {
-		try (InputStream is = model.openDMModel(parameters.getNOCR()-1)) {
+	private Predictor getDMPredictor(String ifg, int nOCR) throws Exception {
+		try (InputStream is = model.openDMModel(nOCR-1)) {
 			return new Predictor()
 					.withLanguageModel(lm)
 					.withTokens(workspace.getNormalTokenReader(ifg, profile))
