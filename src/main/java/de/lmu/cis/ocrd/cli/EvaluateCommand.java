@@ -3,12 +3,10 @@ package de.lmu.cis.ocrd.cli;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.BaseOCRToken;
 import de.lmu.cis.ocrd.ml.DMProtocol;
-import de.lmu.cis.ocrd.ml.Ranking;
 import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
-import de.lmu.cis.ocrd.util.Normalizer;
 import org.pmw.tinylog.Logger;
 
 import java.io.*;
@@ -17,6 +15,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+// ocr-tokens
+// ├ not suspicious
+// │ ├ too short
+// │ ├ no candidates
+// │ └ lexicon-entry
+// │   └ false friends
+// └ suspicious
+//   ├ taken
+//   | ├ ocr correct
+//   | | ├ candidate correct [successful correction]
+//   | | └ candidate incorrect [infelicitous correction (type IV)]
+//   | |   ├ no correction candidate (type I)
+//   | |   └ correction candidate not on first rank (type II)
+//   | └ ocr incorrect
+//   |   ├ candidate correct [successful correction]
+//   |	  └ candidate incorrect [do not care correction]
+//   |     ├ no correction candidate (type I)
+//   |     └ correction candidate not on first rank (type II)
+//   └ not taken
+//     ├ ocr correct
+//     | ├ candidate correct
+//     | └ candidate incorrect
+//     |   ├ no correction candidate (type I)
+//     |   └ correction candidate not on first rank (type II)
+//     └ ocr incorrect
+//       ├ candidate correct [missed opportunity (type III)]
+//       └ candidate incorrect
+//         ├ no correction candidate (type I)
+//         └ correction candidate not on first rank (type II)
 public class EvaluateCommand extends ParametersCommand {
     private Counts counts;
     private DMProtocol protocol;
@@ -90,43 +117,99 @@ public class EvaluateCommand extends ParametersCommand {
             if (!value.gt.present) {
                 throw new Exception("invalid protocol value " + id + ": missing ground truth");
             }
-            countAttempted(value);
+            countSuspicious(value);
         } else {
-            countNotAttempted(token, gt);
+            countSkipped(token, gt);
         }
     }
 
-    private void countAttempted(DMProtocol.Value value) {
-        counts.attempted++;
-        if (isTypeIError(value)) {
-            counts.missingCandidate++;
-            counts.typeIValues.add(value);
-            Logger.debug(" * type I error (missing candidate)");
+    private void countSuspicious(DMProtocol.Value value) {
+        counts.suspicious++;
+        if (value.taken) {
+            countSuspiciousTaken(value);
+        } else {
+            countSuspiciousNotTaken(value);
         }
-        if (isTypeIIError(value)) {
-            counts.badRank++;
-            counts.typeIIValues.add(value);
-            Logger.debug(" * type II error (bad rank)");
+        if (value.correctionIsCorrect()) {
+            counts.availableGoodCorrections++;
         }
-        if (isTypeIIIError(value)) {
-            counts.missedOpportunity++;
-            counts.typeIIIValues.add(value);
-            Logger.debug(" * type III error (missed opportunity)");
-        }
-        if (isTypeIVError(value)) {
-            counts.infelicitousCorrection++;
-            counts.typeIVValues.add(value);
-            Logger.debug(" * type IV error (infelicitous correction)");
-        }
-        if ((value.taken && correctionIsGood(value)) || (!value.taken && !correctionIsGood(value))) {
+        if ((value.taken && value.correctionIsCorrect()) || (value.ocrIsCorrect())) {
             counts.correctAfter++;
         }
-        if (value.taken && correctionIsGood(value)) {
-            counts.successfulCorrections++;
+    }
+
+    private void countSuspiciousTaken(DMProtocol.Value value) {
+        assert(value.taken);
+        if (value.ocrIsCorrect()) {
+            if (!value.correctionIsCorrect()) {
+                Logger.debug(" * type IV error (infelicitous correction)");
+                counts.typeIVValues.add(value);
+                counts.infelicitousCorrection++;
+                if (value.getCorrectCandidateIndex() == -1) {
+                    Logger.debug(" * type I error (missing candidate)");
+                    counts.typeIValues.add(value);
+                    counts.missingCandidate++;
+                } else {
+                    Logger.debug(" * type II error (bad rank)");
+                    counts.typeIIValues.add(value);
+                    counts.badRank++;
+                }
+            } else {
+                counts.successfulCorrections++;
+            }
+        } else {
+            if (value.correctionIsCorrect()) {
+                counts.successfulCorrections++;
+            } else {
+                if (value.getCorrectCandidateIndex() == -1) {
+                    Logger.debug(" * type I error (missing candidate)");
+                    counts.typeIValues.add(value);
+                    counts.missingCandidate++;
+                } else {
+                    Logger.debug(" * type II error (bad rank)");
+                    counts.typeIIValues.add(value);
+                    counts.badRank++;
+                }
+            }
         }
     }
 
-    private void countNotAttempted(BaseOCRToken token, String gt) throws Exception {
+    private void countSuspiciousNotTaken(DMProtocol.Value value) {
+        assert (!value.taken);
+        if (value.ocrIsCorrect()) {
+            if (value.correctionIsCorrect()) {
+                counts.successfulCorrections++;
+            } else {
+                if (value.getCorrectCandidateIndex() == -1) {
+                    Logger.debug(" * type I error (missing candidate)");
+                    counts.typeIValues.add(value);
+                    counts.missingCandidate++;
+                } else {
+                    Logger.debug(" * type II error (bad rank)");
+                    counts.typeIIValues.add(value);
+                    counts.badRank++;
+                }
+            }
+        } else {
+            if (value.correctionIsCorrect()) {
+                Logger.debug(" * type III error (missed opportunity)");
+                counts.typeIIIValues.add(value);
+                counts.missedOpportunity++;
+            } else {
+                if (value.getCorrectCandidateIndex() == -1) {
+                    Logger.debug(" * type I error (missing candidate)");
+                    counts.typeIValues.add(value);
+                    counts.missingCandidate++;
+                } else {
+                    Logger.debug(" * type II error (bad rank)");
+                    counts.typeIIValues.add(value);
+                    counts.badRank++;
+                }
+            }
+        }
+    }
+
+    private void countSkipped(BaseOCRToken token, String gt) throws Exception {
         counts.skipped++;
         if (token.getMasterOCR().getWordNormalized().length() <= 3) {
             counts.skippedTooShort++;
@@ -152,49 +235,6 @@ public class EvaluateCommand extends ParametersCommand {
         }
     }
 
-    // No good correction candidate
-    private static boolean isTypeIError(DMProtocol.Value value) {
-        if (value.taken && !correctionIsGood(value)) {
-            return !hasGoodCandidate(value);
-        }
-        return false;
-    }
-
-    // Good correction not on first rank
-    private static boolean isTypeIIError(DMProtocol.Value value) {
-        if (value.taken && !correctionIsGood(value)) {
-            return hasGoodCandidate(value);
-        }
-        return false;
-    }
-
-    // Missed opportunity
-    private static boolean isTypeIIIError(DMProtocol.Value value) {
-        return !value.taken && correctionIsGood(value);
-    }
-
-    // Infelicitous correction
-    private static boolean isTypeIVError(DMProtocol.Value value) {
-        return value.taken && !correctionIsGood(value);
-    }
-
-    private static boolean correctionIsGood(DMProtocol.Value value) {
-        return Normalizer.normalize(value.cor).equalsIgnoreCase(value.gt.gt);
-    }
-
-    private static boolean hasGoodCandidate(DMProtocol.Value value) {
-        if (value.rankings == null) {
-            return false;
-        }
-        // no need to normalize: gt.gt is already normalized; profiler's suggestions are as well normalized.
-        for (Ranking ranking: value.rankings) {
-            if (ranking.getCandidate().Suggestion.equalsIgnoreCase(value.gt.gt)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static class Counts {
         List<DMProtocol.Value> typeIValues = new ArrayList<>();
         List<DMProtocol.Value> typeIIValues = new ArrayList<>();
@@ -202,19 +242,20 @@ public class EvaluateCommand extends ParametersCommand {
         List<DMProtocol.Value> typeIVValues = new ArrayList<>();
         String time;
         long timestamp;
-        int missingCandidate = 0;        // no correction candidate (error type I)
-        int badRank = 0;                 // good correction not on rank one (error type II)
-        int missedOpportunity = 0;       // missed opportunity (error type III)
-        int infelicitousCorrection = 0;  // infelicitous correction (error type IV)
+        int missingCandidate = 0;         // no correction candidate (error type I)
+        int badRank = 0;                  // good correction not on rank one (error type II)
+        int missedOpportunity = 0;        // missed opportunity (error type III)
+        int infelicitousCorrection = 0;   // infelicitous correction (error type IV)
         int correctBefore = 0;
         int correctAfter = 0;
-        int successfulCorrections = 0;   // a wrong OCR token was corrected with a correct correction
-        int attempted = 0;               // number of tokens where a correction was
-        int skipped = 0;                 // no correction attempt because one of the three causes below
-        int skippedTooShort = 0;         // no correction attempt because the token is too short
-        int skippedNoCandidates = 0;     // no correction attempt because the token has no correction candidates
-        int skippedLexiconEntry = 0;     // no correction attempt because the token is a lexicon entry
-        int skippedFalseFriends = 0;     // token is a lexicon entry but it is an OCR error
-        int n = 0;                       // total number of tokens
+        int successfulCorrections = 0;    // a wrong OCR token was corrected with a correct correction
+        int availableGoodCorrections = 0; // number
+        int suspicious = 0;               // number of tokens where a correction was attempted
+        int skipped = 0;                  // no correction attempt because one of the three causes below
+        int skippedTooShort = 0;          // no correction attempt because the token is too short
+        int skippedNoCandidates = 0;      // no correction attempt because the token has no correction candidates
+        int skippedLexiconEntry = 0;      // no correction attempt because the token is a lexicon entry
+        int skippedFalseFriends = 0;      // token is a lexicon entry but it is an OCR error
+        int n = 0;                        // total number of tokens
     }
 }

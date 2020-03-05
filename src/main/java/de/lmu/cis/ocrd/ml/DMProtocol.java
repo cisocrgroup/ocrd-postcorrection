@@ -19,10 +19,32 @@ public class DMProtocol implements Protocol {
         String ocrNormalized = "";
         String corNormalized = "";
         public String ocr = "";
-        public String cor = "";
+        String cor = "";
         public List<Ranking> rankings;
         public double confidence = 0;
         public boolean taken = false;
+
+        public boolean correctionIsCorrect() {
+            return corNormalized.equalsIgnoreCase(gt.gt);
+        }
+
+        public boolean ocrIsCorrect() {
+            return ocrNormalized.equalsIgnoreCase(gt.gt);
+        }
+
+        // -1: no good correction candidate
+        // 0: good correction candidate
+        public int getCorrectCandidateIndex() {
+            if (rankings == null) {
+                return -1;
+            }
+            for (int i = 0; i< rankings.size(); i++) {
+                if (rankings.get(i).getCandidate().Suggestion.equalsIgnoreCase(gt.gt)) {
+                    return i;
+                }
+            }
+            return -1;
+        }
     }
 
     public static class GroundTruth {
