@@ -7,7 +7,6 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 public class FeatureFactory {
 	private final HashSet<String> features = new HashSet<>();
@@ -57,7 +56,7 @@ public class FeatureFactory {
 		return this;
 	}
 
-	public Optional<Feature> create(JsonObject o) throws Exception {
+	public Feature create(JsonObject o) throws Exception {
 		final String type = JSON.mustGet(o, "type").getAsString();
 		if (!features.contains(type)) {
 			throw new Exception("cannot create feature: unknown type: " + type);
@@ -65,7 +64,7 @@ public class FeatureFactory {
 		final Class<?> clazz = Class.forName(type);
 		final Class<?>[] parameters = new Class[] { JsonObject.class, ArgumentFactory.class };
 		final Constructor<?> c = clazz.getConstructor(parameters);
-		return Optional.of((Feature) c.newInstance(o, args));
+		return (Feature) c.newInstance(o, args);
 	}
 
 	public <F extends Feature> FeatureFactory register(Class<F> feature) {
@@ -83,9 +82,7 @@ public class FeatureFactory {
 			if (ff.filter(o)) {
 				continue;
 			}
-			Optional<Feature> feature = create(o);
-			// feature is not deactivated
-			feature.ifPresent(fs::add);
+			fs.add(create(o));
 		}
 		return fs;
 	}

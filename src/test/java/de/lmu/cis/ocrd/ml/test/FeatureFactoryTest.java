@@ -7,10 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Optional;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 public class FeatureFactoryTest {
 	private FeatureFactory featureFactory;
 
@@ -23,17 +23,17 @@ public class FeatureFactoryTest {
 	public void testWithValidName() throws Exception {
 		final String json = "{\"name\": \"test\", \"type\": \"de.lmu.cis.ocrd.ml.test.FeatureFactoryTest$TestFeature\", \"short\": 3, \"medium\": 8, \"long\": 13}";
 		JsonObject o = new Gson().fromJson(json, JsonObject.class);
-		Optional<Feature> feature = featureFactory.create(o);
-		assertThat(feature.isPresent(), is(true));
-		assertThat(feature.orElseThrow(Exception::new), is(new TestFeature(3, 8, 13, "test")));
+		Feature feature = featureFactory.create(o);
+		assertThat(feature, notNullValue());
+		assertThat(feature, is(new TestFeature(3, 8, 13, "test")));
 	}
 
 	@Test(expected = Exception.class)
 	public void testWithInvalidName() throws Exception {
 		final String json = "{\"name\": \"test\", \"type\": \"invalid.package.InvalidFeature\", \"MIN\": 0, \"max\": 1}";
 		JsonObject o = new Gson().fromJson(json, JsonObject.class);
-		Optional<Feature> feature = featureFactory.create(o);
-		assertThat(feature.isPresent(), is(false));
+		Feature feature = featureFactory.create(o);
+		assertThat(feature, notNullValue());
 	}
 
 	@Test
