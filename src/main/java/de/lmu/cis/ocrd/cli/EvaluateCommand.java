@@ -11,10 +11,8 @@ import de.lmu.cis.ocrd.profile.Profile;
 import de.lmu.cis.ocrd.util.Normalizer;
 import org.pmw.tinylog.Logger;
 
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.Writer;
+import java.io.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +44,7 @@ public class EvaluateCommand extends ParametersCommand {
 
     private void evaluate(String[] ifgs, int nOCR, boolean runLE) throws Exception {
         this.counts = new Counts();
-        for (String ifg: ifgs) {
+        for (String ifg : ifgs) {
             Logger.debug("evaluate({}, {}, {})", ifg, nOCR, runLE);
             if (runLE) {
                 profile = getProfile(ifg, new AdditionalFileLexicon(parameters.getLETraining().getLexicon(nOCR)), nOCR);
@@ -62,6 +60,13 @@ public class EvaluateCommand extends ParametersCommand {
                 evaluate(token);
             }
         }
+        writeCounts(nOCR, runLE);
+    }
+
+    private void writeCounts(int nOCR, boolean runLE) throws IOException {
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        counts.timestamp = timestamp.getTime();
+        counts.time = timestamp.toString();
         try (Writer w = new FileWriter(parameters.getDMTraining().getEvaluation(nOCR, runLE).toFile())) {
             new Gson().toJson(counts, w);
         }
@@ -195,6 +200,8 @@ public class EvaluateCommand extends ParametersCommand {
         List<DMProtocol.Value> typeIIValues = new ArrayList<>();
         List<DMProtocol.Value> typeIIIValues = new ArrayList<>();
         List<DMProtocol.Value> typeIVValues = new ArrayList<>();
+        String time;
+        long timestamp;
         int missingCandidate = 0;        // no correction candidate (error type I)
         int badRank = 0;                 // good correction not on rank one (error type II)
         int missedOpportunity = 0;       // missed opportunity (error type III)
