@@ -22,26 +22,26 @@ import java.util.Optional;
 // │ └ lexicon-entry
 // │   └ false friends
 // └ suspicious
-//   ├ taken
-//   | ├ ocr correct
-//   | | ├ candidate correct [successful correction]
-//   | | └ candidate incorrect [infelicitous correction (type IV)]
-//   | |   ├ no correction candidate (type I)
-//   | |   └ correction candidate not on first rank (type II)
-//   | └ ocr incorrect
-//   |   ├ candidate correct [successful correction]
-//   |	  └ candidate incorrect [do not care correction]
-//   |     ├ no correction candidate (type I)
-//   |     └ correction candidate not on first rank (type II)
-//   └ not taken
+//   ├ replaced
+//   │ ├ ocr correct
+//   │ │ ├ candidate correct [successful correction]
+//   │ │ └ candidate incorrect [infelicitous correction (type IV)]
+//   │ │   ├ no correction candidate (type I)
+//   │ │   └ correction candidate not on first rank (type II)
+//   │ └ ocr incorrect
+//   │   ├ candidate correct [successful correction]
+//   │	  └ candidate incorrect [do not care correction]
+//   │     ├ no correction candidate (type I)
+//   │     └ correction candidate not on first rank (type II)
+//   └ not replaced
 //     ├ ocr correct
-//     | ├ candidate correct
-//     | └ candidate incorrect
-//     |   ├ no correction candidate (type I)
-//     |   └ correction candidate not on first rank (type II)
+//     │ ├ candidate correct
+//     │ └ candidate incorrect
+//     │   ├ no correction candidate (type I)
+//     │   └ correction candidate not on first rank (type II)
 //     └ ocr incorrect
 //       ├ candidate correct [missed opportunity (type III)]
-//       └ candidate incorrect
+//   	 └ candidate incorrect
 //         ├ no correction candidate (type I)
 //         └ correction candidate not on first rank (type II)
 public class EvaluateCommand extends ParametersCommand {
@@ -126,9 +126,9 @@ public class EvaluateCommand extends ParametersCommand {
     private void countSuspicious(DMProtocol.Value value) {
         counts.suspicious++;
         if (value.taken) {
-            countSuspiciousTaken(value);
+            countSuspiciousReplaced(value);
         } else {
-            countSuspiciousNotTaken(value);
+            countSuspiciousNotReplaced(value);
         }
         if (value.correctionIsCorrect()) {
             counts.availableGoodCorrections++;
@@ -138,8 +138,9 @@ public class EvaluateCommand extends ParametersCommand {
         }
     }
 
-    private void countSuspiciousTaken(DMProtocol.Value value) {
+    private void countSuspiciousReplaced(DMProtocol.Value value) {
         assert(value.taken);
+        counts.replaced++;
         if (value.ocrIsCorrect()) {
             if (!value.correctionIsCorrect()) {
                 Logger.debug(" * type IV error (infelicitous correction)");
@@ -174,7 +175,8 @@ public class EvaluateCommand extends ParametersCommand {
         }
     }
 
-    private void countSuspiciousNotTaken(DMProtocol.Value value) {
+    private void countSuspiciousNotReplaced(DMProtocol.Value value) {
+        counts.notReplaced++;
         assert (!value.taken);
         if (value.ocrIsCorrect()) {
             if (value.correctionIsCorrect()) {
@@ -248,6 +250,8 @@ public class EvaluateCommand extends ParametersCommand {
         int infelicitousCorrection = 0;   // infelicitous correction (error type IV)
         int correctBefore = 0;
         int correctAfter = 0;
+        int replaced = 0;                 // decision maker said yes
+        int notReplaced = 0;              // decision make said no
         int successfulCorrections = 0;    // a wrong OCR token was corrected with a correct correction
         int availableGoodCorrections = 0; // number
         int suspicious = 0;               // number of tokens where a correction was attempted
