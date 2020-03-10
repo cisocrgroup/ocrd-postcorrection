@@ -103,7 +103,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 				rankings.get(token).add(new Ranking(candidate, conf));
 			}
 		}
-		rankings.sort();
+		rankings.sortAllRankings();
 		return rankings;
 	}
 

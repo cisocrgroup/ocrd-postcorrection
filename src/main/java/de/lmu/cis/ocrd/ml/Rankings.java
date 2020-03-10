@@ -24,7 +24,7 @@ public class Rankings extends HashMap<OCRToken, List<Ranking>> {
     }
 
     // sort all rankings in this map.
-    public void sort() {
+    public void sortAllRankings() {
         for (Entry<OCRToken, List<Ranking>> entry: this.entrySet()) {
             sort(entry.getValue());
         }
@@ -67,7 +67,7 @@ public class Rankings extends HashMap<OCRToken, List<Ranking>> {
                 rankings.put(token, rs);
             }
         }
-        rankings.sort();
+        rankings.sortAllRankings();
         return rankings;
     }
 }
