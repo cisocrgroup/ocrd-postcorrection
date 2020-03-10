@@ -37,8 +37,8 @@ public class TrainCommand extends ParametersCommand {
 				leTrainer.prepare(workspace.getNormalTokenReader(ifg, profile), i+1);
 				rrTrainer.prepare(workspace.getCandidateTokenReader(ifg, null), i+1);
 			}
-			leTrainer.train(parameters.getLETraining().getTraining(i+1), parameters.getLETraining().getModel(i+1));
-			rrTrainer.train(parameters.getRRTraining().getTraining(i+1), parameters.getRRTraining().getModel(i+1));
+			leTrainer.train(parameters.getLETraining().getTraining(i+1), parameters.getLETraining().getModel(i+1), isDebug());
+			rrTrainer.train(parameters.getRRTraining().getTraining(i+1), parameters.getRRTraining().getModel(i+1), isDebug());
 		}
 
 		// train decision maker
@@ -50,13 +50,9 @@ public class TrainCommand extends ParametersCommand {
 						workspace.getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
 						parameters.getRRTraining().getModel(i+1),
 						parameters.getRRTraining().getTraining(i+1));
-				for (OCRToken token: workspace.getRankedTokenReader(ifg, null, rankings).read()) {
-					Logger.debug("token = {}", token.toString());
-					Logger.debug("valid = {}", dmgtFeature.isValidForTraining(token));
-				}
 				dmTrainer.prepare(workspace.getRankedTokenReader(ifg, null, rankings), i+1, (dmgtFeature::isValidForTraining));
 			}
-			dmTrainer.train(parameters.getDMTraining().getTraining(i+1), parameters.getDMTraining().getModel(i+1));
+			dmTrainer.train(parameters.getDMTraining().getTraining(i+1), parameters.getDMTraining().getModel(i+1), isDebug());
 		}
 		writeModelZIP();
 	}

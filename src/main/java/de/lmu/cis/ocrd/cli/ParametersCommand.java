@@ -19,6 +19,7 @@ abstract class ParametersCommand implements Command {
     private final String name;
     protected Parameters parameters;
     protected Workspace workspace;
+    private boolean debug;
 
     ParametersCommand(String name) {
         this.name = name;
@@ -31,6 +32,7 @@ abstract class ParametersCommand implements Command {
             this.parameters.setNOCR(config.maybeGetNOCR().get());
         }
         this.workspace = makeWorkspace(config, this.parameters);
+        this.debug = "DEBUG".equalsIgnoreCase(config.getLogLevel());
         setupDirs();
     }
 
@@ -48,6 +50,10 @@ abstract class ParametersCommand implements Command {
         if (parameters.getCacheDir().toFile().mkdirs()) {
             Logger.debug("created dir {}", parameters.getCacheDir().toString());
         }
+    }
+
+    boolean isDebug() {
+        return debug;
     }
 
     Profile getProfile(String ifg, AdditionalLexicon alex, int n) throws Exception {

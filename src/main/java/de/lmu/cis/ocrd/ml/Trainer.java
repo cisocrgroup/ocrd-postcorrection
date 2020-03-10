@@ -73,10 +73,10 @@ public class Trainer {
         });
     }
 
-    public void train(Path arff, Path bin) throws Exception {
+    public void train(Path arff, Path bin, boolean debug) throws Exception {
         Logger.info("train({}, {})", arff, bin);
         closeARFFWriter();
-        LogisticClassifier classifier = LogisticClassifier.train(arff);
+        LogisticClassifier classifier = LogisticClassifier.train(arff, debug);
         classifier.save(bin);
     }
 }

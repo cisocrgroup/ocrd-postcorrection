@@ -2,12 +2,16 @@ package de.lmu.cis.ocrd.ml;
 
 import de.lmu.cis.ocrd.ml.features.BinaryPrediction;
 import de.lmu.cis.ocrd.profile.Candidate;
+import org.pmw.tinylog.Logger;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Rankings extends HashMap<OCRToken, List<Ranking>> {
@@ -35,14 +39,17 @@ public class Rankings extends HashMap<OCRToken, List<Ranking>> {
         final Instances instances = new ConverterUtils.DataSource(rrTrain.toString()).getDataSet();
         instances.setClassIndex(instances.numAttributes() - 1);
 
+        int i = 0;
         final Iterator<Instance> iis = instances.iterator();
         // final Iterator<OCRToken> tis = TokenFilter.filter(tokenReader.read()).collect(Collectors.toList()).iterator();
         final Rankings rankings = new Rankings();
-        for (OCRToken token: TokenFilter.filter(tokenReader.read()).collect(Collectors.toList())) {
+        for (OCRToken token: TokenFilter.filter(tokenReader.read(), (t)->t.getGT().isPresent()).collect(Collectors.toList())) {
             // calculate a ranking for each of the token's candidates and put it into the map
             List<Ranking> rs = null;
             for (Candidate candidate: token.getCandidates()) {
+                i++;
                 if (!iis.hasNext()) {
+                    Logger.debug("i = {}", i);
                     throw new Exception("tokens and instances out of sync");
                 }
                 final Instance instance = iis.next();
