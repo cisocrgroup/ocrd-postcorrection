@@ -26,7 +26,7 @@ public class MinCharNGramsFeature extends NamedCharacterNGramFeature {
 		return getMinCharNGram(getWord(token, i, n).toString());
 	}
 
-	protected double getMinCharNGram(String str) {
+	double getMinCharNGram(String str) {
 		final double[] values = getNgrams().getRelativeNGrams(str, 3);
 		if (values == null || values.length == 0) {
 			return 0;

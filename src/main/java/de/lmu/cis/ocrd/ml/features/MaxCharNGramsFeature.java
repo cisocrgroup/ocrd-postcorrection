@@ -26,7 +26,7 @@ public class MaxCharNGramsFeature extends NamedCharacterNGramFeature {
 		return getMaxCharNGram(getWord(token, i, n).toString());
 	}
 
-	protected double getMaxCharNGram(String str) {
+	double getMaxCharNGram(String str) {
 		final double[] values = getNgrams().getRelativeNGrams(str, 3);
 		if (values == null || values.length == 0) {
 			return 0;

@@ -23,7 +23,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 	private final Instances structure;
 	private final Map<Integer, Instance> instances = new HashMap<>();
 
-	public static LogisticClassifier train(Path path) throws Exception {
+	static LogisticClassifier train(Path path, boolean debug) throws Exception {
 		Logger.debug("training logistic classifier from file {}", path);
 		final ConverterUtils.DataSource ds =
 				new ConverterUtils.DataSource(path.toString());
@@ -34,7 +34,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		structure.setClassIndex(structure.numAttributes() - 1);
 		final AbstractClassifier sl = new Logistic();
 		//final AbstractClassifier sl = new SimpleLogistic();
-		sl.setDebug(true);
+		sl.setDebug(debug);
 //		for (int i = 0; i < train.numAttributes(); i++) {
 //			Logger.debug("train.attribute({}).numValues() = {}", i, train.attribute(i).numValues());
 //			Logger.debug("attribute: {}", train.attribute(i).toString());
@@ -44,7 +44,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		return new LogisticClassifier(ds.getStructure(), sl);
 	}
 
-	public static LogisticClassifier load(InputStream is) throws Exception {
+	static LogisticClassifier load(InputStream is) throws Exception {
 		try (ObjectInputStream ois = new ObjectInputStream(is)) {
 			final LogisticClassifier c =  (LogisticClassifier) ois.readObject();
 			c.structure.setClassIndex(c.structure.numAttributes()-1);
@@ -52,7 +52,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		}
 	}
 
-	public static LogisticClassifier load(Path path) throws Exception {
+	static LogisticClassifier load(Path path) throws Exception {
 		Logger.debug("loading logistic classifier from file {}", path);
 		try (InputStream is = new FileInputStream(path.toFile())) {
 			return load(is);
@@ -99,7 +99,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 		return new Prediction(res, xy, instance.classAttribute().value((int) res));
 	}
 
-	public void save(Path path) throws Exception {
+	void save(Path path) throws Exception {
 		Logger.debug("saving logistic classifier to {}", path);
 		try (ObjectOutputStream oot =
 				     new ObjectOutputStream(new FileOutputStream(path.toFile()))) {

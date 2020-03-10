@@ -16,7 +16,6 @@ public class Prediction implements BinaryPrediction {
 		this.label = label;
 	}
 
-
 	@Override
 	public boolean getPrediction() {
 		return value == 0; // 0 is true class, 1 is false class
@@ -29,7 +28,7 @@ public class Prediction implements BinaryPrediction {
 	}
 
 	public double getValue() {
-		return (double) value;
+		return value;
 	}
 
 	@Override
