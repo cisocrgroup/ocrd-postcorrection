@@ -65,4 +65,12 @@ public class CandidateOCRPatternConfidenceFeatureTest {
         final Object res = feature.calculate(new CandidateOCRToken(baseOCRToken, candidate), 0, 2);
         assertThat(res, is(.1*.1*((.9+.9)/2)));
     }
+
+    @Test
+    public void testInsertionConfidence() {
+        // nota,ocr:[(:o:0),(t:g:2)]
+        final Candidate candidate = candidates.get(20); // onoga -- "":o:0,t:g:2 -> nota
+        final Object res = feature.calculate(new CandidateOCRToken(baseOCRToken, candidate), 0, 2);
+        assertThat(res, is(.1 * .9));
+    }
 }
