@@ -15,10 +15,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Rankings extends HashMap<OCRToken, List<Ranking>> {
+    // compare rankings; use the ranking weight and the candidate weight as fallback
+    private static int compare(Ranking lhs, Ranking rhs) {
+        if (lhs.getRanking() == rhs.getRanking()) {
+            return Double.compare(lhs.getCandidate().Weight, rhs.getCandidate().Weight);
+        }
+        return Double.compare(lhs.getRanking(), rhs.getRanking());
+    }
+
     // sort the rankings in descending order from highest rank to lowest rank.
     private void sort(List<Ranking> rs) {
         assert(!rs.isEmpty());
-        rs.sort((lhs, rhs)-> Double.compare(rhs.getRanking(), lhs.getRanking()));
+        rs.sort((lhs, rhs)-> compare(rhs, lhs));
         double before = rs.get(0).getRanking();
         // ensure descending order of the list
         for (int i = 1; i < rs.size(); i++) {
