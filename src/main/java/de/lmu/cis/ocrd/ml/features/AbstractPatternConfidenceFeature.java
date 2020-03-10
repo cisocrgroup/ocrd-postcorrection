@@ -34,13 +34,17 @@ abstract class AbstractPatternConfidenceFeature extends NamedDoubleFeature {
     // Use the product of the substituted characters.
     private static double calculateConfidenceForSubstitution(OCRWord word, PosPattern pattern) {
         double ret = 1;
-        final int[] cp = pattern.Right.codePoints().toArray();
-        for (int i = 0; i < cp.length; i++) {
-            ret *= word.getCharacterConfidenceAt(pattern.Pos + i);
+        final int[] right = pattern.Right.codePoints().toArray();
+        final int[] ocrToken = word.getWordNormalized().codePoints().toArray();
+        final int pos = pattern.getAdjustedPosition(ocrToken);
+        if (pos == -1) {
+            return ret;
+        }
+        for (int i = 0; i < right.length && pos + i < ocrToken.length; i++) {
+            ret *= word.getCharacterConfidenceAt(pos + i);
         }
         return ret;
     }
-
 
     // There are three possible positions for deletions (Right=""):
     // at 0:           use confidence for character at pos=0
@@ -50,19 +54,16 @@ abstract class AbstractPatternConfidenceFeature extends NamedDoubleFeature {
         if (pattern.Pos == 0) {
             return word.getCharacterConfidenceAt(0);
         }
-        final int[] cp = word.getWordNormalized().codePoints().toArray();
-        if (pattern.Pos+1 < cp.length) {
+        final int[] ocrToken = word.getWordNormalized().codePoints().toArray();
+
+        if (pattern.Pos + 1 < ocrToken.length) {
             return (word.getCharacterConfidenceAt(pattern.Pos) + word.getCharacterConfidenceAt(pattern.Pos + 1)) / 2.0;
         }
-        return word.getCharacterConfidenceAt(cp.length-1);
+        return word.getCharacterConfidenceAt(ocrToken.length-1);
     }
 
     // Use the product of the inserted characters.
     private static double calculateConfidenceForInsertion(OCRWord word, PosPattern pattern) {
-        double ret = 1;
-        for (int i = 0; i < pattern.Right.codePointCount(0, pattern.Right.length()); i++) {
-            ret *= word.getCharacterConfidenceAt(i + pattern.Pos);
-        }
-        return ret;
+        return calculateConfidenceForSubstitution(word, pattern);
     }
 }

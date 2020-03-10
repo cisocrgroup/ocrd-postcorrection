@@ -1,9 +1,6 @@
 package de.lmu.cis.ocrd.cli;
 
-import de.lmu.cis.ocrd.ml.LM;
-import de.lmu.cis.ocrd.ml.ModelZIP;
-import de.lmu.cis.ocrd.ml.Rankings;
-import de.lmu.cis.ocrd.ml.Trainer;
+import de.lmu.cis.ocrd.ml.*;
 import de.lmu.cis.ocrd.ml.features.*;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
@@ -53,6 +50,10 @@ public class TrainCommand extends ParametersCommand {
 						workspace.getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
 						parameters.getRRTraining().getModel(i+1),
 						parameters.getRRTraining().getTraining(i+1));
+				for (OCRToken token: workspace.getRankedTokenReader(ifg, null, rankings).read()) {
+					Logger.debug("token = {}", token.toString());
+					Logger.debug("valid = {}", dmgtFeature.isValidForTraining(token));
+				}
 				dmTrainer.prepare(workspace.getRankedTokenReader(ifg, null, rankings), i+1, (dmgtFeature::isValidForTraining));
 			}
 			dmTrainer.train(parameters.getDMTraining().getTraining(i+1), parameters.getDMTraining().getModel(i+1));
@@ -110,8 +111,8 @@ public class TrainCommand extends ParametersCommand {
 
 	private Trainer openDMTrainer(int n) throws Exception {
 		dmgtFeature = parameters.isCourageous() ?
-				new DMGTFeature("dm-gt"):
-				new CourageousDMGTFeature("courageous-dm-gt");
+				new CourageousDMGTFeature("courageous-dm-gt"):
+				new DMGTFeature("dm-gt");
 		final Trainer trainer = new Trainer()
 				.withLanguageModel(lm)
 				.withDebug(debug)

@@ -53,14 +53,14 @@ public class CandidateOCRPatternConfidenceFeatureTest {
     }
 
     @Test
-    public void testInsertionConfidence() {
+    public void testDeletionConfidence() {
         final Candidate candidate = candidates.get(candidates.size() - 3); // onoga -- m:"":0,m:"":6 -> monogam
         final Object res = feature.calculate(new CandidateOCRToken(baseOCRToken, candidate), 0, 2);
         assertThat(res, is(.1*.9));
     }
 
     @Test
-    public void testInsertionInMiddleConfidence() {
+    public void testDeletionInMiddleConfidence() {
         final Candidate candidate = candidates.get(candidates.size() - 19); // onoga -- l:on:0,n:"":2 -> longa
         final Object res = feature.calculate(new CandidateOCRToken(baseOCRToken, candidate), 0, 2);
         assertThat(res, is(.1*.1*((.9+.9)/2)));

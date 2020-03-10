@@ -133,7 +133,7 @@ public class EvaluateCommand extends ParametersCommand {
         if (value.correctionIsCorrect()) {
             counts.availableGoodCorrections++;
         }
-        if ((value.taken && value.correctionIsCorrect()) || (value.ocrIsCorrect())) {
+        if ((value.taken && value.correctionIsCorrect()) || (!value.taken && value.ocrIsCorrect())) {
             counts.correctAfter++;
         }
     }
@@ -179,9 +179,7 @@ public class EvaluateCommand extends ParametersCommand {
         counts.notReplaced++;
         assert (!value.taken);
         if (value.ocrIsCorrect()) {
-            if (value.correctionIsCorrect()) {
-                counts.successfulCorrections++;
-            } else {
+            if (!value.correctionIsCorrect()) {
                 if (value.getCorrectCandidateIndex() == -1) {
                     Logger.debug(" * type I error (missing candidate)");
                     counts.typeIValues.add(value);

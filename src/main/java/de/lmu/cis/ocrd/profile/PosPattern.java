@@ -31,12 +31,25 @@ public class PosPattern {
 		return Left.isEmpty();
 	}
 
-	// getAdjustment returns the positional adjustment for all patterns after this one.
-	// E.g. ab:c -> -1, c:ab -> +1, ab:cd -> 0
-	int getAdjustment() {
-		final int l = Left.codePointCount(0, Left.length());
-		final int r = Right.codePointCount(0, Right.length());
-		return r - l;
+	// adjusts the position to a fitting position in the given ocr token.
+	// return -1 if the right pattern cannot be matched onto the ocr token.
+	public int getAdjustedPosition(int[] ocrToken) {
+		final int min = Pos >= 2 ? Pos-2 : 0;
+		final int max = Math.min(Pos + 2, ocrToken.length);
+		final int[] right = Right.codePoints().toArray();
+		for (int i = min; i < max; i++) {
+			boolean match = true;
+			for (int j = 0; j < right.length && (i+j) < ocrToken.length; j++) {
+				if (ocrToken[j+i] != right[j]) {
+					match = false;
+					break;
+				}
+			}
+			if (match) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	@Override

@@ -9,18 +9,20 @@ abstract class AbstractHistoricalPatternConfidenceFeature extends AbstractConfid
 	}
 
 	double[] getPatternConfidence(OCRWord word, PosPattern pattern) {
-		final int[] cps = pattern.Right.codePoints().toArray();
-		if (cps.length == 0) {
+		final int[] ocrToken = word.getWordNormalized().codePoints().toArray();
+		final int pos = pattern.getAdjustedPosition(ocrToken);
+		final int[] right = pattern.Right.codePoints().toArray();
+		if (pos == -1 || right.length == 0) {
 			return new double[]{0};
 		}
-		return doGetPatternConfidence(word, pattern.Pos, cps);
+		return doGetPatternConfidence(word, pos, right);
 	}
 
-	private double[] doGetPatternConfidence(OCRWord word, int pos, int[] cps) {
-		final double[] values = new double[cps.length];
-		for (int i = 0; i < cps.length; i++) {
+	private double[] doGetPatternConfidence(OCRWord word, int pos, int[] right) {
+		final double[] values = new double[right.length];
+		for (int i = 0; i < right.length; i++) {
 			values[i] = word.getCharacterConfidenceAt(i + pos);
 		}
-		return values.length == 0 ? new double[]{0.0} : values;
+		return values;
 	}
 }

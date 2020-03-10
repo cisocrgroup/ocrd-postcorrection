@@ -48,6 +48,7 @@ public class Trainer {
     }
 
     public void prepare(OCRTokenReader tokenReader, int n, TokenFilter.Func func) throws Exception {
+        Logger.debug("preparing {}", arffWriter.getRelation());
         final List<OCRToken> tokens = tokenReader.read();
         lm.setTokens(tokens);
         TokenFilter.filter(tokens, (t)-> func.apply(t) && t.getGT().isPresent()).forEach(token->{
@@ -60,6 +61,7 @@ public class Trainer {
     }
 
     public void prepare(OCRTokenReader tokenReader, int n) throws Exception {
+        Logger.debug("preparing {}", arffWriter.getRelation());
         final List<OCRToken> tokens = tokenReader.read();
         lm.setTokens(tokens);
         TokenFilter.filter(tokens, (t)-> t.getGT().isPresent()).forEach(token->{

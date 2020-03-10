@@ -54,8 +54,7 @@ public class Profile extends HashMap<String, Candidates> {
 		}
 		return new Profile(toLowerCase(data))
 				.removeEmptyCandidates()
-				.sortCandidatesByVoteWeight()
-				.adjustCandidatePostPatterns();
+				.sortCandidatesByVoteWeight();
 	}
 
 	private static HashMap<String, Candidates> toLowerCase(HashMap<String, Candidates> map) {
@@ -66,15 +65,6 @@ public class Profile extends HashMap<String, Candidates> {
 			newMap.put(lower, cLower);
 		}
 		return newMap;
-	}
-
-	private Profile adjustCandidatePostPatterns() {
-		for (Map.Entry<String, Candidates> e: this.entrySet()) {
-			for (Candidate candidate: e.getValue().Candidates) {
-				candidate.adjustOCRPosPatterns();
-			}
-		}
-		return this;
 	}
 
 	private Profile removeEmptyCandidates() {
