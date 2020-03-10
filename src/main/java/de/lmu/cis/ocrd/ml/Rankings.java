@@ -36,15 +36,16 @@ public class Rankings extends HashMap<OCRToken, List<Ranking>> {
         instances.setClassIndex(instances.numAttributes() - 1);
 
         final Iterator<Instance> iis = instances.iterator();
-        final Iterator<OCRToken> tis = TokenFilter.filter(tokenReader.read()).collect(Collectors.toList()).iterator();
+        // final Iterator<OCRToken> tis = TokenFilter.filter(tokenReader.read()).collect(Collectors.toList()).iterator();
         final Rankings rankings = new Rankings();
-        while (iis.hasNext() && tis.hasNext()) {
-            final Instance instance = iis.next();
-            final OCRToken token = tis.next();
-
+        for (OCRToken token: TokenFilter.filter(tokenReader.read()).collect(Collectors.toList())) {
             // calculate a ranking for each of the token's candidates and put it into the map
             List<Ranking> rs = null;
             for (Candidate candidate: token.getCandidates()) {
+                if (!iis.hasNext()) {
+                    throw new Exception("tokens and instances out of sync");
+                }
+                final Instance instance = iis.next();
                 final BinaryPrediction p = classifier.predict(instance);
                 final boolean t = p.getPrediction();
                 final double ranking = t ? p.getConfidence() : -p.getConfidence();
