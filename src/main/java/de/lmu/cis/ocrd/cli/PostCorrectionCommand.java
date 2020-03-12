@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.ml.*;
-import de.lmu.cis.ocrd.ml.features.FeatureFactory;
 import de.lmu.cis.ocrd.profile.*;
 import org.pmw.tinylog.Logger;
 
@@ -130,12 +129,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 					.withLanguageModel(lm)
 					.withTokens(workspace.getNormalTokenReader(ifg, profile))
 					.withOpenClassifier(is)
-					.withFeatureSet(
-							FeatureFactory
-									.getDefault()
-									.withArgumentFactory(lm)
-									.createFeatureSet(model.getLEFeatureSet(), parameters.getFilterClasses())
-					);
+					.withFeatureSet(model.getLEFeatures(lm));
 		}
 	}
 
@@ -145,12 +139,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 					.withLanguageModel(lm)
 					.withTokens(workspace.getNormalTokenReader(ifg, profile))
 					.withOpenClassifier(is)
-					.withFeatureSet(
-							FeatureFactory
-									.getDefault()
-									.withArgumentFactory(lm)
-									.createFeatureSet(model.getRRFeatureSet(), parameters.getFilterClasses())
-					);
+					.withFeatureSet(model.getRRFeatures(lm));
 		}
 	}
 
@@ -160,12 +149,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 					.withLanguageModel(lm)
 					.withTokens(workspace.getNormalTokenReader(ifg, profile))
 					.withOpenClassifier(is)
-					.withFeatureSet(
-							FeatureFactory
-									.getDefault()
-									.withArgumentFactory(lm)
-									.createFeatureSet(model.getDMFeatureSet(), parameters.getFilterClasses())
-					);
+					.withFeatureSet(model.getDMFeatures(lm));
 		}
 	}
 

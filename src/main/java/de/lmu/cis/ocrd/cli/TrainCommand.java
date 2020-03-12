@@ -64,6 +64,7 @@ public class TrainCommand extends ParametersCommand {
 			model.addRRModel(parameters.getRRTraining().getModel(i+1), i);
 			model.addDMModel(parameters.getDMTraining().getModel(i+1), i);
 		}
+		model.setFilterClasses(parameters.getFilterClasses());
 		model.setLEFeatureSet(parameters.getLETraining().getFeatures());
 		model.setRRFeatureSet(parameters.getRRTraining().getFeatures());
 		model.setDMFeatureSet(parameters.getDMTraining().getFeatures());
@@ -81,7 +82,7 @@ public class TrainCommand extends ParametersCommand {
 						FeatureFactory
 								.getDefault()
 								.withArgumentFactory(lm)
-								.createFeatureSet(parameters.getLETraining().getFeatures(), parameters.getFilterClasses())
+								.createFeatureSet(parameters.getLETraining().getFeatures(), parameters.getClassFilter())
 								.add(new DynamicLexiconGTFeature())
 				);
 		// trainer.train() closes the writer
@@ -97,7 +98,7 @@ public class TrainCommand extends ParametersCommand {
 						FeatureFactory
 								.getDefault()
 								.withArgumentFactory(lm)
-								.createFeatureSet(parameters.getRRTraining().getFeatures(), parameters.getFilterClasses())
+								.createFeatureSet(parameters.getRRTraining().getFeatures(), parameters.getClassFilter())
 								.add(new ReRankingGTFeature())
 				);
 		// trainer.train() closes the writer
@@ -116,7 +117,7 @@ public class TrainCommand extends ParametersCommand {
 						FeatureFactory
 								.getDefault()
 								.withArgumentFactory(lm)
-								.createFeatureSet(parameters.getDMTraining().getFeatures(), parameters.getFilterClasses())
+								.createFeatureSet(parameters.getDMTraining().getFeatures(), parameters.getClassFilter())
 								.add(dmgtFeature)
 				);
         // trainer.train() closes the writer

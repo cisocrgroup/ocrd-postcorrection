@@ -2,6 +2,9 @@ package de.lmu.cis.ocrd.ml;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import de.lmu.cis.ocrd.ml.features.FeatureClassFilter;
+import de.lmu.cis.ocrd.ml.features.FeatureFactory;
+import de.lmu.cis.ocrd.ml.features.FeatureSet;
 
 import java.io.*;
 import java.net.URI;
@@ -58,6 +61,18 @@ public class ModelZIP implements Closeable {
         return config.dmFeatureSet;
     }
 
+    public FeatureSet getLEFeatures(LM lm) throws Exception {
+        return FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(getLEFeatureSet(), new FeatureClassFilter(config.filterClasses));
+    }
+
+    public FeatureSet getRRFeatures(LM lm) throws Exception {
+        return FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(getRRFeatureSet(), new FeatureClassFilter(config.filterClasses));
+    }
+
+    public FeatureSet getDMFeatures(LM lm) throws Exception {
+        return FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(getDMFeatureSet(), new FeatureClassFilter(config.filterClasses));
+    }
+
     public void addLEModel(Path path, int i) {
         addModel(initConfig().leModels, path, i);
     }
@@ -69,6 +84,10 @@ public class ModelZIP implements Closeable {
     public void addDMModel(Path path, int i) {
         addModel(initConfig().dmModels, path, i);
     }
+
+    public void setFilterClasses(List<String> filterClasses) {initConfig().filterClasses = filterClasses;}
+
+    public List<String> getFilterClasses() {return config.filterClasses;}
 
     public void setLEFeatureSet(List<JsonObject> set) {
         initConfig().leFeatureSet = set;
@@ -165,6 +184,7 @@ public class ModelZIP implements Closeable {
         List<String> leModels = new ArrayList<>();
         List<String> rrModels = new ArrayList<>();
         List<String> dmModels = new ArrayList<>();
+        List<String> filterClasses = new ArrayList<>();
         List<JsonObject> leFeatureSet = new ArrayList<>();
         List<JsonObject> rrFeatureSet = new ArrayList<>();
         List<JsonObject> dmFeatureSet = new ArrayList<>();

@@ -54,8 +54,12 @@ public class Parameters {
         this.trigrams = trigrams;
     }
 
-    public FeatureClassFilter getFilterClasses() {
+    public FeatureClassFilter getClassFilter() {
         return new FeatureClassFilter(filterClasses);
+    }
+
+    public List<String> getFilterClasses() {
+        return filterClasses;
     }
 
     public void setFilterClasses(List<String> filterClasses) {

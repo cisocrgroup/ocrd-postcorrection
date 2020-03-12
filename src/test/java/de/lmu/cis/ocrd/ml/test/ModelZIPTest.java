@@ -50,6 +50,7 @@ public class ModelZIPTest {
         }
         created = System.currentTimeMillis();
         model.setCreated(created);
+        model.setFilterClasses(getFilterClasses());
         model.setLEFeatureSet(getLEFeatureSet());
         model.setRRFeatureSet(getRRFeatureSet());
         model.setDMFeatureSet(getDMFeatureSet());
@@ -94,6 +95,13 @@ public class ModelZIPTest {
     private List<JsonObject> getDMFeatureSet() {
         List<JsonObject> ret = new ArrayList<>();
         ret.add(new Gson().fromJson("{\"dmFeature\": \"dmFeatureValue\"}", JsonObject.class));
+        return ret;
+    }
+
+    private List<String> getFilterClasses() {
+        List<String> ret = new ArrayList<>();
+        ret.add("filterClassA");
+        ret.add("filterClassB");
         return ret;
     }
 
@@ -176,6 +184,13 @@ public class ModelZIPTest {
     public void testReadLanguageModel() throws Exception {
         final String want = readStringAndClose(new FileInputStream(new File("src/test/resources/nGrams.csv")));
         final String got = readStringAndClose(model.openLanguageModel());
+        assertThat(got, is(want));
+    }
+
+    @Test
+    public void testGetFilterClasses() {
+        final String want = new Gson().toJson(getFilterClasses());
+        final String got = new Gson().toJson(model.getFilterClasses());
         assertThat(got, is(want));
     }
 

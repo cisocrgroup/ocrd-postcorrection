@@ -30,7 +30,7 @@ class ARFFCommand extends ParametersCommand {
             case LE:
                 trainer.withFeatureSet(
                         FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(
-                                parameters.getLETraining().getFeatures(), parameters.getFilterClasses()));
+                                parameters.getLETraining().getFeatures(), parameters.getClassFilter()));
                 trainer.openARFFWriter(new OutputStreamWriter(System.out), trainingType.toString(), parameters.getNOCR());
                 for (String ifg: ifgs) {
                     profile = getProfile(ifg, new NoAdditionalLexicon(), nOCR);
@@ -41,7 +41,7 @@ class ARFFCommand extends ParametersCommand {
             case RR:
                 trainer.withFeatureSet(
                         FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(
-                                parameters.getRRTraining().getFeatures(), parameters.getFilterClasses()));
+                                parameters.getRRTraining().getFeatures(), parameters.getClassFilter()));
                 trainer.openARFFWriter(new OutputStreamWriter(System.out), trainingType.toString(), parameters.getNOCR());
                 for (String ifg: ifgs) {
                     profile = getProfile(ifg, getAdditionalLexicon(), nOCR);
@@ -52,7 +52,7 @@ class ARFFCommand extends ParametersCommand {
             case DM:
                 trainer.withFeatureSet(
                         FeatureFactory.getDefault().withArgumentFactory(lm).createFeatureSet(
-                                parameters.getDMTraining().getFeatures(), parameters.getFilterClasses()));
+                                parameters.getDMTraining().getFeatures(), parameters.getClassFilter()));
                 trainer.openARFFWriter(new OutputStreamWriter(System.out), trainingType.toString(), parameters.getNOCR());
                 for (String ifg: ifgs) {
                     profile = getProfile(ifg, getAdditionalLexicon(), nOCR);
