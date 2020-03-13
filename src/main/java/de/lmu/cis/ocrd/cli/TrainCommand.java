@@ -69,6 +69,9 @@ public class TrainCommand extends ParametersCommand {
 		model.setRRFeatureSet(parameters.getRRTraining().getFeatures());
 		model.setDMFeatureSet(parameters.getDMTraining().getFeatures());
 		model.setLanguageModelPath(parameters.getTrigrams().toString());
+		model.setCourageous(parameters.isCourageous());
+		model.setNOCR(parameters.getNOCR());
+		model.setMaxCandidates(parameters.getMaxCandidates());
 		model.setCreated(System.currentTimeMillis());
 		Logger.debug("saving model to {}", parameters.getModel().toString());
 		model.save(parameters.getModel());

@@ -50,6 +50,9 @@ public class ModelZIPTest {
         }
         created = System.currentTimeMillis();
         model.setCreated(created);
+        model.setNOCR(13);
+        model.setMaxCandidates(10);
+        model.setCourageous(true);
         model.setFilterClasses(getFilterClasses());
         model.setLEFeatureSet(getLEFeatureSet());
         model.setRRFeatureSet(getRRFeatureSet());
@@ -192,6 +195,21 @@ public class ModelZIPTest {
         final String want = new Gson().toJson(getFilterClasses());
         final String got = new Gson().toJson(model.getFilterClasses());
         assertThat(got, is(want));
+    }
+
+    @Test
+    public void testGetNOCR() {
+        assertThat(model.getNOCR(), is(13));
+    }
+
+    @Test
+    public void testGetMaxCandidates() {
+        assertThat(model.getMaxCandidates(), is(10));
+    }
+
+    @Test
+    public void testIsCourageous() {
+        assertThat(model.isCourageous(), is(true));
     }
 
     @Test

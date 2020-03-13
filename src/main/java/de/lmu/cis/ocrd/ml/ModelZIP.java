@@ -128,7 +128,30 @@ public class ModelZIP implements Closeable {
         }
     }
 
-    @Override
+    public void setCourageous(boolean courageous) {
+        initConfig().courageous = courageous;
+    }
+
+    public boolean isCourageous() {
+        return config.courageous;
+    }
+
+    public void setNOCR(int nOCR) {
+        initConfig().nOCR = nOCR;
+    }
+
+    public int getNOCR() {
+        return config.nOCR;
+    }
+
+    public void setMaxCandidates(int maxCandidates) {
+        initConfig().maxCandidates = maxCandidates;
+    }
+
+    public int getMaxCandidates() {
+        return config.maxCandidates;
+    }
+                              @Override
     public void close() throws IOException {
         if (zipFile != null) {
             zipFile.close();
@@ -190,5 +213,8 @@ public class ModelZIP implements Closeable {
         List<JsonObject> dmFeatureSet = new ArrayList<>();
         String languageModelPath = "";
         long created = 0;
+        int nOCR = 0;
+        int maxCandidates = 0;
+        boolean courageous = false;
     }
 }
