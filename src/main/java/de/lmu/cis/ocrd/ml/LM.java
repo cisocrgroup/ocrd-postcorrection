@@ -73,11 +73,6 @@ public class LM implements ArgumentFactory {
 	}
 
 	@Override
-	public int getNumberOfOtherOCRs() {
-		return loadFreqMapsIfNotPresent().size() -1;
-	}
-
-	@Override
 	public FreqMap getCharacterTrigrams() throws Exception {
 		return loadTrigramsIfNotPresent();
 	}

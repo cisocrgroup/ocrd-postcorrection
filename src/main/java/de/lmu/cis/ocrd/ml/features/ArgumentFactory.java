@@ -5,6 +5,5 @@ import de.lmu.cis.ocrd.ml.FreqMap;
 public interface ArgumentFactory {
 	FreqMap getMasterOCRUnigrams() throws Exception;
 	FreqMap getSlaveOCRUnigrams(int i) throws Exception;
-	int getNumberOfOtherOCRs() throws Exception;
 	FreqMap getCharacterTrigrams() throws Exception;
 }

@@ -23,9 +23,4 @@ public class EmptyArgumentFactory implements ArgumentFactory {
 	public Profile getProfile() {
 		return Profile.empty();
 	}
-
-	@Override
-	public int getNumberOfOtherOCRs() {
-		return 0;
-	}
 }

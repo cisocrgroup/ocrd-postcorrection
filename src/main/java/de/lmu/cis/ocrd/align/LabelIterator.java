@@ -2,7 +2,6 @@ package de.lmu.cis.ocrd.align;
 
 import java.util.Iterator;
 
-// TODO: check if this is still needed
 public class LabelIterator implements Iterator<LabelPos> {
 
 	private LabelPos pos;
@@ -13,7 +12,7 @@ public class LabelIterator implements Iterator<LabelPos> {
 
 	@Override
 	public boolean equals(Object other) {
-		if (other == null || !(other instanceof LabelIterator)) {
+		if (!(other instanceof LabelIterator)) {
 			return false;
 		}
 		return pos.equals(((LabelIterator) other).pos);
