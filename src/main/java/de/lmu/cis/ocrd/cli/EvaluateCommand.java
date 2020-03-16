@@ -24,7 +24,7 @@ import java.util.Optional;
 // └ suspicious
 //   ├ replaced
 //   │ ├ ocr correct
-//   │ │ ├ candidate correct [successful correction]
+//   │ │ ├ candidate correct
 //   │ │ └ candidate incorrect [infelicitous correction (type IV)]
 //   │ │   ├ no correction candidate (type I)
 //   │ │   └ correction candidate not on first rank (type II)
@@ -130,8 +130,11 @@ public class EvaluateCommand extends ParametersCommand {
         } else {
             countSuspiciousNotReplaced(value);
         }
-        if (value.correctionIsCorrect()) {
-            counts.availableGoodCorrections++;
+        if (value.ocrIsCorrect() && !value.correctionIsCorrect()) {
+            counts.risks++;
+        }
+        if (!value.ocrIsCorrect() && value.correctionIsCorrect()) {
+            counts.chances++;
         }
         if ((value.taken && value.correctionIsCorrect()) || (!value.taken && value.ocrIsCorrect())) {
             counts.correctAfter++;
@@ -155,8 +158,6 @@ public class EvaluateCommand extends ParametersCommand {
                     counts.typeIIValues.add(value);
                     counts.badRank++;
                 }
-            } else {
-                counts.successfulCorrections++;
             }
         } else {
             if (value.correctionIsCorrect()) {
@@ -251,7 +252,8 @@ public class EvaluateCommand extends ParametersCommand {
         int replaced = 0;                 // decision maker said yes
         int notReplaced = 0;              // decision make said no
         int successfulCorrections = 0;    // a wrong OCR token was corrected with a correct correction
-        int availableGoodCorrections = 0; // number
+        int chances = 0;
+        int risks = 0;
         int suspicious = 0;               // number of tokens where a correction was attempted
         int skipped = 0;                  // no correction attempt because one of the three causes below
         int skippedTooShort = 0;          // no correction attempt because the token is too short

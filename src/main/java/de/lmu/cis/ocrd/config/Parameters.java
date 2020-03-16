@@ -20,6 +20,7 @@ public class Parameters {
     private List<String> ocropusOCRExtensions = new ArrayList<>();
     private int nOCR = 0;
     private int maxCandidates = 0;
+    private int maxTokens = 0;
     private boolean runLE = false;
     private boolean runDM = false;
     private boolean courageous = false;
@@ -52,6 +53,12 @@ public class Parameters {
 
     public void setTrigrams(String trigrams) {
         this.trigrams = trigrams;
+    }
+
+    public int getMaxTokens() {return maxTokens;}
+
+    public void setMaxTokens(int maxTokens) {
+        this.maxTokens = maxTokens;
     }
 
     public FeatureClassFilter getClassFilter() {

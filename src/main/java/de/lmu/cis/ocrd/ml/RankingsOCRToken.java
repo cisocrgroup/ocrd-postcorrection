@@ -23,7 +23,7 @@ public class RankingsOCRToken extends AbstractOCRToken {
 
     @Override
     public Optional<Candidate> getCandidate() {
-        return Optional.empty();
+        return Optional.of(rankings.get(0).getCandidate());//Optional.empty();
     }
 
     @Override

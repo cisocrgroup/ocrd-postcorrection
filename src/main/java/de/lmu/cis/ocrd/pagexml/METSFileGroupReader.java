@@ -59,6 +59,10 @@ class METSFileGroupReader {
                 final NodeList words = (NodeList) XPathHelper.CHILD_WORD.evaluate(nodes.item(i), XPathConstants.NODESET);
                 for (int j = 0; j < words.getLength(); j++) {
                     func.apply(id++, words.item(j), linesNormalized);
+                    // stop after max tokens
+                    if (parameters.getMaxTokens() > 0 && id > parameters.getMaxTokens()) {
+                        return;
+                    }
                 }
             }
         }
