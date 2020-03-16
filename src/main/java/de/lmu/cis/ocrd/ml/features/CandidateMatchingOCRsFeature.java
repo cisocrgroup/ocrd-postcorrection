@@ -24,11 +24,11 @@ public class CandidateMatchingOCRsFeature extends NamedDoubleFeature {
 	public double doCalculate(OCRToken token, int i, int n) {
 		int sum = 0;
 		final String suggestion = mustGetCandidate(token).Suggestion;
-		if (token.getMasterOCR().toString().equals(suggestion)) {
+		if (token.getMasterOCR().getWordNormalized().equalsIgnoreCase(suggestion)) {
 			sum += 1;
 		}
 		for (int j = 0; j < token.getNOCR()-1; j++) {
-			if (token.getSlaveOCR(j).toString().equalsIgnoreCase(suggestion)) {
+			if (token.getSlaveOCR(j).getWordNormalized().equalsIgnoreCase(suggestion)) {
 				sum += 1;
 			}
 		}
