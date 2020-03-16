@@ -11,7 +11,7 @@ public class EmptyArgumentFactory implements ArgumentFactory {
 	}
 
 	@Override
-	public FreqMap getOtherOCRUnigrams(int i) {
+	public FreqMap getSlaveOCRUnigrams(int i) {
 		return new FreqMap();
 	}
 

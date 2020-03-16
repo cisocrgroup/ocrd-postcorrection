@@ -35,7 +35,7 @@ public class UnigramFeature extends NamedDoubleFeature {
 			if (i == 0) {
 				return this.args.getMasterOCRUnigrams();
 			}
-			return this.args.getOtherOCRUnigrams(i - 1);
+			return this.args.getSlaveOCRUnigrams(i - 1);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

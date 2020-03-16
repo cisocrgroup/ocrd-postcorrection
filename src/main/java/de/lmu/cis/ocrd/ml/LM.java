@@ -28,9 +28,9 @@ public class LM implements ArgumentFactory {
 		this.trigramFreqMap = CharacterNGrams.readFromCSV(is, map);
 	}
 
-	private void loadFreqMapsIfNotPresent() {
+	private List<FreqMap> loadFreqMapsIfNotPresent() {
 		if (freqMaps != null) {
-			return;
+			return freqMaps;
 		}
 		freqMaps = new ArrayList<>();
 		if (tokens.size() > 0) {
@@ -44,15 +44,17 @@ public class LM implements ArgumentFactory {
 				freqMaps.get(1).add(token.getSlaveOCR(i - 1).getWordNormalized());
 			}
 		}
+		return freqMaps;
 	}
 
-	private void loadTrigramsIfNotPresent() throws Exception {
+	private FreqMap loadTrigramsIfNotPresent() throws Exception {
 		if (trigramFreqMap != null) {
-			return;
+			return trigramFreqMap;
 		}
 		// use a caching map
 		final FreqMap map = new CachingFreqMap();
 		trigramFreqMap = CharacterNGrams.addFromCSV(trigrams.toString(), map);
+		return trigramFreqMap;
 	}
 
 	public void setTokens(List<OCRToken> tokens) {
@@ -62,25 +64,21 @@ public class LM implements ArgumentFactory {
 
 	@Override
 	public FreqMap getMasterOCRUnigrams() {
-		loadFreqMapsIfNotPresent();
-		return freqMaps.get(0);
+		return loadFreqMapsIfNotPresent().get(0);
 	}
 
 	@Override
-	public FreqMap getOtherOCRUnigrams(int i) {
-		loadFreqMapsIfNotPresent();
-		return freqMaps.get(i + 1);
+	public FreqMap getSlaveOCRUnigrams(int i) {
+		return loadFreqMapsIfNotPresent().get(i + 1);
 	}
 
 	@Override
 	public int getNumberOfOtherOCRs() {
-		loadFreqMapsIfNotPresent();
-		return freqMaps.size() - 1;
+		return loadFreqMapsIfNotPresent().size() -1;
 	}
 
 	@Override
 	public FreqMap getCharacterTrigrams() throws Exception {
-		loadTrigramsIfNotPresent();
-		return trigramFreqMap;
+		return loadTrigramsIfNotPresent();
 	}
 }
