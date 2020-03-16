@@ -14,8 +14,9 @@ public class PostCorrectionCommand extends ParametersCommand {
 	private ModelZIP model;
 	private Profile profile;
 
+	PostCorrectionCommand(String name) {super(name);}
 	public PostCorrectionCommand() {
-		super("post-correct");
+		this("post-correct");
 	}
 
 	@Override
@@ -23,7 +24,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 		init(config);
 		config.setCommand(this); // logging
 		// output file group
-		String ofg = config.mustGetSingleOutputFileGroup();
+		final String ofg = config.maybeGetSingleOutputFileGroup(); // can be null
 		this.model = ModelZIP.open(parameters.getModel());
 		try (InputStream is = model.openLanguageModel()) {
 			this.lm = new LM(is);
@@ -31,14 +32,22 @@ public class PostCorrectionCommand extends ParametersCommand {
 
 		final String ifg = config.mustGetSingleInputFileGroup();
 		if (config.isIterate()) {
-			final boolean[] runLE = new boolean[]{false, true};
-			for (boolean b : runLE) {
-				for (int n = 0; n < parameters.getNOCR(); n++) {
-					postCorrect(ifg, ofg, n + 1, b);
-				}
-			}
+			iterate((nOCR, runLE)->postCorrect(ifg, ofg, nOCR, runLE));
 		} else {
 			postCorrect(ifg, ofg, parameters.getNOCR(), parameters.isRunLE());
+		}
+	}
+
+	interface Func {
+		void apply(int nOCR, boolean runLE) throws Exception;
+	}
+
+	void iterate(Func f) throws Exception {
+		final boolean[] runLE = new boolean[]{false, true};
+		for (boolean b: runLE) {
+			for (int n = 0; n < parameters.getNOCR(); n++) {
+				f.apply(n+1, b);
+			}
 		}
 	}
 
@@ -49,9 +58,11 @@ public class PostCorrectionCommand extends ParametersCommand {
 			alex = predictLexiconExtensions(ifg, nOCR);
 		}
 		if (parameters.isRunDM()) {
-			decide(predictRankings(alex, ifg, nOCR), ifg, nOCR, runLE);
+			decide(predictRankings(alex, ifg, nOCR), ifg, nOCR, runLE, ofg != null);
 		}
-		workspace.write(ifg, ofg);
+		if (ofg != null) {
+			workspace.write(ifg, ofg);
+		}
 	}
 
 	private AdditionalLexicon predictLexiconExtensions(String ifg, int nOCR) throws Exception {
@@ -106,7 +117,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 		return rankings;
 	}
 
-	private void decide(Rankings rankings, String ifg, int nOCR, boolean runLE) throws Exception {
+	private void decide(Rankings rankings, String ifg, int nOCR, boolean runLE, boolean doCorrect) throws Exception {
 		Logger.debug("decide({}, {}, {})", ifg, nOCR, runLE);
 		// no profile
 		final Predictor predictor = getDMPredictor(ifg, nOCR);
@@ -116,7 +127,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 			final boolean take = result.getPrediction().getPrediction();
 			final Ranking topRanking = rankings.get(token).get(0);
 			protocol.protocol(token, topRanking.getCandidate().Suggestion, topRanking.getRanking(), take);
-			if (take) {
+			if (take && doCorrect) {
 				token.correct(topRanking.getCandidate().Suggestion, topRanking.getRanking());
 			}
 		}

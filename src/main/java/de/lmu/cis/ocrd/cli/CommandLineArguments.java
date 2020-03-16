@@ -258,6 +258,13 @@ public class CommandLineArguments {
         return outputFileGroups[0];
     }
 
+    String maybeGetSingleOutputFileGroup() {
+        if (outputFilegrp == null || outputFilegrp.length != 1) {
+            return null;
+        }
+        return outputFilegrp[0];
+    }
+
     private static boolean isMissing(String str) {
         return str == null || "".equals(str);
     }

@@ -44,7 +44,7 @@ import java.util.Optional;
 //   	 └ candidate incorrect
 //         ├ no correction candidate (type I)
 //         └ correction candidate not on first rank (type II)
-public class EvaluateCommand extends ParametersCommand {
+public class EvaluateCommand extends PostCorrectionCommand {
     private Counts counts;
     private DMProtocol protocol;
     private Profile profile;
@@ -55,17 +55,13 @@ public class EvaluateCommand extends ParametersCommand {
 
     @Override
     public void execute(CommandLineArguments config) throws Exception {
-        init(config);
-        config.setCommand(this); // logging
+        super.execute(config); // run post correction
+        config.setCommand(this); // reset log name
+        final String[] ifgs = config.mustGetInputFileGroups();
         if (config.isIterate()) {
-            final boolean[] runLE = new boolean[]{false, true};
-            for (boolean b : runLE) {
-                for (int n = 0; n < parameters.getNOCR(); n++) {
-                    evaluate(config.mustGetInputFileGroups(), n + 1, b);
-                }
-            }
+            iterate((nOCR, runLE)->evaluate(ifgs, nOCR, runLE));
         } else {
-            evaluate(config.mustGetInputFileGroups(), parameters.getNOCR(), parameters.isRunLE());
+            evaluate(ifgs, parameters.getNOCR(), parameters.isRunLE());
         }
     }
 
