@@ -121,43 +121,46 @@ public class TSV {
 
     private int mustGetIndexOf(String needle, int offset) throws Exception {
         final String str = toString();
+        final int len = needle.length();
         int pos = str.indexOf(needle, offset);
+        if (pos >= 0 && ((pos-(offset+len)) <= 2*len)) {
+            return pos;
+        }
+        int start = offset - len;
+        if (start < 0) {
+            start = 0;
+        }
+        pos = str.indexOf(needle, start);
         if (pos >= 0) {
             return pos;
         }
-        if (offset >= needle.length()) {
-            pos = str.indexOf(needle, offset-needle.length());
-            if (pos >= 0) {
-                return pos;
-            }
-        }
+
         // We have some problem with the alignment.
         // We search around the offset position for the best match using levenshtein distance.
-        LevenshteinDistance lev = new LevenshteinDistance(Math.min(3, needle.length() / 2));
-        final int from = offset >= 2 ? offset-2 : 0;
-        final int to = offset + needle.length() + 2;
+        LevenshteinDistance lev = new LevenshteinDistance(Math.min(3, len / 2));
+        final int from = offset >= len ? offset-len : 0;
+        final int to = Math.min(offset + len, str.length());
         int argMin = -1;
-        int min = needle.length();
-        for (int i = from; i < to && i < str.length(); i++) {
-            int endPos = i + needle.length();
-            if (endPos > str.length()) {
-                endPos = str.length();
-            }
-            int distance = lev.apply(str.substring(i, endPos), needle);
-            if (distance < min) {
-                min = distance;
-                argMin = i;
+        int min = len;
+        for (int i = from; i < to; i++) {
+            for (int j = to; j > i; j--) {
+                final String substr = str.substring(i, j);
+                final int dist = lev.apply(substr, needle);
+                if (dist < min) {
+                    min = dist;
+                    argMin = i;
+                }
             }
         }
         if (argMin < 0) {
-            throw new Exception("cannot find alignment in llocs: " + needle);
+            throw new Exception("cannot find '" + needle + "' in '" + str + "'");
         }
         return argMin;
     }
 
     private TSV sublist(int start, int end) {
         int s = toString().codePointCount(0, start);
-        int len = toString().codePointCount(start, end);
+        int len = toString().codePointCount(start, Math.min(end, toString().length()));
         return new TSV(this.pairs.subList(s, s+len), this.path);
     }
 

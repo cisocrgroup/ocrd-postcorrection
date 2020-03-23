@@ -25,7 +25,7 @@ public class TSVLineAlignment {
         for (String extension : extensions) {
             Optional<Path> maybePath = findPathWithExtension(img.toString(), extension);
             if (!maybePath.isPresent()) {
-                throw new Exception("cannot find ocr tsv file with extension: " + extension);
+                throw new Exception("cannot find ocr tsv file with extension: " + extension + " for file " + img.toString());
             }
             paths.add(maybePath.get());
         }
