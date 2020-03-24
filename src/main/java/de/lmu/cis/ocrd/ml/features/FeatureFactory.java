@@ -48,6 +48,7 @@ public class FeatureFactory {
 				.register(CandidateOCRPatternConfidenceFeature.class)
 				.register(DMBestRankFeature.class)
 				.register(DMDifferenceToNextRankFeature.class)
+				.register(AverageOCRCharacterConfidenceFeature.class)
 				.register(MaxCharNGramsFeature.class);
 	}
 
