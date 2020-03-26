@@ -24,6 +24,7 @@ public class Main {
 				.register(CatCommand.class)
 				.register(ARFFCommand.class)
 				.register(DefaultConfigCommand.class)
+				.register(StatsCommand.class)
 				.register(AlignCommand.class);
 	}
 

@@ -28,7 +28,7 @@ public class TokenFilter {
         return !(token.getCandidates().size() == 1 && token.getCandidates().get(0).isLexiconEntry());
     }
 
-    static boolean isLong(OCRToken token) {
+    public static boolean isLong(OCRToken token) {
         return token.getMasterOCR().getWordNormalized().length() > 3;
     }
 }
