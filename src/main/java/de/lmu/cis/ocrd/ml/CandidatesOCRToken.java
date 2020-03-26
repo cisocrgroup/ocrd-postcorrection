@@ -28,7 +28,9 @@ public class CandidatesOCRToken extends AbstractOCRToken {
 
     @Override
     public Optional<Candidate> getCandidate() {
-        return Optional.empty();
+        return getCandidates().isEmpty() ?
+                Optional.empty():
+                Optional.of(getCandidates().get(0));
     }
 
     @Override
