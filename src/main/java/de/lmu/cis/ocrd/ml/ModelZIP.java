@@ -151,7 +151,8 @@ public class ModelZIP implements Closeable {
     public int getMaxCandidates() {
         return config.maxCandidates;
     }
-                              @Override
+
+    @Override
     public void close() throws IOException {
         if (zipFile != null) {
             zipFile.close();

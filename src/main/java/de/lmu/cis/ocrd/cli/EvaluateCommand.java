@@ -3,13 +3,19 @@ package de.lmu.cis.ocrd.cli;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.BaseOCRToken;
 import de.lmu.cis.ocrd.ml.DMProtocol;
+import de.lmu.cis.ocrd.ml.ModelZIP;
 import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
 import de.lmu.cis.ocrd.profile.Profile;
 import org.pmw.tinylog.Logger;
+import weka.core.Attribute;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.converters.ConverterUtils;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +89,7 @@ public class EvaluateCommand extends PostCorrectionCommand {
                 evaluate(token);
             }
         }
+        countDecisionMakerTrainingTokens(nOCR);
         writeCounts(nOCR, runLE);
     }
 
@@ -232,6 +239,27 @@ public class EvaluateCommand extends PostCorrectionCommand {
         }
     }
 
+    private void countDecisionMakerTrainingTokens(int nOCR) throws Exception {
+        final ModelZIP model = ModelZIP.open(parameters.getModel());
+        final int index = model.getDMFeatureSet().size();
+        final Path path = parameters.getDMTraining().getTraining(nOCR);
+        try (InputStream is = new FileInputStream(path.toFile())) {
+            final ConverterUtils.DataSource dataSource = new ConverterUtils.DataSource(is);
+            final Instances instances = dataSource.getDataSet();
+            final Instances structure = dataSource.getStructure();
+            instances.setClassIndex(structure.numAttributes() -1);
+            counts.dmTotalTrainingInstances = instances.size();
+            for (final Instance instance : instances) {
+                final Attribute attribute = instance.attribute(structure.numAttributes() - 1);
+                if (instance.classValue() == 0) { // 0 is the true class
+                    counts.dmTrueTrainingInstances++;
+                }
+            }
+        }
+        Logger.debug("total number of dm training instances: {}", counts.dmTotalTrainingInstances);
+        Logger.debug("total number of true dm training instances: {}", counts.dmTrueTrainingInstances);
+    }
+
     public static class Counts {
         List<DMProtocol.Value> typeIValues = new ArrayList<>();
         List<DMProtocol.Value> typeIIValues = new ArrayList<>();
@@ -239,6 +267,8 @@ public class EvaluateCommand extends PostCorrectionCommand {
         List<DMProtocol.Value> typeIVValues = new ArrayList<>();
         String time;
         long timestamp;
+        int dmTrueTrainingInstances = 0;
+        int dmTotalTrainingInstances = 0;
         int missingCandidate = 0;         // no correction candidate (error type I)
         int badRank = 0;                  // good correction not on rank one (error type II)
         int missedOpportunity = 0;        // missed opportunity (error type III)
