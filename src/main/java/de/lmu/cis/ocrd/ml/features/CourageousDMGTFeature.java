@@ -21,8 +21,9 @@ public class CourageousDMGTFeature extends DMGTFeature {
 	@Override
 	public boolean isValidForTraining(OCRToken token) {
 		assert(!token.getRankings().isEmpty());
-		if (!token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
-			return token.getRankings().get(0).getCandidate().Suggestion.equalsIgnoreCase(token.getGT().orElse(""));
+		final String gt = token.getGT().orElse("");
+		if (!gt.equalsIgnoreCase(token.getMasterOCR().getWordNormalized())) {
+			return token.getRankings().get(0).getCandidate().Suggestion.equalsIgnoreCase(gt);
 		}
 		return true;
 	}
