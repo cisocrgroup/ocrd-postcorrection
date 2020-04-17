@@ -14,6 +14,7 @@ public class Parameters {
     private List<JsonObject> rrFeatures = new ArrayList<>();
     private List<JsonObject> dmFeatures = new ArrayList<>();
     private String dir = "";
+    private String model = "";
     private String trigrams = "";
     private String ocropusImageExtension = "";
     private List<String> filterClasses = new ArrayList<>();
@@ -135,7 +136,7 @@ public class Parameters {
     }
 
     public Path getModel() {
-        return Paths.get(dir, "model.zip");
+        return Paths.get(model);
     }
 
     public LexiconTrainingResource getLETraining() {
