@@ -39,7 +39,9 @@ class METSFileGroupReader {
             for (METS.File file: mets.findFileGrpFiles(ifg)) {
                 Logger.debug("loading page", file.getFLocat());
                 try (InputStream is = file.openInputStream()) {
-                    pages.get(ifg).add(Page.parse(Paths.get(file.getFLocat()), is));
+                    final Page page = Page.parse(Paths.get(file.getFLocat()), is);
+                    page.setMetsFile(file);
+                    pages.get(ifg).add(page);
                 }
             }
             pages.get(ifg).sort(Comparator.comparing(lhs -> lhs.getPath().toString()));

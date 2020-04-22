@@ -66,6 +66,12 @@ public class METSTest {
 	}
 
 	@Test
+	public void testAddFPtr() {
+		final METS.FPtr fptr = mets.addFPtr(mets.findFileGrpFiles(imgGrpID).get(0)).withFileID("testFileID");
+		assertThat(fptr.getFileID(), is("testFileID"));
+	}
+
+	@Test
 	public void testOpenPageXML() throws Exception {
 		List<METS.File> files = mets.findFileGrpFiles("OCR-D-TEST");
 		assertThat(files.size(), is(1));

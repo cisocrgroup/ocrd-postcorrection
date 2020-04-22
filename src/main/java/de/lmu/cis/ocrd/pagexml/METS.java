@@ -62,17 +62,17 @@ public class METS {
 		transformer.transform(source, result);
 	}
 
-	public List<File> findFileGrpFiles(String use) {
-		List<File> files = new ArrayList<>();
+	public List<METS.File> findFileGrpFiles(String use) {
+		List<METS.File> files = new ArrayList<>();
 		for (Node fg: XPathHelper.getNodes(xml, String.format(fileGrpFmt, use))) {
 			for (Node f : XPathHelper.getNodes(fg, file)) {
-				files.add(new File(path.getParent(), f));
+				files.add(new METS.File(path.getParent(), f));
 			}
 		}
 		return files;
 	}
 
-	public File addFileToFileGrp(String use) {
+	public METS.File addFileToFileGrp(String use) {
 		Node fileGrp = XPathHelper.getNode(xml, String.format(fileGrpFmt, use));
 		if (fileGrp == null) {
 			fileGrp = xml.createElement("mets:fileGrp");
@@ -82,7 +82,17 @@ public class METS {
 		}
 		Node file = xml.createElement("mets:file");
 		fileGrp.appendChild(file);
-		return new File(path.getParent(), file);
+		return new METS.File(path.getParent(), file);
+	}
+
+	public FPtr addFPtr(METS.File file) {
+		final Node fptr = file.findFPtr();
+		if (fptr == null) {
+			return null;
+		}
+		Element newNode = fptr.getOwnerDocument().createElement("mets:fptr");
+		fptr.getParentNode().appendChild(newNode);
+		return new FPtr(newNode);
 	}
 
 	public static class File {
@@ -129,6 +139,11 @@ public class METS {
 
 		public String getOtherLocType() { return XPathHelper.getAttribute(node, "OTHERLOCTYPE").orElse("FILE");}
 
+		public Node findFPtr() {
+			final String xpath = String.format("/mets/structMap/div/div/fptr[@FILEID='%s']", getID());
+			return XPathHelper.getNode(node.getOwnerDocument(), xpath);
+		}
+
 		public String getFLocat() {
 			final Node flocat = XPathHelper.getNode(node, flocatXPATH);
 			if (flocat == null) {
@@ -165,6 +180,22 @@ public class METS {
 		private File setAttribute(String key, String value) {
 			((Element) node).setAttribute(key, value);
 			return this;
+		}
+	}
+
+	public static class FPtr {
+		private final Node node;
+		public FPtr(Node node) {
+			this.node = node;
+		}
+
+		public FPtr withFileID(String fileID) {
+			((Element) node).setAttribute("FILEID", fileID);
+			return this;
+		}
+
+		public String getFileID() {
+			return ((Element) node).getAttribute("FILEID");
 		}
 	}
 }

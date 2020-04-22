@@ -20,6 +20,7 @@ public class Page {
 	public static final String MIMEType = "application/vnd.prima.page+xml";
 	private final Document doc;
 	private final Path path;
+	private METS.File metsFile;
 
 	// Open a page from a page-XML file path.
 	public static Page open(Path path) throws Exception {
@@ -80,5 +81,13 @@ public class Page {
 		DOMSource source = new DOMSource(doc);
 		StreamResult result = new StreamResult(file);
 		transformer.transform(source, result);
+	}
+
+	public void setMetsFile(METS.File file) {
+		this.metsFile = file;
+	}
+
+	public METS.File getMetsFile() {
+		return this.metsFile;
 	}
 }

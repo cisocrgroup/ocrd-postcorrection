@@ -54,14 +54,16 @@ public class Workspace extends AbstractWorkspace {
         final Path workDir = metsPath.getParent();
         final Path name = getNewName(ofg, page.getPath().getFileName());
         final Path destination = workDir.resolve(Paths.get(ofg).resolve(name));
+        final String id = getID(name);
         //noinspection ResultOfMethodCallIgnored
         destination.getParent().toFile().mkdirs();
         mets.addFileToFileGrp(ofg)
                 .withFLocat(destination.toString())
-                .withID(getID(name))
+                .withID(id)
                 .withMIMEType(Page.MIMEType);
+        mets.addFPtr(page.getMetsFile()).withFileID(id);
         page.save(destination);
-        return destination.toAbsolutePath();
+        return destination;
     }
 
     private String getID(Path name) {
