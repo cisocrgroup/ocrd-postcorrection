@@ -140,7 +140,6 @@ public class METS {
 		public InputStream openInputStream() throws Exception {
 			URL url;
 			final String flocat = getFLocat();
-			Logger.info("flocat {}", flocat);
 			try {
 				url = new URL(flocat);
 			} catch (MalformedURLException e) {
