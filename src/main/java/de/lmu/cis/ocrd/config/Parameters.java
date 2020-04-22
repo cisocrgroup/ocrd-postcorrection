@@ -136,6 +136,9 @@ public class Parameters {
     }
 
     public Path getModel() {
+        if (model == null || "".equals(model)) {
+            return Paths.get(dir, "model.zip");
+        }
         return Paths.get(model);
     }
 
