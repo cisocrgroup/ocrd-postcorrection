@@ -57,7 +57,7 @@ public class Workspace extends AbstractWorkspace {
         //noinspection ResultOfMethodCallIgnored
         destination.getParent().toFile().mkdirs();
         mets.addFileToFileGrp(ofg)
-                .withFLocat("file://" + destination.toAbsolutePath().toString())
+                .withFLocat(destination.toString())
                 .withID(getID(name))
                 .withMIMEType(Page.MIMEType);
         page.save(destination);
