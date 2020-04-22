@@ -91,6 +91,7 @@ public class METS {
 		private File(Path workspace, Node node) {
 			this.workspace = workspace;
 			this.node = node;
+			setAttribute("LOCTYPE", "OTHER").setAttribute("OTHERLOCTYPE", "FILE");
 		}
 
 		public File withID(String id) {
@@ -123,6 +124,10 @@ public class METS {
 		public String getGroupID() {
 			return XPathHelper.getAttribute(node, "GROUPID").orElse("");
 		}
+
+		public String getLocType() { return XPathHelper.getAttribute(node, "LOCTYPE").orElse("OTHER");}
+
+		public String getOtherLocType() { return XPathHelper.getAttribute(node, "OTHERLOCTYPE").orElse("FILE");}
 
 		public String getFLocat() {
 			final Node flocat = XPathHelper.getNode(node, flocatXPATH);

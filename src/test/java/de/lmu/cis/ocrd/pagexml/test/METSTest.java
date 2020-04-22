@@ -35,28 +35,34 @@ public class METSTest {
 
 	@Test
 	public void testFileID() {
-		assertThat(mets.findFileGrpFiles(imgGrpID).get(0).getID(), is("OCR-D" +
-				"-IMG-aventinus_grammatica_1515-aventinus_grammatica_1515_0007"));
+		assertThat(mets.findFileGrpFiles(imgGrpID).get(0).getID(), is("OCR-D-IMG-aventinus_grammatica_1515-aventinus_grammatica_1515_0007"));
 	}
 
 	@Test
 	public void testFileMIMEType() {
-		assertThat(mets.findFileGrpFiles(imgGrpID).get(0).getMIMEType(), is(
-				"image/tif"));
+		assertThat(mets.findFileGrpFiles(imgGrpID).get(0).getMIMEType(), is("image/tif"));
+
 	}
 
 	@Test
 	public void testFileGroupID() {
-		assertThat(mets.findFileGrpFiles(imgGrpID).get(0).getGroupID(),
-				is(imgGrpID));
+		assertThat(mets.findFileGrpFiles(imgGrpID).get(0).getGroupID(), is(imgGrpID));
 	}
 
 	@Test
 	public void testFilePath() {
 		assertThat(mets.findFileGrpFiles(imgGrpID).get(0).getFLocat(),
-				is("file://workspace/OCR-D-IMG" +
-						"-aventinus_grammatica_1515" +
-						"/aventinus_grammatica_1515_0007.tif"));
+				is("file://workspace/OCR-D-IMG-aventinus_grammatica_1515/aventinus_grammatica_1515_0007.tif"));
+	}
+
+	@Test
+	public void testLocType() {
+		assertThat(mets.findFileGrpFiles(imgGrpID).get(0).getLocType(), is("OTHER"));
+	}
+
+	@Test
+	public void testOtherLocType() {
+		assertThat(mets.findFileGrpFiles(imgGrpID).get(0).getOtherLocType(), is("FILE"));
 	}
 
 	@Test
