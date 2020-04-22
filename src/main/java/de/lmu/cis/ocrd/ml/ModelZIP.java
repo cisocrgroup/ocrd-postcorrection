@@ -112,8 +112,8 @@ public class ModelZIP implements Closeable {
     public void save(Path path) throws Exception {
         Map<String, String> env = new HashMap<>();
         env.put("create", "true");
-        URI uri = new URI("jar:" + path.toUri().getScheme(), path.toUri().getPath(), null);
-        try (FileSystem zipfs = FileSystems.newFileSystem(uri, env)) {
+        final URI uri = new URI("jar:" + path.toUri().getScheme(), path.toUri().getPath(), null);
+        try (FileSystem zipfs = FileSystems.newFileSystem(uri, env, null)) {
             for (int i = 0; i < config.leModels.size(); i++) {
                 config.leModels.set(i, copyInto(zipfs, config.leModels.get(i)));
             }

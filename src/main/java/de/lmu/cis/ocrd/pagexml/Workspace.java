@@ -53,7 +53,7 @@ public class Workspace extends AbstractWorkspace {
     private Path putPageXML(Page page, String ofg) throws Exception {
         final Path workDir = metsPath.getParent();
         final Path name = getNewName(ofg, page.getPath().getFileName());
-        final Path destination = workDir.resolve(Paths.get(ofg).resolve(name));
+        final Path destination = workDir.resolve(Paths.get(ofg).resolve(name)).toAbsolutePath();
         final String id = getID(name);
         //noinspection ResultOfMethodCallIgnored
         destination.getParent().toFile().mkdirs();
@@ -61,7 +61,10 @@ public class Workspace extends AbstractWorkspace {
                 .withFLocat(destination.toString())
                 .withID(id)
                 .withMIMEType(Page.MIMEType);
-        mets.addFPtr(page.getMetsFile()).withFileID(id);
+        final METS.FPtr fptr = mets.addFPtr(page.getMetsFile());
+        if (fptr != null) {
+            fptr.withFileID(id);
+        }
         page.save(destination);
         return destination;
     }

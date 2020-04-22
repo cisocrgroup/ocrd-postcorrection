@@ -150,10 +150,10 @@ public class TrainCommandTest {
 			assertThat(dir.toFile().isDirectory(), is(true));
 			assertThat(numberOfFiles(dir), is(1));
 			assertThat(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).size(), is(1));
-			assertThat(Paths.get(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).get(0).getFLocat().substring(7)).toFile().exists(), is(true));
+			assertThat(Paths.get(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).get(0).getFLocat()).toFile().exists(), is(true));
 			FileUtils.deleteDirectory(dir.toFile());
 			assertThat(dir.toFile().exists(), is(false));
-			assertThat(Paths.get(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).get(0).getFLocat().substring(7)).toFile().exists(), is(false));
+			assertThat(Paths.get(METS.open(Paths.get(mets)).findFileGrpFiles(ofg).get(0).getFLocat()).toFile().exists(), is(false));
 			// check protocols
             assertThat(cmd.getParameters().getLETraining().getProtocol(i+1, parameters.isRunLE()).toFile().exists(), is(true));
 			checkReadProtocol(new LEProtocol(), cmd.getParameters().getLETraining().getProtocol(i+1, parameters.isRunLE()));
