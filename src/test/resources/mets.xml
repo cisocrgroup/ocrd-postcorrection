@@ -100,4 +100,17 @@
       </mets:file>
     </mets:fileGrp>
   </mets:fileSec>
+  <mets:structMap>
+    <mets:div ID="physroot" TYPE="physSequence">
+      <mets:div DMDID="6" ID="phys_6" ORDER="1" TYPE="page">
+        <mets:fptr FILEID="OCR-D-IMG-aventinus_grammatica_1515-aventinus_grammatica_1515_0006"/>
+      </mets:div>
+      <mets:div DMDID="7" ID="phys_7" ORDER="1" TYPE="page">
+        <mets:fptr FILEID="OCR-D-IMG-aventinus_grammatica_1515-aventinus_grammatica_1515_0007"/>
+      </mets:div>
+      <mets:div DMDID="8" ID="phys_8" ORDER="1" TYPE="page">
+        <mets:fptr FILEID="OCR-D-IMG-aventinus_grammatica_1515-aventinus_grammatica_1515_0008"/>
+      </mets:div>
+    </mets:div>
+  </mets:structMap>
 </mets:mets>
