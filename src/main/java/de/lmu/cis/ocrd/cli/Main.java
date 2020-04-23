@@ -21,8 +21,6 @@ public class Main {
 				.register(EvaluateCommand.class)
 				.register(PostCorrectionCommand.class)
 				.register(TrainCommand.class)
-				.register(CatCommand.class)
-				.register(ARFFCommand.class)
 				.register(DefaultConfigCommand.class)
 				.register(StatsCommand.class)
 				.register(AlignCommand.class);
