@@ -1,9 +1,9 @@
 package de.lmu.cis.ocrd;
 
 public interface Document {
-	public void eachLine(Document.Visitor v) throws Exception;
+	void eachLine(Document.Visitor v) throws Exception;
 
-	public interface Visitor {
+	interface Visitor {
 		void visit(OCRLine t) throws Exception;
 	}
 }
