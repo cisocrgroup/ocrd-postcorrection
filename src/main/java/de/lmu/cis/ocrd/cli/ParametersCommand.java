@@ -57,6 +57,9 @@ abstract class ParametersCommand implements Command {
     }
 
     Profile getProfile(String ifg, AdditionalLexicon alex, int n) throws Exception {
+        if (parameters.getProfiler().isNoCache()) {
+            return getProfile(ifg, alex);
+        }
         final Path cachedPath = parameters.getProfiler().getCachedPath(parameters.getCacheDir(), ifg, alex.use(), n);
         if (cachedPath.toFile().exists()) {
             Logger.debug("opening cached profile {}", cachedPath.toString());
@@ -67,16 +70,7 @@ abstract class ParametersCommand implements Command {
             Logger.debug("opening file profile {}", parameters.getProfiler().getPath().toString());
             return new FileProfiler(parameters.getProfiler().getPath()).profile();
         }
-        Logger.debug("calculating profile");
-        final Profile profile;
-        profile = new BaseOCRTokenProfiler(
-                workspace.getBaseOCRTokenReader(ifg),
-                new LocalProfilerProcess(
-                        parameters.getProfiler().getPath(),
-                        parameters.getProfiler().getConfig(),
-                        alex)
-        ).profile();
-
+        final Profile profile = getProfile(ifg, alex);
         // cache the profile
         Logger.debug("caching profile to {}", cachedPath.toString());
         // input file group could be a directory (if ocropus is used). So build all path components for the cache file
@@ -90,6 +84,17 @@ abstract class ParametersCommand implements Command {
             Logger.warn("cannot create profiler cache file {}: {}", cachedPath.toString(), e.getMessage());
         }
         return profile;
+    }
+
+    private Profile getProfile(String ifg, AdditionalLexicon alex) throws Exception {
+        Logger.debug("calculating profile for ifg={}", ifg);
+        return new BaseOCRTokenProfiler(
+                workspace.getBaseOCRTokenReader(ifg),
+                new LocalProfilerProcess(
+                        parameters.getProfiler().getPath(),
+                        parameters.getProfiler().getConfig(),
+                        alex)
+        ).profile();
     }
 
     public Parameters getParameters() {

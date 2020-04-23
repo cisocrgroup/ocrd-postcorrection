@@ -35,6 +35,7 @@ class DefaultConfigCommand implements Command{
         Profiler profiler = new Profiler();
         profiler.setConfig("/path/to/language-config.ini");
         profiler.setPath("/path/to/profiler-executable");
+        profiler.setIsNoCache(false);
         return profiler;
     }
 

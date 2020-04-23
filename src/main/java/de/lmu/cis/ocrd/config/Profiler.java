@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 public class Profiler {
     private String path = "";
     private String config = "";
+    private boolean noCache = false;
 
     public Path getCachedPath(Path cache, String ifg, boolean alex, int n) {
         String suffix = ".json.gz";
@@ -13,6 +14,14 @@ public class Profiler {
             suffix = "_alex_" + n + suffix;
         }
         return Paths.get(cache.toString(), ifg + suffix);
+    }
+
+    public boolean isNoCache() {
+        return noCache;
+    }
+
+    public void setIsNoCache(boolean noCache) {
+        this.noCache = noCache;
     }
 
     public Path getPath() {
