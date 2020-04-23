@@ -52,7 +52,11 @@ public class TSVLineAlignment {
         }
         if (withGT) {
             try (BufferedReader r = new BufferedReader(new FileReader(paths.get(nOCR).toFile()))) {
-                lines.add(clean(r.readLine()));
+                final String gtline = r.readLine();
+                if (gtline == null || "".equals(gtline)) { // if gt is missing (happens) return nothing
+                    return new ArrayList<>();
+                }
+                lines.add(clean(gtline));
             }
         }
         this.alignment = Lines.align(lines.toArray(new String[0]));
