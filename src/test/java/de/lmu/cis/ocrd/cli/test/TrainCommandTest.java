@@ -8,7 +8,7 @@ import de.lmu.cis.ocrd.cli.TrainCommand;
 import de.lmu.cis.ocrd.config.Parameters;
 import de.lmu.cis.ocrd.ml.DMProtocol;
 import de.lmu.cis.ocrd.ml.LEProtocol;
-import de.lmu.cis.ocrd.ml.ModelZIP;
+import de.lmu.cis.ocrd.ml.Model;
 import de.lmu.cis.ocrd.ml.Protocol;
 import de.lmu.cis.ocrd.pagexml.METS;
 import org.apache.commons.io.FileUtils;
@@ -105,7 +105,7 @@ public class TrainCommandTest {
 
 		// check model
 		assertThat(cmd.getParameters().getModel().toFile().exists(), is(true));
-		ModelZIP model = ModelZIP.open(cmd.getParameters().getModel());
+		Model model = Model.open(cmd.getParameters().getModel());
 		assertThat(model.getLEFeatureSet(), notNullValue());
 		assertThat(model.getLEFeatureSet().size(), is(cmd.getParameters().getLETraining().getFeatures().size()));
 		assertThat(model.getRRFeatureSet(), notNullValue());

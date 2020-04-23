@@ -18,12 +18,12 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipFile;
 
-public class ModelZIP implements Closeable {
+public class Model implements Closeable {
     private ZipFile zipFile;
     private Config config;
 
-    public static ModelZIP open(Path path) throws Exception {
-        ModelZIP m = new ModelZIP();
+    public static Model open(Path path) throws Exception {
+        Model m = new Model();
         m.zipFile = new ZipFile(path.toFile());
         m.config = m.readConfig();
         return m;

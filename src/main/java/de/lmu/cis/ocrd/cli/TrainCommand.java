@@ -58,7 +58,7 @@ public class TrainCommand extends ParametersCommand {
 	}
 
 	private void writeModelZIP() throws Exception {
-		final ModelZIP model = new ModelZIP();
+		final Model model = new Model();
 		for (int i = 0; i < parameters.getNOCR(); i++) {
 			model.addLEModel(parameters.getLETraining().getModel(i+1), i);
 			model.addRRModel(parameters.getRRTraining().getModel(i+1), i);

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class PostCorrectionCommand extends ParametersCommand {
 	private LM lm;
-	private ModelZIP model;
+	private Model model;
 	private Profile profile;
 
 	PostCorrectionCommand(String name) {super(name);}
@@ -25,7 +25,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 		config.setCommand(this); // logging
 		// output file group
 		final String ofg = config.maybeGetSingleOutputFileGroup(); // can be null
-		this.model = ModelZIP.open(parameters.getModel());
+		this.model = Model.open(parameters.getModel());
 		try (InputStream is = model.openLanguageModel()) {
 			this.lm = new LM(is);
 		}

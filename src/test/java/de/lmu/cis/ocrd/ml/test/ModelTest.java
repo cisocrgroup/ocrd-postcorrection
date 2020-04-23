@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.ml.test;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import de.lmu.cis.ocrd.ml.ModelZIP;
+import de.lmu.cis.ocrd.ml.Model;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -19,8 +19,8 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class ModelZIPTest {
-    private ModelZIP model;
+public class ModelTest {
+    private Model model;
     private Path tmp;
     private String[] names;
     private long created;
@@ -28,7 +28,7 @@ public class ModelZIPTest {
     @Before
     public void init() throws Exception {
         tmp = Files.createTempDirectory("ocrd-cis-java");
-        model = new ModelZIP();
+        model = new Model();
         names = new String[]{
                 "a", "b", "c",
                 "d", "e", "f",
@@ -59,7 +59,7 @@ public class ModelZIPTest {
         model.setDMFeatureSet(getDMFeatureSet());
         model.setLanguageModelPath("src/test/resources/nGrams.csv");
         model.save(Paths.get(tmp.toString(), "model.zip"));
-        model = ModelZIP.open(Paths.get(tmp.toString(), "model.zip"));
+        model = Model.open(Paths.get(tmp.toString(), "model.zip"));
     }
 
     @After

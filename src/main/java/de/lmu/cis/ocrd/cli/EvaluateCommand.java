@@ -3,7 +3,7 @@ package de.lmu.cis.ocrd.cli;
 import com.google.gson.Gson;
 import de.lmu.cis.ocrd.ml.BaseOCRToken;
 import de.lmu.cis.ocrd.ml.DMProtocol;
-import de.lmu.cis.ocrd.ml.ModelZIP;
+import de.lmu.cis.ocrd.ml.Model;
 import de.lmu.cis.ocrd.profile.AdditionalFileLexicon;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.NoAdditionalLexicon;
@@ -240,7 +240,7 @@ public class EvaluateCommand extends PostCorrectionCommand {
     }
 
     private void countDecisionMakerTrainingTokens(int nOCR) throws Exception {
-        final ModelZIP model = ModelZIP.open(parameters.getModel());
+        final Model model = Model.open(parameters.getModel());
         final int index = model.getDMFeatureSet().size();
         final Path path = parameters.getDMTraining().getTraining(nOCR);
         try (InputStream is = new FileInputStream(path.toFile())) {
