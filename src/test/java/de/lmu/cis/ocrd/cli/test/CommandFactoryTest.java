@@ -3,12 +3,11 @@ package de.lmu.cis.ocrd.cli.test;
 import de.lmu.cis.ocrd.cli.Command;
 import de.lmu.cis.ocrd.cli.CommandFactory;
 import de.lmu.cis.ocrd.cli.CommandLineArguments;
-import de.lmu.cis.ocrd.cli.InvalidCommand;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 public class CommandFactoryTest {
 	private CommandFactory commandFactory;
 
@@ -24,18 +23,14 @@ public class CommandFactoryTest {
 		assertThat(command instanceof TestCommand, is(true));
 	}
 
-	@Test
+	@Test(expected = Exception.class)
 	public void testInvalidCommand() throws Exception {
-		final Command command = commandFactory.get("invalid command");
-		assertThat(command.getName(), is(new InvalidCommand("").getName()));
-		assertThat(command instanceof InvalidCommand, is(true));
+		commandFactory.get("invalid");
 	}
 
-	@Test
+	@Test(expected = Exception.class)
 	public void testNullCommand() throws Exception {
-		final Command command = commandFactory.get(null);
-		assertThat(command.getName(), is(new InvalidCommand("").getName()));
-		assertThat(command instanceof InvalidCommand, is(true));
+		commandFactory.get(null);
 	}
 
 	public static class TestCommand implements Command {

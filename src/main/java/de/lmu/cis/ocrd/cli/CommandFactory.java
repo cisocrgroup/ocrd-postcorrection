@@ -7,18 +7,18 @@ public class CommandFactory {
 
 	public Command get(String command) throws Exception {
 		if (command == null) {
-			return new InvalidCommand("missing command");
+			throw new Exception("missing command");
 		}
-		String key = command.toLowerCase();
+		final String key = command.toLowerCase();
 		if (!registry.containsKey(key)) {
-			return new InvalidCommand(key.toLowerCase());
+			throw new Exception("missing command: " + key);
 		}
-		return (Command) Class.forName(registry.get(key)).newInstance();
+		return (Command) Class.forName(registry.get(key)).getDeclaredConstructor().newInstance();
 	}
 
 	// Puts the lower case getName() into the registry.
 	public <E extends Command> CommandFactory register(Class<E> command) throws Exception {
-		registry.put(((Command) Class.forName(command.getName()).newInstance()).getName().toLowerCase(), command.getName());
+		registry.put(((Command) Class.forName(command.getName()).getDeclaredConstructor().newInstance()).getName().toLowerCase(), command.getName());
 		return this;
 	}
 
