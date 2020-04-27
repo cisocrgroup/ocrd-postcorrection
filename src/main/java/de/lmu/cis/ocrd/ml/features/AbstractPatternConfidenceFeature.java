@@ -54,12 +54,12 @@ abstract class AbstractPatternConfidenceFeature extends NamedDoubleFeature {
         if (pattern.Pos == 0) {
             return word.getCharacterConfidenceAt(0);
         }
-        final int[] ocrToken = word.getWordNormalized().codePoints().toArray();
+        final int[] ocrGlyphs = word.getWordNormalized().codePoints().toArray();
 
-        if (pattern.Pos + 1 < ocrToken.length) {
+        if (pattern.Pos + 1 < ocrGlyphs.length) {
             return (word.getCharacterConfidenceAt(pattern.Pos) + word.getCharacterConfidenceAt(pattern.Pos + 1)) / 2.0;
         }
-        return word.getCharacterConfidenceAt(ocrToken.length-1);
+        return word.getCharacterConfidenceAt(ocrGlyphs.length-1);
     }
 
     // Use the product of the inserted characters.
