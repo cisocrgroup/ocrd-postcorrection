@@ -34,6 +34,7 @@ public class Workspace extends AbstractWorkspace {
             for (int i = 0; i < tokens.size(); i++) {
                 ((BaseOCRToken)tokens.get(i)).setID(i+1);
             }
+            base.clear();
             base.put(ifg, new AbstractWorkspace.BaseOCRTokenReaderImpl(tokens));
         }
         return base.get(ifg);
@@ -44,6 +45,7 @@ public class Workspace extends AbstractWorkspace {
         if (!normal.containsKey(dir)) {
             List<OCRToken> tokens = new ArrayList<>();
             getBaseOCRTokenReader(dir).read().forEach(t -> tokens.add(makeCandidateOCRToken(t, profile)));
+            normal.clear();
             normal.put(dir, new AbstractWorkspace.OCRTokenReaderImpl(tokens));
         }
         return normal.get(dir);
