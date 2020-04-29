@@ -19,9 +19,14 @@ abstract class AbstractHistoricalPatternConfidenceFeature extends AbstractConfid
 	}
 
 	private double[] doGetPatternConfidence(OCRWord word, int pos, int[] right) {
+		final int[] ocrGlyphs = word.getWordNormalized().codePoints().toArray();
 		final double[] values = new double[right.length];
 		for (int i = 0; i < right.length; i++) {
-			values[i] = word.getCharacterConfidenceAt(i + pos);
+			if (i+pos < ocrGlyphs.length) {
+				values[i] = word.getCharacterConfidenceAt(i + pos);
+			} else {
+				values[i] = word.getCharacterConfidenceAt(ocrGlyphs.length - 1);
+			}
 		}
 		return values;
 	}
