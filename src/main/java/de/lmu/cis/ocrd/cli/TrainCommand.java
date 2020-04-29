@@ -46,11 +46,12 @@ public class TrainCommand extends ParametersCommand {
 			final Trainer dmTrainer = openDMTrainer(i+1);
 			for (String ifg: ifgs) {
 				Logger.info("dm training for {}({})", ifg, i+1);
+				final Profile profile = getProfile(ifg, new NoAdditionalLexicon(), i+1);
 				final Rankings rankings = Rankings.load(
-						workspace.getNormalTokenReader(ifg, null), // this is OK, since we already loaded these tokens beforehand
+						workspace.getNormalTokenReader(ifg, profile), // this is OK, since we already loaded these tokens beforehand
 						parameters.getRRTraining().getModel(i+1),
 						parameters.getRRTraining().getTraining(i+1));
-				dmTrainer.prepare(workspace.getRankedTokenReader(ifg, null, rankings), i+1, (dmgtFeature::isValidForTraining));
+				dmTrainer.prepare(workspace.getRankedTokenReader(ifg, profile, rankings), i+1, (dmgtFeature::isValidForTraining));
 			}
 			dmTrainer.train(parameters.getDMTraining().getTraining(i+1), parameters.getDMTraining().getModel(i+1), isDebug());
 		}
