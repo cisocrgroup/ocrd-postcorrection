@@ -9,6 +9,8 @@ public class Profiler {
     private boolean noCache = false;
 
     public Path getCachedPath(Path cache, String ifg, boolean alex, int n) {
+        Path ifgPath = Paths.get(ifg);
+        ifg = ifgPath.getFileName().toString();
         String suffix = ".json.gz";
         if (alex) {
             suffix = "_alex_" + n + suffix;
