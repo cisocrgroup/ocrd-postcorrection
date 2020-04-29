@@ -97,7 +97,9 @@ public class EvaluateCommand extends PostCorrectionCommand {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         counts.timestamp = timestamp.getTime();
         counts.time = timestamp.toString();
-        try (Writer w = new FileWriter(parameters.getDMTraining().getEvaluation(nOCR, runLE).toFile())) {
+        final Path path = parameters.getDMTraining().getEvaluation(nOCR, runLE);
+        Logger.debug("writeCounts({}, {}) to file", nOCR, runLE, path);
+        try (Writer w = new FileWriter(path.toFile())) {
             new Gson().toJson(counts, w);
         }
     }
