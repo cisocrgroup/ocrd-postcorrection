@@ -75,7 +75,7 @@ public class METSTest {
 	public void testOpenPageXML() throws Exception {
 		List<METS.File> files = mets.findFileGrpFiles("OCR-D-TEST");
 		assertThat(files.size(), is(1));
-		assertThat(files.get(0).getMIMEType(), is(Page.MIMEType));
+		assertThat(files.get(0).getMIMEType(), is(Page.MIME_TYPE));
 		final Page page = Page.parse(Paths.get(files.get(0).getFLocat()), files.get(0).openInputStream());
 		assertThat(page, notNullValue());
 	}

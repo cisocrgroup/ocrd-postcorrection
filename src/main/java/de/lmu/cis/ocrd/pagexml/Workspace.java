@@ -66,7 +66,7 @@ public class Workspace extends AbstractWorkspace {
         mets.addFileToFileGrp(ofg)
                 .withFLocat(destination.toString())
                 .withID(id)
-                .withMIMEType(Page.MIMEType);
+                .withMIMEType(Page.MIME_TYPE);
         final METS.FPtr fptr = mets.addFPtr(page.getMetsFile());
         if (fptr != null) {
             fptr.withFileID(id);

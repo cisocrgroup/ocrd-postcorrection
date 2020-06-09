@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Page {
-	public static final String MIMEType = "application/vnd.prima.page+xml";
+	public static final String MIME_TYPE = "application/vnd.prima.page+xml";
 	public static final String DATA_TYPE = "OCR-D-CIS-POST-CORRECTION";
 
 	private final Document doc;
