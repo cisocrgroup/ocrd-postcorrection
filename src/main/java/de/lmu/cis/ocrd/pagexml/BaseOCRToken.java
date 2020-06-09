@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
-	private static final String DATA_TYPE = "OCR-D-CIS-POST-CORRECTION";
 	private final Node node;
 	private final List<OCRWord> words;
 	private final int id;
@@ -69,8 +68,8 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
 	@Override
 	public de.lmu.cis.ocrd.ml.OCRWord getSlaveOCR(int i) {
-		if (i+1 < words.size()) {
-			return words.get(i+1);
+		if (i + 1 < words.size()) {
+			return words.get(i + 1);
 		}
 		return EmptyWord.instance;
 	}
@@ -89,11 +88,11 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 		sj.add("id:" + getID());
 		sj.add("mOCR:" + getMasterOCR().getWordNormalized());
 		for (int i = 1; i < words.size(); i++) {
-		    if (words.get(i).isGT()) {
-                sj.add("GT:" + words.get(i).getWordNormalized());
-            } else {
-		    	sj.add("OCR" + (i+1) + ":" + words.get(i).getWordNormalized());
-            }
+			if (words.get(i).isGT()) {
+				sj.add("GT:" + words.get(i).getWordNormalized());
+			} else {
+				sj.add("OCR" + (i + 1) + ":" + words.get(i).getWordNormalized());
+			}
 		}
 		return sj.toString();
 	}
@@ -111,32 +110,23 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
 
 	private void doNotCorrect(String correction, String ocr, double confidence) {
 		TextRegion textRegion = getTextRegion();
-		incrementIndices(textRegion);
+		textRegion.incrementTextEquivIndices();
 		textRegion.prependNewTextEquiv()
 				.addUnicode(ocr)
 				.withConfidence(confidence)
 				.withIndex(1)
-				.withDataType(DATA_TYPE)
+				.withDataType(Page.DATA_TYPE)
 				.withDataTypeDetails("correction: " + correction);
 	}
 
 	private void doCorrect(String correction, String ocr, double confidence) {
 		TextRegion textRegion = getTextRegion();
-		incrementIndices(textRegion);
+		textRegion.incrementTextEquivIndices();
 		textRegion.prependNewTextEquiv()
 				.addUnicode(correction)
 				.withConfidence(confidence)
 				.withIndex(1)
-				.withDataType(DATA_TYPE)
+				.withDataType(Page.DATA_TYPE)
 				.withDataTypeDetails("master-ocr: " + ocr);
-	}
-
-	private void incrementIndices(TextRegion textRegion) {
-		for (TextEquiv textEquiv: textRegion.getTextEquivs()) {
-			final int index = textEquiv.getIndex();
-			if (index > 0) { // increment indices bigger than 0
-				textEquiv.withIndex(index + 1);
-			}
-		}
 	}
 }

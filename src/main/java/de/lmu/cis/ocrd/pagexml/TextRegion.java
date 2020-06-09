@@ -79,6 +79,16 @@ public class TextRegion {
 		return unicode;
 	}
 
+	void incrementTextEquivIndices() {
+		for (TextEquiv textEquiv: getTextEquivs()) {
+			final int index = textEquiv.getIndex();
+			if (index > 0) { // increment indices bigger than 0
+				textEquiv.withIndex(index + 1);
+			}
+		}
+	}
+
+
 	public Node getNode() {
 		return node;
 	}

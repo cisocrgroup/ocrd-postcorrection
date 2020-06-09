@@ -9,6 +9,7 @@ import org.pmw.tinylog.Logger;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class Workspace extends AbstractWorkspace {
     private final Path metsPath;
@@ -39,7 +40,7 @@ public class Workspace extends AbstractWorkspace {
 
     @Override
     public void write(String ifg, String ofg) throws Exception {
-        for (Page page: fgr.getPages(ifg)) {
+        for (Page page: getPages(ifg)) {
             putPageXML(page, ofg);
         }
         saveMETS();
@@ -50,7 +51,12 @@ public class Workspace extends AbstractWorkspace {
         fgr.setProfile(ifg, profile);
     }
 
+    public List<Page> getPages(String ifg) throws Exception {
+        return fgr.getPages(ifg);
+    }
+
     private Path putPageXML(Page page, String ofg) throws Exception {
+        page.correctLinesAndRegions();
         final Path workDir = metsPath.getParent();
         final Path name = getNewName(ofg, page.getPath().getFileName());
         final Path destination = workDir.resolve(Paths.get(ofg).resolve(name)).toAbsolutePath();
