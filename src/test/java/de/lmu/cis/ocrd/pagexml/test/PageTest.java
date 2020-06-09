@@ -10,25 +10,26 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class PageTest {
+	private final static String PATH = "src/test/resources/page.xml";
 	private Page page;
 
 	@Before
 	public void init() throws Exception {
-		page = Page.open(Paths.get("src/test/resources/page.xml"));
+		page = Page.open(Paths.get(PATH));
 	}
 
 	@Test
-	public void pageHas24Lines() throws Exception {
+	public void pageHas24Lines() {
 		assertThat(page.getLines().size(), is(24));
 	}
 
 	@Test
-	public void firstLineHas3Words() throws Exception {
+	public void firstLineHas3Words() {
 		assertThat(page.getLines().get(0).getWords().size(), is(3));
 	}
 
 	@Test
-	public void firstLineID() throws Exception {
+	public void firstLineID() {
 		assertThat(page.getLines().get(0).getID(), is("tl_1"));
 	}
 
@@ -38,12 +39,12 @@ public class PageTest {
 	}
 
 	@Test
-	public void secondLineHas2Words() throws Exception {
+	public void secondLineHas2Words() {
 		assertThat(page.getLines().get(1).getWords().size(), is(2));
 	}
 
 	@Test
-	public void secondLineID() throws Exception {
+	public void secondLineID() {
 		assertThat(page.getLines().get(1).getID(), is("tl_2"));
 	}
 
@@ -53,12 +54,12 @@ public class PageTest {
 	}
 
 	@Test
-	public void thirdLineHas5Words() throws Exception {
+	public void thirdLineHas5Words() {
 		assertThat(page.getLines().get(2).getWords().size(), is(5));
 	}
 
 	@Test
-	public void thirdLineID() throws Exception {
+	public void thirdLineID() {
 		assertThat(page.getLines().get(2).getID(), is("tl_3"));
 	}
 	
@@ -68,7 +69,7 @@ public class PageTest {
 	}
 
 	@Test
-	public void firstWordOfFirstLineID() throws Exception {
+	public void firstWordOfFirstLineID() {
 		assertThat(page.getLines().get(0).getWords().get(0).getID(), is("w_w1aab1b1b2b1b1ab1"));
 	}
 
@@ -78,7 +79,7 @@ public class PageTest {
 	}
 
 	@Test
-	public void secondWordOfSecondLineID() throws Exception {
+	public void secondWordOfSecondLineID() {
 		assertThat(page.getLines().get(1).getWords().get(1).getID(), is("word_1478541239125_799"));
 	}
 
@@ -88,7 +89,7 @@ public class PageTest {
 	}
 
 	@Test
-	public void thirdWordOfThirdLineID() throws Exception {
+	public void thirdWordOfThirdLineID() {
 		assertThat(page.getLines().get(2).getWords().get(2).getID(), is("word_1478541244021_801"));
 	}
 
@@ -98,7 +99,7 @@ public class PageTest {
 	}
 
 	@Test
-	public void FirstGlyphID() throws Exception {
+	public void FirstGlyphID() {
 		assertThat(page.getLines().get(2).getWords().get(1).getGlyphs().get(0).getID(), is("g1"));
 	}
 
@@ -108,7 +109,7 @@ public class PageTest {
 	}
 
 	@Test
-	public void SecondGlyphID() throws Exception {
+	public void SecondGlyphID() {
 		assertThat(page.getLines().get(2).getWords().get(1).getGlyphs().get(1).getID(), is("g2"));
 	}
 
@@ -118,7 +119,7 @@ public class PageTest {
 	}
 
 	@Test
-	public void ThirdGlyphID() throws Exception {
+	public void ThirdGlyphID() {
 		assertThat(page.getLines().get(2).getWords().get(1).getGlyphs().get(2).getID(), is("g3"));
 	}
 
@@ -128,7 +129,7 @@ public class PageTest {
 	}
 
 	@Test
-	public void FourthGlyphID() throws Exception {
+	public void FourthGlyphID() {
 		assertThat(page.getLines().get(2).getWords().get(1).getGlyphs().get(3).getID(), is("g4"));
 	}
 
@@ -138,7 +139,7 @@ public class PageTest {
 	}
 
 	@Test
-	public void wordID() throws Exception {
+	public void wordID() {
 		assertThat(page.getLines().get(2).getWords().get(1).getID(), is("word_1478541244022_802"));
 	}
 }
