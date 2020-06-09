@@ -36,7 +36,7 @@ import java.util.Optional;
 //   │ │   └ correction candidate not on first rank (type II)
 //   │ └ ocr incorrect
 //   │   ├ candidate correct [successful correction]
-//   │	  └ candidate incorrect [do not care correction]
+//   │	 └ candidate incorrect [do not care correction]
 //   │     ├ no correction candidate (type I)
 //   │     └ correction candidate not on first rank (type II)
 //   └ not replaced
