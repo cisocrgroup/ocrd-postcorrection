@@ -56,7 +56,7 @@ public class MockBaseOCRToken implements BaseOCRToken {
     }
 
     @Override
-    public void correct(String correction, double confidence) {
+    public void correct(String correction, double confidence, boolean take) {
         throw new RuntimeException("correct: not implemented");
     }
 }

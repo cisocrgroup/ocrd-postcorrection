@@ -17,6 +17,6 @@ public interface BaseOCRToken {
     OCRWord getSlaveOCR(int i);
     // Get the GT string (if it exists).
     Optional<String> getGT();
-    // Correct this token in the underlying document.
-    void correct(String correction, double confidence);
+    // Correct this token in the underlying document if take=true.
+    void correct(String correction, double confidence, boolean take);
 }

@@ -41,7 +41,7 @@ public abstract class AbstractOCRToken implements OCRToken {
     }
 
     @Override
-    public void correct(String correction, double confidence) {
-        base.correct(correction, confidence);
+    public void correct(String correction, double confidence, boolean take) {
+        base.correct(correction, confidence, take);
     }
 }

@@ -127,9 +127,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 			final boolean take = result.getPrediction().getPrediction();
 			final Ranking topRanking = rankings.get(token).get(0);
 			protocol.protocol(token, topRanking.getCandidate().Suggestion, topRanking.getRanking(), take);
-			if (take && doCorrect) {
-				token.correct(topRanking.getCandidate().Suggestion, topRanking.getRanking());
-			}
+			token.correct(topRanking.getCandidate().Suggestion, topRanking.getRanking(), take && doCorrect);
 		}
 		saveProtocol(parameters.getDMTraining().getProtocol(nOCR, runLE), protocol);
 	}

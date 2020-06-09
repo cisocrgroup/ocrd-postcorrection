@@ -49,7 +49,10 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
     }
 
     @Override
-    public void correct(String correction, double confidence) {
+    public void correct(String correction, double confidence, boolean take) {
+        if (!take) {
+            return;
+        }
         Logger.debug("correcting {} with {}/{}", toString(), correction, confidence);
     }
 

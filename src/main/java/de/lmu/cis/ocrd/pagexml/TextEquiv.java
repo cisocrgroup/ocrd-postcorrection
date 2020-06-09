@@ -69,9 +69,12 @@ public class TextEquiv {
 	    return setAttribute("dataTypeDetails", dataTypeDetails);
     }
 
-	TextEquiv addUnicode(String unicode) {
-		final Node u = node.getOwnerDocument().createTextNode(unicode);
-		node.appendChild(u);
+	TextEquiv addUnicode(String str) {
+		final Node textNode = node.getOwnerDocument().createTextNode(str);
+		final Node unicodeNode = node.getOwnerDocument().createElement("Unicode");
+		unicodeNode.appendChild(textNode);
+		node.appendChild(unicodeNode);
+		this.unicode = null; // reset cached unicode string
 		return this;
 	}
 
