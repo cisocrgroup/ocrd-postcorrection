@@ -40,6 +40,7 @@ public class LogisticClassifier implements Classifier, BinaryPredictor, Serializ
 //			Logger.debug("attribute: {}", train.attribute(i).toString());
 //			Logger.debug("attribute name: {}", train.attribute(i).name());
 //		}
+		Logger.debug("building classifier: nattr={}, nvals={}", train.numAttributes(), train.numClasses());
 		sl.buildClassifier(train);
 		return new LogisticClassifier(ds.getStructure(), sl);
 	}
