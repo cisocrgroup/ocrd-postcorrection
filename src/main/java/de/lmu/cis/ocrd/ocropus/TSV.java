@@ -155,7 +155,7 @@ public class TSV {
         if (argMin >= 0) {
             return argMin;
         }
-        throw new Exception("cannot find '" + needle + "' in '" + str + "'");
+        throw new Exception("cannot find '" + needle + "' in '" + str + "'" + " at index " + offset);
     }
 
     private TSV sublist(int start, int end) {
