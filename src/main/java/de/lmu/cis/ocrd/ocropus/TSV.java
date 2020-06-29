@@ -137,7 +137,7 @@ public class TSV {
 
         // We have some problem with the alignment.
         // We search around the offset position for the best match using levenshtein distance.
-        LevenshteinDistance lev = new LevenshteinDistance(Math.min(3, len / 2));
+        LevenshteinDistance lev = new LevenshteinDistance(3);
         final int from = offset >= len ? offset-len : 0;
         final int to = Math.min(offset + len, str.length());
         int argMin = -1;
@@ -152,10 +152,10 @@ public class TSV {
                 }
             }
         }
-        if (argMin < 0) {
-            throw new Exception("cannot find '" + needle + "' in '" + str + "'");
+        if (argMin >= 0) {
+            return argMin;
         }
-        return argMin;
+        throw new Exception("cannot find '" + needle + "' in '" + str + "'");
     }
 
     private TSV sublist(int start, int end) {
