@@ -30,6 +30,9 @@ public class Workspace extends AbstractWorkspace {
             for (Path imageFile: imageFiles) {
                 List<BaseOCRToken> lineTokens = new TSVLineAlignment(imageFile).align(parameters.getOcropusOCRExtensions());
                 tokens.addAll(lineTokens);
+                if (parameters.getMaxTokens() > 0 && parameters.getMaxTokens() >= tokens.size()) {
+                    break;
+                }
             }
             for (int i = 0; i < tokens.size(); i++) {
                 ((BaseOCRToken)tokens.get(i)).setID(i+1);
