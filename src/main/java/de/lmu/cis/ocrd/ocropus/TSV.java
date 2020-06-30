@@ -171,6 +171,7 @@ public class TSV {
         Logger.debug("sublist({},{})", start, end);
         Logger.debug("string: {}", toString());
         int s = toString().codePointCount(0, start);
+        Logger.debug("substring: {}", s);
         int len = toString().codePointCount(start, Math.min(end, toString().length()));
         return new TSV(this.pairs.subList(s, s+len), this.path);
     }
