@@ -102,12 +102,18 @@ public class TSV {
             // handle master
             if (index == 0) {
                 final int pos = mustGetIndexOf(wordAlignment.master, offset);
+                if (pos < 0) {
+                    continue;
+                }
                 offset = pos + wordAlignment.master.length();
                 ret.add(sublist(pos, offset));
             } else { // alignment: index > 0
                 int start = -1;
                 for (String part : wordAlignment.alignments.get(index - 1)) {
                     final int pos = mustGetIndexOf(part, offset);
+                    if (pos < 0) {
+                        continue;
+                    }
                     if (start == -1) {
                         start = pos;
                     }
@@ -155,8 +161,8 @@ public class TSV {
         if (argMin >= 0) {
             return argMin;
         }
-        // sigh. just find something at this point
-        return offset;
+        // sigh. we just cannot get the index
+        return -1;
         // throw new Exception("cannot find '" + needle + "' in '" + str + "'" + " at index " + offset);
     }
 
