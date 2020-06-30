@@ -2,7 +2,6 @@ package de.lmu.cis.ocrd.ocropus;
 
 import de.lmu.cis.ocrd.align.Lines;
 import org.apache.commons.text.similarity.LevenshteinDistance;
-import org.pmw.tinylog.Logger;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -103,18 +102,12 @@ public class TSV {
             // handle master
             if (index == 0) {
                 final int pos = mustGetIndexOf(wordAlignment.master, offset);
-                if (pos < 0) {
-                    continue;
-                }
                 offset = pos + wordAlignment.master.length();
                 ret.add(sublist(pos, offset));
             } else { // alignment: index > 0
                 int start = -1;
                 for (String part : wordAlignment.alignments.get(index - 1)) {
                     final int pos = mustGetIndexOf(part, offset);
-                    if (pos < 0) {
-                        continue;
-                    }
                     if (start == -1) {
                         start = pos;
                     }
@@ -128,7 +121,10 @@ public class TSV {
 
     private int mustGetIndexOf(String needle, int offset) throws Exception {
         final String str = toString();
-        final int len = needle.length();
+        int len = needle.length();
+        if (len < 3) {
+            len = 3;
+        }
         int pos = str.indexOf(needle, offset);
         if (pos >= 0 && ((pos-(offset+len)) <= 2*len)) {
             return pos;
@@ -163,15 +159,11 @@ public class TSV {
             return argMin;
         }
         // sigh. we just cannot get the index
-        return -1;
-        // throw new Exception("cannot find '" + needle + "' in '" + str + "'" + " at index " + offset);
+        throw new Exception("cannot find '" + needle + "' in '" + str + "'" + " at index " + offset);
     }
 
     private TSV sublist(int start, int end) {
-        Logger.debug("sublist({},{})", start, end);
-        Logger.debug("string: {}", toString());
         int s = toString().codePointCount(0, start);
-        Logger.debug("substring: {}", s);
         int len = toString().codePointCount(start, Math.min(end, toString().length()));
         return new TSV(this.pairs.subList(s, s+len), this.path);
     }
