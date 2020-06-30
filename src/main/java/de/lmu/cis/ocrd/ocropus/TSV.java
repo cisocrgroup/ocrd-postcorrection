@@ -2,6 +2,7 @@ package de.lmu.cis.ocrd.ocropus;
 
 import de.lmu.cis.ocrd.align.Lines;
 import org.apache.commons.text.similarity.LevenshteinDistance;
+import org.pmw.tinylog.Logger;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -167,6 +168,8 @@ public class TSV {
     }
 
     private TSV sublist(int start, int end) {
+        Logger.debug("sublist({},{})", start, end);
+        Logger.debug("string: {}", toString());
         int s = toString().codePointCount(0, start);
         int len = toString().codePointCount(start, Math.min(end, toString().length()));
         return new TSV(this.pairs.subList(s, s+len), this.path);
