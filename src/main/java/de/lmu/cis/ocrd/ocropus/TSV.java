@@ -119,13 +119,8 @@ public class TSV {
         return ret;
     }
 
-    private int mustGetIndexOf(String needle, int offset) throws Exception {
-        final String str = toString();
-        int len = needle.length();
-        if (len < 3) {
-            len = 3;
-        }
-        int pos = str.indexOf(needle, offset);
+    private static int exactSearch(String needle, String haystack, int offset, int len) {
+        int pos = haystack.indexOf(needle, offset);
         if (pos >= 0 && ((pos-(offset+len)) <= 2*len)) {
             return pos;
         }
@@ -133,30 +128,57 @@ public class TSV {
         if (start < 0) {
             start = 0;
         }
-        pos = str.indexOf(needle, start);
-        if (pos >= 0) {
-            return pos;
-        }
+        return haystack.indexOf(needle, start);
+    }
 
-        // We have some problem with the alignment.
-        // We search around the offset position for the best match using levenshtein distance.
-        LevenshteinDistance lev = new LevenshteinDistance(3);
+    private static int levSearch(String needle, String haystack, int offset, int len, int k) {
+        LevenshteinDistance lev = new LevenshteinDistance(k);
         final int from = offset >= len ? offset-len : 0;
-        final int to = Math.min(offset + len, str.length());
+        final int to = Math.min(offset + len, haystack.length());
         int argMin = -1;
         int min = len;
         for (int i = from; i < to; i++) {
             for (int j = to; j > i; j--) {
-                final String substr = str.substring(i, j);
-                final int dist = lev.apply(substr, needle);
+                final String substring = haystack.substring(i, j);
+                final int dist = lev.apply(substring, needle);
                 if (dist < min) {
                     min = dist;
                     argMin = i;
                 }
             }
         }
-        if (argMin >= 0) {
-            return argMin;
+        return argMin;
+    }
+
+    private int mustGetIndexOf(String needle, int offset) throws Exception {
+        final String str = toString();
+        // Use a minimum length of 3.
+        int len = needle.length();
+        if (len < 3) {
+            len = 3;
+        }
+        // Exact match
+        int pos = exactSearch(needle, str, offset, len);
+        if (pos >= 0) {
+            return pos;
+        }
+
+        // We have some problem with the alignment.
+        // We search around the offset position for the best match using levenshtein distance.
+        pos = levSearch(needle, str, offset, len, 3);
+        if (pos >= 0) {
+            return pos;
+        }
+
+        // Try again with more space
+        len *= 2;
+        pos = exactSearch(needle, str, offset, len);
+        if (pos >= 0) {
+            return pos;
+        }
+        pos = levSearch(needle, str, offset, len, 3);
+        if (pos >= 0) {
+            return pos;
         }
         // sigh. we just cannot get the index
         throw new Exception("cannot find '" + needle + "' in '" + str + "'" + " at index " + offset);
