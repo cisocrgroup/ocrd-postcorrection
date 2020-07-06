@@ -22,9 +22,11 @@ public class CandidateOCRPatternsDistanceFeature extends NamedDoubleFeature {
 	@Override
 	protected double doCalculate(OCRToken token, int i, int n) {
 		final Candidate candidate = mustGetCandidate(token);
+		// For the master ocr (i=0) the levenshtein distance is encoded directly in the profiler candidate.
 		if (i == 0) {
 			return candidate.Distance;
 		}
+		// For the support ocrs (i>0), the levenshtein distance has to be calculated individually.
 		final String ocr = getWord(token, i, n).getWordNormalized();
 		final String suggestion = candidate.Suggestion;
 		return ld.apply(ocr, suggestion);
