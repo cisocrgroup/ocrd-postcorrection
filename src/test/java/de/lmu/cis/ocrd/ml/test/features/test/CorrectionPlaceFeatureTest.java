@@ -2,7 +2,7 @@ package de.lmu.cis.ocrd.ml.test.features.test;
 
 import de.lmu.cis.ocrd.ml.BaseOCRToken;
 import de.lmu.cis.ocrd.ml.CandidateOCRToken;
-import de.lmu.cis.ocrd.ml.features.CandidateOCRPatternConfidenceFeature;
+import de.lmu.cis.ocrd.ml.features.CorrectionPlaceFeature;
 import de.lmu.cis.ocrd.ml.features.Feature;
 import de.lmu.cis.ocrd.ml.test.MockBaseOCRToken;
 import de.lmu.cis.ocrd.ml.test.MockOCRWord;
@@ -21,7 +21,7 @@ import java.util.zip.GZIPInputStream;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class CandidateOCRPatternConfidenceFeatureTest {
+public class CorrectionPlaceFeatureTest {
     private BaseOCRToken baseOCRToken;
     private List<Candidate> candidates;
     private Feature feature;
@@ -32,7 +32,7 @@ public class CandidateOCRPatternConfidenceFeatureTest {
             candidates = Profile.read(r).get("onoga").orElseThrow(Exception::new).Candidates;
         }
         baseOCRToken = new MockBaseOCRToken(1).addWord(new MockOCRWord().setWordNormalized("onoga").setCharConfidences(new double[]{.1,.1,.9,.9,.9}));
-        feature = new CandidateOCRPatternConfidenceFeature("test");
+        feature = new CorrectionPlaceFeature("test");
     }
 
     @Test

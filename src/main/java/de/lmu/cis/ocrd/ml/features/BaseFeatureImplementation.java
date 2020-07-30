@@ -40,23 +40,31 @@ abstract class BaseFeatureImplementation implements Feature {
 		return token.getSlaveOCR(i - 1);
 	}
 
-	// return either the best weighted candidate (by the profiler), the according candidate (candidate tokens for ranking),
-	// or the best ranked candidate (by the ranker).
-	protected Candidate mustGetCandidate(OCRToken token) {
+	protected Optional<Candidate> maybeGetCandidate(OCRToken token) {
 		// candidate token
 		final Optional<Candidate> candidate = token.getCandidate();
 		if (candidate.isPresent()) {
-			return candidate.get();
+			return candidate;
 		}
 		// profiler candidates
 		final List<Candidate> candidates = token.getCandidates();
 		if (!candidates.isEmpty()) {
-			return candidates.get(0);
+			return Optional.of(candidates.get(0));
 		}
 		// ranked candidates
 		List<Ranking> rankings = token.getRankings();
 		if (!rankings.isEmpty()) {
-			return rankings.get(0).getCandidate();
+			return Optional.of(rankings.get(0).getCandidate());
+		}
+		return Optional.empty();
+	}
+
+	// return either the best weighted candidate (by the profiler), the according candidate (candidate tokens for ranking),
+	// or the best ranked candidate (by the ranker).
+	protected Candidate mustGetCandidate(OCRToken token) {
+		final Optional<Candidate> candidate = maybeGetCandidate(token);
+		if (candidate.isPresent()) {
+			return candidate.get();
 		}
 		throw new RuntimeException("missing profiler candidate for: " + token.toString() + " [" + token.getClass().getName() + "]");
 	}

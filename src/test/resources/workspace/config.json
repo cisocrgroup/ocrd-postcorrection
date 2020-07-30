@@ -58,8 +58,8 @@
             "maxThreshold": 5
         },
         {
-            "type": "de.lmu.cis.ocrd.ml.features.OCRPatternConfidenceFeature",
-            "name": "OCRPatternConfidence"
+            "type": "de.lmu.cis.ocrd.ml.features.CorrectionPlaceFeature",
+            "name": "CorrectionPlaceFeature"
         },
         {
             "type":  null,
@@ -167,8 +167,8 @@
             "name": "UnigramOCRRelativeFrequency"
         },
         {
-            "type": "de.lmu.cis.ocrd.ml.features.CandidateOCRPatternConfidenceFeature",
-            "name": "OCRPatternConfidence"
+            "type": "de.lmu.cis.ocrd.ml.features.CorrectionPlaceFeature",
+            "name": "CorrectionPlaceFeature"
         }
     ],
     "dmFeatures":[
@@ -181,8 +181,8 @@
             "name": "BestRankDifferenceToNext"
         },
         {
-            "type": "de.lmu.cis.ocrd.ml.features.CandidateOCRPatternConfidenceFeature",
-            "name": "OCRPatternConfidenceFeature"
+            "type": "de.lmu.cis.ocrd.ml.features.CorrectionPlaceFeature",
+            "name": "CorrectionPlaceFeature"
         }
     ]
   }
