@@ -28,6 +28,7 @@ public class Workspace extends AbstractWorkspace {
             imageFiles.sort(Path::compareTo);
             List<de.lmu.cis.ocrd.ml.BaseOCRToken> tokens = new ArrayList<>(imageFiles.size());
             for (Path imageFile: imageFiles) {
+                Logger.debug("image file: {}", imageFile.toString());
                 List<BaseOCRToken> lineTokens = new TSVLineAlignment(imageFile).align(parameters.getOcropusOCRExtensions());
                 tokens.addAll(lineTokens);
                 if (parameters.getMaxTokens() > 0 && parameters.getMaxTokens() >= tokens.size()) {
