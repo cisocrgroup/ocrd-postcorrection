@@ -45,6 +45,11 @@ public class WorkspaceTest {
     }
 
     @Test
+    public void testNumberOfBaseTokensNoSubDir() throws Exception {
+        assertThat(workspace.getBaseOCRTokenReader(Paths.get(ocropusDir, "0001").toString()).read().size(), is(4));
+    }
+
+    @Test
     public void testMasterOCR() throws Exception {
         final String[] want = new String[]{"ab", "cd", "ef", "ghi"};
         final List<BaseOCRToken> tokens = workspace.getBaseOCRTokenReader(ocropusDir).read();
