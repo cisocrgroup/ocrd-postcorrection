@@ -32,13 +32,14 @@ public class Workspace extends AbstractWorkspace {
 
                 List<BaseOCRToken> lineTokens = new TSVLineAlignment(imageFile).align(parameters.getOcropusOCRExtensions());
                 tokens.addAll(lineTokens);
-                if (parameters.getMaxTokens() > 0 && parameters.getMaxTokens() >= tokens.size()) {
+                if (parameters.getMaxTokens() > 0 && parameters.getMaxTokens() <= tokens.size()) {
                     break;
                 }
             }
             for (int i = 0; i < tokens.size(); i++) {
                 ((BaseOCRToken)tokens.get(i)).setID(i+1);
             }
+            Logger.debug("read {} tokens [max={}]", tokens.size(), parameters.getMaxTokens());
             base.clear();
             base.put(ifg, new AbstractWorkspace.BaseOCRTokenReaderImpl(tokens));
         }
