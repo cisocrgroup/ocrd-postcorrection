@@ -1,7 +1,6 @@
 package de.lmu.cis.ocrd.ml;
 
 import com.google.gson.Gson;
-import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.util.StringCorrector;
 import org.pmw.tinylog.Logger;
 
@@ -9,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +53,21 @@ public class DMProtocol implements Protocol {
 
     public static class TValue extends BaseValue {
         public List<Candidate> candidates;
+    }
+
+    public static class Candidate {
+        int histDistance, ocrDistance;
+        String suggestion;
+        public Candidate(de.lmu.cis.ocrd.profile.Candidate candidate) {
+            suggestion = candidate.Suggestion;
+            ocrDistance = candidate.Distance;
+            if (candidate.HistPatterns == null) {
+                histDistance = 0;
+            } else {
+                histDistance = candidate.HistPatterns.length;
+            }
+
+        }
     }
 
     public static class GroundTruth {
@@ -137,7 +152,10 @@ public class DMProtocol implements Protocol {
         v.cor = ""; // updated later
         v.confidence = 0; // updated later
         v.taken = false; // updated later
-        v.candidates = token.getCandidates();
+        v.candidates = new ArrayList<>();
+        for (de.lmu.cis.ocrd.profile.Candidate candidate: token.getCandidates()) {
+            v.candidates.add(new Candidate(candidate));
+        }
         protocol.tokens.put(token.getID(), v);
     }
 }
