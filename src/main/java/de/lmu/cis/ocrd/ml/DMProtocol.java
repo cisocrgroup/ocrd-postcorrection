@@ -1,6 +1,7 @@
 package de.lmu.cis.ocrd.ml;
 
 import com.google.gson.Gson;
+import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.util.StringCorrector;
 import org.pmw.tinylog.Logger;
 
@@ -13,14 +14,13 @@ import java.util.List;
 import java.util.Map;
 
 public class DMProtocol implements Protocol {
-    public static class Value {
+    public static class BaseValue {
         public GroundTruth gt;
         public String id = "";
         String ocrNormalized = "";
         String corNormalized = "";
         public String ocr = "";
         String cor = "";
-        public List<Ranking> rankings;
         public double confidence = 0;
         public boolean taken = false;
 
@@ -31,6 +31,10 @@ public class DMProtocol implements Protocol {
         public boolean ocrIsCorrect() {
             return ocrNormalized.equalsIgnoreCase(gt.gt);
         }
+    }
+
+    public static class Value extends BaseValue {
+        public List<Ranking> rankings;
 
         // -1: no good correction candidate
         // 0: good correction candidate
@@ -47,6 +51,10 @@ public class DMProtocol implements Protocol {
         }
     }
 
+    public static class TValue extends BaseValue {
+        public List<Candidate> candidates;
+    }
+
     public static class GroundTruth {
         public String gt;
         public boolean present;
@@ -59,13 +67,15 @@ public class DMProtocol implements Protocol {
 
     public static class Protocol {
         public final Map<String, Value> corrections = new HashMap<>();
+        public final Map<String, TValue> tokens = new HashMap<>();
     }
 
     private Protocol protocol = new Protocol();
     private Map<OCRToken, List<Ranking>> rankings;
 
     public DMProtocol() {}
-    public DMProtocol(Map<OCRToken, List<Ranking>> rankings) {
+
+    public void setRankings(Map<OCRToken, List<Ranking>> rankings) {
         this.rankings = rankings;
     }
 
@@ -77,6 +87,7 @@ public class DMProtocol implements Protocol {
     public void read(InputStream is) {
         protocol = new Gson().fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), protocol.getClass());
     }
+
     @Override
     public void write(OutputStream out) throws Exception {
         out.write(new Gson().toJson(protocol).getBytes(StandardCharsets.UTF_8));
@@ -100,5 +111,33 @@ public class DMProtocol implements Protocol {
         val.taken = taken;
         val.rankings = rankings.get(token);
         protocol.corrections.put(token.getID(), val);
+
+        // Update the according token in the token map
+        if (!protocol.tokens.containsKey(token.getID())) {
+            throw new Exception("cannot find token with id: " + token.getID());
+        }
+        TValue v = protocol.tokens.get(token.getID());
+        v.corNormalized = val.corNormalized;
+        v.cor = val.cor;
+        v.confidence = val.confidence;
+        v.taken = val.taken;
+    }
+
+    public void protocol(OCRToken token) throws Exception {
+        if (protocol.tokens.containsKey(token.getID())) {
+            throw new Exception("not a unique id: " + token.getID() + " for token: " + token.toString());
+        }
+        final OCRWord mOCR = token.getMasterOCR();
+        final TValue v = new TValue();
+        v.id = token.getID();
+        v.gt = new GroundTruth(token);
+        v.ocrNormalized = mOCR.getWordNormalized();
+        v.corNormalized = ""; // gets updated in the other protocol function
+        v.ocr = mOCR.getWordRaw();
+        v.cor = ""; // updated later
+        v.confidence = 0; // updated later
+        v.taken = false; // updated later
+        v.candidates = token.getCandidates();
+        protocol.tokens.put(token.getID(), v);
     }
 }

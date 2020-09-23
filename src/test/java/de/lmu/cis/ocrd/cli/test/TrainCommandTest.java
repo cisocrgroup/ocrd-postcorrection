@@ -158,7 +158,7 @@ public class TrainCommandTest {
             assertThat(cmd.getParameters().getLETraining().getProtocol(i+1, parameters.isRunLE()).toFile().exists(), is(true));
 			checkReadProtocol(new LEProtocol(), cmd.getParameters().getLETraining().getProtocol(i+1, parameters.isRunLE()));
             assertThat(cmd.getParameters().getDMTraining().getProtocol(i+1, parameters.isRunLE()).toFile().exists(), is(true));
-			checkReadProtocol(new DMProtocol(null), cmd.getParameters().getDMTraining().getProtocol(i+1, parameters.isRunLE()));
+			checkReadProtocol(new DMProtocol(), cmd.getParameters().getDMTraining().getProtocol(i+1, parameters.isRunLE()));
 		}
 	}
 

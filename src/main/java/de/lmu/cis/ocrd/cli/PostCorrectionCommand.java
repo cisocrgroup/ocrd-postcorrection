@@ -13,6 +13,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 	private LM lm;
 	private Model model;
 	private Profile profile;
+	private DMProtocol protocol;
 
 	PostCorrectionCommand(String name) {super(name);}
 	public PostCorrectionCommand() {
@@ -97,6 +98,11 @@ public class PostCorrectionCommand extends ParametersCommand {
 		workspace.resetProfile(ifg, profile);
 		final Predictor predictor = getRRPredictor(ifg, nOCR);
 		Rankings rankings = new Rankings();
+		protocol = new DMProtocol();
+		// insert all tokens into the protocol.
+		for (OCRToken token: workspace.getNormalTokenReader(ifg, profile).read()) {
+			protocol.protocol(token);
+		}
 		for (OCRToken token: TokenFilter.filter(workspace.getNormalTokenReader(ifg, profile)).collect(Collectors.toList())) {
 			if (token.getCandidates().isEmpty()) { // skip token with no interpretation
 				continue;
@@ -121,7 +127,7 @@ public class PostCorrectionCommand extends ParametersCommand {
 		Logger.debug("decide({}, {}, {})", ifg, nOCR, runLE);
 		// no profile
 		final Predictor predictor = getDMPredictor(ifg, nOCR);
-		final DMProtocol protocol = new DMProtocol(rankings);
+		protocol.setRankings(rankings);
 		for (OCRToken token: rankings.keySet()) {
 			final Predictor.Result result = predictor.predict(new RankingsOCRToken(token, rankings.get(token)), nOCR);
 			final boolean take = result.getPrediction().getPrediction();
