@@ -153,7 +153,7 @@ public class DMProtocol implements Protocol {
         v.confidence = 0; // updated later
         v.taken = false; // updated later
         v.candidates = new ArrayList<>();
-        for (de.lmu.cis.ocrd.profile.Candidate candidate: token.getCandidates()) {
+        for (de.lmu.cis.ocrd.profile.Candidate candidate: token.getAllCandidates()) {
             v.candidates.add(new Candidate(candidate));
         }
         protocol.tokens.put(token.getID(), v);

@@ -100,7 +100,7 @@ class METSFileGroupReader {
             final Optional<Candidates> maybeCandidates = profile.get(token.getMasterOCR().getWordNormalized());
             if (maybeCandidates.isPresent()) {
                 final List<Candidate> candidates = maybeCandidates.get().Candidates;
-                tokens.add(new CandidatesOCRToken(token, candidates.subList(0, Math.min(candidates.size(), parameters.getMaxCandidates()))));
+                tokens.add(new CandidatesOCRToken(token, parameters.getMaxCandidates(), candidates));
             } else {
                 tokens.add(new CandidatesOCRToken(token));
             }

@@ -54,6 +54,9 @@ public class EmptyOCRToken implements OCRToken {
 	}
 
 	@Override
+	public List<Candidate> getAllCandidates() {return candidates;}
+
+	@Override
 	public void correct(String correction, double confidence, boolean take) {
 		/* do nothing */
 	}

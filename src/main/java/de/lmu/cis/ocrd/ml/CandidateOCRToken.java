@@ -33,6 +33,11 @@ public class CandidateOCRToken extends AbstractOCRToken {
     }
 
     @Override
+    public List<Candidate> getAllCandidates() {
+        return EMPTY_CANDIDATES;
+    }
+
+    @Override
     public String toString() {
         StringJoiner sj = new StringJoiner("|");
         sj.add(getBase().toString());

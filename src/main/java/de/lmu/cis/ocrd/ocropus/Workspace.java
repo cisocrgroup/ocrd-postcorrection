@@ -79,10 +79,10 @@ public class Workspace extends AbstractWorkspace {
     private OCRToken makeCandidateOCRToken(de.lmu.cis.ocrd.ml.BaseOCRToken token, Profile profile) {
         final Optional<Candidates> maybeCandidates = profile.get(token.getMasterOCR().getWordNormalized());
         if (!maybeCandidates.isPresent()) {
-            return new CandidatesOCRToken(token, new ArrayList<>());
+            return new CandidatesOCRToken(token);
         }
         List<Candidate> candidates = maybeCandidates.get().Candidates;
-        return new CandidatesOCRToken(token, candidates.subList(0, Math.min(candidates.size(), parameters.getMaxCandidates())));
+        return new CandidatesOCRToken(token, parameters.getMaxCandidates(), maybeCandidates.get().Candidates);
     }
 
     private List<Path> gatherImageFiles(Path base) throws IOException {

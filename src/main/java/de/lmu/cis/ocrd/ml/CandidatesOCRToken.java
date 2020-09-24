@@ -11,14 +11,20 @@ public class CandidatesOCRToken extends AbstractOCRToken {
     private static final List<Ranking> EMPTY_RANKINGS = new ArrayList<>();
     private static final List<Candidate> EMPTY_CANDIDATES = new ArrayList<>();
     private final List<Candidate> candidates;
+    private final int maxCandidates;
 
     public CandidatesOCRToken(BaseOCRToken base) {
-        this(base, null);
+        this(base, 0, null);
     }
 
-    public CandidatesOCRToken(BaseOCRToken base, List<Candidate> candidates) {
+    public CandidatesOCRToken(BaseOCRToken base, int maxCandidates, List<Candidate> candidates) {
         super(base);
-        this.candidates = candidates;
+        this.maxCandidates = maxCandidates;
+        if (maxCandidates == 0 || candidates == null) {
+            this.candidates = EMPTY_CANDIDATES;
+        } else {
+            this.candidates = candidates;
+        }
     }
 
     @Override
@@ -35,9 +41,13 @@ public class CandidatesOCRToken extends AbstractOCRToken {
 
     @Override
     public List<Candidate> getCandidates() {
-        if (candidates == null) {
-            return EMPTY_CANDIDATES;
-        }
+        assert(candidates != null);
+        return candidates.subList(0, Math.min(candidates.size(), maxCandidates));
+    }
+
+    @Override
+    public List<Candidate> getAllCandidates() {
+        assert(candidates != null);
         return candidates;
     }
 

@@ -14,4 +14,6 @@ public interface OCRToken extends BaseOCRToken {
 	Optional<Candidate> getCandidate();
 	// Get list of candidates.  If there are none, returns an empty list.
 	List<Candidate> getCandidates();
+	// Get the list of all candidates.
+	List<Candidate> getAllCandidates();
 }

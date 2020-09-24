@@ -108,6 +108,11 @@ public class Token implements Serializable, OCRToken {
 	}
 
 	@Override
+	public List<Candidate> getAllCandidates() {
+		return new ArrayList<>();
+	}
+
+	@Override
 	public void correct(String correction, double confidence, boolean take) {
 		/* do nothing */
 	}

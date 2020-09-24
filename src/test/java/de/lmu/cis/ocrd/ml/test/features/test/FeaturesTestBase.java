@@ -8,7 +8,6 @@ import de.lmu.cis.ocrd.pagexml.BaseOCRToken;
 import de.lmu.cis.ocrd.pagexml.Line;
 import de.lmu.cis.ocrd.pagexml.Page;
 import de.lmu.cis.ocrd.pagexml.Word;
-import de.lmu.cis.ocrd.profile.Candidate;
 import de.lmu.cis.ocrd.profile.Candidates;
 import de.lmu.cis.ocrd.profile.FileProfiler;
 import de.lmu.cis.ocrd.profile.Profile;
@@ -49,13 +48,11 @@ public class FeaturesTestBase {
 
 	private static OCRToken makeToken(int id, Word word, Line line, int maxCandidates, Profile profile) throws Exception {
 		Candidates candidates = profile.get(word.getUnicodeNormalized().get(0)).orElse(new Candidates());
-		List<Candidate> cands;
+		final BaseOCRToken baseOCRToken = new BaseOCRToken(id, word.getNode(), line.getUnicodeNormalized());
 		if (candidates.Candidates == null) {
-			cands = new ArrayList<>();
-		} else {
-			cands = candidates.Candidates.subList(0, Math.min(candidates.Candidates.size(), maxCandidates));
+			return new CandidatesOCRToken(baseOCRToken);
 		}
-		return new CandidatesOCRToken(new BaseOCRToken(id, word.getNode(), line.getUnicodeNormalized()), cands);
+		return new CandidatesOCRToken(baseOCRToken, maxCandidates, candidates.Candidates);
 	}
 
 	OCRToken getToken(int i) {
@@ -73,7 +70,7 @@ public class FeaturesTestBase {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-		// Logger.info("CANDIATE: " + new Gson().toJson(t.getCandidates().get(j)));
+		// Logger.info("CANDIDATE: " + new Gson().toJson(t.getCandidates().get(j)));
 		return new CandidateOCRToken(t, t.getCandidates().get(j));
 	}
 }
