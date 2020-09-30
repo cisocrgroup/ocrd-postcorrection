@@ -18,7 +18,8 @@ class DefaultConfigCommand implements Command{
         Parameters parameters = new Parameters();
         parameters.setNOCR(config.maybeGetNOCR().orElse(2));
         parameters.setDir("train");
-        parameters.setCourageous(true);
+        parameters.setDMTrainingType("courageous");
+        parameters.setSeed(42);
         parameters.setRunDM(true);
         parameters.setRunLE(true);
         parameters.setFilterClasses(Collections.singletonList("deactivate"));

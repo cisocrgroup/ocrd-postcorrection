@@ -52,7 +52,8 @@ public class ModelTest {
         model.setCreated(created);
         model.setNOCR(13);
         model.setMaxCandidates(10);
-        model.setCourageous(true);
+        model.setSeed(42);
+        model.setDMTrainingType("courageous");
         model.setFilterClasses(getFilterClasses());
         model.setLEFeatureSet(getLEFeatureSet());
         model.setRRFeatureSet(getRRFeatureSet());
@@ -209,7 +210,12 @@ public class ModelTest {
 
     @Test
     public void testIsCourageous() {
-        assertThat(model.isCourageous(), is(true));
+        assertThat(model.getDMTrainingType(), is("courageous"));
+    }
+
+    @Test
+    public void testSeed() {
+        assertThat(model.getSeed(), is(42L));
     }
 
     @Test

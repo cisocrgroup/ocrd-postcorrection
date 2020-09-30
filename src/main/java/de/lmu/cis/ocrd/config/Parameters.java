@@ -19,12 +19,13 @@ public class Parameters {
     private String ocropusImageExtension = "";
     private List<String> filterClasses = new ArrayList<>();
     private List<String> ocropusOCRExtensions = new ArrayList<>();
+    private String dmTrainingType;
+    private long seed;
     private int nOCR = 0;
     private int maxCandidates = 0;
     private int maxTokens = 0;
     private boolean runLE = false;
     private boolean runDM = false;
-    private boolean courageous = false;
 
     public void setLEFeatures(List<JsonObject> leFeatures) {
         this.leFeatures = leFeatures;
@@ -106,11 +107,19 @@ public class Parameters {
         this.runDM = runDM;
     }
 
-    public boolean isCourageous() {
-        return courageous;
+    public String getDMTrainingType() {return dmTrainingType;}
+
+    public void setDMTrainingType(String t) {
+        this.dmTrainingType = t;
     }
 
-    public void setCourageous(boolean courageous) {this.courageous = courageous;}
+    public long getSeed() {
+        return seed;
+    }
+
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
 
     public String getOcropusImageExtension() {
         return ocropusImageExtension;

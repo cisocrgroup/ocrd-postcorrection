@@ -128,13 +128,19 @@ public class Model implements Closeable {
         }
     }
 
-    public void setCourageous(boolean courageous) {
-        initConfig().courageous = courageous;
+    public void setDMTrainingType(String t) {
+        initConfig().dmTrainingType = t;
     }
 
-    public boolean isCourageous() {
-        return config.courageous;
+    public void setSeed(long seed) {
+        initConfig().seed = seed;
     }
+
+    public long getSeed() {
+        return initConfig().seed;
+    }
+
+    public String getDMTrainingType() {return initConfig().dmTrainingType;}
 
     public void setNOCR(int nOCR) {
         initConfig().nOCR = nOCR;
@@ -213,9 +219,10 @@ public class Model implements Closeable {
         List<JsonObject> rrFeatureSet = new ArrayList<>();
         List<JsonObject> dmFeatureSet = new ArrayList<>();
         String languageModelPath = "";
+        String dmTrainingType = "";
+        long seed = 0;
         long created = 0;
         int nOCR = 0;
         int maxCandidates = 0;
-        boolean courageous = false;
     }
 }

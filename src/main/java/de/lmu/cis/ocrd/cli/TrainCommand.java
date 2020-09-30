@@ -70,7 +70,8 @@ public class TrainCommand extends ParametersCommand {
 		model.setRRFeatureSet(parameters.getRRTraining().getFeatures());
 		model.setDMFeatureSet(parameters.getDMTraining().getFeatures());
 		model.setLanguageModelPath(parameters.getTrigrams().toString());
-		model.setCourageous(parameters.isCourageous());
+		model.setDMTrainingType(parameters.getDMTrainingType());
+		model.setSeed(parameters.getSeed());
 		model.setNOCR(parameters.getNOCR());
 		model.setMaxCandidates(parameters.getMaxCandidates());
 		model.setCreated(System.currentTimeMillis());
@@ -111,9 +112,7 @@ public class TrainCommand extends ParametersCommand {
 	}
 
 	private Trainer openDMTrainer(int n) throws Exception {
-		dmgtFeature = parameters.isCourageous() ?
-				new CourageousDMGTFeature("courageous-dm-gt"):
-				new DMGTFeature("dm-gt");
+		dmgtFeature = getDMGTFeature();
 		final Trainer trainer = new Trainer()
 				.withLanguageModel(lm)
 				.withDebug(debug)
@@ -127,5 +126,17 @@ public class TrainCommand extends ParametersCommand {
         // trainer.train() closes the writer
 		trainer.openARFFWriter(new BufferedWriter(new FileWriter(parameters.getDMTraining().getTraining(n).toFile())), "dm", n);
 		return trainer;
+	}
+
+	private DMGTFeature getDMGTFeature() throws Exception {
+		switch (parameters.getDMTrainingType()) {
+			case "courageous":
+				return new CourageousDMGTFeature("courageous-dm-gt");
+			case "cautious":
+				return new DMGTFeature("dm-gt");
+			case "random":
+				return new RandomDMGTFeature("random-dm-gt", parameters.getSeed());
+		}
+		throw new Exception("bad dm training type: " + parameters.getDMTrainingType());
 	}
 }
