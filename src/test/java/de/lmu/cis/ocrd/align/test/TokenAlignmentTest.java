@@ -125,8 +125,8 @@ public class TokenAlignmentTest extends de.lmu.cis.ocrd.test.Test {
 	}
 
 	@Test
-	public void testBug8() { // fist string contains two whitespace
-		final String a = "ſeer krefftig  vñ von wegirer vile";
+	public void testBug8() {
+		final String a = "ſeer krefftig  vñ von wegirer vile"; // The first string contains two whitespace.
 		final String b = "ſeer krefftig / vñ von wegẽ jrer vile";
 		final TokenAlignment tokens = new TokenAlignment(a).add(b);
 		assertThat(tokens.size(), is(6));
