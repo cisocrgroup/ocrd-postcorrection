@@ -32,7 +32,7 @@ public class Normalizer {
 	// state 2 -- w:e   -> 3
 	// state 2 -- a:xa  -> 1
 	// state 3 -- w,z:e -> 3
-	// state 3 -- a:sa    -> 1
+	// state 3 -- a:sa  -> 1
 	private void delta2(int c, double confidence) {
 		final int sigma = getSigma(c); // sigma = _ | . | a
 		// System.out.print("state " + state + " sigma " + (char)sigma);
