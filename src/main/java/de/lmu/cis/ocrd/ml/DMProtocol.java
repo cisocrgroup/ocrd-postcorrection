@@ -25,11 +25,11 @@ public class DMProtocol implements Protocol {
         public boolean taken = false;
 
         public boolean correctionIsCorrect() {
-            return corNormalized.equalsIgnoreCase(gt.gt);
+            return corNormalized.toLowerCase().equals(gt.gt.toLowerCase());
         }
 
         public boolean ocrIsCorrect() {
-            return ocrNormalized.equalsIgnoreCase(gt.gt);
+            return ocrNormalized.toLowerCase().equals(gt.gt.toLowerCase());
         }
     }
 
@@ -43,7 +43,7 @@ public class DMProtocol implements Protocol {
                 return -1;
             }
             for (int i = 0; i< rankings.size(); i++) {
-                if (rankings.get(i).getCandidate().Suggestion.equalsIgnoreCase(gt.gt)) {
+                if (rankings.get(i).getCandidate().Suggestion.toLowerCase().equals(gt.gt.toLowerCase())) {
                     return i;
                 }
             }

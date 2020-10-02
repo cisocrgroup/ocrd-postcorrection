@@ -28,10 +28,10 @@ public class DynamicLexiconGTFeature extends NamedBooleanFeature {
 	@Override
 	boolean doCalculate(OCRToken token, int i, int n) {
 		final OCRWord mOCR = token.getMasterOCR();
-		final String normalized = mOCR.getWordNormalized();
+		final String normalized = mOCR.getWordNormalized().toLowerCase();
 		return normalized.codePointCount(0, normalized.length()) > SHORT
 				&& !mOCR.getLineNormalized().startsWith(normalized)
 				&& !mOCR.getLineNormalized().endsWith(normalized)
-				&& token.getGT().orElse("").equalsIgnoreCase(normalized);
+				&& token.getGT().orElse("").toLowerCase().equals(normalized);
 	}
 }

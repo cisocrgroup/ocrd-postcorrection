@@ -10,7 +10,7 @@ import java.util.List;
 public class HighestRankedCandidateMatchesOCRFeature extends NamedBooleanFeature {
 	private static final long serialVersionUID = 2905792591421472862L;
 
-	public HighestRankedCandidateMatchesOCRFeature(JsonObject o, ArgumentFactory args) throws Exception {
+	public HighestRankedCandidateMatchesOCRFeature(JsonObject o, ArgumentFactory args) {
 		this(JSON.mustGetNameOrType(o));
 	}
 
@@ -24,7 +24,7 @@ public class HighestRankedCandidateMatchesOCRFeature extends NamedBooleanFeature
 		if (cs.isEmpty()) {
 			return false;
 		}
-		return cs.get(0).Suggestion.equalsIgnoreCase(getWord(token, i, n).getWordNormalized());
+		return cs.get(0).Suggestion.toLowerCase().equals(getWord(token, i, n).getWordNormalized().toLowerCase());
 	}
 
 	@Override

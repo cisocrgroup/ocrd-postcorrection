@@ -115,13 +115,13 @@ public class DMEvaluator {
 
 	public void register(OCRToken token) throws Exception {
 		tokens.add(token);
-		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
+		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth")).toLowerCase();
 		// is the token interpretable?
 		// it is not interpretable if the Profiler did not return any correction suggestion
 		// or if there are no rankings for the token because NaNs etc.
 		if (token.getCandidates().isEmpty() || rankings.get(token) == null) {
 			notInterpretableTokenList.add(token);
-			if (token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
+			if (token.getGT().orElse("").toLowerCase().equals(token.getMasterOCR().getWordNormalized().toLowerCase())) {
 				classifications.put(token, Classification.UNINTERPRETABLE_OCR_CORRECT);
 				notInterpretableCorrectTokens++;
 			} else {
@@ -134,19 +134,19 @@ public class DMEvaluator {
 		interpretableTokens++;
 		// we only care about tokens that we are going to correct
 		// correct or incorrect uninterpretable tokens cannot be corrected anyway
-		if (token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
+		if (gt.equals(token.getMasterOCR().getWordNormalized().toLowerCase())) {
 			correctOCRTokensBefore++;
 		} else {
 			badOCRTokensBefore++;
 		}
-		if (token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString())) {
+		if (gt.equals(token.getMasterOCR().getWordNormalized().toLowerCase())) {
 			interpretableCorrectTokens++;
 			classifications.put(token, Classification.INTERPRETABLE_OCR_CORRECT);
 			return;
 		}
 		// ocr error (we want to correct something)
 		interpretableNotCorrectTokens++;
-		if (token.getCandidates().get(0).Suggestion.equalsIgnoreCase(gt)) {
+		if (token.getCandidates().get(0).Suggestion.toLowerCase().equals(gt)) {
 			profilerFirstRankTokens++;
 		}
 		int placement = getPlacement(token, gt);
@@ -174,7 +174,7 @@ public class DMEvaluator {
 		for (int i = 0; i < rs.size(); i++) {
 			assert(rs.get(i).getRanking() <= before);
 			before = rs.get(i).getRanking();
-			if (gt.equalsIgnoreCase(rs.get(i).getCandidate().Suggestion)) {
+			if (gt.toLowerCase().equals(rs.get(i).getCandidate().Suggestion.toLowerCase())) {
 				return i;
 			}
 		}
@@ -185,7 +185,7 @@ public class DMEvaluator {
 	private void updateErrorTypeCounts_I_II(OCRToken token, String gt) {
 		boolean found = false;
 		for (Candidate candidate : token.getCandidates()) {
-			if (gt.equalsIgnoreCase(candidate.Suggestion)) {
+			if (gt.toLowerCase().equals(candidate.Suggestion.toLowerCase())) {
 				found = true;
 				break;
 			}
@@ -326,7 +326,7 @@ public class DMEvaluator {
 
 	private void printTokenClassifications() {
         final List<Map.Entry<OCRToken, Classification>> entries = new ArrayList<>(classifications.entrySet());
-	    entries.sort(Comparator.comparing(Map.Entry::getValue));
+	    entries.sort(Map.Entry.comparingByValue());
 	    entries.forEach((entry)->{
             printf("%s: %s", entry.getValue().toString(), entry.getKey());
             if (entry.getValue() == Classification.INTERPRETABLE_OCR_ERROR_HAVE_NO_CANDIDATE ||
@@ -342,9 +342,9 @@ public class DMEvaluator {
 	private void evaluate(OCRToken token, Instance instance) throws Exception {
 		final String gt = token.getGT().orElseThrow(() -> new Exception("missing ground-truth"));
 		final boolean yes = classify(instance);
-		final boolean ocrCorrect = token.getGT().orElse("").equalsIgnoreCase(token.getMasterOCR().toString());
-		final String correction = rankings.get(token).get(0).getCandidate().Suggestion;
-		final boolean correctionCorrect = gt.equalsIgnoreCase(correction);
+		final boolean ocrCorrect = token.getGT().orElse("").toLowerCase().equals(token.getMasterOCR().getWordNormalized().toLowerCase());
+		final String correction = rankings.get(token).get(0).getCandidate().Suggestion.toLowerCase();
+		final boolean correctionCorrect = gt.toLowerCase().equals(correction);
 		counts.get(classifications.get(token)).add(yes, correctionCorrect);
 
 		// we have an invalid ocr token and the correction is bad
@@ -399,7 +399,7 @@ public class DMEvaluator {
 					postCorrectionFalseFriends++;
 				}
 			}
-		} else if(ocrCorrect && yes && !correctionCorrect) {
+		} else if(yes && !correctionCorrect) { // ocrCorrect == true
 			postCorrectionDisimprovements++;
 		}
 	}

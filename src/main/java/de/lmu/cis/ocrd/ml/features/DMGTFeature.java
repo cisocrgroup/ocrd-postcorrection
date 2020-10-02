@@ -28,7 +28,7 @@ public class DMGTFeature extends NamedBooleanFeature {
 		final Ranking ranking = token.getRankings().get(0);
 
 		final String gt = token.getGT().orElse("");
-		return gt.equalsIgnoreCase(ranking.getCandidate().Suggestion);
+		return gt.toLowerCase().equals(ranking.getCandidate().Suggestion.toLowerCase());
 	}
 
 	// Returns true if the given token should be used for the DM-training.

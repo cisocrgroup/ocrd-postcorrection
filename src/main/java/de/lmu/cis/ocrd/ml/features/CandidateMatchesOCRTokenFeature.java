@@ -7,8 +7,7 @@ import de.lmu.cis.ocrd.util.JSON;
 public class CandidateMatchesOCRTokenFeature extends NamedBooleanFeature {
 	private static final long serialVersionUID = -3415553562125497094L;
 
-	public CandidateMatchesOCRTokenFeature(JsonObject o,
-	                                       ArgumentFactory args) throws Exception {
+	public CandidateMatchesOCRTokenFeature(JsonObject o, ArgumentFactory args) {
 		this(JSON.mustGetNameOrType(o));
 	}
 
@@ -18,7 +17,7 @@ public class CandidateMatchesOCRTokenFeature extends NamedBooleanFeature {
 
 	@Override
 	boolean doCalculate(OCRToken token, int i, int n) {
-		return getWord(token, i, n).getWordNormalized().toLowerCase().equalsIgnoreCase(mustGetCandidate(token).Suggestion);
+		return getWord(token, i, n).getWordNormalized().toLowerCase().equals(mustGetCandidate(token).Suggestion.toLowerCase());
 	}
 
 	@Override

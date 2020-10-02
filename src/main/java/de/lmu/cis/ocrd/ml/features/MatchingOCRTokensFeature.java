@@ -28,7 +28,7 @@ public class MatchingOCRTokensFeature extends NamedDoubleFeature {
 		// i=0 is master OCR
 		final String mOCR = token.getMasterOCR().getWordNormalized();
 		for (int j = 1; j < n; j++) {
-			if (mOCR.equalsIgnoreCase(token.getSlaveOCR(j - 1).getWordNormalized())) {
+			if (mOCR.toLowerCase().equals(token.getSlaveOCR(j - 1).getWordNormalized().toLowerCase())) {
 				sum += 1;
 			}
 		}

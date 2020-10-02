@@ -20,6 +20,6 @@ public class ReRankingGTFeature extends NamedBooleanFeature {
 	@Override
 	boolean doCalculate(OCRToken token, int i, int n) {
 		Candidate candidate = mustGetCandidate(token);
-		return token.getGT().orElseThrow(RuntimeException::new).equalsIgnoreCase(candidate.Suggestion);
+		return token.getGT().orElseThrow(RuntimeException::new).toLowerCase().equals(candidate.Suggestion.toLowerCase());
 	}
 }

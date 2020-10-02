@@ -111,7 +111,7 @@ public class EvaluateCommand extends PostCorrectionCommand {
         }
         // counts
         counts.n++;
-        if (token.getMasterOCR().getWordNormalized().equalsIgnoreCase(gt)) {
+        if (token.getMasterOCR().getWordNormalized().toLowerCase().equals(gt)) {
             counts.correctBefore++;
         }
         Logger.debug("evaluating token {}/{} {}", counts.n, counts.correctBefore, token.toString());
@@ -228,7 +228,7 @@ public class EvaluateCommand extends PostCorrectionCommand {
             } else if (maybeCandidates.get().Candidates.size() == 1 && maybeCandidates.get().Candidates.get(0).isLexiconEntry()) {
                 counts.skippedLexiconEntry++;
                 Logger.debug(" * no correction attempted: lexicon entry");
-                if (!token.getMasterOCR().getWordNormalized().equalsIgnoreCase(gt)) {
+                if (!token.getMasterOCR().getWordNormalized().toLowerCase().equals(gt)) {
                     counts.skippedFalseFriends++;
                     Logger.debug(" * no correction attempted: false friend");
                 }
@@ -236,7 +236,7 @@ public class EvaluateCommand extends PostCorrectionCommand {
                 throw new Exception("bad unhandled token: " + token.toString());
             }
         }
-        if (token.getMasterOCR().getWordNormalized().equalsIgnoreCase(token.getGT().orElse(""))) {
+        if (token.getMasterOCR().getWordNormalized().toLowerCase().equals(token.getGT().orElse("").toLowerCase())) {
             counts.correctAfter++;
         }
     }

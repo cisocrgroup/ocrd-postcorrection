@@ -51,7 +51,7 @@ public class StatsCommand extends ParametersCommand {
         }
         ocrConfSum += token.getMasterOCR().getConfidence();
         if (token.getGT().isPresent()) {
-            if (token.getMasterOCR().getWordNormalized().equalsIgnoreCase(token.getGT().get())) {
+            if (token.getMasterOCR().getWordNormalized().toLowerCase().equals(token.getGT().get().toLowerCase())) {
                 Logger.debug(" * token {} is correct", token);
                 ocrCorrect++;
             }

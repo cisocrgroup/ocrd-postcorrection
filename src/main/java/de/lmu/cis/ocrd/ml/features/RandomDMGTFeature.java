@@ -29,7 +29,7 @@ public class RandomDMGTFeature extends DMGTFeature {
 	public boolean isValidForTraining(OCRToken token) {
 		assert(!token.getRankings().isEmpty());
 		final String gt = token.getGT().orElse("");
-		if (!gt.equalsIgnoreCase(token.getMasterOCR().getWordNormalized())) {
+		if (!gt.toLowerCase().equals(token.getMasterOCR().getWordNormalized().toLowerCase())) {
 			return flip();
 		}
 		return true;
