@@ -69,4 +69,23 @@ public class NormalizerTest {
 				"#String with special characters $ # $");
 		assertThat(got, is(want));
 	}
+
+	@Test
+	public void testEqualsIgnoreCase() {
+		final String a = "ſeer";
+		final String b = "seer";
+		// equalIgnoreCase compares to true for all a,b in str1,str2
+		// if a == b or toLower(a) == toLower(b) or toUpper(a) == toUpper(b).
+		// For ſ: toUpper(ſ) == S.
+		assertThat(a.equalsIgnoreCase(b), is(true));
+	}
+
+	@Test
+	public void testToLowerCaseEquals() {
+		final String a = "ſeer";
+		final String b = "seer";
+		// We need to use this comparison to compare two strings
+		// ignoring case (see above).
+		assertThat(a.toLowerCase().equals(b), is(false));
+	}
 }
