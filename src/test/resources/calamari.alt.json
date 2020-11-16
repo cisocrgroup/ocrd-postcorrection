@@ -1,0 +1,34 @@
+[
+  {
+    "PrimaryOCR": "Weſer",
+    "SecondaryOCR": "Weſer",
+    "GT": "Weſer",
+    "PrimaryLine": "Weſer ſee gelegen / wirdeſonſt et⸗",
+    "SecondaryLine": "Weſer ſee gelegen / wirdt ſonſt et⸗",
+    "PrimaryCharConfs": [
+      0.821114924028022,
+      0.996961353697874,
+      0.996472664982612,
+      0.996896251214616,
+      0.99231287798895
+    ],
+    "Alternatives": [],
+    "PrimaryConf": 0.909038138862948,
+    "SecondaryConf": 0.997808
+  },
+  {
+    "PrimaryOCR": "ſee",
+    "SecondaryOCR": "ſee",
+    "GT": "ſee",
+    "PrimaryLine": "Weſer ſee gelegen / wirdeſonſt et⸗",
+    "SecondaryLine": "Weſer ſee gelegen / wirdt ſonſt et⸗",
+    "PrimaryCharConfs": [
+      0.942812564753051,
+      0.984318058754909,
+      0.988223905498783
+    ],
+    "Alternatives": [],
+    "PrimaryConf": 0.965518235125917,
+    "SecondaryConf": 0.9998229
+  }
+]
