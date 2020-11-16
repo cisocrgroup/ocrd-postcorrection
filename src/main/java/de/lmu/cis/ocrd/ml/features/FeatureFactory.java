@@ -48,7 +48,9 @@ public class FeatureFactory {
 				.register(DMBestRankFeature.class)
 				.register(DMDifferenceToNextRankFeature.class)
 				.register(AverageOCRCharacterConfidenceFeature.class)
-				.register(MaxCharNGramsFeature.class);
+				.register(MaxCharNGramsFeature.class)
+				.register(CandidateIsAlternativeFeature.class)
+				.register(CandidateAlternativeConfidenceFeature.class);
 	}
 
 	public FeatureFactory withArgumentFactory(ArgumentFactory args) {
