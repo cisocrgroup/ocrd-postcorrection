@@ -144,6 +144,12 @@ public class Parameters {
                 && !ocropusImageExtension.isEmpty();
     }
 
+    public boolean isCalamari(String ext) {
+        return ocropusOCRExtensions != null
+                && ocropusOCRExtensions.size() == 1
+                && ocropusOCRExtensions.get(0).endsWith(ext);
+    }
+
     public Path getModel() {
         if (model == null || "".equals(model)) {
             return Paths.get(dir, "model.zip");

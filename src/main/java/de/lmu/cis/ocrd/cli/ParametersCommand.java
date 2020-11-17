@@ -37,6 +37,9 @@ abstract class ParametersCommand implements Command {
     }
 
     private static Workspace makeWorkspace(CommandLineArguments config, Parameters parameters) throws Exception {
+        if (parameters.isCalamari(de.lmu.cis.ocrd.calamari.Workspace.EXTENSION)) {
+            return new de.lmu.cis.ocrd.calamari.Workspace(parameters);
+        }
         if (parameters.isOcropus()) {
             return new de.lmu.cis.ocrd.ocropus.Workspace(parameters);
         }
