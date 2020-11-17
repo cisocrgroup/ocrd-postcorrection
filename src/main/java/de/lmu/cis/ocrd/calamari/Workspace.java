@@ -8,25 +8,24 @@ import de.lmu.cis.ocrd.profile.Profile;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class Workspace extends AbstractWorkspace {
     public static final String EXTENSION = ".alt.json";
-    private final Path dir;
     private final Parameters parameters;
-    private List<BaseOCRToken> baseTokens;
-    private List<OCRToken> ocrTokens;
+    private Map<String, List<BaseOCRToken>> baseTokens;
+    private Map<String, List<OCRToken>> ocrTokens;
 
-    public Workspace(Path dir, Parameters parameters) {
-        this.dir = dir;
+    public Workspace(Parameters parameters) {
         this.parameters = parameters;
+        this.baseTokens = new HashMap<>();
+        this.ocrTokens = new HashMap<>();
     }
 
-    private void walk() throws IOException {
-        this.baseTokens = new ArrayList<>();
-        File[] files = dir.toFile().listFiles((dir, name) -> name.toLowerCase().endsWith(EXTENSION));
+    private List<BaseOCRToken> walk(Path dir) throws IOException {
+        final List <BaseOCRToken> ret = new ArrayList<>();
+        File[] files = dir.toFile().listFiles((d, name) -> name.toLowerCase().endsWith(EXTENSION));
         int id = 0;
         for (File file: files) {
             try (Reader r = new FileReader(file)) {
@@ -34,37 +33,40 @@ public class Workspace extends AbstractWorkspace {
                 data = new Gson().fromJson(r, Data[].class);
                 for (Data d: data) {
                     ++id;
-                    this.baseTokens.add(new Token(d, id));
+                    ret.add(new Token(d, id));
                 }
             }
         }
+        return ret.subList(0, Math.min(ret.size(), parameters.getMaxTokens()));
     }
 
     @Override
     public BaseOCRTokenReader getBaseOCRTokenReader(String ifg) throws Exception {
-        if (this.baseTokens == null) {
-            walk();
+        if (!this.baseTokens.containsKey(ifg)) {
+            final List<BaseOCRToken> tmp = walk(Paths.get(ifg));
+            this.baseTokens.put(ifg, tmp);
         }
-        return new BaseOCRTokenReaderImpl(this.baseTokens);
+        return new BaseOCRTokenReaderImpl(this.baseTokens.get(ifg));
     }
 
     @Override
     public OCRTokenReader getNormalTokenReader(String ifg, Profile profile) throws Exception {
-        if (this.ocrTokens == null) {
-            this.ocrTokens = new ArrayList<>();
-            getBaseOCRTokenReader(null).read().forEach(t -> ocrTokens.add(makeCandidateOCRToken(t, profile)));
+        if (!this.ocrTokens.containsKey(ifg)) {
+            List<OCRToken> tmp = new ArrayList<>();
+            getBaseOCRTokenReader(ifg).read().forEach(t -> tmp.add(makeCandidateOCRToken(t, profile)));
+            this.ocrTokens.put(ifg, tmp);
         }
-        return new OCRTokenReaderImpl(this.ocrTokens);
+        return new OCRTokenReaderImpl(this.ocrTokens.get(ifg));
     }
 
     @Override
     public void resetProfile(String ifg, Profile profile) throws Exception {
-        List<OCRToken> tokens = getNormalTokenReader(null, profile).read();
+        List<OCRToken> tokens = getNormalTokenReader(ifg, profile).read();
         for (int i = 0; i < tokens.size(); i++) {
             final BaseOCRToken token = ((AbstractOCRToken)tokens.get(i)).getBase();
             tokens.set(i, makeCandidateOCRToken(token, profile));
         }
-        ocrTokens = tokens;
+        ocrTokens.put(ifg, tokens);
     }
 
     @Override
