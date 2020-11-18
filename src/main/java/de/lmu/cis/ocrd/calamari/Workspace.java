@@ -37,7 +37,10 @@ public class Workspace extends AbstractWorkspace {
                 }
             }
         }
-        return ret.subList(0, Math.min(ret.size(), parameters.getMaxTokens()));
+        if (parameters.getMaxTokens() > 0) {
+            return ret.subList(0, Math.min(ret.size(), parameters.getMaxTokens()));
+        }
+        return ret;
     }
 
     @Override
