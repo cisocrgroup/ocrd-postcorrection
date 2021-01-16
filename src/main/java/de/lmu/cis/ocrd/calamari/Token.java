@@ -50,10 +50,10 @@ public class Token implements BaseOCRToken {
         // do nothing
     }
 
-    // Return the confidence for the matching alternative or -1 if the given
+    // Return the confidence for the matching alternative or 0 if the given
     // alternative does not exist.
     public double getAlternativeConf(String candidate) {
-        if (this.alternatives == null) {
+        if (this.alternatives == null || candidate == null) {
             return 0;
         }
         for (Data.Alternative alt: this.alternatives) {
