@@ -14,8 +14,8 @@ import java.util.*;
 public class Workspace extends AbstractWorkspace {
     public static final String EXTENSION = ".alt.json";
     private final Parameters parameters;
-    private Map<String, List<BaseOCRToken>> baseTokens;
-    private Map<String, List<OCRToken>> ocrTokens;
+    private final Map<String, List<BaseOCRToken>> baseTokens;
+    private final Map<String, List<OCRToken>> ocrTokens;
 
     public Workspace(Parameters parameters) {
         this.parameters = parameters;
