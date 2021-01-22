@@ -3,6 +3,7 @@ package de.lmu.cis.ocrd.calamari;
 import de.lmu.cis.ocrd.ml.BaseOCRToken;
 import de.lmu.cis.ocrd.ml.OCRWord;
 import de.lmu.cis.ocrd.util.Normalizer;
+import org.pmw.tinylog.Logger;
 
 import java.util.Optional;
 
@@ -57,6 +58,7 @@ public class Token implements BaseOCRToken {
             return 0;
         }
         for (Data.Alternative alt: this.alternatives) {
+            Logger.debug("alternatives: {} {}", alt.Token, candidate);
             if (Normalizer.normalize(alt.Token.toLowerCase()).equals(candidate.toLowerCase())) {
                 return alt.Conf;
             }
