@@ -40,12 +40,10 @@ abstract class ParametersCommand implements Command {
         if (parameters.isCalamari(de.lmu.cis.ocrd.calamari.Workspace.EXTENSION)) {
             return new de.lmu.cis.ocrd.calamari.Workspace(parameters);
         }
-        Logger.debug("parameters: {}", parameters.getOcropusOCRExtensions());
-        throw new Exception("WHAT?");
-//        if (parameters.isOcropus()) {
-//            return new de.lmu.cis.ocrd.ocropus.Workspace(parameters);
-//        }
-//        return new de.lmu.cis.ocrd.pagexml.Workspace(Paths.get(config.mustGetMETSFile()), parameters);
+        if (parameters.isOcropus()) {
+            return new de.lmu.cis.ocrd.ocropus.Workspace(parameters);
+        }
+        return new de.lmu.cis.ocrd.pagexml.Workspace(Paths.get(config.mustGetMETSFile()), parameters);
     }
 
     private void setupDirs() {

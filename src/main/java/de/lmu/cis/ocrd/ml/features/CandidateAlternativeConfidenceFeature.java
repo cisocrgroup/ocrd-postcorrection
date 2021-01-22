@@ -16,10 +16,9 @@ public class CandidateAlternativeConfidenceFeature extends NamedDoubleFeature {
 
     @Override
     protected double doCalculate(OCRToken token, int i, int n) {
-        if (!(token instanceof de.lmu.cis.ocrd.calamari.Token)) {
-            Logger.debug("NOT A CALAMARI TOKEN");
-            return 0;
-        }
+//        if (!(token instanceof de.lmu.cis.ocrd.calamari.Token)) {
+//            return 0;
+//        }
         final String candidate = mustGetCandidate(token).Suggestion;
         return ((de.lmu.cis.ocrd.calamari.Token)token).getAlternativeConf(candidate);
     }
