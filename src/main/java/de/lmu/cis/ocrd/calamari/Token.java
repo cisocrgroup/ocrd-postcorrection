@@ -58,7 +58,10 @@ public class Token implements BaseOCRToken {
             return 0;
         }
         for (Data.Alternative alt: this.alternatives) {
-            Logger.debug("alternatives: {} {}", alt.Token, candidate);
+            Logger.debug(" * ALTERNATIVE: {} {}", alt.Token, candidate);
+        }
+        for (Data.Alternative alt: this.alternatives) {
+
             if (Normalizer.normalize(alt.Token.toLowerCase()).equals(candidate.toLowerCase())) {
                 return alt.Conf;
             }
