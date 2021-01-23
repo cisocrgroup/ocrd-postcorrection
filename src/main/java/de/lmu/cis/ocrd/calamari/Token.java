@@ -51,6 +51,27 @@ public class Token implements BaseOCRToken {
         // do nothing
     }
 
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append(pOCR.getWordNormalized()).append("|").append(sOCR.getWordNormalized());
+        if (getGT().isPresent()) {
+            b.append("|").append(getGT());
+        }
+        if (alternatives == null) {
+            b.append("[]");
+            return b.toString();
+        }
+        char c = '[';
+        for (Data.Alternative alt: alternatives) {
+            b.append(c);
+            b.append(alt.Token.toLowerCase());
+            c=',';
+        }
+        b.append(']');
+        return b.toString();
+    }
+
     // Return the confidence for the matching alternative or 0 if the given
     // alternative does not exist.
     public double getAlternativeConf(String candidate) {
