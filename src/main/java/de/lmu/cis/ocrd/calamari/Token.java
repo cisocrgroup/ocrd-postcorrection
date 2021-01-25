@@ -58,7 +58,7 @@ public class Token implements BaseOCRToken {
         if (getGT().isPresent()) {
             b.append("|").append(getGT().get());
         }
-        if (alternatives == null) {
+        if (alternatives == null || alternatives.length == 0) {
             b.append("[]");
             return b.toString();
         }
