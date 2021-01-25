@@ -54,9 +54,9 @@ public class Token implements BaseOCRToken {
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder();
-        b.append(pOCR.getWordNormalized()).append("|").append(sOCR.getWordNormalized());
+        b.append(pOCR.getWordNormalized()).append("|").append(sOCR.getWordNormalized().toLowerCase());
         if (getGT().isPresent()) {
-            b.append("|").append(getGT().get());
+            b.append("|").append(getGT().get().toLowerCase());
         }
         if (alternatives == null || alternatives.length == 0) {
             b.append("[]");
