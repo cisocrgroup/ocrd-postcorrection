@@ -56,7 +56,7 @@ public class Token implements BaseOCRToken {
         StringBuilder b = new StringBuilder();
         b.append(pOCR.getWordNormalized()).append("|").append(sOCR.getWordNormalized());
         if (getGT().isPresent()) {
-            b.append("|").append(getGT());
+            b.append("|").append(getGT().get());
         }
         if (alternatives == null) {
             b.append("[]");
