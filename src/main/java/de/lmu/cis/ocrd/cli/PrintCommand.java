@@ -2,7 +2,6 @@ package de.lmu.cis.ocrd.cli;
 
 import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.ml.OCRTokenReader;
-import de.lmu.cis.ocrd.ml.TokenFilter;
 import de.lmu.cis.ocrd.profile.Profile;
 
 import java.util.List;
@@ -23,8 +22,6 @@ public class PrintCommand extends ParametersCommand {
             OCRTokenReader r = workspace.getNormalTokenReader(ifg, emptyProfile);
             final List<OCRToken> tokens = r.read();
             tokens.forEach(token->{
-                // assert (TokenFilter.isLong(token));
-                // assert (token.getGT().isPresent());
                 System.out.printf("%s: %s", token.getID(), fixWhiteSpace(token.getMasterOCR().getWordNormalized()));
                 for (int i = 1; i < token.getNOCR(); i++) {
                     System.out.printf(" %s", fixWhiteSpace(token.getSlaveOCR(i - 1).getWordNormalized()));
