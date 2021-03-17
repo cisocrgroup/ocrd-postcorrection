@@ -4,6 +4,7 @@ import de.lmu.cis.ocrd.ml.OCRToken;
 import de.lmu.cis.ocrd.ml.OCRTokenReader;
 import de.lmu.cis.ocrd.ml.TokenFilter;
 import de.lmu.cis.ocrd.profile.Profile;
+import org.pmw.tinylog.Logger;
 
 import java.util.List;
 
@@ -22,10 +23,11 @@ public class PrintCommand extends ParametersCommand {
         for (String ifg: ifgs) {
             OCRTokenReader r = workspace.getNormalTokenReader(ifg, emptyProfile);
             final List<OCRToken> tokens = r.read();
+            Logger.debug("loaded {} tokens", tokens.size());
             TokenFilter.filter(tokens, (t)-> t.getGT().isPresent()).forEach(token->{
-                // Logger.debug("preparing {}: {}", arffWriter.getRelation(), token.toString());
                 assert(TokenFilter.isLong(token));
                 assert(token.getGT().isPresent());
+                Logger.debug("nocr = {}", token.getNOCR());
                 System.out.printf("%s: %s", token.getID(), token.getMasterOCR().getWordNormalized());
                 for (int i = 1; i < token.getNOCR(); i++) {
                     System.out.printf(" %s", token.getSlaveOCR(i));
