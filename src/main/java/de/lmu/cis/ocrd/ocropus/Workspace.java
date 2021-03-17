@@ -49,7 +49,7 @@ public class Workspace extends AbstractWorkspace {
         file = file.substring(0, file.length() - parameters.getOcropusImageExtension().length());
         file = file + parameters.getOcropusOCRExtensions().get(0);
         for (int i = 0; i < tokens.size(); i++) {
-            tokens.get(i).setID(file + ":" + i+1);
+            tokens.get(i).setID(file + ":" + (i+1));
         }
     }
 
