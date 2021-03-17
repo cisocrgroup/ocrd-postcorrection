@@ -23,6 +23,7 @@ public class Main {
 				.register(TrainCommand.class)
 				.register(DefaultConfigCommand.class)
 				.register(StatsCommand.class)
+				.register(PrintCommand.class)
 				.register(AlignCommand.class);
 	}
 

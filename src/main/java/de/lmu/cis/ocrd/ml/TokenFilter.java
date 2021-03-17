@@ -8,11 +8,11 @@ public class TokenFilter {
         boolean apply(OCRToken token);
     }
 
-    static Stream<OCRToken> filter(List<OCRToken> tokens) {
+    public static Stream<OCRToken> filter(List<OCRToken> tokens) {
         return tokens.stream().filter((t)-> isNonLexical(t) && isLong(t));
     }
 
-    static Stream<OCRToken> filter(List<OCRToken> tokens, Func func) {
+    public static Stream<OCRToken> filter(List<OCRToken> tokens, Func func) {
         return tokens.stream().filter((t)-> isNonLexical(t) && isLong(t) && func.apply(t));
     }
 
