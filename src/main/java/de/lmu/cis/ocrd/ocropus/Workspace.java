@@ -37,9 +37,9 @@ public class Workspace extends AbstractWorkspace {
                     break;
                 }
             }
-            for (int i = 0; i < tokens.size(); i++) {
-                ((BaseOCRToken)tokens.get(i)).setID(i+1);
-            }
+//            for (int i = 0; i < tokens.size(); i++) {
+//                ((BaseOCRToken)tokens.get(i)).setID(i+1);
+//            }
             Logger.debug("read {} tokens [max={}]", tokens.size(), parameters.getMaxTokens());
             base.clear();
             base.put(ifg, new AbstractWorkspace.BaseOCRTokenReaderImpl(tokens));
