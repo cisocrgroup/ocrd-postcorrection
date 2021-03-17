@@ -25,6 +25,8 @@ public class BaseOCRToken implements de.lmu.cis.ocrd.ml.BaseOCRToken {
         this.id = Integer.toString(id);
     }
 
+    void setID(String id) {this.id = id;}
+
     @Override
     public String getID() {return id;}
 
