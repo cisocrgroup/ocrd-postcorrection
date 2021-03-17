@@ -22,12 +22,12 @@ public class PrintCommand extends ParametersCommand {
         for (String ifg: ifgs) {
             OCRTokenReader r = workspace.getNormalTokenReader(ifg, emptyProfile);
             final List<OCRToken> tokens = r.read();
-            TokenFilter.filter(tokens, (t)-> t.getGT().isPresent()).forEach(token->{
-                assert(TokenFilter.isLong(token));
-                assert(token.getGT().isPresent());
+            tokens.forEach(token->{
+                // assert (TokenFilter.isLong(token));
+                // assert (token.getGT().isPresent());
                 System.out.printf("%s: %s", token.getID(), fixWhiteSpace(token.getMasterOCR().getWordNormalized()));
                 for (int i = 1; i < token.getNOCR(); i++) {
-                    System.out.printf(" %s", fixWhiteSpace(token.getSlaveOCR(i-1).getWordNormalized()));
+                    System.out.printf(" %s", fixWhiteSpace(token.getSlaveOCR(i - 1).getWordNormalized()));
                 }
                 if (token.getGT().isPresent()) {
                     System.out.printf(" %s", fixWhiteSpace(token.getGT().get()));
