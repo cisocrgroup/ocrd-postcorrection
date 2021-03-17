@@ -30,7 +30,7 @@ public class PrintCommand extends ParametersCommand {
                 Logger.debug("nocr = {}", token.getNOCR());
                 System.out.printf("%s: %s", token.getID(), token.getMasterOCR().getWordNormalized());
                 for (int i = 1; i < token.getNOCR(); i++) {
-                    System.out.printf(" %s", token.getSlaveOCR(i));
+                    System.out.printf(" %s", token.getSlaveOCR(i-1));
                 }
                 if (token.getGT().isPresent()) {
                     System.out.printf(" %s", token.getGT().get());
