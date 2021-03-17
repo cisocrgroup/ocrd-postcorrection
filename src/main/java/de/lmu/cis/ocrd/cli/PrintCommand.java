@@ -25,15 +25,19 @@ public class PrintCommand extends ParametersCommand {
             TokenFilter.filter(tokens, (t)-> t.getGT().isPresent()).forEach(token->{
                 assert(TokenFilter.isLong(token));
                 assert(token.getGT().isPresent());
-                System.out.printf("%s: %s", token.getID(), token.getMasterOCR().getWordNormalized());
+                System.out.printf("%s: %s", token.getID(), fixWhiteSpace(token.getMasterOCR().getWordNormalized()));
                 for (int i = 1; i < token.getNOCR(); i++) {
-                    System.out.printf(" %s", token.getSlaveOCR(i-1).getWordNormalized());
+                    System.out.printf(" %s", fixWhiteSpace(token.getSlaveOCR(i-1).getWordNormalized()));
                 }
                 if (token.getGT().isPresent()) {
-                    System.out.printf(" %s", token.getGT().get());
+                    System.out.printf(" %s", fixWhiteSpace(token.getGT().get()));
                 }
                 System.out.println();
             });
         }
+    }
+
+    private static String fixWhiteSpace(String str) {
+        return str.replace(' ', '_');
     }
 }
